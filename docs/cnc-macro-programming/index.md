@@ -15,12 +15,14 @@ New to macros? Start with the concepts before reading control-specific syntax or
 1. [CNC Macro Programming for Beginners](macro-programming-for-beginners/) — what a macro is, when it is useful, and how to learn safely.
 2. [Macro Variables for Beginners](macro-variables-for-beginners/) — how a macro stores dimensions, quantities, and counters.
 3. [Macro Logic for Beginners](macro-logic-for-beginners/) — how a macro checks values and makes simple, safe decisions.
+4. [How to Read a CNC Macro](how-to-read-a-cnc-macro/) — learn to trace an existing macro before trying to write one.
+5. [Macro Math for Beginners](macro-math-for-beginners/) — turn spacing, quantities, and counters into predictable results.
 
 > **Learning principle:** Understand the machining process, coordinate references, and safe machine operation before attempting to create or alter macro-driven motion.
 
 ## Common Instructions: Your First Practice Series
 
-Once the three foundations feel familiar, continue with these short instruction lessons. Each article translates a common command into plain language, a readable example, and a small offline thinking exercise.
+Once the foundations feel familiar, continue with these short instruction lessons. Each article translates a common command into plain language, a readable example, and a small offline thinking exercise.
 
 1. [IF Statement for Beginners](if-statement-for-beginners/) — make a clear check before a value can affect the next action.
 2. [WHILE Loops for Beginners](while-loop-for-beginners/) — repeat an approved task with a counter, a limit, and a visible exit.
@@ -36,18 +38,6 @@ These articles develop the engineering practices needed for robust, reviewable m
 - [Macro Arguments and Subprogram Interfaces](macro-arguments-and-subprogram-interfaces/)
 - [Coordinate Transformations and Safe Geometry](coordinate-transformations-and-safe-geometry/)
 - [Macro Program Verification and Change Control](macro-program-verification-and-change-control/)
-
-## Core Topics
-
-- Macro Variables and System Variables
-- Arithmetic, Logic, and Conditional Statements
-- Loops, Subprograms, and Reusable Program Structures
-- Coordinate Transformation and Geometric Calculation
-- Probing, Measurement, and Adaptive Machining Logic
-
-## Engineering Applications
-
-Macro programming is used to standardize recurring machining tasks, reduce programming time, and build adaptable process logic for controlled production environments. Typical applications include approved hole patterns, feature families, probing routines, fixture functions, and setup checks.
 
 ## Scope and Control Boundaries
 
