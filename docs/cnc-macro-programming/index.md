@@ -17,6 +17,7 @@ New to macros? Start with the concepts before reading control-specific syntax or
 3. [Macro Logic for Beginners](macro-logic-for-beginners/) — how a macro checks values and makes simple, safe decisions.
 4. [How to Read a CNC Macro](how-to-read-a-cnc-macro/) — learn to trace an existing macro before trying to write one.
 5. [Macro Math for Beginners](macro-math-for-beginners/) — turn spacing, quantities, and counters into predictable results.
+6. [Math Functions and Trigonometry for Beginners](math-functions-and-trigonometry-for-beginners/) — use SIN, COS, TAN, SQRT, ABS, rounding, and expressions with confidence.
 
 > **Learning principle:** Understand the machining process, coordinate references, and safe machine operation before attempting to create or alter macro-driven motion.
 
