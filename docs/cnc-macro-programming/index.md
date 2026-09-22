@@ -18,6 +18,14 @@ New to macros? Start with the concepts before reading control-specific syntax or
 
 > **Learning principle:** Understand the machining process, coordinate references, and safe machine operation before attempting to create or alter macro-driven motion.
 
+## Common Instructions: Your First Practice Series
+
+Once the three foundations feel familiar, continue with these short instruction lessons. Each article translates a common command into plain language, a readable example, and a small offline thinking exercise.
+
+1. [IF Statement for Beginners](if-statement-for-beginners/) — make a clear check before a value can affect the next action.
+2. [WHILE Loops for Beginners](while-loop-for-beginners/) — repeat an approved task with a counter, a limit, and a visible exit.
+3. [GOTO for Beginners](goto-for-beginners/) — understand program jumps, trace their paths, and know why they require extra care.
+
 ## Professional Reference Series
 
 These articles develop the engineering practices needed for robust, reviewable macro programs:
