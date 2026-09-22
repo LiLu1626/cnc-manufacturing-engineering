@@ -1,0 +1,38 @@
+---
+title: Unit Conversion
+---
+
+# Unit Conversion
+
+<style>
+.converter{max-width:780px;padding:24px;border:1px solid #d7e0e5;border-radius:12px;background:#fff}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid label{display:block;font-weight:700;margin-bottom:6px}.grid input,.grid select{width:100%;box-sizing:border-box;padding:11px;border:1px solid #9aaab5;border-radius:6px;font:inherit}.answer{margin-top:20px;padding:18px;background:#09313d;color:#fff;border-radius:8px}.answer strong{font-size:28px}.boundary{margin-top:20px;padding:15px;border-left:4px solid #d38b00;background:#fff8e8}@media(max-width:600px){.grid{grid-template-columns:1fr}}
+</style>
+
+<div class="converter">
+<p><strong>Engineering Utility · Released</strong><br>Convert frequently used CNC and manufacturing units. Results update immediately.</p>
+<div class="grid">
+<div><label for="type">Measurement category</label><select id="type"><option value="length">Length</option><option value="speed">Cutting speed</option><option value="feed">Feed rate</option><option value="torque">Torque</option><option value="pressure">Pressure</option><option value="temp">Temperature</option></select></div>
+<div><label for="value">Value to convert</label><input id="value" type="number" value="25.4" step="any"></div>
+<div><label for="from">From</label><select id="from"></select></div>
+<div><label for="to">To</label><select id="to"></select></div>
+</div>
+<div class="answer"><div>Converted result</div><strong id="result">—</strong><div id="detail"></div></div>
+</div>
+
+<div class="boundary"><strong>Use boundary:</strong> This tool converts units only. It does not establish an approved cutting condition, tolerance, machine setting, or process parameter. Confirm the drawing, control convention, machine documentation, supplier data, and approved process plan before production use.</div>
+
+## Practical CNC Reference
+
+- <strong>1 in = 25.4 mm</strong> — common for drawing dimensions, tools, and stock allowance.
+- <strong>1 sfm = 0.3048 m/min</strong> — useful when comparing metric and imperial tooling data.
+- <strong>1 ipm = 25.4 mm/min</strong> — verify whether the program uses feed per minute or feed per revolution.
+
+## How to Use
+
+1. Choose the physical quantity.
+2. Enter the known value and select its source and target units.
+3. Confirm the result against the drawing, control, catalog, or inspection plan.
+
+<script>
+(()=>{const D={length:{mm:['Millimetre (mm)',1],in:['Inch (in)',25.4],cm:['Centimetre (cm)',10],m:['Metre (m)',1000],ft:['Foot (ft)',304.8]},speed:{mmin:['Metres per minute (m/min)',1],sfm:['Surface feet per minute (sfm)',.3048],msec:['Metres per second (m/s)',60]},feed:{mmmin:['Millimetres per minute (mm/min)',1],ipm:['Inches per minute (ipm)',25.4],mmrev:['Millimetres per revolution (mm/rev)',1],ipr:['Inches per revolution (ipr)',25.4]},torque:{nm:['Newton metre (N·m)',1],ftlb:['Foot-pound force (ft·lbf)',1.3558179483],inlb:['Inch-pound force (in·lbf)',.112984829]},pressure:{bar:['Bar',1],psi:['Pounds per square inch (psi)',.0689475729],mpa:['Megapascal (MPa)',10],kpa:['Kilopascal (kPa)',.01]},temp:{c:['Celsius (°C)'],f:['Fahrenheit (°F)']}};const T=document.getElementById('type'),V=document.getElementById('value'),F=document.getElementById('from'),O=document.getElementById('to'),R=document.getElementById('result'),N=document.getElementById('detail'),q=x=>new Intl.NumberFormat(undefined,{maximumFractionDigits:8}).format(x);function reset(){let u=D[T.value];[F,O].forEach(s=>s.innerHTML=Object.entries(u).map(([k,v])=>'<option value="'+k+'">'+v[0]+'</option>').join(''));O.selectedIndex=1;if(T.value==='temp'){V.value=20;F.value='c';O.value='f'}if(T.value==='speed'){V.value=100;F.value='mmin';O.value='sfm'}if(T.value==='feed'){V.value=1000;F.value='mmmin';O.value='ipm'}go()}function go(){let x=Number(V.value),u=D[T.value];if(!Number.isFinite(x)){R.textContent='Enter a valid number';return}let y;if(T.value==='temp'){let c=F.value==='f'?(x-32)*5/9:x;y=O.value==='f'?c*9/5+32:c}else y=x*u[F.value][1]/u[O.value][1];let z=u[O.value][0].match(/(([^)]+))/)[1];R.textContent=q(y)+' '+z;N.textContent=q(x)+' '+u[F.value][0]+' = '+q(y)+' '+u[O.value][0]}T.onchange=reset;[V,F,O].forEach(e=>e.oninput=go);[F,O].forEach(e=>e.onchange=go);reset()})();
+</script>
