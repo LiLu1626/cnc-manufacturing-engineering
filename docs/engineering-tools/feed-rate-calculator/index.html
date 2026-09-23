@@ -1,0 +1,52 @@
+---
+title: Feed Rate Calculator
+---
+
+<link rel="stylesheet" href="styles.css">
+
+<main class="tool-page">
+  <header class="tool-header">
+    <div class="eyebrow">Machining Parameters · Released</div>
+    <h1>Feed Rate Calculator</h1>
+    <p>Calculate feed rate from chip load, number of teeth, and spindle speed.</p>
+  </header>
+
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field">
+        <label for="chipLoad">Chip load per tooth (mm/tooth)</label>
+        <input id="chipLoad" type="number" value="0.05" min="0" step="any">
+      </div>
+      <div class="field">
+        <label for="teeth">Number of teeth</label>
+        <input id="teeth" type="number" value="4" min="1" step="1">
+      </div>
+      <div class="field">
+        <label for="rpm">Spindle speed (RPM)</label>
+        <input id="rpm" type="number" value="4775" min="0" step="any">
+      </div>
+    </div>
+
+    <div class="result">
+      <div>Calculated feed rate</div>
+      <div class="result-value" id="result">—</div>
+      <div class="result-detail" id="detail"></div>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>Formula</h2>
+    <p><strong>Feed rate = Chip load × Number of teeth × RPM</strong></p>
+  </section>
+
+  <aside class="notice">
+    <strong>Use boundary:</strong>
+    This result is a calculation aid. Confirm tool manufacturer data, engagement, material, rigidity, coolant, and the approved process plan before production use.
+  </aside>
+
+  <footer class="tool-footer">
+    Designed by Li Lu · CNC & Manufacturing Engineering
+  </footer>
+</main>
+
+<script src="calculator.js"></script>
