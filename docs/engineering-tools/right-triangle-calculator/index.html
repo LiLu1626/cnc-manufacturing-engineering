@@ -1,0 +1,74 @@
+---
+title: Right-Triangle Calculator
+---
+
+<article class="tool-page">
+  <header class="tool-header">
+    <p class="eyebrow">Trigonometry · Released</p>
+    <h1>Right-Triangle Calculator</h1>
+    <p>Solve a right triangle from any two known sides or one side plus one angle. Useful for chamfers, dovetails, coordinate offsets, and angle conversions on the shop floor.</p>
+  </header>
+
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field">
+        <label for="sideA">Side a (opposite A) — mm</label>
+        <input id="sideA" type="number" step="0.001" placeholder="leave blank if unknown" />
+      </div>
+      <div class="field">
+        <label for="sideB">Side b (adjacent to A) — mm</label>
+        <input id="sideB" type="number" step="0.001" placeholder="leave blank if unknown" />
+      </div>
+      <div class="field">
+        <label for="hypC">Hypotenuse c — mm</label>
+        <input id="hypC" type="number" step="0.001" placeholder="leave blank if unknown" />
+      </div>
+      <div class="field">
+        <label for="angleA">Angle A — degrees</label>
+        <input id="angleA" type="number" step="0.001" placeholder="leave blank if unknown" />
+      </div>
+    </div>
+
+    <div class="result-grid">
+      <div class="result">
+        <p>Side a (opposite A)</p>
+        <p class="result-value" id="aResult">—</p>
+        <p class="result-detail" id="aDetail"></p>
+      </div>
+      <div class="result">
+        <p>Side b (adjacent to A)</p>
+        <p class="result-value" id="bResult">—</p>
+        <p class="result-detail" id="bDetail"></p>
+      </div>
+      <div class="result">
+        <p>Hypotenuse c</p>
+        <p class="result-value" id="cResult">—</p>
+        <p class="result-detail" id="cDetail"></p>
+      </div>
+      <div class="result">
+        <p>Angles</p>
+        <p class="result-value" id="angResult">—</p>
+        <p class="result-detail" id="angDetail"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>Formula and use</h2>
+    <p>Pythagorean theorem: c² = a² + b²</p>
+    <p>sin(A) = a/c,&nbsp;&nbsp;cos(A) = b/c,&nbsp;&nbsp;tan(A) = a/b</p>
+    <p>Enter any two known values (two sides, or one side + one angle) and the calculator solves the rest. Angle B = 90° − A. Angle C = 90°.</p>
+    <p>Common shop uses: chamfer dimensions, dovetail angle calculations, V-block setups, and converting between horizontal/vertical cuts and angle.</p>
+  </section>
+
+  <aside class="notice">
+    <strong>Note:</strong>
+    <p>Leave unknown fields blank. The tool needs exactly two known values to solve. If you enter more than two, it uses the first two filled fields in order (a, b, c, angle A). Results are rounded to 3 decimals for sides and 2 decimals for angles.</p>
+  </aside>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</article>
+
+<link rel="stylesheet" href="styles.css" />
+<script src="calculator.js" defer></script>
+
