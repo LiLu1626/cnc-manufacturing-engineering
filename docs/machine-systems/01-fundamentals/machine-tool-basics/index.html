@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machine Tool Basics | Machine Systems</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../" class="active">Machine Systems</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch01" class="back-link">&larr; Back to 01 &middot; Machine Tool Fundamentals</a>
+<div class="hero-eyebrow">01.1 &middot; Machine Tool Fundamentals</div>
+<h1>Machine Tool Basics</h1>
+
+<p>Every machinist should understand what a machine tool actually is, how CNC differs from manual, and how the coordinate system maps to the real machine. This is the foundation for everything else in Machine Systems.</p>
+
+<h2>What Is a Machine Tool?</h2>
+<p>A machine tool is a power-driven machine that shapes metal (or other materials) by cutting, grinding, or forming. It holds the workpiece and the cutting tool, and controls their relative motion to produce the desired geometry.</p>
+
+<div class="callout">
+  <p><strong>Three things every machine tool does:</strong></p>
+  <ol>
+    <li><strong>Holds</strong> the workpiece (fixture, chuck, table, vise)</li>
+    <li><strong>Holds</strong> the cutting tool (tool holder, turret, spindle)</li>
+    <li><strong>Controls relative motion</strong> between tool and workpiece (axes, spindle rotation)</li>
+  </ol>
+</div>
+
+<h2>CNC vs Conventional Machines</h2>
+<table>
+  <tr><th></th><th>Conventional (Manual)</th><th>CNC</th></tr>
+  <tr><td>Motion control</td><td>Operator handwheels / levers</td><td>Programmed axis movements</td></tr>
+  <tr><td>Accuracy</td><td>Depends on operator skill</td><td>Consistent, tied to machine accuracy</td></tr>
+  <tr><td>Setup time</td><td>Fast for one-offs</td><td>Program setup required</td></tr>
+  <tr><td>Production</td><td>Slow, variable</td><td>Repeatable, lights-out capable</td></tr>
+  <tr><td>Best for</td><td>One-off, prototyping, repair</td><td>Production, complex geometry, repeatability</td></tr>
+</table>
+
+<h2>Machine Coordinate Systems</h2>
+<p>CNC machines use a standardized coordinate system (ISO 841) to define axis directions. The rule is always the same regardless of machine type:</p>
+
+<h3>Linear Axes</h3>
+<table>
+  <tr><th>Axis</th><th>Direction</th><th>On a mill</th><th>On a lathe</th></tr>
+  <tr><td><strong>X</strong></td><td>Horizontal, left-right</td><td>Table left-right</td><td>Cross-slide (in/out)</td></tr>
+  <tr><td><strong>Y</strong></td><td>Horizontal, front-back</td><td>Table front-back</td><td>(on Y-axis lathes: turret in/out)</td></tr>
+  <tr><td><strong>Z</strong></td><td>Along the spindle</td><td>Spindle up-down</td><td>Carriage along spindle axis</td></tr>
+</table>
+
+<h3>Rotary Axes</h3>
+<table>
+  <tr><th>Axis</th><th>Rotation around</th><th>Typical use</th></tr>
+  <tr><td><strong>A</strong></td><td>X axis</td><td>Tilt table on 5-axis mills</td></tr>
+  <tr><td><strong>B</strong></td><td>Y axis</td><td>Swing head on 5-axis, B-axis on turn-mill</td></tr>
+  <tr><td><strong>C</strong></td><td>Z axis</td><td>Spindle indexing on lathes, rotary table on mills</td></tr>
+</table>
+
+<h3>Right-Hand Rule</h3>
+<p>Point your right thumb in +X, index finger in +Y, middle finger in +Z. That's the machine's coordinate system. Positive rotation around an axis follows the same right-hand rule (curl fingers, thumb points positive direction).</p>
+
+<h2>Key Reference Positions</h2>
+<table>
+  <tr><th>Term</th><th>What it is</th></tr>
+  <tr><td><strong>Machine Zero (M0)</strong></td><td>The fixed reference point of the machine, set by home switches. You don't change this.</td></tr>
+  <tr><td><strong>Reference Position (Ref)</strong></td><td>The position the machine goes to on startup to establish its coordinate system.</td></tr>
+  <tr><td><strong>Work Coordinate System (G54)</strong></td><td>Your part's zero point. You set this relative to machine zero. Each setup gets its own offset.</td></tr>
+  <tr><td><strong>Tool Offset</strong></td><td>The length and diameter of each tool, stored in the controller so the machine knows where each tool's tip is.</td></tr>
+</table>
+
+<div class="warning">
+  <p><strong>Machine zero is fixed; work zero is yours.</strong> On startup, the machine finds its own reference. Then you tell it where your part is (G54). If the machine loses position (power outage, crash), you must re-home and re-check your offsets.</p>
+</div>
+
+<h2>Machine Envelope and Working Area</h2>
+<p>The machine envelope is the space the tool can reach. It's defined by axis travels:</p>
+<ul>
+  <li><strong>X travel:</strong> how far the table/turret moves left-right</li>
+  <li><strong>Y travel:</strong> front-back movement</li>
+  <li><strong>Z travel:</strong> spindle vertical (mill) or carriage horizontal (lathe)</li>
+  <li><strong>Maximum swing / diameter:</strong> on lathes, the largest part that fits over the bed</li>
+  <li><strong>Table size:</strong> on mills, the physical table dimensions — the part must fit on it</li>
+</ul>
+
+<div class="callout">
+  <p><strong>When choosing a machine, the envelope matters more than spindle speed.</strong> A 12,000 rpm VMC can't cut a part that's bigger than its travel. Always check axis travel and table size first. See <a href="../machine-specifications/">Reading Machine Specifications</a>.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../../#ch01">&larr; Machine Systems</a>
+  <a href="../machine-configurations/">Next: Machine Configurations &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

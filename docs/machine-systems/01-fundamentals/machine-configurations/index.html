@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machine Configurations | Machine Systems</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../" class="active">Machine Systems</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch01" class="back-link">&larr; Back to 01 &middot; Machine Tool Fundamentals</a>
+<div class="hero-eyebrow">01.2 &middot; Machine Tool Fundamentals</div>
+<h1>Machine Configurations</h1>
+
+<p>How a machine is built determines what it's good at. Vertical vs horizontal, 3-axis vs 5-axis, rotating workpiece vs rotating tool — these are the fundamental configuration choices.</p>
+
+<h2>Vertical vs Horizontal</h2>
+<table>
+  <tr><th></th><th>Vertical</th><th>Horizontal</th></tr>
+  <tr><td>Spindle orientation</td><td>Vertical (down)</td><td>Horizontal (sideways)</td></tr>
+  <tr><td>Typical machines</td><td>VMC, VTL, vertical mill</td><td>HMC, horizontal lathe</td></tr>
+  <tr><td>Chip evacuation</td><td>Chips fall onto part/table</td><td>Chips fall away from work</td></tr>
+  <tr><td>Gravity effect</td><td>Fixturing supports part downward</td><td>Part weight on chuck face</td></tr>
+  <tr><td>Best for</td><td>Plates, molds, boxy parts, one-sided work</td><td>Production, prismatic parts, multi-side machining</td></tr>
+</table>
+
+<h2>Rotating Workpiece vs Rotating Tool</h2>
+<p>This is the most basic split between machine types:</p>
+<ul>
+  <li><strong>Rotating workpiece (lathes):</strong> The part spins in the spindle; the tool moves linearly. Good for cylindrical parts — shafts, disks, bushings, rings.</li>
+  <li><strong>Rotating tool (mills):</strong> The tool spins; the part stays on the table. Good for prismatic parts — blocks, plates, housings, molds.</li>
+  <li><strong>Both (turn-mill, mill-turn):</strong> Part indexes while tool cuts. Combines both operations in one setup.</li>
+</ul>
+
+<h2>Axis Configurations</h2>
+<h3>3-Axis</h3>
+<p>X, Y, Z move simultaneously. Tool approaches from one direction (usually vertical on a VMC). Good for: pockets, faces, holes drilled from top, simple profiles.</p>
+
+<h3>4-Axis</h3>
+<p>Adds a rotary axis (A or C). Part rotates so you can machine sides without re-fixturing. Good for: round parts with flats, cams, manifolds, parts needing holes on multiple faces.</p>
+
+<h3>5-Axis</h3>
+<p>Two rotary axes (A+B or A+C). Tool tilts relative to the part. Good for: impellers, turbine blades, complex molds, aerospace parts — anything needing access to multiple angles in one setup.</p>
+
+<div class="callout">
+  <p><strong>5-axis isn't automatically better.</strong> It's more expensive, needs more programming, and for simple prismatic parts a 3-axis VMC is faster and more accurate. Use 5-axis when you need (1) complex geometry, (2) fewer setups, or (3) long-reach tool access that short tools can't achieve.</p>
+</div>
+
+<h2>Spindle and Turret Configurations</h2>
+<table>
+  <tr><th>Configuration</th><th>Description</th><th>Typical use</th></tr>
+  <tr><td><strong>Single spindle</strong></td><td>One main spindle</td><td>Standard, most common</td></tr>
+  <tr><td><strong>Dual spindle (main + sub)</strong></td><td>Second spindle picks off the part for back-side work</td><td>Complete parts in one setup</td></tr>
+  <tr><td><strong>Single turret</strong></td><td>One tool changer / turret</td><td>Standard lathe, basic mill</td></tr>
+  <tr><td><strong>Dual turret</strong></td><td>Two turrets, can cut simultaneously</td><td>High-production turning</td></tr>
+  <tr><td><strong>ATC + magazine</strong></td><td>Automatic tool changer with carousel or chain magazine</td><td>Machining centers (10–300+ tools)</td></tr>
+</table>
+
+<h2>Quick Reference: Picking a Configuration</h2>
+<table>
+  <tr><th>Part shape</th><th>Best machine type</th></tr>
+  <tr><td>Shafts, disks, rings, cylindrical</td><td>Horizontal CNC lathe or VTL</td></tr>
+  <tr><td>Plates, blocks, housings, molds (top face)</td><td>VMC</td></tr>
+  <tr><td>Boxy parts needing 4+ sides</td><td>HMC with pallet changer</td></tr>
+  <tr><td>Impellers, blades, complex 3D surfaces</td><td>5-axis machining center</td></tr>
+  <tr><td>Large, heavy, short, large-diameter parts</td><td>VTL (vertical turning lathe)</td></tr>
+  <tr><td>Complete part (front + back) in one setup</td><td>Sub-spindle lathe or turn-mill</td></tr>
+</table>
+
+<div class="nav-links">
+  <a href="../machine-tool-basics/">&larr; Machine Tool Basics</a>
+  <a href="../machine-specifications/">Next: Reading Machine Specifications &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

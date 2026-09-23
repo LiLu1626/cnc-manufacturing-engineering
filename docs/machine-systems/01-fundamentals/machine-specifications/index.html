@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reading Machine Specifications | Machine Systems</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../" class="active">Machine Systems</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch01" class="back-link">&larr; Back to 01 &middot; Machine Tool Fundamentals</a>
+<div class="hero-eyebrow">01.3 &middot; Machine Tool Fundamentals</div>
+<h1>Reading Machine Specifications</h1>
+
+<p>Machine spec sheets are full of numbers. Most people only look at spindle speed. This guide tells you which numbers actually matter, what they mean in practice, and how to compare machines.</p>
+
+<h2>Lathe Specifications</h2>
+<table>
+  <tr><th>Spec</th><th>What it means</th><th>Why it matters</th></tr>
+  <tr><td><strong>Max Swing over Bed</strong></td><td>Largest diameter that clears the bed ways</td><td>Physical limit on part size</td></tr>
+  <tr><td><strong>Max Turning Diameter</strong></td><td>Largest diameter you can actually turn (often less than swing due to carriage/turret clearance)</td><td>Real working limit — this is the number to use</td></tr>
+  <tr><td><strong>Max Turning Length</strong></td><td>Z-axis travel between chuck and tailstock</td><td>Part length limit</td></tr>
+  <tr><td><strong>Chuck Size</strong></td><td>Diameter of standard chuck</td><td>Grip range, part support</td></tr>
+  <tr><td><strong>Bar Capacity</strong></td><td>Max bar diameter through spindle bore</td><td>Bar feeder work limit</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Swing vs Turning Diameter:</strong> "Swing over bed" is the theoretical max (part clears the ways). "Max turning diameter" is what the carriage and turret can actually reach. Always use the turning diameter for real work. Example: a 20" swing lathe might only turn 14" over the cross-slide.</p>
+</div>
+
+<h2>Milling / Machining Center Specifications</h2>
+<table>
+  <tr><th>Spec</th><th>What it means</th><th>Why it matters</th></tr>
+  <tr><td><strong>Table Size</strong></td><td>Length × width of the table</td><td>Part must physically fit, with room for vises/fixtures</td></tr>
+  <tr><td><strong>X / Y / Z Travel</strong></td><td>Axis movement range</td><td>Maximum part reachable by the tool</td></tr>
+  <tr><td><strong>Table Load Capacity</strong></td><td>Max weight the table can hold</td><td>Heavy parts need rigid tables</td></tr>
+  <tr><td><strong>T-Slot Size / Spacing</strong></td><td>Clamping slot dimensions</td><td>What fixturing fits</td></tr>
+</table>
+
+<h2>Spindle Specifications</h2>
+<table>
+  <tr><th>Spec</th><th>What it means</th><th>Practical note</th></tr>
+  <tr><td><strong>Spindle Speed (max RPM)</strong></td><td>Maximum rotational speed</td><td>High RPM is for small tools / aluminum. Heavy steel cuts at low RPM.</td></tr>
+  <tr><td><strong>Spindle Power (kW or HP)</strong></td><td>Motor rating</td><td>Determines how much material you can remove. More power = bigger cuts.</td></tr>
+  <tr><td><strong>Spindle Torque (N·m)</strong></td><td>Twisting force at low RPM</td><td>Critical for large tools, heavy cuts, hard materials. Power peaks at mid RPM; torque matters at low RPM.</td></tr>
+  <tr><td><strong>Spindle Nose / Taper</strong></td><td>CAT40, CAT50, BT30, HSK, etc.</td><td>Determines tool holder compatibility and rigidity</td></tr>
+</table>
+
+<div class="warning">
+  <p><strong>Power alone doesn't tell the whole story.</strong> A 20 kW spindle that only makes full power above 4,000 RPM is useless for heavy steel turning at 500 RPM. Look at the <strong>torque curve</strong> — how much torque is available across the RPM range. Low-end torque is what matters for large cuts.</p>
+</div>
+
+<h2>Axis and Motion Specifications</h2>
+<table>
+  <tr><th>Spec</th><th>What it means</th><th>Practical note</th></tr>
+  <tr><td><strong>Rapid Traverse Rate</strong></td><td>Fastest non-cutting move (m/min or IPM)</td><td>Affects cycle time on positioning-heavy jobs. 24–48 m/min is typical.</td></tr>
+  <tr><td><strong>Maximum Feed Rate</strong></td><td>Fastest cutting feed</td><td>Usually much lower than rapid; 5–10 m/min is common</td></tr>
+  <tr><td><strong>Axis Acceleration</strong></td><td>How fast it reaches rapid speed</td><td>Important for small parts with many moves — fast rapids mean nothing if accel is low</td></tr>
+</table>
+
+<h2>Accuracy Specifications</h2>
+<table>
+  <tr><th>Spec</th><th>Typical value</th><th>What it means</th></tr>
+  <tr><td><strong>Positioning Accuracy</strong></td><td>±0.005–0.02 mm</td><td>How close the axis gets to a commanded position, across the full travel</td></tr>
+  <tr><td><strong>Repeatability</strong></td><td>±0.002–0.005 mm</td><td>How consistently it returns to the same position. More important for production than absolute accuracy.</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Repeatability &gt; absolute accuracy for most shops.</strong> You can calibrate out systematic errors (ballbar, laser compensation). What you can't easily fix is random variation. A machine with ±0.01 mm positioning but ±0.002 mm repeatability will hold tight tolerances after calibration.</p>
+</div>
+
+<h2>Other Specifications</h2>
+<table>
+  <tr><th>Spec</th><th>Why it matters</th></tr>
+  <tr><td><strong>Tool Capacity</strong></td><td>Number of tools in the magazine. More tools = fewer setups.</td></tr>
+  <tr><td><strong>Tool Change Time</strong></td><td>Chip-to-chip time. Matters for high-mix, frequent tool changes.</td></tr>
+  <tr><td><strong>Machine Weight</strong></td><td>Heavier = more rigid, better vibration damping. A 5-ton VMC is more stable than a 3-ton one.</td></tr>
+  <tr><td><strong>Footprint</strong></td><td>Floor space required. Include room for chip conveyor, coolant tank, maintenance access.</td></tr>
+  <tr><td><strong>Power Supply</strong></td><td>3-phase voltage and kVA. Can your shop handle it?</td></tr>
+</table>
+
+<h2>Example: Reading a Spec Sheet</h2>
+<div class="example">
+  <p><strong>Haas VF-2SS (typical spec):</strong></p>
+  <ul>
+    <li>Travel: 508 × 406 × 406 mm → fits parts up to ~450 mm cube</li>
+    <li>Table: 1016 × 406 mm → standard vise fits easily</li>
+    <li>Spindle: 12,000 RPM, 22.4 kW → good for aluminum and general steel</li>
+    <li>Rapid: 50 m/min → fast on small parts</li>
+    <li>Tool capacity: 24+1 → enough for most jobs</li>
+    <li>Repeatability: ±0.0025 mm → production-grade</li>
+  </ul>
+  <p><strong>Verdict:</strong> A compact, fast VMC for precision, moderate-sized parts. Not ideal for very heavy steel cuts (spindle power is mid-range), but excellent for mold and die, aerospace aluminum, and high-volume small parts.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../machine-configurations/">&larr; Machine Configurations</a>
+  <a href="../../#ch01">Back to Chapter 01 &uarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>
