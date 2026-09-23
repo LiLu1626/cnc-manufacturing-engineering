@@ -1,0 +1,32 @@
+---
+title: Tool Life Planning
+---
+<link rel="stylesheet" href="styles.css">
+<main class="tool-page">
+  <header class="tool-header">
+    <div class="eyebrow">Tooling and Process Planning · Released</div>
+    <h1>Tool Life Planning</h1>
+    <p>Turn an expected tool life into a practical change-plan for a production batch.</p>
+  </header>
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field"><label for="toolLife">Expected usable tool life (min)</label><input id="toolLife" type="number" value="60" min="0" step="any"></div>
+      <div class="field"><label for="cutTime">Cutting time per part (min)</label><input id="cutTime" type="number" value="4" min="0" step="any"></div>
+      <div class="field"><label for="quantity">Planned production quantity</label><input id="quantity" type="number" value="50" min="1" step="1"></div>
+      <div class="field"><label for="reserve">Planning reserve (%)</label><input id="reserve" type="number" value="15" min="0" step="any"></div>
+    </div>
+    <div class="result-grid">
+      <div class="result"><div>Parts per tool</div><div class="result-value" id="partsPerTool">—</div></div>
+      <div class="result"><div>Tools required</div><div class="result-value" id="toolsRequired">—</div></div>
+      <div class="result wide-result"><div>Production plan</div><p class="result-detail" id="detail"></p></div>
+    </div>
+  </section>
+  <section class="formula">
+    <h2>Planning method</h2>
+    <p><strong>Parts per tool = usable tool life ÷ cutting time per part.</strong> The planning reserve reduces calculated capacity before required tool quantity is rounded up.</p>
+    <p>Use verified life data whenever possible. A conservative reserve is appropriate when material variability, interrupted cuts, long overhang, or unattended production may reduce actual life.</p>
+  </section>
+  <aside class="notice"><strong>For beginners:</strong> Tool life is not a promise. Establish the first value through controlled cutting, inspect wear consistently, and document the actual replacement point before increasing production quantity.</aside>
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</main>
+<script src="calculator.js"></script>
