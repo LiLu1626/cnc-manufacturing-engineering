@@ -1,0 +1,49 @@
+---
+title: Tolerance Stack-Up Assistant
+---
+<link rel="stylesheet" href="styles.css">
+<a href="../" class="back-link">&larr; Back to Engineering Tools</a>
+<main class="tool-page">
+  <header class="tool-header">
+    <div class="eyebrow">Quality · Released</div>
+    <h1>Tolerance Stack-Up Assistant</h1>
+    <p>Calculate worst-case and RSS (root-sum-square) tolerance accumulation across a chain of dimensions. Critical for checking if assembled parts will fit and function.</p>
+  </header>
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field">
+        <label for="dims">Dimensions and tolerances (one per line: nominal ± tol)</label>
+        <textarea id="dims" rows="6" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:10px;font:inherit;">25 ± 0.1
+10 ± 0.05
+15 ± 0.1</textarea>
+      </div>
+      <div class="field">
+        <label for="method">Analysis method</label>
+        <select id="method">
+          <option value="worst" selected>Worst-case (100% exchange)</option>
+          <option value="rss">RSS / statistical (Cpk-based)</option>
+        </select>
+      </div>
+    </div>
+    <div class="result-grid">
+      <div class="result"><div>Resulting nominal</div><div class="result-value" id="nomResult">—</div></div>
+      <div class="result"><div>Resulting tolerance</div><div class="result-value" id="tolResult">—</div><div class="result-detail" id="tolDetail"></div></div>
+      <div class="result"><div>Total tolerance range</div><div class="result-value" id="rangeResult">—</div></div>
+      <div class="result"><div>Assessment</div><div class="result-value" id="assessResult">—</div><div class="result-detail" id="assessDetail"></div></div>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>Stack-up methods</h2>
+    <p><strong>Worst-case:</strong> total tolerance = sum of all individual tolerances. Assumes every dimension is at its extreme simultaneously. Safe but conservative — can require very tight individual tolerances.</p>
+    <p><strong>RSS (Root Sum Square):</strong> total tolerance = √(Σ tol²). Statistically realistic assuming normal distributions and ~Cpk 1.33. Allows looser individual tolerances, lower cost.</p>
+    <p><strong>Rule of thumb:</strong> if the assembled gap is critical (seal, bearing fit), use worst-case. If it's a cosmetic or non-critical gap, RSS is fine. Always draw the dimension chain and identify which dimensions stack up in the same direction.</p>
+  </section>
+
+  <aside class="notice">
+    <strong>Example:</strong> Three dimensions: 25±0.1, 10±0.05, 15±0.1. Worst-case total = ±0.25 (range 50±0.25). RSS total = √(0.1² + 0.05² + 0.1²) = √0.0225 = ±0.15. The RSS allows 40% more tolerance on each dimension for the same assembly outcome.
+  </aside>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</main>
+<script src="calculator.js"></script>

@@ -1,0 +1,45 @@
+---
+title: Measurement Planning
+---
+<link rel="stylesheet" href="styles.css">
+<a href="../" class="back-link">&larr; Back to Engineering Tools</a>
+<main class="tool-page">
+  <header class="tool-header">
+    <div class="eyebrow">Quality · Released</div>
+    <h1>Measurement Planning</h1>
+    <p>Plan which instrument to use, which datum to reference, and what acceptance criteria apply. Good measurement planning prevents bad parts from shipping and good parts from being rejected.</p>
+  </header>
+
+  <section class="tool-card">
+    <h2 style="margin-bottom:16px;">Instrument selection guide</h2>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Feature</th><th>Tolerance range</th><th>Recommended instrument</th><th>Resolution needed</th></tr></thead>
+        <tbody>
+          <tr><td>External dimensions</td><td>±0.05 mm or looser</td><td>Vernier caliper</td><td>0.02 mm</td></tr>
+          <tr><td>External dimensions</td><td>±0.02 mm</td><td>Outside micrometer</td><td>0.001 mm</td></tr>
+          <tr><td>Hole diameter</td><td>±0.05 mm</td><td>Inside micrometer / telescoping gauge</td><td>0.01 mm</td></tr>
+          <tr><td>Hole diameter (precision)</td><td>±0.01 mm</td><td>Bore gauge / CMM</td><td>0.001 mm</td></tr>
+          <tr><td>Depth / step</td><td>±0.02 mm</td><td>Depth micrometer / dial depth gauge</td><td>0.01 mm</td></tr>
+          <tr><td>Surface finish</td><td>Ra 0.8–6.3 µm</td><td>Surface roughness tester</td><td>0.01 µm</td></tr>
+          <tr><td>Angles</td><td>±0.5°</td><td>Bevel protractor</td><td>0.1°</td></tr>
+          <tr><td>Complex geometry</td><td>Any precision</td><td>CMM</td><td>0.001 mm</td></tr>
+          <tr><td>Threads</td><td>Go/No-Go</td><td>Thread plug/ring gauge</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>Measurement principles</h2>
+    <p><strong>10:1 rule:</strong> instrument resolution should be at least 10× better than the tolerance being measured. If tolerance is ±0.05 mm, use an instrument with 0.005 mm resolution or better.</p>
+    <p><strong>Same datum:</strong> always measure from the same datum that the machine used to cut the feature. Measuring from a different datum introduces alignment error.</p>
+    <p><strong>Calibration:</strong> check calipers and micrometers against gauge blocks before each shift. A zeroed micrometer is more reliable than a CMM that hasn't been calibrated in 6 months.</p>
+  </section>
+
+  <aside class="notice">
+    <strong>Example:</strong> A 20 H7 hole (tolerance +0.021/0 mm). Use a bore gauge with 0.001 mm resolution — that's a 21:1 ratio, excellent. Measure from the same face used to set the work offset. Record both the reading and the temperature if the part is precision.
+  </aside>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</main>

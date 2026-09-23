@@ -1,0 +1,38 @@
+---
+title: Datum Planning Worksheet
+---
+<link rel="stylesheet" href="styles.css">
+<a href="../" class="back-link">&larr; Back to Engineering Tools</a>
+<main class="tool-page">
+  <header class="tool-header">
+    <div class="eyebrow">Workholding · Released</div>
+    <h1>Datum Planning Worksheet</h1>
+    <p>Plan locating surfaces and inspection datums before setup. Good datum strategy eliminates stacking errors and ensures the part is inspected the same way it's machined.</p>
+  </header>
+
+  <section class="tool-card">
+    <h2 style="margin-bottom:16px;">Setup checklist</h2>
+    <div style="display:grid;gap:12px;">
+      <label style="display:flex;gap:10px;align-items:flex-start;font-weight:400;cursor:pointer;"><input type="checkbox" style="width:auto;margin-top:4px;"><span><strong>Primary datum (3-2-1):</strong> Which surface does the part rest on? Is it flat, clean, and accessible?</span></label>
+      <label style="display:flex;gap:10px;align-items:flex-start;font-weight:400;cursor:pointer;"><input type="checkbox" style="width:auto;margin-top:4px;"><span><strong>Secondary datum (2-2-1):</strong> Which edge locates X position? Is it a finished surface?</span></label>
+      <label style="display:flex;gap:10px;align-items:flex-start;font-weight:400;cursor:pointer;"><input type="checkbox" style="width:auto;margin-top:4px;"><span><strong>Tertiary datum:</strong> Which feature locates rotation? Hole, pin, or edge?</span></label>
+      <label style="display:flex;gap:10px;align-items:flex-start;font-weight:400;cursor:pointer;"><input type="checkbox" style="width:auto;margin-top:4px;"><span><strong>Inspection datum matches setup datum:</strong> Will CMM or comparator use the same datums as the machine?</span></label>
+      <label style="display:flex;gap:10px;align-items:flex-start;font-weight:400;cursor:pointer;"><input type="checkbox" style="width:auto;margin-top:4px;"><span><strong>Clamping points avoid datums:</strong> Are clamps placed away from locating surfaces?</span></label>
+      <label style="display:flex;gap:10px;align-items:flex-start;font-weight:400;cursor:pointer;"><input type="checkbox" style="width:auto;margin-top:4px;"><span><strong>All critical features accessible:</strong> Can the tool reach every feature without re-fixturing?</span></label>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>The 3-2-1 locating principle</h2>
+    <p><strong>3 points on the primary datum plane</strong> restrict 3 degrees of freedom (rotation about X and Y, and Z translation). The part rests flat on this surface.</p>
+    <p><strong>2 points on the secondary datum</strong> restrict 2 more (rotation about Z and Y translation). This is typically an edge or pin.</p>
+    <p><strong>1 point on the tertiary datum</strong> restricts the last (X translation). This locks the part in position.</p>
+    <p><strong>Golden rule:</strong> machine the datum surfaces first, then use them to locate everything else. Never locate from a rough surface if a finished datum is available. The inspection drawing datums must match the setup datums.</p>
+  </section>
+
+  <aside class="notice">
+    <strong>Example:</strong> A rectangular plate. Primary datum = bottom face (3 points on the mill table). Secondary datum = left finished edge (2 points against a stop). Tertiary = one corner or a dowel pin. All milling is done from these surfaces. CMM inspection uses the same three datums, so measured dimensions match drawing dimensions exactly.
+  </aside>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</main>

@@ -1,0 +1,92 @@
+---
+title: Boring-Bar Deflection Check
+---
+<link rel="stylesheet" href="styles.css">
+<a href="../" class="back-link">&larr; Back to Engineering Tools</a>
+<main class="tool-page">
+  <header class="tool-header">
+    <div class="eyebrow">Boring · Released</div>
+    <h1>Boring-Bar Deflection Check</h1>
+    <p>Estimate boring-bar deflection and chatter risk from bar diameter, overhang, material, and cutting data. Excessive deflection causes poor surface finish, dimensional errors, and vibration.</p>
+  </header>
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field">
+        <label for="barD">Bar diameter (mm)</label>
+        <input id="barD" type="number" value="25" min="3" step="any">
+      </div>
+      <div class="field">
+        <label for="overhang">Overhang L (mm)</label>
+        <input id="overhang" type="number" value="75" min="1" step="any">
+      </div>
+      <div class="field">
+        <label for="barMaterial">Bar material</label>
+        <select id="barMaterial">
+          <option value="200000">Steel (HSS / steel shank)</option>
+          <option value="600000" selected>Carbide shank</option>
+          <option value="400000">Heavy-alloy (W heavy metal)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="workMaterial">Workpiece material</label>
+        <select id="workMaterial">
+          <option value="1100">Aluminum (kc ≈ 1100 N/mm²)</option>
+          <option value="2500">Mild steel (kc ≈ 2500 N/mm²)</option>
+          <option value="3500" selected>Alloy steel (kc ≈ 3500 N/mm²)</option>
+          <option value="4200">Stainless steel (kc ≈ 4200 N/mm²)</option>
+          <option value="5000">Hardened steel (kc ≈ 5000 N/mm²)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="ap">Depth of cut ap (mm)</label>
+        <input id="ap" type="number" value="1.5" min="0.01" step="any">
+      </div>
+      <div class="field">
+        <label for="f">Feed f (mm/rev)</label>
+        <input id="f" type="number" value="0.15" min="0.01" step="any">
+      </div>
+    </div>
+    <div class="result-grid">
+      <div class="result">
+        <div>L/D ratio</div>
+        <div class="result-value" id="ldResult">—</div>
+        <div class="result-detail" id="ldDetail"></div>
+      </div>
+      <div class="result">
+        <div>Estimated deflection δ</div>
+        <div class="result-value" id="deflectResult">—</div>
+        <div class="result-detail" id="deflectDetail"></div>
+      </div>
+      <div class="result">
+        <div>Cutting force Fc</div>
+        <div class="result-value" id="forceResult">—</div>
+        <div class="result-detail">Radial component ≈ Fc × 0.3–0.5</div>
+      </div>
+      <div class="result">
+        <div>Risk level</div>
+        <div class="result-value" id="riskResult">—</div>
+        <div class="result-detail" id="riskDetail"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>Formula and theory</h2>
+    <p><strong>Deflection of a cantilever beam:</strong> δ = (F_radial × L³) / (3 × E × I)</p>
+    <p><strong>Moment of inertia (solid round bar):</strong> I = π × d⁴ / 64</p>
+    <p><strong>Cutting force estimate:</strong> Fc ≈ ap × f × kc (specific cutting force × chip cross-section)</p>
+    <p><strong>Radial force:</strong> Fr ≈ Fc × (0.3 to 0.5) for steel turning; use 0.4 as a default estimate. The radial (passive) force is what pushes the boring bar away from the workpiece and causes deflection.</p>
+    <p>The L/D ratio is the single most important boring-bar parameter. Most shops recommend keeping L/D ≤ 4–5 for steel shanks and ≤ 6–7 for carbide shanks. Beyond that, deflection and chatter rise rapidly.</p>
+  </section>
+
+  <aside class="notice">
+    <strong>Example:</strong> A 25 mm carbide bar at 75 mm overhang (L/D = 3.0), cutting alloy steel at ap = 1.5 mm, f = 0.15 mm/rev. The estimated deflection is roughly 0.003 mm — well controlled. But if overhang doubles to 150 mm (L/D = 6.0), deflection increases 8× (because δ ∝ L³) to about 0.024 mm, which is visible on the part surface.
+  </aside>
+
+  <aside class="notice" style="border-left-color:#c0392b;background:#fdf0ef;color:#6b2020;">
+    <strong>Chatter warning:</strong> If deflection exceeds ~0.01–0.02 mm or L/D exceeds 6, you will likely experience chatter. Solutions: reduce overhang, use a larger bar or carbide shank, reduce ap or f, use a positive-rake insert, or use damped (anti-vibration) boring bars.
+  </aside>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</main>
+<script src="calculator.js"></script>

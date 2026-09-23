@@ -1,0 +1,68 @@
+---
+title: Coordinate Transformation
+---
+<link rel="stylesheet" href="styles.css">
+<a href="../" class="back-link">&larr; Back to Engineering Tools</a>
+<main class="tool-page">
+  <header class="tool-header">
+    <div class="eyebrow">Geometry · Released</div>
+    <h1>Coordinate Transformation</h1>
+    <p>Rotate, translate, and mirror X/Y coordinates. Essential for programing parts on rotated fixtures, finding coordinates after a datum shift, or calculating mirror-image pockets.</p>
+  </header>
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field">
+        <label for="tx">Translation X (mm)</label>
+        <input id="tx" type="number" value="0" step="any">
+      </div>
+      <div class="field">
+        <label for="ty">Translation Y (mm)</label>
+        <input id="ty" type="number" value="0" step="any">
+      </div>
+      <div class="field">
+        <label for="angle">Rotation angle (degrees, CCW+)</label>
+        <input id="angle" type="number" value="0" step="any">
+      </div>
+      <div class="field">
+        <label for="mirrorX">Mirror across X-axis?</label>
+        <select id="mirrorX"><option value="1" selected>No</option><option value="-1">Yes (flip Y)</option></select>
+      </div>
+      <div class="field">
+        <label for="mirrorY">Mirror across Y-axis?</label>
+        <select id="mirrorY"><option value="1" selected>No</option><option value="-1">Yes (flip X)</option></select>
+      </div>
+      <div class="field">
+        <label for="inputPoints">Input points (one per line: X, Y)</label>
+        <textarea id="inputPoints" rows="4" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:10px;font:inherit;">10, 0
+10, 20
+0, 20</textarea>
+      </div>
+    </div>
+    <div class="result-grid">
+      <div class="result wide-result">
+        <div>Transformed coordinates</div>
+        <div class="table-wrap">
+          <table class="coord-table">
+            <thead><tr><th>#</th><th>Original X</th><th>Original Y</th><th>→ New X</th><th>→ New Y</th></tr></thead>
+            <tbody id="resultBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>Transformation formulas</h2>
+    <p><strong>Rotation (counterclockwise by θ):</strong> X' = X·cos θ − Y·sin θ; Y' = X·sin θ + Y·cos θ</p>
+    <p><strong>Translation:</strong> X' = X + tx; Y' = Y + ty</p>
+    <p><strong>Mirror:</strong> mirror across X → Y' = −Y; mirror across Y → X' = −X</p>
+    <p><strong>Order of operations:</strong> mirror → rotate → translate. This matches how G68 (coordinate rotation) and G52 (local offset) work on most CNC controls.</p>
+  </section>
+
+  <aside class="notice">
+    <strong>When to use this:</strong> If your fixture is rotated 15° on the mill table, enter the angle and all your program coordinates auto-adjust. If you move the part zero, use translation. For left-hand/right-hand parts, use mirror — but remember that mirroring reverses climb vs conventional milling direction.
+  </aside>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</main>
+<script src="calculator.js"></script>

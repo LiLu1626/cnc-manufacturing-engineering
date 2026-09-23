@@ -1,0 +1,63 @@
+---
+title: Setup Clearance Check
+---
+<link rel="stylesheet" href="styles.css">
+<a href="../" class="back-link">&larr; Back to Engineering Tools</a>
+<main class="tool-page">
+  <header class="tool-header">
+    <div class="eyebrow">Setup · Released</div>
+    <h1>Setup Clearance Check</h1>
+    <p>Check tool holder, collet, and spindle clearance against fixture and part geometry. Crashes usually happen at setup — catch them before you cycle the machine.</p>
+  </header>
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field">
+        <label for="holderType">Holder type</label>
+        <select id="holderType">
+          <option value="20">ER collet chuck (≈20 mm flange overhang)</option>
+          <option value="35" selected>CAT/BT end mill holder (≈35 mm)</option>
+          <option value="50">Shell mill arbor (≈50 mm)</option>
+          <option value="65">Face mill arbor (≈65 mm)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="holderD">Holder flange diameter (mm)</label>
+        <input id="holderD" type="number" value="48" min="10" step="any">
+      </div>
+      <div class="field">
+        <label for="toolLength">Protrusion from holder (mm)</label>
+        <input id="toolLength" type="number" value="50" min="1" step="any">
+      </div>
+      <div class="field">
+        <label for="fixtureHeight">Fixture / jaw height above table (mm)</label>
+        <input id="fixtureHeight" type="number" value="40" min="0" step="any">
+      </div>
+      <div class="field">
+        <label for="partHeight">Part top above fixture (mm)</label>
+        <input id="partHeight" type="number" value="25" min="0" step="any">
+      </div>
+      <div class="field">
+        <label for="workZ">Work offset Z0 (mm above table)</label>
+        <input id="workZ" type="number" value="65" min="0" step="any">
+      </div>
+    </div>
+    <div class="result-grid">
+      <div class="result"><div>Total reach below spindle face</div><div class="result-value" id="reachResult">—</div><div class="result-detail" id="reachDetail"></div></div>
+      <div class="result"><div>Clearance at part level</div><div class="result-value" id="clearResult">—</div><div class="result-detail" id="clearDetail"></div></div>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>How to check clearance</h2>
+    <p><strong>Total reach = holder overhang + tool protrusion.</strong> This is how far the tool assembly extends below the spindle nose.</p>
+    <p><strong>Required clearance:</strong> when the tool moves to a position near the fixture or jaw, the holder flange must clear the tallest obstruction by at least 3–5 mm. If the tool reaches past the work offset and the holder flange is near the fixture, you risk crashing the holder into the part or vise.</p>
+    <p><strong>Best practice:</strong> after setting up, manually jog the spindle to the highest point of the travel with dry run (single block). Watch the holder clear the vise and clamps at every position. Use tool length offset verification.</p>
+  </section>
+
+  <aside class="notice">
+    <strong>Common crash:</strong> an end mill holder with 35 mm flange overhang, tool protrusion 50 mm = 85 mm total reach. If work offset is at 65 mm above table, the holder flange sits 85 − 65 = 20 mm below the spindle face. If your vise jaws are 40 mm tall, the holder flange is at 65 − 20 = 45 mm above the table — only 5 mm above the jaw. Tight clearance!
+  </aside>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</main>
+<script src="calculator.js"></script>

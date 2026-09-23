@@ -1,0 +1,70 @@
+---
+title: Clamping Force Estimator
+---
+<link rel="stylesheet" href="styles.css">
+<a href="../" class="back-link">&larr; Back to Engineering Tools</a>
+<main class="tool-page">
+  <header class="tool-header">
+    <div class="eyebrow">Workholding · Released</div>
+    <h1>Clamping Force Estimator</h1>
+    <p>Estimate clamping force from screw torque or hydraulic cylinder pressure. Knowing your actual clamping force helps prevent part movement, fixture deflection, and part deformation.</p>
+  </header>
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field">
+        <label for="method">Method</label>
+        <select id="method">
+          <option value="screw" selected>Torque wrench (screw clamp)</option>
+          <option value="hydraulic">Hydraulic cylinder</option>
+        </select>
+      </div>
+      <div class="field" id="torqueField">
+        <label for="torque">Applied torque (N·m)</label>
+        <input id="torque" type="number" value="40" min="1" step="any">
+      </div>
+      <div class="field" id="threadField">
+        <label for="thread">Thread pitch</label>
+        <select id="thread">
+          <option value="1.5">M8 × 1.25 (fine)</option>
+          <option value="1.25" selected>M10 × 1.5 (coarse)</option>
+          <option value="1.75">M12 × 1.75 (coarse)</option>
+          <option value="2.0">M16 × 2.0 (coarse)</option>
+        </select>
+      </div>
+      <div class="field" id="effField">
+        <label for="efficiency">Friction efficiency μ</label>
+        <select id="efficiency">
+          <option value="0.15">Dry / rusty (μ=0.15)</option>
+          <option value="0.12" selected>Machine oil (μ=0.12)</option>
+          <option value="0.08">Anti-seize / Moly (μ=0.08)</option>
+        </select>
+      </div>
+      <div class="field" id="pressureField" style="display:none;">
+        <label for="pressure">Hydraulic pressure (bar)</label>
+        <input id="pressure" type="number" value="70" min="1" step="any">
+      </div>
+      <div class="field" id="areaField" style="display:none;">
+        <label for="area">Piston area (cm²)</label>
+        <input id="area" type="number" value="20" min="0.1" step="any">
+      </div>
+    </div>
+    <div class="result-grid">
+      <div class="result"><div>Estimated clamping force</div><div class="result-value" id="forceResult">—</div><div class="result-detail" id="forceDetail"></div></div>
+      <div class="result"><div>Safety check</div><div class="result-value" id="safetyResult">—</div><div class="result-detail" id="safetyDetail"></div></div>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>Formulas</h2>
+    <p><strong>Screw clamp (approximate):</strong> F ≈ (2000 × T) / d × η, where T = torque (N·m), d = bolt diameter (mm), η = friction efficiency factor. This is a shop-floor approximation; actual preload depends on thread condition, washer friction, and bolt grade.</p>
+    <p><strong>Hydraulic cylinder:</strong> F = P × A, where P = pressure (N/mm² = bar × 0.1), A = piston area (mm²).</p>
+    <p><strong>Rule of thumb:</strong> clamping force should be at least 3–5× the maximum cutting force. If the part can flex, spread the force with a larger contact pad. Never clamp on thin walls — support from below.</p>
+  </section>
+
+  <aside class="notice">
+    <strong>Example:</strong> M10 bolt at 40 N·m torque, oil-lubricated. Approximate clamping force ≈ 12–15 kN. If your cutting force is ~3 kN, that gives a safety factor of 4–5× — adequate. If you torque a dry bolt to the same 40 N·m, friction is higher and actual clamping force drops by ~30%.
+  </aside>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</main>
+<script src="calculator.js"></script>

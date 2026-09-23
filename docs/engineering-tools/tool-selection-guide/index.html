@@ -1,0 +1,47 @@
+---
+title: Tool Selection Guide
+---
+<link rel="stylesheet" href="styles.css">
+<a href="../" class="back-link">&larr; Back to Engineering Tools</a>
+<main class="tool-page">
+  <header class="tool-header">
+    <div class="eyebrow">Tooling · Released</div>
+    <h1>Tool Selection Guide</h1>
+    <p>Choose the right cutter geometry, substrate, and coating for your material and operation. Better tool selection means fewer tool changes, longer life, and better surface finish.</p>
+  </header>
+
+  <section class="tool-card">
+    <h2 style="margin-bottom:16px;">Operation → Tool type</h2>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Operation</th><th>Tool type</th><th>Geometry recommendation</th><th>Coating</th></tr></thead>
+        <tbody>
+          <tr><td>Aluminum roughing</td><td>Solid carbide end mill</td><td>3 flutes, high helix 35–45°, polished flutes</td><td>Uncoated or ZrN</td></tr>
+          <tr><td>Aluminum finishing</td><td>Ball nose / bull end mill</td><td>2–3 flutes, sharp edge</td><td>Uncoated</td></tr>
+          <tr><td>Steel roughing</td><td>Roughing end mill (chipbreaker)</td><td>4 flutes, 30° helix</td><td>TiCN or AlCrN</td></tr>
+          <tr><td>Steel finishing</td><td>Square end mill / ball nose</td><td>3–4 flutes, sharp edge prep</td><td>AlCrN</td></tr>
+          <tr><td>Stainless milling</td><td>Variable helix end mill</td><td>3–4 flutes, unequal helix for chatter</td><td>AlCrN or TiAlN</td></tr>
+          <tr><td>Cast iron</td><td>End mill / face mill</td><td>4–6 flutes, positive rake</td><td>TiN or uncoated</td></tr>
+          <tr><td>Titanium</td><td>Variable helix, high shear</td><td>3 flutes, polished, sharp edge</td><td>TiAlN (Al-rich)</td></tr>
+          <tr><td>Slotting / plunge</td><td>Plunge end mill</td><td>2–3 flutes, center-cutting</td><td>TiCN</td></tr>
+          <tr><td>Thread milling</td><td>Thread mill</td><td>Single-profile or full-profile</td><td>TiCN</td></tr>
+          <tr><td>Face milling</td><td>Face mill (insert)</td><td>Positive rake, 45° lead angle</td><td>Insert grade per material</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>Key selection principles</h2>
+    <p><strong>Flute count:</strong> fewer flutes = more chip room (for aluminum, soft materials, slotting). More flutes = higher feed rate (for steel, finishing, small features).</p>
+    <p><strong>Helix angle:</strong> higher helix (35–45°) gives shearing action in aluminum and stainless. Lower helix (20–30°) is stronger for heavy roughing in steel.</p>
+    <p><strong>Coating matching:</strong> TiN for general steel (low heat). TiCN for abrasive materials. AlCrN/TiAlN for high-heat cutting (stainless, titanium, hardened steel). Uncoated for aluminum to prevent built-up edge.</p>
+    <p><strong>Rigidity first:</strong> always use the shortest tool that reaches the feature. A 10 mm tool at 15 mm protrusion outlasts the same tool at 30 mm by 3–5×.</p>
+  </section>
+
+  <aside class="notice">
+    <strong>Example:</strong> Machining 304 stainless. Choose a 10 mm variable-helix carbide end mill with 3 flutes and AlCrN coating. Run Vc = 100 m/min (≈3180 RPM), fz = 0.06 mm/tooth (feed ≈ 570 mm/min). Use flood coolant and take ap ≤ 1×D. This setup gives stable cuts and 45–90 min tool life.
+  </aside>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</main>

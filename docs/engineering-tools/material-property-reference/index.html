@@ -1,0 +1,46 @@
+---
+title: Material Property Reference
+---
+<link rel="stylesheet" href="styles.css">
+<a href="../" class="back-link">&larr; Back to Engineering Tools</a>
+<main class="tool-page">
+  <header class="tool-header">
+    <div class="eyebrow">Reference · Released</div>
+    <h1>Material Property Reference</h1>
+    <p>Common workpiece materials for CNC machining: recommended cutting speeds, feed guidance, and chip characteristics. Always confirm with your tool supplier for specific grades and coatings.</p>
+  </header>
+
+  <section class="tool-card">
+    <h2 style="margin-bottom:16px">Cutting speed recommendations (cemented carbide, dry / flood coolant)</h2>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Material</th><th>Typical Vc (m/min)</th><th>Feed/tooth (mm)</th><th>Chip type</th><th>Coolant</th></tr></thead>
+        <tbody>
+          <tr><td>Aluminum (6061, 7075)</td><td>200–600</td><td>0.05–0.20</td><td>Long, stringy</td><td>Flood or MWF</td></tr>
+          <tr><td>Brass / Bronze</td><td>100–300</td><td>0.05–0.15</td><td>Short, brittle</td><td>Optional</td></tr>
+          <tr><td>Mild steel (A36, 1018)</td><td>120–250</td><td>0.05–0.20</td><td>Continuous ribbon</td><td>Flood</td></tr>
+          <tr><td>Alloy steel (4140, 4340)</td><td>100–200</td><td>0.05–0.18</td><td>Continuous, tough</td><td>Flood</td></tr>
+          <tr><td>Stainless 304/316</td><td>80–150</td><td>0.04–0.12</td><td>Work-hardening</td><td>Abundant flood</td></tr>
+          <tr><td>Stainless 17-4 PH</td><td>70–120</td><td>0.04–0.10</td><td>Tough, stringy</td><td>Flood + air</td></tr>
+          <tr><td>Cast iron (GG25)</td><td>60–150</td><td>0.08–0.25</td><td>Short, dusty</td><td>Dry or air</td></tr>
+          <tr><td>Titanium Ti-6Al-4V</td><td>40–80</td><td>0.05–0.15</td><td>Springy, hot</td><td>High-pressure through-tool</td></tr>
+          <tr><td>Inconel 718</td><td>30–60</td><td>0.05–0.12</td><td>Work-hardening</td><td>High-pressure coolant</td></tr>
+          <tr><td>Hardened steel (HRC 45–55)</td><td>60–120 (ceramic)</td><td>0.05–0.15</td><td>Discontinuous</td><td>Dry or air</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>Reading this table</h2>
+    <p><strong>Vc ranges are starting points.</strong> Actual cutting speed depends on tool coating (TiN, TiCN, Al2O3, CVD/DVD), tool geometry, machine rigidity, and coolant. Always start at the lower end and increase.</p>
+    <p><strong>Feed per tooth (fz) ranges.</strong> For finishing, use the lower end (0.03–0.08 mm). For roughing, use higher (0.10–0.25 mm). Stainless and titanium need consistent feed to avoid work hardening — never rub.</p>
+    <p><strong>Coolant strategy:</strong> aluminum benefits from flood to prevent built-up edge. Stainless needs high flow to flush chips and cool the cutting edge. Titanium needs high-pressure through-spindle coolant to break the heat zone.</p>
+  </section>
+
+  <aside class="notice">
+    <strong>Safety note:</strong> these values are typical starting points for carbide tools. Ceramic and CBN tools can run 2–5× faster on hard materials. HSS tools run at 1/3 to 1/2 the carbide speed. Always refer to your insert manufacturer's catalog for exact recommendations.
+  </aside>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</main>

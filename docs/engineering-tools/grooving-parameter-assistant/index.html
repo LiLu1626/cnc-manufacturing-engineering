@@ -1,0 +1,61 @@
+---
+title: Grooving Parameter Assistant
+---
+<link rel="stylesheet" href="styles.css">
+<a href="../" class="back-link">&larr; Back to Engineering Tools</a>
+<main class="tool-page">
+  <header class="tool-header">
+    <div class="eyebrow">Grooving · Released</div>
+    <h1>Grooving Parameter Assistant</h1>
+    <p>Calculate grooving RPM, feed, depth limits, and chip-breaking recommendations. Grooving involves interrupted cut and high chip load — correct parameters are critical for insert life and part quality.</p>
+  </header>
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field">
+        <label for="insertWidth">Insert / groove width (mm)</label>
+        <input id="insertWidth" type="number" value="3" min="1" step="any">
+      </div>
+      <div class="field">
+        <label for="vc">Cutting speed Vc (m/min)</label>
+        <input id="vc" type="number" value="120" min="1" step="any">
+      </div>
+      <div class="field">
+        <label for="workD">Workpiece diameter (mm)</label>
+        <input id="workD" type="number" value="50" min="1" step="any">
+      </div>
+      <div class="field">
+        <label for="depth">Groove depth (mm, radial)</label>
+        <input id="depth" type="number" value="4" min="0.5" step="any">
+      </div>
+      <div class="field">
+        <label for="feedRev">Feed (mm/rev)</label>
+        <input id="feedRev" type="number" value="0.08" min="0.01" step="any">
+      </div>
+    </div>
+    <div class="result-grid">
+      <div class="result"><div>Spindle speed</div><div class="result-value" id="rpmResult">—</div><div class="result-detail">RPM = 1000·Vc / (π·D)</div></div>
+      <div class="result"><div>Feed rate</div><div class="result-value" id="feedResult">—</div><div class="result-detail">mm/min at calculated RPM</div></div>
+      <div class="result"><div>Chip cross-section</div><div class="result-value" id="chipResult">—</div><div class="result-detail">ap × f per cut</div></div>
+      <div class="result"><div>Depth-to-width ratio</div><div class="result-value" id="dwResult">—</div><div class="result-detail" id="dwDetail"></div></div>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>Grooving fundamentals</h2>
+    <p><strong>RPM = 1000 × Vc ÷ (π × D)</strong> — use the workpiece diameter at the cutting point.</p>
+    <p><strong>Feed rate = f × RPM</strong> — grooving feeds are typically 0.05–0.15 mm/rev, much lower than turning because the chip is constrained in the groove.</p>
+    <p><strong>Groove depth limits:</strong> for external grooving, depth should not exceed 1.5× the insert width for stable tool life. Deeper grooves require multiple passes (plunge, retract, shift, plunge again).</p>
+    <p><strong>Chip control is everything.</strong> Grooving produces a wide, thin chip that tends to pack in the groove. Use peck cycles (Q) to retract and break the chip. For stainless and titanium, use 0.5–1 mm pecks.</p>
+  </section>
+
+  <aside class="notice">
+    <strong>Example:</strong> Grooving a 3 mm wide insert into 50 mm diameter steel at Vc = 120 m/min, f = 0.08 mm/rev. RPM ≈ 764, feed rate ≈ 61 mm/min. At 4 mm depth, depth/width = 1.33 — within single-pass capability. If depth were 8 mm (ratio 2.7), you would need 2–3 plunge cycles with 0.5 mm pecks.
+  </aside>
+
+  <aside class="notice">
+    <strong>For beginners:</strong> Always start at 50% of calculated feed. Watch the chip — it should curl into a small "6" or "9" shape, not a long string. If the chip packs in the groove, reduce feed or increase peck frequency. Never run dry on stainless or titanium.
+  </aside>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</main>
+<script src="calculator.js"></script>
