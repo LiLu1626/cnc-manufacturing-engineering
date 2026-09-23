@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Engineering Tools | Li Lu CNC Eng</title>
+  <link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../" class="active">Engineering Tools</a></li>
+      <li><a href="../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../machine-systems/">Machine Systems</a></li>
+      <li><a href="../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="page">
+
+  <section class="hero">
+    <div class="hero-eyebrow">Engineering Tools</div>
+    <h1>Calculators &amp; References</h1>
+    <p>25+ practical tools for CNC machining planning: speeds, feeds, geometry, drilling, tapping, threading, fits, surface finish, and setup. Every tool gives you transparent formulas and beginner-friendly explanations.</p>
+  </section>
+
+  <div class="tool-cat">
+    <h2>01 &middot; Machining Parameters</h2>
+    <p class="tool-cat-desc">Convert process inputs into planning values for speed, feed, and productivity.</p>
+    <div class="tool-list">
+      <a class="tool-item" href="cutting-speed-calculator/">
+        <div class="tool-item-name">Cutting Speed Calculator</div>
+        <div class="tool-item-desc">Reverse-lookup: find Vc from diameter and RPM.</div>
+      </a>
+      <a class="tool-item" href="spindle-speed-calculator/">
+        <div class="tool-item-name">Spindle Speed Calculator</div>
+        <div class="tool-item-desc">RPM from cutting speed and tool diameter.</div>
+      </a>
+      <a class="tool-item" href="feed-rate-calculator/">
+        <div class="tool-item-name">Feed Rate Calculator</div>
+        <div class="tool-item-desc">Vf from chip load, tooth count, and RPM.</div>
+      </a>
+      <a class="tool-item" href="material-removal-rate-calculator/">
+        <div class="tool-item-name">Material Removal Rate</div>
+        <div class="tool-item-desc">Metal removal rate Q = Vf &times; ap &times; ae.</div>
+      </a>
+      <a class="tool-item" href="machining-time-estimator/">
+        <div class="tool-item-name">Machining Time Estimator</div>
+        <div class="tool-item-desc">First-pass cycle time estimate.</div>
+      </a>
+      <a class="tool-item" href="power-torque-estimator/">
+        <div class="tool-item-name">Power &amp; Torque Estimator</div>
+        <div class="tool-item-desc">Check if the cut fits the spindle.</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="tool-cat">
+    <h2>02 &middot; Tooling &amp; Process Planning</h2>
+    <p class="tool-cat-desc">Tool stability, chip load, drilling, tapping, and tool life considerations.</p>
+    <div class="tool-list">
+      <a class="tool-item" href="chip-load-calculator/">
+        <div class="tool-item-name">Chip Load Reference</div>
+        <div class="tool-item-desc">Understand fz, tooth count, and feed rate.</div>
+      </a>
+      <a class="tool-item" href="tool-overhang-risk-check/">
+        <div class="tool-item-name">Tool Overhang Risk Check</div>
+        <div class="tool-item-desc">Deflection and chatter risk by diameter and length.</div>
+      </a>
+      <a class="tool-item" href="tool-life-planning/">
+        <div class="tool-item-name">Tool Life Planning</div>
+        <div class="tool-item-desc">Balance life, quality, and productivity.</div>
+      </a>
+      <a class="tool-item" href="drilling-parameter-assistant/">
+        <div class="tool-item-name">Drilling Parameter Assistant</div>
+        <div class="tool-item-desc">Drill RPM, feed, depth, pecking, safety.</div>
+      </a>
+      <a class="tool-item" href="tapping-parameter-assistant/">
+        <div class="tool-item-name">Tapping Parameter Assistant</div>
+        <div class="tool-item-desc">Rigid tapping RPM, feed, and tap drill size.</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="tool-cat">
+    <h2>03 &middot; Geometry &amp; Coordinates</h2>
+    <p class="tool-cat-desc">Turn drawing geometry into reviewable coordinates before programming.</p>
+    <div class="tool-list">
+      <a class="tool-item" href="bolt-circle-calculator/">
+        <div class="tool-item-name">Bolt Circle Calculator</div>
+        <div class="tool-item-desc">X/Y positions for equally spaced holes.</div>
+      </a>
+      <a class="tool-item" href="hole-pattern-generator/">
+        <div class="tool-item-name">Hole Pattern Generator</div>
+        <div class="tool-item-desc">Rectangular and circular hole coordinate tables.</div>
+      </a>
+      <a class="tool-item" href="right-triangle-calculator/">
+        <div class="tool-item-name">Right-Triangle Calculator</div>
+        <div class="tool-item-desc">Missing sides and angles for angled faces and coordinates.</div>
+      </a>
+      <a class="tool-item" href="arc-and-chord-calculator/">
+        <div class="tool-item-name">Arc &amp; Chord Calculator</div>
+        <div class="tool-item-desc">Radius, chord, sagitta, and included angle.</div>
+      </a>
+      <a class="tool-item" href="taper-angle-calculator/">
+        <div class="tool-item-name">Taper &amp; Angle Calculator</div>
+        <div class="tool-item-desc">Taper dimensions, half-angle, and taper per 100 mm.</div>
+      </a>
+      <div class="tool-item planned">
+        <div class="tool-item-name">Coordinate Transformation</div>
+        <div class="tool-item-desc">Translation, rotation, and mirroring. (Planned)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool-cat">
+    <h2>04 &middot; Turning Engineering</h2>
+    <p class="tool-cat-desc">Turning-specific RPM, feed, CSS, and threading calculations.</p>
+    <div class="tool-list">
+      <a class="tool-item" href="turning-speed-feed-calculator/">
+        <div class="tool-item-name">Turning Speed &amp; Feed</div>
+        <div class="tool-item-desc">RPM, mm/rev, and surface speed for turning.</div>
+      </a>
+      <a class="tool-item" href="constant-surface-speed-reference/">
+        <div class="tool-item-name">Constant Surface Speed</div>
+        <div class="tool-item-desc">CSS crossover diameter and max RPM limits.</div>
+      </a>
+      <a class="tool-item" href="threading-calculator/">
+        <div class="tool-item-name">Threading Calculator</div>
+        <div class="tool-item-desc">Pitch, lead, depth, passes, and minor diameter.</div>
+      </a>
+      <div class="tool-item planned">
+        <div class="tool-item-name">Grooving Parameter Assistant</div>
+        <div class="tool-item-desc">Tool width, depth, chip, and clearance. (Planned)</div>
+      </div>
+      <div class="tool-item planned">
+        <div class="tool-item-name">Boring-Bar Deflection Check</div>
+        <div class="tool-item-desc">Bar deflection risk by diameter and overhang. (Planned)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool-cat">
+    <h2>05 &middot; Workholding &amp; Setup</h2>
+    <p class="tool-cat-desc">Setup decisions: locating, clamping, soft jaws, and repeatability.</p>
+    <div class="tool-list">
+      <a class="tool-item" href="soft-jaw-step-calculator/">
+        <div class="tool-item-name">Soft-Jaw Step Calculator</div>
+        <div class="tool-item-desc">Bore diameter, step diameter, and engagement depth.</div>
+      </a>
+      <div class="tool-item planned">
+        <div class="tool-item-name">Clamping Force Estimator</div>
+        <div class="tool-item-desc">Initial clamping-force discussion. (Planned)</div>
+      </div>
+      <div class="tool-item planned">
+        <div class="tool-item-name">Setup Clearance Check</div>
+        <div class="tool-item-desc">Tool, holder, fixture, and travel clearances. (Planned)</div>
+      </div>
+      <div class="tool-item planned">
+        <div class="tool-item-name">Datum Planning Worksheet</div>
+        <div class="tool-item-desc">Locating surfaces and inspection datums. (Planned)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool-cat">
+    <h2>06 &middot; Quality &amp; Inspection</h2>
+    <p class="tool-cat-desc">Tolerances, fits, surface roughness, and inspection planning.</p>
+    <div class="tool-list">
+      <a class="tool-item" href="basic-fit-reference/">
+        <div class="tool-item-name">Basic Fit Reference</div>
+        <div class="tool-item-desc">Tolerance system concepts: clearance, transition, interference.</div>
+      </a>
+      <a class="tool-item" href="surface-finish-conversion/">
+        <div class="tool-item-name">Surface Finish Conversion</div>
+        <div class="tool-item-desc">Ra, Rz, RMS, and &micro;in &harr; &micro;m conversion.</div>
+      </a>
+      <div class="tool-item planned">
+        <div class="tool-item-name">Tolerance Stack-Up Assistant</div>
+        <div class="tool-item-desc">List and assess contributing dimensions. (Planned)</div>
+      </div>
+      <div class="tool-item planned">
+        <div class="tool-item-name">Measurement Planning</div>
+        <div class="tool-item-desc">Feature, datum, instrument, and acceptance. (Planned)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool-cat">
+    <h2>07 &middot; Engineering Utilities</h2>
+    <p class="tool-cat-desc">Reusable references and worksheets supporting every domain.</p>
+    <div class="tool-list">
+      <a class="tool-item" href="unit-conversion/">
+        <div class="tool-item-name">Unit Conversion</div>
+        <div class="tool-item-desc">Length, speed, feed, torque, pressure, temperature.</div>
+      </a>
+      <a class="tool-item" href="formula-library/">
+        <div class="tool-item-name">Formula Library</div>
+        <div class="tool-item-desc">Search all formulas; each links to its calculator.</div>
+      </a>
+      <a class="tool-item" href="printable-setup-worksheet/">
+        <div class="tool-item-name">Printable Setup Worksheet</div>
+        <div class="tool-item-desc">Job, tooling, zero, and first-article inspection sheet.</div>
+      </a>
+      <div class="tool-item planned">
+        <div class="tool-item-name">Material Property Reference</div>
+        <div class="tool-item-desc">Material data for machining planning. (Planned)</div>
+      </div>
+      <div class="tool-item planned">
+        <div class="tool-item-name">Tool Selection Guide</div>
+        <div class="tool-item-desc">Compare tool, holder, material, and stability. (Planned)</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering
+</footer>
+
+</body>
+</html>
