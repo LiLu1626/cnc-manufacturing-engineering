@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Process Capability & SPC | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch11" class="back-link">&larr; Back to 11 &middot; Manufacturing Quality</a>
+<div class="hero-eyebrow">11.1 &middot; Manufacturing Quality</div>
+<h1>Process Capability &amp; SPC — Can Your Process Make Good Parts?</h1>
+
+<p>Process capability answers a simple question: when you run this job, can the machine consistently hold the tolerance? Cp and Cpk are the numbers that quantify this. SPC (Statistical Process Control) monitors whether the process stays in control over time. This page explains both in plain terms.</p>
+
+<h2>What Is Process Capability?</h2>
+<p>A machine might hold a dimension ±0.01 mm on the first part — but can it do that for 1000 parts in a row? Process capability measures how much variation the process actually produces compared to the tolerance allowed on the drawing.</p>
+
+<div class="callout">
+  <p><strong>The idea:</strong> tolerance band (USL − LSL) divided by the natural spread of the process (6σ, or ±3σ from the mean). If the process variation fits comfortably inside the tolerance, the process is capable. If it's tight, expect defects.</p>
+</div>
+
+<h2>Cp — Process Potential</h2>
+<p>Cp compares the tolerance width to the process spread, without considering where the process is centered.</p>
+
+<div class="formula-box">
+  <p><strong>Cp = (USL − LSL) / (6σ)</strong></p>
+  <p>USL = upper spec limit, LSL = lower spec limit, σ = process standard deviation</p>
+</div>
+
+<table>
+  <tr><th>Cp value</th><th>Meaning</th><th>Assessment</th></tr>
+  <tr><td>Cp &lt; 1.0</td><td>Process spread exceeds tolerance</td><td>Incapable — expect scrap</td></tr>
+  <tr><td>Cp = 1.0</td><td>Process spread exactly fills tolerance</td><td>Barely capable — any drift = defects</td></tr>
+  <tr><td>Cp = 1.33</td><td>Tolerance is 4× process spread</td><td>Acceptable — standard target</td></tr>
+  <tr><td>Cp = 1.67</td><td>Tolerance is 5× process spread</td><td>Excellent — comfortable margin</td></tr>
+  <tr><td>Cp ≥ 2.0</td><td>Six-sigma level</td><td>World-class</td></tr>
+</table>
+
+<h2>Cpk — Process Performance (Centered)</h2>
+<p>Cp ignores centering. Cpk accounts for whether the process mean is off-center. If the process drifts toward one spec limit, Cpk drops even if Cp looks good.</p>
+
+<div class="formula-box">
+  <p><strong>Cpk = min[(USL − mean) / 3σ, (mean − LSL) / 3σ]</strong></p>
+  <p>Takes the smaller of the two distances from mean to each spec, divided by 3σ.</p>
+</div>
+
+<table>
+  <tr><th>Cpk value</th><th>Meaning</th><th>Typical use</th></tr>
+  <tr><td>Cpk &lt; 1.0</td><td>Not capable</td><td>Process needs improvement</td></tr>
+  <tr><td>Cpk = 1.0</td><td>Just capable at the nearest limit</td><td>Risky — no margin</td></tr>
+  <tr><td>Cpk = 1.33</td><td>Standard target</td><td>Most industries require this</td></tr>
+  <tr><td>Cpk = 1.67</td><td>Good margin</td><td>Critical features</td></tr>
+<tr><td>Cpk ≥ 2.0</td><td>Six-sigma</td><td>High-reliability parts (medical, aerospace)</td></tr>
+</table>
+
+<div class="example">
+  <p><strong>Worked example:</strong> a shaft dimension is 25 ±0.05 mm. USL = 25.05, LSL = 24.95. After measuring 50 parts, mean = 25.01, σ = 0.010.</p>
+  <p>Cp = (25.05 − 24.95) / (6 × 0.010) = 0.10 / 0.060 = <strong>1.67</strong></p>
+  <p>Cpk upper = (25.05 − 25.01) / (3 × 0.010) = 0.04 / 0.030 = 1.33</p>
+  <p>Cpk lower = (25.01 − 24.95) / (3 × 0.010) = 0.06 / 0.030 = 2.00</p>
+  <p>Cpk = min(1.33, 2.00) = <strong>1.33</strong></p>
+  <p>The process is acceptable (Cpk = 1.33), but the mean is offset +0.01 toward the upper limit. Re-centering to 25.00 would raise Cpk to 1.67 on both sides.</p>
+</div>
+
+<h2>How to Measure Cp/Cpk in Practice</h2>
+<ol>
+  <li>Let the machine warm up and run normally.</li>
+  <li>Measure 30–50 consecutive parts on a critical dimension.</li>
+  <li>Calculate mean and standard deviation.</li>
+  <li>Plug into the formulas.</li>
+  <li>If Cpk &lt; 1.33, investigate the cause (see <a href="../root-cause-analysis/">Root Cause Analysis</a>).</li>
+</ol>
+
+<div class="warning">
+  <p><strong>Important:</strong> only calculate Cp/Cpk when the process is in statistical control. If the process is drifting or has special-cause variation, the numbers are meaningless. Use SPC first to confirm stability.</p>
+</div>
+
+<h2>SPC — Statistical Process Control</h2>
+<p>SPC uses control charts to monitor whether the process is stable over time. A control chart plots measured dimensions in order, with upper and lower control limits (UCL/LCL) set at ±3σ from the mean.</p>
+
+<h3>Common Control Charts</h3>
+<table>
+  <tr><th>Chart</th><th>Use</th><th>What it detects</th></tr>
+  <tr><td>X-bar / R chart</td><td>Variables data (dimensions), subgroups of 3–5</td><td>Mean shift and spread change</td></tr>
+  <tr><td>X / MR chart</td><td>One measurement per part</td><td>Individual part variation and drift</td></tr>
+  <tr><td>P chart</td><td>Attribute data (pass/fail)</td><td>Proportion defective</td></tr>
+</table>
+
+<h3>Out-of-Control Signals</h3>
+<p>The process needs attention if:</p>
+<ul>
+  <li>Any point falls outside UCL or LCL.</li>
+  <li>7 consecutive points trend upward or downward (tool wear).</li>
+  <li>7 consecutive points are on one side of the mean (mean shift).</li>
+  <li>Points hug the control limits (process changed).</li>
+</ul>
+
+<h2>First Article Inspection (FAI)</h2>
+<p>Before running production, the first part is fully inspected against the drawing — every dimension, every GD&amp;T tolerance, every note. This proves the process can produce a conforming part.</p>
+<table>
+  <tr><th>FAI step</th><th>What you do</th></tr>
+  <tr><td>1. Set up the job</td><td>Machine, tools, offsets per the process plan</td></tr>
+  <tr><td>2. Run first part</td><td>Full cycle, no shortcuts</td></tr>
+  <tr><td>3. Measure everything</td><td>Every dimension on the drawing — not just critical ones</td></tr>
+  <tr><td>4. Record results</td><td>FAI report: nominal, upper/lower, measured, pass/fail</td></tr>
+  <tr><td>5. Sign off</td><td>Operator, inspector, engineer all approve</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Rule:</strong> if the first part is wrong, fix the cause before making 10 more. Don't tweak offsets on the fly without understanding why the first part was off. See <a href="../root-cause-analysis/">Root Cause Analysis</a> for structured troubleshooting.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../../#ch11">&larr; Knowledge Base</a>
+  <a href="../root-cause-analysis/">Next: Root Cause Analysis &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

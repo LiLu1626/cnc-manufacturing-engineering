@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Root Cause Analysis | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch11" class="back-link">&larr; Back to 11 &middot; Manufacturing Quality</a>
+<div class="hero-eyebrow">11.2 &middot; Manufacturing Quality</div>
+<h1>Root Cause Analysis — Why Did It Actually Happen?</h1>
+
+<p>When a part is out of tolerance or a tool breaks, fixing the immediate symptom (adjusting an offset, indexing a tool) isn't enough. If you don't find the root cause, it'll happen again. This page covers the practical tools: 5 Why, Fishbone, and the corrective action process.</p>
+
+<h2>The Two Types of Problems</h2>
+<table>
+  <tr><th>Type</th><th>What it means</th><th>Example</th></tr>
+  <tr><td><strong>Special cause</strong></td><td>Unexpected, one-off, identifiable event</td><td>A chip under the part caused a bad dimension; a tool broke early</td></tr>
+  <tr><td><strong>Common cause</strong></td><td>Built into the process, happens regularly</td><td>The machine consistently drifts 0.02 mm over a shift; tool wear rate is too high</td></tr>
+</table>
+<p>Special causes are fixed by addressing the event. Common causes require changing the process. Knowing which type you have determines your corrective action.</p>
+
+<h2>5 Why — Keep Asking "Why?"</h2>
+<p>The simplest root cause tool: ask "why" repeatedly until you reach the underlying cause, not just the immediate symptom.</p>
+
+<div class="example">
+  <p><strong>Example: a bore is out of tolerance</strong></p>
+  <p><strong>Why 1:</strong> Why is the bore 0.03 mm too big? → The boring bar deflected during the cut.</p>
+  <p><strong>Why 2:</strong> Why did the boring bar deflect? → The feed was too high for the overhang.</p>
+  <p><strong>Why 3:</strong> Why was the feed too high? → The operator used the standard feed for a short bar, but this hole requires a long bar.</p>
+  <p><strong>Why 4:</strong> Why didn't the program account for that? → The process plan didn't specify reduced feed for deep boring.</p>
+  <p><strong>Why 5:</strong> Why didn't the plan specify it? → No one considered the overhang when the program was written.</p>
+  <p><strong>Root cause:</strong> process plan doesn't account for tool overhang. <strong>Fix:</strong> add a feed reduction rule to the setup sheet for deep bores.</p>
+</div>
+
+<div class="callout">
+  <p><strong>5 Why works when you follow the chain.</strong> Don't stop at "operator error" — that's always the surface answer. Ask why the operator was put in a position to make that error.</p>
+</div>
+
+<h2>Fishbone Diagram (Ishikawa)</h2>
+<p>When there are many possible causes, brainstorm them all organized into categories. The standard categories for machining:</p>
+
+<table>
+  <tr><th>Category</th><th>Questions to ask</th></tr>
+  <tr><td><strong>Machine</strong></td><td>Is the machine aligned? Spindle worn? Way lubrication OK?</td></tr>
+  <tr><td><strong>Method</strong></td><td>Is the process plan correct? Parameters right? Sequence logical?</td></tr>
+  <tr><td><strong>Material</strong></td><td>Is the material consistent? Hardness variation? Sawed vs milled stock?</td></tr>
+  <tr><td><strong>Measurement</strong></td><td>Is the gauge calibrated? Is the operator measuring correctly?</td></tr>
+  <tr><td><strong>Man (operator)</strong></td><td>Trained? Following the sheet? Fatigued?</td></tr>
+  <tr><td><strong>Environment</strong></td><td>Temperature variation? Chips on the table? Coolant condition?</td></tr>
+</table>
+
+<h2>Non-Conformance (NC) Process</h2>
+<p>When a part is out of spec, you need a documented process:</p>
+<ol>
+  <li><strong>Identify:</strong> tag the part, mark it non-conforming, segregate it so it doesn't get shipped.</li>
+  <li><strong>Contain:</strong> check other parts from the same batch — how many are affected?</li>
+  <li><strong>Evaluate:</strong> can it be reworked? Is it a scrap? Can the customer use it as-is (concession)?</li>
+  <li><strong>Root cause:</strong> use 5 Why or Fishbone to find why it happened.</li>
+  <li><strong>Corrective action:</strong> fix the cause so it doesn't repeat.</li>
+  <li><strong>Verify effectiveness:</strong> after the fix, monitor for 1–2 weeks — did the problem actually stop?</li>
+</ol>
+
+<h2>Corrective vs Preventive Action</h2>
+<table>
+  <tr><th></th><th>Corrective Action (CA)</th><th>Preventive Action (PA)</th></tr>
+  <tr><td>Trigger</td><td>A problem already happened</td><td>A problem could happen</td></tr>
+  <tr><td>Purpose</td><td>Fix the cause of the non-conformance</td><td>Stop potential non-conformances before they occur</td></tr>
+  <tr><td>Example</td><td>"Deep bores need reduced feed" added to setup sheet</td><td>"All boring programs over 3× diameter overhang get a feed check"</td></tr>
+</table>
+
+<h2>Process Qualification</h2>
+<p>Before a new process runs in production, prove it works consistently:</p>
+<ul>
+  <li><strong>First Article Inspection:</strong> one good part proves the process can work.</li>
+  <li><strong>Capability study (Cpk):</strong> 30–50 parts prove it's consistently good.</li>
+  <li><strong>Run-off:</strong> produce a full batch, measure at intervals, confirm no drift.</li>
+  <li><strong>Sign-off:</strong> engineer, quality, and production all approve before release.</li>
+</ul>
+
+<h2>Practical Tips</h2>
+<div class="warning">
+  <p><strong>"Operator error" is not a root cause.</strong> It's the start of the investigation. Ask: why was the operator able to make that mistake? Was the setup sheet unclear? Was the program wrong? Was there no poke-yoke (mistake-proofing)? A good process should make it hard to do the wrong thing.</p>
+</div>
+
+<ul>
+  <li><strong>Contain first, investigate later.</strong> Make sure bad parts don't ship before you spend time on root cause.</li>
+  <li><strong>Don't blame people — fix systems.</strong> Even if an operator made a mistake, the process should have caught it.</li>
+  <li><strong>Document everything.</strong> The 5 Why, the fix, and the verification should be written down so the next person learns from it.</li>
+  <li><strong>Verify the fix worked.</strong> A corrective action that isn't followed up is just a suggestion.</li>
+</ul>
+
+<div class="callout">
+  <p><strong>Related:</strong> for machining-specific problems (chatter, tool wear, dimensional error), see <a href="../../10-troubleshooting/">Chapter 10 — Machining Troubleshooting</a>. For measuring process stability, see <a href="../process-capability-spc/">Process Capability &amp; SPC</a>.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../process-capability-spc/">&larr; Process Capability &amp; SPC</a>
+  <a href="../../#ch11">Knowledge Base &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>
