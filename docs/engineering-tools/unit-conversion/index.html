@@ -1,5 +1,82 @@
 ---
 title: Unit Conversion
 ---
+
 <link rel="stylesheet" href="styles.css">
-<main class="tool-page"><header class="tool-header"><div class="eyebrow">Engineering Utility · Released</div><h1>Unit Conversion</h1><p>Convert frequently used CNC and manufacturing units with clear source and target units.</p></header><section class="tool-card"><div class="tool-grid"><div class="field"><label for="type">Measurement category</label><select id="type"><option value="length">Length</option><option value="speed">Cutting speed</option><option value="feed">Feed rate</option><option value="torque">Torque</option><option value="pressure">Pressure</option><option value="temp">Temperature</option></select></div><div class="field"><label for="value">Value to convert</label><input id="value" type="number" value="25.4" step="any"></div><div class="field"><label for="from">From</label><select id="from"></select></div><div class="field"><label for="to">To</label><select id="to"></select></div></div><div class="result"><div>Converted result</div><div class="result-value" id="result">—</div><div class="result-detail" id="detail"></div></div></section><aside class="notice"><strong>Use boundary:</strong> This tool converts units only. Confirm the drawing, control convention, machine documentation, supplier data, and approved process plan before production use.</aside><section><h2>Practical CNC Reference</h2><ul><li><strong>1 in = 25.4 mm</strong></li><li><strong>1 sfm = 0.3048 m/min</strong></li><li><strong>1 ipm = 25.4 mm/min</strong></li></ul><h2>How to Use</h2><ol><li>Choose the physical quantity.</li><li>Enter the known value and select source and target units.</li><li>Confirm the unit convention against the relevant engineering source.</li></ol></section><footer class="tool-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer></main><script src="converter.js"></script>
+
+<main class="tool-page">
+  <header class="tool-header">
+    <div class="eyebrow">Engineering Utility · Released</div>
+    <h1>Unit Conversion</h1>
+    <p>
+      Convert frequently used CNC and manufacturing units with
+      clear source and target units.
+    </p>
+  </header>
+
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field">
+        <label for="type">Measurement category</label>
+        <select id="type">
+          <option value="length">Length</option>
+          <option value="speed">Cutting speed</option>
+          <option value="feed">Feed rate</option>
+          <option value="torque">Torque</option>
+          <option value="pressure">Pressure</option>
+          <option value="temp">Temperature</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="value">Value to convert</label>
+        <input id="value" type="number" value="25.4" step="any">
+      </div>
+
+      <div class="field">
+        <label for="from">From</label>
+        <select id="from"></select>
+      </div>
+
+      <div class="field">
+        <label for="to">To</label>
+        <select id="to"></select>
+      </div>
+    </div>
+
+    <div class="result">
+      <div>Converted result</div>
+      <div class="result-value" id="result">—</div>
+      <div class="result-detail" id="detail"></div>
+    </div>
+  </section>
+
+  <aside class="notice">
+    <strong>Use boundary:</strong>
+    This tool converts units only. Confirm the drawing, control
+    convention, machine documentation, supplier data, and approved
+    process plan before production use.
+  </aside>
+
+  <section>
+    <h2>Practical CNC Reference</h2>
+    <ul>
+      <li><strong>1 in = 25.4 mm</strong></li>
+      <li><strong>1 sfm = 0.3048 m/min</strong></li>
+      <li><strong>1 ipm = 25.4 mm/min</strong></li>
+    </ul>
+
+    <h2>How to Use</h2>
+    <ol>
+      <li>Choose the physical quantity.</li>
+      <li>Enter the known value and select source and target units.</li>
+      <li>Confirm the unit convention against the relevant engineering source.</li>
+    </ol>
+  </section>
+
+  <footer class="tool-footer">
+    Designed by Li Lu · CNC & Manufacturing Engineering
+  </footer>
+</main>
+
+<script src="converter.js"></script>
