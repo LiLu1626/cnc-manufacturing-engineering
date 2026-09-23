@@ -1,0 +1,23 @@
+---
+title: Chip Load Reference and Calculator
+---
+<link rel="stylesheet" href="styles.css">
+<main class="tool-page">
+  <header class="tool-header">
+    <div class="eyebrow">Tooling and Process Planning · Released</div>
+    <h1>Chip Load Reference and Calculator</h1>
+    <p>Calculate feed per tooth from table feed, spindle speed, and active cutting edges.</p>
+  </header>
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field"><label for="feed">Table feed (mm/min)</label><input id="feed" type="number" value="955" min="0" step="any"></div>
+      <div class="field"><label for="rpm">Spindle speed (RPM)</label><input id="rpm" type="number" value="4775" min="0" step="any"></div>
+      <div class="field"><label for="flutes">Active cutting edges</label><input id="flutes" type="number" value="4" min="1" step="1"></div>
+    </div>
+    <div class="result"><div>Feed per tooth</div><div class="result-value" id="result">—</div><div class="result-detail" id="detail"></div></div>
+  </section>
+  <section class="formula"><h2>Formula and interpretation</h2><p><strong>Chip load (mm/tooth) = Feed rate ÷ (RPM × active cutting edges)</strong></p><p>Chip load is the programmed feed movement assigned to each active cutting edge. It is a starting value, not a guaranteed chip thickness under every engagement condition.</p></section>
+  <aside class="notice"><strong>For beginners:</strong> Too little feed per tooth can cause rubbing; too much can overload the cutter or machine. Start with the toolmaker's material-specific range and reduce conservatively when rigidity is limited.</aside>
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</main>
+<script src="calculator.js"></script>
