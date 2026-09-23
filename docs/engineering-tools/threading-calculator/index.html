@@ -1,0 +1,91 @@
+---
+title: Threading Calculator
+---
+
+<article class="tool-page">
+  <header class="tool-header">
+    <p class="eyebrow">Turning · Released</p>
+    <h1>Threading Calculator</h1>
+    <p>Calculate thread parameters for CNC lathe threading cycles: RPM, feed rate, thread depth, and approximate number of passes. Covers metric 60° threads (M profile). Helps beginners understand why threading feed equals the pitch and how thread depth is distributed across passes.</p>
+  </header>
+
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field">
+        <label for="workD">Workpiece diameter — mm</label>
+        <input id="workD" type="number" step="0.001" placeholder="e.g. 20" />
+      </div>
+      <div class="field">
+        <label for="pitchP">Pitch P — mm</label>
+        <input id="pitchP" type="number" step="0.01" placeholder="e.g. 2.0" />
+      </div>
+      <div class="field">
+        <label for="vcThr">Cutting speed Vc — m/min</label>
+        <input id="vcThr" type="number" step="0.1" placeholder="e.g. 60" />
+      </div>
+      <div class="field">
+        <label for="mode">Thread type</label>
+        <select id="mode">
+          <option value="60">Metric / Unified 60° external</option>
+          <option value="60int">Metric 60° internal (hole)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="result-grid">
+      <div class="result">
+        <p>Spindle speed RPM</p>
+        <p class="result-value" id="rpmResult">—</p>
+        <p class="result-detail" id="rpmDetail"></p>
+      </div>
+      <div class="result">
+        <p>Feed rate (thread feed)</p>
+        <p class="result-value" id="feedResult">—</p>
+        <p class="result-detail" id="feedDetail"></p>
+      </div>
+      <div class="result">
+        <p>Thread depth (single depth)</p>
+        <p class="result-value" id="depthResult">—</p>
+        <p class="result-detail" id="depthDetail"></p>
+      </div>
+      <div class="result">
+        <p>Approx. number of passes</p>
+        <p class="result-value" id="passesResult">—</p>
+        <p class="result-detail" id="passesDetail"></p>
+      </div>
+      <div class="result">
+        <p>Minor diameter (external)</p>
+        <p class="result-value" id="minorResult">—</p>
+        <p class="result-detail" id="minorDetail"></p>
+      </div>
+      <div class="result">
+        <p>Lead / start count</p>
+        <p class="result-value" id="leadResult">—</p>
+        <p class="result-detail" id="leadDetail"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>Threading formulas (60° metric)</h2>
+    <p><strong>Feed per revolution = pitch P.</strong> On Fanuc G92/G76, the feed is programmed as F = P (mm/rev). The spindle must be synchronized so every revolution advances exactly one pitch.</p>
+    <ul>
+      <li>RPM = 1000 × Vc / (π × D) — threading uses lower Vc (30–80 m/min) than turning</li>
+      <li>Thread depth (external) = 0.6134 × P (H/2 height of 60° triangle)</li>
+      <li>Minor diameter (external) = D − 2 × depth = D − 1.2268 × P</li>
+      <li>For internal threads, the tap drill size ≈ D − P (60% thread engagement)</li>
+    </ul>
+    <p><strong>Pass schedule:</strong> Threads are cut in multiple passes with decreasing depth. Typical first pass 0.3–0.5 mm, last pass 0.05 mm. Rough guides for carbide: P=1.0 → 3–4 passes; P=1.5 → 4–6; P=2.0 → 6–8; P=3.0 → 10–12. Always check the tool manufacturer's recommended infeed pattern (compound vs. radial).</p>
+    <p><strong>Approach distance:</strong> Leave at least 2–3 mm of lead-in before the thread start (G76 Q value). This lets the spindle synchronize before cutting the full pitch.</p>
+  </section>
+
+  <aside class="notice">
+    <strong>Safety:</strong>
+    <p>Never use high RPM for threading — the feed is fixed by pitch, so high RPM means high feed rate and tool damage. Always dry-run the threading cycle without cutting first. The infeed angle (compound slide) should be 29° for external 60° threads to reduce cutting forces. Verify the final thread with a go/no-go gauge.</p>
+  </aside>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</article>
+
+<link rel="stylesheet" href="styles.css" />
+<script src="calculator.js" defer></script>
