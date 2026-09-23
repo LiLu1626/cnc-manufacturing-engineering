@@ -25,26 +25,57 @@
 <div class="hero-eyebrow">03.5 · Machining Operations</div>
 <h1>EDM (Electrical Discharge Machining)</h1>
 
-<p>EDM removes metal with controlled electrical sparks — no physical contact between tool and workpiece. It is used for hard materials, intricate internal geometries, and fine details that a milling cutter cannot reach.</p>
+<p>EDM removes metal with controlled electrical sparks — no physical contact between tool and workpiece. A series of rapid voltage discharges (sparks) jumps between the electrode (tool) and the workpiece through a dielectric fluid, melting and vaporizing tiny particles of metal. Because there's no cutting force, EDM can machine hard materials, fragile parts, and intricate internal geometries that conventional tools cannot reach.</p>
 
-<h2>Two Main Types</h2>
-<table>
-  <tr><th>Type</th><th>How it works</th><th>Typical use</th></tr>
-  <tr><td><strong>Sinker EDM</strong></td><td>A graphite/copper electrode is sunk into the workpiece</td><td>Mold cavities, internal gear shapes</td></tr>
-  <tr><td><strong>Wire EDM</strong></td><td>A thin brass wire cuts through the part like a bandsaw</td><td>Extrusion dies, punch pins, fine profiles</td></tr>
-</table>
+<h2>The Two Main Types</h2>
 
-<h2>When to Use EDM</h2>
+<h3>Sinker EDM (Ram EDM / Plunge EDM)</h3>
+<p>A shaped electrode (usually graphite or copper) is sunk into the workpiece. The electrode is the inverse of the desired cavity — like a mold punch pressing into clay. Used for mold cavities, die pockets, and internal gear forms. One electrode shape creates one cavity shape.</p>
 <ul>
-  <li>Material is too hard (HRC 60+) for carbide cutting tools.</li>
-  <li>Internal corners require a radius smaller than any end mill.</li>
-  <li>Thin or fragile parts that would deflect under cutting forces.</li>
-  <li>Deep, narrow slots that milling cannot reach.</li>
+  <li><strong>Electrode material:</strong> graphite (most common, easy to machine), copper (fine finish), copper tungsten (difficult materials)</li>
+  <li><strong>Dielectric:</strong> hydrocarbon oil or deionized water</li>
+  <li><strong>Typical use:</strong> injection mold cavities, die casting dies, forging dies</li>
 </ul>
 
+<h3>Wire EDM (Wire Cut EDM)</h3>
+<p>A thin brass or copper wire (0.1–0.3 mm diameter) travels from a supply spool to a take-up spool, cutting through the workpiece like a bandsaw. The workpiece is CNC-contoured in X/Y. Wire EDM can cut extremely intricate profiles and narrow slots with no force on the part.</p>
+<ul>
+  <li><strong>Wire diameter:</strong> 0.10–0.30 mm (thinner = finer detail, slower)</li>
+  <li><strong>Dielectric:</strong> deionized water</li>
+  <li><strong>Typical use:</strong> punch and die buttons, extrusion dies, carbide punches, progressive die components</li>
+</ul>
+
+<h2>When to Choose EDM</h2>
+<table>
+  <tr><th>Scenario</th><th>Why EDM</th></tr>
+  <tr><td>Hardened steel (HRC 60+) after heat treat</td><td>Carbide tools can't cut it; EDM only needs electrical conductivity</td></tr>
+  <tr><td>Internal corner radius smaller than tool radius</td><td>End mills have corner radii; EDM wire can make near-zero inside corners</td></tr>
+  <tr><td>Thin or fragile walls</td><td>No cutting force means no deflection or vibration</td></tr>
+  <tr><td>Deep, narrow slots</td><td>Small wire can reach L/D ratios milling cannot</td></tr>
+  <tr><td>Carbide or ceramic parts</td><td>Grinding is slow; EDM cuts carbide efficiently</td></tr>
+</table>
+
+<h2>EDM Limitations</h2>
 <div class="callout warning">
-  <p><strong>Limitation:</strong> EDM only works on conductive materials. It is slow (mm³/min) and leaves a recast layer (white layer) on the surface that may need removal for highly stressed parts.</p>
+  <p><strong>What EDM can't do:</strong></p>
+  <ul>
+    <li>Only works on <strong>electrically conductive</strong> materials (no plastics, ceramics, glass unless metalized)</li>
+    <li>Slow material removal (mm³/min) — not for roughing large volumes</li>
+    <li>Leaves a <strong>recast layer</strong> (white layer) on the surface — a thin, brittle, heat-affected zone that may need removal for highly stressed parts</li>
+    <li>Creates a slight <strong>taper</strong> on tall walls (wire wanders slightly from the spark gap)</li>
+  </ul>
 </div>
+
+<h2>EDM vs Other Processes</h2>
+<table>
+  <tr><th></th><th>Milling</th><th>Grinding</th><th>EDM</th></tr>
+  <tr><td>Material hardness</td><td>Up to HRC 50</td><td>Any (abrasive)</td><td>Any conductive</td></tr>
+  <tr><td>Material removal rate</td><td>High</td><td>Medium</td><td>Low</td></tr>
+  <tr><td>Internal corner radius</td><td>Limited by tool</td><td>Limited by wheel</td><td>Near-zero</td></tr>
+  <tr><td>Cutting forces</td><td>Significant</td><td>Moderate</td><td>None</td></tr>
+  <tr><td>Surface integrity</td><td>Good</td><td>Good (if controlled)</td><td>Recast layer</td></tr>
+  <tr><td>Best for</td><td>General machining</td><td>Precision finishing</td><td>Hard materials, complex geometry</td></tr>
+</table>
 
 <div class="nav-links">
   <a href="../grinding/">&larr; Grinding</a>

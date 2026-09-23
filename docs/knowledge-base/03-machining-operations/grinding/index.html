@@ -25,27 +25,62 @@
 <div class="hero-eyebrow">03.4 · Machining Operations</div>
 <h1>Grinding</h1>
 
-<p>Grinding uses an abrasive wheel to remove very small amounts of material. It is used after heat treatment or when you need the highest precision and surface finish — typically Ra &lt; 0.4 µm and tolerances under ±0.005 mm.</p>
+<p>Grinding uses an abrasive wheel to remove very small amounts of material. It is the precision finishing process — used after heat treatment, when tolerances are tighter than machining can hold, or when surface finish must be below Ra 0.4 µm. A grinding wheel has thousands of abrasive grains, each acting like a tiny cutting edge. Material removal is slow (micron-sized chips), but accuracy and finish are unmatched.</p>
 
-<h2>Common Grinding Types</h2>
+<h2>Why Grind Instead of Machine?</h2>
 <table>
-  <tr><th>Type</th><th>What it does</th><th>Typical use</th></tr>
-  <tr><td>Surface grinding</td><td>Flat surfaces with a rotating wheel</td><td>Die plates, fixture bases, parallel blocks</td></tr>
-  <tr><td>Cylindrical grinding</td><td>Rotates the part while a wheel grinds OD</td><td>Shafts, pins after heat treat</td></tr>
-  <tr><td>Internal grinding</td><td>Grinds precision holes</td><td>Bearing races, dies</td></tr>
-  <tr><td>Centerless grinding</td><td>Part rests on a blade, no centers</td><td>High-volume pins, rollers</td></tr>
+  <tr><th>Reason</th><th>Example</th></tr>
+  <tr><td>Material is too hard for carbide</td><td>After heat treatment to HRC 58–62 (bearings, dies)</td></tr>
+  <tr><td>Tighter tolerance than turning/milling</td><td>±0.002 mm on shaft diameter, roundness &lt; 0.001 mm</td></tr>
+  <tr><td>Better surface finish</td><td>Ra 0.1–0.2 µm for seal surfaces, bearing races</td></tr>
+  <tr><td>No burr or thermal damage</td><td>Precision components that can't tolerate burrs</td></tr>
 </table>
 
-<h2>Why Grind Instead of Mill?</h2>
+<h2>Common Grinding Types</h2>
+
+<h3>Surface Grinding</h3>
+<p>The most common grinder. A rotating wheel reciprocates across a magnetic chuck holding a flat workpiece. Used for die plates, fixture bases, parallel blocks, and any flat surface that needs precision.</p>
 <ul>
-  <li>After heat treatment, the part is too hard (HRC 50+) for carbide tools.</li>
-  <li>Surface finish requirement is below what turning/milling can hold.</li>
-  <li>Tighter tolerance (±0.002 mm) than machining can achieve.</li>
+  <li><strong>Typical accuracy:</strong> ±0.005 mm flatness, ±0.002 mm parallelism</li>
+  <li><strong>Depth of cut:</strong> 0.005–0.02 mm per pass (very light)</li>
+  <li><strong>Wheel:</strong> aluminum oxide (A) for steel, silicon carbide (C) for carbide/ceramics</li>
 </ul>
 
-<div class="callout">
-  <p><strong>Key difference from cutting:</strong> grinding removes tiny chips (micron-sized) with thousands of abrasive grains. Each grain acts like a tiny cutting tool edge. Material removal rate is low, but accuracy and finish are unmatched.</p>
+<h3>Cylindrical Grinding (OD Grind)</h3>
+<p>The part rotates between centers while a large grinding wheel traverses along it. Used to finish hardened shafts, pins, and rollers after heat treatment. External cylindrical grinding is the most common — internal grinding bores precision holes.</p>
+<ul>
+  <li><strong>Typical accuracy:</strong> ±0.005 mm diameter, roundness &lt; 0.002 mm</li>
+  <li><strong>Stock removal:</strong> 0.05–0.2 mm total (rough + finish passes)</li>
+</ul>
+
+<h3>Centerless Grinding</h3>
+<p>The part rests on a work blade between a grinding wheel and a regulating wheel — no centers needed. Used for high-volume production of pins, dowels, and cylindrical parts. Excellent diameter consistency but limited to simple cylinders.</p>
+
+<h3>Internal Grinding (ID Grind)</h3>
+<p>Small grinding wheels reach inside a pre-bored hole to finish it. Used for bearing races, die bushings, and precision hydraulic cylinders. Very delicate — the small wheel has limited rigidity.</p>
+
+<h2>Grinding Wheel Basics</h2>
+<table>
+  <tr><th>Abrasive type</th><th>Use for</th><th>Color</th></tr>
+  <tr><td>Aluminum oxide (A)</td><td>Steel, carbon steel, alloy steel</td><td>Brown / white</td></tr>
+  <tr><td>Silicon carbide (C)</td><td>Cast iron, aluminum, carbide, ceramics</td><td>Black / green</td></tr>
+  <tr><td>CBN (cubic boron nitride)</td><td>Hardened steel (HRC 50+), high-volume</td><td>Black (superabrasive)</td></tr>
+  <tr><td>Diamond (D)</td><td>Carbide, ceramics, glass, composites</td><td>Silver (superabrasive)</td></tr>
+</table>
+
+<div class="callout warning">
+  <p><strong>Grinding burn:</strong> if you grind too aggressively, the surface overheats and gets a "burned" temper — a blue/green discoloration that ruins surface integrity and can cause cracking. Use light cuts, dress the wheel regularly, and always flood with coolant.</p>
 </div>
+
+<h2>When to Use Which Process</h2>
+<table>
+  <tr><th>Requirement</th><th>Process</th></tr>
+  <tr><td>Rough shape, general tolerance</td><td>Milling / turning</td></tr>
+  <tr><td>±0.02 mm, Ra 1.6 µm</td><td>Finish milling / finish turning</td></tr>
+  <tr><td>±0.005 mm, Ra 0.4 µm</td><td>Finish boring / fine turning</td></tr>
+  <tr><td>±0.002 mm, Ra 0.2 µm, hardened steel</td><td>Grinding</td></tr>
+  <tr><td>Mirror finish, extremely flat</td><td>Grinding + lapping / polishing</td></tr>
+</table>
 
 <div class="nav-links">
   <a href="../drilling-hole-making/">&larr; Drilling</a>

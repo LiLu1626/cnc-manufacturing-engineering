@@ -25,59 +25,138 @@
 <div class="hero-eyebrow">03.2 · Machining Operations</div>
 <h1>Milling Operations</h1>
 
-<p>Milling is the most versatile CNC process: a rotating multi-flute cutter moves across a fixed workpiece. It can machine flat faces, pockets, slots, contours, and 3D shapes. This is what happens in a typical CNC vertical machining center (VMC).</p>
+<p>Milling is the most versatile CNC process. A rotating multi-flute cutter moves across a fixed workpiece, cutting away material in small chips. Unlike turning (where the part spins), milling holds the part still and moves the tool — which means you can make virtually any shape: flat plates, pockets, slots, contoured surfaces, 3D molds, and intricate parts. This is what a typical vertical machining center (VMC) does all day.</p>
 
-<h2>How Milling Works</h2>
-<svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
+<h2>How Milling Works: The Geometry of a Cut</h2>
+<svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg">
   <!-- Spindle -->
   <rect x="270" y="20" width="60" height="40" fill="#5c6872" rx="4"/>
-  <text x="300" y="80" text-anchor="middle" font-size="11" fill="#5c6872">Spindle</text>
+  <text x="300" y="75" text-anchor="middle" font-size="11" fill="#5c6872">Spindle</text>
   <!-- Cutter -->
-  <circle cx="300" cy="120" r="25" fill="none" stroke="#0b766e" stroke-width="3"/>
-  <line x1="300" y1="95" x2="300" y2="80" stroke="#0b766e" stroke-width="2"/>
+  <circle cx="300" cy="120" r="30" fill="none" stroke="#0b766e" stroke-width="3"/>
+  <line x1="300" y1="90" x2="300" y2="75" stroke="#0b766e" stroke-width="2"/>
+  <text x="350" y="115" font-size="11" fill="#0b766e">End mill (Z up)</text>
   <!-- Workpiece -->
-  <rect x="180" y="155" width="240" height="40" fill="#cfdbd8" rx="3"/>
-  <text x="300" y="180" text-anchor="middle" font-size="12" fill="#17242f">Workpiece</text>
+  <rect x="160" y="160" width="280" height="50" fill="#cfdbd8" rx="3"/>
+  <text x="300" y="190" text-anchor="middle" font-size="12" fill="#17242f">Workpiece (fixed)</text>
   <!-- Feed arrow -->
-  <line x1="100" y1="175" x2="160" y2="175" stroke="#c0392b" stroke-width="2" marker-end="url(#mf)"/>
-  <text x="100" y="165" font-size="11" fill="#c0392b">Feed</text>
-  <defs><marker id="mf" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#c0392b"/></marker></defs>
+  <line x1="80" y1="185" x2="145" y2="185" stroke="#c0392b" stroke-width="2" marker-end="url(#mf)"/>
+  <text x="80" y="175" font-size="11" fill="#c0392b">Feed (X/Y)</text>
+  <!-- ap label -->
+  <line x1="470" y1="160" x2="470" y2="210" stroke="#e67e22" stroke-width="1.5" marker-end="url(#apd)"/>
+  <text x="485" y="190" font-size="11" fill="#e67e22">ap (depth)</text>
+  <defs>
+    <marker id="mf" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#c0392b"/></marker>
+    <marker id="apd" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#e67e22"/></marker>
+  </defs>
 </svg>
+
+<p>Three numbers define every milling cut:</p>
+<table>
+  <tr><th>Parameter</th><th>Symbol</th><th>Meaning</th></tr>
+  <tr><td>Spindle speed</td><td>N (RPM)</td><td>Derived from cutting speed Vc and tool diameter</td></tr>
+  <tr><td>Chip load per tooth</td><td>fz (mm/tooth)</td><td>How thick each flute cuts per revolution</td></tr>
+  <tr><td>Feed rate</td><td>Vf (mm/min)</td><td>fz × N × number of flutes (z)</td></tr>
+  <tr><td>Axial depth of cut</td><td>ap (mm)</td><td>How deep the tool cuts vertically</td></tr>
+  <tr><td>Radial depth of cut</td><td>ae (mm)</td><td>How wide the tool engages horizontally</td></tr>
+</table>
+
+<div class="formula-box">RPM = (Vc × 1000) / (π × D_tool)<br>Vf = fz × z × RPM</div>
+
+<div class="callout">
+  <p><strong>Worked example — milling aluminum:</strong> You have a 12 mm, 3-flute carbide end mill. Aluminum with carbide: Vc = 300 m/min, fz = 0.05 mm/tooth.</p>
+  <p>RPM = (300 × 1000) / (π × 12) = <strong>7,958 RPM</strong>.<br>
+  Feed rate Vf = 0.05 × 3 × 7,958 = <strong>1,194 mm/min</strong>.</p>
+  <p>Try it: <a href="../../../engineering-tools/spindle-speed-calculator/">Spindle Speed</a> · <a href="../../../engineering-tools/feed-rate-calculator/">Feed Rate</a> · <a href="../../../engineering-tools/cutting-speed-calculator/">Cutting Speed</a></p>
+</div>
+
+<h2>Climb vs Conventional Milling</h2>
+<p>This is the single most important concept in milling — it changes tool life, surface finish, and even machine choice.</p>
+<svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Conventional (up) milling -->
+  <text x="150" y="25" text-anchor="middle" font-size="12" font-weight="bold" fill="#c0392b">Conventional (up) milling</text>
+  <circle cx="150" cy="80" r="25" fill="none" stroke="#0b766e" stroke-width="2.5"/>
+  <path d="M 130 65 A 20 20 0 0 1 170 65" fill="none" stroke="#0b766e" stroke-width="2" marker-end="url(#rc1)"/>
+  <rect x="80" y="120" width="140" height="30" fill="#cfdbd8"/>
+  <text x="150" y="140" text-anchor="middle" font-size="10" fill="#17242f">Workpiece</text>
+  <text x="150" y="175" text-anchor="middle" font-size="10" fill="#c0392b">Chip starts thin → gets thick<br>Rubbing, heat, BUE</text>
+  <defs><marker id="rc1" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#0b766e"/></marker></defs>
+
+  <!-- Climb (down) milling -->
+  <text x="450" y="25" text-anchor="middle" font-size="12" font-weight="bold" fill="#0b766e">Climb (down) milling</text>
+  <circle cx="450" cy="80" r="25" fill="none" stroke="#0b766e" stroke-width="2.5"/>
+  <path d="M 430 95 A 20 20 0 0 0 470 95" fill="none" stroke="#0b766e" stroke-width="2" marker-end="url(#rc2)"/>
+  <rect x="380" y="120" width="140" height="30" fill="#cfdbd8"/>
+  <text x="450" y="140" text-anchor="middle" font-size="10" fill="#17242f">Workpiece</text>
+  <text x="450" y="175" text-anchor="middle" font-size="10" fill="#0b766e">Chip starts thick → gets thin<br>Clean cut, better finish, preferred</text>
+  <defs><marker id="rc2" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#0b766e"/></marker></defs>
+</svg>
+
+<div class="callout">
+  <p><strong>Rule:</strong> always use climb milling (also called "down milling") on modern CNC machines with ball screws and backlash compensation. Conventional milling is only needed on old manual machines or when machining cast/scale surfaces where you want the insert to scrape through the hard skin first.</p>
+</div>
 
 <h2>Common Milling Operations</h2>
 
 <h3>Face Milling</h3>
-<p>A large-diameter face mill skims across the top surface, creating a flat plane. Uses indexable inserts at high feed rates. Usually the first operation on a raw block.</p>
+<p>A large-diameter face mill (often 50–100 mm) skims across the top surface of the part. It uses indexable inserts and removes large amounts of stock quickly. Usually the first operation on a raw block — you face the top, flip it, face the bottom, and then machine features.</p>
+<ul>
+  <li><strong>Depth:</strong> 0.5–3 mm per pass</li>
+  <li><strong>Width of cut:</strong> 60–80% of cutter diameter (center the tool slightly off-center for even wear)</li>
+  <li><strong>Insert grade:</strong> P30 for steel, K20 for aluminum/cast iron</li>
+</ul>
 
-<h3>Peripheral / Slab Milling</h3>
-<p>The cutter axis is parallel to the surface, cutting a wide, shallow slab. Used for large flat sides.</p>
-
-<h3>Slot Milling</h3>
-<p>An end mill cuts a full-width slot (ae = tool diameter). Heaviest cut — only half the tool engages, chips are thicker on one side.</p>
+<h3>Slot Milling (Full Slotting)</h3>
+<p>The end mill cuts a slot where ae = tool diameter (the full width of the tool is engaged). This is the heaviest cut — half the tool is buried, chips must evacuate through the flutes, and heat builds up fast.</p>
+<ul>
+  <li><strong>Reduce feed:</strong> use 50–70% of normal chip load because chip evacuation is poor</li>
+  <li><strong>Use 2–3 flutes:</strong> fewer flutes = more chip clearance. A 4-flute mill in a full slot will pack chips and burn up</li>
+  <li><strong>Depth limit:</strong> slot no deeper than 1.5× tool diameter in one pass. Deeper slots require pecking</li>
+</ul>
 
 <h3>Pocket Milling</h3>
-<p>Milling an enclosed cavity (like a mold pocket). Uses trochoidal or zig-zag toolpaths to manage heat and chip evacuation.</p>
+<p>Milling an enclosed cavity (like a mold pocket or a housing cavity). CAM software generates the toolpath — typically zig-zag, offset (also called "constant scallop"), or trochoidal.</p>
 
 <h3>Profile / Contour Milling</h3>
-<p>The cutter follows the outer perimeter of a part, finishing its side walls. Usually a finishing pass after roughing.</p>
+<p>The cutter follows the outer perimeter of the part, finishing side walls. This is always a finishing operation — roughing removes bulk material first, then a light finish pass (0.2–0.5 mm radial stock) cleans up the walls to final dimension.</p>
 
-<h3>Trochodial Milling</h3>
-<p>The cutter follows a spiral path with small radial engagement (ae ≈ 10–20% of diameter) but deep axial depth (ap up to 2–3× diameter). Keeps chip thickness constant and tool cool. Great for stainless and titanium.</p>
+<h3>Trochodial Milling (High-Efficiency Milling)</h3>
+<p>A modern roughing strategy: the cutter follows a spiral path with <strong>small radial engagement</strong> (ae ≈ 10–20% of diameter) but <strong>deep axial depth</strong> (ap up to 2–3× tool diameter). Because ae is small, the tool is only cutting a small arc — chip thickness stays constant, heat stays low, and tool life doubles or triples.</p>
+<table>
+  <tr><th>Strategy</th><th>ae (radial)</th><th>ap (axial)</th><th>Best for</th></tr>
+  <tr><td>Conventional roughing</td><td>50–100% D</td><td>0.5–1× D</td><td>Soft materials, low power machines</td></tr>
+  <tr><td>Trochodial / HEM</td><td>10–20% D</td><td>2–3× D</td><td>Stainless, titanium, hardened steel</td></tr>
+</table>
 
 <div class="callout">
-  <p><strong>Climb vs conventional milling:</strong> in climb (up) milling, the cutter feeds in the direction of rotation — chip starts thick and gets thin. Better surface finish, less heat, preferred on modern machines. In conventional (down) milling, chip starts thin and gets thick — more rubbing, more heat.</p>
+  <p><strong>Calculate MRR and power:</strong> MRR = Vf × ap × ae. For a 12 mm tool, ae = 2 mm (17% D), ap = 24 mm (2× D), Vf = 800 mm/min → MRR = 38.4 cm³/min. Check if your machine has enough spindle power: <a href="../../../engineering-tools/material-removal-rate-calculator/">MRR Calculator</a></p>
 </div>
 
-<h2>Choosing the Right Cutter</h2>
+<h2>Choosing the Right End Mill</h2>
 <table>
-  <tr><th>Operation</th><th>Cutter type</th><th>Typical flutes</th></tr>
-  <tr><td>Face milling</td><td>Face mill (indexable)</td><td>4–8 inserts</td></tr>
-  <tr><td>Slotting</td><td>Solid carbide end mill</td><td>2–3 (chip clearance)</td></tr>
-  <tr><td>Finishing walls</td><td>Carbide end mill, 35–45° helix</td><td>3–4</td></tr>
-  <tr><td>Aluminum</td><td>Polished, 2–3 flutes, high helix</td><td>2–3</td></tr>
-  <tr><td>Steel roughing</td><td>Roughing end mill (chip breakers)</td><td>4–6</td></tr>
+  <tr><th>Material to cut</th><th>Tool material</th><th>Flutes</th><th>Helix angle</th><th>Vc (m/min)</th></tr>
+  <tr><td>Aluminum</td><td>Carbide, polished</td><td>2–3</td><td>35–45° (high)</td><td>300–600</td></tr>
+  <tr><td>Low-carbon steel</td><td>Carbide TiAlN coated</td><td>3–4</td><td>30–35°</td><td>100–200</td></tr>
+  <tr><td>Stainless steel</td><td>Carbide TiAlN + chip breaker</td><td>3–4</td><td>35–40°</td><td>80–150</td></tr>
+  <tr><td>Cast iron</td><td>Carbide (uncoated or TiCN)</td><td>4–6</td><td>30°</td><td>100–250</td></tr>
+  <tr><td>Hardened steel (HRC 45–55)</td><td>Sub-micron grain carbide</td><td>4</td><td>30°</td><td>60–120</td></tr>
+  <tr><td>Titanium</td><td>Carbide, polished, variable helix</td><td>3–4</td><td>35–40°</td><td>40–80</td></tr>
 </table>
-<p>More: <a href="../../../engineering-tools/tool-selection-guide/">Tool Selection Guide</a></p>
+<p>More: <a href="../../../engineering-tools/tool-selection-guide/">Tool Selection Guide</a> · <a href="../../../engineering-tools/cutting-speed-calculator/">Cutting Speed Calculator</a></p>
+
+<h2>Workholding for Milling</h2>
+<table>
+  <tr><th>Method</th><th>Use case</th><th>Considerations</th></tr>
+  <tr><td>Vise ( Kurt / 6")</td><td>Blocks, plates, general work</td><td>Most common; use soft jaws for finished surfaces</td></tr>
+  <tr><td>Machine clamps / strap clamps</td><td>Large parts, plates</td><td>Clamp low — tall clamps deflect under cutting forces</td></tr>
+  <tr><td>Vacuum chuck</td><td>Thin sheets, flat plates</td><td>Good for aluminum panels; limited holding force</td></tr>
+  <tr><td>Modular fixture plate</td><td>Production, multiple setups</td><td>Repeatable; uses dowel pins and clamps</td></tr>
+  <tr><td>3-2-1 fixturing</td><td>Precision locating</td><td>Six points locate the part — see <a href="../../../engineering-tools/datum-planning-worksheet/">Datum Planning</a></td></tr>
+</table>
+
+<div class="callout warning">
+  <p><strong>Clamp height warning:</strong> the number-one cause of crashed mills is the tool hitting a clamp or screw. Always check tool clearance in your CAM simulation, and position clamps below the machined surface. See <a href="../../../engineering-tools/tool-overhang-risk-check/">Tool Overhang Risk Check</a>.</p>
+</div>
 
 <div class="nav-links">
   <a href="../turning/">&larr; Turning</a>
