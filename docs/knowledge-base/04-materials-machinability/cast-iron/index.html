@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cast Iron | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../" class="back-link">&larr; Back to Knowledge Base</a>
+<div class="hero-eyebrow">04.3 · Materials & Machinability</div>
+<h1>Cast Iron</h1>
+
+<p>Cast iron is an alloy of iron with 2–4% carbon and 1–3% silicon. The carbon is not fully dissolved — it appears as graphite flakes or nodules in the microstructure. Castings are poured into molds near net shape, then CNC-machined to final dimensions. Cast iron machines differently from steel — it produces short chips, is abrasive, and doesn't need coolant.</p>
+
+<h2>Major Cast Iron Types</h2>
+<table>
+  <tr><th>Type</th><th>Microstructure</th><th>Properties</th><th>Typical use</th></tr>
+  <tr><td><strong>Gray cast iron (GG20/GG25, ASTM A48)</strong></td><td>Flake graphite</td><td>Excellent vibration damping, good castability, brittle</td><td>Engine blocks, machine bases, brake discs</td></tr>
+  <tr><td><strong>Ductile iron (GGG40/GGG50, ASTM A536)</strong></td><td>Nodular (spheroidal) graphite</td><td>Tougher and stronger than gray iron, still casts well</td><td>Gears, crankshafts, hydraulic housings</td></tr>
+  <tr><td><strong>Compacted graphite iron (CGI)</strong></td><td>Vermicular graphite</td><td>Between gray and ductile — higher strength</td><td>Modern diesel engine blocks</td></tr>
+  <tr><td><strong>Malleable iron</strong></td><td>Tempered carbon nodules</td><td>Heat-treated white iron, shock-resistant</td><td>Pipe fittings, hand tools</td></tr>
+</table>
+
+<h2>Machining Cast Iron</h2>
+
+<h3>What's easy</h3>
+<ul>
+  <li><strong>Short chips:</strong> gray cast iron fractures into small chips — no chip breaker needed, no tangling around the tool.</li>
+  <li><strong>No coolant needed:</strong> cast iron machines dry. The graphite acts as a lubricant, and coolant causes the fine iron dust to form a sticky paste that clogs machines.</li>
+  <li><strong>Good surface finish:</strong> cuts cleanly at moderate feeds.</li>
+</ul>
+
+<h3>What's hard</h3>
+<ul>
+  <li><strong>Abrasiveness:</strong> the graphite flakes and hard silicon particles cause flank wear on the tool. Use uncoated or TiCN-coated carbide (K-type grade).</li>
+  <li><strong>Scale/skin:</strong> castings have a hard outer scale (the mold skin). Always take a cut deep enough to break through the scale on the first pass — cutting on the scale kills the tool edge.</li>
+  <li><strong>Dust:</strong> cast iron generates fine, dark dust. Use a vacuum/extraction. The dust is conductive and can damage electrical components if it builds up in the machine.</li>
+</ul>
+
+<h3>Cutting parameters</h3>
+<table>
+  <tr><th>Material</th><th>Vc (carbide, m/min)</th><th>Feed (mm/rev)</th><th>Coolant</th></tr>
+  <tr><td>Gray cast iron (GG25)</td><td>80–150</td><td>0.15–0.3</td><td>Dry (or air blast)</td></tr>
+  <tr><td>Ductile iron (GGG40)</td><td>70–120</td><td>0.1–0.25</td><td>Dry (or light flood)</td></tr>
+  <tr><td>Hardened cast iron (HRC 50+)</td><td>50–80 (CBN)</td><td>0.1–0.2</td><td>Dry</td></tr>
+</table>
+
+<div class="callout warning">
+  <p><strong>Cast iron scale:</strong> the first cut on a casting must be deep enough (at least 0.5 mm) to get below the hard sand-blasted skin. Cutting on the scale causes rapid flank wear. If stock is uneven, take a facing pass first to find the real surface.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../steel-stainless/">&larr; Steel & Stainless</a>
+  <a href="../non-ferrous/">Next: Non-Ferrous &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

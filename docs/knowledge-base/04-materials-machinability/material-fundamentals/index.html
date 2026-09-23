@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Material Fundamentals | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../" class="back-link">&larr; Back to Knowledge Base</a>
+<div class="hero-eyebrow">04.1 · Materials & Machinability</div>
+<h1>Material Fundamentals</h1>
+
+<p>Before you pick a tool and set speeds, you need to understand what you're cutting. Every material behaves differently under the cutting edge — some produce nice curly chips, others work-harden, others generate extreme heat. This page explains the material properties that control how easy or difficult a part is to machine.</p>
+
+<h2>The 8 Properties That Control Machinability</h2>
+
+<h3>1. Hardness</h3>
+<p>Hardness is the material's resistance to plastic deformation — how much it resists being pushed aside by the cutting edge. Measured on the Brinell (HB) or Rockwell (HRC) scale.</p>
+<table>
+  <tr><th>Hardness range</th><th>Typical materials</th><th>Machinability</th></tr>
+  <tr><td>HB 120–200</td><td>Low-carbon steel, aluminum, brass</td><td>Easy — standard carbide works</td></tr>
+  <tr><td>HB 200–300</td><td>Alloy steel, 4140 pre-hard</td><td>Moderate — coated carbide, lower speeds</td></tr>
+  <tr><td>HB 300–450 (HRC 30–45)</td><td>Tool steel, pre-hard mold steel</td><td>Hard — advanced carbide, low speeds</td></tr>
+  <tr><td>HRC 50–65</td><td>Hardened tool steel, bearing races</td><td>Very hard — CBN, ceramic, or EDM/grinding</td></tr>
+</table>
+<div class="callout">
+  <p><strong>Rule of thumb:</strong> as hardness doubles, cutting speed drops by roughly half. A material at HB 400 needs about half the speed of the same material at HB 200.</p>
+</div>
+
+<h3>2. Strength (Tensile Strength)</h3>
+<p>Strength is how much force the material can withstand before breaking. Stronger materials require more cutting force, which means more heat and more tool wear. Tensile strength correlates roughly with hardness — but not perfectly. Stainless steel, for example, has moderate hardness but high work-hardening tendency, making it harder to machine than its hardness suggests.</p>
+
+<h3>3. Toughness</h3>
+<p>Toughness is the ability to absorb energy before fracture. Tough materials don't break cleanly — they deform plastically, form long stringy chips, and generate high cutting forces. High-toughness materials (austenitic stainless steel, titanium) are tough to machine because the chip doesn't break cleanly and heat stays concentrated at the edge.</p>
+
+<h3>4. Ductility</h3>
+<p>Ductility is how much the material stretches before breaking. Ductile materials (low-carbon steel, aluminum, copper) form long, continuous chips that need chip breakers. Brittle materials (cast iron, hardened steel) form discontinuous chips — easier to handle, but they can cause edge chipping on the tool.</p>
+
+<h3>5. Thermal Conductivity</h3>
+<p>This is one of the most underrated machinability factors. Materials that conduct heat well (aluminum, copper) pull heat away from the cutting edge — the tool stays cool, and you can run fast. Materials that conduct heat poorly (stainless steel, titanium, Inconel) trap heat at the cutting zone — tool temperatures spike, and you must reduce speed to compensate.</p>
+<table>
+  <tr><th>Material</th><th>Thermal conductivity (W/m·K)</th><th>Effect on machining</th></tr>
+  <tr><td>Aluminum</td><td>200–230</td><td>Excellent — run high speeds</td></tr>
+  <tr><td>Carbon steel</td><td>45–50</td><td>Good — standard speeds</td></tr>
+  <tr><td>Stainless steel (304)</td><td>16</td><td>Poor — heat stays at edge, reduce speed</td></tr>
+  <tr><td>Titanium (Ti-6Al-4V)</td><td>6.7</td><td>Very poor — extreme heat, slow speeds</td></tr>
+  <tr><td>Inconel 718</td><td>11</td><td>Very poor — high temp strength, slow speeds</td></tr>
+</table>
+
+<h3>6. Work Hardening</h3>
+<p>Some materials harden mechanically when you cut them — the act of pushing the tool across the surface work-hardens the workpiece, making the next cut harder. This is the defining challenge of austenitic stainless steel (304/316), titanium, and superalloys. Symptoms: surface gets glazed, tool rubs instead of cuts, built-up edge, poor finish.</p>
+<div class="callout warning">
+  <p><strong>Work-hardening rules:</strong> never let the tool rub in the cut. Use a positive rake angle, adequate feed (don't feed too light — light feeds cause rubbing which work-hardens), and never dwell in the cut. If you feel the cut get harder as you go, you're work-hardening the surface.</p>
+</div>
+
+<h3>7. Abrasiveness</h3>
+<p>Abrasive materials contain hard particles that wear the tool mechanically. Cast iron has graphite flakes that abrade the tool. Aluminum with high silicon content (A380) is abrasive. Fiberglass and carbon-fiber composites are extremely abrasive. Abrasiveness causes flank wear — the tool wears on the flank face even at moderate speeds.</p>
+
+<h3>8. Machinability Rating</h3>
+<p>Machinability is a relative score comparing how easily a material is cut. The industry standard uses free-machining steel (AISI 1212) as the baseline = 100%. Higher number = easier; lower = harder.</p>
+<table>
+  <tr><th>Material</th><th>Machinability index</th><th>Relative difficulty</th></tr>
+  <tr><td>AISI 1212 (baseline)</td><td>100%</td><td>Reference</td></tr>
+  <tr><td>Aluminum 6061</td><td>200–500%</td><td>Very easy</td></tr>
+  <tr><td>Low-carbon steel 1018</td><td>60–80%</td><td>Easy</td></tr>
+  <tr><td>4140 alloy steel</td><td>60%</td><td>Moderate</td></tr>
+  <tr><td>304 stainless</td><td>25–35%</td><td>Difficult</td></tr>
+  <tr><td>Titanium Ti-6Al-4V</td><td>10–20%</td><td>Very difficult</td></tr>
+  <tr><td>Inconel 718</td><td>5–15%</td><td>Extremely difficult</td></tr>
+</table>
+
+<h2>How These Properties Combine</h2>
+<p>No single property tells the whole story. Stainless steel 304 is only moderately hard (HB 180), but it combines low thermal conductivity, high work-hardening, and high toughness — making it 3× harder to machine than plain carbon steel of the same hardness. Aluminum is soft and conducts heat well, but it can built-up edge (BUE) on the tool if speeds are too low.</p>
+
+<div class="callout">
+  <p><strong>Material reference:</strong> look up cutting speeds, feeds, and coolant recommendations by material: <a href="../../../engineering-tools/material-property-reference/">Material Property Reference Table</a></p>
+</div>
+
+<div class="nav-links">
+  <a href="../../">&larr; Knowledge Base</a>
+  <a href="../steel-stainless/">Next: Steel & Stainless &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

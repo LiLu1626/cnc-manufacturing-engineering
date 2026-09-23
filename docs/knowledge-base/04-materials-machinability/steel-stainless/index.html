@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Steel & Stainless Steel | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../" class="back-link">&larr; Back to Knowledge Base</a>
+<div class="hero-eyebrow">04.2 · Materials & Machinability</div>
+<h1>Steel &amp; Stainless Steel</h1>
+
+<p>Steel is the most machined material on Earth. But "steel" covers a huge range — from soft, free-cutting 1215 that machines like butter, to hardened H13 tool steel that needs CBN inserts. This page breaks down the major steel families and how to machine each one.</p>
+
+<h2>Carbon Steel</h2>
+<p>Carbon steel is iron with up to ~0.5% carbon. More carbon = harder and stronger, but less ductile.</p>
+<table>
+  <tr><th>Grade</th><th>Carbon %</th><th>Typical use</th><th>Machinability</th></tr>
+  <tr><td>1018 / 1020</td><td>0.18–0.20%</td><td>General shafts, brackets, fasteners</td><td>Easy — but gummy, needs chip breaker</td></tr>
+  <tr><td>1045</td><td>0.45%</td><td>Shafts, gears, axles</td><td>Good — medium hardness, nice chips</td></tr>
+  <tr><td>1215 (free-machining)</td><td>0.15% + lead/sulfur</td><td>High-volume screw machine parts</td><td>Excellent — the 100% baseline</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Low-carbon steel challenge:</strong> 1018 is soft and ductile — it forms long, stringy chips that wrap around the tool. Use a chip-breaker insert and run slightly higher feed to force chip breaking. Aluminum-like speeds (Vc = 150–250 m/min with carbide) work well.</p>
+</div>
+
+<h2>Alloy Steel</h2>
+<p>Alloy steels add chromium, molybdenum, nickel, or vanadium to improve strength and toughness. The most common in CNC shops: <strong>4140</strong> and <strong>4340</strong>.</p>
+<table>
+  <tr><th>Grade</th><th>Properties</th><th>Typical condition</th><th>Vc (carbide)</th></tr>
+  <tr><td>4140</td><td>Cr-Mo alloy, good toughness</td><td>Annealed HB 200, or pre-hard HRC 28–32</td><td>180–250 m/min annealed, 100–150 pre-hard</td></tr>
+  <tr><td>4340</td><td>Ni-Cr-Mo, high strength</td><td>Quenched & tempered HRC 30–38</td><td>80–120 m/min</td></tr>
+  <tr><td>4150</td><td>Higher carbon, springs</td><td>HRC 40–45</td><td>60–100 m/min</td></tr>
+</table>
+<p>Calculate: <a href="../../../engineering-tools/turning-speed-feed-calculator/">Turning Speed & Feed</a> · <a href="../../../engineering-tools/spindle-speed-calculator/">Spindle Speed</a></p>
+
+<h2>Tool Steel</h2>
+<p>Tool steels are alloyed for hardness and wear resistance after heat treatment. They come annealed (soft, machinable) and are hardened after machining.</p>
+<table>
+  <tr><th>Grade</th><th>Common name</th><th>Use</th><th>Machining condition</th></tr>
+  <tr><td>P20</td><td>Pre-hard mold steel</td><td>Injection mold bases</td><td>Pre-hard HRC 28–32, machine as delivered</td></tr>
+  <tr><td>H13</td><td>Hot work tool steel</td><td>Die casting dies, forging dies</td><td>Annealed HB 200, machine then harden to HRC 48–52</td></tr>
+  <tr><td>D2</td><td>Cold work tool steel</td><td>Blanking dies, punches</td><td>Annealed HB 220, machine then harden to HRC 60</td></tr>
+  <tr><td>A2</td><td>Air-hardening tool steel</td><td>Precision gauges, punches</td><td>Annealed, low distortion on hardening</td></tr>
+  <tr><td>S7</td><td>Shock-resisting steel</td><td>Chisels, forming tools</td><td>Tough, impact-resistant</td></tr>
+</table>
+
+<div class="callout warning">
+  <p><strong>Machining hardened steel (HRC 45+):</strong> once steel is hardened above HRC 45, standard carbide inserts struggle. Options: (1) use CBN or ceramic inserts at low speed, (2) hardmill with advanced coated carbide at 60–100 m/min, or (3) leave stock for grinding. Don't try to rough HRC 50+ with regular carbide — you'll burn through inserts fast.</p>
+</div>
+
+<h2>Stainless Steel</h2>
+<p>Stainless steel contains at least 10.5% chromium, which forms a passive oxide layer that resists corrosion. But that oxide layer, combined with low thermal conductivity and work-hardening, makes stainless one of the hardest common materials to machine.</p>
+
+<h3>Stainless families</h3>
+<table>
+  <tr><th>Family</th><th>Common grades</th><th>Magnetic?</th><th>Machinability</th></tr>
+  <tr><th>Austenitic (300 series)</th><td>304, 316, 321</td><td>No</td><td>Worst — work-hardens, gummy, low heat conduction</td></tr>
+  <tr><th>Ferritic (400 series)</th><td>430, 409</td><td>Yes</td><td>Better — closer to mild steel</td></tr>
+  <tr><th>Martensitic</th><td>410, 420, 440C</td><td>Yes</td><td>Hardenable, abrasive</td></tr>
+  <tr><th>Precipitation hardening</th><td>17-4 PH, 15-5 PH</td><td>Yes</td><td>Good in solution-treated condition</td></tr>
+</table>
+
+<h3>Machining austenitic stainless (304/316) — the rules</h3>
+<ul>
+  <li><strong>Use sharp tools:</strong> a honed, sharp edge cuts cleanly. A worn edge rubs and work-hardens the surface.</li>
+  <li><strong>Positive rake angle:</strong> 15–20° rake shears the material instead of pushing it.</li>
+  <li><strong>Adequate feed:</strong> don't feed too light. Feed below 0.05 mm/rev causes rubbing → work hardening → built-up edge. Keep f = 0.1–0.2 mm/rev.</li>
+  <li><strong>Lower speed:</strong> Vc = 80–120 m/min with coated carbide (vs 200+ for mild steel). Low thermal conductivity means heat stays at the edge.</li>
+  <li><strong>Flood coolant:</strong> copious flood coolant or through-tool coolant. Heat is the enemy of stainless machining.</li>
+  <li><strong>Chip breaker:</strong> stainless forms long stringy chips — use a chip-breaker geometry to keep chips short and controllable.</li>
+</ul>
+
+<div class="callout warning">
+  <p><strong>The #1 stainless mistake:</strong> running too slow and feeding too light. Operators see it "work hardening" and slow down — but that makes it worse. The tool starts rubbing instead of cutting, which work-hardens the surface further. Correct response: keep feed up (0.1–0.15 mm/rev), use a sharp positive-rake insert, and let the chip breaker do its job.</p>
+</div>
+
+<h2>Quick Reference: Steel Cutting Speeds</h2>
+<table>
+  <tr><th>Material</th><th>Carbide Vc (m/min)</th><th>Feed rough (mm/rev)</th><th>Coolant</th></tr>
+  <tr><td>1018 low carbon</td><td>180–280</td><td>0.2–0.3</td><td>Optional</td></tr>
+  <tr><td>1045 / 4140 annealed</td><td>150–250</td><td>0.2–0.4</td><td>Flood</td></tr>
+  <tr><td>4140 pre-hard (HRC 28–32)</td><td>100–160</td><td>0.15–0.3</td><td>Flood</td></tr>
+  <tr><td>P20 mold steel</td><td>120–180</td><td>0.15–0.3</td><td>Flood</td></tr>
+  <tr><td>H13 / D2 annealed</td><td>80–120</td><td>0.1–0.25</td><td>Flood</td></tr>
+  <tr><td>304 / 316 stainless</td><td>80–120</td><td>0.1–0.2</td><td>Heavy flood</td></tr>
+  <tr><td>17-4 PH</td><td>100–150</td><td>0.1–0.25</td><td>Flood</td></tr>
+</table>
+<p>Full table: <a href="../../../engineering-tools/material-property-reference/">Material Property Reference</a></p>
+
+<div class="nav-links">
+  <a href="../material-fundamentals/">&larr; Material Fundamentals</a>
+  <a href="../cast-iron/">Next: Cast Iron &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

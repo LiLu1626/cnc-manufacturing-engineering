@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Non-Ferrous Metals | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../" class="back-link">&larr; Back to Knowledge Base</a>
+<div class="hero-eyebrow">04.4 · Materials & Machinability</div>
+<h1>Non-Ferrous Metals</h1>
+
+<p>Non-ferrous metals (no iron) include aluminum, copper, brass, bronze, and magnesium. They are generally soft, conduct heat well, and machine at high speeds — but they have their own quirks, especially built-up edge and chip control.</p>
+
+<h2>Aluminum</h2>
+<p>Aluminum is the most machined non-ferrous metal. It is soft (HB 70–150), conducts heat well, and cuts at high speeds. But it is gummy and can weld to the cutting edge (built-up edge) if the tool is not sharp or the speed is too low.</p>
+
+<h3>Common aluminum grades</h3>
+<table>
+  <tr><th>Alloy</th><th>Condition</th><th>Properties</th><th>Machinability</th></tr>
+  <tr><td>6061</td><td>T6</td><td>General purpose, medium strength</td><td>Good — the "default" aluminum</td></tr>
+  <tr><td>7075</td><td>T6</td><td>High strength, aerospace</td><td>Good — slightly gummy</td></tr>
+  <tr><td>2024</td><td>T3/T4</td><td>High strength, aerospace</td><td>Fair — more chip control needed</td></tr>
+  <tr><td>A380 / ADC12</td><td>As cast</td><td>High silicon, die casting</td><td>Abrasive — use polished PCD or carbide</td></tr>
+  <tr><td>1100 / 3003</td><td>Soft</td><td>Pure / low alloy, very ductile</td><td>Gummy — long chips, needs high speed</td></tr>
+</table>
+
+<h3>Machining aluminum — the rules</h3>
+<ul>
+  <li><strong>Run fast:</strong> Vc = 300–600 m/min with polished carbide or PCD. The faster you go, the cleaner the cut — low speed causes built-up edge.</li>
+  <li><strong>Sharp, polished tool:</strong> use polished 2–3 flute end mills with high helix (35–45°). A rough or coated tool (TiN) encourages aluminum to weld to it.</li>
+  <li><strong>Generous chip clearance:</strong> 2–3 flutes (not 4–6) so chips don't pack in the flutes.</li>
+  <li><strong>Coolant:</strong> flood coolant or air blast. Air blast works well for chips; flood coolant helps with finish and built-up edge.</li>
+  <li><strong>Don't run too slow:</strong> the #1 aluminum machining mistake is running at steel-like speeds. At low RPM, the edge rubs, aluminum welds to the tool, and you get a poor finish with a built-up edge.</li>
+</ul>
+
+<div class="callout">
+  <p><strong>Worked example:</strong> 12 mm carbide end mill in 6061-T6. Vc = 400 m/min, fz = 0.05 mm/tooth, 3 flutes. RPM = 400×1000/(π×12) = 10,610 RPM. Feed = 0.05 × 3 × 10,610 = 1,592 mm/min. Most small VMCs top out at 8,000–12,000 RPM — right in the sweet spot for aluminum.</p>
+</div>
+
+<h2>Copper and Copper Alloys</h2>
+<table>
+  <tr><th>Material</th><th>Properties</th><th>Machining notes</th></tr>
+  <tr><td>Pure copper (C110)</td><td>Very soft, conductive, ductile</td><td>Gummy — needs sharp tools, high speed, chip breaker</td></tr>
+  <tr><td>Brass (C360 free-cutting)</td><td>Copper + zinc + lead</td><td>Excellent — machines almost like 1215 steel, chips break free</td></tr>
+  <tr><td>Bronze (C932 bearing)</td><td>Copper + tin</td><td>Abrasive, slower speeds</td></tr>
+</table>
+<div class="callout">
+  <p><strong>Brass is the best non-ferrous:</strong> free-cutting brass (C360) has lead added that acts as an internal chip breaker. It machines beautifully at high speeds with no built-up edge. If you get to choose the material, C360 is a dream.</p>
+</div>
+
+<h2>Magnesium</h2>
+<p>Magnesium is the lightest structural metal (2/3 the density of aluminum). It machines extremely fast — like cutting balsa wood. But it has one critical safety issue: <strong>magnesium chips are flammable.</strong> Fine magnesium swarf can ignite and burn with an intense white flame. Never machine magnesium with water-based coolant — use dry cutting or special magnesium oil. Have a Class D fire extinguisher nearby.</p>
+
+<div class="callout warning">
+  <p><strong>Magnesium fire safety:</strong> never use water on a magnesium fire — it makes it burn hotter. Keep the chips dry, don't accumulate fine swarf, and know where your Class D extinguisher is.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../cast-iron/">&larr; Cast Iron</a>
+  <a href="../heat-resistant-alloys/">Next: Heat-Resistant Alloys &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

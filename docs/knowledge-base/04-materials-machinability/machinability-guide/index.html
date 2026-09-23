@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machinability Guide | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../" class="back-link">&larr; Back to Knowledge Base</a>
+<div class="hero-eyebrow">04.6 · Materials & Machinability</div>
+<h1>Machinability Decision Guide</h1>
+
+<p>This page brings it all together: when you pick up a new material, follow this checklist to choose tooling, speeds, feeds, and coolant without guessing.</p>
+
+<h2>The Machinability Checklist</h2>
+<p>For any new material, work through these questions in order:</p>
+<ol>
+  <li><strong>What is the hardness?</strong> HB or HRC? This sets the speed range.</li>
+  <li><strong>Does it work-harden?</strong> Stainless, titanium, Inconel = yes. Cast iron, aluminum = no.</li>
+  <li><strong>How well does it conduct heat?</strong> Aluminum = great. Titanium/Inconel = poor → lower speed.</li>
+  <li><strong>Is it abrasive?</strong> Cast iron, high-silicon aluminum, composites = yes → wear-resistant tool grade.</li>
+  <li><strong>What surface finish is needed?</strong> Ra &lt; 1.6 µm = finishing pass with light feed.</li>
+  <li><strong>How much stock needs removal?</strong> Heavy roughing = prioritize tool life. Finish = prioritize surface finish.</li>
+</ol>
+
+<h2>Quick-Start Speed Reference</h2>
+<table>
+  <tr><th>Material family</th><th>Vc range (carbide)</th><th>fz rough (mm/tooth)</th><th>Coolant</th><th>Tool grade</th></tr>
+  <tr><td>Aluminum (6061, 7075)</td><td>300–600 m/min</td><td>0.03–0.08</td><td>Flood or air blast</td><td>K10 polished</td></tr>
+  <tr><td>Brass (free-cutting)</td><td>200–400 m/min</td><td>0.05–0.15</td><td>Optional</td><td>K10</td></tr>
+  <tr><td>Low-carbon steel (1018, 1045)</td><td>180–280 m/min</td><td>0.05–0.15</td><td>Flood</td><td>P20–P35 TiN/TiCN</td></tr>
+  <tr><td>Alloy steel (4140 annealed)</td><td>150–250 m/min</td><td>0.05–0.15</td><td>Flood</td><td>P20–P35 CVD</td></tr>
+  <tr><td>Pre-hard steel (HRC 28–32)</td><td>100–160 m/min</td><td>0.04–0.10</td><td>Flood</td><td>P10–P20 coated</td></tr>
+  <tr><td>Stainless 304/316</td><td>80–120 m/min</td><td>0.04–0.10</td><td>Heavy flood</td><td>M20–M30 TiAlN</td></tr>
+  <tr><td>Cast iron (gray/ductile)</td><td>80–150 m/min</td><td>0.05–0.15</td><td>Dry / air</td><td>K20 uncoated</td></tr>
+  <tr><td>Titanium Ti-6Al-4V</td><td>40–80 m/min</td><td>0.04–0.10</td><td>High pressure</td><td>K10 polished, variable helix</td></tr>
+  <tr><td>Inconel 718</td><td>30–60 m/min</td><td>0.03–0.08</td><td>High pressure</td><td>S grade / ceramic</td></tr>
+  <tr><td>Hardened steel HRC 50+</td><td>60–120 m/min (hard mill)</td><td>0.03–0.08</td><td>Minimal</td><td>CBN / advanced carbide</td></tr>
+</table>
+
+<h2>Troubleshooting by Symptom</h2>
+<table>
+  <tr><th>Symptom</th><th>Likely cause</th><th>Fix</th></tr>
+  <tr><td>Built-up edge (BUE) on tool</td><td>Speed too low, tool not sharp</td><td>Increase speed, hone edge, use positive rake</td></tr>
+  <tr><td>Tool wears fast (flank wear)</td><td>Speed too high, material abrasive</td><td>Reduce Vc 20%, use wear-resistant grade</td></tr>
+  <tr><td>Poor surface finish (lay marks)</td><td>Feed too high, nose radius too small</td><td>Reduce feed, larger nose radius</td></tr>
+  <tr><td>Chatter / vibration</td><td>Overhang too long, tool flex</td><td>Reduce stickout, lower ae, sharper edge</td></tr>
+  <tr><td>Long stringy chips</td><td>Ductile material, no chip breaker</td><td>Use chip-breaker geometry, increase feed</td></tr>
+  <tr><td>Work hardening (surface glaze)</td><td>Light feed, rubbing, stainless/Ti</td><td>Increase feed, sharper tool, never dwell</td></tr>
+  <tr><td>Burning / discoloration</td><td>Speed too high, insufficient coolant</td><td>Reduce Vc, increase coolant pressure/flow</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Calculate everything:</strong> <a href="../../../engineering-tools/material-property-reference/">Material Property Reference</a> · <a href="../../../engineering-tools/spindle-speed-calculator/">Spindle Speed</a> · <a href="../../../engineering-tools/feed-rate-calculator/">Feed Rate</a> · <a href="../../../engineering-tools/cutting-speed-calculator/">Cutting Speed</a> · <a href="../../../engineering-tools/material-removal-rate-calculator/">MRR</a></p>
+</div>
+
+<div class="nav-links">
+  <a href="../heat-resistant-alloys/">&larr; Heat-Resistant Alloys</a>
+  <a href="../../">&larr; Knowledge Base</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>
