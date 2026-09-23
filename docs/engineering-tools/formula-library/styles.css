@@ -1,1 +1,191 @@
-$STYLE
+:root {
+  --accent: #0b766e;
+  --accent-dark: #07574f;
+  --surface: #fff;
+  --text: #1a2a28;
+  --muted: #5a6b69;
+  --border: #d8e0df;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #f6f8f7;
+  color: var(--text);
+  line-height: 1.6;
+  padding: 2rem 1rem;
+}
+
+.tool-page {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.tool-header .eyebrow {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.tool-header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.tool-header p {
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+.tool-card {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  margin-bottom: 1.5rem;
+}
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.field label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 0.35rem;
+  color: var(--text);
+}
+
+.field input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.field input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(11,118,110,0.12);
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.result {
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: #fff;
+  border-radius: 10px;
+  padding: 1.25rem;
+}
+
+.result p:first-child {
+  font-size: 0.8rem;
+  opacity: 0.85;
+  margin-bottom: 0.35rem;
+}
+
+.result-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.result-detail {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  margin-top: 0.25rem;
+}
+
+.formula {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.formula h2 {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  color: var(--accent-dark);
+}
+
+.formula p {
+  margin-bottom: 0.5rem;
+  color: var(--muted);
+}
+
+.notice {
+  background: #eef6f5;
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.notice p {
+  color: var(--muted);
+  margin-top: 0.25rem;
+}
+
+.tool-footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+  padding-top: 1rem;
+}
+
+@media (max-width: 700px) {
+  .tool-grid, .result-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+#searchBox {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+#searchBox:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(11,118,110,0.12);
+}
+
+#formulaList h3 {
+  color: var(--accent-dark);
+  margin: 1.25rem 0 0.5rem;
+  font-size: 1rem;
+}
+
+.field select {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #fff;
+  outline: none;
+  cursor: pointer;
+}
+
+.field select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(11,118,110,0.12);
+}
