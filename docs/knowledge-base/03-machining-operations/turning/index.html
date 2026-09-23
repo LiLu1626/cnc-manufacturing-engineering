@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turning Operations | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../" class="back-link">&larr; Back to Knowledge Base</a>
+<div class="hero-eyebrow">03.1 · Machining Operations</div>
+<h1>Turning Operations</h1>
+
+<p>Turning is machining on a lathe: the workpiece rotates, and a single-point cutting tool moves linearly to create cylindrical shapes. It is the most efficient way to make round parts — shafts, bushings, pulleys, threads.</p>
+
+<h2>How Turning Works</h2>
+<svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Chuck -->
+  <rect x="50" y="70" width="60" height="60" fill="#5c6872" rx="4"/>
+  <text x="80" y="145" text-anchor="middle" font-size="11" fill="#5c6872">Chuck</text>
+  <!-- Workpiece -->
+  <rect x="110" y="85" width="380" height="30" fill="#cfdbd8" rx="3"/>
+  <text x="300" y="105" text-anchor="middle" font-size="12" fill="#17242f">Workpiece (rotating)</text>
+  <!-- Tool -->
+  <rect x="450" y="55" width="50" height="20" fill="#0b766e" rx="2"/>
+  <text x="475" y="45" text-anchor="middle" font-size="11" fill="#0b766e">Tool</text>
+  <!-- Rotation arrow -->
+  <path d="M 300 55 A 20 20 0 1 1 299 55" fill="none" stroke="#0b766e" stroke-width="1.5" marker-end="url(#tr)"/>
+  <defs><marker id="tr" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#0b766e"/></marker></defs>
+</svg>
+
+<h2>Basic Turning Operations</h2>
+
+<h3>Facing</h3>
+<p>The tool feeds perpendicular to the workpiece axis, creating a flat surface on the end. Done first to establish a flat reference surface.</p>
+
+<h3>OD Turning (External Turning)</h3>
+<p>The tool feeds along the workpiece axis, reducing the diameter. This is the most common turning operation — roughing down to size, then finishing.</p>
+
+<h3>ID Turning / Boring</h3>
+<p>The tool reaches inside a hole and feeds along the axis, enlarging or finishing the inside diameter. Boring bars have overhang, so they are prone to chatter — see <a href="../../../engineering-tools/boring-bar-deflection-check/">Boring-Bar Deflection Check</a>.</p>
+
+<h3>Grooving / Parting</h3>
+<p>A narrow tool feeds radially into the part to cut a groove (for O-rings, retaining rings) or to cut the part off (parting). Grooving tools are very narrow and fragile — see <a href="../../../engineering-tools/grooving-parameter-assistant/">Grooving Parameter Assistant</a>.</p>
+
+<h3>Threading</h3>
+<p>The tool feeds at exactly the pitch (lead) per revolution, creating V-shaped threads. Done in multiple passes. See <a href="../../../engineering-tools/threading-calculator/">Threading Calculator</a>.</p>
+
+<h3>Taper Turning</h3>
+<p>The tool feeds at an angle to create a tapered surface. Calculated with <a href="../../../engineering-tools/taper-angle-calculator/">Taper & Angle Calculator</a>.</p>
+
+<h3>Chamfering</h3>
+<p>A small 45° cut at the edge to remove sharp burrs. Usually programmed as a short linear move.</p>
+
+<h2>Turning vs Milling: Key Differences</h2>
+<table>
+  <tr><th></th><th>Turning</th><th>Milling</th></tr>
+  <tr><td>What rotates</td><td>Workpiece</td><td>Tool</td></tr>
+  <tr><td>Typical shape</td><td>Round, cylindrical</td><td>Prisms, pockets, flat faces</td></tr>
+  <tr><td>Tool type</td><td>Single-point insert</td><td>Multi-flute end mill</td></tr>
+  <tr><td>Feed units</td><td>mm/rev</td><td>mm/tooth × RPM</td></tr>
+  <tr><td>Surface speed</td><td>CSS (constant)</td><td>Constant RPM</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Start here:</strong> <a href="../../../engineering-tools/turning-speed-feed-calculator/">Turning Speed & Feed Calculator</a> · <a href="../../../engineering-tools/constant-surface-speed-reference/">CSS Reference</a> · <a href="../../../engineering-tools/soft-jaw-step-calculator/">Soft-Jaw Step</a></p>
+</div>
+
+<div class="nav-links">
+  <a href="../../">&larr; Knowledge Base</a>
+  <a href="../milling/">Next: Milling &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

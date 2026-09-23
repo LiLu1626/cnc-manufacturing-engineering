@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drilling & Hole Making | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../" class="back-link">&larr; Back to Knowledge Base</a>
+<div class="hero-eyebrow">03.3 · Machining Operations</div>
+<h1>Drilling &amp; Hole Making</h1>
+
+<p>Holes are the most common machining feature — and the most trouble-prone. A hole drilled in open air is easy; a deep, cross-hole, threaded, or precision hole requires the right sequence of tools and operations.</p>
+
+<h2>The Hole-Making Sequence</h2>
+<p>Most holes are not drilled in one step. A typical precision hole looks like this:</p>
+<svg viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="50" width="80" height="80" rx="8" fill="#e6f4f2" stroke="#0b766e" stroke-width="2"/>
+  <text x="60" y="85" text-anchor="middle" font-size="12" fill="#0b766e" font-weight="bold">1. Spot drill</text>
+  <text x="60" y="105" text-anchor="middle" font-size="10" fill="#5c6872">Start hole</text>
+  <line x1="100" y1="90" x2="130" y2="90" stroke="#5c6872" stroke-width="1.5" marker-end="url(#ha)"/>
+
+  <rect x="130" y="50" width="80" height="80" rx="8" fill="#e6f4f2" stroke="#0b766e" stroke-width="2"/>
+  <text x="170" y="85" text-anchor="middle" font-size="12" fill="#0b766e" font-weight="bold">2. Drill</text>
+  <text x="170" y="105" text-anchor="middle" font-size="10" fill="#5c6872">Rough hole</text>
+  <line x1="210" y1="90" x2="240" y2="90" stroke="#5c6872" stroke-width="1.5" marker-end="url(#ha)"/>
+
+  <rect x="240" y="50" width="80" height="80" rx="8" fill="#e6f4f2" stroke="#0b766e" stroke-width="2"/>
+  <text x="280" y="85" text-anchor="middle" font-size="12" fill="#0b766e" font-weight="bold">3. Ream</text>
+  <text x="280" y="105" text-anchor="middle" font-size="10" fill="#5c6872">Finish size</text>
+  <line x1="320" y1="90" x2="350" y2="90" stroke="#5c6872" stroke-width="1.5" marker-end="url(#ha)"/>
+
+  <rect x="350" y="50" width="80" height="80" rx="8" fill="#e6f4f2" stroke="#0b766e" stroke-width="2"/>
+  <text x="390" y="85" text-anchor="middle" font-size="12" fill="#0b766e" font-weight="bold">4. Bore</text>
+  <text x="390" y="105" text-anchor="middle" font-size="10" fill="#5c6872">Precision</text>
+  <line x1="430" y1="90" x2="460" y2="90" stroke="#5c6872" stroke-width="1.5" marker-end="url(#ha)"/>
+
+  <rect x="460" y="50" width="100" height="80" rx="8" fill="#fdf0ef" stroke="#c0392b" stroke-width="2"/>
+  <text x="510" y="85" text-anchor="middle" font-size="12" fill="#c0392b" font-weight="bold">5. Tap / Thread</text>
+  <text x="510" y="105" text-anchor="middle" font-size="10" fill="#5c6872">Internal thread</text>
+  <defs><marker id="ha" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#5c6872"/></marker></defs>
+</svg>
+
+<h2>Each Tool's Job</h2>
+<table>
+  <tr><th>Operation</th><th>Purpose</th><th>Typical tolerance</th></tr>
+  <tr><td>Spot drill / center drill</td><td>Create a starting cone so the drill doesn't walk</td><td>—</td></tr>
+  <tr><td>Twist drill</td><td>Make the rough hole (typically 0.1–0.2 mm undersize for reaming)</td><td>±0.05–0.1 mm</td></tr>
+  <tr><td>Reamer</td><td>Finish the hole to close tolerance and good surface</td><td>±0.01–0.02 mm</td></tr>
+  <tr><td>Boring bar</td><td>Precision hole after drilling, for true position and roundness</td><td>±0.005 mm</td></tr>
+  <tr><td>Counterbore / countersink</td><td>Create flat seat for bolt head / angled entry</td><td>—</td></tr>
+  <tr><td>Tap</td><td>Cut internal threads</td><td>—</td></tr>
+  <tr><td>Thread mill</td><td>Mill internal threads (flexible, one tool for many sizes)</td><td>—</td></tr>
+</table>
+
+<h2>Deep Hole Drilling</h2>
+<p>When depth exceeds 3× diameter (3D), chips can't escape and the drill burns. Solutions:</p>
+<ul>
+  <li><strong>Peck drilling (G83):</strong> retract fully every 1–2× diameter to clear chips.</li>
+  <li><strong>High-pressure coolant:</strong> flushes chips out through the drill flutes.</li>
+  <li><strong>Internal coolant drills:</strong> drills with holes through the flutes.</li>
+</ul>
+<p>Calculate peck depth and feed: <a href="../../../engineering-tools/drilling-parameter-assistant/">Drilling Parameter Assistant</a></p>
+
+<div class="callout warning">
+  <p><strong>Drill wander:</strong> a drill on a flat surface can "walk" sideways if not spotted first. Always spot-drill first, especially on angled or curved surfaces. This is the #1 cause of hole position errors.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../milling/">&larr; Milling</a>
+  <a href="../grinding/">Next: Grinding &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

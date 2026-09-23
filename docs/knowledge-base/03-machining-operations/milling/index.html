@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Milling Operations | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../" class="back-link">&larr; Back to Knowledge Base</a>
+<div class="hero-eyebrow">03.2 · Machining Operations</div>
+<h1>Milling Operations</h1>
+
+<p>Milling is the most versatile CNC process: a rotating multi-flute cutter moves across a fixed workpiece. It can machine flat faces, pockets, slots, contours, and 3D shapes. This is what happens in a typical CNC vertical machining center (VMC).</p>
+
+<h2>How Milling Works</h2>
+<svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
+  <!-- Spindle -->
+  <rect x="270" y="20" width="60" height="40" fill="#5c6872" rx="4"/>
+  <text x="300" y="80" text-anchor="middle" font-size="11" fill="#5c6872">Spindle</text>
+  <!-- Cutter -->
+  <circle cx="300" cy="120" r="25" fill="none" stroke="#0b766e" stroke-width="3"/>
+  <line x1="300" y1="95" x2="300" y2="80" stroke="#0b766e" stroke-width="2"/>
+  <!-- Workpiece -->
+  <rect x="180" y="155" width="240" height="40" fill="#cfdbd8" rx="3"/>
+  <text x="300" y="180" text-anchor="middle" font-size="12" fill="#17242f">Workpiece</text>
+  <!-- Feed arrow -->
+  <line x1="100" y1="175" x2="160" y2="175" stroke="#c0392b" stroke-width="2" marker-end="url(#mf)"/>
+  <text x="100" y="165" font-size="11" fill="#c0392b">Feed</text>
+  <defs><marker id="mf" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#c0392b"/></marker></defs>
+</svg>
+
+<h2>Common Milling Operations</h2>
+
+<h3>Face Milling</h3>
+<p>A large-diameter face mill skims across the top surface, creating a flat plane. Uses indexable inserts at high feed rates. Usually the first operation on a raw block.</p>
+
+<h3>Peripheral / Slab Milling</h3>
+<p>The cutter axis is parallel to the surface, cutting a wide, shallow slab. Used for large flat sides.</p>
+
+<h3>Slot Milling</h3>
+<p>An end mill cuts a full-width slot (ae = tool diameter). Heaviest cut — only half the tool engages, chips are thicker on one side.</p>
+
+<h3>Pocket Milling</h3>
+<p>Milling an enclosed cavity (like a mold pocket). Uses trochoidal or zig-zag toolpaths to manage heat and chip evacuation.</p>
+
+<h3>Profile / Contour Milling</h3>
+<p>The cutter follows the outer perimeter of a part, finishing its side walls. Usually a finishing pass after roughing.</p>
+
+<h3>Trochodial Milling</h3>
+<p>The cutter follows a spiral path with small radial engagement (ae ≈ 10–20% of diameter) but deep axial depth (ap up to 2–3× diameter). Keeps chip thickness constant and tool cool. Great for stainless and titanium.</p>
+
+<div class="callout">
+  <p><strong>Climb vs conventional milling:</strong> in climb (up) milling, the cutter feeds in the direction of rotation — chip starts thick and gets thin. Better surface finish, less heat, preferred on modern machines. In conventional (down) milling, chip starts thin and gets thick — more rubbing, more heat.</p>
+</div>
+
+<h2>Choosing the Right Cutter</h2>
+<table>
+  <tr><th>Operation</th><th>Cutter type</th><th>Typical flutes</th></tr>
+  <tr><td>Face milling</td><td>Face mill (indexable)</td><td>4–8 inserts</td></tr>
+  <tr><td>Slotting</td><td>Solid carbide end mill</td><td>2–3 (chip clearance)</td></tr>
+  <tr><td>Finishing walls</td><td>Carbide end mill, 35–45° helix</td><td>3–4</td></tr>
+  <tr><td>Aluminum</td><td>Polished, 2–3 flutes, high helix</td><td>2–3</td></tr>
+  <tr><td>Steel roughing</td><td>Roughing end mill (chip breakers)</td><td>4–6</td></tr>
+</table>
+<p>More: <a href="../../../engineering-tools/tool-selection-guide/">Tool Selection Guide</a></p>
+
+<div class="nav-links">
+  <a href="../turning/">&larr; Turning</a>
+  <a href="../drilling-hole-making/">Next: Drilling & Hole Making &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>
