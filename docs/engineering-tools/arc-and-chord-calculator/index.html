@@ -1,0 +1,84 @@
+---
+title: Arc and Chord Calculator
+---
+
+<article class="tool-page">
+  <header class="tool-header">
+    <p class="eyebrow">Trigonometry · Released</p>
+    <h1>Arc and Chord Calculator</h1>
+    <p>Solve circular arc geometry from any two known values: radius, central angle, chord length, arc length, or sagitta (bow height). Used for arc milling, radius gauges, cam profiles, and template layout.</p>
+  </header>
+
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field">
+        <label for="radius">Radius R — mm</label>
+        <input id="radius" type="number" step="0.001" placeholder="leave blank if unknown" />
+      </div>
+      <div class="field">
+        <label for="angle">Central angle θ — degrees</label>
+        <input id="angle" type="number" step="0.001" placeholder="leave blank if unknown" />
+      </div>
+      <div class="field">
+        <label for="chord">Chord length C — mm</label>
+        <input id="chord" type="number" step="0.001" placeholder="leave blank if unknown" />
+      </div>
+      <div class="field">
+        <label for="arc">Arc length L — mm</label>
+        <input id="arc" type="number" step="0.001" placeholder="leave blank if unknown" />
+      </div>
+      <div class="field">
+        <label for="sagitta">Sagitta h (bow height) — mm</label>
+        <input id="sagitta" type="number" step="0.001" placeholder="leave blank if unknown" />
+      </div>
+    </div>
+
+    <div class="result-grid">
+      <div class="result">
+        <p>Radius R</p>
+        <p class="result-value" id="rResult">—</p>
+        <p class="result-detail" id="rDetail"></p>
+      </div>
+      <div class="result">
+        <p>Central angle θ</p>
+        <p class="result-value" id="angResult">—</p>
+        <p class="result-detail" id="angDetail"></p>
+      </div>
+      <div class="result">
+        <p>Chord length C</p>
+        <p class="result-value" id="cResult">—</p>
+        <p class="result-detail" id="cDetail"></p>
+      </div>
+      <div class="result">
+        <p>Arc length L</p>
+        <p class="result-value" id="lResult">—</p>
+        <p class="result-detail" id="lDetail"></p>
+      </div>
+      <div class="result">
+        <p>Sagitta h</p>
+        <p class="result-value" id="hResult">—</p>
+        <p class="result-detail" id="hDetail"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>Formula and use</h2>
+    <p>Chord: C = 2R·sin(θ/2)</p>
+    <p>Arc length: L = R·θ (θ in radians)</p>
+    <p>Sagitta: h = R·(1 − cos(θ/2))</p>
+    <p>Enter any two known values and the calculator solves the other three. All lengths in mm, angles in degrees.</p>
+    <p>Common uses: checking arc milling programs, laying out curved brackets, setting up radius gauges, and converting between chord/arc/sagitta measurements on a part drawing.</p>
+  </section>
+
+  <aside class="notice">
+    <strong>Note:</strong>
+    <p>Leave unknown fields blank. The tool needs exactly two known values. Results are rounded to 3 decimals for lengths and 2 decimals for angles. For combinations involving arc length + chord or arc length + sagitta, an iterative solver is used.</p>
+  </aside>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</article>
+
+<link rel="stylesheet" href="styles.css" />
+<script src="calculator.js" defer></script>
+
