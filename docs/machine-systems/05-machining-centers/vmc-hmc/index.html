@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VMC vs HMC | Machining Centers</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../" class="active">Machine Systems</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch05" class="back-link">&larr; Back to 05 &middot; Machining Centers</a>
+<div class="hero-eyebrow">05.1 &middot; Machining Centers</div>
+<h1>VMC vs HMC</h1>
+
+<p>A machining center is a mill with an automatic tool changer and a tool magazine — it can run a complete cycle unattended. The two main flavors are vertical (VMC) and horizontal (HMC). They look similar on paper but behave very differently in production.</p>
+
+<h2>VMC (Vertical Machining Center)</h2>
+<p>The spindle points down onto a flat table. Most common CNC machine in job shops. Easy to set up, easy to see the cut, relatively inexpensive.</p>
+<ul>
+  <li><strong>Pros:</strong> Low cost, easy setup, great for plates/molds/one-sided work, fast to get started.</li>
+  <li><strong>Cons:</strong> Chips fall on the part, only one face easy, limited multi-side work without re-fixturing.</li>
+</ul>
+
+<h2>HMC (Horizontal Machining Center)</h2>
+<p>The spindle points sideways at a tombstone or pallet. Parts are clamped on four-sided fixtures so you can machine multiple sides by rotating the pallet.</p>
+<ul>
+  <li><strong>Pros:</strong> Chips fall away, multi-sided machining in one setup, pallet changers allow unattended running, excellent for production.</li>
+  <li><strong>Cons:</strong> Much more expensive, more complex fixturing, longer setup, overkill for simple parts.</li>
+</ul>
+
+<table>
+  <tr><th></th><th>VMC</th><th>HMC</th></tr>
+  <tr><td>Typical price</td><td>$50k–150k</td><td>$200k–500k+</td></tr>
+  <tr><td>Setup time</td><td>Short (vise on table)</td><td>Long (custom tombstone fixturing)</td></tr>
+  <tr><td>Best part type</td><td>Plates, molds, one-sided</td><td>Housings, manifolds, multi-sided</td></tr>
+  <tr><td>Unattended time</td><td>Limited (one vise load)</td><td>Pallet changer = hours</td></tr>
+  <tr><td>Chip control</td><td>Chips on part</td><td>Chips fall away</td></tr>
+</table>
+
+<div class="example">
+  <p><strong>Example: VMC or HMC for a manifold block?</strong></p>
+  <p>An aluminum manifold needs holes and pockets on 4 faces. On a VMC, you'd flip and re-fixture 4 times per part. On an HMC with a tombstone, you load 4 parts on the fixture, press cycle, and come back 2 hours later with all 4 parts done on all sides. The HMC wins on production parts; the VMC wins on one-offs and prototypes.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../../#ch05">&larr; Machine Systems</a>
+  <a href="../five-axis/">Next: 5-Axis Machining Centers &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

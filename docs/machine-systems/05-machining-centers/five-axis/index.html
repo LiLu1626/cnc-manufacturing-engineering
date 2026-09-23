@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5-Axis Machining Centers | Machine Systems</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../" class="active">Machine Systems</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch05" class="back-link">&larr; Back to 05 &middot; Machining Centers</a>
+<div class="hero-eyebrow">05.2 &middot; Machining Centers</div>
+<h1>5-Axis Machining Centers</h1>
+
+<p>5-axis machines move the tool (or the part) in two additional rotary directions, so the tool can approach the part at any angle. This unlocks complex geometry and eliminates setups — but it's expensive and needs serious CAM.</p>
+
+<h2>Two Rotary Configurations</h2>
+<table>
+  <tr><th>Type</th><th>Rotary motion</th><th>Typical use</th></tr>
+  <tr><td><strong>Trunnion / Table</strong></td><td>Part tilts and rotates on an A/C trunnion table</td><td>Small-to-medium parts, molds, aerospace</td></tr>
+  <tr><td><strong>Head / Spindle</strong></td><td>Spindle head tilts (A/B), table stays flat</td><td>Large parts, heavy work, gantry-style</td></tr>
+</table>
+
+<h2>Why 5-Axis</h2>
+<ul>
+  <li><strong>One setup instead of five:</strong> Access all sides without re-fixturing.</li>
+  <li><strong>Shorter, stiffer tools:</strong> Tilt the spindle normal to the surface — use short tools instead of long reach tools, reducing deflection and chatter.</li>
+  <li><strong>Complex geometry:</strong> Impellers, turbine blades, tire molds, dental implants.</li>
+</ul>
+
+<div class="warning">
+  <p><strong>5-axis is not a magic upgrade.</strong> It needs (1) expensive machine, (2) sophisticated CAM software, (3) collision checking, (4) skilled programmers. For a simple block with holes, a 3-axis VMC is faster and more accurate. Buy 5-axis when the geometry demands it, not because it sounds impressive.</p>
+</div>
+
+<h3>3+2 vs Full 5-Axis</h3>
+<table>
+  <tr><th></th><th>3+2 (Positional)</th><th>Full 5-Axis (Simultaneous)</th></tr>
+  <tr><td>How it works</td><td>Index to angle, then mill in 3 axes</td><td>All 5 axes move continuously during cut</td></tr>
+  <tr><td>Programming</td><td>Much simpler</td><td>Complex CAM, collision checking</td></tr>
+  <tr><td>Use case</td><td>Machining sides at angles</td><td>Freeform surfaces, impellers, blades</td></tr>
+</table>
+
+<div class="nav-links">
+  <a href="../vmc-hmc/">&larr; VMC vs HMC</a>
+  <a href="../../#ch05">Back to Chapter 05 &uarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

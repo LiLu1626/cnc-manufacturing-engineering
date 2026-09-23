@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CNC Milling Fundamentals | Machine Systems</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../" class="active">Machine Systems</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch04" class="back-link">&larr; Back to 04 &middot; CNC Milling Machines</a>
+<div class="hero-eyebrow">04.1 &middot; CNC Milling Machines</div>
+<h1>CNC Milling Fundamentals</h1>
+
+<p>In milling, the tool rotates and the workpiece stays still on the table. This is the opposite of a lathe. Milling machines make prismatic parts — blocks, plates, housings, molds — by cutting pockets, faces, holes, and profiles.</p>
+
+<h2>Vertical vs Horizontal Milling</h2>
+<svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%;margin:1rem auto;display:block;">
+  <!-- VMC -->
+  <text x="120" y="20" font-size="13" font-weight="bold" fill="#0b766e">Vertical Mill</text>
+  <rect x="60" y="40" width="120" height="14" fill="#07574f"/>
+  <rect x="110" y="54" width="20" height="60" fill="#5c6872"/>
+  <rect x="100" y="114" width="40" height="12" fill="#17242f"/>
+  <rect x="70" y="140" width="100" height="10" fill="#0b766e"/>
+  <rect x="70" y="150" width="100" height="30" fill="#07574f"/>
+  <text x="55" y="135" font-size="11" fill="#17242f">Spindle down</text>
+  <!-- HMC -->
+  <text x="380" y="20" font-size="13" font-weight="bold" fill="#0b766e">Horizontal Mill</text>
+  <rect x="320" y="40" width="14" height="100" fill="#07574f"/>
+  <rect x="334" y="70" width="60" height="18" fill="#5c6872"/>
+  <rect x="394" y="72" width="14" height="14" fill="#17242f"/>
+  <rect x="334" y="130" width="100" height="10" fill="#0b766e"/>
+  <rect x="334" y="140" width="100" height="30" fill="#07574f"/>
+  <text x="410" y="65" font-size="11" fill="#17242f">Spindle sideways</text>
+</svg>
+
+<table>
+  <tr><th></th><th>Vertical Mill / VMC</th><th>Horizontal Mill / HMC</th></tr>
+  <tr><td>Spindle direction</td><td>Downward onto table</td><td>Sideways onto a tombstone/fixture</td></tr>
+  <tr><td>Chip evacuation</td><td>Chips fall on the part</td><td>Chips fall away</td></tr>
+  <tr><td>Workholding</td><td>Vise, plate, simple fixture</td><td>Tombstone, pallet, 4-sided fixture</td></tr>
+  <tr><td>Best for</td><td>Molds, plates, one-sided work, prototyping</td><td>Production, boxy parts, multi-sided machining</td></tr>
+</table>
+
+<h2>Axis Configurations</h2>
+<table>
+  <tr><th>Axes</th><th>What you can do</th></tr>
+  <tr><td><strong>3-axis (X/Y/Z)</strong></td><td>Move table left-right, front-back, spindle up-down. Mill top face, holes, pockets, 2.5D contours.</td></tr>
+  <tr><td><strong>4-axis (+ rotary table)</strong></td><td>Part rotates so you can machine sides without re-fixturing. Indexing or continuous.</td></tr>
+  <tr><td><strong>5-axis (+ second rotary)</strong></td><td>Tool tilts relative to part. Complex 3D surfaces, multi-angle access in one setup.</td></tr>
+</table>
+
+<h2>Key Milling Operations</h2>
+<table>
+  <tr><th>Operation</th><th>What it does</th></tr>
+  <tr><td><strong>Face milling</strong></td><td>Square up a surface with a face mill</td></tr>
+  <tr><td><strong>End milling</strong></td><td>Cut slots, pockets, profiles</td></tr>
+  <tr><td><strong>Drilling / tapping</strong></td><td>Create holes, threads (often on the same machine)</td></tr>
+  <tr><td><strong>Boring</strong></td><td>Accurately size an existing hole</td></tr>
+  <tr><td><strong>Pocketing / profiling</strong></td><td>2D and 3D cavity and contour work</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Milling vs drilling on a mill:</strong> Any CNC mill can drill, tap, and bore. The difference between a basic mill and a machining center is the <strong>automatic tool changer (ATC)</strong> and the ability to run unattended cycles. See <a href="../machine-components/">Machine Components</a> and <a href="../../05-machining-centers/vmc-hmc/">VMC vs HMC</a>.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../../#ch04">&larr; Machine Systems</a>
+  <a href="../machine-components/">Next: Machine Components &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

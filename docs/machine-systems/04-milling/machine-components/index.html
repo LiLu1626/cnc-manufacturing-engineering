@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Milling Machine Components | Machine Systems</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../" class="active">Machine Systems</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch04" class="back-link">&larr; Back to 04 &middot; CNC Milling Machines</a>
+<div class="hero-eyebrow">04.2 &middot; CNC Milling Machines</div>
+<h1>Milling Machine Components</h1>
+
+<p>What's actually inside a CNC mill? The spindle, table, axis drives, tool changer, and coolant/chip systems. Understanding these helps you know why one machine holds ±0.005 mm and another holds ±0.02 mm.</p>
+
+<h2>Spindle</h2>
+<table>
+  <tr><th>Type</th><th>Speed</th><th>Torque</th><th>Typical use</th></tr>
+  <tr><td>Belt-driven</td><td>Up to 8,000–15,000 RPM</td><td>High torque at low RPM</td><td>General machining, steel</td></tr>
+  <tr><td>Direct-drive</td><td>12,000–24,000 RPM</td><td>Mid-range</td><td>Molds, aluminum</td></tr>
+  <tr><td>Motorized (built-in)</td><td>20,000–40,000+ RPM</td><td>Lower torque</td><td>High-speed machining, small tools</td></tr>
+</table>
+
+<h2>Table, Saddle, Column</h2>
+<ul>
+  <li><strong>Table:</strong> T-slotted surface that holds the part. Size and T-slot spacing matter for fixturing.</li>
+  <li><strong>Saddle:</strong> Carries the table, moves in Y.</li>
+  <li><strong>Column:</strong> Vertical structure carrying the head/spindle. Heavy, rigid columns reduce vibration.</li>
+</ul>
+
+<h2>Axis Drives: Ballscrews vs Linear Motors</h2>
+<table>
+  <tr><th></th><th>Ballscrew Drive</th><th>Linear Motor</th></tr>
+  <tr><td>Speed</td><td>24–48 m/min</td><td>60–120 m/min</td></tr>
+  <tr><td>Acceleration</td><td>0.3–0.5 g</td><td>1–2 g</td></tr>
+  <tr><td>Accuracy</td><td>Good, with preloaded screws</td><td>Excellent, no mechanical backlash</td></tr>
+  <tr><td>Cost</td><td>Standard</td><td>Very expensive</td></tr>
+  <tr><td>Best for</td><td>Most production mills</td><td>High-speed, high-accuracy mills</td></tr>
+</table>
+
+<h2>Tool Changing System</h2>
+<ul>
+  <li><strong>Tool magazine:</strong> Carousel (20–40 tools) or chain magazine (up to 300+).</li>
+  <li><strong>ATC (Automatic Tool Changer):</strong> Swaps tools between magazine and spindle. Typical tool change time: 1–5 seconds.</li>
+  <li><strong>Tool taper:</strong> CAT40, CAT50, BT30, HSK. CAT40 is standard for VMCs; CAT50 for heavy-duty.</li>
+</ul>
+
+<h2>Coolant and Chip Management</h2>
+<div class="callout">
+  <p><strong>Chip management is a production issue, not a cosmetic one.</strong> Chips recut under the tool, ruin surface finish, and jam fixturing. Good machines have a chip conveyor through the bed, flood coolant, and a coolant tank with filtration. Dry machining is fine for aluminum; steel needs coolant.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../milling-fundamentals/">&larr; Milling Fundamentals</a>
+  <a href="../../#ch04">Back to Chapter 04 &uarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>
