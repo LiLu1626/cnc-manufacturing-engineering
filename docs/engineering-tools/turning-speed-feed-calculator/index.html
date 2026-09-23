@@ -1,0 +1,81 @@
+---
+title: Turning Speed and Feed Calculator
+---
+
+<article class="tool-page">
+  <header class="tool-header">
+    <p class="eyebrow">Turning · Released</p>
+    <h1>Turning Speed and Feed Calculator</h1>
+    <p>Calculate spindle RPM, feed rate, and metal removal for CNC lathe / turning operations. Enter workpiece diameter, cutting speed (Vc), and feed per revolution to get the machine settings. For external turning, facing, and boring.</p>
+  </header>
+
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field">
+        <label for="workD">Workpiece diameter — mm</label>
+        <input id="workD" type="number" step="0.001" placeholder="e.g. 40" />
+      </div>
+      <div class="field">
+        <label for="vc">Cutting speed Vc — m/min</label>
+        <input id="vc" type="number" step="0.1" placeholder="e.g. 150" />
+      </div>
+      <div class="field">
+        <label for="frev">Feed per revolution — mm/rev</label>
+        <input id="frev" type="number" step="0.001" placeholder="e.g. 0.2" />
+      </div>
+      <div class="field">
+        <label for="depth">Depth of cut ap — mm (optional)</label>
+        <input id="depth" type="number" step="0.01" placeholder="e.g. 2.0" />
+      </div>
+    </div>
+
+    <div class="result-grid">
+      <div class="result">
+        <p>Spindle speed RPM</p>
+        <p class="result-value" id="rpmResult">—</p>
+        <p class="result-detail" id="rpmDetail"></p>
+      </div>
+      <div class="result">
+        <p>Feed rate</p>
+        <p class="result-value" id="feedResult">—</p>
+        <p class="result-detail" id="feedDetail"></p>
+      </div>
+      <div class="result">
+        <p>Actual cutting speed</p>
+        <p class="result-value" id="vcResult">—</p>
+        <p class="result-detail" id="vcDetail"></p>
+      </div>
+      <div class="result">
+        <p>Metal removal rate (if ap given)</p>
+        <p class="result-value" id="mrrResult">—</p>
+        <p class="result-detail" id="mrrDetail"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>Formula and use</h2>
+    <p><strong>Spindle speed:</strong> RPM = 1000 × Vc / (π × D)</p>
+    <p><strong>Feed rate:</strong> Vf = RPM × f (mm/rev)</p>
+    <p><strong>Metal removal rate:</strong> Q = Vf × ap × f / 1000 (cm³/min)</p>
+    <p>Cutting speed Vc is the surface speed of the tool relative to the workpiece. It depends on the material combination:</p>
+    <ul>
+      <li>Steel (P): 150–300 m/min with carbide</li>
+      <li>Stainless (M): 100–200 m/min</li>
+      <li>Cast iron (K): 80–150 m/min</li>
+      <li>Aluminum (N): 300–1000 m/min</li>
+      <li>High-temp alloys (S): 30–80 m/min</li>
+    </ul>
+    <p>Feed per revolution f affects surface finish and chip load. Finish passes use 0.05–0.15 mm/rev; roughing uses 0.2–0.5 mm/rev. Depth of cut ap for carbide is typically 1–4 mm per pass.</p>
+  </section>
+
+  <aside class="notice">
+    <strong>Note:</strong>
+    <p>Diameter D should be the cutting diameter. For facing, use the current turning diameter (not the bar size). Always verify the machine's max RPM — small parts may exceed the spindle limit. Feed rate on the controller is usually entered in mm/min (mm/rev for G99). Check your machine's feed mode.</p>
+  </aside>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</article>
+
+<link rel="stylesheet" href="styles.css" />
+<script src="calculator.js" defer></script>
