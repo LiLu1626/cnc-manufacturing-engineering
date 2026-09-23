@@ -1,0 +1,37 @@
+---
+title: Drilling Parameter Assistant
+---
+<link rel="stylesheet" href="styles.css">
+<main class="tool-page">
+  <header class="tool-header">
+    <div class="eyebrow">Drilling · Released</div>
+    <h1>Drilling Parameter Assistant</h1>
+    <p>Calculate recommended spindle speed, feed rate, and drilling strategy from drill diameter, cutting speed, feed per revolution, and hole depth.</p>
+  </header>
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field"><label for="diameter">Drill diameter (mm)</label><input id="diameter" type="number" value="10" min="0.1" step="any"></div>
+      <div class="field"><label for="vc">Cutting speed Vc (m/min)</label><input id="vc" type="number" value="80" min="0.1" step="any"></div>
+      <div class="field"><label for="feedRev">Feed per revolution (mm/rev)</label><input id="feedRev" type="number" value="0.15" min="0.01" step="any"></div>
+      <div class="field"><label for="holeDepth">Hole depth (mm)</label><input id="holeDepth" type="number" value="30" min="0" step="any"></div>
+      <div class="field"><label for="maxRpm">Machine max RPM (0 = no limit)</label><input id="maxRpm" type="number" value="0" min="0" step="any"></div>
+    </div>
+    <div class="result-grid">
+      <div class="result"><div>Recommended RPM</div><div class="result-value" id="rpmResult">—</div></div>
+      <div class="result"><div>Feed rate</div><div class="result-value" id="feedResult">—</div><div class="result-detail" id="feedDetail"></div></div>
+      <div class="result"><div>Depth ratio L/D</div><div class="result-value" id="ldResult">—</div><div class="result-detail" id="ldDetail"></div></div>
+      <div class="result wide-result"><div>Drilling strategy</div><p class="result-detail" id="strategyDetail"></p></div>
+    </div>
+  </section>
+  <section class="formula">
+    <h2>Formula and use</h2>
+    <p><strong>RPM = 1000 × Vc ÷ (π × D)</strong></p>
+    <p><strong>Feed rate (mm/min) = feed per revolution × RPM</strong></p>
+    <p><strong>L/D ratio = hole depth ÷ drill diameter</strong></p>
+    <p>Use toolmaker data for specific materials and drill geometries. If the calculated RPM exceeds the machine limit, RPM is capped and actual cutting speed drops — reduce feed or check tool life.</p>
+  </section>
+  <aside class="notice"><strong>For beginners:</strong> Always start dry cutting at 50–70% of calculated feed to test chip formation and hole quality. For L/D above 5, use peck drilling to clear chips. Never force a drill through without sufficient coolant.</aside>
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</main>
+<script src="calculator.js"></script>
+
