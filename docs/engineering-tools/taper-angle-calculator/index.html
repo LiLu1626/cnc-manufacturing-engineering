@@ -1,0 +1,89 @@
+---
+title: Taper and Angle Calculator
+---
+
+<article class="tool-page">
+  <header class="tool-header">
+    <p class="eyebrow">Trigonometry · Released</p>
+    <h1>Taper and Angle Calculator</h1>
+    <p>Calculate taper dimensions and angles for turned parts, toolholders, and tapered features. Enter any three of the four values (large diameter, small diameter, length, included angle) and the calculator solves the fourth. Also shows taper per 100&nbsp;mm and the half-angle for programming.</p>
+  </header>
+
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field">
+        <label for="largeD">Large diameter D — mm</label>
+        <input id="largeD" type="number" step="0.001" placeholder="e.g. 30" />
+      </div>
+      <div class="field">
+        <label for="smallD">Small diameter d — mm</label>
+        <input id="smallD" type="number" step="0.001" placeholder="e.g. 20" />
+      </div>
+      <div class="field">
+        <label for="lengthL">Length L — mm</label>
+        <input id="lengthL" type="number" step="0.001" placeholder="e.g. 50" />
+      </div>
+      <div class="field">
+        <label for="incAngle">Included angle α — degrees</label>
+        <input id="incAngle" type="number" step="0.001" placeholder="leave blank if unknown" />
+      </div>
+    </div>
+
+    <div class="result-grid">
+      <div class="result">
+        <p>Large diameter D</p>
+        <p class="result-value" id="dResult">—</p>
+        <p class="result-detail" id="dDetail"></p>
+      </div>
+      <div class="result">
+        <p>Small diameter d</p>
+        <p class="result-value" id="sResult">—</p>
+        <p class="result-detail" id="sDetail"></p>
+      </div>
+      <div class="result">
+        <p>Length L</p>
+        <p class="result-value" id="lResult">—</p>
+        <p class="result-detail" id="lDetail"></p>
+      </div>
+      <div class="result">
+        <p>Included angle α</p>
+        <p class="result-value" id="aResult">—</p>
+        <p class="result-detail" id="aDetail"></p>
+      </div>
+      <div class="result">
+        <p>Taper per 100 mm</p>
+        <p class="result-value" id="tp100Result">—</p>
+        <p class="result-detail" id="tp100Detail"></p>
+      </div>
+      <div class="result">
+        <p>Half-angle (program side)</p>
+        <p class="result-value" id="halfResult">—</p>
+        <p class="result-detail" id="halfDetail"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>Formula and use</h2>
+    <p>The taper is defined by the diameter change over length:</p>
+    <ul>
+      <li>Included angle: α = 2·atan((D − d) / (2·L))</li>
+      <li>D = d + 2·L·tan(α/2)</li>
+      <li>d = D − 2·L·tan(α/2)</li>
+      <li>L = (D − d) / (2·tan(α/2))</li>
+      <li>Taper per 100 mm = (D − d) / L × 100</li>
+    </ul>
+    <p>On a lathe, the compound rest is swivelled to the <strong>half-angle</strong> (α/2), not the included angle. When programming a CNC lathe, the toolpath uses the half-angle as well. Standard tapers (Morse, Metric 1:50, etc.) are defined by their taper ratio, not the angle.</p>
+    <p>Common uses: turning tapered shafts, boring tapered holes, setting up taper-turning attachments, checking Morse taper dimensions, and verifying toolholder tapers (BT/CAT).</p>
+  </section>
+
+  <aside class="notice">
+    <strong>Note:</strong>
+    <p>Enter any three of the four fields; the fourth is calculated automatically. If you enter all four, they must agree. Length L is the axial length over which the taper changes from d to D. Results: diameters and length to 3 decimals, angles to 2 decimals.</p>
+  </aside>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</article>
+
+<link rel="stylesheet" href="styles.css" />
+<script src="calculator.js" defer></script>
