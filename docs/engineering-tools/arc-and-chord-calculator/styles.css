@@ -1,0 +1,74 @@
+:root {
+  --accent: #0b766e;
+  --accent-dark: #07574f;
+  --surface: #fff;
+  --text: #1f2933;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f6f8f7;
+  color: var(--text);
+  line-height: 1.6;
+  padding: 2rem 1rem;
+}
+.container { max-width: 960px; margin: 0 auto; }
+h1 { color: var(--accent-dark); margin-bottom: 0.5rem; }
+.subtitle { color: var(--text-muted); margin-bottom: 2rem; }
+.tool-grid, .result-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.input-group, .result-card {
+  background: var(--surface);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--border);
+}
+.input-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.input-group input, .input-group select {
+  width: 100%;
+  padding: 0.55rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 1rem;
+  color: var(--text);
+}
+.input-group input:focus, .input-group select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(11,118,110,0.15);
+}
+.result-card {
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: #fff;
+  border: none;
+}
+.result-card .label { font-size: 0.8rem; opacity: 0.9; margin-bottom: 0.3rem; }
+.result-card .value { font-size: 1.5rem; font-weight: 700; }
+.result-card .detail { font-size: 0.8rem; opacity: 0.85; margin-top: 0.3rem; }
+.notes {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem;
+}
+.notes h3 { color: var(--accent-dark); margin-bottom: 0.6rem; }
+.notes ul { padding-left: 1.2rem; color: var(--text-muted); }
+.notes li { margin-bottom: 0.3rem; }
+@media (max-width: 700px) {
+  .tool-grid, .result-grid { grid-template-columns: 1fr; }
+  body { padding: 1rem; }
+}
