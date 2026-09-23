@@ -1,0 +1,23 @@
+---
+title: Machining Time Estimator
+---
+<link rel="stylesheet" href="styles.css">
+<main class="tool-page">
+  <header class="tool-header">
+    <div class="eyebrow">Machining Parameters · Released</div>
+    <h1>Machining Time Estimator</h1>
+    <p>Estimate a basic machining time from cutting length, feed rate, and planned allowance time.</p>
+  </header>
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field"><label for="length">Total cutting length (mm)</label><input id="length" type="number" value="250" min="0" step="any"></div>
+      <div class="field"><label for="feedRate">Feed rate (mm/min)</label><input id="feedRate" type="number" value="955" min="0" step="any"></div>
+      <div class="field"><label for="allowance">Additional time (seconds)</label><input id="allowance" type="number" value="15" min="0" step="any"></div>
+    </div>
+    <div class="result"><div>Estimated cycle time</div><div class="result-value" id="result">—</div><div class="result-detail" id="detail"></div></div>
+  </section>
+  <section class="formula"><h2>How the estimate works</h2><p><strong>Cutting time = Cutting length ÷ Feed rate</strong></p><p>Additional time can represent a planned approach, retract, or handling allowance. It is not a complete production cycle-time study.</p></section>
+  <aside class="notice"><strong>For beginners:</strong> Start by measuring only the distance the tool actually cuts. Tool changes, rapid movement, probing, dwell, inspection, and machine acceleration can materially change a final cycle time.</aside>
+  <footer class="tool-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</main>
+<script src="calculator.js"></script>
