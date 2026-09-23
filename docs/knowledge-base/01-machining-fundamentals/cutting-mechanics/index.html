@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cutting Mechanics | Knowledge Base</title>
+  <link rel="stylesheet" href="../../assets/css/site.css">
+  <link rel="stylesheet" href="../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../" class="active">Knowledge Base</a></li>
+      <li><a href="../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="article">
+  <a href="../" class="back-link">&larr; Back to Knowledge Base</a>
+
+  <div class="hero-eyebrow">01.2 · Machining Fundamentals</div>
+  <h1>Cutting Mechanics</h1>
+
+  <p>When a cutting tool engages a workpiece, it does not scrape or plow — it shears the metal along a narrow zone called the shear plane. Understanding this mechanism explains why we choose certain speeds, feeds, and tool geometries, and why cutting generates so much heat.</p>
+
+  <h2>How Metal Cutting Works</h2>
+  <p>Imagine a wedge being pushed into a block of material. The metal ahead of the tool edge undergoes intense shear deformation along a plane at approximately 20–35° to the cutting direction (the shear angle φ). The material above this plane flows upward along the tool rake face, becoming the chip. This is a plastic deformation process — the chip is permanently deformed, not just displaced.</p>
+
+  <p>Key points:</p>
+  <ul>
+    <li>The tool edge must be sharp enough to initiate shear, not just compress the material.</li>
+    <li>The shear zone is extremely narrow — most deformation happens in a thin band.</li>
+    <li>The chip is work-hardened as it slides up the rake face.</li>
+  </ul>
+
+  <h2>The Shear Zone</h2>
+  <p>The shear plane is where the bulk of energy is consumed. The shear angle φ depends on the rake angle, friction on the rake face, and the material. A larger shear angle means thinner chips and less energy per unit volume — which is why positive-rake tools cut more efficiently than negative-rake tools.</p>
+
+  <div class="formula-box">
+    Cutting energy ≈ Shear stress × Shear area × Shear plane length
+  </div>
+
+  <h2>Cutting Forces</h2>
+  <p>Three orthogonal forces act on the cutting edge. Together they determine machine power, tool deflection, and surface quality.</p>
+
+  <table>
+    <tr><th>Force</th><th>Symbol</th><th>Direction</th><th>Effect</th></tr>
+    <tr><td><strong>Tangential (main cutting) force</strong></td><td>Fc</td><td>Opposes cutting speed; vertical in turning</td><td>Determines spindle power; causes tool deflection and bend</td></tr>
+    <tr><td><strong>Radial (thrust) force</strong></td><td>Fr</td><td>Pushes tool away from workpiece; perpendicular to surface</td><td>Causes boring bar deflection, chatter, poor surface finish</td></tr>
+    <tr><td><strong>Axial (feed) force</strong></td><td>Ff</td><td>Opposes feed motion; along tool axis</td><td>Feeds the table; usually the smallest of the three</td></tr>
+  </table>
+
+  <div class="callout">
+    <p><strong>Typical ratios (steel turning):</strong> Fc is the largest. Fr ≈ 0.3–0.5 × Fc. Ff ≈ 0.3–0.4 × Fc. The radial force is why boring bars chatter — it acts perpendicular to the overhang, multiplying deflection with L³.</p>
+  </div>
+
+  <h3>Specific Cutting Force (kc)</h3>
+  <p>The specific cutting force kc is the cutting force per unit area of undeformed chip. It depends on workpiece material and chip thickness (thinner chips → higher kc due to size effect). Typical values:</p>
+  <ul>
+    <li>Aluminum: 700–1000 N/mm²</li>
+    <li>Low-carbon steel: 2000–2500 N/mm²</li>
+    <li>Alloy steel (4140): 3000–3500 N/mm²</li>
+    <li>Stainless steel (304): 3500–4500 N/mm²</li>
+    <li>Inconel 718: 4000–5000 N/mm²</li>
+  </ul>
+
+  <div class="formula-box">
+    Fc ≈ kc × ap × f &nbsp;&nbsp;(turning: depth × feed)
+  </div>
+
+  <p>Try it in the <a href="../../engineering-tools/boring-bar-deflection-check/">Boring-Bar Deflection Check</a> — it estimates Fc from kc × chip cross-section.</p>
+
+  <h2>Heat Generation</h2>
+  <p>Almost all cutting energy converts to heat. The heat comes from three sources:</p>
+  <ol>
+    <li><strong>Shear zone</strong> — plastic deformation of the workpiece (≈60% of heat).</li>
+    <li><strong>Chip–tool interface</strong> — friction as the chip slides up the rake face (≈30%).</li>
+    <li><strong>Tool–workpiece flank contact</strong> — friction on the clearance face (≈10%).</li>
+  </ol>
+
+  <h3>Heat Distribution</h3>
+  <p>In conventional machining of steel at moderate speeds:</p>
+  <ul>
+    <li>≈75% of heat leaves with the chip</li>
+    <li>≈20% enters the tool</li>
+    <li>≈5% enters the workpiece</li>
+  </ul>
+
+  <div class="callout warning">
+    <p><strong>Why speed matters:</strong> as cutting speed increases, chip heat grows, but the chip leaves faster and carries more heat away — so tool temperature initially rises then stabilizes. At very high speeds, however, tool temperature spikes and crater wear accelerates. This is why tool-life curves (Taylor's equation) exist: there is an optimal speed range.</p>
+  </div>
+
+  <p>Learn more with the <a href="../../engineering-tools/power-torque-estimator/">Power & Torque Estimator</a> and <a href="../../engineering-tools/tool-life-planning/">Tool Life Planning</a>.</p>
+
+  <div class="nav-links">
+    <a href="../introduction-to-machining/">&larr; Introduction to Machining</a>
+    <a href="../cutting-motions/">Next: Cutting Motions &rarr;</a>
+  </div>
+</main>
+
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

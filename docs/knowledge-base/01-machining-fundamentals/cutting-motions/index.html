@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cutting Motions | Knowledge Base</title>
+  <link rel="stylesheet" href="../../assets/css/site.css">
+  <link rel="stylesheet" href="../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../" class="active">Knowledge Base</a></li>
+      <li><a href="../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+  <a href="../" class="back-link">&larr; Back to Knowledge Base</a>
+  <div class="hero-eyebrow">01.3 · Machining Fundamentals</div>
+  <h1>Cutting Motions</h1>
+  <p>Every machining operation is produced by the relative motion between the tool and the workpiece. There are two fundamental motions — cutting motion and feed motion — and they combine to produce the desired geometry.</p>
+
+  <h2>Cutting Motion (Primary Motion)</h2>
+  <p>This is the main motion that generates the cutting speed Vc. It is usually rotational (the spindle spins the tool or workpiece):</p>
+  <ul>
+    <li><strong>Milling:</strong> the spindle rotates the end mill.</li>
+    <li><strong>Turning:</strong> the spindle rotates the workpiece; the tool moves linearly.</li>
+    <li><strong>Drilling:</strong> the drill rotates and feeds axially into the part.</li>
+  </ul>
+  <p>Cutting speed Vc is measured in m/min (surface feet per minute, SFM, in imperial). It is the speed at which the tool edge passes across the workpiece surface.</p>
+
+  <h2>Feed Motion</h2>
+  <p>Feed motion moves the tool (or workpiece) so that a fresh cutting edge engages new material. It is usually linear and perpendicular to the cutting motion:</p>
+  <ul>
+    <li><strong>Turning:</strong> the tool feeds along the workpiece axis (longitudinal feed) or across it (facing/cross feed).</li>
+    <li><strong>Milling:</strong> the table moves the workpiece past the rotating cutter.</li>
+    <li><strong>Drilling:</strong> the drill feeds axially into the hole.</li>
+  </ul>
+
+  <h2>Depth of Cut</h2>
+  <p>Depth of cut (ap in turning, ae in milling) is how deep the tool penetrates below the machined surface. It is set once per pass and is not the same as feed.</p>
+  <table>
+    <tr><th>Parameter</th><th>Symbol</th><th>What it is</th><th>Typical value</th></tr>
+    <tr><td>Cutting speed</td><td>Vc</td><td>Surface speed at the edge</td><td>100–300 m/min (steel)</td></tr>
+    <tr><td>Spindle speed</td><td>N</td><td>Revolutions per minute</td><td>500–5000 RPM</td></tr>
+    <tr><td>Feed per tooth/rev</td><td>fz / f</td><td>How far tool advances per revolution</td><td>0.05–0.3 mm</td></tr>
+    <tr><td>Feed rate</td><td>Vf</td><td>Linear travel speed</td><td>100–1000 mm/min</td></tr>
+    <tr><td>Depth of cut</td><td>ap / ae</td><td>Depth below surface</td><td>0.5–5 mm roughing</td></tr>
+  </table>
+
+  <h2>Rotational vs Linear Motion</h2>
+  <p>In milling, the tool rotates and the workpiece feeds linearly. In turning, the workpiece rotates and the tool feeds linearly. In both cases, the chip is formed by the same shear mechanism — only the kinematics differ.</p>
+
+  <div class="callout">
+    <p><strong>Key distinction:</strong> cutting speed determines tool life and heat. Feed determines surface finish and chip load. Depth of cut determines how much material you remove per pass. These three are the "cutting conditions" — set them and the machine does the rest.</p>
+  </div>
+
+  <p>Calculate real values: <a href="../../engineering-tools/spindle-speed-calculator/">Spindle Speed</a> · <a href="../../engineering-tools/feed-rate-calculator/">Feed Rate</a> · <a href="../../engineering-tools/material-removal-rate-calculator/">MRR</a></p>
+
+  <div class="nav-links">
+    <a href="../cutting-mechanics/">&larr; Cutting Mechanics</a>
+    <a href="../chip-formation/">Next: Chip Formation &rarr;</a>
+  </div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

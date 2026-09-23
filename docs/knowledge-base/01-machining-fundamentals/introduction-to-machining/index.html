@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Introduction to Machining | Knowledge Base</title>
+  <link rel="stylesheet" href="../../assets/css/site.css">
+  <link rel="stylesheet" href="../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../" class="active">Knowledge Base</a></li>
+      <li><a href="../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="article">
+  <a href="../" class="back-link">&larr; Back to Knowledge Base</a>
+
+  <div class="hero-eyebrow">01.1 · Machining Fundamentals</div>
+  <h1>Introduction to Machining</h1>
+
+  <p>Machining is the process of removing material from a workpiece to achieve a desired shape, size, and surface finish. It is the most common subtractive manufacturing process, and it underpins nearly every precision metal component you encounter — from engine blocks to medical implants.</p>
+
+  <h2>What is Machining?</h2>
+  <p>Machining belongs to the family of <strong>subtractive manufacturing</strong>. You start with a solid block of material (a workpiece) and cut away excess material with a sharp cutting tool until only the desired part remains. This is the opposite of additive manufacturing (3D printing), where material is added layer by layer.</p>
+
+  <p>The key relationship in every machining operation is between three elements:</p>
+  <ul>
+    <li><strong>Machine</strong> — provides the power, accuracy, and motion (spindle, table, axes).</li>
+    <li><strong>Tool</strong> — the cutting edge that shears material away (insert, end mill, drill).</li>
+    <li><strong>Workpiece</strong> — the material being cut (steel, aluminum, titanium, plastic).</li>
+  </ul>
+
+  <div class="callout">
+    <p><strong>The fundamental principle:</strong> the cutting tool must be harder than the workpiece, and it must move relative to the workpiece with controlled speed, feed, and depth. Everything else — CNC controls, coolant, tool holders — exists to manage these three inputs reliably.</p>
+  </div>
+
+  <h2>Machining vs Manufacturing</h2>
+  <p>Manufacturing is a broad term covering all ways to produce parts: casting, forging, injection molding, 3D printing, and machining. Machining is one process within manufacturing — typically used when the part requires high precision, tight tolerances, or complex geometry that other processes cannot achieve.</p>
+
+  <table>
+    <tr><th>Process</th><th>How it works</th><th>Typical tolerance</th><th>Best for</th></tr>
+    <tr><td>Casting</td><td>Molten metal into mold</td><td>±0.5 mm</td><td>Large, complex shapes</td></tr>
+    <tr><td>Forging</td><td>Metal hammered/pressed</td><td>±0.3 mm</td><td>High-strength parts</td></tr>
+    <tr><td>Injection molding</td><td>Plastic injected into mold</td><td>±0.1 mm</td><td>High-volume plastic</td></tr>
+    <tr><td><strong>CNC Machining</strong></td><td><strong>Material cut with tool</strong></td><td><strong>±0.005 mm</strong></td><td><strong>Precision, low volume, complex geometry</strong></td></tr>
+  </table>
+
+  <h2>Conventional vs CNC Machining</h2>
+  <p><strong>Conventional (manual) machining</strong> uses a human operator to crank handles on a lathe, mill, or drill press. The operator reads the drawing, sets the depth, and moves the tool by hand. It requires skilled machinists and is slow but flexible.</p>
+  <p><strong>CNC (Computer Numerical Control) machining</strong> uses a programmed computer to control tool motion. The operator sets up the machine, loads the program, and presses cycle start. The machine repeats the same path with micron-level accuracy. CNC is faster, more consistent, and handles complex 3D geometry that would be impossible by hand.</p>
+
+  <div class="callout example">
+    <p><strong>Example:</strong> A manual machinist might take 2 hours to mill a bracket. A CNC machine with the same program makes the first part in 20 minutes and every subsequent part in 18 minutes — identical every time. The manual skill is now in setup, tool selection, and program verification, not in cranking handles.</p>
+  </div>
+
+  <h2>The Machine–Tool–Workpiece Relationship</h2>
+  <p>Every machining operation is a system. If any element is weak, the whole system suffers:</p>
+  <ul>
+    <li><strong>Weak machine</strong> (spindle wobble, loose ways) → poor finish, dimensional error.</li>
+    <li><strong>Dull tool</strong> → rubbing instead of cutting, heat, poor finish, rapid wear.</li>
+    <li><strong>Bad workpiece material</strong> (inclusions, hard spots) → tool breakage, inconsistency.</li>
+    <li><strong>Poor workholding</strong> → part moves, chatter, scrap, safety risk.</li>
+  </ul>
+  <p>A skilled machinist diagnoses which element is the limiting factor and adjusts the others to compensate. This is the core of process planning.</p>
+
+  <h2>Where to go next</h2>
+  <ul>
+    <li><a href="../cutting-mechanics/">Next: Cutting Mechanics</a> — how metal actually shears under the tool edge.</li>
+    <li><a href="../../engineering-tools/spindle-speed-calculator/">Try: Spindle Speed Calculator</a> — calculate RPM from cutting speed and diameter.</li>
+  </ul>
+
+  <div class="nav-links">
+    <span></span>
+    <a href="../cutting-mechanics/">Next: Cutting Mechanics &rarr;</a>
+  </div>
+</main>
+
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chip Formation | Knowledge Base</title>
+  <link rel="stylesheet" href="../../assets/css/site.css">
+  <link rel="stylesheet" href="../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../" class="active">Knowledge Base</a></li>
+      <li><a href="../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+  <a href="../" class="back-link">&larr; Back to Knowledge Base</a>
+  <div class="hero-eyebrow">01.4 · Machining Fundamentals</div>
+  <h1>Chip Formation</h1>
+  <p>The shape of the chip tells you almost everything about how the cut is going. A trained machinist reads the chip color, shape, and sound to judge speed, feed, tool wear, and coolant effectiveness.</p>
+
+  <h2>Types of Chips</h2>
+  <table>
+    <tr><th>Chip type</th><th>Appearance</th><th>Material</th><th>Meaning</th></tr>
+    <tr><td><strong>Continuous</strong></td><td>Long, curly ribbon</td><td>Ductile metals (steel, aluminum)</td><td>Stable cut, good conditions — but can tangle</td></tr>
+    <tr><td><strong>Discontinuous</strong></td><td>Small segments, powder-like</td><td>Brittle materials (cast iron, brass)</td><td>Normal for brittle materials</td></tr>
+    <tr><td><strong>Segmented (serrated)</strong></td><td>Uneven, sawtooth ribbon</td><td>Titanium, hardened steel</td><td>Shear localizes; high heat at edge</td></tr>
+  </table>
+
+  <h2>Built-Up Edge (BUE)</h2>
+  <p>When cutting ductile materials at low speeds, workpiece material can weld itself to the tool edge under pressure and heat. This built-up edge (BUE) acts as a temporary cutting edge — but it is unstable and periodically breaks off, taking pieces of the tool with it. BUE causes poor surface finish and accelerated flank wear.</p>
+  <div class="callout warning">
+    <p><strong>Prevention:</strong> increase cutting speed, use sharper positive-rake tools, apply coolant effectively, or switch to a coated insert. BUE is most common in low-speed machining of mild steel and stainless.</p>
+  </div>
+
+  <h2>Chip Breaking</h2>
+  <p>Long continuous chips are dangerous — they can wrap around the tool, scratch the finished surface, block coolant flow, and injure the operator. Chip breakers (grooves on the insert rake face) force the chip to curl and break into short "6" or "C" shaped pieces.</p>
+  <p>Effective chip breaking depends on feed: too light a feed → the chip is too thin to curl and break; too heavy → the chip is too thick and won't break. Insert chip-breaker geometry is designed for a specific feed range.</p>
+
+  <h2>Chip Control and Evacuation</h2>
+  <p>In deep holes and deep pockets, chip evacuation is critical. Chips that stay in the cut get recut, ruining surface finish and dulling the tool. Strategies:</p>
+  <ul>
+    <li><strong>Peck drilling:</strong> retract the drill periodically to clear chips.</li>
+    <li><strong>High-pressure coolant:</strong> flushes chips out of deep holes.</li>
+    <li><strong>Climb milling vs conventional:</strong> affects chip thickness and direction.</li>
+    <li><strong>Trochodial milling:</strong> keeps chip thickness consistent and evacuates chips.</li>
+  </ul>
+
+  <div class="callout example">
+    <p><strong>Example:</strong> drilling a 10 mm deep hole in steel at 3× diameter depth is fine. At 10× diameter, chips pack in the flutes and the drill burns up. Peck cycle (retract every 1–2× diameter) solves this. See the <a href="../../engineering-tools/drilling-parameter-assistant/">Drilling Parameter Assistant</a> for peck depth guidance.</p>
+  </div>
+
+  <div class="nav-links">
+    <a href="../cutting-motions/">&larr; Cutting Motions</a>
+    <a href="../cutting-conditions/">Next: Cutting Conditions &rarr;</a>
+  </div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

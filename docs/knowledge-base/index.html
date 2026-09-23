@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knowledge Base | Li Lu CNC Eng</title>
+  <link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="./" class="active">Knowledge Base</a></li>
+      <li><a href="../machine-systems/">Machine Systems</a></li>
+      <li><a href="../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="page">
+  <a href="../" class="back-link">&larr; Back to Home</a>
+
+  <section class="hero">
+    <div class="hero-eyebrow">Knowledge Base</div>
+    <h1>Manufacturing Engineering Reference</h1>
+    <p>Structured knowledge for CNC machining: fundamentals, parameters, operations, materials, drawings, metrology, quality, and troubleshooting. Built from shop-floor practice and verified engineering principles.</p>
+  </section>
+
+  <div class="tool-cat">
+    <h2>01 &middot; Machining Fundamentals</h2>
+    <p class="tool-cat-desc">How cutting works: chip formation, forces, heat, motions, and the tool–workpiece relationship.</p>
+    <div class="tool-list">
+      <a class="tool-item" href="01-machining-fundamentals/introduction-to-machining/">
+        <div class="tool-item-name">Introduction to Machining</div>
+        <div class="tool-item-desc">Subtractive manufacturing, conventional vs CNC, process overview.</div>
+      </a>
+      <a class="tool-item" href="01-machining-fundamentals/cutting-mechanics/">
+        <div class="tool-item-name">Cutting Mechanics</div>
+        <div class="tool-item-desc">Shear zone, cutting forces, specific cutting force, heat generation.</div>
+      </a>
+      <a class="tool-item" href="01-machining-fundamentals/cutting-motions/">
+        <div class="tool-item-name">Cutting Motions</div>
+        <div class="tool-item-desc">Cutting motion, feed motion, depth of cut, rotational and linear motion.</div>
+      </a>
+      <a class="tool-item" href="01-machining-fundamentals/chip-formation/">
+        <div class="tool-item-name">Chip Formation</div>
+        <div class="tool-item-desc">Continuous, discontinuous, segmented chips, BUE, chip breaking and control.</div>
+      </a>
+      <a class="tool-item" href="01-machining-fundamentals/cutting-conditions/">
+        <div class="tool-item-name">Cutting Conditions</div>
+        <div class="tool-item-desc">Speed, feed, depth, engagement, cutting time, MRR. Links to calculators.</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="tool-cat">
+    <h2>02 &middot; Machining Parameters</h2>
+    <p class="tool-cat-desc">Spindle speed, cutting speed, feed, depth of cut, MRR, and how they relate.</p>
+    <div class="tool-list">
+      <a class="tool-item" href="../engineering-tools/spindle-speed-calculator/">
+        <div class="tool-item-name">Spindle Speed → Calculator</div>
+        <div class="tool-item-desc">RPM from cutting speed and diameter.</div>
+      </a>
+      <a class="tool-item" href="../engineering-tools/cutting-speed-calculator/">
+        <div class="tool-item-name">Cutting Speed → Calculator</div>
+        <div class="tool-item-desc">Reverse-lookup Vc from diameter and RPM.</div>
+      </a>
+      <a class="tool-item" href="../engineering-tools/feed-rate-calculator/">
+        <div class="tool-item-name">Feed Rate → Calculator</div>
+        <div class="tool-item-desc">Vf from chip load, teeth, and RPM.</div>
+      </a>
+      <a class="tool-item" href="../engineering-tools/material-removal-rate-calculator/">
+        <div class="tool-item-name">MRR → Calculator</div>
+        <div class="tool-item-desc">Metal removal rate Q = Vf × ap × ae.</div>
+      </a>
+      <div class="tool-item planned">
+        <div class="tool-item-name">Parameter Relationship Map</div>
+        <div class="tool-item-desc">How speed, feed, DOC, finish, tool life, and power connect. (Coming soon)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool-cat">
+    <h2>03 &middot; Machining Operations</h2>
+    <p class="tool-cat-desc">Turning, milling, drilling/hole making, grinding, and EDM.</p>
+    <div class="tool-list">
+      <div class="tool-item planned"><div class="tool-item-name">Turning Operations</div><div class="tool-item-desc">Facing, OD/ID turning, boring, grooving, threading. (Coming soon)</div></div>
+      <div class="tool-item planned"><div class="tool-item-name">Milling Operations</div><div class="tool-item-desc">Face, peripheral, slot, pocket, profile, trochoidal milling. (Coming soon)</div></div>
+      <div class="tool-item planned"><div class="tool-item-name">Drilling & Hole Making</div><div class="tool-item-desc">Drill, ream, bore, counterbore, tap, thread mill. (Coming soon)</div></div>
+      <div class="tool-item planned"><div class="tool-item-name">Grinding Basics</div><div class="tool-item-desc">Surface, cylindrical, centerless grinding. (Coming soon)</div></div>
+      <div class="tool-item planned"><div class="tool-item-name">EDM</div><div class="tool-item-desc">Sinker, wire EDM, electrode, dielectric. (Coming soon)</div></div>
+    </div>
+  </div>
+
+  <div class="tool-cat">
+    <h2>04 &middot; Materials & Machinability</h2>
+    <p class="tool-cat-desc">Steel, cast iron, non-ferrous, heat-resistant alloys, and machinability.</p>
+    <div class="tool-list">
+      <a class="tool-item" href="../engineering-tools/material-property-reference/">
+        <div class="tool-item-name">Material Property Reference → Table</div>
+        <div class="tool-item-desc">Cutting speeds, feeds, coolant by material.</div>
+      </a>
+      <div class="tool-item planned"><div class="tool-item-name">Steel & Stainless Steel</div><div class="tool-item-desc">Carbon, alloy, tool, stainless grades. (Coming soon)</div></div>
+      <div class="tool-item planned"><div class="tool-item-name">Aluminum & Non-Ferrous</div><div class="tool-item-desc">Aluminum, copper, brass, bronze. (Coming soon)</div></div>
+      <div class="tool-item planned"><div class="tool-item-name">Heat-Resistant Alloys</div><div class="tool-item-desc">Inconel, titanium, work hardening. (Coming soon)</div></div>
+    </div>
+  </div>
+
+  <div class="tool-cat">
+    <h2>05 &middot; Engineering Drawings & GD&T</h2>
+    <p class="tool-cat-desc">Drawing interpretation, datums, form/orientation/location/runout controls.</p>
+    <div class="tool-list">
+      <div class="tool-item planned"><div class="tool-item-name">Drawing Fundamentals</div><div class="tool-item-desc">Views, dimensions, notes, surface symbols. (Coming soon)</div></div>
+      <div class="tool-item planned"><div class="tool-item-name">GD&T Symbols</div><div class="tool-item-desc">Form, orientation, location, profile, runout. (Coming soon)</div></div>
+      <div class="tool-item planned"><div class="tool-item-name">MMC / LMC / Bonus Tolerance</div><div class="tool-item-desc">Virtual condition, datum shift, composite position. (Coming soon)</div></div>
+    </div>
+  </div>
+
+  <div class="tool-cat">
+    <h2>06 &middot; Metrology & Inspection</h2>
+    <p class="tool-cat-desc">Caliper, micrometer, bore gauge, CMM, measurement fundamentals.</p>
+    <div class="tool-list">
+      <a class="tool-item" href="../engineering-tools/measurement-planning/">
+        <div class="tool-item-name">Measurement Planning → Guide</div>
+        <div class="tool-item-desc">Instrument selection, 10:1 rule, datum strategy.</div>
+      </a>
+      <div class="tool-item planned"><div class="tool-item-name">Measurement Fundamentals</div><div class="tool-item-desc">Accuracy, precision, uncertainty, calibration. (Coming soon)</div></div>
+      <div class="tool-item planned"><div class="tool-item-name">Advanced Inspection</div><div class="tool-item-desc">CMM, optical, laser, 3D scanning. (Coming soon)</div></div>
+    </div>
+  </div>
+
+  <div class="tool-cat">
+    <h2>07 &middot; Surface Finish & Integrity</h2>
+    <p class="tool-cat-desc">Ra/Rz/Rt, feed vs finish, tool nose radius, residual stress, burrs.</p>
+    <div class="tool-list">
+      <a class="tool-item" href="../engineering-tools/surface-finish-conversion/">
+        <div class="tool-item-name">Surface Finish Conversion → Tool</div>
+        <div class="tool-item-desc">Ra, Rz, RMS, µin ↔ µm.</div>
+      </a>
+      <div class="tool-item planned"><div class="tool-item-name">Surface Integrity</div><div class="tool-item-desc">Residual stress, work hardening, white layer. (Coming soon)</div></div>
+    </div>
+  </div>
+
+  <div class="tool-cat">
+    <h2>08 &middot; Tolerances & Fits</h2>
+    <p class="tool-cat-desc">Dimensional tolerance, clearance/transition/interference fits, hole basis.</p>
+    <div class="tool-list">
+      <a class="tool-item" href="../engineering-tools/basic-fit-reference/">
+        <div class="tool-item-name">Basic Fit Reference → Guide</div>
+        <div class="tool-item-desc">Tolerance system concepts.</div>
+      </a>
+      <a class="tool-item" href="../engineering-tools/tolerance-stackup-assistant/">
+        <div class="tool-item-name">Tolerance Stack-Up → Calculator</div>
+        <div class="tool-item-desc">Worst-case and RSS accumulation.</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="tool-cat">
+    <h2>09 &middot; Machining Process Planning</h2>
+    <p class="tool-cat-desc">Drawing review → datum → workholding → sequence → tools → inspection.</p>
+    <div class="tool-list">
+      <a class="tool-item" href="../engineering-tools/datum-planning-worksheet/">
+        <div class="tool-item-name">Datum Planning → Worksheet</div>
+        <div class="tool-item-desc">3-2-1 locating checklist.</div>
+      </a>
+      <a class="tool-item" href="../engineering-tools/printable-setup-worksheet/">
+        <div class="tool-item-name">Setup Worksheet → Printable</div>
+        <div class="tool-item-desc">Job, tooling, zero, first-article sheet.</div>
+      </a>
+      <div class="tool-item planned"><div class="tool-item-name">Process Planning Workflow</div><div class="tool-item-desc">Roughing vs finishing, setup reduction, cycle time. (Coming soon)</div></div>
+    </div>
+  </div>
+
+  <div class="tool-cat">
+    <h2>10 &middot; Machining Troubleshooting</h2>
+    <p class="tool-cat-desc">Chatter, tool wear, BUE, burrs, dimensional error, chip control.</p>
+    <div class="tool-list">
+      <div class="tool-item planned"><div class="tool-item-name">Chatter & Vibration</div><div class="tool-item-desc">Causes, diagnosis, corrective actions. (Coming soon)</div></div>
+      <div class="tool-item planned"><div class="tool-item-name">Poor Surface Finish</div><div class="tool-item-desc">BUE, tool wear, vibration, feed issues. (Coming soon)</div></div>
+      <div class="tool-item planned"><div class="tool-item-name">Tool Wear & Breakage</div><div class="tool-item-desc">Flank wear, crater wear, notch, failure modes. (Coming soon)</div></div>
+      <div class="tool-item planned"><div class="tool-item-name">Dimensional Error</div><div class="tool-item-desc">Taper, deflection, thermal growth, backlash. (Coming soon)</div></div>
+    </div>
+  </div>
+
+  <div class="tool-cat">
+    <h2>11 &middot; Manufacturing Quality</h2>
+    <p class="tool-cat-desc">FAI, Cp/Cpk, SPC, non-conformance, root cause analysis.</p>
+    <div class="tool-list">
+      <div class="tool-item planned"><div class="tool-item-name">Process Capability (Cp/Cpk)</div><div class="tool-item-desc">Statistical process control basics. (Coming soon)</div></div>
+      <div class="tool-item planned"><div class="tool-item-name">Root Cause Analysis</div><div class="tool-item-desc">5 Why, fishbone, corrective action. (Coming soon)</div></div>
+    </div>
+  </div>
+
+  <div class="tool-cat">
+    <h2>12 &middot; Manufacturing Glossary</h2>
+    <p class="tool-cat-desc">Alphabetical engineering terms with links to detailed articles.</p>
+    <div class="tool-list">
+      <div class="tool-item planned"><div class="tool-item-name">CNC Machining Glossary</div><div class="tool-item-desc">A–Z dictionary of machining terms. (Coming soon)</div></div>
+    </div>
+  </div>
+
+  <div class="tool-cat">
+    <h2>13 &middot; Engineering Reference</h2>
+    <p class="tool-cat-desc">Units, formulas, trigonometry, thread terminology — knowledge, not calculation.</p>
+    <div class="tool-list">
+      <a class="tool-item" href="../engineering-tools/formula-library/">
+        <div class="tool-item-name">Formula Library</div>
+        <div class="tool-item-desc">All machining formulas in one searchable list.</div>
+      </a>
+      <a class="tool-item" href="../engineering-tools/unit-conversion/">
+        <div class="tool-item-name">Unit Conversion</div>
+        <div class="tool-item-desc">Length, speed, feed, torque, pressure, temperature.</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="tool-cat">
+    <h2>14 &middot; Learning Paths</h2>
+    <p class="tool-cat-desc">Structured study routes: CNC beginner → CNC programmer → manufacturing engineer.</p>
+    <div class="tool-list">
+      <div class="tool-item planned"><div class="tool-item-name">CNC Machining Fundamentals Path</div><div class="tool-item-desc">From chip formation to first part. (Coming soon)</div></div>
+      <div class="tool-item planned"><div class="tool-item-name">CNC Programming Path</div><div class="tool-item-desc">G-code, offsets, canned cycles, macros. (Coming soon)</div></div>
+      <div class="tool-item planned"><div class="tool-item-name">Manufacturing Engineer Path</div><div class="tool-item-desc">Drawing → GD&T → process → validation. (Coming soon)</div></div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  Designed by Li Lu &middot; CNC & Manufacturing Engineering
+</footer>
+
+</body>
+</html>
