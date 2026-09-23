@@ -1,0 +1,89 @@
+---
+title: Basic Fit Reference
+---
+
+<article class="tool-page">
+  <header class="tool-header">
+    <p class="eyebrow">Reference · Released</p>
+    <h1>Basic Fit Reference</h1>
+    <p>A beginner's guide to ISO fits (hole basis). Understand clearance, transition, and interference fits, and when to use common designations like H7/g6, H7/h6, H7/k6, and H7/p6. Select a fit class below to see typical applications.</p>
+  </header>
+
+  <section class="tool-card">
+    <h2 style="color:var(--accent-dark); margin-bottom:1rem;">Select a fit type</h2>
+    <div class="tool-grid">
+      <div class="field">
+        <label for="fitType">Fit class</label>
+        <select id="fitType">
+          <option value="clearance">Clearance fit (running / sliding)</option>
+          <option value="transition">Transition fit (location)</option>
+          <option value="interference">Interference fit (press / shrink)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="sizeRange">Nominal size range</label>
+        <select id="sizeRange">
+          <option value="0-10">0 – 10 mm</option>
+          <option value="10-18">10 – 18 mm</option>
+          <option value="18-30" selected>18 – 30 mm</option>
+          <option value="30-50">30 – 50 mm</option>
+          <option value="50-80">50 – 80 mm</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="result-grid">
+      <div class="result">
+        <p>Example designation</p>
+        <p class="result-value" id="designResult">—</p>
+        <p class="result-detail" id="designDetail"></p>
+      </div>
+      <div class="result">
+        <p>Fit type</p>
+        <p class="result-value" id="typeResult">—</p>
+        <p class="result-detail" id="typeDetail"></p>
+      </div>
+      <div class="result">
+        <p>Typical application</p>
+        <p class="result-value" id="appResult" style="font-size:1.1rem;">—</p>
+        <p class="result-detail" id="appDetail"></p>
+      </div>
+      <div class="result">
+        <p>Mating method</p>
+        <p class="result-value" id="methodResult" style="font-size:1.1rem;">—</p>
+        <p class="result-detail" id="methodDetail"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>Understanding ISO fits</h2>
+    <p>Fits are written as <strong>hole / shaft</strong>, e.g. H7/g6. The capital letter (H) is the hole tolerance; lowercase (g) is the shaft. The number is the tolerance grade (IT5–IT12). Lower grade = tighter tolerance.</p>
+    <ul>
+      <li><strong>Hole basis (H):</strong> the hole is held to its basic size (H). The shaft letter determines the fit. This is the most common system.</li>
+      <li><strong>Clearance fits:</strong> shaft is always smaller than the hole. Gears on shafts, sliding parts, bearings in housings that must slide.</li>
+      <li><strong>Transition fits:</strong> may have slight clearance or interference. Precision location, keyed assemblies, pulleys that can be disassembled.</li>
+      <li><strong>Interference fits:</strong> shaft is larger than the hole. Requires press, heat, or cold assembly. Permanent or semi-permanent joints, gears on shafts, bearing outer rings.</li>
+    </ul>
+    <table class="data-table">
+      <tr><th>Fit</th><th>Type</th><th>Typical use</th></tr>
+      <tr><td>H7/g6</td><td>Clearance</td><td>Precise sliding, bearings in bushes</td></tr>
+      <tr><td>H7/h6</td><td>Clearance</td><td>Running fit, removable guides</td></tr>
+      <tr><td>H7/js6</td><td>Transition</td><td>Precise location, light loading</td></tr>
+      <tr><td>H7/k6</td><td>Transition</td><td>Location with key/press, gears</td></tr>
+      <tr><td>H7/n6</td><td>Transition / Interference</td><td>Semi-permanent, light press</td></tr>
+      <tr><td>H7/p6</td><td>Interference</td><td>Press fit, permanent joints</td></tr>
+      <tr><td>H7/s6</td><td>Interference</td><td>Heavy press, steel on steel</td></tr>
+    </table>
+  </section>
+
+  <aside class="notice">
+    <strong>Note:</strong>
+    <p>Exact tolerance values depend on the nominal size (the IT grade band changes by diameter). Always look up the specific numbers in a tolerance table (ISO 286) for your exact size. This page gives the conceptual guide — verify actual limits on the drawing or standard.</p>
+  </aside>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</article>
+
+<link rel="stylesheet" href="styles.css" />
+<script src="calculator.js" defer></script>
