@@ -1,0 +1,93 @@
+---
+title: Hole Pattern Generator
+---
+
+<article class="tool-page">
+  <header class="tool-header">
+    <p class="eyebrow">Layout · Released</p>
+    <h1>Hole Pattern Generator</h1>
+    <p>Generate rectangular grid hole coordinates from a start point, column/row counts, and spacing. Output is ready for CNC programming and inspection. For circular arrays use the Bolt Circle Calculator.</p>
+  </header>
+
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field">
+        <label for="startX">Start X (mm)</label>
+        <input id="startX" type="number" value="0" step="0.01" />
+      </div>
+      <div class="field">
+        <label for="startY">Start Y (mm)</label>
+        <input id="startY" type="number" value="0" step="0.01" />
+      </div>
+      <div class="field">
+        <label for="cols">Number of columns</label>
+        <input id="cols" type="number" value="3" min="1" step="1" />
+      </div>
+      <div class="field">
+        <label for="rows">Number of rows</label>
+        <input id="rows" type="number" value="3" min="1" step="1" />
+      </div>
+      <div class="field">
+        <label for="xSpacing">X spacing (mm)</label>
+        <input id="xSpacing" type="number" value="20" min="0" step="0.1" />
+      </div>
+      <div class="field">
+        <label for="ySpacing">Y spacing (mm)</label>
+        <input id="ySpacing" type="number" value="20" min="0" step="0.1" />
+      </div>
+      <div class="field">
+        <label for="order">Numbering order</label>
+        <select id="order">
+          <option value="row">Row by row (left to right, bottom to top)</option>
+          <option value="col">Column by column (bottom to top, left to right)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="result-grid">
+      <div class="result">
+        <p>Total holes</p>
+        <p class="result-value" id="totalResult">—</p>
+        <p class="result-detail" id="totalDetail"></p>
+      </div>
+      <div class="result">
+        <p>Overall span</p>
+        <p class="result-value" id="spanResult">—</p>
+        <p class="result-detail" id="spanDetail"></p>
+      </div>
+    </div>
+
+    <div class="table-wrap" style="margin-top:24px;">
+      <table class="coord-table" id="coordTable">
+        <thead>
+          <tr>
+            <th>Hole #</th>
+            <th>Row</th>
+            <th>Col</th>
+            <th>X (mm)</th>
+            <th>Y (mm)</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>Formula and use</h2>
+    <p>X<sub>ij</sub> = StartX + (j − 1) × X spacing,&nbsp;&nbsp;Y<sub>ij</sub> = StartY + (i − 1) × Y spacing</p>
+    <p>i = row index (1..rows), j = column index (1..cols). Numbering follows the selected order.</p>
+    <p>Use this for grid-like fixture plates, hole grids on manifolds, or any rectangular pattern. Coordinates can be pasted directly into G-code or inspection reports.</p>
+  </section>
+
+  <aside class="notice">
+    <strong>Note:</strong>
+    <p>Spacing is center-to-center distance between adjacent holes. The first hole sits exactly at (StartX, StartY). For circular bolt-hole patterns, use the Bolt Circle Calculator instead.</p>
+  </aside>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</article>
+
+<link rel="stylesheet" href="styles.css" />
+<script src="calculator.js" defer></script>
+
