@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Circular Interpolation (G02/G03) | CNC Programming</title>
+<link rel="stylesheet" href="../../assets/css/site.css">
+<link rel="stylesheet" href="../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../" class="active">CNC Programming</a></li>
+      <li><a href="../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../#ch14" class="back-link">&larr; Back to Level 4 · Motion &amp; Compensation</a>
+<div class="hero-eyebrow">Lesson 15 · Circular Interpolation ⭐⭐</div>
+<h1>Circular Interpolation — G02 / G03</h1>
+
+<h2>Concept</h2>
+<p>To cut an arc, two axes move simultaneously at coordinated speeds. G02 is clockwise, G03 is counterclockwise. You specify: start point (where you are), end point (X/Y destination), and arc center.</p>
+
+<h2>The Four Things You Need</h2>
+<svg viewBox="0 0 480 240" xmlns="http://www.w3.org/2000/svg" style="max-width:480px;width:100%;margin:1rem auto;display:block;">
+  <path d="M 80 180 A 100 100 0 0 1 280 180" fill="none" stroke="#0b766e" stroke-width="3"/>
+  <circle cx="80" cy="180" r="6" fill="#17242f"/>
+  <text x="70" y="200" text-anchor="end" font-size="12" fill="#17242f">1. Start</text>
+  <circle cx="280" cy="180" r="6" fill="#17242f"/>
+  <text x="290" y="200" font-size="12" fill="#17242f">2. End</text>
+  <circle cx="180" cy="180" r="5" fill="#c0392b"/>
+  <line x1="80" y1="180" x2="180" y2="180" stroke="#c0392b" stroke-dasharray="4,3"/>
+  <text x="185" y="170" font-size="12" fill="#c0392b">3. Center (I=100, J=0)</text>
+  <text x="180" y="80" text-anchor="middle" font-size="13" fill="#0b766e">4. Direction: G02 (CW)</text>
+</svg>
+
+<h2>Two Ways to Define the Center</h2>
+<table>
+  <tr><th>Method</th><th>Syntax</th><th>When to use</th></tr>
+  <tr><td><strong>I / J</strong></td><td><code>G02 X__ Y__ I__ J__</code></td><td>Precise work. I/J are offset from start to center.</td></tr>
+  <tr><td><strong>R (radius)</strong></td><td><code>G02 X__ Y__ R__</code></td><td>Simple arcs. Easier, but can't cut full circles.</td></tr>
+</table>
+
+<h2>Example</h2>
+<div class="example">
+  <p>Start at X0 Y0, cut a quarter-circle to X20 Y20, center at X0 Y20 (radius 20):</p>
+  <div class="formula-box">
+  <pre style="margin:0;font-family:monospace;font-size:12.5px;">
+G17 G90 G01 X0 Y0 F300.
+G02 X20. Y20. I0 J20.</pre>
+  </div>
+  <p><strong>Why I0 J20?</strong> Start is at X0 Y0. Center is at X0 Y20. I = center X − start X = 0. J = center Y − start Y = 20. The tool follows the arc from start to end clockwise.</p>
+</div>
+
+<div class="warning">
+  <p><strong>Common mistake: I/J are incremental from start, not absolute.</strong> Beginners write I0 J20 meaning "center at absolute Y20" — which happens to work here, but if the start were at X5 Y5, I would still be 0 and J would still be 20 (the difference), not I5 J25. When unsure, use R.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../14-linear-interpolation/">&larr; Linear Interpolation</a>
+  <a href="../16-cutter-compensation/">Next: Cutter Compensation &rarr;</a>
+</div>
+
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

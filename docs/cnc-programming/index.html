@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CNC Programming | Li Lu CNC Eng</title>
+<title>CNC Programming Fundamentals &amp; Applications | Li Lu CNC Eng</title>
 <link rel="stylesheet" href="../assets/css/site.css">
 </head>
 <body>
@@ -26,82 +26,142 @@
 
   <section class="hero">
     <div class="hero-eyebrow">CNC Programming</div>
-    <h1>Learn CNC Programming from Scratch</h1>
-    <p>A structured learning path for complete beginners: coordinates → program structure → G-code → offsets → turning/milling → verification. Build the skills to read, write, and check real CNC programs.</p>
+    <h1>Learn CNC Programming from Zero</h1>
+    <p>A structured learning center for complete beginners. Start with coordinates, then program structure, G-codes, offsets, compensation, cycles, and complete part programs. By the end you can read, write, and verify real CNC code.</p>
   </section>
 
   <div class="tool-cat" id="ch01">
-    <h2>Level 1 &middot; Getting Started</h2>
-    <p class="tool-cat-desc">Build the mental model before you touch G-code.</p>
+    <h2>Level 1 &middot; Foundations (Start Here)</h2>
+    <p class="tool-cat-desc">Build the mental model before you see a single G-code.</p>
     <div class="tool-list">
-      <a class="tool-item" href="getting-started/what-is-cnc-programming/">
+      <a class="tool-item" href="01-getting-started/what-is-cnc-programming/">
         <div class="tool-item-name">What Is CNC Programming?</div>
         <div class="tool-item-desc">How code becomes machine motion, manual vs CAM.</div>
       </a>
-      <a class="tool-item" href="coordinate-systems/">
-        <div class="tool-item-name">Coordinate Systems</div>
-        <div class="tool-item-desc">Machine zero, work zero, G54, G90 vs G91.</div>
+      <a class="tool-item" href="02-machine-fundamentals/">
+        <div class="tool-item-name">Machine Fundamentals for Programmers</div>
+        <div class="tool-item-desc">Axes, spindle, turret, machine zero — only what a programmer needs.</div>
       </a>
-      <a class="tool-item" href="program-structure/">
+      <a class="tool-item" href="03-coordinate-systems/">
+        <div class="tool-item-name">Coordinate Systems</div>
+        <div class="tool-item-desc">Machine zero, work zero, G54, G90 vs G91 — the core of CNC thinking.</div>
+      </a>
+      <a class="tool-item" href="04-program-structure/">
         <div class="tool-item-name">Program Structure</div>
-        <div class="tool-item-desc">Anatomy of a real CNC program, line by line.</div>
+        <div class="tool-item-desc">Anatomy of a real program, line by line.</div>
       </a>
     </div>
   </div>
 
-  <div class="tool-cat" id="ch02">
-    <h2>Level 2 &middot; G-Code &amp; M-Code Basics</h2>
+  <div class="tool-cat" id="ch05">
+    <h2>Level 2 &middot; G-Code &amp; M-Code</h2>
     <p class="tool-cat-desc">Motion codes, machine functions, modal groups, units.</p>
     <div class="tool-list">
-      <a class="tool-item" href="gcode-fundamentals/g00-g01/">
-        <div class="tool-item-name">G00 / G01 — Rapid &amp; Linear</div>
-        <div class="tool-item-desc">Safe approach, cutting feed, diagonal moves.</div>
+      <a class="tool-item" href="05-gcode-fundamentals/">
+        <div class="tool-item-name">G-Code Fundamentals</div>
+        <div class="tool-item-desc">G00, G01, G02, G03 by function — not just a lookup table.</div>
       </a>
-      <a class="tool-item" href="gcode-fundamentals/g02-g03/">
-        <div class="tool-item-name">G02 / G03 — Circular Interpolation</div>
-        <div class="tool-item-desc">Arc center, radius, direction, plane selection.</div>
+      <a class="tool-item" href="06-modal-codes/">
+        <div class="tool-item-name">Modal vs Non-Modal Codes</div>
+        <div class="tool-item-desc">Why G01 persists, modal groups, cancellation.</div>
       </a>
-      <a class="tool-item" href="mcodes/">
+      <a class="tool-item" href="07-plane-units/">
+        <div class="tool-item-name">Plane &amp; Units</div>
+        <div class="tool-item-desc">G17/G18/G19, G20/G21 — why units errors are dangerous.</div>
+      </a>
+      <a class="tool-item" href="09-mcode-fundamentals/">
         <div class="tool-item-name">M-Code Fundamentals</div>
         <div class="tool-item-desc">Spindle, coolant, stop, tool change, program end.</div>
       </a>
     </div>
   </div>
 
-  <div class="tool-cat" id="ch03">
-    <h2>Level 3 &middot; Offsets &amp; Compensation</h2>
+  <div class="tool-cat" id="ch10">
+    <h2>Level 3 &middot; Spindle, Feed &amp; Offsets</h2>
     <p class="tool-cat-desc">The core CNC thinking: machine zero + work offset + tool offset = actual position.</p>
     <div class="tool-list">
-      <a class="tool-item" href="offsets/work-offsets/">
+      <a class="tool-item" href="10-spindle-feed/">
+        <div class="tool-item-name">Spindle &amp; Feed Programming</div>
+        <div class="tool-item-desc">S command, G96 CSS vs G97 RPM, G94/G95 feed modes.</div>
+      </a>
+      <a class="tool-item" href="12-tool-offsets/">
+        <div class="tool-item-name">Tool Offsets</div>
+        <div class="tool-item-desc">Length, radius, geometry vs wear, G43/G49.</div>
+      </a>
+      <a class="tool-item" href="13-work-offsets/">
         <div class="tool-item-name">Work Offsets (G54–G59)</div>
         <div class="tool-item-desc">Setting part zero, multiple setups, datum strategy.</div>
-      </a>
-      <a class="tool-item" href="offsets/tool-offsets/">
-        <div class="tool-item-name">Tool Offsets</div>
-        <div class="tool-item-desc">Length, radius, geometry vs wear, G43/G41/G42.</div>
-      </a>
-      <a class="tool-item" href="canned-cycles/">
-        <div class="tool-item-name">Canned Cycles</div>
-        <div class="tool-item-desc">G81 drilling, G83 peck, G84 tapping, cycle structure.</div>
       </a>
     </div>
   </div>
 
-  <div class="tool-cat" id="ch04">
-    <h2>Level 4 &middot; Verification &amp; Best Practices</h2>
-    <p class="tool-cat-desc">Writing the program is only half the job — proving it works.</p>
+  <div class="tool-cat" id="ch14">
+    <h2>Level 4 &middot; Motion &amp; Compensation</h2>
+    <p class="tool-cat-desc">Linear, circular, and how cutter compensation works.</p>
     <div class="tool-list">
-      <a class="tool-item" href="verification/">
+      <a class="tool-item" href="14-linear-interpolation/">
+        <div class="tool-item-name">Linear Interpolation (G00/G01)</div>
+        <div class="tool-item-desc">Safe approach, cutting feed, tool path explanation.</div>
+      </a>
+      <a class="tool-item" href="15-circular-interpolation/">
+        <div class="tool-item-name">Circular Interpolation (G02/G03)</div>
+        <div class="tool-item-desc">Start → Center → End → Direction. IJK and R methods.</div>
+      </a>
+      <a class="tool-item" href="16-cutter-compensation/">
+        <div class="tool-item-name">Cutter Compensation (G41/G42)</div>
+        <div class="tool-item-desc">Program the contour, not the tool center. Lead-in/lead-out.</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="tool-cat" id="ch17">
+    <h2>Level 5 &middot; Drilling &amp; Cycles</h2>
+    <p class="tool-cat-desc">Hole-making and canned cycles.</p>
+    <div class="tool-list">
+      <a class="tool-item" href="17-drilling-cycles/">
+        <div class="tool-item-name">Drilling &amp; Hole-Making</div>
+        <div class="tool-item-desc">G81, G82, G83 peck, G84 tapping, G85 boring.</div>
+      </a>
+      <a class="tool-item" href="18-canned-cycles/">
+        <div class="tool-item-name">Canned Cycles Reference</div>
+        <div class="tool-item-desc">Cycle structure, R plane, G98/G99, repetition.</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="tool-cat" id="ch23">
+    <h2>Level 6 &middot; Safety &amp; Verification</h2>
+    <p class="tool-cat-desc">Writing the program is half the job — proving it's safe is the other half.</p>
+    <div class="tool-list">
+      <a class="tool-item" href="23-program-safety/">
+        <div class="tool-item-name">Program Safety &amp; Startup Blocks</div>
+        <div class="tool-item-desc">Why G21 G17 G90 G40 G49 G80 at the top of every program.</div>
+      </a>
+      <a class="tool-item" href="24-verification/">
         <div class="tool-item-name">Program Verification</div>
-        <div class="tool-item-desc">Syntax review → simulation → dry run → single block → first part.</div>
+        <div class="tool-item-desc">Syntax → simulation → dry run → single block → first part.</div>
       </a>
-      <a class="tool-item" href="common-mistakes/">
+      <a class="tool-item" href="25-troubleshooting/">
+        <div class="tool-item-name">Program Troubleshooting</div>
+        <div class="tool-item-desc">Alarm diagnosis, wrong motion, offset errors.</div>
+      </a>
+      <a class="tool-item" href="26-common-mistakes/">
         <div class="tool-item-name">Common Beginner Mistakes</div>
-        <div class="tool-item-desc">Wrong offset, wrong unit, G40 forgotten, unsafe rapid.</div>
+        <div class="tool-item-desc">The 15 mistakes every new programmer makes.</div>
       </a>
-      <a class="tool-item" href="learning-path/">
+    </div>
+  </div>
+
+  <div class="tool-cat" id="ch30">
+    <h2>Reference &amp; Learning Path</h2>
+    <div class="tool-list">
+      <a class="tool-item" href="30-reference/">
+        <div class="tool-item-name">Quick Reference</div>
+        <div class="tool-item-desc">G-code, M-code, modal groups, canned cycles — fast lookup.</div>
+      </a>
+      <a class="tool-item" href="31-learning-path/">
         <div class="tool-item-name">Learning Path</div>
-        <div class="tool-item-desc">From zero to full programs, with links to every lesson.</div>
+        <div class="tool-item-desc">Follow from Level 1 to advanced. Where to go next.</div>
       </a>
     </div>
   </div>

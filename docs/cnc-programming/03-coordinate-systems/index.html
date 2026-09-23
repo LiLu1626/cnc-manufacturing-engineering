@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coordinate Systems | CNC Programming</title>
+<link rel="stylesheet" href="../../assets/css/site.css">
+<link rel="stylesheet" href="../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../" class="active">CNC Programming</a></li>
+      <li><a href="../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../#ch01" class="back-link">&larr; Back to Level 1 · Foundations</a>
+<div class="hero-eyebrow">Lesson 03 · Coordinate Systems ⭐⭐⭐</div>
+<h1>CNC Coordinate Systems</h1>
+
+<h2>Concept</h2>
+<p>Every position a tool moves to is a coordinate. CNC uses the Cartesian coordinate system: X, Y, Z. But there are <strong>two coordinate systems</strong> you must understand: the machine's own (machine zero) and the part's (workpiece zero). The bridge between them is the work offset.</p>
+
+<h2>Why It Matters</h2>
+<p>This is the #1 source of beginner errors. If you don't understand the difference between machine coordinates and work coordinates, you will crash. If you mix up G90 and G91, your coordinates mean the wrong thing. This is the most important lesson in the entire course — take your time here.</p>
+
+<h2>1. Cartesian Coordinates</h2>
+<p>Just like math class: you have an origin (0,0,0), and each axis goes positive and negative. On a mill:</p>
+<ul>
+  <li><strong>+X</strong> = table moves right</li>
+  <li><strong>+Y</strong> = table moves toward you (away from the column)</li>
+  <li><strong>+Z</strong> = spindle moves up (away from the table)</li>
+</ul>
+
+<h2>2. Machine Coordinate System</h2>
+<p>The machine has its own fixed zero point called <strong>machine zero</strong> or <strong>home</strong>. When you turn on the machine, it "homes" itself — the axes move to the limit switches and establish where (0,0,0) is for the machine. You never program machine coordinates directly; the controller uses them internally.</p>
+
+<h2>3. Work Coordinate System (G54)</h2>
+<p>The part is not sitting at machine zero. It's clamped somewhere on the table. During setup, you "touch off" the part corner: the tool touches the X edge, the Y edge, and the top surface. You press <em>set</em>, and the controller records the offset between machine zero and the part corner. That offset is stored in <strong>G54</strong>.</p>
+
+<div class="formula-box">
+  <p style="text-align:center;font-size:15px;"><strong>Machine Position + Work Offset (G54) = Work Coordinate</strong></p>
+</div>
+
+<table>
+  <tr><th>Offset</th><th>Use</th></tr>
+  <tr><td>G54</td><td>Primary part setup</td></tr>
+  <tr><td>G55</td><td>Second part on the table (e.g. second vise)</td></tr>
+  <tr><td>G56, G57</td><td>Additional parts or fixtures</td></tr>
+  <tr><td>G58, G59</td><td>Pallets or multi-setup jobs</td></tr>
+</table>
+
+<h2>4. Absolute vs Incremental (G90 vs G91) ⭐</h2>
+<p>This is the concept that confuses every beginner. <strong>G90</strong> means coordinates are absolute — every X/Y/Z is measured from work zero. <strong>G91</strong> means coordinates are incremental (relative) — every X/Y/Z is a distance from the <em>current position</em>.</p>
+
+<svg viewBox="0 0 520 260" xmlns="http://www.w3.org/2000/svg" style="max-width:520px;width:100%;margin:1rem auto;display:block;">
+  <!-- Left: Absolute -->
+  <text x="130" y="20" text-anchor="middle" font-size="13" fill="#0b766e" font-weight="bold">G90 Absolute</text>
+  <line x1="30" y1="220" x2="240" y2="220" stroke="#5c6872"/>
+  <line x1="30" y1="220" x2="30" y2="40" stroke="#5c6872"/>
+  <circle cx="30" cy="220" r="4" fill="#0b766e"/>
+  <text x="30" y="240" text-anchor="middle" font-size="11" fill="#0b766e">0,0</text>
+  <circle cx="180" cy="120" r="5" fill="#c0392b"/>
+  <text x="180" y="110" text-anchor="middle" font-size="11" fill="#c0392b">X150 Y100</text>
+  <line x1="30" y1="220" x2="180" y2="220" stroke="#c0392b" stroke-dasharray="3,3"/>
+  <line x1="180" y1="220" x2="180" y2="120" stroke="#c0392b" stroke-dasharray="3,3"/>
+  <text x="100" y="235" text-anchor="middle" font-size="10" fill="#5c6872">always measured from 0,0</text>
+
+  <!-- Right: Incremental -->
+  <text x="390" y="20" text-anchor="middle" font-size="13" fill="#0b766e" font-weight="bold">G91 Incremental</text>
+  <line x1="290" y1="220" x2="500" y2="220" stroke="#5c6872"/>
+  <line x1="290" y1="220" x2="290" y2="40" stroke="#5c6872"/>
+  <circle cx="290" cy="220" r="4" fill="#0b766e"/>
+  <text x="290" y="240" text-anchor="middle" font-size="11" fill="#0b766e">start</text>
+  <!-- move 1 -->
+  <circle cx="370" cy="220" r="4" fill="#17242f"/>
+  <line x1="290" y1="220" x2="370" y2="220" stroke="#2980b9" stroke-width="2"/>
+  <text x="330" y="212" text-anchor="middle" font-size="10" fill="#2980b9">X+80</text>
+  <!-- move 2 -->
+  <circle cx="450" cy="140" r="5" fill="#c0392b"/>
+  <line x1="370" y1="220" x2="450" y2="140" stroke="#c0392b" stroke-width="2"/>
+  <text x="420" y="170" font-size="10" fill="#c0392b">X+80 Y-80</text>
+  <text x="390" y="255" text-anchor="middle" font-size="10" fill="#5c6872">each move = distance from current spot</text>
+</svg>
+
+<h2>Example: Same Destination, Different Meaning</h2>
+<div class="example">
+  <p>Start at X0 Y0. You want to end at X50 Y20.</p>
+  <table>
+    <tr><th>Mode</th><th>Code</th><th>What the machine does</th></tr>
+    <tr><td><strong>G90 Absolute</strong></td><td><code>G90 G01 X50. Y20.</code></td><td>"Go to position X50 Y20" (from work zero)</td></tr>
+    <tr><td><strong>G91 Incremental</strong></td><td><code>G91 G01 X50. Y20.</code></td><td>"Move 50 in X and 20 in Y" (from where you are now)</td></tr>
+  </table>
+  <p>If you start at X10 Y5 and write G91 X50 Y20, you end up at X60 Y25 — not X50 Y20. That's the trap.</p>
+</div>
+
+<div class="warning">
+  <p><strong>Most programs run in G90 (absolute).</strong> G91 is used for specific moves like <code>G91 G28 Z0</code> (return to home: move to machine zero relative to current position). If you're ever unsure which mode you're in, look at the controller screen — it shows G90 or G91.</p>
+</div>
+
+<h2>Practice Exercise</h2>
+<div class="example">
+  <p><strong>Question:</strong> You're at X20 Y10. You write <code>G91 G01 X30. Y15.</code>. Where do you end up? Now write the equivalent G90 code.</p>
+  <p><strong>Answer:</strong> In G91, you move +30 in X and +15 in Y from current position: X50 Y25. The G90 equivalent is <code>G90 G01 X50. Y25.</code></p>
+</div>
+
+<div class="nav-links">
+  <a href="../02-machine-fundamentals/">&larr; Machine Fundamentals</a>
+  <a href="../04-program-structure/">Next: Program Structure &rarr;</a>
+</div>
+
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

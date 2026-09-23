@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Work Offsets G54–G59 | CNC Programming</title>
+<link rel="stylesheet" href="../../assets/css/site.css">
+<link rel="stylesheet" href="../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../" class="active">CNC Programming</a></li>
+      <li><a href="../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../#ch10" class="back-link">&larr; Back to Level 3 · Spindle, Feed &amp; Offsets</a>
+<div class="hero-eyebrow">Lesson 13 · Work Offsets ⭐⭐⭐</div>
+<h1>Work Offsets (G54–G59)</h1>
+
+<h2>Concept</h2>
+<p>The work offset tells the controller where your part sits on the machine table. It's the difference between machine zero and your chosen part zero. You set it during setup by touching off.</p>
+
+<h2>The Core CNC Equation</h2>
+<div class="formula-box">
+  <p style="text-align:center;font-size:15px;"><strong>Machine Zero + Work Offset (G54) + Tool Offset = Actual Tool–Workpiece Position</strong></p>
+</div>
+<p>This is the single most important equation in CNC programming. Every coordinate you write is measured from work zero. The controller figures out where that is in machine space by adding the offset.</p>
+
+<h2>Multiple Work Offsets</h2>
+<table>
+  <tr><th>Offset</th><th>Typical use</th></tr>
+  <tr><td>G54</td><td>Primary part / first setup</td></tr>
+  <tr><td>G55</td><td>Second part on the same table (second vise)</td></tr>
+  <tr><td>G56, G57</td><td>Additional parts / fixtures</td></tr>
+  <tr><td>G58, G59</td><td>Pallet positions or special setups</td></tr>
+</table>
+
+<div class="example">
+  <p><strong>Example: Two identical parts side by side</strong></p>
+  <p>You clamp two vises 200 mm apart on the table. You set G54 for vise 1 and G55 for vise 2. The program runs:</p>
+  <div class="formula-box">
+  <pre style="margin:0;font-family:monospace;font-size:12.5px;">
+G54 ... (cut part in vise 1)
+G55 ... (cut part in vise 2, same program)</pre>
+  </div>
+  <p>You don't rewrite coordinates — you just switch the offset. This is how you run multiple parts per setup.</p>
+</div>
+
+<div class="warning">
+  <p><strong>Wrong G54 is the #1 crash cause.</strong> If you set the offset on the wrong corner, or forget to update it after moving the part, the machine cuts exactly where you tell it — which is the wrong location. Always verify with a dry run or single-block the first cut.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../12-tool-offsets/">&larr; Tool Offsets</a>
+  <a href="../14-linear-interpolation/">Next: Linear Interpolation &rarr;</a>
+</div>
+
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

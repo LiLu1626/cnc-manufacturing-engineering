@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Program Safety &amp; Startup Blocks | CNC Programming</title>
+<link rel="stylesheet" href="../../assets/css/site.css">
+<link rel="stylesheet" href="../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../" class="active">CNC Programming</a></li>
+      <li><a href="../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../#ch23" class="back-link">&larr; Back to Level 6 · Safety &amp; Verification</a>
+<div class="hero-eyebrow">Lesson 23 · Program Safety ⭐⭐⭐</div>
+<h1>Program Safety &amp; Startup Blocks</h1>
+
+<h2>Concept</h2>
+<p>Every program should start by putting the machine in a known, safe state. This is the "safe start" block: <code>G21 G17 G90 G40 G49 G80</code>. Don't just copy it — understand what each word does.</p>
+
+<h2>The Safe-Start Block Explained</h2>
+<table>
+  <tr><th>Code</th><th>What it resets</th><th>Why it matters</th></tr>
+  <tr><td><code>G21</code></td><td>Units = mm</td><td>Prevents inch/mm mismatch</td></tr>
+  <tr><td><code>G17</code></td><td>Plane = XY</td><td>Correct plane for arcs</td></tr>
+  <tr><td><code>G90</code></td><td>Absolute mode</td><td>Coordinates measured from work zero</td></tr>
+  <tr><td><code>G40</code></td><td>Cancel cutter comp</td><td>No unexpected radius offset</td></tr>
+  <tr><td><code>G49</code></td><td>Cancel length offset</td><td>No unexpected Z offset</td></tr>
+  <tr><td><code>G80</code></td><td>Cancel canned cycle</td><td>No leftover drilling cycle</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Why this matters:</strong> The previous program may have ended with cutter compensation active, in G91 incremental mode, or in G20 inches. If you don't reset, your new program runs in the wrong state. The safe-start block costs one line and prevents a dozen crashes.</p>
+</div>
+
+<h2>Safe End-of-Program</h2>
+<div class="formula-box">
+<pre style="margin:0;font-family:monospace;font-size:12.5px;">
+G00 Z50. M09    (retract, coolant off)
+M05             (spindle stop)
+G91 G28 Z0      (Z to machine home)
+M30             (program end, reset)</pre>
+</div>
+
+<div class="nav-links">
+  <a href="../18-canned-cycles/">&larr; Canned Cycles</a>
+  <a href="../24-verification/">Next: Verification &rarr;</a>
+</div>
+
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

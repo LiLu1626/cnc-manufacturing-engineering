@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quick Reference | CNC Programming</title>
+<link rel="stylesheet" href="../../assets/css/site.css">
+<link rel="stylesheet" href="../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../" class="active">CNC Programming</a></li>
+      <li><a href="../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../#ch30" class="back-link">&larr; Back to Reference &amp; Learning Path</a>
+<div class="hero-eyebrow">Quick Reference</div>
+<h1>CNC Programming Quick Reference</h1>
+
+<h2>Common G-Codes</h2>
+<table>
+  <tr><th>Code</th><th>Function</th><th>Modal?</th></tr>
+  <tr><td>G00</td><td>Rapid positioning</td><td>Yes</td></tr>
+  <tr><td>G01</td><td>Linear interpolation (feed)</td><td>Yes</td></tr>
+  <tr><td>G02</td><td>Circular CW</td><td>Yes</td></tr>
+  <tr><td>G03</td><td>Circular CCW</td><td>Yes</td></tr>
+  <tr><td>G17/G18/G19</td><td>XY / XZ / YZ plane</td><td>Yes</td></tr>
+  <tr><td>G20/G21</td><td>Inch / mm</td><td>Yes</td></tr>
+  <tr><td>G40</td><td>Cancel cutter comp</td><td>Yes</td></tr>
+  <tr><td>G41/G42</td><td>Cutter left / right</td><td>Yes</td></tr>
+  <tr><td>G43/G49</td><td>Tool length offset on/off</td><td>Yes</td></tr>
+  <tr><td>G54–G59</td><td>Work offsets</td><td>Yes</td></tr>
+  <tr><td>G80</td><td>Cancel canned cycle</td><td>Yes</td></tr>
+  <tr><td>G81/G82/G83/G84/G85</td><td>Drill/dwell/peck/tap/bore</td><td>Yes</td></tr>
+  <tr><td>G90/G91</td><td>Absolute / incremental</td><td>Yes</td></tr>
+  <tr><td>G94/G95</td><td>Feed/min / feed/rev</td><td>Yes</td></tr>
+  <tr><td>G96/G97</td><td>CSS / constant RPM (lathe)</td><td>Yes</td></tr>
+</table>
+
+<h2>Common M-Codes</h2>
+<table>
+  <tr><th>Code</th><th>Function</th></tr>
+  <tr><td>M03/M04/M05</td><td>Spindle forward / reverse / stop</td></tr>
+  <tr><td>M06</td><td>Tool change</td></tr>
+  <tr><td>M08/M09</td><td>Coolant on / off</td></tr>
+  <tr><td>M00/M01</td><td>Program stop / optional stop</td></tr>
+  <tr><td>M30</td><td>Program end &amp; reset</td></tr>
+</table>
+
+<h2>Standard Safe-Start Block</h2>
+<div class="formula-box">
+<pre style="margin:0;font-family:monospace;font-size:13px;">
+G21 G17 G90 G40 G49 G80</pre>
+</div>
+
+<div class="nav-links">
+  <a href="../26-common-mistakes/">&larr; Common Mistakes</a>
+  <a href="../31-learning-path/">Next: Learning Path &rarr;</a>
+</div>
+
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

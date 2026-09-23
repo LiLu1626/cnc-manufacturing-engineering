@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plane &amp; Units (G17/G18/G19, G20/G21) | CNC Programming</title>
+<link rel="stylesheet" href="../../assets/css/site.css">
+<link rel="stylesheet" href="../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../" class="active">CNC Programming</a></li>
+      <li><a href="../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../#ch05" class="back-link">&larr; Back to Level 2 · G-Code &amp; M-Code</a>
+<div class="hero-eyebrow">Lesson 07 · Plane &amp; Units</div>
+<h1>Plane Selection &amp; Units</h1>
+
+<h2>Plane Selection: G17, G18, G19</h2>
+<p>Circular interpolation (G02/G03) needs to know which plane you're working in. G17 is the XY plane (milling), G18 is XZ (turning), G19 is YZ.</p>
+<table>
+  <tr><th>Code</th><th>Plane</th><th>Common on</th></tr>
+  <tr><td><strong>G17</strong></td><td>XY plane</td><td>Milling machines (default)</td></tr>
+  <tr><td><strong>G18</strong></td><td>XZ plane</td><td>CNC lathes / turning</td></tr>
+  <tr><td><strong>G19</strong></td><td>YZ plane</td><td>Rare, special setups</td></tr>
+</table>
+<p>The plane determines which axes move for arcs and which I/J/K values are used. <strong>G17 G18 G19 are modal</strong> — set once at program start.</p>
+
+<h2>Units: G20 vs G21</h2>
+<table>
+  <tr><th>Code</th><th>Units</th><th>Feed</th><th>Coordinates</th></tr>
+  <tr><td><strong>G20</strong></td><td>Inches</td><td>inch/min</td><td>inches</td></tr>
+  <tr><td><strong>G21</strong></td><td>Millimeters</td><td>mm/min</td><td>mm</td></tr>
+</table>
+
+<div class="warning">
+  <p><strong>Units errors are catastrophic.</strong> If your program says G21 (mm) but the machine is in G20 (inch), every dimension is off by 25.4×. A 50 mm cut becomes 1270 mm. Always confirm units at program start. <code>G21</code> should be in your safe-start block.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../06-modal-codes/">&larr; Modal Codes</a>
+  <a href="../09-mcode-fundamentals/">Next: M-Codes &rarr;</a>
+</div>
+
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

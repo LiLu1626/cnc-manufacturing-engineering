@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Program Verification | CNC Programming</title>
+<link rel="stylesheet" href="../../assets/css/site.css">
+<link rel="stylesheet" href="../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../" class="active">CNC Programming</a></li>
+      <li><a href="../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../#ch23" class="back-link">&larr; Back to Level 6 · Safety &amp; Verification</a>
+<div class="hero-eyebrow">Lesson 24 · Verification ⭐⭐⭐</div>
+<h1>Program Verification</h1>
+
+<h2>Concept</h2>
+<p>Writing the program is half the job. Proving it won't crash the machine or scrap the part is the other half. Every new program should go through this checklist before cutting real material.</p>
+
+<h2>The Verification Workflow</h2>
+<svg viewBox="0 0 400 360" xmlns="http://www.w3.org/2000/svg" style="max-width:400px;width:100%;margin:1rem auto;display:block;">
+  <rect x="80" y="5" width="240" height="28" rx="5" fill="#e6f4f2" stroke="#0b766e"/>
+  <text x="200" y="23" text-anchor="middle" font-size="11" fill="#07574f">1. Syntax review (read every line)</text>
+  <line x1="200" y1="33" x2="200" y2="42" stroke="#0b766e" marker-end="url(#a)"/>
+  <rect x="80" y="44" width="240" height="28" rx="5" fill="#e6f4f2" stroke="#0b766e"/>
+  <text x="200" y="62" text-anchor="middle" font-size="11" fill="#07574f">2. Check coordinates & offsets</text>
+  <line x1="200" y1="72" x2="200" y2="81" stroke="#0b766e" marker-end="url(#a)"/>
+  <rect x="80" y="83" width="240" height="28" rx="5" fill="#e6f4f2" stroke="#0b766e"/>
+  <text x="200" y="101" text-anchor="middle" font-size="11" fill="#07574f">3. CAM simulation / backplot</text>
+  <line x1="200" y1="111" x2="200" y2="120" stroke="#0b766e" marker-end="url(#a)"/>
+  <rect x="80" y="122" width="240" height="28" rx="5" fill="#e6f4f2" stroke="#0b766e"/>
+  <text x="200" y="140" text-anchor="middle" font-size="11" fill="#07574f">4. Dry run (tool up, no material)</text>
+  <line x1="200" y1="150" x2="200" y2="159" stroke="#0b766e" marker-end="url(#a)"/>
+  <rect x="80" y="161" width="240" height="28" rx="5" fill="#e6f4f2" stroke="#0b766e"/>
+  <text x="200" y="179" text-anchor="middle" font-size="11" fill="#07574f">5. Single block first cycle</text>
+  <line x1="200" y1="189" x2="200" y2="198" stroke="#0b766e" marker-end="url(#a)"/>
+  <rect x="80" y="200" width="240" height="28" rx="5" fill="#e6f4f2" stroke="#0b766e"/>
+  <text x="200" y="218" text-anchor="middle" font-size="11" fill="#07574f">6. Reduced rapid / feed override</text>
+  <line x1="200" y1="228" x2="200" y2="237" stroke="#0b766e" marker-end="url(#a)"/>
+  <rect x="80" y="239" width="240" height="28" rx="5" fill="#e6f4f2" stroke="#0b766e"/>
+  <text x="200" y="257" text-anchor="middle" font-size="11" fill="#07574f">7. First part → inspect dimensions</text>
+  <line x1="200" y1="267" x2="200" y2="276" stroke="#0b766e" marker-end="url(#a)"/>
+  <rect x="80" y="278" width="240" height="28" rx="5" fill="#0b766e"/>
+  <text x="200" y="296" text-anchor="middle" font-size="11" fill="#fff">8. Full production</text>
+  <defs><marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0b766e"/></marker></defs>
+</svg>
+
+<div class="warning">
+  <p><strong>Never jump from writing code to full-speed cutting.</strong> The most expensive crashes happen when someone assumes the program is correct. Even simple programs deserve a dry run. On a new part, always run single-block the first cycle — one block at a time, with feed hold ready.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../23-program-safety/">&larr; Program Safety</a>
+  <a href="../25-troubleshooting/">Next: Troubleshooting &rarr;</a>
+</div>
+
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

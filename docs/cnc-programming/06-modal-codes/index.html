@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modal vs Non-Modal Codes | CNC Programming</title>
+<link rel="stylesheet" href="../../assets/css/site.css">
+<link rel="stylesheet" href="../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../" class="active">CNC Programming</a></li>
+      <li><a href="../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../#ch05" class="back-link">&larr; Back to Level 2 · G-Code &amp; M-Code</a>
+<div class="hero-eyebrow">Lesson 06 · Modal Codes</div>
+<h1>Modal vs Non-Modal Codes</h1>
+
+<h2>Concept</h2>
+<p>A <strong>modal</strong> G-code stays active until another code in the same group cancels it. A <strong>non-modal</strong> code works only on the line it appears on. This is why you write <code>G01 X50 F200</code> once, then <code>X100</code>, then <code>X150</code> — G01 and F200 persist.</p>
+
+<h2>Why It Matters</h2>
+<p>New programmers often repeat G01 and F on every line (which works but is messy), or worse: they forget that a modal code from 20 lines ago is still active. Understanding modal groups prevents unexpected motion.</p>
+
+<h2>Example: Modal in Action</h2>
+<div class="formula-box">
+<pre style="margin:0;font-family:monospace;font-size:13px;line-height:1.7;">
+G01 X0 F200.       (G01 AND F200 are now active)
+X50.               (still G01 at F200 — moves to X50)
+X100.              (still G01 at F200 — moves to X100)
+Y50.               (still G01 at F200 — moves diagonally to X100 Y50)
+G00 X0 Y0          (G00 replaces G01 — rapid back to start)</pre>
+</div>
+
+<h2>Common Modal Groups</h2>
+<table>
+  <tr><th>Group</th><th>Modal codes</th><th>What it controls</th></tr>
+  <tr><td>Motion</td><td>G00, G01, G02, G03</td><td>How axes move</td></tr>
+  <tr><td>Coordinate mode</td><td>G90, G91</td><td>Absolute vs incremental</td></tr>
+  <tr><td>Units</td><td>G20, G21</td><td>Inch vs mm</td></tr>
+  <tr><td>Plane</td><td>G17, G18, G19</td><td>Which plane for arcs</td></tr>
+  <tr><td>Cutter comp</td><td>G40, G41, G42</td><td>Tool radius compensation</td></tr>
+  <tr><td>Tool length</td><td>G43, G49</td><td>Length offset active</td></tr>
+  <tr><td>Feed mode</td><td>G94, G95</td><td>Feed per minute vs per rev</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Only one code in each group can be active at a time.</strong> Writing G01 cancels G00. Writing G90 cancels G91. This is why the safe-start block (<code>G21 G17 G90 G40 G49 G80</code>) resets all groups to known values.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../05-gcode-fundamentals/">&larr; G-Code Fundamentals</a>
+  <a href="../07-plane-units/">Next: Plane &amp; Units &rarr;</a>
+</div>
+
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

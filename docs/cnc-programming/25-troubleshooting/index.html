@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Program Troubleshooting | CNC Programming</title>
+<link rel="stylesheet" href="../../assets/css/site.css">
+<link rel="stylesheet" href="../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../" class="active">CNC Programming</a></li>
+      <li><a href="../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../#ch23" class="back-link">&larr; Back to Level 6 · Safety &amp; Verification</a>
+<div class="hero-eyebrow">Lesson 25 · Troubleshooting</div>
+<h1>Program Troubleshooting</h1>
+
+<h2>Concept</h2>
+<p>When the machine alarms or moves wrong, work backwards: what did the code tell it to do, what did the offsets say, and what mode was it in? Most problems are not mysterious — they're offset errors, wrong mode, or a missing G-code.</p>
+
+<table>
+  <tr><th>Symptom</th><th>Likely cause</th><th>Check</th></tr>
+  <tr><td>Alarm on start</td><td>Syntax error, missing M03, tool not found</td><td>Read alarm message, check first lines</td></tr>
+  <tr><td>Tool moves wrong direction</td><td>G90 vs G91, or wrong axis direction</td><td>Check current mode on screen</td></tr>
+  <tr><td>Cuts in wrong location</td><td>Wrong G54 offset, or wrong corner touched off</td><td>Verify G54 values, dry run</td></tr>
+  <tr><td>Z cuts too deep</td><td>Wrong H offset, or G49 not canceled</td><td>Check tool length offset H number</td></tr>
+  <tr><td>Arc error alarm</td><td>I/J wrong, or radius too small for start/end</td><td>Recalculate center offset</td></tr>
+  <tr><td>Unexpected hole cycle</td><td>G80 missing after drilling</td><td>Look for G80 line</td></tr>
+  <tr><td>Dimensions 25.4× off</td><td>G20/G21 mismatch</td><td>Confirm units at program start</td></tr>
+  <tr><td>Feed too fast/slow</td><td>G94 vs G95 mode wrong</td><td>Check feed mode on screen</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Diagnose before you change the code.</strong> Read the alarm number, look at what line the machine stopped on, and check the modal state (G90/G91, G20/G21, G41/G42). 80% of the time, the problem is a missing or wrong G-code — not a mysterious machine fault.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../24-verification/">&larr; Verification</a>
+  <a href="../26-common-mistakes/">Next: Common Mistakes &rarr;</a>
+</div>
+
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

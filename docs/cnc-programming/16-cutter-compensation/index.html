@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cutter Compensation (G41/G42) | CNC Programming</title>
+<link rel="stylesheet" href="../../assets/css/site.css">
+<link rel="stylesheet" href="../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../" class="active">CNC Programming</a></li>
+      <li><a href="../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../#ch14" class="back-link">&larr; Back to Level 4 · Motion &amp; Compensation</a>
+<div class="hero-eyebrow">Lesson 16 · Cutter Compensation ⭐⭐⭐</div>
+<h1>Cutter Compensation (G41 / G42)</h1>
+
+<h2>Concept</h2>
+<p>When you mill a contour, you program the <em>part outline</em> — not the path the tool center must follow. The controller uses cutter compensation to offset the tool center by the tool radius automatically.</p>
+
+<h2>Why It Matters</h2>
+<p>Without compensation, you'd have to recalculate every coordinate by hand for every tool diameter. With compensation, you program the part dimensions directly. If the tool wears 0.1 mm smaller, you just update the offset — no program change.</p>
+
+<svg viewBox="0 0 480 220" xmlns="http://www.w3.org/2000/svg" style="max-width:480px;width:100%;margin:1rem auto;display:block;">
+  <!-- programmed contour -->
+  <rect x="120" y="60" width="200" height="120" fill="none" stroke="#0b766e" stroke-width="2"/>
+  <text x="220" y="50" text-anchor="middle" font-size="12" fill="#0b766e">Programmed contour (part shape)</text>
+  <!-- tool center path (offset) -->
+  <rect x="105" y="45" width="230" height="150" fill="none" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="220" y="210" text-anchor="middle" font-size="12" fill="#c0392b">Tool center path (offset by radius)</text>
+  <!-- tool circle -->
+  <circle cx="105" cy="120" r="15" fill="none" stroke="#17242f" stroke-width="1.5"/>
+  <circle cx="105" cy="120" r="2" fill="#17242f"/>
+</svg>
+
+<h2>G41 vs G42</h2>
+<table>
+  <tr><th>Code</th><th>Meaning</th><th>Direction</th></tr>
+  <tr><td><strong>G41</strong></td><td>Cutter left</td><td>Tool is to the <em>left</em> of the programmed direction of travel</td></tr>
+  <tr><td><strong>G42</strong></td><td>Cutter right</td><td>Tool is to the <em>right</em> of the programmed direction of travel</td></tr>
+  <tr><td><strong>G40</strong></td><td>Cancel</td><td>Turn compensation off</td></tr>
+</table>
+
+<div class="warning">
+  <p><strong>Compensation must engage on a straight lead-in move.</strong> You cannot turn G41 on while cutting an arc. The standard pattern: approach on a straight line away from the part, engage G41, then cut the contour. At the end, straight lead-out, then G40. Engaging compensation mid-cut causes the tool to jump sideways — a crash.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../15-circular-interpolation/">&larr; Circular Interpolation</a>
+  <a href="../17-drilling-cycles/">Next: Drilling &amp; Cycles &rarr;</a>
+</div>
+
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>
