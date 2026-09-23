@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inspection Strategy | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch06" class="back-link">&larr; Back to 06 &middot; Metrology &amp; Inspection</a>
+<div class="hero-eyebrow">06.3 &middot; Metrology &amp; Inspection</div>
+<h1>Inspection Strategy — FAI, Sampling &amp; Critical Dimensions</h1>
+
+<p>Knowing how to measure is only half the job. Knowing <em>what</em> to measure, <em>when</em> to measure it, and <em>how often</em> is what separates a quality process from a lucky one. This page covers the inspection strategy that prevents mass scrap.</p>
+
+<h2>Three Levels of Inspection</h2>
+<table>
+  <tr><th>Level</th><th>When</th><th>What you check</th><th>Goal</th></tr>
+  <tr><td><strong>In-process</strong></td><td>During machining, between operations</td><td>Key dimensions after each op, tool wear, offsets</td><td>Catch drift before it produces scrap</td></tr>
+  <tr><td><strong>First Article (FAI)</strong></td><td>First part of a new setup / new batch</td><td>Every dimension on the drawing — full dimensional report</td><td>Confirm the process is capable before running production</td></tr>
+  <tr><td><strong>Final inspection</strong></td><td>After all machining, before shipping</td><td>Critical and safety-related dimensions, visual, surface finish</td><td>Only ship good parts</td></tr>
+</table>
+
+<h2>First Article Inspection (FAI)</h2>
+<p>FAI is the most important inspection event. It's not "check the first part and move on" — it's a systematic verification that every dimension on the drawing is produced correctly by the planned process.</p>
+
+<h3>What a proper FAI includes (AS9102 / AIAG standard)</h3>
+<ol>
+  <li><strong>Part identification:</strong> part number, revision, serial number, material, lot, machine, operator, date.</li>
+  <li><strong>Complete dimensional report:</strong> every dimension on the drawing is measured and recorded — not just the tight ones. Even "obvious" dimensions get checked.</li>
+  <li><strong>GD&amp;T verification:</strong> all position, profile, runout, flatness callouts measured (usually on CMM).</li>
+  <li><strong>Material &amp; process certs:</strong> material mill cert, heat treat report, plating/anodize cert attached.</li>
+  <li><strong>Comparison to drawing:</strong> measured value, nominal, tolerance, pass/fail for every feature.</li>
+  <li><strong>Deviations:</strong> any out-of-tolerance dimension documented with root cause and corrective action.</li>
+</ol>
+
+<div class="callout">
+  <p><strong>FAI reality:</strong> if the first part fails FAI, you don't just adjust and try again without documenting. You record the deviation, fix the cause, re-machine, and re-inspect. A clean FAI report is what the customer uses to approve your process — it's not a formality.</p>
+</div>
+
+<h2>What to Check In-Process</h2>
+<p>Not every dimension needs in-process checking. Focus on:</p>
+<ul>
+  <li><strong>Dimensions that drift with tool wear:</strong> hole diameter (drills wear), bore size (boring bars deflect), shoulder widths (end mill wear).</li>
+  <li><strong>Dimensions that affect downstream operations:</strong> if you're turning a shaft to be ground later, leave the correct grind stock — check it before moving to the grinder.</li>
+  <li><strong>Setup-critical dimensions:</strong> after a new workholding setup, check the first part's location and alignment before running the batch.</li>
+  <li><strong>Tight-tolerance features:</strong> if ±0.01 mm is specified, check it every 5–10 parts, not just at the end.</li>
+</ul>
+
+<table>
+  <tr><th>Feature</th><th>Why it drifts</th><th>Check frequency</th></tr>
+  <tr><td>Drilled hole diameter</td><td>Drill wears, becomes undersize</td><td>Every 25–50 holes (or per batch)</td></tr>
+  <tr><td>Bored hole size</td><td>Boring bar deflection, tool wear</td><td>Every 5–10 bores</td></tr>
+  <tr><td>Milled pocket depth</td><td>Tool length setter drift, tool wear</td><td>First part of setup, then every 10–20 parts</td></tr>
+  <tr><td>Turned OD</td><td>Insert wear, tool offset thermal drift</td><td>Every 10–20 parts</td></tr>
+  <tr><td>Threaded hole</td><td>Tap wear causes over/under tap</td><td>Go/no-go gauge every batch start</td></tr>
+</table>
+
+<h2>Sampling — How Often to Check Production</h2>
+<p>100% inspection of every dimension on every part is expensive and unnecessary. A sampling plan balances cost and risk.</p>
+
+<table>
+  <tr><th>Part type</th><th>Inspection level</th><th>Reasoning</th></tr>
+  <tr><td>Safety-critical (aerospace, medical)</td><td>100% inspection of critical dims + FAI</td><td>Failure = risk to life</td></tr>
+  <tr><td>Tight tolerance (±0.01 mm)</td><td>Every part on critical features</td><td>Process barely capable — high defect risk</td></tr>
+  <tr><td>Moderate tolerance (±0.05–0.1 mm)</td><td>First article + sampling (AQL 1.0–2.5)</td><td>Process is capable; sampling catches drift</td></tr>
+  <tr><td>Loose tolerance (±0.5 mm+)</td><td>First article + visual check</td><td>Easy process; low risk</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>AQL (Acceptable Quality Limit):</strong> a standard sampling plan (ISO 2859 / ANSI Z1.4) that tells you how many parts to inspect based on batch size. AQL 1.0 means you accept the batch if no more than 1% of samples are defective. Larger batches → larger sample sizes, but lower percentage inspected.</p>
+</div>
+
+<h2>Identifying Critical Dimensions</h2>
+<p>Not all dimensions are equal. On a typical drawing, identify:</p>
+<ul>
+  <li><strong>Critical / Key Characteristics (KC/CC):</strong> flagged on the drawing with a symbol (triangle, diamond, or "KC"). These affect fit, function, or safety. 100% inspected, often with SPC.</li>
+  <li><strong>Important dimensions:</strong> tight tolerance or GD&amp;T callout. Check on FAI and sample during production.</li>
+  <li><strong>General dimensions:</strong> nominal ± default tolerance. Not inspected individually — verified visually and on FAI.</li>
+</ul>
+
+<div class="warning">
+  <p><strong>If the drawing doesn't mark critical features:</strong> look for clues — tightest tolerances, GD&amp;T position calls, surfaces with finish symbols, datums, mating surfaces, anything that says "reference" or "for assembly". When in doubt, ask the customer or design engineer which dimensions are critical. Never guess.</p>
+</div>
+
+<h2>Datum Setup for Inspection</h2>
+<p>The inspection setup must match the drawing's datum reference frame exactly. If you measure on a different datum, your numbers are meaningless.</p>
+
+<div class="example">
+  <p><strong>Setup sequence (following A|B|C):</strong></p>
+  <ol>
+    <li><strong>Datum A (primary):</strong> rest the part on the surface that datum A points to. Use a surface plate, fixture, or the CMM table. This establishes the primary plane.</li>
+    <li><strong>Datum B (secondary):</strong> align the part so the B feature touches a stop or aligns to an edge. This constrains rotation/translation.</li>
+    <li><strong>Datum C (tertiary):</strong> the final locator pins the part in the last direction.</li>
+    <li><strong>Verify:</strong> measure a known dimension from the established datums to confirm the setup is correct before measuring production features.</li>
+  </ol>
+</div>
+
+<h2>Common Inspection Mistakes</h2>
+<table>
+  <tr><th>Mistake</th><th>Consequence</th><th>Fix</th></tr>
+  <tr><td>Using caliper for ±0.01 work</td><td>Fails to detect out-of-tolerance parts</td><td>Use micrometer / CMM per 10:1 rule</td></tr>
+  <tr><td>Measuring hot parts</td><td>False oversized readings</td><td>Let parts cool to 20°C</td></tr>
+  <tr><td>Caliper zeroed on a dirty surface</td><td>All readings offset</td><td>Wipe and zero before measuring</td></tr>
+  <tr><td>CMM program measured at wrong datum</td><td>Good parts reported as bad</td><td>Verify datum alignment on first run</td></tr>
+  <tr><td>Only checking at batch end</td><td>Whole batch may be scrap</td><td>In-process checks every N parts</td></tr>
+  <tr><td>No FAI on new setup</td><td>Process never validated</td><td>FAI mandatory before production run</td></tr>
+  <tr><td>Measuring with worn instruments</td><td>Inaccurate results</td><td>Calibrate on schedule; check gauge blocks daily</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Related tools:</strong> plan which instrument for each feature — <a href="../../../engineering-tools/measurement-planning/">Measurement Planning Guide</a>. Printable setup and inspection sheet: <a href="../../../engineering-tools/printable-setup-worksheet/">Setup Worksheet</a>.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../advanced-inspection/">&larr; Advanced Inspection</a>
+  <a href="../../#ch06">Knowledge Base &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

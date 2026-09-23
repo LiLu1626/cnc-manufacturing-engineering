@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Inspection | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch06" class="back-link">&larr; Back to 06 &middot; Metrology &amp; Inspection</a>
+<div class="hero-eyebrow">06.2 &middot; Metrology &amp; Inspection</div>
+<h1>Advanced Inspection — CMM, Optical &amp; 3D Scanning</h1>
+
+<p>When hand tools aren't enough — for complex geometries, tight GD&amp;T tolerances, or 100% inspection of production parts — you move to automated and optical inspection. This page covers the main systems, what they're good at, and their limitations.</p>
+
+<h2>Coordinate Measuring Machine (CMM)</h2>
+<p>A CMM is a computer-controlled 3-axis (or more) machine with a touch probe that physically probes points on the part. It records X/Y/Z coordinates and constructs geometric features (planes, circles, cylinders, cones) from those points.</p>
+
+<h3>How it works</h3>
+<ol>
+  <li>Part is placed on the CMM granite table.</li>
+  <li>Operator establishes the datum reference frame by probing the datums (A|B|C) from the drawing.</li>
+  <li>Program runs: the probe touches each programmed point on the part.</li>
+  <li>Software constructs features and compares measured values to drawing nominal + tolerance.</li>
+  <li>Report passes/fails each dimension and GD&amp;T callout.</li>
+</ol>
+
+<table>
+  <tr><th>Characteristic</th><th>Typical value</th></tr>
+  <tr><td>Volumetric accuracy</td><td>(1.9 + L/300) µm — ~2–5 µm for small parts</td></tr>
+  <tr><td>Probe repeatability</td><td>0.5–2 µm</td></tr>
+  <tr><td>Measuring force</td><td>0.05–0.3 N (very light)</td></tr>
+  <tr><td>Temperature range</td><td>20 ±1–2°C controlled room</td></tr>
+  <tr><td>Speed</td><td>5–20 seconds per point (touch-trigger); scanning much faster</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>CMM in practice:</strong> a CMM is not a universal "measure anything" machine. It measures what you program it to measure. A good CMM program follows the drawing's datums exactly. If the part setup on the CMM doesn't match the drawing's datum reference frame, the CMM will report accurate numbers in the wrong coordinate system — and parts will fail inspection even though they're actually good.</p>
+</div>
+
+<h3>Touch-trigger vs scanning probes</h3>
+<table>
+  <tr><th>Probe type</th><th>How it works</th><th>Best for</th></tr>
+  <tr><td>Touch-trigger (TP20, TP200)</td><td>Single point touch — stops when trigger fires</td><td>Basic dimensions, hole positions, simple GD&amp;T</td></tr>
+  <tr><td>Continuous scanning (SP25, PH10)</td><td>Drags along surface, collects hundreds of points/sec</td><td>Complex surfaces, profile, form errors, turbine blades</td></tr>
+  <tr><td>Vision probe (optical)</td><td>Camera captures edges — no contact</td><td>Delicate parts, small features, soft materials</td></tr>
+</table>
+
+<h2>Optical Measurement</h2>
+<p>Optical systems measure without touching the part. They're fast and non-contact, but they can't see inside holes or measure hidden surfaces.</p>
+
+<h3>Vision Systems (2D)</h3>
+<p>A camera with zoom lens, backlight, and ring light. Measures 2D features on the top/visible face: hole positions, edge distances, part outlines, small features. Common in electronics and precision machining.</p>
+<table>
+  <tr><th>Pros</th><th>Cons</th></tr>
+  <tr><td>Very fast — measure hundreds of features in seconds</td><td>Only 2D — can't measure depth without Z axis</td></tr>
+  <tr><td>No contact — no risk of damaging delicate parts</td><td>Needs good edge contrast — polished/chrome surfaces tricky</td></tr>
+  <tr><td>Good for small parts (under 300 mm)</td><td>Depth perception limited — 3D features need multiple angles</td></tr>
+</table>
+
+<h3>Laser Scanning / Laser Displacement</h3>
+<p>A laser triangulation sensor projects a laser line or dot onto the part and measures the reflected position. Non-contact, very fast, good for complex contours.</p>
+<table>
+  <tr><th>Technology</th><th>Resolution</th><th>Best for</th></tr>
+  <tr><td>Laser micrometer</td><td>0.1 µm</td><td>In-line diameter checking, extruded parts</td></tr>
+  <tr><td>Laser line scanner</td><td>5–20 µm</td><td>Reverse engineering, surface comparison</td></tr>
+  <tr><td>Laser interferometer</td><td>nm-level</td><td>Machine/CMM calibration, not part inspection</td></tr>
+</table>
+
+<h2>3D Scanning</h2>
+<p>3D scanners capture millions of points on a surface to create a point cloud, which is then compared to a CAD model (best-fit alignment) to show where the part deviates from nominal.</p>
+
+<table>
+  <tr><th>Technology</th><th>Accuracy</th><th>Best for</th></tr>
+  <tr><td>Blue light scanning (structured light)</td><td>0.02–0.05 mm</td><td>Castings, molds, full-part comparison to CAD</td></tr>
+  <tr><td>Laser arm scanning</td><td>0.03–0.1 mm</td><td>Large parts, on-machine inspection, reverse engineering</td></tr>
+  <tr><td>CT scanning (industrial)</td><td>5–50 µm</td><td>Internal geometry, wall thickness, defects (non-destructive)</td></tr>
+</table>
+
+<div class="warning">
+  <p><strong>3D scanning caveat:</strong> scanner accuracy is not CMM accuracy. A 3D scanner at 0.05 mm resolution is great for showing "the part is warped by 0.2 mm" but not for inspecting a ⌀10 ±0.01 mm hole. Use scanners for form/shape analysis, not for tight dimensional inspection.</p>
+</div>
+
+<h2>Surface Profilometer</h2>
+<p>Measures surface roughness (Ra, Rz, etc.) by dragging a diamond stylus across the surface or using optical interferometry.</p>
+<table>
+  <tr><th>Type</th><th>Measures</th><th>Typical use</th></tr>
+  <tr><td>Contact profilometer (stylus)</td><td>Ra, Rz, Rt, Rq, waviness</td><td>Precision surfaces, bearing journals, seal surfaces</td></tr>
+  <tr><td>Optical profilometer</td><td>Same parameters, plus 3D topography</td><td>Delicate surfaces, thin coatings, non-contact</td></tr>
+</table>
+<p>Convert between Ra, Rz, RMS: <a href="../../../engineering-tools/surface-finish-conversion/">Surface Finish Conversion Tool</a></p>
+
+<h2>Comparing Inspection Methods</h2>
+<table>
+  <tr><th>Method</th><th>Accuracy</th><th>Speed</th><th>Best for</th></tr>
+  <tr><td>Caliper / micrometer</td><td>±0.002–0.05 mm</td><td>Slow (manual)</td><td>Simple features, shop floor</td></tr>
+  <tr><td>Dial indicator / bore gauge</td><td>±0.001–0.005 mm</td><td>Slow</td><td>Form, runout, comparison</td></tr>
+  <tr><td>CMM (touch probe)</td><td>±0.002–0.005 mm</td><td>Medium (programmed)</td><td>GD&amp;T, complex dimensions, FAI</td></tr>
+  <tr><td>Vision system</td><td>±0.001–0.005 mm</td><td>Fast</td><td>2D small features, production</td></tr>
+  <tr><td>Laser / 3D scanner</td><td>±0.02–0.1 mm</td><td>Very fast</td><td>Form, shape, reverse engineering</td></tr>
+  <tr><td>CT scan</td><td>±0.005–0.05 mm</td><td>Slow (expensive)</td><td>Internal geometry, defects</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Key principle:</strong> match the instrument to the tolerance and the feature. Don't use a CMM to check a ±0.5 mm dimension (waste of time), and don't use a caliper to check a ±0.01 mm hole (wrong tool). The drawing's tolerance dictates the method.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../measurement-fundamentals/">&larr; Measurement Fundamentals</a>
+  <a href="../inspection-strategy/">Next: Inspection Strategy &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

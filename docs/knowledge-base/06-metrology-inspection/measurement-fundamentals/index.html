@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Measurement Fundamentals | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch06" class="back-link">&larr; Back to 06 &middot; Metrology &amp; Inspection</a>
+<div class="hero-eyebrow">06.1 &middot; Metrology &amp; Inspection</div>
+<h1>Measurement Fundamentals &amp; Hand Tools</h1>
+
+<p>A measurement is only as good as the instrument and the person taking it. This page covers the core concepts that separate a "rough check" from a valid inspection result, plus the hand tools every machinist uses daily — and how to use them correctly.</p>
+
+<h2>Accuracy vs Precision — The Classic Distinction</h2>
+<p>These two words are often confused, but they mean different things. A measurement system can be accurate but not precise, precise but not accurate, both, or neither.</p>
+
+<svg viewBox="0 0 500 160" xmlns="http://www.w3.org/2000/svg" style="max-width:460px;margin:16px auto;display:block;">
+  <!-- Bullseye 1: accurate + precise -->
+  <circle cx="80" cy="55" r="35" fill="none" stroke="#cfdbd8" stroke-width="1"/>
+  <circle cx="80" cy="55" r="22" fill="none" stroke="#cfdbd8" stroke-width="1"/>
+  <circle cx="80" cy="55" r="10" fill="none" stroke="#0b766e" stroke-width="1.5"/>
+  <circle cx="78" cy="53" r="3" fill="#0b766e"/>
+  <circle cx="82" cy="56" r="3" fill="#0b766e"/>
+  <circle cx="80" cy="55" r="3" fill="#0b766e"/>
+  <text x="80" y="115" text-anchor="middle" font-size="11" fill="#17242f">Accurate &amp; Precise</text>
+  <!-- Bullseye 2: precise but not accurate -->
+  <circle cx="250" cy="55" r="35" fill="none" stroke="#cfdbd8" stroke-width="1"/>
+  <circle cx="250" cy="55" r="22" fill="none" stroke="#cfdbd8" stroke-width="1"/>
+  <circle cx="250" cy="55" r="10" fill="none" stroke="#cfdbd8" stroke-width="1.5"/>
+  <circle cx="275" cy="40" r="3" fill="#c0392b"/>
+  <circle cx="278" cy="43" r="3" fill="#c0392b"/>
+  <circle cx="276" cy="38" r="3" fill="#c0392b"/>
+  <text x="250" y="115" text-anchor="middle" font-size="11" fill="#17242f">Precise, not accurate</text>
+  <!-- Bullseye 3: accurate but not precise -->
+  <circle cx="420" cy="55" r="35" fill="none" stroke="#cfdbd8" stroke-width="1"/>
+  <circle cx="420" cy="55" r="22" fill="none" stroke="#cfdbd8" stroke-width="1"/>
+  <circle cx="420" cy="55" r="10" fill="none" stroke="#0b766e" stroke-width="1.5"/>
+  <circle cx="405" cy="45" r="3" fill="#e67e22"/>
+  <circle cx="435" cy="65" r="3" fill="#e67e22"/>
+  <circle cx="420" cy="55" r="3" fill="#e67e22"/>
+  <text x="420" y="115" text-anchor="middle" font-size="11" fill="#17242f">Accurate, not precise</text>
+</svg>
+
+<table>
+  <tr><th>Concept</th><th>Definition</th><th>Question it answers</th></tr>
+  <tr><td><strong>Accuracy</strong></td><td>How close a measured value is to the true (reference) value</td><td>"Is the reading correct?"</td></tr>
+  <tr><td><strong>Precision</strong></td><td>How repeatable the measurement is when taken multiple times</td><td>"Do I get the same number every time?"</td></tr>
+  <tr><td><strong>Resolution</strong></td><td>Smallest increment the instrument can display</td><td>"Can I read 0.01 or 0.001?"</td></tr>
+  <tr><td><strong>Repeatability</strong></td><td>Same person, same instrument, same part, short time span — variation</td><td>"Can I reproduce my own measurement?"</td></tr>
+  <tr><td><strong>Reproducibility</strong></td><td>Different person, same instrument, same part — variation</td><td>"Does another inspector get the same number?"</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>The 10:1 rule:</strong> your measuring instrument should be at least 10× more accurate than the tolerance being measured. If you're checking a ⌀25 ±0.01 mm feature (total tolerance 0.02), use an instrument with resolution of 0.002 mm or better. A caliper (0.01 mm resolution) is NOT accurate enough for ±0.01 work — use a micrometer.</p>
+</div>
+
+<h2>Measurement Uncertainty</h2>
+<p>No measurement is exact. Every result has some uncertainty from the instrument, the environment, the operator, and the part itself. A properly reported measurement includes its uncertainty: <code>25.000 ±0.003 mm (k=2)</code>.</p>
+<table>
+  <tr><th>Source of uncertainty</th><th>Typical cause</th></tr>
+  <tr><td>Instrument calibration</td><td>Gauge out of calibration, worn tips</td></tr>
+  <tr><td>Operator technique</td><td>Too much/too little pressure, inconsistent contact</td></tr>
+  <tr><td>Thermal expansion</td><td>Part at 25°C vs 20°C reference temperature — steel moves ~11.7 ppm/°C</td></tr>
+  <tr><td>Part surface</td><td>Rough surface gives different readings than polished</td></tr>
+  <tr><td>Contact geometry</td><td>Flat vs rounded tips on a curved surface</td></tr>
+</table>
+
+<div class="warning">
+  <p><strong>Thermal growth matters:</strong> a 100 mm steel bar at 30°C (hand-warm) is about 0.012 mm longer than at 20°C. For tight tolerances, let parts cool to room temperature before measuring. Never handle precision parts with bare hands — use gloves or tweezers.</p>
+</div>
+
+<h2>Calibration and Traceability</h2>
+<p><strong>Calibration</strong> compares your instrument to a known reference (gauge block) and adjusts or records any error. <strong>Traceability</strong> means the reference itself is calibrated against a national standard (NIST in the US, PTB in Germany, etc.) — creating an unbroken chain back to a physical standard.</p>
+<table>
+  <tr><th>Instrument</th><th>Typical calibration interval</th><th>Reference standard</th></tr>
+  <tr><td>Vernier caliper (150 mm)</td><td>6–12 months</td><td>Cercian gauge blocks, grade 0</td></tr>
+  <tr><td>Outside micrometer (0–25 mm)</td><td>6–12 months</td><td>Gauge blocks, grade K</td></tr>
+  <tr><td>Dial indicator</td><td>6 months</td><td>Criterion check / gauge block</td></tr>
+  <tr><td>Bore gauge</td><td>6 months</td><td>Setting ring / master ring</td></tr>
+  <tr><td>CMM</td><td>Annual (plus daily check)</td><td>Laser interferometer, ball bar</td></tr>
+</table>
+
+<h2>Hand Tools — When to Use Which</h2>
+
+<h3>Vernier / Digital Caliper</h3>
+<p>The most common shop tool. Measures outside, inside, and depth. Resolution: 0.01 mm (0.0005 in). Best for: rough dimensions, non-critical features, stock size checks.</p>
+<table>
+  <tr><th>Can measure</th><th>Accuracy</th><th>Don't use for</th></tr>
+  <tr><td>Outside length/width</td><td>±0.02–0.03 mm</td><td>Tighter than ±0.03 mm</td></tr>
+  <tr><td>Inside diameter</td><td>±0.03–0.05 mm</td><td>Fine bores</td></tr>
+  <tr><td>Depth</td><td>±0.03 mm</td><td>Deep holes (flexes)</td></tr>
+</table>
+<div class="callout">
+  <p><strong>Caliper technique:</strong> let the jaws close with light pressure — don't squeeze. Wipe the jaws clean. Zero the caliper before each use. Never measure a moving part. Never use a caliper as a pry bar or marking tool.</p>
+</div>
+
+<h3>Outside Micrometer</h3>
+<p>Higher accuracy than a caliper. Measures outside dimensions only. Resolution: 0.01 mm (with vernier 0.001 mm). Best for: precision OD, shaft diameters, checking tight tolerances.</p>
+<table>
+  <tr><th>Range</th><th>Typical accuracy</th><th>Use case</th></tr>
+  <tr><td>0–25 mm</td><td>±0.002 mm</td><td>Small shafts, pins</td></tr>
+  <tr><td>25–50 mm</td><td>±0.002 mm</td><td>Medium shafts</td></tr>
+  <tr><td>50–75 mm</td><td>±0.003 mm</td><td>Larger parts</td></tr>
+  <tr><td>75–100 mm</td><td>±0.003 mm</td><td>Large diameters</td></tr>
+</table>
+<div class="warning">
+  <p><strong>Micrometer mistakes:</strong> (1) don't over-tighten — use the ratchet/ thimble slip, it clicks at the correct pressure. (2) Always zero at the closing point — 0–25 mm closes on the anvil, 25–50 mm uses the 25 mm standard. (3) Wipe part and anvil — a chip between faces gives a false reading.</p>
+</div>
+
+<h3>Dial / Digital Indicator</h3>
+<p>Measures deviation from a reference, not absolute size. Mounted on a magnetic base or height stand. Resolution: 0.01 mm (digital) or 0.001 mm (dial). Best for: runout, flatness, alignment, comparing parts to a master, checking deflection.</p>
+
+<h3>Bore Gauge / Inside Micrometer</h3>
+<p>For measuring internal diameters accurately. Telescopic gauges + micrometer (transfer method), dial bore gauges (direct reading), or inside micrometer. Resolution: 0.001–0.01 mm. Best for: precision bores, hydraulic cylinders, bearing seats.</p>
+
+<h3>Height Gauge</h3>
+<p>Measures height from a surface plate. Digital height gauges resolve to 0.001 mm. Best for: checking hole positions, step heights, laying out part coordinates on a CMM or surface plate.</p>
+
+<h3>Gauge Blocks (Jo Blocks)</h3>
+<p>The reference standard. Precision-ground steel or ceramic blocks of known thickness, stacked to create any desired dimension. Grade 0 (highest accuracy) is used in the calibration lab; grade 2 for the shop. These are what your calipers and micrometers are checked against.</p>
+
+<h2>Which Tool for Which Tolerance?</h2>
+<table>
+  <tr><th>Tolerance</th><th>Recommended tool</th><th>Don't use</th></tr>
+  <tr><td>±0.1 mm (rough)</td><td>Caliper, steel rule</td><td>—</td></tr>
+  <tr><td>±0.05 mm</td><td>Caliper, outside micrometer</td><td>Steel rule</td></tr>
+  <tr><td>±0.02 mm</td><td>Outside micrometer, bore gauge</td><td>Caliper (too loose)</td></tr>
+  <tr><td>±0.01 mm</td><td>Outside micrometer with vernier, dial bore gauge</td><td>Caliper</td></tr>
+  <tr><td>±0.005 mm or tighter</td><td>CMM, inside micrometer, length machine</td><td>Any hand tool</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Related:</strong> planning which instrument to use for a given feature — <a href="../../../engineering-tools/measurement-planning/">Measurement Planning Guide</a>. Surface roughness measurement: <a href="../../../engineering-tools/surface-finish-conversion/">Surface Finish Conversion</a>.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../../#ch06">&larr; Knowledge Base</a>
+  <a href="../advanced-inspection/">Next: Advanced Inspection &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>
