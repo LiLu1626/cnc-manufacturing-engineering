@@ -1,0 +1,88 @@
+---
+title: Surface Finish Conversion
+---
+
+<article class="tool-page">
+  <header class="tool-header">
+    <p class="eyebrow">Reference · Released</p>
+    <h1>Surface Finish Conversion</h1>
+    <p>Convert between common surface roughness units: Ra (µm and µin), Rz (µm), RMS, and ISO grade N. Enter any one value and the tool shows the rest. Helps when reading drawings that mix metric and imperial finish specifications.</p>
+  </header>
+
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field">
+        <label for="raUm">Ra — micrometers (µm)</label>
+        <input id="raUm" type="number" step="0.01" placeholder="e.g. 1.6" />
+      </div>
+      <div class="field">
+        <label for="raUin">Ra — microinches (µin)</label>
+        <input id="raUin" type="number" step="0.1" placeholder="e.g. 63" />
+      </div>
+      <div class="field">
+        <label for="rzUm">Rz (Rt rough avg) — µm</label>
+        <input id="rzUm" type="number" step="0.1" placeholder="leave blank" />
+      </div>
+      <div class="field">
+        <label for="rmsUm">RMS — µm (approx.)</label>
+        <input id="rmsUm" type="number" step="0.01" placeholder="leave blank" />
+      </div>
+    </div>
+
+    <div class="result-grid">
+      <div class="result">
+        <p>Ra</p>
+        <p class="result-value" id="raResult">—</p>
+        <p class="result-detail" id="raDetail"></p>
+      </div>
+      <div class="result">
+        <p>Rz (approx.)</p>
+        <p class="result-value" id="rzResult">—</p>
+        <p class="result-detail" id="rzDetail"></p>
+      </div>
+      <div class="result">
+        <p>RMS (approx.)</p>
+        <p class="result-value" id="rmsResult">—</p>
+        <p class="result-detail" id="rmsDetail"></p>
+      </div>
+      <div class="result">
+        <p>ISO grade / typical process</p>
+        <p class="result-value" id="gradeResult">—</p>
+        <p class="result-detail" id="gradeDetail"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>Conversion relationships</h2>
+    <ul>
+      <li>1 µin = 0.0254 µm, so Ra(µin) = Ra(µm) × 39.37</li>
+      <li>Rz ≈ 4 × Ra (empirical, for general machining; varies 3–5× by process)</li>
+      <li>RMS ≈ 1.11 × Ra (for Gaussian surfaces)</li>
+    </ul>
+    <p><strong>ISO surface roughness grades (N series):</strong></p>
+    <table class="data-table">
+      <tr><th>Grade</th><th>Ra µm</th><th>Ra µin</th><th>Typical process</th></tr>
+      <tr><td>N1</td><td>0.025</td><td>1</td><td>Lapping, honing</td></tr>
+      <tr><td>N2</td><td>0.05</td><td>2</td><td>Superfinishing</td></tr>
+      <tr><td>N3</td><td>0.10</td><td>4</td><td>Grinding</td></tr>
+      <tr><td>N4</td><td>0.20</td><td>8</td><td>Fine grinding</td></tr>
+      <tr><td>N5</td><td>0.40</td><td>16</td><td>Finish turning / boring</td></tr>
+      <tr><td>N6</td><td>0.80</td><td>32</td><td>Finish milling</td></tr>
+      <tr><td>N7</td><td>1.60</td><td>63</td><td>General machining</td></tr>
+      <tr><td>N8</td><td>3.20</td><td>125</td><td>Rough milling / turning</td></tr>
+      <tr><td>N9</td><td>6.30</td><td>250</td><td>Roughing</td></tr>
+      <tr><td>N10</td><td>12.5</td><td>500</td><td>Heavy roughing</td></tr>
+    </table>
+  </section>
+
+  <aside class="notice">
+    <strong>Note:</strong>
+    <p>Rz conversions are approximate. Actual Rz/Ra ratios depend on the process, tool wear, and material. Always use the drawing-specified parameter (Ra, Rz, or RMS) — don't substitute without engineering approval. µin is still common on American drawings; µm (Ra) is the ISO standard.</p>
+  </aside>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</article>
+
+<link rel="stylesheet" href="styles.css" />
+<script src="calculator.js" defer></script>
