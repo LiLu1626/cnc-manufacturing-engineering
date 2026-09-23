@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Surface Finish Basics | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch07" class="back-link">&larr; Back to 07 &middot; Surface Finish &amp; Integrity</a>
+<div class="hero-eyebrow">07.1 &middot; Surface Finish &amp; Integrity</div>
+<h1>Surface Finish Basics — Ra, Rz &amp; What You Actually Control</h1>
+
+<p>A machined surface is never perfectly smooth — it has microscopic peaks and valleys. The drawing specifies how smooth that surface must be. This page explains the roughness parameters, what they mean, and which cutting parameters actually control the finish you get.</p>
+
+<h2>What the Surface Profile Looks Like</h2>
+<p>When a tool cuts a surface, it leaves a characteristic texture. The surface profile has three components:</p>
+<table>
+  <tr><th>Component</th><th>Description</th><th>Caused by</th></tr>
+  <tr><td><strong>Roughness</strong></td><td>Fine, closely spaced irregularities — the peaks and valleys from the cutting edge</td><td>Feed marks, tool nose radius, cutting edge micro-geometry</td></tr>
+  <tr><td><strong>Waviness</strong></td><td>Longer, larger waves spaced further apart</td><td>Machine vibration, tool deflection, workholding movement, chatter</td></tr>
+  <tr><td><strong>Lay</strong></td><td>Direction of the surface pattern — the direction the tool fed</td><td>Turning (longitudinal), milling (crosshatch), grinding (directional)</td></tr>
+</table>
+
+<h2>The Roughness Parameters You Need to Know</h2>
+
+<h3>Ra — Arithmetic Average Roughness</h3>
+<p>Ra is the most commonly specified parameter. It's the average of the absolute deviations from the centerline over the sampling length. Lower Ra = smoother surface.</p>
+
+<h3>Rz — Mean Roughness Depth</h3>
+<p>Rz measures the average height of the five highest peaks and five deepest valleys. Unlike Ra, it captures the extreme peaks — which matter for sealing surfaces, fatigue life, and coating adhesion. Rz is typically 4–10× Ra depending on the process.</p>
+
+<h3>Other Parameters</h3>
+<table>
+  <tr><th>Parameter</th><th>Full name</th><th>What it measures</th></tr>
+  <tr><td>Rt</td><td>Total Roughness Depth</td><td>Largest peak-to-valley height in the sampling length</td></tr>
+  <tr><td>Rq (RMS)</td><td>Root Mean Square</td><td>Quadratic average — slightly higher than Ra</td></tr>
+  <tr><td>Rmax</td><td>Maximum Roughness Depth</td><td>Deepest valley over the evaluation length</td></tr>
+  <tr><td>Wa</td><td>Waviness Average</td><td>The waviness component (filtered out from roughness)</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Ra vs Rz in practice:</strong> a drawing that says Ra 1.6 µm looks smooth, but the actual peaks could be 10–15 µm high (Rz). For seal surfaces or fatigue-critical parts, Rz or Rmax is more meaningful than Ra. Always check which parameter the drawing specifies.</p>
+</div>
+
+<h3>Converting Between Units</h3>
+<p>Ra is measured in micrometers (µm) or microinches (µin):</p>
+<div class="formula-box">
+  <p>1 µm = 39.37 µin &nbsp;&nbsp;|&nbsp;&nbsp; 1 µin = 0.0254 µm</p>
+  <p>Typical: 1.6 µm ≈ 63 µin &nbsp;|&nbsp; 0.8 µm ≈ 32 µin &nbsp;|&nbsp; 0.4 µm ≈ 16 µin</p>
+</div>
+<p>Use the <a href="../../../engineering-tools/surface-finish-conversion/">Surface Finish Conversion Tool</a> to convert Ra, Rz, and RMS automatically.</p>
+
+<h2>Typical Ra Values by Process</h2>
+<table>
+  <tr><th>Process</th><th>Ra (µm)</th><th>Ra (µin)</th><th>Visual / functional</th></tr>
+  <tr><td>Rough milling / rough turning</td><td>6.3–25</td><td>250–1000</td><td>Visible tool marks, rough</td></tr>
+  <tr><td>Standard milling / turning</td><td>1.6–3.2</td><td>63–125</td><td>Typical as-machined surface</td></tr>
+  <tr><td>Finish milling / finish turning</td><td>0.8–1.6</td><td>32–63</td><td>Fine, reflective</td></tr>
+  <tr><td>Fine finish / light feed</td><td>0.4–0.8</td><td>16–32</td><td>Smooth, near-polished</td></tr>
+  <tr><td>Grinding</td><td>0.2–0.8</td><td>8–32</td><td>Bright, uniform</td></tr>
+  <tr><td>Fine grinding / honing</td><td>0.05–0.2</td><td>2–8</td><td>Mirror-like</td></tr>
+  <tr><td>Lapping / polishing</td><td>0.01–0.05</td><td>0.4–2</td><td>Optical flat</td></tr>
+</table>
+
+<h2>What Controls Surface Finish — The 5 Factors</h2>
+
+<h3>1. Feed Rate (Biggest Effect)</h3>
+<p>For turning and boring, the theoretical surface roughness from feed marks follows:</p>
+<div class="formula-box">
+  <p><strong>Rt(theoretical) = f² / (8 × rε)</strong></p>
+  <p>Where f = feed per revolution (mm/rev), rε = tool nose radius (mm)</p>
+</div>
+<p>This means reducing feed by half reduces theoretical roughness to 1/4. Doubling the nose radius also halves the roughness.</p>
+
+<div class="example">
+  <p><strong>Example:</strong> turning with nose radius rε = 0.8 mm, feed f = 0.2 mm/rev:<br>
+  Rt = 0.2² / (8 × 0.8) = 0.04 / 6.4 = 0.00625 mm = 6.25 µm (≈ Ra 1.6 µm)<br><br>
+  If we reduce feed to 0.1 mm/rev:<br>
+  Rt = 0.1² / (8 × 0.8) = 0.01 / 6.4 = 0.00156 mm = 1.56 µm (≈ Ra 0.4 µm)</p>
+</div>
+
+<h3>2. Tool Nose Radius</h3>
+<p>Larger nose radius = smoother surface, but also more cutting force and more tendency to chatter. For finish passes, use the largest nose radius that won't cause vibration.</p>
+<table>
+  <tr><th>Nose radius</th><th>Best feed range</th><th>Typical use</th></tr>
+  <tr><td>0.2 mm</td><td>0.05–0.1 mm/rev</td><td>Finishing small parts, thin walls</td></tr>
+  <tr><td>0.4 mm</td><td>0.08–0.15 mm/rev</td><td>General finishing</td></tr>
+  <tr><td>0.8 mm</td><td>0.1–0.25 mm/rev</td><td>Standard finishing, good balance</td></tr>
+  <tr><td>1.2–1.6 mm</td><td>0.2–0.4 mm/rev</td><td>Heavy finishing, rigid setups only</td></tr>
+</table>
+
+<h3>3. Cutting Speed</h3>
+<p>Speed affects finish mainly through built-up edge (BUE). At low speeds, material welds to the tool nose, tearing the surface and leaving a poor finish. At higher speeds (above BUE threshold), the cutting edge stays clean and the surface improves. This is why finish passes always use higher speed than roughing.</p>
+
+<h3>4. Tool Wear</h3>
+<p>As the tool wears, the nose radius breaks down and the edge becomes rough. A freshly sharpened insert gives Ra 0.8; the same insert at end of life may give Ra 2.5 even with identical feed and speed. Tool wear is the #1 cause of finish drift during production.</p>
+
+<h3>5. Vibration / Chatter</h3>
+<p>Even if feed and speed are perfect, vibration creates waviness that ruins the surface. Look for a "grainy" or "orange peel" pattern — that's chatter marks, not feed marks. Reducing depth of cut, increasing setup rigidity, or changing tool overhang usually fixes it.</p>
+
+<h2>How to Get a Better Surface Finish</h2>
+<table>
+  <tr><th>Problem</th><th>Fix</th></tr>
+  <tr><td>Too rough at high feed</td><td>Reduce feed (biggest impact)</td></tr>
+  <tr><td>Tool marks visible</td><td>Use larger nose radius</td></tr>
+  <tr><td>Surface is torn/gummy (aluminum, stainless)</td><td>Increase speed — eliminate BUE</td></tr>
+  <tr><td>Grainy/wavy pattern</td><td>Reduce chatter — shorter tool, lighter DOC, stiffer setup</td></tr>
+  <tr><td>Finish drifts during batch</td><td>Replace worn insert</td></tr>
+  <tr><td>Can't reach Ra 0.4 with turning</td><td>Plan for grinding or honing as final operation</td></tr>
+</table>
+
+<div class="warning">
+  <p><strong>Don't over-engineer the finish:</strong> chasing Ra 0.4 on a surface that only needs Ra 1.6 costs cycle time (lower feed = slower) and tool life. The drawing specifies what's needed — don't make it smoother unless there's a functional reason (sealing, fatigue, sliding surface).</p>
+</div>
+
+<div class="callout">
+  <p><strong>Next:</strong> what happens beneath the surface — residual stress, work hardening, and thermal damage — <a href="../surface-integrity/">Surface Integrity</a>.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../../#ch07">&larr; Knowledge Base</a>
+  <a href="../surface-integrity/">Next: Surface Integrity &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

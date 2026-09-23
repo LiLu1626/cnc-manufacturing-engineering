@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Surface Integrity | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch07" class="back-link">&larr; Back to 07 &middot; Surface Finish &amp; Integrity</a>
+<div class="hero-eyebrow">07.2 &middot; Surface Finish &amp; Integrity</div>
+<h1>Surface Integrity — What's Beneath the Finish</h1>
+
+<p>Surface roughness (Ra) is what you can measure and see. But the machining process also changes the material <em>underneath</em> the surface — residual stress, work hardening, thermal damage, and microcracks. These subsurface effects can dramatically reduce fatigue life, cause corrosion, or lead to part failure in service. Surface integrity is the total picture: both the texture you see and the material state you don't.</p>
+
+<h2>The Machined Surface Layer</h2>
+<p>When a cutting tool passes over the material, it creates a characteristic subsurface structure. From the surface inward:</p>
+<table>
+  <tr><th>Layer</th><th>Depth (typical)</th><th>What happens</th></tr>
+  <tr><td>Surface roughness</td><td>0–25 µm</td><td>Peaks and valleys from feed marks — measured as Ra</td></tr>
+  <tr><td>Plastic deformation (work-hardened)</td><td>25–200 µm</td><td>Material deformed by tool pressure, harder and more brittle</td></tr>
+  <tr><td>Heat-affected layer</td><td>10–100 µm</td><td>Microstructural changes from cutting heat — possible "white layer"</td></tr>
+  <tr><td>Residual stress zone</td><td>0.1–1 mm</td><td>Tensile or compressive stress locked into the surface</td></tr>
+  <tr><td>Base material</td><td>Beyond 1 mm</td><td>Unaffected bulk material</td></tr>
+</table>
+
+<h2>Residual Stress</h2>
+<p>Residual stress is stress that remains in the part after machining, when no external force is applied. It comes from two competing effects: mechanical deformation (compressive) and thermal expansion/contraction (tensile).</p>
+
+<table>
+  <tr><th>Stress type</th><th>Caused by</th><th>Effect on part</th></tr>
+  <tr><td><strong>Compressive residual stress</strong></td><td>Mechanical plastic deformation — tool pushes surface, compresses it</td><td>Good — improves fatigue life, closes microcracks</td></tr>
+  <tr><td><strong>Tensile residual stress</strong></td><td>Thermal cycling — surface heats, expands, then contracts while constrained by cooler base material</td><td>Bad — opens microcracks, reduces fatigue life, can cause distortion</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>What matters:</strong> under ideal machining conditions (sharp tool, moderate speed, adequate feed), the mechanical effect dominates and you get compressive residual stress — which is beneficial. Problems arise when the tool is dull, speed is too high, or cutting forces are excessive — then the thermal effect takes over and produces tensile stress, which can lead to premature fatigue failure.</p>
+</div>
+
+<h3>How to control residual stress favorably</h3>
+<ul>
+  <li>Keep the cutting edge sharp — a dull tool rubs and generates heat instead of shearing.</li>
+  <li>Use sufficient feed — too light a feed causes rubbing (burnishing) rather than cutting, generating heat.</li>
+  <li>Use coolant effectively — it reduces cutting zone temperature and minimizes thermal stress.</li>
+  <li>For fatigue-critical parts, consider a final shot-peening or roller-burnishing operation — these intentionally induce compressive residual stress.</li>
+</ul>
+
+<h2>Work Hardening</h2>
+<p>Plastic deformation during machining work-hardens the surface layer. In most steels this is mild and harmless. But in work-hardening materials (austenitic stainless 304/316, Inconel, titanium), the surface can become 20–50% harder than the base material.</p>
+
+<table>
+  <tr><th>Material</th><th>Work-hardening tendency</th><th>Risk</th></tr>
+  <tr><td>Carbon steel</td><td>Low–moderate</td><td>Minimal</td></tr>
+  <tr><td>Stainless 304/316</td><td>High</td><td>Surface becomes hard and abrasive — next tool pass wears faster</td></tr>
+  <tr><td>Inconel 718</td><td>Very high</td><td>Severe — can create a hard "skin" that ruins tool life</td></tr>
+  <tr><td>Titanium Ti-6Al-4V</td><td>Moderate</td><td>Moderate — combined with poor thermal conductivity</td></tr>
+</table>
+
+<div class="warning">
+  <p><strong>Work-hardening trap:</strong> when machining stainless, if the tool rubs (due to dull edge or feed too light), it work-hardens the surface. The next pass now cuts into this hard layer, wearing the tool faster, which causes more rubbing, which causes more work hardening — a vicious cycle. Use sharp tools, adequate feed, and don't linger in one cut.</p>
+</div>
+
+<h2>Thermal Damage and the "White Layer"</h2>
+<p>At high cutting temperatures, the surface layer can undergo microstructural changes. In hardened steels, a phenomenon called <strong>white layer</strong> (or untempered martensite) can form — a hard, brittle, highly stressed layer that appears white under a microscope after etching.</p>
+
+<table>
+  <tr><th>Condition</th><th>When it happens</th><th>Consequence</th></tr>
+  <tr><td>Soft/tempered layer</td><td>Over-tempering from excessive heat</td><td>Surface loses hardness on bearing/seal surfaces</td></tr>
+  <tr><td>White layer (untempered martensite)</td><td>Surface heats above austenitizing temp, then quenches by the bulk material</td><td>Hard, brittle, microcracked — fatigue life drops dramatically</td></tr>
+  <tr><td>Resoftening (rehardening then tempering)</td><td>Multiple thermal cycles</td><td>Inconsistent surface properties</td></tr>
+</table>
+
+<p>White layer is a particular concern on hardened steel parts (bearing races, die blocks, injection mold components) that are finish-ground or hard-turned. It's invisible to the eye but can be detected by metallurgical sectioning or X-ray diffraction residual stress measurement.</p>
+
+<div class="callout">
+  <p><strong>Prevention:</strong> use sharp tools, correct feeds (not too light), adequate coolant, and don't push cutting speeds beyond what the tool material can handle. For hardened steel finish machining, use CBN tools at controlled parameters — they produce minimal thermal damage.</p>
+</div>
+
+<h2>Burr Formation</h2>
+<p>A burr is the unwanted material left over at the exit edge of a cut. Every machined edge has some burr — the question is how much and whether it matters.</p>
+
+<h3>Types of burrs</h3>
+<table>
+  <tr><th>Type</th><th>Where it occurs</th><th>How to minimize</th></tr>
+  <tr><td>Poisson burr</td><td>Side of cut, material deforms sideways under tool pressure</td><td>Sharper tool, lower feed</td></tr>
+  <tr><td>Exit burr</td><td>Where the tool breaks through the exit edge</td><td>Support the exit side, reduce feed at exit</td></tr>
+  <tr><td>Roll-over burr</td><td>Milling — material folds over at the edge instead of shearing cleanly</td><td>Up-cut vs down-cut, sharper end mill</td></tr>
+</table>
+
+<h3>Burr removal</h3>
+<ul>
+  <li><strong>Manual deburring:</strong> hand scrape, chamfer with a file — cheap but inconsistent.</li>
+  <li><strong>Chamfer in the CNC:</strong> add a 0.2–0.5 mm chamfer pass at edge exits — best practice for production.</li>
+  <li><strong>Vibratory tumbling:</strong> batch deburring with media — good for loose parts.</li>
+  <li><strong>Thermal deburring (TEM):</strong> controlled explosion burns off burrs — good for complex internal passages.</li>
+</ul>
+
+<div class="warning">
+  <p><strong>Burrs matter:</strong> a burr on a mating edge can prevent parts from seating flat. A burr on a sealing surface can cause leaks. A burr that breaks off in service can become a hard particle that damages bearings or seals. Always specify deburring on the drawing: "Break sharp edges 0.2 max" or "Remove all burrs".</p>
+</div>
+
+<h2>Surface Integrity by Process</h2>
+<table>
+  <tr><th>Process</th><th>Subsurface damage</th><th>Residual stress</th><th>Best for</th></tr>
+  <tr><td>Rough milling/turning</td><td>High (0.1–0.5 mm deformed layer)</td><td>Mostly compressive, but can be tensile if dull</td><td>Rough stock removal</td></tr>
+  <tr><td>Finish turning/milling (sharp tool)</td><td>Low (0.02–0.1 mm)</td><td>Compressive — generally good</td><td>Final geometry</td></tr>
+  <tr><td>Grinding (proper parameters)</td><td>Very low</td><td>Mostly compressive</td><td>Precision surfaces</td></tr>
+  <tr><td>Grinding (burning / dull wheel)</td><td>High — thermal damage, white layer</td><td>Tensile — bad</td><td>Avoid — dress wheel, use coolant</td></tr>
+  <tr><td>Hard turning (CBN)</td><td>Very low, controlled</td><td>Compressive — often better than grinding</td><td>Hardened steel finishing</td></tr>
+  <tr><td>EDM (sinker/wire)</td><td>Recast layer 5–20 µm — brittle, microcracked</td><td>Tensile — always</td><td>Hard complex shapes; remove recast for fatigue parts</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>For fatigue-critical parts:</strong> specify a finish process that produces compressive residual stress (finish grinding, hard turning, shot peening). Avoid EDM without a subsequent polish or grind — the recast layer is a fatigue crack initiator. Check surface roughness parameters: <a href="../../../engineering-tools/surface-finish-conversion/">Surface Finish Conversion</a>.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../surface-finish-basics/">&larr; Surface Finish Basics</a>
+  <a href="../../#ch07">Knowledge Base &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>
