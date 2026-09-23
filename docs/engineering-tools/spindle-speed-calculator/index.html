@@ -1,0 +1,53 @@
+---
+title: Spindle Speed Calculator
+---
+
+<link rel="stylesheet" href="styles.css">
+
+<main class="tool-page">
+  <header class="tool-header">
+    <div class="eyebrow">Machining Parameters · Released</div>
+    <h1>Spindle Speed Calculator</h1>
+    <p>Calculate a recommended spindle speed from cutting speed and effective diameter.</p>
+  </header>
+
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field">
+        <label for="cuttingSpeed">Cutting speed (m/min)</label>
+        <input id="cuttingSpeed" type="number" value="180" min="0" step="any">
+      </div>
+      <div class="field">
+        <label for="diameter">Effective diameter (mm)</label>
+        <input id="diameter" type="number" value="12" min="0" step="any">
+      </div>
+      <div class="field">
+        <label for="maxRpm">Machine maximum RPM (optional)</label>
+        <input id="maxRpm" type="number" min="0" step="any" placeholder="For example: 12000">
+      </div>
+    </div>
+
+    <div class="result">
+      <div>Calculated spindle speed</div>
+      <div class="result-value" id="result">—</div>
+      <div class="result-detail" id="detail"></div>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>Formula</h2>
+    <p><strong>RPM = (1000 × Cutting speed) ÷ (π × Diameter)</strong></p>
+    <p>Use the effective cutting diameter. For turning, this normally changes as the workpiece diameter changes.</p>
+  </section>
+
+  <aside class="notice">
+    <strong>Use boundary:</strong>
+    The result is a calculation aid, not an approved cutting condition. Confirm tooling supplier data, material condition, machine capability, workholding, and the approved process plan before production use.
+  </aside>
+
+  <footer class="tool-footer">
+    Designed by Li Lu · CNC & Manufacturing Engineering
+  </footer>
+</main>
+
+<script src="calculator.js"></script>
