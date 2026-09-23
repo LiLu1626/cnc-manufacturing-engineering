@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MMC, LMC & Bonus Tolerance | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch05" class="back-link">&larr; Back to 05 &middot; Engineering Drawings &amp; GD&amp;T</a>
+<div class="hero-eyebrow">05.3 &middot; Engineering Drawings &amp; GD&amp;T</div>
+<h1>MMC, LMC &amp; Bonus Tolerance</h1>
+
+<p>This is the most powerful — and most misunderstood — concept in GD&amp;T. MMC (Maximum Material Condition) allows you to get <strong>extra tolerance</strong> on location when your feature is larger (for a hole) or smaller (for a shaft) than its maximum material size. It means more parts pass inspection without sacrificing assembly. Understanding this will change how you read drawings and how you program holes.</p>
+
+<h2>What Does "Maximum Material" Mean?</h2>
+<p>"Maximum material" = the feature contains the most possible material. Think about it physically:</p>
+<table>
+  <tr><th>Feature type</th><th>MMC condition</th><th>LMC condition</th></tr>
+  <tr><td>External (shaft, boss)</td><td>Largest diameter (most material)</td><td>Smallest diameter (least material)</td></tr>
+  <tr><td>Internal (hole, slot)</td><td>Smallest diameter (most material left around hole)</td><td>Largest diameter (least material left)</td></tr>
+</table>
+
+<div class="example">
+  <p><strong>Example: a ⌀10 ±0.2 hole.</strong><br>
+  - MMC size = ⌀9.8 (smallest hole = most material in the part)<br>
+  - LMC size = ⌀10.2 (largest hole = least material in the part)<br><br>
+  <strong>Example: a ⌀10 ±0.2 shaft.</strong><br>
+  - MMC size = ⌀10.2 (largest shaft = most material)<br>
+  - LMC size = ⌀9.8 (smallest shaft = least material)</p>
+</div>
+
+<h2>The Three Modifiers</h2>
+<table>
+  <tr><th>Modifier</th><th>Symbol</th><th>Meaning</th><th>When tolerance applies</th></tr>
+  <tr><td>MMC</td><td>Ⓓ (circled M)</td><td>Geometric tolerance applies at MMC size</td><td>Tolerance grows as feature deviates from MMC (bonus tolerance)</td></tr>
+  <tr><td>LMC</td><td>Ⓛ (circled L)</td><td>Geometric tolerance applies at LMC size</td><td>Tolerance grows as feature deviates from LMC (rare; used for wall thickness control)</td></tr>
+  <tr><td>RFS</td><td>(no symbol)</td><td>Regardless of Feature Size</td><td>Geometric tolerance is the same at every size within the range. Default in older standards.</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Modern default:</strong> In ASME Y14.5-2009 and later, position tolerances default to MMC for features that are assembled (holes, pins). RFS must be explicitly stated. If you see Ⓓ, bonus tolerance applies.</p>
+</div>
+
+<h2>Bonus Tolerance — How It Works</h2>
+<p>When a position tolerance is applied at MMC, the actual geometric tolerance grows when the actual feature size deviates from MMC. The extra is called <strong>bonus tolerance</strong>.</p>
+
+<div class="formula-box">
+  <p><strong>Bonus Tolerance = | Actual Feature Size − MMC Size |</strong></p>
+  <p><strong>Total Position Tolerance = Specified Tolerance + Bonus Tolerance</strong></p>
+</div>
+
+<div class="example">
+  <p><strong>Worked example:</strong><br>
+  Drawing calls out: Hole ⌀10 +0.2/0, position ⌀0.15 Ⓓ relative to datums A|B|C.</p>
+  <p>Step 1 — Find MMC size:<br>
+  Hole is internal, so MMC = smallest size = ⌀10.0 (the lower limit).</p>
+  <p>Step 2 — Check the actual hole size after machining:</p>
+  <table>
+    <tr><th>Actual hole size</th><th>Bonus tolerance</th><th>Total position tolerance allowed</th></tr>
+    <tr><td>⌀10.0 (at MMC)</td><td>0.00</td><td>⌀0.15</td></tr>
+    <tr><td>⌀10.1</td><td>0.10</td><td>⌀0.25</td></tr>
+    <tr><td>⌀10.2 (at LMC)</td><td>0.20</td><td>⌀0.35</td></tr>
+  </table>
+  <p>So if you drill the hole a bit oversize (within the ⌀10–10.2 size tolerance), you get extra position tolerance for free. This makes functional sense: a bigger hole is easier to assemble a bolt into, so you can allow more location error.</p>
+</div>
+
+<h2>Virtual Condition</h2>
+<p>The <strong>virtual condition (VC)</strong> is the boundary that the mating part cannot violate. It's the effective worst-case size of the feature after considering both size tolerance and geometric tolerance.</p>
+
+<div class="formula-box">
+  <p><strong>External feature (shaft) at MMC:</strong><br>
+  VC = MMC size + Geometric tolerance (at MMC)</p>
+  <p><strong>Internal feature (hole) at MMC:</strong><br>
+  VC = MMC size − Geometric tolerance (at MMC)</p>
+</div>
+
+<div class="example">
+  <p><strong>Example:</strong> Hole ⌀10 +0.2/0, position ⌀0.15 Ⓓ.<br>
+  MMC = ⌀10.0<br>
+  VC = 10.0 − 0.15 = ⌀9.85<br><br>
+  This means the smallest boundary the hole must provide is ⌀9.85. Any bolt smaller than ⌀9.85 will always assemble, regardless of how the hole drifts within its position tolerance. This is the functional "go" boundary that a go/no-go gauge checks.</p>
+</div>
+
+<h2>Datum Shift</h2>
+<p>When a datum feature is referenced at MMC, the datum itself can shift within its tolerance zone. This is called <strong>datum shift</strong> — and it gives you even more effective tolerance.</p>
+
+<p>Example: Datum B is a ⌀8 ±0.1 hole referenced at MMC. When the datum hole is actually ⌀8.1 (larger than MMC of ⌀7.9), the datum feature simulator (the gage pin) can "float" up to 0.2 off nominal. This shift can compensate for position errors in other features — more parts assemble, even if individual holes aren't perfectly located.</p>
+
+<div class="callout">
+  <p><strong>Shop floor reality:</strong> datum shift is why CMM programs that measure holes at perfect nominal positions can report "out of tolerance" while the parts actually assemble fine. Functional gauges (go/no-go pins) account for MMC and datum shift automatically. CMM programs must be programmed with MMC bonus tolerance calculations to match.</p>
+</div>
+
+<h2>Basic Dimensions</h2>
+<p>A <strong>basic dimension</strong> is shown in a rectangle (e.g., ⌈50⌉) and is theoretically exact. It has <em>no tolerance of its own</em> — all the tolerance comes from the GD&amp;T control frame. If you see a dimension in a rectangle, it's the "true position" from which position tolerance is measured.</p>
+
+<table>
+  <tr><th>Type</th><th>Appearance</th><th>Tolerance</th></tr>
+  <tr><td>Regular dimension</td><td>50 ±0.1</td><td>±0.1 on the dimension itself</td></tr>
+  <tr><td>Basic dimension</td><td>⌈50⌉</td><td>None — controlled by GD&amp;T position/profile tolerance</td></tr>
+</table>
+
+<h2>Composite Position Tolerancing</h2>
+<p>On complex hole patterns (e.g., a bolt circle with multiple hole groups), a single position tolerance may be too loose for hole-to-hole spacing but too tight for pattern-to-datum location. <strong>Composite position</strong> splits this into two zones:</p>
+
+<svg viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg" style="max-width:360px;margin:16px auto;display:block;">
+  <rect x="20" y="15" width="40" height="30" fill="none" stroke="#17242f" stroke-width="1.5"/>
+  <text x="40" y="35" text-anchor="middle" font-size="14">◉</text>
+  <rect x="60" y="15" width="50" height="30" fill="none" stroke="#17242f" stroke-width="1.5"/>
+  <text x="85" y="35" text-anchor="middle" font-size="12">0.30</text>
+  <rect x="110" y="15" width="35" height="30" fill="none" stroke="#17242f" stroke-width="1.5"/>
+  <text x="127" y="35" text-anchor="middle" font-size="12">A B C</text>
+  <rect x="60" y="45" width="50" height="25" fill="none" stroke="#17242f" stroke-width="1.5"/>
+  <text x="85" y="62" text-anchor="middle" font-size="12">0.10</text>
+  <rect x="110" y="45" width="35" height="25" fill="none" stroke="#17242f" stroke-width="1.5"/>
+  <text x="127" y="62" text-anchor="middle" font-size="12">A B</text>
+  <text x="180" y="30" font-size="10" fill="#5c6872">Upper: pattern location vs datums (looser)</text>
+  <text x="180" y="58" font-size="10" fill="#5c6872">Lower: hole-to-hole within pattern (tighter)</text>
+</svg>
+
+<ul>
+  <li><strong>Upper line (pattern-locating tolerance):</strong> controls the whole pattern's location relative to datums — usually looser.</li>
+  <li><strong>Lower line (feature-relating tolerance):</strong> controls hole-to-hole spacing within the pattern — usually tighter.</li>
+</ul>
+
+<h2>How This Affects CNC Machining</h2>
+<div class="example">
+  <p><strong>Programming implications:</strong></p>
+  <ul>
+    <li>When drilling holes with a position Ⓓ callout, you don't need to hit perfect nominal — the MMC bonus tolerance gives you room. But you must control the hole size (drill reamer size) to maximize bonus.</li>
+    <li>If you're at the MMC limit (hole at smallest size), you have zero bonus — program to true position accurately.</li>
+    <li>If you deliberately drill slightly larger (within size tolerance), you gain position tolerance — useful when the machine can't hold tight location.</li>
+    <li>For inspection: CMM programs must apply MMC bonus tolerance when evaluating position. Measuring at nominal without bonus will over-reject parts.</li>
+  </ul>
+</div>
+
+<h2>Quick Decision Guide</h2>
+<table>
+  <tr><th>Drawing callout</th><th>What it means for you</th></tr>
+  <tr><td>◉ ⌀0.1 A B C (no Ⓓ)</td><td>RFS — position tolerance is fixed at any hole size. Program accurately.</td></tr>
+  <tr><td>◉ ⌀0.1 Ⓓ A B C</td><td>MMC — if hole is oversize, you get bonus tolerance. Check actual hole size before condemning.</td></tr>
+  <tr><td>◉ ⌀0.1 Ⓛ A B C</td><td>LMC — rare. Used to control minimum wall thickness. Bonus when hole is undersize.</td></tr>
+  <tr><td>⌈25⌉ in a box</td><td>Basic dimension — don't dimension from it directly; it's the true position.</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Related tools:</strong> see how tolerance stacks up across multiple features — <a href="../../../engineering-tools/tolerance-stackup-assistant/">Tolerance Stack-Up Calculator</a>. For fits and hole/shaft relationships — <a href="../../../engineering-tools/basic-fit-reference/">Basic Fit Reference</a>.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../gdt-symbols/">&larr; GD&amp;T Symbols</a>
+  <a href="../../#ch05">Knowledge Base &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

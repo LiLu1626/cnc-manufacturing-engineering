@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drawing Fundamentals | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch05" class="back-link">&larr; Back to 05 &middot; Engineering Drawings &amp; GD&amp;T</a>
+<div class="hero-eyebrow">05.1 &middot; Engineering Drawings &amp; GD&amp;T</div>
+<h1>Engineering Drawing Fundamentals</h1>
+
+<p>An engineering drawing is the legal document that communicates exactly what you're supposed to make. On the shop floor, the drawing is the contract — if it's not on the drawing, you don't make it. This page teaches you how to read a drawing like a machinist: where to look first, what every element means, and how to avoid the most common misunderstandings.</p>
+
+<h2>Why the Drawing Matters</h2>
+<p>A CNC programmer or machinist who misreads a drawing can scrap expensive material, build the wrong feature, or miss a critical tolerance. The drawing is not a suggestion — it specifies geometry, dimensions, tolerances, surface finish, material, heat treat, and inspection criteria. Before you touch any machine, you should be able to look at a drawing and answer: What are the critical features? Where are the datums? What tolerances are tight? What is the surface finish requirement?</p>
+
+<h2>Orthographic Projection — The Six Views</h2>
+<p>Most mechanical parts are shown in <strong>third-angle projection</strong> (standard in the US and ISO). The part is imagined inside a glass box, and each face is projected onto the wall. You typically use 3 views (front, top, right-side), but complex parts may need 6.</p>
+
+<svg viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg" style="max-width:520px;margin:16px auto;display:block;">
+  <!-- 6 views arranged in third-angle -->
+  <!-- Top view -->
+  <rect x="180" y="10" width="120" height="60" fill="none" stroke="#0b766e" stroke-width="1.5"/>
+  <text x="240" y="45" text-anchor="middle" font-size="11" fill="#5c6872">TOP VIEW</text>
+  <!-- Front view -->
+  <rect x="180" y="110" width="120" height="80" fill="none" stroke="#0b766e" stroke-width="1.5"/>
+  <text x="240" y="155" text-anchor="middle" font-size="11" fill="#5c6872">FRONT VIEW</text>
+  <!-- Right side view -->
+  <rect x="340" y="110" width="80" height="80" fill="none" stroke="#0b766e" stroke-width="1.5"/>
+  <text x="380" y="155" text-anchor="middle" font-size="11" fill="#5c6872">RIGHT SIDE</text>
+  <!-- Left side -->
+  <rect x="60" y="110" width="80" height="80" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="100" y="155" text-anchor="middle" font-size="10" fill="#999">LEFT</text>
+  <!-- Bottom -->
+  <rect x="180" y="220" width="120" height="50" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="240" y="248" text-anchor="middle" font-size="10" fill="#999">BOTTOM</text>
+  <!-- Back -->
+  <rect x="440" y="110" width="80" height="80" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="480" y="155" text-anchor="middle" font-size="10" fill="#999">BACK</text>
+</svg>
+
+<table>
+  <tr><th>View</th><th>Shows</th><th>When to use</th></tr>
+  <tr><td>Front view</td><td>Primary shape, most features</td><td>Always — the starting view</td></tr>
+  <tr><td>Top view</td><td>Width and depth</td><td>When features are on top/bottom</td></tr>
+  <tr><td>Right-side view</td><td>Height and depth</td><td>When side features need dimensioning</td></tr>
+  <tr><td>Section view</td><td>Internal features, holes, walls</td><td>When hidden lines get too confusing</td></tr>
+  <tr><td>Detail view</td><td>Magnified area (chamfer, thread, small feature)</td><td>When a small feature needs clear dimensions</td></tr>
+  <tr><td>Auxiliary view</td><td>True shape of an inclined surface</td><td>When a slanted face appears foreshortened</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Third-angle vs first-angle:</strong> Third-angle (US, ISO) = top view sits above front view, right-side view sits to the right. First-angle (Europe, ISO) = top view sits below front view. Look for the projection symbol in the title block to know which one you're reading.</p>
+</div>
+
+<h2>Section Views</h2>
+<p>When a part has internal features (holes, cavities, walls), hidden dashed lines get cluttered. A <strong>section view</strong> cuts the part open along a cutting plane line and shows the interior. Cut surfaces are hatched (section lining).</p>
+
+<table>
+  <tr><th>Section type</th><th>Use case</th></tr>
+  <tr><td>Full section</td><td>Cut all the way through — simple parts with one cutting plane</td></tr>
+  <tr><td>Half section</td><td>Show half exterior, half interior — symmetric parts</td></tr>
+  <tr><td>Offset section</td><td>Cutting plane bends to pass through multiple holes/features</td></tr>
+  <tr><td>Broken-out section</td><td>Small partial cut to show one hole or internal detail</td></tr>
+  <tr><td>Revolved section</td><td>Cross-section of a long part (shaft, bar) shown in place</td></tr>
+</table>
+
+<h2>Dimensions — The Language of the Drawing</h2>
+<p>Dimensions tell you the nominal size and the allowed variation. Every dimension on a drawing has three parts: <strong>nominal size</strong>, <strong>tolerance</strong>, and <strong>datum reference</strong>.</p>
+
+<h3>Types of Dimensions</h3>
+<table>
+  <tr><th>Type</th><th>Example</th><th>Meaning</th></tr>
+  <tr><td>Basic dimension</td><td><code>⌀25.000</code></td><td>Theoretically exact — no tolerance on the dimension itself; tolerance comes from GD&amp;T</td></tr>
+  <tr><td>Unilateral tolerance</td><td><code>25 +0.05/−0</code></td><td>Only one direction varies (upper or lower)</td></tr>
+  <tr><td>Bilateral tolerance</td><td><code>25 ±0.05</code></td><td>Can vary both directions equally</td></tr>
+  <tr><td>Limit dimension</td><td><code>24.95 / 25.05</code></td><td>Max and min size explicitly stated</td></tr>
+  <tr><td>Reference dimension</td><td><code>(50)</code></td><td>For information only — not inspected, derived from other dims</td></tr>
+</table>
+
+<h3>Dimension Placement Rules</h3>
+<ul>
+  <li><strong>Dimension from the view that shows the true shape</strong> — don't dimension a circle from a side view where it looks like a rectangle.</li>
+  <li><strong>Chain dimensions vs baseline:</strong> chain dimensions (end-to-end) accumulate tolerances; baseline (all from one edge) avoids accumulation but may be less intuitive. Good drawings mix both deliberately.</li>
+  <li><strong>Don't dimension to hidden lines</strong> — if a feature needs a dimension, use a section or detail view.</li>
+  <li><strong>Each feature dimensioned once</strong> — never the same size from two views with different values.</li>
+  <li><strong>Leave machining stock out of the drawing</strong> — the drawing shows final dimensions only.</li>
+</ul>
+
+<div class="warning">
+  <p><strong>Common mistake:</strong> don't assume a dimension without a tolerance uses ±0. The tolerance is in the title block (e.g., "X.X ±0.1, X.XX ±0.025, X.XXX ±0.005"). Always read the title block tolerance first.</p>
+</div>
+
+<h2>Datums — The Reference Frame</h2>
+<p>A datum is a theoretically exact plane, axis, or point from which other dimensions are measured. On a drawing, datums are shown as letters in boxes (A, B, C…) connected to a surface or feature. When you set up a part on the machine, you establish these datums physically — with a vise, a stop, or an indicator.</p>
+
+<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="max-width:360px;margin:16px auto;display:block;">
+  <!-- Block with datum A on bottom, B on left, C on right hole -->
+  <rect x="120" y="60" width="160" height="100" fill="none" stroke="#0b766e" stroke-width="1.5"/>
+  <!-- Datum A arrow to bottom -->
+  <line x1="200" y1="160" x2="200" y2="185" stroke="#17242f" stroke-width="1"/>
+  <rect x="185" y="185" width="30" height="18" fill="none" stroke="#17242f" stroke-width="1"/>
+  <text x="200" y="198" text-anchor="middle" font-size="11" font-weight="bold">A</text>
+  <!-- Datum B arrow to left -->
+  <line x1="120" y1="110" x2="90" y2="110" stroke="#17242f" stroke-width="1"/>
+  <rect x="60" y="101" width="30" height="18" fill="none" stroke="#17242f" stroke-width="1"/>
+  <text x="75" y="114" text-anchor="middle" font-size="11" font-weight="bold">B</text>
+  <!-- Hole with datum C -->
+  <circle cx="200" cy="110" r="12" fill="none" stroke="#0b766e" stroke-width="1.5"/>
+  <line x1="212" y1="110" x2="260" y2="80" stroke="#17242f" stroke-width="1"/>
+  <rect x="260" y="68" width="30" height="18" fill="none" stroke="#17242f" stroke-width="1"/>
+  <text x="275" y="81" text-anchor="middle" font-size="11" font-weight="bold">C</text>
+</svg>
+
+<p>The <strong>datum reference frame (DRF)</strong> — usually A|B|C — tells you the order of importance:</p>
+<table>
+  <tr><th>Datum</th><th>Typical role</th><th>How you establish it on the machine</th></tr>
+  <tr><td>Datum A (primary)</td><td>The main locating surface — usually the largest flat face</td><td>Place the part flat on the mill table, fixture, or vise jaws</td></tr>
+  <tr><td>Datum B (secondary)</td><td>Constrains rotation / one direction</td><td>Push against a stop, edge finder, or vice jaw</td></tr>
+  <tr><td>Datum C (tertiary)</td><td>Constrains the last degree of freedom</td><td>A second stop or a pin in a hole</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Why datum order matters:</strong> if the drawing says A|B|C, you must set up on A first, then B, then C. Reversing the order can change which dimensions are actually controlled. This is the #1 cause of setup-related part rejections.</p>
+</div>
+
+<h2>Surface Finish Symbols</h2>
+<p>A surface finish symbol (check mark with a number) tells you the required roughness. The number is usually Ra in micrometers or microinches.</p>
+<table>
+  <tr><th>Symbol</th><th>Ra (µm)</th><th>Ra (µin)</th><th>Typical process</th></tr>
+  <tr><td>No symbol</td><td>—</td><td>—</td><td>As-machined, no finish requirement</td></tr>
+  <tr><td>3.2</td><td>3.2</td><td>125</td><td>Standard milling/turning</td></tr>
+  <tr><td>1.6</td><td>1.6</td><td>63</td><td>Finishing pass, light feed</td></tr>
+  <tr><td>0.8</td><td>0.8</td><td>32</td><td>Fine finish — reduced feed, sharp tool</td></tr>
+  <tr><td>0.4</td><td>0.4</td><td>16</td><td>Grinding or fine boring</td></tr>
+  <tr><td>0.1</td><td>0.1</td><td>4</td><td>Precision grinding / lapping</td></tr>
+</table>
+<p>Convert between Ra, Rz, and RMS: <a href="../../../engineering-tools/surface-finish-conversion/">Surface Finish Conversion Tool</a></p>
+
+<h2>Title Block and Notes</h2>
+<p>The title block (usually bottom-right) contains critical information you must read before machining:</p>
+<table>
+  <tr><th>Item</th><th>What it tells you</th></tr>
+  <tr><td>Part name / number</td><td>What you're making — verify this matches the work order</td></tr>
+  <tr><td>Material</td><td>Aluminum 6061-T6, Steel 4140, etc. — drives speed/feed choices</td></tr>
+  <tr><td>Heat treat</td><td>HRC 28–32, anodize, passivate — affects tooling and final size</td></tr>
+  <tr><td>Drawn by / date / revision</td><td>Revision letter matters — never machine from an old rev</td></tr>
+  <tr><td>General tolerances</td><td>Default tolerance for dimensions without explicit tolerance</td></tr>
+  <tr><td>Projection symbol</td><td>Third-angle or first-angle</td></tr>
+  <tr><td>Scale / units</td><td>MM or IN — never assume</td></tr>
+</table>
+
+<p><strong>General notes</strong> (usually upper-left) include instructions like: "Remove burrs", "Break sharp edges 0.2 max", "Do not scale drawing", "All dimensions in mm". Read these — they apply to every feature.</p>
+
+<h2>How to Read a Drawing — Workflow</h2>
+<div class="example">
+  <p><strong>A systematic approach every time:</strong></p>
+  <ol>
+    <li><strong>Title block:</strong> material, heat treat, revision, units, general tolerances.</li>
+    <li><strong>Notes:</strong> read all general notes and local notes.</li>
+    <li><strong>Overall size:</strong> what's the bounding box? How big is the raw stock?</li>
+    <li><strong>Critical features:</strong> which dimensions have tight tolerances? Which surfaces have finish symbols? Which datums are referenced?</li>
+    <li><strong>Feature list:</strong> holes (size, depth, tolerance), pockets, slots, threads, chamfers, radii.</li>
+    <li><strong>GD&amp;T callouts:</strong> position, profile, runout — read these carefully (next article).</li>
+    <li><strong>Inspection:</strong> how will the part be checked? CMM? Height gauge? Go/no-go gauge? This tells you which features really matter.</li>
+  </ol>
+</div>
+
+<div class="callout">
+  <p><strong>Related tools:</strong> tolerance and fit concepts — <a href="../../../engineering-tools/basic-fit-reference/">Basic Fit Reference</a>; tolerance stack-up analysis — <a href="../../../engineering-tools/tolerance-stackup-assistant/">Tolerance Stack-Up Calculator</a>.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../../#ch05">&larr; Knowledge Base</a>
+  <a href="../gdt-symbols/">Next: GD&amp;T Symbols &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

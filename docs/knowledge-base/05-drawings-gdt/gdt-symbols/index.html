@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GD&T Symbols | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch05" class="back-link">&larr; Back to 05 &middot; Engineering Drawings &amp; GD&amp;T</a>
+<div class="hero-eyebrow">05.2 &middot; Engineering Drawings &amp; GD&amp;T</div>
+<h1>GD&amp;T Symbols Explained</h1>
+
+<p>Geometric Dimensioning and Tolerancing (GD&amp;T) is the language that controls <em>how features relate to each other</em>, not just how big they are. A simple dimension says "this hole is ⌀10 ±0.05". GD&amp;T says "this hole must be within ⌀0.05 of the exact theoretical location, relative to datums A and B." That difference is what makes parts actually fit and function.</p>
+
+<h2>The Feature Control Frame</h2>
+<p>Every GD&amp;T callout appears as a rectangular box divided into cells. Reading left to right:</p>
+
+<svg viewBox="0 0 500 60" xmlns="http://www.w3.org/2000/svg" style="max-width:460px;margin:16px auto;display:block;">
+  <!-- FCF example: Position | ⌀ | 0.05 | M | A | B | C -->
+  <rect x="20" y="15" width="50" height="30" fill="none" stroke="#17242f" stroke-width="1.5"/>
+  <text x="45" y="35" text-anchor="middle" font-size="14" fill="#0b766e">◉</text>
+  <rect x="70" y="15" width="40" height="30" fill="none" stroke="#17242f" stroke-width="1.5"/>
+  <text x="90" y="35" text-anchor="middle" font-size="13">⌀</text>
+  <rect x="110" y="15" width="55" height="30" fill="none" stroke="#17242f" stroke-width="1.5"/>
+  <text x="137" y="35" text-anchor="middle" font-size="13">0.05</text>
+  <rect x="165" y="15" width="30" height="30" fill="none" stroke="#17242f" stroke-width="1.5"/>
+  <text x="180" y="35" text-anchor="middle" font-size="13">Ⓓ</text>
+  <rect x="195" y="15" width="35" height="30" fill="none" stroke="#17242f" stroke-width="1.5"/>
+  <text x="212" y="35" text-anchor="middle" font-size="13">A</text>
+  <rect x="230" y="15" width="35" height="30" fill="none" stroke="#17242f" stroke-width="1.5"/>
+  <text x="247" y="35" text-anchor="middle" font-size="13">B</text>
+  <rect x="265" y="15" width="35" height="30" fill="none" stroke="#17242f" stroke-width="1.5"/>
+  <text x="282" y="35" text-anchor="middle" font-size="13">C</text>
+  <!-- Labels -->
+  <text x="45" y="58" text-anchor="middle" font-size="9" fill="#5c6872">Symbol</text>
+  <text x="90" y="58" text-anchor="middle" font-size="9" fill="#5c6872">⌀?</text>
+  <text x="137" y="58" text-anchor="middle" font-size="9" fill="#5c6872">Tolerance</text>
+  <text x="180" y="58" text-anchor="middle" font-size="9" fill="#5c6872">M/L/R</text>
+  <text x="247" y="58" text-anchor="middle" font-size="9" fill="#5c6872">Datums</text>
+</svg>
+
+<table>
+  <tr><th>Cell</th><th>Meaning</th></tr>
+  <tr><td>Symbol</td><td>Which geometric characteristic (position, flatness, etc.)</td></tr>
+  <tr><td>⌀ (optional)</td><td>Tolerance zone is cylindrical (for position of holes). Without it, zone is two parallel planes.</td></tr>
+  <tr><td>Tolerance value</td><td>Size of the tolerance zone. If preceded by ⌀, it's the diameter of a cylindrical zone.</td></tr>
+  <tr><td>Ⓜ / Ⓛ / Ⓡ</td><td>MMC, LMC, or RFS modifier (explained in next article)</td></tr>
+  <tr><td>Datums (A|B|C)</td><td>The datum reference frame — order matters</td></tr>
+</table>
+
+<h2>The 14 GD&T Symbols — Grouped by Type</h2>
+
+<h3>Form Controls (no datums needed)</h3>
+<p>Form controls describe the shape of a single feature independently. They don't reference datums because they say "this surface itself must be flat/straight/round" regardless of where it sits.</p>
+
+<table>
+  <tr><th>Symbol</th><th>Name</th><th>Controls</th><th>Typical use</th></tr>
+  <tr><td><code>—</code></td><td>Straightness</td><td>Line element — must lie within a tolerance zone</td><td>Straightness of a shaft, no bow</td></tr>
+  <tr><td><code>▱</code></td><td>Flatness</td><td>Surface — all points within two parallel planes</td><td>Mating surfaces, fixture surfaces</td></tr>
+  <tr><td><code>○</code></td><td>Circularity (roundness)</td><td>Each cross-section must be within two concentric circles</td><td>Shaft diameters, bore circularity</td></tr>
+  <tr><td><code>⌭</code></td><td>Cylindricity</td><td>Entire surface — combined roundness + straightness + taper</td><td>Precision bearing journals, hydraulic bores</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Flatness vs parallelism:</strong> flatness says the surface itself is flat (no datum). Parallelism says the surface is parallel to datum A (a relationship). A surface can be flat but tilted — parallelism catches that, flatness doesn't.</p>
+</div>
+
+<h3>Orientation Controls (need datums)</h3>
+<p>Orientation controls describe the angle between a feature and a datum.</p>
+
+<table>
+  <tr><th>Symbol</th><th>Name</th><th>Controls</th><th>Typical use</th></tr>
+  <tr><td><code>//</code></td><td>Parallelism</td><td>Surface/axis parallel to datum plane/axis</td><td>Parallel faces, slot walls</td></tr>
+  <tr><td><code>⟂</code></td><td>Perpendicularity</td><td>Surface/axis at 90° to datum</td><td>Square shoulders, hole axes vs face</td></tr>
+  <tr><td><code>∠</code></td><td>Angularity</td><td>Surface/axis at a specified angle to datum</td><td>Wedges, chamfers, angled faces</td></tr>
+</table>
+
+<h3>Location Controls</h3>
+
+<table>
+  <tr><th>Symbol</th><th>Name</th><th>Controls</th><th>Typical use</th></tr>
+  <tr><td><code>◉</code></td><td>Position</td><td>Location of features (holes, pins) from datums</td><td>Bolt hole patterns — the most common GD&amp;T callout</td></tr>
+  <tr><td><code>◎</code></td><td>Concentricity</td><td>Axes of features around a datum axis</td><td>Rotating parts — spindles, bearing journals</td></tr>
+  <tr><td><code>⫛</code></td><td>Symmetry</td><td>Feature centered about a datum centerplane</td><td>Slots symmetric about a centerline</td></tr>
+</table>
+
+<div class="warning">
+  <p><strong>Position is the workhorse.</strong> On most machined parts, 80% of GD&amp;T callouts are position. It controls hole location in a cylindrical tolerance zone. Instead of checking X=25±0.05 and Y=15±0.05 separately, position says the hole center must lie within a ⌀0.1 cylinder at the true position. This is more functional and allows bonus tolerance (explained next article).</p>
+</div>
+
+<h3>Profile Controls</h3>
+<table>
+  <tr><th>Symbol</th><th>Name</th><th>Controls</th><th>Typical use</th></tr>
+  <tr><td><code>⌒</code></td><td>Profile of a line</td><td>2D cross-section shape along one line</td><td>Cam profiles, contoured edges</td></tr>
+  <tr><td><code>⌒</code> (filled)</td><td>Profile of a surface</td><td>3D surface shape over the entire feature</td><td>Complex cast/machined surfaces, molds</td></tr>
+</table>
+<p>Profile is the most flexible control — it can simultaneously control size, form, orientation, and location. It's widely used on castings and contoured parts where no single dimension captures the shape.</p>
+
+<h3>Runout Controls</h3>
+<table>
+  <tr><th>Symbol</th><th>Name</th><th>Controls</th><th>Typical use</th></tr>
+  <tr><td><code>↗</code></td><td>Circular runout</td><td>Each individual cross-section during rotation</td><td>Shafts, bearing surfaces — catches lobing, eccentricity per revolution</td></tr>
+  <tr><code>↗</code> (double)</td><td>Total runout</td><td>Entire surface during rotation (cumulative)</td><td>Entire shaft surface — catches taper, ovality, and cumulative error</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Runout in practice:</strong> to check runout, mount the part between centers or in a fixture on a rotary axis, place a dial indicator on the surface, and rotate. The total indicator variation is the runout. Circular runout checks one cross-section at a time; total runout sweeps the indicator along the whole surface.</p>
+</div>
+
+<h2>Practical Example: A Bolt Hole Pattern</h2>
+<p>Consider a flange with 4 holes on a 50 mm bolt circle. The drawing shows:</p>
+<div class="example">
+  <p><strong>Without GD&amp;T:</strong><br>
+  Hole positions dimensioned as X=25±0.1, Y=25±0.1 for each hole. This creates square tolerance zones that accumulate — a hole could be at the corner of the square and still "pass", but the mating bolt wouldn't fit.</p>
+  <p><strong>With GD&amp;T position:</strong><br>
+  <code>◉ ⌀0.15 Ⓜ A B C</code><br>
+  Each hole's center must lie within a ⌀0.15 cylindrical tolerance zone at the true (basic) position. This is functionally correct — if a bolt fits the tolerance zone, it will assemble. Plus, with MMC, you get bonus tolerance when the hole is larger than its minimum size.</p>
+</div>
+
+<h2>Which Control to Use — Quick Reference</h2>
+<table>
+  <tr><th>If you need to control...</th><th>Use</th></tr>
+  <tr><td>A flat surface is flat (no reference)</td><td>Flatness</td></tr>
+  <tr><td>A surface is flat AND parallel to another</td><td>Parallelism</td></tr>
+  <tr><td>A surface is square to another</td><td>Perpendicularity</td></tr>
+  <tr><td>Hole location relative to datums</td><td>Position</td></tr>
+  <tr><td>A shaft doesn't wobble when turned</td><td>Circular runout</td></tr>
+  <tr><td>A whole turned surface is straight and round</td><td>Total runout / cylindricity</td></tr>
+  <tr><td>A complex curved surface shape</td><td>Profile of a surface</td></tr>
+  <tr><td>A hole axis is perpendicular to a face</td><td>Perpendicularity (of axis) or position</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Next:</strong> learn how MMC, LMC, and bonus tolerance give you extra tolerance when the feature deviates from maximum material condition — <a href="../mmc-lmc-bonus-tolerance/">MMC / LMC / Bonus Tolerance</a>.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../drawing-fundamentals/">&larr; Drawing Fundamentals</a>
+  <a href="../mmc-lmc-bonus-tolerance/">Next: MMC &amp; Bonus Tolerance &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>
