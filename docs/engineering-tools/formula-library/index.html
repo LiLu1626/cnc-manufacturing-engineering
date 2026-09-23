@@ -1,0 +1,35 @@
+---
+title: Formula Library
+---
+
+<article class="tool-page">
+  <header class="tool-header">
+    <p class="eyebrow">Reference · Released</p>
+    <h1>Formula Library</h1>
+    <p>All CNC machining formulas in one place. Search or browse by category. Each formula links to its calculator tool. Bookmark this page for quick reference on the shop floor.</p>
+  </header>
+
+  <section class="tool-card">
+    <div class="field" style="margin-bottom:1rem;">
+      <label for="searchBox">Search formulas</label>
+      <input id="searchBox" type="text" placeholder="e.g. rpm, feed, taper, thread..." />
+    </div>
+    <div id="formulaList"></div>
+  </section>
+
+  <section class="formula">
+    <h2>How to use this page</h2>
+    <p>Type a keyword to filter. Each card shows the formula in plain language. Click the tool name to open the calculator. All formulas use:</p>
+    <ul>
+      <li>D = diameter (mm), R = radius (mm), L = length (mm)</li>
+      <li>Vc = cutting speed (m/min), f = feed (mm/rev or mm/tooth)</li>
+      <li>P = pitch (mm), θ = angle (degrees)</li>
+      <li>RPM = spindle speed, π ≈ 3.14159</li>
+    </ul>
+  </section>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</article>
+
+<link rel="stylesheet" href="styles.css" />
+<script src="calculator.js" defer></script>
