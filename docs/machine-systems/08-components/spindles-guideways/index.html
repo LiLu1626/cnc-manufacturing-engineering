@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spindles &amp; Guideways | Machine Components</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../" class="active">Machine Systems</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch08" class="back-link">&larr; Back to 08 &middot; Machine Components</a>
+<div class="hero-eyebrow">08.1 &middot; Machine Components</div>
+<h1>Spindles &amp; Guideways</h1>
+
+<p>Every machine has the same core components. Understanding them helps you compare machines, diagnose problems, and know where accuracy comes from.</p>
+
+<h2>Spindle Systems</h2>
+<table>
+  <tr><th>Drive type</th><th>Speed range</th><th>Torque</th><th>Typical use</th></tr>
+  <tr><td>Gear-driven</td><td>Low RPM, high torque</td><td>Very high</td><td>Heavy cutting, big lathes</td></tr>
+  <tr><td>Belt-driven</td><td>Mid range (0–15k RPM)</td><td>Good</td><td>General milling, turning</td></tr>
+  <tr><td>Direct-drive</td><td>High RPM (12–24k)</td><td>Mid</td><td>Molds, aluminum</td></tr>
+  <tr><td>Motorized / built-in</td><td>Very high (20–40k+)</td><td>Low</td><td>High-speed small tools</td></tr>
+</table>
+
+<h2>Guideways</h2>
+<table>
+  <tr><th></th><th>Box Ways</th><th>Linear Guideways</th></tr>
+  <tr><td>Damping / rigidity</td><td>Excellent</td><td>Moderate</td></tr>
+  <tr><td>Speed</td><td>Slower</td><td>Fast</td></tr>
+  <tr><td>Wear life</td><td>Decades, re-scrapable</td><td>Cartridge replacement</td></tr>
+  <tr><td>Best for</td><td>Heavy steel, cast iron</td><td>Light fast cuts, aluminum</td></tr>
+</table>
+
+<h2>Other Key Components</h2>
+<table>
+  <tr><th>Part</th><th>Function</th></tr>
+  <tr><td><strong>Ballscrews</strong></td><td>Convert rotary motor motion to linear axis motion. Preloaded to eliminate backlash.</td></tr>
+  <tr><td><strong>Linear scales (encoders)</strong></td><td>Direct position feedback on the axis. Without them, the controller estimates position from motor rotation (less accurate).</td></tr>
+  <tr><td><strong>Servo motors</strong></td><td>Drive each axis; closed-loop feedback on position and torque.</td></tr>
+  <tr><td><strong>Coolant / chip systems</strong></td><td>High-pressure coolant breaks chips; chip conveyors remove them.</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Linear scales = direct feedback.</strong> A machine without them is "semi-closed loop" — position is estimated from motor rotation, not directly measured. On a budget VMC this is fine; on a precision machine, glass scales are a must.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../../#ch08">Back to Chapter 08 &uarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

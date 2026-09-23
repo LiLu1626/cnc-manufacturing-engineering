@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machine Troubleshooting Guide | Machine Systems</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../" class="active">Machine Systems</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch12" class="back-link">&larr; Back to 12 &middot; Machine Troubleshooting</a>
+<div class="hero-eyebrow">12.1 &middot; Machine Troubleshooting</div>
+<h1>Machine Troubleshooting Guide</h1>
+
+<p>When a machine acts up, don't start replacing parts. Work the problem systematically: observe the symptom, list possible causes, check the easy things first, then dig deeper.</p>
+
+<h2>Structured Method</h2>
+<div class="formula-box">
+  <p><strong>Symptom</strong> → What exactly is happening?<br>
+  <strong>Possible Causes</strong> → What could cause this?<br>
+  <strong>Diagnostic Checks</strong> → What can I measure?<br>
+  <strong>Corrective Action</strong> → What fixes it?<br>
+  <strong>Prevention</strong> → How do we stop it recurring?</p>
+</div>
+
+<h2>Common Problems</h2>
+<table>
+  <tr><th>Symptom</th><th>Common causes</th><th>First check</th></tr>
+  <tr><td>Poor surface finish / chatter</td><td>Tool wear, deflection, loose fixturing, spindle bearing</td><td>Is the tool sharp? Is the part rigid?</td></tr>
+  <tr><td>Dimensional drift</td><td>Thermal growth, worn ballscrew, lube issue</td><td>Did the machine warm up? Check after 30 min.</td></tr>
+  <tr><td>Alarm on axis move</td><td>Overtravel, servo fault, encoder error</td><td>Read the alarm code — don't just reset</td></tr>
+  <tr><td>Tool changer failure</td><td>Air pressure low, misaligned pot, jammed chip</td><td>Air pressure? Any chip in the drum?</td></tr>
+  <tr><td>Chuck not holding</td><td>Clamp pressure low, worn jaws, hydraulic leak</td><td>Gauge the chuck pressure</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Start with the obvious.</strong> 80% of "machine problems" are low air pressure, empty lube tank, a chip jam, or a dull tool. Check these before calling a technician. Read the alarm code — controllers tell you exactly what's wrong if you look.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../../#ch12">Back to Chapter 12 &uarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

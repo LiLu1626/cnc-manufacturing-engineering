@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accuracy vs Repeatability | Machine Accuracy</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../" class="active">Machine Systems</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch10" class="back-link">&larr; Back to 10 &middot; Accuracy &amp; Performance</a>
+<div class="hero-eyebrow">10.1 &middot; Accuracy &amp; Performance</div>
+<h1>Accuracy vs Repeatability</h1>
+
+<p>These two numbers are on every spec sheet, but people confuse them constantly. Accuracy is how close you are to the truth. Repeatability is how consistent you are.</p>
+
+<h2>The Analogy</h2>
+<svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg" style="max-width:500px;width:100%;margin:1rem auto;display:block;">
+  <!-- target 1: accurate and precise -->
+  <circle cx="100" cy="80" r="45" fill="none" stroke="#ccc" stroke-width="2"/>
+  <circle cx="100" cy="80" r="25" fill="none" stroke="#ccc" stroke-width="1.5"/>
+  <circle cx="100" cy="80" r="5" fill="#0b766e"/>
+  <circle cx="95" cy="78" r="4" fill="#0b766e"/>
+  <circle cx="105" cy="83" r="4" fill="#0b766e"/>
+  <text x="100" y="155" text-anchor="middle" font-size="12" fill="#17242f">Accurate + Precise</text>
+  <!-- target 2: precise but not accurate -->
+  <circle cx="250" cy="80" r="45" fill="none" stroke="#ccc" stroke-width="2"/>
+  <circle cx="250" cy="80" r="25" fill="none" stroke="#ccc" stroke-width="1.5"/>
+  <circle cx="280" cy="60" r="4" fill="#c0392b"/>
+  <circle cx="278" cy="65" r="4" fill="#c0392b"/>
+  <circle cx="283" cy="63" r="4" fill="#c0392b"/>
+  <text x="250" y="155" text-anchor="middle" font-size="12" fill="#17242f">Precise, not accurate</text>
+  <!-- target 3: accurate-ish but not precise -->
+  <circle cx="400" cy="80" r="45" fill="none" stroke="#ccc" stroke-width="2"/>
+  <circle cx="400" cy="80" r="25" fill="none" stroke="#ccc" stroke-width="1.5"/>
+  <circle cx="380" cy="70" r="4" fill="#e67e22"/>
+  <circle cx="420" cy="90" r="4" fill="#e67e22"/>
+  <circle cx="395" cy="95" r="4" fill="#e67e22"/>
+  <text x="400" y="155" text-anchor="middle" font-size="12" fill="#17242f">Accurate, not precise</text>
+</svg>
+
+<h2>Key Terms</h2>
+<table>
+  <tr><th>Term</th><th>Meaning</th></tr>
+  <tr><td><strong>Positioning Accuracy</strong></td><td>How close the commanded position is to actual position across the travel. Usually ±0.005–0.02 mm.</td></tr>
+  <tr><td><strong>Repeatability</strong></td><td>How consistently the machine returns to the same position. Usually ±0.002–0.005 mm.</td></tr>
+  <tr><td><strong>Backlash</strong></td><td>Lost motion when an axis reverses direction. Worn ballscrews increase it.</td></tr>
+  <tr><td><strong>Thermal growth</strong></td><td>Spindle and axes expand as they warm up, shifting positions.</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Repeatability is more important for production.</strong> You can calibrate out systematic errors (laser compensation). What you can't fix is random scatter. A machine that consistently makes parts 0.02 mm over — but always by the same amount — is fine. A machine that varies ±0.03 mm randomly is scrap.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../../#ch10">Back to Chapter 10 &uarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

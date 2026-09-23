@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machine Selection Guide | Machine Systems</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../" class="active">Machine Systems</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch13" class="back-link">&larr; Back to 13 &middot; Machine Selection</a>
+<div class="hero-eyebrow">13.1 &middot; Machine Selection</div>
+<h1>Machine Selection Guide</h1>
+
+<p>Choosing a machine is one of the biggest decisions a shop makes. It's not about buying the most expensive or most capable machine — it's about matching the machine to the parts you actually make.</p>
+
+<h2>Decision Factors</h2>
+<table>
+  <tr><th>Factor</th><th>Questions to ask</th></tr>
+  <tr><td><strong>Part geometry</strong></td><td>Cylindrical? Prismatic? Complex 3D?</td></tr>
+  <tr><td><strong>Part size &amp; weight</strong></td><td>Diameter/length? Does it need a VTL or lathe? Table load?</td></tr>
+  <tr><td><strong>Material</strong></td><td>Aluminum (high speed) or steel (high torque)?</td></tr>
+  <tr><td><strong>Tolerances</strong></td><td>±0.05 mm or ±0.005 mm? Drives accuracy class.</td></tr>
+  <tr><td><strong>Operations needed</strong></td><td>Turning only, or turn-mill? Drilling? Grinding?</td></tr>
+  <tr><td><strong>Production volume</strong></td><td>One-off (VMC fine) or 10,000/year (HMC + automation)?</td></tr>
+  <tr><td><strong>Budget &amp; ROI</strong></td><td>What's the payback? Can you use existing tooling?</td></tr>
+</table>
+
+<h2>Quick Decision Tree</h2>
+<div class="formula-box">
+  <p><strong>Part is cylindrical?</strong><br>
+  &nbsp;&nbsp;→ Short, large diameter, heavy? → <strong>VTL</strong><br>
+  &nbsp;&nbsp;→ Long, small diameter? → <strong>Horizontal CNC lathe</strong><br><br>
+  <strong>Part is prismatic?</strong><br>
+  &nbsp;&nbsp;→ One-off, plates, molds? → <strong>VMC</strong><br>
+  &nbsp;&nbsp;→ Production, multi-sided? → <strong>HMC</strong><br>
+  &nbsp;&nbsp;→ Complex 3D surfaces? → <strong>5-axis</strong><br><br>
+  <strong>Need precision on hardened parts?</strong> → <strong>Grinder</strong><br>
+  <strong>Need internal corners in hard material?</strong> → <strong>EDM</strong></p>
+</div>
+
+<div class="example">
+  <p><strong>Example: A shop grows from prototype to production</strong></p>
+  <p>Job shop starts with a VMC — perfect for one-offs and prototypes. As production volumes grow, they're flipping parts 4 times on the VMC and losing money. The next investment is an HMC with a pallet changer: load 4 parts, walk away, come back to finished parts. The VMC stays for prototypes. Neither machine replaces the other — they serve different jobs.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../../#ch13">Back to Chapter 13 &uarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

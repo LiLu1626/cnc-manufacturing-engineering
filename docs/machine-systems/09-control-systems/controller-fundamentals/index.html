@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CNC Controller Fundamentals | Machine Systems</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../" class="active">Machine Systems</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch09" class="back-link">&larr; Back to 09 &middot; CNC Control Systems</a>
+<div class="hero-eyebrow">09.1 &middot; CNC Control Systems</div>
+<h1>CNC Controller Fundamentals</h1>
+
+<p>The controller is the brain of the machine. It reads your G-code, interpolates axis movements, manages the spindle, and handles alarms. This section covers what the controller does — not how to program it (that's CNC Programming).</p>
+
+<h2>Controller Architecture</h2>
+<table>
+  <tr><th>Layer</th><th>What it does</th></tr>
+  <tr><td><strong>HMI (Human Machine Interface)</strong></td><td>Screen, keyboard, handwheel — what the operator touches</td></tr>
+  <tr><td><strong>NC Kernel</strong></td><td>Reads G-code, interpolates tool path, computes axis commands</td></tr>
+  <tr><td><strong>PLC (Logic Controller)</strong></td><td>Handles machine logic: tool changes, coolant, chuck, guards — not tool path</td></tr>
+  <tr><td><strong>Servo Drives</strong></td><td>Amplify commands to motors; close position loop</td></tr>
+</table>
+
+<h2>Major Controller Brands</h2>
+<table>
+  <tr><th>Brand</th><th>Known for</th></tr>
+  <tr><td><strong>Fanuc</strong></td><td>Dominant in Japan/Asia, ultra-reliable, simple, common on Haas</td></tr>
+  <tr><td><strong>Siemens</strong></td><td>European, powerful, complex, good for high-end 5-axis</td></tr>
+  <tr><td><strong>Heidenhain</strong></td><td>German, premium, excellent for mold/die and 5-axis, conversational</td></tr>
+  <tr><td><strong>Haas</strong></td><td>Simplified Fanuc-style, easy to learn, common in job shops</td></tr>
+</table>
+
+<h2>What Every Operator Should Know</h2>
+<ul>
+  <li><strong>Offsets:</strong> Work offsets (G54) set part zero; tool offsets set tool length/diameter.</li>
+  <li><strong>Alarms:</strong> The controller tells you what's wrong. Read the alarm code — don't just press reset.</li>
+  <li><strong>Diagnostics:</strong> Servo load, spindle load, axis positions are visible on the HMI. Use them to diagnose problems.</li>
+</ul>
+
+<div class="warning">
+  <p><strong>Machine parameters are factory settings — don't tweak them casually.</strong> They define servo tuning, backlash compensation, travel limits, and safety interlocks. Changing them without training can crash the machine. This site does not publish OEM parameter backups or PLC ladder logic.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../../#ch09">Back to Chapter 09 &uarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>
