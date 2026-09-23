@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canned Cycles | CNC Programming</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../" class="active">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch03" class="back-link">&larr; Back to Level 3 · Offsets &amp; Compensation</a>
+<div class="hero-eyebrow">03.3 · Canned Cycles</div>
+<h1>Canned Cycles</h1>
+
+<p>Drilling, pecking, tapping, boring — these repeated motions are packaged into single-line "canned cycles." Instead of writing 10 lines for each hole, you write one line and repeat.</p>
+
+<h2>Common Drilling Cycles</h2>
+<table>
+  <tr><th>Cycle</th><th>What it does</th><th>Use for</th></tr>
+  <tr><td><strong>G81</strong></td><td>Drill straight down, rapid out</td><td>Shallow holes, center drills</td></tr>
+  <tr><td><strong>G82</strong></td><td>Drill, dwell at bottom, retract</td><td>Spot faces, bottoming drills</td></tr>
+  <tr><td><strong>G83</strong></td><td>Peck drill: drill in, retract to clear chips, repeat</td><td>Deep holes, chip evacuation</td></tr>
+  <tr><td><strong>G84</strong></td><td>Rigid tapping</td><td>Tapping threads</td></tr>
+  <tr><td><strong>G85</strong></td><td>Bore: feed in, feed out</td><td>Reaming, boring</td></tr>
+  <tr><td><strong>G80</strong></td><td>Cancel canned cycle</td><td>After all holes done</td></tr>
+</table>
+
+<h2>Typical Cycle Structure</h2>
+<div class="formula-box">
+<pre style="margin:0;font-family:monospace;font-size:13px;line-height:1.7;">
+G90 G54 G00 X0 Y0 S2000 M03
+G43 H01 Z50. M08
+G81 G99 X20. Y20. Z-15. R5. F100.
+X40. Y20.
+X60. Y20.
+G80 M09
+G91 G28 Z0
+M30</pre>
+</div>
+
+<h2>Cycle Parameters</h2>
+<table>
+  <tr><th>Parameter</th><th>Meaning</th></tr>
+  <tr><td><code>X__ Y__</code></td><td>Hole position</td></tr>
+  <tr><td><code>Z__</code></td><td>Final hole depth</td></tr>
+  <tr><td><code>R__</code></td><td>R plane — where tool starts feeding and retracts to</td></tr>
+  <tr><td><code>F__</code></td><td>Feed rate</td></tr>
+  <tr><td><code>G98/G99</code></td><td>Retract to initial plane (G98) or R plane (G99)</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>G80 cancels the cycle.</strong> Without G80, the machine keeps drilling every X/Y move as if it's a hole position. Always write G80 when you're done drilling.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../tool-offsets/">&larr; Tool Offsets</a>
+  <a href="../../verification/">Next: Program Verification &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

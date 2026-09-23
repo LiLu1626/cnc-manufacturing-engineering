@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G02 / G03 — Circular Interpolation | CNC Programming</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../" class="active">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch02" class="back-link">&larr; Back to Level 2 · G-Code Basics</a>
+<div class="hero-eyebrow">02.2 · G02 / G03</div>
+<h1>G02 / G03 — Circular Interpolation</h1>
+
+<p>To cut arcs and circles, the machine moves two axes simultaneously at varying speeds. G02 is clockwise, G03 is counterclockwise. The trick is telling the machine where the arc center is.</p>
+
+<h2>How to Specify an Arc</h2>
+<p>You need three things: <strong>start point</strong> (where you are), <strong>end point</strong> (X/Y destination), and <strong>arc center</strong> (where the circle's center is relative to the start).</p>
+
+<svg viewBox="0 0 480 240" xmlns="http://www.w3.org/2000/svg" style="max-width:480px;width:100%;margin:1rem auto;display:block;">
+  <!-- arc -->
+  <path d="M 100 180 A 80 80 0 0 1 260 180" fill="none" stroke="#0b766e" stroke-width="3"/>
+  <!-- start -->
+  <circle cx="100" cy="180" r="5" fill="#17242f"/>
+  <text x="80" y="200" font-size="12" fill="#17242f">Start</text>
+  <!-- end -->
+  <circle cx="260" cy="180" r="5" fill="#17242f"/>
+  <text x="265" y="200" font-size="12" fill="#17242f">End</text>
+  <!-- center -->
+  <circle cx="180" cy="180" r="4" fill="#c0392b"/>
+  <line x1="100" y1="180" x2="180" y2="180" stroke="#c0392b" stroke-dasharray="3,3"/>
+  <line x1="180" y1="180" x2="180" y2="100" stroke="#c0392b" stroke-dasharray="3,3"/>
+  <text x="185" y="130" font-size="12" fill="#c0392b">Center</text>
+  <text x="130" y="175" font-size="11" fill="#c0392b">I=80</text>
+  <text x="190" y="145" font-size="11" fill="#c0392b">J=0</text>
+  <!-- direction arrow -->
+  <path d="M 140 130 A 50 50 0 0 1 220 130" fill="none" stroke="#0b766e" stroke-width="2" marker-end="url(#a)"/>
+  <text x="180" y="115" text-anchor="middle" font-size="11" fill="#0b766e">G02 CW</text>
+  <defs><marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0b766e"/></marker></defs>
+</svg>
+
+<h2>Two Ways to Define the Center</h2>
+<table>
+  <tr><th>Method</th><th>Syntax</th><th>How it works</th></tr>
+  <tr><td><strong>I / J</strong></td><td><code>G02 X__ Y__ I__ J__</code></td><td>I = center offset in X from start, J = center offset in Y from start</td></tr>
+  <tr><td><strong>Radius R</strong></td><td><code>G02 X__ Y__ R__</code></td><td>Just give the radius. Simpler, but R can't distinguish full circles.</td></tr>
+</table>
+
+<div class="example">
+  <p><strong>Example: Cut a quarter circle</strong></p>
+  <p>Start at X0 Y0, end at X20 Y20, center at X0 Y20 (radius 20). Clockwise (G02):</p>
+  <div class="formula-box">
+  <pre style="margin:0;font-family:monospace;font-size:13px;">
+G01 X0 Y0 F300.
+G02 X20. Y20. I0 J20.</pre>
+  </div>
+  <p>Or using R: <code>G02 X20. Y20. R20.</code></p>
+</div>
+
+<h2>G02 vs G03 Direction</h2>
+<p>Look at the arc from the <em>positive Z direction</em> (down at the table on a mill). Clockwise = G02. Counterclockwise = G03. On lathes, the convention is reversed because of how you view the part — check your controller.</p>
+
+<div class="warning">
+  <p><strong>Common mistake: I/J are incremental from the start point, not absolute coordinates.</strong> If the start is at X5 Y5 and center is at X10 Y5, then I=5, J=0 — not I=10. This trips up beginners constantly. When in doubt, use R.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../g00-g01/">&larr; G00 / G01</a>
+  <a href="../../mcodes/">Next: M-Codes &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

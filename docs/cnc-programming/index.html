@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CNC Programming | Li Lu CNC Eng</title>
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../machine-systems/">Machine Systems</a></li>
+      <li><a href="./" class="active">CNC Programming</a></li>
+      <li><a href="../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="page">
+  <a href="../" class="back-link">&larr; Back to Home</a>
+
+  <section class="hero">
+    <div class="hero-eyebrow">CNC Programming</div>
+    <h1>Learn CNC Programming from Scratch</h1>
+    <p>A structured learning path for complete beginners: coordinates → program structure → G-code → offsets → turning/milling → verification. Build the skills to read, write, and check real CNC programs.</p>
+  </section>
+
+  <div class="tool-cat" id="ch01">
+    <h2>Level 1 &middot; Getting Started</h2>
+    <p class="tool-cat-desc">Build the mental model before you touch G-code.</p>
+    <div class="tool-list">
+      <a class="tool-item" href="getting-started/what-is-cnc-programming/">
+        <div class="tool-item-name">What Is CNC Programming?</div>
+        <div class="tool-item-desc">How code becomes machine motion, manual vs CAM.</div>
+      </a>
+      <a class="tool-item" href="coordinate-systems/">
+        <div class="tool-item-name">Coordinate Systems</div>
+        <div class="tool-item-desc">Machine zero, work zero, G54, G90 vs G91.</div>
+      </a>
+      <a class="tool-item" href="program-structure/">
+        <div class="tool-item-name">Program Structure</div>
+        <div class="tool-item-desc">Anatomy of a real CNC program, line by line.</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="tool-cat" id="ch02">
+    <h2>Level 2 &middot; G-Code &amp; M-Code Basics</h2>
+    <p class="tool-cat-desc">Motion codes, machine functions, modal groups, units.</p>
+    <div class="tool-list">
+      <a class="tool-item" href="gcode-fundamentals/g00-g01/">
+        <div class="tool-item-name">G00 / G01 — Rapid &amp; Linear</div>
+        <div class="tool-item-desc">Safe approach, cutting feed, diagonal moves.</div>
+      </a>
+      <a class="tool-item" href="gcode-fundamentals/g02-g03/">
+        <div class="tool-item-name">G02 / G03 — Circular Interpolation</div>
+        <div class="tool-item-desc">Arc center, radius, direction, plane selection.</div>
+      </a>
+      <a class="tool-item" href="mcodes/">
+        <div class="tool-item-name">M-Code Fundamentals</div>
+        <div class="tool-item-desc">Spindle, coolant, stop, tool change, program end.</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="tool-cat" id="ch03">
+    <h2>Level 3 &middot; Offsets &amp; Compensation</h2>
+    <p class="tool-cat-desc">The core CNC thinking: machine zero + work offset + tool offset = actual position.</p>
+    <div class="tool-list">
+      <a class="tool-item" href="offsets/work-offsets/">
+        <div class="tool-item-name">Work Offsets (G54–G59)</div>
+        <div class="tool-item-desc">Setting part zero, multiple setups, datum strategy.</div>
+      </a>
+      <a class="tool-item" href="offsets/tool-offsets/">
+        <div class="tool-item-name">Tool Offsets</div>
+        <div class="tool-item-desc">Length, radius, geometry vs wear, G43/G41/G42.</div>
+      </a>
+      <a class="tool-item" href="canned-cycles/">
+        <div class="tool-item-name">Canned Cycles</div>
+        <div class="tool-item-desc">G81 drilling, G83 peck, G84 tapping, cycle structure.</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="tool-cat" id="ch04">
+    <h2>Level 4 &middot; Verification &amp; Best Practices</h2>
+    <p class="tool-cat-desc">Writing the program is only half the job — proving it works.</p>
+    <div class="tool-list">
+      <a class="tool-item" href="verification/">
+        <div class="tool-item-name">Program Verification</div>
+        <div class="tool-item-desc">Syntax review → simulation → dry run → single block → first part.</div>
+      </a>
+      <a class="tool-item" href="common-mistakes/">
+        <div class="tool-item-name">Common Beginner Mistakes</div>
+        <div class="tool-item-desc">Wrong offset, wrong unit, G40 forgotten, unsafe rapid.</div>
+      </a>
+      <a class="tool-item" href="learning-path/">
+        <div class="tool-item-name">Learning Path</div>
+        <div class="tool-item-desc">From zero to full programs, with links to every lesson.</div>
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+
+</body>
+</html>

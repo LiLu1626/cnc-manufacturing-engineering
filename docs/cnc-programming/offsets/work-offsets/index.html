@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Work Offsets (G54–G59) | CNC Programming</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../" class="active">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch03" class="back-link">&larr; Back to Level 3 · Offsets &amp; Compensation</a>
+<div class="hero-eyebrow">03.1 · Work Offsets</div>
+<h1>Work Offsets — G54 to G59</h1>
+
+<p>The work offset tells the controller where your part is sitting on the machine. Without it, the machine has no idea where to cut. This is one of the most important setup concepts.</p>
+
+<h2>The Core Formula</h2>
+<div class="formula-box">
+  <p><strong>Actual tool position = Machine position + Work offset (G54) + Tool offset</strong></p>
+</div>
+<p>You set G54 by touching off: the tool touches the corner of the part, you press "set", and the controller records the difference between machine zero and that corner. From then on, every X/Y/Z in your program is measured from that corner.</p>
+
+<h2>When to Use G55, G56, ...</h2>
+<table>
+  <tr><th>Offset</th><th>Use for</th></tr>
+  <tr><td>G54</td><td>Primary part / setup</td></tr>
+  <tr><td>G55</td><td>Second part on the same table (e.g. two vises)</td></tr>
+  <tr><td>G56</td><td>Third part or a different fixture</td></tr>
+  <tr><td>G57–G59</td><td>Additional setups / pallets</td></tr>
+</table>
+
+<div class="example">
+  <p><strong>Example: Two vises on one table</strong></p>
+  <p>You set up two identical vises on the mill table, 200 mm apart. You set G54 for vise 1 and G55 for vise 2. The same program runs: when it says G54, it cuts part 1; when it says G55, it cuts part 2. You don't rewrite the program for each part — you just change the offset.</p>
+</div>
+
+<div class="warning">
+  <p><strong>Wrong G54 is the #1 crash cause.</strong> If you set G54 on the wrong corner, or forget to update it after moving the part, the machine will cut exactly where you tell it — which is the wrong place. Always verify G54 with a dry run or single-block before cutting.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../../mcodes/">&larr; M-Codes</a>
+  <a href="../tool-offsets/">Next: Tool Offsets &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

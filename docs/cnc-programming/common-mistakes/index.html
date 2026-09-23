@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Common Beginner Mistakes | CNC Programming</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../" class="active">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch04" class="back-link">&larr; Back to Level 4 · Verification &amp; Best Practices</a>
+<div class="hero-eyebrow">04.2 · Common Mistakes</div>
+<h1>Common Beginner Programming Mistakes</h1>
+
+<p>Every new programmer makes these. Knowing them in advance saves you scrap, broken tools, and crashed machines.</p>
+
+<table>
+  <tr><th>Mistake</th><th>What happens</th><th>How to avoid</th></tr>
+  <tr><td>Wrong G54 work offset</td><td>Machine cuts in the wrong location</td><td>Verify offset before first cut; dry run</td></tr>
+  <tr><td>Wrong tool length offset</td><td>Tool plunges too deep or too shallow</td><td>Double-check H number matches tool</td></tr>
+  <tr><td>Forgetting G21/G20</td><td>Program in mm but machine thinks inch — parts are 25.4x off</td><td>Always G21 at program start</td></tr>
+  <tr><td>Missing G40 / G49 / G80</td><td>Previous program's mode leaks into new one</td><td>Safe-start block at top</td></tr>
+  <tr><td>G90/G91 confusion</td><td>Coordinates mean something different than expected</td><td>Check current mode on screen</td></tr>
+  <tr><td>Rapid into material</td><td>Z rapid hits the part at full speed</td><td>Always approach Z at feed, not G00</td></tr>
+  <tr><td>Wrong spindle direction</td><td>Tool cuts backwards, bad finish, broken edge</td><td>M03 forward; check rotation</td></tr>
+  <tr><td>Forgetting M09/M05</td><td>Coolant floods, spindle spins after end</td><td>End-of-program housekeeping block</td></tr>
+  <tr><td>G41/G42 without lead-in</td><td>Cutter comp engages mid-cut → crash</td><td>Comp must start on a straight approach move</td></tr>
+  <tr><td>Copy-pasting code without understanding</td><td>Works on one part, fails on next</td><td>Read every line you run</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>The safe-start block is your insurance:</strong> <code>G21 G17 G90 G40 G49 G80</code>. Write it at the top of every program. It resets units, plane, coordinate mode, and cancels all compensation. It takes one line and prevents a dozen mistakes.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../../verification/">&larr; Program Verification</a>
+  <a href="../../learning-path/">Next: Learning Path &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>
