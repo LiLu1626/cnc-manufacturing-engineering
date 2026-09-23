@@ -1,0 +1,22 @@
+---
+title: Cutting Speed Calculator
+---
+<link rel="stylesheet" href="styles.css">
+<main class="tool-page">
+  <header class="tool-header">
+    <div class="eyebrow">Machining Parameters · Released</div>
+    <h1>Cutting Speed Calculator</h1>
+    <p>Calculate the cutting speed at the tool edge from tool diameter and spindle speed.</p>
+  </header>
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field"><label for="diameter">Tool diameter (mm)</label><input id="diameter" type="number" value="12" min="0" step="any"></div>
+      <div class="field"><label for="rpm">Spindle speed (RPM)</label><input id="rpm" type="number" value="4775" min="0" step="any"></div>
+    </div>
+    <div class="result"><div>Cutting speed</div><div class="result-value" id="result">—</div><div class="result-detail" id="detail"></div></div>
+  </section>
+  <section class="formula"><h2>Formula and learning path</h2><p><strong>Cutting speed (m/min) = π × Tool diameter (mm) × RPM ÷ 1,000</strong></p><p>Use this tool to check the actual cutting speed produced by a chosen RPM. Then use the Spindle Speed Calculator to reverse the calculation from a target cutting speed.</p></section>
+  <aside class="notice"><strong>For beginners:</strong> A cutting speed is not a universal setting. Start from tooling supplier recommendations, then adjust for workpiece material, coolant, rigidity, engagement, and machine capability.</aside>
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</main>
+<script src="calculator.js"></script>
