@@ -1,0 +1,54 @@
+---
+title: Tool Overhang Risk Check
+---
+<link rel="stylesheet" href="styles.css">
+
+<main class="tool-page">
+  <header class="tool-header">
+    <div class="eyebrow">Tooling and Process Planning · Released</div>
+    <h1>Tool Overhang Risk Check</h1>
+    <p>Review the relationship between unsupported tool length and cutter diameter before committing to a milling strategy.</p>
+  </header>
+
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field">
+        <label for="length">Unsupported tool length (mm)</label>
+        <input id="length" type="number" value="45" min="0" step="any">
+      </div>
+      <div class="field">
+        <label for="diameter">Tool diameter (mm)</label>
+        <input id="diameter" type="number" value="10" min="0" step="any">
+      </div>
+      <div class="field">
+        <label for="operation">Machining operation</label>
+        <select id="operation">
+          <option value="finish">Finishing</option>
+          <option value="general" selected>General milling</option>
+          <option value="rough">Roughing</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="result">
+      <div>Overhang ratio (L/D)</div>
+      <div class="result-value" id="ratio">—</div>
+      <div class="risk-label" id="risk">Enter dimensions to begin</div>
+      <p class="result-detail" id="detail"></p>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>How to use this check</h2>
+    <p><strong>Overhang ratio (L/D) = unsupported tool length ÷ tool diameter.</strong> A lower ratio normally improves stiffness, reduces deflection, and supports a more stable cutting process.</p>
+    <p>This is a practical screening guide, not a substitute for a machine, holder, toolmaker, or process-engineering review. Holder runout, gauge length, material, engagement, and machine condition also matter.</p>
+  </section>
+
+  <aside class="notice">
+    <strong>For beginners:</strong> First shorten the stick-out as much as the feature permits. If a long reach cannot be avoided, reduce radial engagement, axial depth, and feed deliberately; then verify the result with a safe trial cut.
+  </aside>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</main>
+
+<script src="calculator.js"></script>
