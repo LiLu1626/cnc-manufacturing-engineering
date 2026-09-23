@@ -1,0 +1,73 @@
+---
+title: Tapping Parameter Assistant
+---
+
+<article class="tool-page">
+  <header class="tool-header">
+    <p class="eyebrow">Tapping · Released</p>
+    <h1>Tapping Parameter Assistant</h1>
+    <p>Calculate rigid tapping spindle speed and synchronized feed from thread diameter, pitch, and cutting speed. Beginners can use this to set up G84 tapping cycles safely.</p>
+  </header>
+
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field">
+        <label for="diameter">Nominal thread diameter (mm)</label>
+        <input id="diameter" type="number" value="6" min="1" step="0.1" />
+      </div>
+      <div class="field">
+        <label for="pitch">Pitch (mm/rev)</label>
+        <input id="pitch" type="number" value="1.0" min="0.1" step="0.05" />
+      </div>
+      <div class="field">
+        <label for="vc">Cutting speed Vc (m/min)</label>
+        <input id="vc" type="number" value="8" min="1" step="0.5" />
+      </div>
+      <div class="field">
+        <label for="maxRpm">Machine max RPM (0 = no limit)</label>
+        <input id="maxRpm" type="number" value="0" min="0" step="100" />
+      </div>
+    </div>
+
+    <div class="result-grid">
+      <div class="result">
+        <p>Recommended RPM</p>
+        <p class="result-value" id="rpmResult">—</p>
+        <p class="result-detail" id="rpmDetail"></p>
+      </div>
+      <div class="result">
+        <p>Tapping feed rate</p>
+        <p class="result-value" id="feedResult">—</p>
+        <p class="result-detail">mm/min = pitch × RPM (rigid sync)</p>
+      </div>
+      <div class="result">
+        <p>Tap drill size (minor Ø)</p>
+        <p class="result-value" id="drillResult">—</p>
+        <p class="result-detail" id="drillDetail"></p>
+      </div>
+      <div class="result wide-result">
+        <p>Tapping strategy</p>
+        <p class="result-detail" id="strategyDetail"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>Formula and use</h2>
+    <p>RPM = 1000 × Vc ÷ (π × D)</p>
+    <p>Tapping feed (mm/min) = pitch × RPM — the machine axis must be synchronized with spindle rotation in rigid tapping mode.</p>
+    <p>Minor diameter ≈ D − pitch × 1.08256 (60° metric thread fundamental triangle).</p>
+    <p>Tapping uses much lower cutting speeds than drilling. Start at the lower end of the material range and use tapping fluid. Blind holes require chip evacuation; through holes are more forgiving.</p>
+  </section>
+
+  <aside class="notice">
+    <strong>For beginners:</strong>
+    <p>Always confirm your machine supports rigid tapping (G84 with synchronous feed) before using these values. On non-rigid tap holders, feed is governed by the tap itself — never override it. Peck tapping (G83-style) helps in deep blind holes. Never run dry; use sulfurized tapping oil or proper coolant.</p>
+  </aside>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</article>
+
+<link rel="stylesheet" href="styles.css" />
+<script src="calculator.js" defer></script>
+
