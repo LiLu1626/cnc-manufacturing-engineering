@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tool Wear & Breakage | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch10" class="back-link">&larr; Back to 10 &middot; Machining Troubleshooting</a>
+<div class="hero-eyebrow">10.2 &middot; Machining Troubleshooting</div>
+<h1>Tool Wear, Breakage &amp; Chip Problems</h1>
+
+<p>Tools don't last forever — but they should wear predictably, not break suddenly. This page covers the common tool failure modes, built-up edge, chip control problems, and how to tell the difference between normal wear and a setup mistake.</p>
+
+<h2>Tool Wear — The Normal Failure Mode</h2>
+<p>Every cutting edge wears over time. The goal is to predict when it needs changing, not wait until it ruins the part. There are several wear patterns:</p>
+
+<table>
+  <tr><th>Wear type</th><th>What it looks like</th><th>Caused by</th></tr>
+  <tr><td><strong>Flank wear</strong></td><td>Uniform wear on the flank (relief) face, measured as VB</td><td>Normal abrasive wear — expected</td></tr>
+  <tr><td><strong>Crater wear</strong></td><td>Depression on the rake face, behind the cutting edge</td><td>High heat — chip sliding on rake face</td></tr>
+  <tr><td><strong>Notch wear</strong></td><td>Groove at the depth-of-cut line (where chip exits)</td><td>Work hardening, scale, or abrasive material at the surface</td></tr>
+  <tr><td><strong>Built-up edge (BUE)</strong></td><td>Welded material stuck to the nose/edge</td><td>Low speed, ductile material, no chip breaker</td></tr>
+  <tr><td><strong>Edge chipping</strong></td><td>Small fractures along the cutting edge</td><td>Interrupted cut, brittle insert, vibration</td></tr>
+  <tr><td><strong>Thermal cracking</strong></td><td>Heat-checks (fine cracks) perpendicular to edge</td><td>Coolant on/off cycling at high temperature</td></tr>
+</table>
+
+<h3>When to change the tool</h3>
+<table>
+  <tr><th>Wear indicator</th><th>Action</th></tr>
+  <tr><td>Flank wear VB = 0.2–0.3 mm (finishing)</td><td>Index or replace</td></tr>
+  <tr><td>Flank wear VB = 0.5–0.8 mm (roughing)</td><td>Index or replace</td></tr>
+  <tr><td>Surface finish visibly degrading</td><td>Replace immediately</td></tr>
+  <tr><td>Increasing cutting force / spindle load rising</td><td>Tool is wearing — plan replacement</td></tr>
+  <tr><td>Audible change (louder, higher pitch)</td><td>Edge is dull — check soon</td></tr>
+</table>
+
+<h2>Sudden Tool Breakage — Why It Happens</h2>
+<p>Breakage is not normal wear — it means something was wrong. Diagnose before replacing and running again.</p>
+
+<table>
+  <tr><th>Cause</th><th>Symptom</th><th>Fix</th></tr>
+  <tr><td>Feed too high</td><td>Clean break at the shank or flutes</td><td>Reduce feed per tooth</td></tr>
+  <tr><td>Depth of cut too large</td><td>Tool snaps under load</td><td>Reduce ap or ae</td></tr>
+  <tr><td>Crash / tool hit a clamp or fixture</td><td>Deformed flutes, broken holder</td><td>Check program, verify clearance</td></tr>
+  <tr><td>Work hardening (stainless, Inconel)</td><td>Notch wear leading to sudden fracture</td><td>Sharper edge, higher feed, don't rub</td></tr>
+  <tr><td>Welded chip / BUE jamming</td><td>Built-up edge suddenly breaks off, taking edge with it</td><td>Increase speed, use chip breaker</td></tr>
+  <tr><td>Tool overhang too long</td><td>Tool deflects then snaps</td><td>Shorter tool, reduce DOC</td></tr>
+  <tr><td>Wrong insert grade for material</td><td>Rapid crater wear leading to failure</td><td>Use correct carbide grade (P/M/K/N/S)</td></tr>
+</table>
+
+<h2>Built-Up Edge (BUE)</h2>
+<p>BUE happens when material from the workpiece welds to the cutting edge instead of being sheared off. It's most common in ductile materials (aluminum, low-carbon steel, stainless) at low cutting speeds.</p>
+
+<h3>Symptoms</h3>
+<ul>
+  <li>Poor surface finish — torn, not sheared surface.</li>
+  <li>Dimensions drift — the BUE adds effective tool size.</li>
+  <li>When BUE breaks off, it takes a piece of the cutting edge with it.</li>
+</ul>
+
+<h3>How to eliminate BUE</h3>
+<table>
+  <tr><th>Action</th><th>Why it works</th></tr>
+  <tr><td>Increase cutting speed</td><td>Above the BUE threshold, material doesn't have time to weld</td></tr>
+  <tr><td>Use sharper, positive-rake geometry</td><td>Cuts cleaner, less pressure at the edge</td></tr>
+  <tr><td>Use coated carbide (TiN, TiCN, DLC for aluminum)</td><td>Coating reduces adhesion between chip and tool</td></tr>
+  <tr><td>More coolant / higher pressure</td><td>Cools the edge and washes chips away</td></tr>
+  <tr><td>Increase feed slightly</td><td>Thicker chip doesn't weld as easily</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Aluminum BUE:</strong> aluminum loves to weld to tool edges. Run high speed (VC = 200–500 m/min), use polished or DLC-coated tools, and flood with coolant. If you see a built-up edge on aluminum, you're running too slow.</p>
+</div>
+
+<h2>Chip Control Problems</h2>
+<p>Chips that don't break are more than a nuisance — they can wrap around the tool, scratch the surface, jam the machine, or injure the operator.</p>
+
+<table>
+  <tr><th>Problem</th><th>Cause</th><th>Fix</th></tr>
+  <tr><td>Long stringy chips (bird nests)</td><td>Ductile material, light feed, no chip breaker</td><td>Use chip-breaker geometry, increase feed, peck drilling</td></tr>
+  <tr><td>Chips wrapping around tool</td><td>Long chips in turning/milling</td><td>Interrupt the cut (peck, dwell), use chip breaker</td></tr>
+  <tr><td>Chips jamming in flutes</td><td>Blind holes, deep pockets, no through coolant</td><td>Peck cycle, through-spindle coolant, air blast</td></tr>
+  <tr><td>Work-hardening chips (stainless)</td><td>Chips re-cut by the tool</td><td>Break chips smaller, flood coolant to flush them out</td></tr>
+  <tr><td>Discolored / blue chips</td><td>Too hot — speed too high or no coolant</td><td>Reduce speed, increase coolant flow</td></tr>
+</table>
+
+<h2>Burr Formation</h2>
+<p>Burrs are expected — the question is how much and whether they're acceptable. See <a href="../../07-surface-finish/surface-integrity/">Surface Integrity</a> for burr types and removal methods.</p>
+
+<h2>Quick Diagnostic Table</h2>
+<table>
+  <tr><th>If you see...</th><th>First check</th></tr>
+  <tr><td>Surface getting rougher over time</td><td>Tool wear — index the edge</td></tr>
+  <tr><td>Dimensions drifting larger/smaller</td><td>Wear or thermal growth — measure after warm-up</td></tr>
+  <tr><td>Sudden breakage mid-cut</td><td>Feed too high, crash, or work hardening</td></tr>
+  <tr><td>Torn/gummy surface</td><td>BUE — increase speed</td></tr>
+  <tr><td>Notch wear at DOC line</td><td>Scale or work-hardened surface — reduce feed at entry</td></tr>
+  <tr><td>Blue chips / burning smell</td><td>Speed too high or coolant insufficient</td></tr>
+  <tr><td>Washboard chatter marks</td><td>See <a href="../chatter-vibration/">Chatter &amp; Vibration</a></td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Tool life reference:</strong> look up recommended speeds and feeds by material — <a href="../../../engineering-tools/material-property-reference/">Material Property Reference</a>. For tool overhang and rigidity — <a href="../../../engineering-tools/tool-overhang-risk-check/">Tool Overhang Risk Check</a>.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../chatter-vibration/">&larr; Chatter &amp; Vibration</a>
+  <a href="../dimensional-error/">Next: Dimensional Error &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

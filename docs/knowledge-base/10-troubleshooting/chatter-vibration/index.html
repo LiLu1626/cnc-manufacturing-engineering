@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatter & Vibration | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch10" class="back-link">&larr; Back to 10 &middot; Machining Troubleshooting</a>
+<div class="hero-eyebrow">10.1 &middot; Machining Troubleshooting</div>
+<h1>Chatter &amp; Vibration — The "Singing" Cut</h1>
+
+<p>Chatter is the high-pitched squealing or growling sound that ruins your surface finish and can break tools. It's a self-feeding vibration: the tool vibrates, which changes the cut forces, which makes it vibrate more. Once it starts, it gets worse fast. This page tells you how to recognize it, diagnose it, and stop it.</p>
+
+<h2>Symptoms</h2>
+<table>
+  <tr><th>What you see/hear</th><th>What it means</th></tr>
+  <tr><td>High-pitched squealing or buzzing sound</td><td>Chatter — the tool or part is vibrating at its natural frequency</td></tr>
+  <tr><td>Regular wave pattern on the surface (like washboard ripples)</td><td>Chatter marks — evenly spaced ridges perpendicular to feed direction</td></tr>
+  <tr><td>Poor surface finish that gets worse as the cut progresses</td><td>Self-excited chatter building up</td></tr>
+  <tr><td>Tool chipping or breakage mid-cut</td><td>Vibration causing impact loads on the edge</td></tr>
+  <tr><td>Machine itself shakes or the part moves in the vise</td><td>Forced vibration — not enough rigidity somewhere</td></tr>
+</table>
+
+<h2>Two Types of Chatter</h2>
+
+<h3>Forced Vibration</h3>
+<p>Caused by an external periodic force: unbalanced tool, loose spindle, gear tooth mesh, or a neighboring machine running. It happens at a specific frequency and doesn't build up on its own.</p>
+
+<h3>Self-Excited Chatter (Regenerative)</h3>
+<p>The most common type. The tool leaves a wavy surface on one pass; on the next pass, it cuts against that wave, which modulates the cutting force and causes more vibration. This is the "squealing" that starts suddenly and gets worse.</p>
+
+<h2>Possible Causes — Diagnosis Checklist</h2>
+<p>Work through these in order. Start with the easiest fixes first.</p>
+
+<table>
+  <tr><th>#</th><th>Cause</th><th>How to check</th><th>Quick test</th></tr>
+  <tr><td>1</td><td>Tool overhang too long</td><td>Measure tool stickout from holder</td><td>Reduce overhang by half — does chatter stop?</td></tr>
+  <tr><td>2</td><td>Too much depth of cut / width of cut</td><td>Check ap × ae engagement</td><td>Reduce DOC by 50% — does it quiet down?</td></tr>
+  <tr><td>3</td><td>Spindle speed hits a "bad" frequency</td><td>Chatter starts at a specific RPM</td><td>Change RPM by ±10–20% — does it stop?</td></tr>
+  <tr><td>4</td><td>Part not held rigidly</td><td>Try pushing the part by hand while idle</td><td>Can you move it? Tighten setup.</td></tr>
+  <tr><td>5</td><td>Dull or worn tool</td><td>Inspect the edge under magnification</td><td>Index to a new edge or change tool</td></tr>
+  <tr><td>6</td><td>Too much feed for the edge geometry</td><td>Check fz vs insert nose radius</td><td>Reduce feed slightly</td></tr>
+  <tr><td>7</td><td>Weak spindle / worn bearings</td><td>Only happens on one machine</td><td>Try the same cut on another machine</td></tr>
+</table>
+
+<h2>Corrective Actions — What to Try</h2>
+
+<h3>1. Reduce Tool Overhang (biggest impact)</h3>
+<p>The longer the tool sticks out, the more it acts like a diving board. Rule of thumb: keep tool overhang under 3× tool diameter for steel, under 4× for aluminum. If you need to reach deep features, use a stronger (larger diameter) tool or a shorter tool holder.</p>
+
+<h3>2. Change the Cutting Speed</h3>
+<p>Chatter happens at certain "bad" spindle speeds where the tooth-passing frequency matches the tool/part natural frequency. Changing RPM by 10–20% often moves you out of the bad zone. This is the fastest fix — just bump the override up or down and listen.</p>
+
+<h3>3. Reduce Width of Cut (ae)</h3>
+<p>For milling, reducing radial engagement (ae) reduces the cutting force and stabilizes the cut. Sometimes a 100% radial stepover (slotting) chats, but a 20% stepover runs smooth. Trochoidal milling (small ae, fast feed) is designed around this principle.</p>
+
+<h3>4. Improve Setup Rigidity</h3>
+<ul>
+  <li>Move the part closer to the vise jaws — minimize overhang from the vise.</li>
+  <li>Use support under the part (parallels, jacks, soft jaws).</li>
+  <li>Tighten the vise fully — don't rely on the power vise's default.</li>
+  <li>For thin walls, back them up with wax, supports, or sacrificial backing.</li>
+</ul>
+
+<h3>5. Use a More Stable Tool</h3>
+<table>
+  <tr><th>Tool choice</th><th>Why it helps</th></tr>
+  <tr><td>Insert geometry with positive rake</td><td>Reduces cutting forces</td></tr>
+  <tr><td>Smaller nose radius on finishing</td><td>Less contact area = less force</td></tr>
+  <tr><td>Helical-fluted end mill (unequal helix)</td><td>Unequal flute spacing breaks up chatter frequency</td></tr>
+  <tr><td>Steeper helix angle</td><td>Shearing action reduces forces</td></tr>
+  <tr><td>Yielding (damped) tool holders</td><td>Absorb vibration — expensive but very effective</td></tr>
+</table>
+
+<h3>6. Adjust Feed per Tooth</h3>
+<p>If feed is too light, the tool rubs instead of shearing — this causes vibration. If feed is too heavy, forces spike. Find the sweet spot: usually 0.05–0.15 mm/tooth for steel finishing.</p>
+
+<div class="callout">
+  <p><strong>Quick diagnostic:</strong> if chatter starts only when the tool is fully engaged (not at entry), it's likely regenerative chatter — change speed or reduce ae. If chatter happens at entry or with light cuts, it's likely forced vibration — check setup rigidity and tool condition.</p>
+</div>
+
+<h2>Prevention</h2>
+<ul>
+  <li>Program with conservative engagement on new setups — you can always increase.</li>
+  <li>Use the shortest tool that reaches the feature.</li>
+  <li>Listen for chatter during the first cut — fix it before running production.</li>
+  <li>Keep tools sharp — a worn edge cuts louder and vibrates more.</li>
+  <li>For known difficult cuts, test different RPMs at the setup sheet and note the stable speed.</li>
+</ul>
+
+<div class="warning">
+  <p><strong>Never run through chatter to "get the part done."</strong> Chatter work-hardens the surface, ruins finish, and accelerates tool wear. It also damages spindle bearings over time. Stop, diagnose, fix — then continue.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../../#ch10">&larr; Knowledge Base</a>
+  <a href="../tool-wear-breakage/">Next: Tool Wear &amp; Breakage &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

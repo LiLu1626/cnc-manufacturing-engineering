@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dimensional Error | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch10" class="back-link">&larr; Back to 10 &middot; Machining Troubleshooting</a>
+<div class="hero-eyebrow">10.3 &middot; Machining Troubleshooting</div>
+<h1>Dimensional Error — Why Your Part Is the Wrong Size</h1>
+
+<p>The tool looks right, the program looks right, but the dimension is off. Dimensional errors are frustrating because the cause is rarely obvious — it could be tool wear, thermal growth, deflection, backlash, or a bad setup. This page helps you diagnose and fix the most common causes.</p>
+
+<h2>The Diagnostic Approach</h2>
+<p>Before adjusting anything, ask: <strong>is the error consistent or random?</strong></p>
+<table>
+  <tr><th>Pattern</th><th>Suggests</th></tr>
+  <tr><td>Same error every part, same direction</td><td>Offset error — tool offset, work offset, or setup</td></tr>
+  <tr><td>Error grows as batch progresses</td><td>Tool wear or thermal growth</td></tr>
+  <tr><td>Error varies between parts randomly</td><td>Setup inconsistency, chips under part, loose vise</td></tr>
+  <tr><td>One direction OK, other direction off</td><td>Backlash or axis-related error</td></tr>
+  <tr><td>Part is tapered (one end bigger/smaller)</td><td>Deflection or misalignment</td></tr>
+</table>
+
+<h2>1. Taper (Part Not Parallel)</h2>
+<p>A bored hole or turned shaft that's larger at one end than the other.</p>
+
+<table>
+  <tr><th>Cause</th><th>How to identify</th><th>Fix</th></tr>
+  <tr><td>Tool deflection (boring bar flex)</td><td>Taper is consistent, larger at the free end</td><td>Stiffer boring bar (larger diameter, shorter), reduce feed</td></tr>
+  <tr><td>Z-axis not aligned to spindle</td><td>Taper direction flips if you reverse the part</td><td>Machine alignment issue — call maintenance</td></tr>
+  <tr><td>Workpiece deflection</td><td>Part flexes under cut, springs back</td><td>Support better, reduce DOC, use climb milling</td></tr>
+  <tr><td>Tool wear over long cut</td><td>Taper increases with cut length</td><td>Sharper tool, peck cycle, shorter cut</td></tr>
+</table>
+
+<h2>2. Dimensional Drift Over Time</h2>
+<p>Parts start in tolerance, but after running for an hour, dimensions drift.</p>
+
+<h3>Thermal Growth</h3>
+<p>The spindle and machine heat up during the day, expanding. A 500 mm steel spindle can grow 0.03–0.05 mm after warm-up. The part also heats up.</p>
+<div class="example">
+  <p><strong>Typical pattern:</strong> first part of the morning is slightly small; by lunch it's slightly large; by end of day it's drifted 0.02–0.05 mm.</p>
+  <p><strong>Fix:</strong></p>
+  <ul>
+    <li>Warm up the machine for 15–20 minutes before precision work (run the spindle at operating speed).</li>
+    <li>Let parts cool to room temperature before measuring.</li>
+    <li>Use in-process offsets — measure every N parts and adjust the offset.</li>
+    <li>For critical parts, measure the part temperature and apply compensation.</li>
+  </ul>
+</div>
+
+<h3>Tool Wear</h3>
+<p>As the tool wears, it cuts smaller (for an external cut) or larger (for an internal bore). The error grows linearly with cutting time.</p>
+<div class="example">
+  <p><strong>Fix:</strong> track tool life by number of parts or cutting time. Replace the tool before it drifts out of tolerance. For production, use tool wear offset adjustments in the program.</p>
+</div>
+
+<h2>3. Backlash</h2>
+<p>When the axis reverses direction, there's a small gap between the screw and nut — the axis doesn't move for a small distance. This shows up as position error on features machined from opposite directions.</p>
+
+<table>
+  <tr><th>Symptom</th><th>When it happens</th></tr>
+  <tr><td>Hole position offset when approaching from opposite sides</td><td>Boring cycles, pocket milling that reverses direction</td></tr>
+  <tr><td>Linear dimensions OK, but stepped features are off</td><td>Axis reverses between steps</td></tr>
+</table>
+<p><strong>Fix:</strong> most modern CNCs have backlash compensation in parameters. If backlash is excessive, the ballscrew may need adjustment or replacement.</p>
+
+<h2>4. Workpiece Deflection</h2>
+<p>The part flexes under cutting force, then springs back when the tool leaves. This makes thin walls too thin or pockets too shallow.</p>
+
+<table>
+  <tr><th>Symptom</th><th>Fix</th></tr>
+  <tr><td>Thin walls thinner at the middle</td><td>Climb mill, lighter cuts, support from behind</td></tr>
+  <tr><td>Pocket floor not flat (bowed)</td><td>Reduce DOC, use stiffer tool, leave finish stock</td></tr>
+  <tr><td>Part moves in the vise during cut</td><td>Tighten setup, use soft jaws, support better</td></tr>
+</table>
+
+<h2>5. Setup and Offset Errors</h2>
+<p>These are operator errors — the machine is fine, but the setup is wrong.</p>
+
+<table>
+  <tr><th>Mistake</th><th>Symptom</th><th>Fix</th></tr>
+  <tr><td>Work offset (G54) set wrong</td><td>All features offset by the same amount</td><td>Re-edge-find or re-touch off the part</td></tr>
+  <tr><td>Tool length offset wrong</td><td>Z dimensions all off (depth, pocket floor)</td><td>Re-check tool length setting</td></tr>
+  <tr><td>Tool diameter offset wrong</td><td>Milled pockets are consistently too big/small</td><td>Calibrate tool diameter probe or measure</td></tr>
+  <tr><td>Chips under the part</td><td>Z dimension off by a small random amount</td><td>Clean parallels and part before setup</td></tr>
+  <tr><td>Part not seated flat</td><td>Angular error, inconsistent dimensions</td><td>Tap down, check with indicator</td></tr>
+</table>
+
+<h2>6. Poor Surface Finish (Non-Chatter Causes)</h2>
+<p>Not all bad finish is chatter. Common causes:</p>
+<table>
+  <tr><th>Cause</th><th>What it looks like</th><th>Fix</th></tr>
+  <tr><td>Dull tool</td><td>Torn, smeared surface</td><td>Index or replace</td></tr>
+  <tr><td>BUE</td><td>Gummy, built-up appearance</td><td>Increase speed (see <a href="../tool-wear-breakage/">Tool Wear</a>)</td></tr>
+  <tr><td>Feed too high</td><td>Deep feed marks</td><td>Reduce feed, larger nose radius</td></tr>
+  <tr><td>Wrong coolant</td><td>Built-up edge, heat marks</td><td>Use correct coolant, increase flow</td></tr>
+  <tr><td>Built-up edge breaking off</td><td>Random scratches/digs in surface</td><td>Increase speed, use coated tool</td></tr>
+</table>
+
+<h2>Systematic Troubleshooting Procedure</h2>
+<div class="example">
+  <ol>
+    <li><strong>Measure the error:</strong> record which dimension is off, by how much, in which direction.</li>
+    <li><strong>Check the pattern:</strong> consistent? growing? random? one axis?</li>
+    <li><strong>Verify the basics:</strong> is the tool sharp? Is the offset correct? Is the part clean and seated?</li>
+    <li><strong>Warm up:</strong> run the machine 15 min, re-measure. If error changes, it's thermal.</li>
+    <li><strong>Check tool wear:</strong> inspect the edge under magnification.</li>
+    <li><strong>Test one variable at a time:</strong> change speed, then feed, then setup — don't change everything at once.</li>
+    <li><strong>Document the fix:</strong> note what worked on the setup sheet for next time.</li>
+  </ol>
+</div>
+
+<div class="callout">
+  <p><strong>Remember:</strong> when in doubt, measure first. Don't adjust an offset based on a single bad part — measure two or three to confirm the pattern. One bad reading could be a chip under the part or a measurement error.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../tool-wear-breakage/">&larr; Tool Wear &amp; Breakage</a>
+  <a href="../../#ch10">Knowledge Base &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>
