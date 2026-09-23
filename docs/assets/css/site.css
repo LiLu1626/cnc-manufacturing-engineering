@@ -23,6 +23,16 @@ body {
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
+.back-link {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+.back-link:hover { text-decoration: underline; }
+
 .site-nav {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
