@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spindle, Chuck &amp; Turret | Horizontal CNC Lathes</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../" class="active">Machine Systems</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch03" class="back-link">&larr; Back to 03 &middot; Horizontal CNC Lathes</a>
+<div class="hero-eyebrow">03.2 &middot; Horizontal CNC Lathes</div>
+<h1>Spindle, Chuck &amp; Turret Systems</h1>
+
+<p>The spindle rotates the part, the chuck holds it, and the turret holds the tools. These three subsystems define what the lathe can actually cut and how reliably it does it.</p>
+
+<h2>The Spindle</h2>
+<table>
+  <tr><th>Feature</th><th>Why it matters</th></tr>
+  <tr><td><strong>Spindle bore</strong></td><td>Max bar diameter through the spindle. Common sizes: 25, 42, 52, 65, 77, 102 mm.</td></tr>
+  <tr><td><strong>Spindle speed range</strong></td><td>High RPM for small diameter finishing; low RPM for heavy roughing. Wide range = more flexible.</td></tr>
+  <tr><td><strong>Torque at low RPM</strong></td><td>Heavy cuts on large diameters need torque, not speed. Check the torque curve.</td></tr>
+  <tr><td><strong>Nose type</strong></td><td>A2-5, A2-6, A2-8, etc. Defines chuck mounting.</td></tr>
+  <tr><td><strong>Bearing arrangement</strong></td><td>Angular contact bearings handle radial + axial load. Preload determines stiffness.</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Bar feed vs chucking:</strong> If you're running bar, the spindle bore is one of the most important numbers on the spec sheet. A 42 mm bore means you can't push 45 mm bar through — no exceptions. For chucking work, bore size matters less, but a bigger bore allows tubing and long parts through.</p>
+</div>
+
+<h2>The Chuck</h2>
+<p>The chuck grips the workpiece. Three types dominate CNC lathes:</p>
+<table>
+  <tr><th>Chuck type</th><th>How it works</th><th>Use case</th></tr>
+  <tr><td><strong>3-Jaw Power Chuck</strong></td><td>Hydraulically actuated, self-centering</td><td>Round bar, production. Fast repeatability.</td></tr>
+  <tr><td><strong>Collet Chuck</strong></td><td>Spring collet grips round/hex/square bar</td><td>Small bar, high precision, fast changeover</td></tr>
+  <tr><td><strong>Independent 4-Jaw</strong></td><td>Each jaw moves independently</td><td>Irregular shapes, one-off setup (rare on CNC)</td></tr>
+  <tr><td><strong>Face Plate / Soft Jaws</strong></td><td>Custom-machined jaws for specific parts</td><td>Castings, odd shapes, thin-wall parts</td></tr>
+</table>
+
+<div class="warning">
+  <p><strong>Chuck clamping force is adjustable.</strong> Too little = part pulls out under cut. Too much = thin-wall part deforms. Start high for roughing, reduce for finishing on delicate parts. Always check pressure with a gauge.</p>
+</div>
+
+<h2>The Turret</h2>
+<p>The turret indexes tool positions. Two main styles:</p>
+<table>
+  <tr><th></th><th>Box / Gang Turret</th><th>Tool Changer Turret</th></tr>
+  <tr><td>Stations</td><td>6–12 fixed positions</td><td>12–24, plus magazine</td></tr>
+  <tr><td>Tool change</td><td>Index to next station</td><td>ATC swaps tools from magazine</td></tr>
+  <tr><td>Rigidity</td><td>Very rigid — tool clamped directly</td><td>Slightly less, but more tools</td></tr>
+  <tr><td>Typical machine</td><td>Basic production lathes</td><td>Turn-mill, complex parts</td></tr>
+</table>
+
+<h2>Tailstock and Steady Rest</h2>
+<ul>
+  <li><strong>Tailstock:</strong> Supports the end of long shafts. Holds a live center or a drill. CNC tailstocks are programmed in Z.</li>
+  <li><strong>Steady rest / follow rest:</strong> Clamps onto the part mid-length to prevent deflection on slender shafts. Essential for long, thin turning.</li>
+</ul>
+
+<div class="example">
+  <p><strong>Example: Why soft jaws matter</strong></p>
+  <p>You're boring a thin-walled aluminum ring (wall 2 mm). A standard 3-jaw power chuck at full pressure collapses the ring out of round — the bore comes out oval. Solution: machine soft jaws to grip a slightly larger diameter, reduce chuck pressure to 30%, and support with a tailstock or steady rest. Now the bore stays round.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../lathe-fundamentals/">&larr; Lathe Fundamentals</a>
+  <a href="../../#ch03">Back to Chapter 03 &uarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

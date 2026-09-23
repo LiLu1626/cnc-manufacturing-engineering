@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VTL Architecture &amp; Components | Machine Systems</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../" class="active">Machine Systems</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch02" class="back-link">&larr; Back to 02 &middot; Vertical Turning Lathes (VTL)</a>
+<div class="hero-eyebrow">02.2 &middot; Vertical Turning Lathes</div>
+<h1>VTL Architecture &amp; Components</h1>
+
+<p>A VTL is structurally simple but massively over-built. Every component is sized for heavy cutting forces and heavy workpieces. Here's what each part does and why it matters.</p>
+
+<h2>Structural Loop</h2>
+<svg viewBox="0 0 520 280" xmlns="http://www.w3.org/2000/svg" style="max-width:520px;width:100%;margin:1rem auto;display:block;">
+  <!-- bed -->
+  <rect x="60" y="230" width="400" height="30" fill="#07574f"/>
+  <!-- column -->
+  <rect x="380" y="40" width="40" height="190" fill="#0b766e"/>
+  <!-- cross rail -->
+  <rect x="140" y="40" width="280" height="22" fill="#0b766e"/>
+  <!-- saddle/ram -->
+  <rect x="220" y="62" width="30" height="100" fill="#5c6872"/>
+  <!-- table -->
+  <ellipse cx="260" cy="225" rx="120" ry="14" fill="#07574f"/>
+  <rect x="140" y="214" width="240" height="12" fill="#0b766e"/>
+  <!-- forces arrows -->
+  <line x1="235" y1="180" x2="235" y2="215" stroke="#c0392b" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="150" y="170" font-size="12" fill="#c0392b">Cutting force path</text>
+  <path d="M235,180 L235,62 L400,62 L400,245 L260,245 L260,225" fill="none" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#c0392b"/></marker></defs>
+</svg>
+
+<p>The cutting force travels from the tool → ram → cross rail → column → bed → table → workpiece. Every joint in this loop deflects under load. A rigid VTL has a short, symmetric, box-type loop — that's why columns are thick and beds are massive.</p>
+
+<h2>Core Components</h2>
+<table>
+  <tr><th>Component</th><th>Function</th><th>What to watch</th></tr>
+  <tr><td><strong>Machine Bed</strong></td><td>Foundation; absorbs vibration and holds geometry</td><td>Heavier is better. Older VTLs are often cast iron; newer ones may be weldments or polymer concrete.</td></tr>
+  <tr><td><strong>Column</strong></td><td>Vertical support for the cross rail and ram</td><td>Box-type column is stiffer than open C-frame. Watch for column twist under heavy cuts.</td></tr>
+  <tr><td><strong>Cross Rail</strong></td><td>Horizontal beam that moves up/down the column; carries the ram saddle</td><td>Must clamp rigidly to the column once positioned. Cross-rail droop = inaccurate facing.</td></tr>
+  <tr><td><strong>Ram / Tool Slide</strong></td><td>Moves in and out (X) over the table; holds the tool block</td><td>Ram deflection under load is the #1 accuracy limit. Longer ram reach = more deflection.</td></tr>
+  <tr><td><strong>Rotary Table</strong></td><td>Horizontal spindle face; holds and rotates the workpiece</td><td>Table runout and flatness directly determine part accuracy. Powered by gearbox or direct drive.</td></tr>
+  <tr><td><strong>Main Spindle / Gearbox</strong></td><td>Drives the table rotation</td><td>Geared heads deliver high torque at low RPM — essential for heavy steel cuts.</td></tr>
+</table>
+
+<h2>Guideways: Box Ways vs Linear Ways</h2>
+<table>
+  <tr><th></th><th>Box (Scrapped) Ways</th><th>Linear Guideways</th></tr>
+  <tr><td>Rigidity / damping</td><td>Excellent — large contact area absorbs vibration</td><td>Lower damping; can chatter on hard cuts</td></tr>
+  <tr><td>Speed</td><td>Slower (10–25 m/min)</td><td>Fast (30–60 m/min)</td></tr>
+  <tr><td>Wear</td><td>Scraped surfaces last decades; re-scrapable</td><td>Cartridge bearings, replaced as units</td></tr>
+  <tr><td>Best for</td><td>Heavy cutting, steel, cast iron, big stock removal</td><td>Light fast cuts, aluminum, high production</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Heavy VTLs almost always use box ways.</strong> The cutting forces in a VTL facing operation are enormous. Linear ways would chatter and deflect. The slower rapids don't matter much because VTL work is heavy-cut dominated, not positioning dominated.</p>
+</div>
+
+<h2>Axes on a VTL</h2>
+<table>
+  <tr><th>Axis</th><th>Movement</th><th>Typical travel</th></tr>
+  <tr><td><strong>X</strong></td><td>Ram in/out across the table radius</td><td>Determines max turning diameter</td></tr>
+  <tr><td><strong>Z</strong></td><td>Ram vertical up/down</td><td>Determines max part height</td></tr>
+  <tr><td><strong>C</strong></td><td>Table indexing / spindle orientation</td><td>Allows milling, drilling on a bolt circle, or C-axis turning</td></tr>
+  <tr><td><strong>Cross-rail vertical</strong></td><td>Rail moves up/down the column (manual or automatic)</td><td>Positions the ram for part height</td></tr>
+</table>
+
+<h2>Tooling System</h2>
+<p>VTL tools are held in a <strong>tool block</strong> or <strong>turret</strong> mounted on the ram:</p>
+<ul>
+  <li><strong>Manual tool block:</strong> One tool at a time, clamped in a holder. Common on smaller VTLs.</li>
+  <li><strong>Indexing turret:</strong> 4–12 stations, powered or manual. Allows turning, boring, facing in sequence without changing tools.</li>
+  <li><strong>Live tooling (C-axis):</strong> Driven tools in the turret for milling, drilling, tapping — turns the VTL into a turn-mill.</li>
+</ul>
+
+<div class="warning">
+  <p><strong>Ram overhang kills accuracy.</strong> The farther the ram extends from the cross rail, the more it deflects under cutting force. If you're turning a 2000 mm diameter part on a VTL with only 800 mm of ram travel, you can't reach the cut without extending the ram fully — and that's where deflection and chatter appear. When selecting a VTL, match ram travel to the part diameter, not just table diameter.</p>
+</div>
+
+<h2>Auxiliary Systems</h2>
+<table>
+  <tr><th>System</th><th>Purpose</th></tr>
+  <tr><td><strong>Coolant system</strong></td><td>High-pressure coolant breaks chips and cools the cut; often flooded onto the table</td></tr>
+  <tr><td><strong>Chip conveyor</strong></td><td>Chips fall off the table into a pit; conveyor removes them automatically</td></tr>
+  <tr><td><strong>Hydraulic system</strong></td><td>Clamps workholding, indexes turret, clamps cross rail</td></tr>
+  <tr><td><strong>Lubrication</strong></td><td>Automatic oil/ grease to ways, ballscrews, gearbox</td></tr>
+  <tr><td><strong>Probing</strong></td><td>Touch probe on the table to set part zero and check dimensions in-cycle</td></tr>
+</table>
+
+<div class="nav-links">
+  <a href="../vtl-fundamentals/">&larr; VTL Fundamentals</a>
+  <a href="../vtl-operations/">Next: VTL Machining Operations &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VTL Fundamentals | Machine Systems</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../" class="active">Machine Systems</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch02" class="back-link">&larr; Back to 02 &middot; Vertical Turning Lathes (VTL)</a>
+<div class="hero-eyebrow">02.1 &middot; Vertical Turning Lathes</div>
+<h1>VTL Fundamentals</h1>
+
+<p>A Vertical Turning Lathe (VTL) — also called a Vertical Boring Mill — is a turning machine where the spindle axis is vertical. The workpiece sits on a horizontal rotary table and rotates about the vertical Z-axis. This inverted geometry makes VTLs the natural choice for large, heavy, short, large-diameter parts that would be impractical on a horizontal lathe.</p>
+
+<h2>How a VTL Works</h2>
+
+<svg viewBox="0 0 520 380" xmlns="http://www.w3.org/2000/svg" style="max-width:520px;width:100%;margin:1rem auto;display:block;">
+  <!-- ground -->
+  <rect x="20" y="350" width="480" height="8" fill="#5c6872"/>
+  <!-- base -->
+  <rect x="120" y="310" width="280" height="40" rx="4" fill="#0b766e"/>
+  <!-- column -->
+  <rect x="340" y="60" width="40" height="250" fill="#07574f"/>
+  <!-- cross rail -->
+  <rect x="180" y="60" width="200" height="24" rx="3" fill="#0b766e"/>
+  <!-- ram -->
+  <rect x="220" y="84" width="28" height="120" fill="#5c6872"/>
+  <!-- tool holder -->
+  <rect x="214" y="200" width="40" height="18" fill="#17242f"/>
+  <!-- tool bit -->
+  <polygon points="220,218 248,218 234,240" fill="#0b766e"/>
+  <!-- table -->
+  <ellipse cx="260" cy="290" rx="110" ry="18" fill="#07574f"/>
+  <rect x="150" y="278" width="220" height="14" fill="#0b766e"/>
+  <!-- workpiece (ring/disc) -->
+  <ellipse cx="260" cy="270" rx="70" ry="12" fill="#e6f4f2" stroke="#0b766e" stroke-width="2"/>
+  <ellipse cx="260" cy="266" rx="70" ry="10" fill="#fff"/>
+  <!-- labels -->
+  <text x="390" y="100" font-size="13" fill="#17242f">Column</text>
+  <text x="390" y="75" font-size="13" fill="#17242f">Cross Rail</text>
+  <text x="120" y="140" font-size="13" fill="#17242f">Ram (Z-axis)</text>
+  <text x="100" y="210" font-size="13" fill="#17242f">Tool</text>
+  <text x="370" y="275" font-size="13" fill="#17242f">Rotary Table</text>
+  <text x="80" y="268" font-size="13" fill="#17242f">Workpiece</text>
+  <!-- Z axis arrow -->
+  <line x1="180" y1="90" x2="180" y2="200" stroke="#0b766e" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="155" y="150" font-size="12" fill="#0b766e">Z</text>
+  <!-- X axis arrow -->
+  <line x1="180" y1="290" x2="340" y2="290" stroke="#0b766e" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="250" y="305" font-size="12" fill="#0b766e">X</text>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0b766e"/></marker></defs>
+</svg>
+
+<p>The workpiece bolts or chucks onto the horizontal rotary table. The table rotates about Z. The ram (carrying the tool) moves vertically in Z and horizontally across the table diameter in X. Facing and OD/ID turning happen as the table spins while the tool feeds.</p>
+
+<h2>VTL vs Horizontal Lathe</h2>
+<table>
+  <tr><th></th><th>VTL (Vertical)</th><th>Horizontal Lathe</th></tr>
+  <tr><td>Spindle orientation</td><td>Vertical</td><td>Horizontal</td></tr>
+  <tr><td>Part support</td><td>Table supports weight downward — gravity works for you</td><td>Chuck must hold part against gravity; sag on long parts</td></tr>
+  <tr><td>Part size sweet spot</td><td>Large diameter, short height (rings, discs, flywheels, valve bodies)</td><td>Long shafts, small-to-medium diameters</td></tr>
+  <tr><td>Loading</td><td>Overhead crane / forklift onto table — easy for heavy parts</td><td>Manual or robot into chuck; heavy parts are hard to load</td></tr>
+  <tr><td>Chip control</td><td>Chips fall away from the cut into a pit/conveyor</td><td>Chips fall on the ways and part</td></tr>
+  <tr><td>Typical max swing</td><td>1–10 m+ (some giant VTLs are 20 m+)</td><td>0.2–2 m typically</td></tr>
+  <tr><td>Accuracy on large parts</td><td>Excellent — no sag, rigid column</td><td>Deflection and sag increase with length</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Rule of thumb:</strong> If your part looks like a <em>plate, ring, disc, or wheel</em> and weighs hundreds of kg, a VTL is the natural machine. If it looks like a <em>shaft, bar, or long tube</em>, use a horizontal lathe. A VTL is rarely chosen for parts under ~300 mm diameter — a horizontal lathe is cheaper and faster to set up.</p>
+</div>
+
+<h2>Typical VTL Applications</h2>
+<table>
+  <tr><th>Industry</th><th>Typical parts</th></tr>
+  <tr><td>Oil &amp; Gas</td><td>Flanges, valve bodies, wellhead components, casing hubs</td></tr>
+  <tr><td>Power Generation</td><td>Turbine discs, generator rings, impellers, valve seats</td></tr>
+  <tr><td>Aerospace</td><td>Turbine housings, engine rings, structural forgings</td></tr>
+  <tr><td>Rail / Heavy Equipment</td><td>Wheel hubs, brake drums, gear blanks</td></tr>
+  <tr><td>General Heavy Machining</td><td>Large bearing rings, die sets, pressure vessel closures</td></tr>
+</table>
+
+<h2>Advantages</h2>
+<ul>
+  <li><strong>Gravity-assisted workholding:</strong> The part sits on the table; you're fighting gravity less.</li>
+  <li><strong>Easy loading:</strong> Overhead crane drops the part onto the table; no lifting into a chuck.</li>
+  <li><strong>No deflection on large diameters:</strong> Horizontal lathes sag under their own length; VTLs don't.</li>
+  <li><strong>Open front:</strong> Operator can see the cut and reach the setup easily.</li>
+  <li><strong>Chip evacuation:</strong> Chips fall into the machine pit, not onto the ways.</li>
+</ul>
+
+<h2>Limitations</h2>
+<ul>
+  <li><strong>Poor for long parts:</strong> Z-axis travel is limited by column height. A 1 m tall part needs a very tall VTL.</li>
+  <li><strong>Expensive floor space:</strong> VTLs are big, heavy, and often need a pit dug in the floor.</li>
+  <li><strong>Slower for small parts:</strong> Setup, programming, and overhead move-times aren't worth it for tiny work.</li>
+  <li><strong>Limited back-working:</strong> Most VTLs are single-sided — you can't easily flip and do the back side without re-fixturing.</li>
+</ul>
+
+<div class="example">
+  <p><strong>Example: Choosing between VTL and horizontal lathe</strong></p>
+  <p>A shop needs to machine a forged steel flange: 1200 mm OD, 800 mm ID, 120 mm thick, weighing 450 kg. Tolerance on the bolt circle is ±0.05 mm, facing surface flatness 0.02 mm.</p>
+  <ul>
+    <li><strong>Horizontal lathe?</strong> A 1200 mm swing lathe is enormous. Holding a 450 kg disc in a chuck is dangerous. Long chuck overhang causes sag. Loading is a nightmare.</li>
+    <li><strong>VTL?</strong> The part bolts directly to the table. The table supports the weight rigidly. The overhead crane sets it down in 5 minutes. Facing and OD/ID turning happen in one setup. Flatness on a faced surface is excellent because the tool is rigid and the table doesn't sag.</li>
+  </ul>
+  <p><strong>Decision: VTL.</strong> This is exactly the geometry VTLs were built for.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../../#ch02">&larr; Machine Systems</a>
+  <a href="../vtl-architecture/">Next: VTL Architecture &amp; Components &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

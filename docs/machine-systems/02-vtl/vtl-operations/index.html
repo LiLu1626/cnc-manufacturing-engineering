@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VTL Machining Operations | Machine Systems</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../" class="active">Machine Systems</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch02" class="back-link">&larr; Back to 02 &middot; Vertical Turning Lathes (VTL)</a>
+<div class="hero-eyebrow">02.3 &middot; Vertical Turning Lathes</div>
+<h1>VTL Machining Operations</h1>
+
+<p>On a VTL the table rotates in C and the tool moves in X and Z. That geometry supports the same turning operations as a horizontal lathe, but the setup and physics are different. Here's what you actually do on a VTL.</p>
+
+<h2>Facing</h2>
+<p>The tool moves radially inward (X direction) while the table spins. This produces a flat face. Because the work sits on a horizontal table, facing on a VTL is usually very flat and stable — the tool is rigidly mounted and the part doesn't sag.</p>
+<div class="callout">
+  <p><strong>Good practice:</strong> Face from OD toward ID (or vice versa consistently). Take a light skim cut at the end to clean up the face. The facing surface becomes your datm for height — watch for table flatness and clamping distortion.</p>
+</div>
+
+<h2>OD Turning</h2>
+<p>The tool moves vertically (Z) along the outside diameter. Used for stepping diameters, turning tapers, and profiling the outer surface. Because the part is on a vertical table, gravity holds it down — heavy cuts are stable.</p>
+
+<h2>ID Turning / Boring</h2>
+<p>The tool reaches over the table and bores into the inside diameter. On a VTL this is often the most valuable operation: large rings, flanges, and valve bodies need accurate bores, and the VTL does it in the same setup as facing and OD turning.</p>
+
+<h2>Grooving, Parting, Profiling</h2>
+<ul>
+  <li><strong>Grooving:</strong> Face grooves, OD/ID grooves for seals or retaining rings.</li>
+  <li><strong>Profiling:</strong> CNC-controlled X+Z interpolation for contoured shapes (turbine discs, valve seats).</li>
+  <li><strong>Taper turning:</strong> Simultaneous X+Z motion to cut angled surfaces.</li>
+</ul>
+
+<h2>Drilling &amp; Boring on the VTL</h2>
+<p>With C-axis and a driven tool or a drill held in the ram, you can:</p>
+<ul>
+  <li>Drill axially (downward) into the part centerline</li>
+  <li>Bolt circle drilling — index C, drill each hole</li>
+  <li>Tapping with rigid tapping</li>
+</ul>
+<div class="example">
+  <p><strong>Example: Flange bolt circle</strong></p>
+  <p>A 1200 mm flange has 12 holes on a 1000 mm bolt circle. On a VTL with C-axis, you program: face → turn OD → bore ID → index C to each hole position → drill. The part never leaves the machine. That's the VTL advantage — one setup does turning, boring, and hole patterns.</p>
+</div>
+
+<h2>Typical VTL Workflow</h2>
+<table>
+  <tr><th>Step</th><th>Operation</th></tr>
+  <tr><td>1</td><td>Crane lowers forging/casting onto the table; clamp on pads or soft jaws</td></tr>
+  <tr><td>2</td><td>Probe to find part center and height; set G54</td></tr>
+  <tr><td>3</td><td>Rough face and rough OD/ID (heavy stock removal)</td></tr>
+  <tr><td>4</td><td>Semifinish, then finish cut for print dimensions</td></tr>
+  <tr><td>5</td><td>Grooves, tapers, chamfers</td></tr>
+  <tr><td>6</td><td>C-axis operations: bolt circle drill, tap, or mill features</td></tr>
+  <tr><td>7</td><td>Probe check critical dimensions in-cycle</td></tr>
+  <tr><td>8</td><td>Unload; part goes to inspection</td></tr>
+</table>
+
+<h2>What Makes VTL Operations Different</h2>
+<ul>
+  <li><strong>Clamping strategy matters more:</strong> The part is bolted down, not gripped in a chuck. You need dedicated soft jaw pads or custom fixturing.</li>
+  <li><strong>Part must be balanced:</strong> An unbalanced 1000 kg disc spinning at 300 RPM will walk off the table and shake the building. Rough balance before first cut.</li>
+  <li><strong>Chip evacuation is vertical:</strong> Chips fall onto the table and around the part. Clean between operations — chips under the part cause wavy surfaces.</li>
+  <li><strong>Coolant floods:</strong> Big cuts need high coolant volume to clear chips and control heat.</li>
+</ul>
+
+<div class="warning">
+  <p><strong>Never leave a clamped part unattended during first cut.</strong> Especially on castings and forgings — the first cut may reveal a cracked or shifted forging. Start at low RPM and light feed, watch for chatter or pulling.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../vtl-architecture/">&larr; VTL Architecture</a>
+  <a href="../../#ch02">Back to Chapter 02 &uarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>

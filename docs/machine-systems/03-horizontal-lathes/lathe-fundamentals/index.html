@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Horizontal CNC Lathe Fundamentals | Machine Systems</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../../knowledge-base/">Knowledge Base</a></li>
+      <li><a href="../../" class="active">Machine Systems</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch03" class="back-link">&larr; Back to 03 &middot; Horizontal CNC Lathes</a>
+<div class="hero-eyebrow">03.1 &middot; Horizontal CNC Lathes</div>
+<h1>Horizontal CNC Lathe Fundamentals</h1>
+
+<p>The horizontal CNC lathe (also called a turning center) is the most common CNC machine in the world. The spindle axis is horizontal, the part rotates in a chuck, and a turret holds tools that move in X (cross) and Z (along the spindle). This chapter explains the architecture and the options that separate a basic 2-axis lathe from a high-end turn-mill.</p>
+
+<h2>Basic Anatomy</h2>
+<svg viewBox="0 0 560 240" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%;margin:1rem auto;display:block;">
+  <!-- bed -->
+  <rect x="30" y="180" width="500" height="30" fill="#07574f"/>
+  <!-- headstock -->
+  <rect x="50" y="80" width="90" height="100" fill="#0b766e"/>
+  <!-- spindle nose / chuck -->
+  <rect x="140" y="110" width="40" height="40" fill="#5c6872"/>
+  <!-- workpiece -->
+  <rect x="180" y="120" width="120" height="20" fill="#e6f4f2" stroke="#0b766e" stroke-width="1.5"/>
+  <!-- turret -->
+  <rect x="280" y="130" width="50" height="50" fill="#17242f"/>
+  <polygon points="290,130 310,130 300,110" fill="#0b766e"/>
+  <!-- tailstock -->
+  <rect x="440" y="100" width="60" height="80" fill="#5c6872"/>
+  <line x1="430" y1="130" x2="300" y2="130" stroke="#5c6872" stroke-width="3"/>
+  <!-- labels -->
+  <text x="55" y="70" font-size="12" fill="#17242f">Headstock</text>
+  <text x="140" y="100" font-size="12" fill="#17242f">Chuck</text>
+  <text x="200" y="115" font-size="12" fill="#17242f">Workpiece</text>
+  <text x="275" y="195" font-size="12" fill="#17242f">Turret (X/Z)</text>
+  <text x="445" y="90" font-size="12" fill="#17242f">Tailstock</text>
+  <!-- Z arrow -->
+  <line x1="180" y1="60" x2="400" y2="60" stroke="#0b766e" stroke-width="2" marker-end="url(#za)"/>
+  <text x="280" y="50" font-size="12" fill="#0b766e">Z (along spindle)</text>
+  <defs><marker id="za" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0b766e"/></marker></defs>
+</svg>
+
+<h2>Lathe Configurations Explained</h2>
+<table>
+  <tr><th>Type</th><th>Axes</th><th>What it adds</th><th>Best for</th></tr>
+  <tr><td><strong>2-Axis</strong></td><td>X + Z</td><td>Basic turning only</td><td>Shafts, sleeves, simple OD/ID work</td></tr>
+  <tr><td><strong>C-Axis</strong></td><td>X + Z + C</td><td>Spindle can index and hold position</td><td>Milling flats, drilling cross-holes, keyways</td></tr>
+  <tr><td><strong>Y-Axis</strong></td><td>X + Z + Y + C</td><td>Turret can move off-centerline</td><td>Off-center milling, eccentric features, polygons</td></tr>
+  <tr><td><strong>Sub-Spindle</strong></td><td>+ second spindle</td><td>Parts transfer to back spindle</td><td>Complete back-side work in one setup</td></tr>
+  <tr><td><strong>Dual Turret</strong></td><td>Two turrets</td><td>Can cut simultaneously</td><td>High-volume production, cycle time reduction</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Live tooling</strong> means the turret holds powered (rotating) tools. Combined with C-axis, it turns a lathe into a turn-mill — you can mill a flat, drill a cross-hole, or tap a thread without moving the part to a mill. This is the standard for complex turned parts today.</p>
+</div>
+
+<h2>Slant Bed vs Flat Bed</h2>
+<table>
+  <tr><th></th><th>Slant Bed (30–45°)</th><th>Flat Bed (horizontal ways)</th></tr>
+  <tr><td>Chip flow</td><td>Chips fall away from the ways</td><td>Chips collect on the ways</td></tr>
+  <tr><td>Ergonomics</td><td>Better operator visibility and access</td><td>Lower, but harder to see the cut</td></tr>
+  <tr><td>Rigidity</td><td>Good — box-ways on a slant</td><td>Very rigid, classic design</td></tr>
+  <tr><td>Typical use</td><td>Modern CNC lathes, production</td><td>Heavy-duty oil country, big bore lathes</td></tr>
+</table>
+
+<h2>Bar Capacity vs Chucking</h2>
+<p>Lathes are often split by how the bar comes in:</p>
+<ul>
+  <li><strong>Bar-fed lathes:</strong> Bar stock passes through the spindle bore. Bar feeder on the back. Small-to-medium parts, high volume. Spindle bore size (e.g. 42 mm, 65 mm, 102 mm) sets the max bar diameter.</li>
+  <li><strong>Chucking lathes:</strong> Castings, forgings, or pre-cut blanks are loaded into the chuck individually. Larger parts, lower volume.</li>
+</ul>
+
+<div class="example">
+  <p><strong>Example: Lathe spec comparison</strong></p>
+  <p>A shop needs to produce small hex fittings from 30 mm hex bar, 50,000/year. They're choosing between:</p>
+  <ul>
+    <li><strong>Machine A:</strong> 6" chuck, 42 mm bar bore, 5,000 RPM, 12-station turret, no live tooling → cheap, but can't mill the hex flats in one setup.</li>
+    <li><strong>Machine B:</strong> 6" chuck, 42 mm bar bore, 5,000 RPM, live tooling + C-axis, sub-spindle → more expensive, but turns, mills flats, and parts off in one cycle. No secondary mill op.</li>
+  </ul>
+  <p><strong>Decision: Machine B.</strong> The added live tooling and sub-spindle eliminate a second setup and a second machine. Over 50,000 parts/year, that's a huge labor savings.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../../#ch03">&larr; Machine Systems</a>
+  <a href="../spindle-chuck-turret/">Next: Spindle, Chuck &amp; Turret &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
+</body>
+</html>
