@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fits & Hole Basis | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch08" class="back-link">&larr; Back to 08 &middot; Tolerances &amp; Fits</a>
+<div class="hero-eyebrow">08.2 &middot; Tolerances &amp; Fits</div>
+<h1>Fits — Clearance, Transition, Interference</h1>
+
+<p>A "fit" describes how two mating parts (a hole and a shaft) go together. Will the shaft slide freely? Will it need pressing in? Will it rotate but not fall out? The ISO fit system standardizes this so a designer can specify H7/g6 and the machinist knows exactly what to make. This page explains the three fit types and the most common combinations you'll see on drawings.</p>
+
+<h2>What Is a Fit?</h2>
+<p>A fit is the range of possible clearance or interference between the hole and shaft, considering both of their tolerances. Because both parts vary within their tolerance bands, the actual fit can range from loosest (largest hole + smallest shaft) to tightest (smallest hole + largest shaft).</p>
+
+<table>
+  <tr><th>Concept</th><th>Definition</th></tr>
+  <tr><td><strong>Clearance</strong></td><td>Hole is always larger than shaft — there's a gap</td></tr>
+  <tr><td><strong>Interference</strong></td><td>Hole is always smaller than shaft — must press or shrink together</td></tr>
+  <tr><td><strong>Transition</strong></td><td>Can be clearance or interference depending on actual sizes</td></tr>
+</table>
+
+<h2>The Three Fit Types</h2>
+
+<h3>1. Clearance Fit — There's Always a Gap</h3>
+<p>The smallest hole is still larger than the largest shaft. The parts slide or rotate freely. Used for moving joints, guides, and easy assembly.</p>
+
+<table>
+  <tr><th>Fit</th><th>Typical use</th><th>Characteristics</th></tr>
+  <tr><td>H7/g6</td><td>Precise sliding fits, machine tool guides</td><td>Small clearance, precise alignment, easy assembly</td></tr>
+  <tr><td>H7/h6</td><td>Location fits, stationary parts that should slide apart</td><td>Minimal clearance — "zero" fit, easy assembly</td></tr>
+  <tr><td>H8/f7</td><td>Rotating bearings, moderate speed</td><td>Larger clearance, free rotation</td></tr>
+  <tr><td>H9/d9</td><td>Loose running fits, dirty environments</td><td>Large clearance, forgiving of dirt/scale</td></tr>
+</table>
+
+<div class="example">
+  <p><strong>Example: ⌀25 H7/g6</strong><br>
+  Hole H7: ⌀25 +0.021/0 → range 25.000–25.021<br>
+  Shaft g6: ⌀25 −0.007/−0.020 → range 24.980–24.993<br><br>
+  Loosest fit: 25.021 − 24.980 = 0.041 mm clearance<br>
+  Tightest fit: 25.000 − 24.993 = 0.007 mm clearance<br>
+  Always clearance — the shaft slides in the hole.</p>
+</div>
+
+<h3>2. Transition Fit — Sometimes Clearance, Sometimes Interference</h3>
+<p>The tolerance bands overlap. Depending on the actual sizes, the shaft might slide in (clearance) or need light pressing (interference). Used for parts that must be accurately located but may need disassembly.</p>
+
+<table>
+  <tr><th>Fit</th><th>Typical use</th><th>Characteristics</th></tr>
+  <tr><td>H7/k6</td><td>Gear on shaft, pulleys, keyed assemblies</td><td>Light interference — assemble with a press, can be disassembled</td></tr>
+  <tr><td>H7/js6</td><td>Precise location, easy assembly</td><td>Near-zero average, can go either way</td></tr>
+  <tr><td>H7/n6</td><td>Permanent location, heavy press</td><td>More interference — rarely disassembled</td></tr>
+</table>
+
+<div class="example">
+  <p><strong>Example: ⌀25 H7/k6</strong><br>
+  Hole H7: ⌀25 +0.021/0 → range 25.000–25.021<br>
+  Shaft k6: ⌀25 +0.015/+0.002 → range 25.002–25.015<br><br>
+  Loosest: 25.021 − 25.002 = +0.019 (slight clearance)<br>
+  Tightest: 25.000 − 25.015 = −0.015 (slight interference)<br>
+  Usually a light press fit — accurate location, but can be taken apart.</p>
+</div>
+
+<h3>3. Interference Fit — Always a Press</h3>
+<p>The largest shaft is still bigger than the smallest hole. The parts must be pressed together (or the hole heated / shaft cooled). Once assembled, they're locked — no relative movement.</p>
+
+<table>
+  <tr><th>Fit</th><th>Typical use</th><th>Characteristics</th></tr>
+  <tr><td>H7/p6</td><td>Permanent assembly, light press</td><td>Moderate interference, press fit with arbor press</td></tr>
+  <tr><td>H7/s6</td><td>Heavy duty, permanent</td><td>Significant interference — hydraulic press or shrink fit</td></tr>
+  <tr><td>H7/u6</td><td>Very heavy loads</td><td>Heavy interference — shrink fit (heat hole, freeze shaft)</td></tr>
+</table>
+
+<div class="example">
+  <p><strong>Example: ⌀25 H7/p6</strong><br>
+  Hole H7: ⌀25 +0.021/0 → range 25.000–25.021<br>
+  Shaft p6: ⌀25 +0.035/+0.022 → range 25.022–25.035<br><br>
+  Minimum interference: 25.022 − 25.021 = 0.001 mm<br>
+  Maximum interference: 25.035 − 25.000 = 0.035 mm<br>
+  Always interference — the shaft is pressed in and stays.</p>
+</div>
+
+<h2>Hole Basis vs Shaft Basis</h2>
+
+<h3>Hole Basis System (most common)</h3>
+<p>The hole's tolerance is fixed (H — lower deviation = 0), and the shaft tolerance is changed to achieve different fits. This is the standard because holes are usually made with fixed tools (drills, reamers) while shafts are turned to any size.</p>
+<table>
+  <tr><th>Fit notation</th><th>Hole</th><th>Shaft</th><th>Type</th></tr>
+  <tr><td>H7/g6</td><td>H7 (fixed)</td><td>g6</td><td>Clearance</td></tr>
+  <tr><td>H7/h6</td><td>H7 (fixed)</td><td>h6</td><td>Clearance (minimal)</td></tr>
+  <tr><td>H7/k6</td><td>H7 (fixed)</td><td>k6</td><td>Transition</td></tr>
+  <tr><td>H7/p6</td><td>H7 (fixed)</td><td>p6</td><td>Interference</td></tr>
+</table>
+
+<h3>Shaft Basis System</h3>
+<p>The shaft tolerance is fixed (h — upper deviation = 0), and the hole is varied. Used when one shaft is used for multiple fits (e.g., a stepped shaft with different hubs). Less common in CNC machining.</p>
+
+<div class="callout">
+  <p><strong>Why hole basis dominates:</strong> in a CNC shop, you bore or ream the hole to H7 (the standard), then turn the shaft to g6, k6, or p6 as needed. It's much easier to adjust the shaft size on a lathe than to make different reamers for different hole tolerances.</p>
+</div>
+
+<h2>How to Read a Fit Callout on a Drawing</h2>
+<p>A drawing might show ⌀25 H7/g6 or ⌀25 H7 with a note that the shaft is g6. The format is:</p>
+<div class="formula-box">
+  <p><strong>⌀ [basic size] [hole tolerance] / [shaft tolerance]</strong></p>
+  <p>Example: ⌀25 H7/g6 = 25 mm basic, hole H7, shaft g6</p>
+</div>
+
+<h2>Choosing the Right Fit — Quick Reference</h2>
+<table>
+  <tr><th>If you need...</th><th>Use this fit</th><th>Why</th></tr>
+  <tr><td>Shaft that rotates freely in a hole</td><td>H8/f7 or H7/g6</td><td>Clearance for lubrication and rotation</td></tr>
+  <tr><td>Parts that slide apart by hand</td><td>H7/h6</td><td>Near-zero clearance, easy assembly</td></tr>
+  <tr><td>Gear/pulley on shaft, accurate location</td><td>H7/k6</td><td>Light press — stays put, can be removed</td></tr>
+  <tr><td>Bearing inner ring on shaft</td><td>k5/k6 or m5/m6</td><td>Standard bearing fits — see bearing manufacturer tables</td></tr>
+  <tr><td>Permanent assembly, no disassembly</td><td>H7/p6 or H7/s6</td><td>Press or shrink fit — locked together</td></tr>
+  <tr><td>Loose fit, dirty environment</td><td>H9/d9</td><td>Large clearance tolerates contamination</td></tr>
+</table>
+
+<div class="warning">
+  <p><strong>Bearing fits are special:</strong> rolling-element bearings (SKF, FAG, NSK) have their own fit recommendations. The inner ring (rotating) usually uses k5/m5; the outer ring (stationary) often uses J7 or H7. Don't guess — look up the bearing catalog.</p>
+</div>
+
+<h2>Practical Machining Notes</h2>
+<ul>
+  <li><strong>Reaming produces H7/H8 holes reliably.</strong> A properly selected reamer held in a good collet will hit H7 consistently. Boring can hit tighter, but requires more skill.</li>
+  <li><strong>Turning can hit IT6–IT7 on shafts.</strong> A finish pass with a sharp insert at correct feed gives g6/k6/p6 on most materials.</li>
+  <li><strong>For interference fits, calculate the press force.</strong> Larger interference = more force needed. Use the press fit formula: F = p × π × d × L, where p is contact pressure from interference, d is diameter, L is engagement length.</li>
+  <li><strong>Shrink fitting:</strong> heat the hole (oven or induction heater) to expand it, cool the shaft (dry ice), assemble. Thermal expansion of steel is ~11.7 ppm/°C — a 100 mm hole heated 200°C grows by 0.23 mm, enough for most interference fits.</li>
+</ul>
+
+<div class="callout">
+  <p><strong>Reference:</strong> for tolerance system concepts and common fits — <a href="../../../engineering-tools/basic-fit-reference/">Basic Fit Reference Guide</a>. For how tolerances stack across multiple features — <a href="../../../engineering-tools/tolerance-stackup-assistant/">Tolerance Stack-Up Calculator</a>.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../dimensional-tolerances/">&larr; Dimensional Tolerances</a>
+  <a href="../../#ch08">Knowledge Base &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

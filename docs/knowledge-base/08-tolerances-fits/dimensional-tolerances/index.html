@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dimensional Tolerances | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch08" class="back-link">&larr; Back to 08 &middot; Tolerances &amp; Fits</a>
+<div class="hero-eyebrow">08.1 &middot; Tolerances &amp; Fits</div>
+<h1>Dimensional Tolerances — The Language of "Close Enough"</h1>
+
+<p>No part can be made to the exact nominal size — every machining process has some variation. A tolerance defines the acceptable range around that nominal. Too tight and the part is expensive to make; too loose and it won't fit or function. This page explains the tolerance system from the ground up.</p>
+
+<h2>The Basic Terms</h2>
+<table>
+  <tr><th>Term</th><th>Definition</th><th>Example (⌀25 ±0.05)</th></tr>
+  <tr><td><strong>Nominal size</strong></td><td>The target size on the drawing — the "ideal" number</td><td>⌀25 mm</td></tr>
+  <tr><td><strong>Basic size</strong></td><td>The theoretical exact size from which deviations are measured</td><td>⌀25 mm</td></tr>
+  <tr><td><strong>Upper limit (USL)</strong></td><td>The largest acceptable size</td><td>25.05 mm</td></tr>
+  <tr><td><strong>Lower limit (LSL)</strong></td><td>The smallest acceptable size</td><td>24.95 mm</td></tr>
+  <tr><td><strong>Tolerance</strong></td><td>The total allowed variation = USL − LSL</td><td>0.10 mm</td></tr>
+  <tr><td><strong>Upper deviation (es/ES)</strong></td><td>USL − basic size</td><td>+0.05</td></tr>
+  <tr><td><strong>Lower deviation (ei/EI)</strong></td><td>LSL − basic size</td><td>−0.05</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Tolerance is always a positive number.</strong> It's the width of the allowed range, not a direction. ⌀25 ±0.05 has a tolerance of 0.10 mm, not 0.05.</p>
+</div>
+
+<h2>How Tolerances Are Written on Drawings</h2>
+
+<h3>Bilateral Tolerance</h3>
+<p>Variation allowed in both directions from nominal.</p>
+<table>
+  <tr><th>Notation</th><th>Meaning</th><th>USL / LSL</th></tr>
+  <tr><td>25 ±0.05</td><td>Equal both directions</td><td>25.05 / 24.95</td></tr>
+  <tr><td>25 +0.03/−0.07</td><td>Unequal bilateral</td><td>25.03 / 24.93</td></tr>
+</table>
+
+<h3>Unilateral Tolerance</h3>
+<p>Variation in only one direction — the other side is at nominal.</p>
+<table>
+  <tr><th>Notation</th><th>Meaning</th><th>USL / LSL</th></tr>
+  <tr><td>25 +0.1/−0</td><td>Only larger is allowed</td><td>25.10 / 25.00</td></tr>
+  <tr><td>25 +0/−0.1</td><td>Only smaller is allowed</td><td>25.00 / 24.90</td></tr>
+</table>
+
+<h3>Limit Dimensions</h3>
+<p>Max and min sizes written directly — no nominal.</p>
+<table>
+  <tr><th>Notation</th><th>Meaning</th></tr>
+  <tr><td>25.05 / 24.95</td><td>Must be between 24.95 and 25.05</td></tr>
+</table>
+
+<h3>General Tolerances (Title Block)</h3>
+<p>Dimensions without an explicit tolerance use the default from the title block. A typical title block says:</p>
+<div class="example">
+  <p><strong>UNLESS OTHERWISE SPECIFIED:</strong><br>
+  X.X ±0.1 &nbsp;&nbsp; X.XX ±0.025 &nbsp;&nbsp; X.XXX ±0.005<br>
+  ANGLES ±0.5° &nbsp;&nbsp; ALL DIMENSIONS IN mm</p>
+</div>
+<p>This means: a dimension written as 25.4 has tolerance ±0.1; 25.40 has ±0.025; 25.400 has ±0.005. The number of decimal places tells you the tolerance — this is why trailing zeros matter on a drawing.</p>
+
+<div class="warning">
+  <p><strong>Common mistake:</strong> assuming 25.0 and 25.00 are the same. On a drawing, 25.0 means ±0.1 (one decimal place), while 25.00 means ±0.025 (two decimal places). Always count the decimal places to know the default tolerance.</p>
+</div>
+
+<h2>Tolerance Grades (ISO IT Grades)</h2>
+<p>The ISO system assigns a tolerance grade to each size. IT01 is the tightest (laboratory gauge blocks); IT18 is the loosest (structural steel). For general machining, IT5–IT11 are the range you'll encounter.</p>
+
+<table>
+  <tr><th>IT grade</th><th>Tolerance at ⌀25 mm</th><th>Typical application</th><th>How to achieve it</th></tr>
+  <tr><td>IT5</td><td>9 µm</td><td>Precision gauges, bearing seats</td><td>Grinding, honing</td></tr>
+  <tr><td>IT6</td><td>13 µm</td><td>Precision fits, shaft journals</td><td>Fine turning/grinding</td></tr>
+  <tr><td>IT7</td><td>21 µm</td><td>General fits — the most common</td><td>Finish turning/boring</td></tr>
+  <tr><td>IT8</td><td>33 µm</td><td>Looser fits, non-critical holes</td><td>Standard machining</td></tr>
+  <tr><td>IT9</td><td>52 µm</td><td>Rough fits, clearances</td><td>Drilling, rough milling</td></tr>
+  <tr><td>IT10</td><td>84 µm</td><td>Non-mating features</td><td>Standard milling</td></tr>
+  <tr><td>IT11</td><td>130 µm</td><td>Rough, stock dimensions</td><td>Sawing, roughing</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>IT7 is the sweet spot.</strong> Most machined mating features are IT7 — achievable with standard CNC turning/milling, and tight enough for most fits. IT6 and above usually require grinding. IT9 and below are easy but only for non-critical dimensions.</p>
+</div>
+
+<h2>How Tolerance Affects Cost</h2>
+<p>Tolerance is not free. As tolerance gets tighter, cost increases — often exponentially.</p>
+
+<table>
+  <tr><th>Tolerance (⌀25)</th><th>Relative cost</th><th>Process needed</th></tr>
+  <tr><td>±0.5 mm (IT12–13)</td><td>1× (baseline)</td><td>Standard CNC</td></tr>
+  <tr><td>±0.1 mm (IT10)</td><td>1.2×</td><td>Standard CNC, good tooling</td></tr>
+  <tr><td>±0.025 mm (IT7–8)</td><td>2×</td><td>Finish pass, inspection</td></tr>
+  <tr><td>±0.01 mm (IT6)</td><td>4×</td><td>Fine finish, careful setup, 100% check</td></tr>
+  <tr><td>±0.005 mm (IT5)</td><td>8–10×</td><td>Grinding, temperature-controlled room, CMM</td></tr>
+</table>
+
+<div class="warning">
+  <p><strong>Design rule:</strong> use the loosest tolerance that still works. Every unnecessary decimal place costs money. If a hole only needs to be ±0.1, don't specify ±0.025 "just to be safe." The shop will charge you for it, and the defect rate goes up.</p>
+</div>
+
+<h2>Dimensioning Styles and Tolerance Accumulation</h2>
+<p>How you chain dimensions affects how tolerances stack up.</p>
+
+<h3>Chain Dimensioning (end-to-end)</h3>
+<p>Each dimension starts where the previous one ended. Tolerances accumulate: if you have 3 dimensions each ±0.1, the total stack from first to last can be ±0.3.</p>
+
+<h3>Baseline Dimensioning (from one edge)</h3>
+<p>All dimensions measured from the same reference edge. No accumulation — each dimension's tolerance is independent. But it can be harder to machine and inspect.</p>
+
+<h3>Direct Dimensioning</h3>
+<p>The functionally important distance is dimensioned directly, with other dimensions as reference (in parentheses). This is best practice for critical features.</p>
+
+<div class="callout">
+  <p><strong>See also:</strong> calculate how tolerances stack up across multiple features — <a href="../../../engineering-tools/tolerance-stackup-assistant/">Tolerance Stack-Up Calculator</a>. For fits between mating parts — <a href="../fits-and-hole-basis/">Fits &amp; Hole Basis System</a>.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../../#ch08">&larr; Knowledge Base</a>
+  <a href="../fits-and-hole-basis/">Next: Fits &amp; Hole Basis &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>
