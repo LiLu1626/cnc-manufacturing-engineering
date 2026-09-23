@@ -1,0 +1,65 @@
+---
+title: Material Removal Rate Calculator
+---
+
+<link rel="stylesheet" href="styles.css">
+
+<main class="tool-page">
+  <header class="tool-header">
+    <div class="eyebrow">Machining Parameters · Released</div>
+    <h1>Material Removal Rate Calculator</h1>
+    <p>
+      Estimate milling material removal rate from width of cut,
+      depth of cut, and feed rate.
+    </p>
+  </header>
+
+  <section class="tool-card" aria-labelledby="calculator-title">
+    <h2 id="calculator-title">Milling MRR Estimate</h2>
+
+    <div class="tool-grid">
+      <div class="field">
+        <label for="widthOfCut">Radial width of cut, ae (mm)</label>
+        <input id="widthOfCut" type="number" value="6" min="0" step="any">
+      </div>
+
+      <div class="field">
+        <label for="depthOfCut">Axial depth of cut, ap (mm)</label>
+        <input id="depthOfCut" type="number" value="3" min="0" step="any">
+      </div>
+
+      <div class="field">
+        <label for="feedRate">Table feed rate, Vf (mm/min)</label>
+        <input id="feedRate" type="number" value="955" min="0" step="any">
+      </div>
+    </div>
+
+    <div class="result" aria-live="polite">
+      <div>Material removal rate</div>
+      <div class="result-value" id="result">—</div>
+      <div class="result-detail" id="detail"></div>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>Formula and meaning</h2>
+    <p><strong>MRR = ae × ap × Vf</strong></p>
+    <p>
+      When all dimensions are entered in millimetres and feed rate is
+      millimetres per minute, the result is shown in mm³/min and cm³/min.
+    </p>
+  </section>
+
+  <aside class="notice">
+    <strong>For beginners:</strong> MRR is a planning indicator, not a safe-cut
+    recommendation. Material, cutter diameter, tool overhang, machine power,
+    toolpath engagement, coolant, and workholding must also be checked before
+    increasing cutting load.
+  </aside>
+
+  <footer class="tool-footer">
+    Designed by Li Lu · CNC &amp; Manufacturing Engineering
+  </footer>
+</main>
+
+<script src="calculator.js"></script>
