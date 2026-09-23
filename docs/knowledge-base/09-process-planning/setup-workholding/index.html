@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Setup & Workholding | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch09" class="back-link">&larr; Back to 09 &middot; Machining Process Planning</a>
+<div class="hero-eyebrow">09.2 &middot; Machining Process Planning</div>
+<h1>Setup &amp; Workholding — Hold It Right</h1>
+
+<p>A beautiful program is worthless if the part moves while you cut it. Workholding is the foundation of every good setup: hold the part rigidly, locate it correctly, and give the tool access to everything it needs. This page covers the main workholding options, when to use each, and the rules that prevent scrap.</p>
+
+<h2>The 3-2-1 Locating Principle</h2>
+<p>A free part in 3D space has 6 degrees of freedom: 3 translations (X, Y, Z) and 3 rotations (around X, Y, Z). To locate it precisely, you constrain all 6:</p>
+
+<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="max-width:360px;margin:16px auto;display:block;">
+  <!-- Block on 3 points bottom -->
+  <rect x="120" y="80" width="160" height="80" fill="none" stroke="#0b766e" stroke-width="1.5"/>
+  <!-- 3 points on bottom plane -->
+  <circle cx="150" cy="160" r="4" fill="#17242f"/>
+  <circle cx="250" cy="160" r="4" fill="#17242f"/>
+  <circle cx="200" cy="175" r="4" fill="#17242f"/>
+  <text x="200" y="195" text-anchor="middle" font-size="10" fill="#5c6872">3 points = primary plane (controls Z, rot X, rot Y)</text>
+  <!-- 2 points on side -->
+  <circle cx="120" cy="100" r="4" fill="#c0392b"/>
+  <circle cx="120" cy="140" r="4" fill="#c0392b"/>
+  <text x="60" y="120" text-anchor="middle" font-size="10" fill="#c0392b">2 pts</text>
+  <!-- 1 point on end -->
+  <circle cx="280" cy="120" r="4" fill="#e67e22"/>
+  <text x="310" y="124" text-anchor="middle" font-size="10" fill="#e67e22">1 pt</text>
+</svg>
+
+<table>
+  <tr><th>Locating points</th><th>Controls</th><th>Datum</th></tr>
+  <tr><td>3 points on primary face</td><td>Z translation + rotation about X and Y (3 DOF)</td><td>Datum A</td></tr>
+  <tr><td>2 points on side face</td><td>X translation + rotation about Z (2 DOF)</td><td>Datum B</td></tr>
+  <tr><td>1 point on end face</td><td>Y translation (1 DOF)</td><td>Datum C</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Rule:</strong> never use more than 3 points on the primary locating surface — 4 points will rock and cause inconsistent location. If the part is not flat, use 3 fixed supports and one adjustable jack.</p>
+</div>
+
+<h2>Common Workholding Options</h2>
+
+<h3>Vise (Manual / CNC)</h3>
+<p>The most common workholding for rectangular parts. Holds on 2 parallel jaws.</p>
+<table>
+  <tr><th>Pros</th><th>Cons</th></tr>
+  <tr><td>Fast setup, flexible, inexpensive</td><td>Only holds one side — need flip setup for reverse side</td></tr>
+  <tr><td>Good for rectangular stock</td><td>Jaw marks on part (use soft jaws for finished surfaces)</td></tr>
+  <tr><td>Easy to align with edge finder</td><td>Limited holding force for heavy cuts</td></tr>
+</table>
+<div class="example">
+  <p><strong>Vise setup tips:</strong></p>
+  <ul>
+    <li>Clean the vise jaws and parallels before every setup.</li>
+    <li>Use parallels to support the part — don't let it hang off the jaw.</li>
+    <li>Only expose the minimum height needed — less overhang = more rigidity.</li>
+    <li>For finished surfaces, use soft jaws machined to match the part.</li>
+    <li>Tap the part down with a mallet while tightening — ensure it sits flat on parallels.</li>
+  </ul>
+</div>
+
+<h3>Collet Chuck / ER Collets</h3>
+<p>For round stock on mills and lathes. Holds concentrically with good grip.</p>
+<table>
+  <tr><th>Best for</th><th>Notes</th></tr>
+  <tr><td>Round bars, bushings, small turned parts</td><td>Runout typically 0.01–0.02 mm</td></tr>
+  <tr><td>High-speed operations</td><td>Balanced grip, no jaws to flex</td></tr>
+</table>
+
+<h3>Chuck (3-jaw / 4-jaw)</h3>
+<p>For round parts on lathes and rotary tables. 3-jaw is self-centering (fast but less accurate); 4-jaw independent (set each jaw for concentricity).</p>
+
+<h3>Magnetic Chuck</h3>
+<p>For ferrous rectangular parts. Flat plate that holds by magnetism. Excellent for surface grinding and flat milling of steel parts.</p>
+<table>
+  <tr><th>Pros</th><th>Cons</th></tr>
+  <tr><td>Full bottom support — no jaw marks</td><td>Only for steel/iron (not aluminum, stainless, plastic)</td></tr>
+  <tr><td>Access to all sides of part</td><td>Part must be flat on bottom</td></tr>
+  <tr><td>Very fast setup</td><td>Not for aggressive cuts (can lift)</td></tr>
+</table>
+
+<h3>Vacuum Chuck</h3>
+<p>For non-ferrous and thin parts. Holds by suction on a flat surface. Common for aluminum plates and thin-wall parts.</p>
+
+<h3>Soft Jaws</h3>
+<p>Machinable vise jaws (usually aluminum or mild steel) bored or turned to match the part's shape. Used when:</p>
+<ul>
+  <li>Holding a finished surface without marring it.</li>
+  <li>Holding a round part in a vise.</li>
+  <li>Repeating a specific part shape in production.</li>
+</ul>
+
+<h3>Fixtures (Dedicated)</h3>
+<p>Custom workholding for production parts. Designed for one part — locates on datums, clamps where there's stock, and gives full tool access.</p>
+<table>
+  <tr><th>When to build a fixture</th><th>When a vise is fine</th></tr>
+  <tr><td>Production run (50+ parts)</td><td>One-off or low quantity</td></tr>
+  <tr><td>Multiple operations on complex geometry</td><td>Simple rectangular block</td></tr>
+  <tr><td>Tight tolerances need repeatable location</td><td>Loose tolerances</td></tr>
+  <tr><td>Vise can't hold the part (odd shape, thin walls)</td><td>Standard stock shape</td></tr>
+</table>
+
+<h2>Setup Reduction — The Goal</h2>
+<p>Every setup costs time (aligning, locating, tool change) and introduces error (alignment tolerance between setups). Good process plans minimize setups.</p>
+
+<table>
+  <tr><th>Strategy</th><th>How it helps</th></tr>
+  <tr><td>4th/5th axis</td><td>Access multiple sides without flipping the part</td></tr>
+  <tr><td>Mill-turn machine</td><td>Turn and mill in one setup</td></tr>
+  <tr><td>Bar feeder on lathe</td><td>Load stock automatically, no chuck re-setup per part</td></tr>
+  <tr><td>Double-station vise</td><td>Machine two parts in one setup — while one cuts, load the other</td></tr>
+  <tr><td> Tombstone fixture</td><td>Multiple parts on one pallet — lights-out machining</td></tr>
+</table>
+
+<h2>Common Setup Mistakes</h2>
+<table>
+  <tr><th>Mistake</th><th>Consequence</th><th>Fix</th></tr>
+  <tr><td>Part not sitting flat on parallels</td><td>Parts are not square, dimensions drift</td><td>Tap down, check with indicator</td></tr>
+  <tr><td>Too much part sticking out of vise</td><td>Chatter, deflection, poor finish</td><td>Minimize overhang — expose only what's needed</td></tr>
+  <tr><td>Clamping on a finished surface</td><td>Jaw marks damage the part</td><td>Use soft jaws or jaw caps</td></tr>
+  <tr><td>Clamping in the tool path</td><td>Tool crashes into the clamp</td><td>Check tool clearance during programming</td></tr>
+  <tr><td>Not cleaning chips before locating</td><td>Chip under part = false location</td><td>Blow chips every setup</td></tr>
+  <tr><td>Thin walls held too tight</td><td>Part deflects under clamp, springs back after machining</td><td>Use less clamp force, support from behind</td></tr>
+  <tr><td>Wrong work offset</td><td>Program cuts in wrong place — scrap</td><td>Always verify G54 with a trial cut or air pass</td></tr>
+</table>
+
+<h2>Roughing vs Finishing Setups</h2>
+<table>
+  <tr><th></th><th>Roughing setup</th><th>Finishing setup</th></tr>
+  <tr><td>Purpose</td><td>Remove bulk material fast</td><td>Hold tight tolerances and finish</td></tr>
+  <tr><td>Rigidity</td><td>Maximize — heavy cuts need grip</td><td>Can be lighter — finish cuts are light</td></tr>
+  <tr><td>Clamping</td><td>Clamp on stock that will be removed</td><td>Clamp carefully on finished surfaces</td></tr>
+  <tr><td>Datum</td><td>Use rough surfaces — they'll be machined later</td><td>Use finished datums from previous operation</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Printable tools:</strong> plan your datums — <a href="../../../engineering-tools/datum-planning-worksheet/">Datum Planning Worksheet</a>. Document setup details — <a href="../../../engineering-tools/printable-setup-worksheet/">Setup Worksheet</a>. Process overview — <a href="../process-planning-workflow/">Process Planning Workflow</a>.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../process-planning-workflow/">&larr; Process Planning Workflow</a>
+  <a href="../../#ch09">Knowledge Base &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

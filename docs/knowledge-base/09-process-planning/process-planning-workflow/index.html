@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Process Planning Workflow | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../#ch09" class="back-link">&larr; Back to 09 &middot; Machining Process Planning</a>
+<div class="hero-eyebrow">09.1 &middot; Machining Process Planning</div>
+<h1>Process Planning Workflow — From Drawing to First Part</h1>
+
+<p>Process planning is the bridge between a drawing and a finished part. It answers: which machine, which workholding, which tools, in what order, with which parameters, and how do we know it came out right? A good process plan prevents scrap, reduces cycle time, and makes the job repeatable. This page walks through the complete workflow.</p>
+
+<h2>The 11-Step Process Plan</h2>
+<div class="example">
+  <p><strong>The standard sequence every machinist/engineer follows:</strong></p>
+  <ol>
+    <li>Drawing review</li>
+    <li>Material review</li>
+    <li>Datum strategy</li>
+    <li>Machine selection</li>
+    <li>Workholding strategy</li>
+    <li>Operation sequence</li>
+    <li>Tool selection</li>
+    <li>Cutting parameters</li>
+    <li>CNC programming</li>
+    <li>Inspection strategy</li>
+    <li>Process validation (first article)</li>
+  </ol>
+</div>
+
+<h2>Step 1 — Drawing Review</h2>
+<p>Before touching any machine, thoroughly read the drawing:</p>
+<ul>
+  <li><strong>Part number and revision:</strong> confirm you're working from the latest rev. An old rev = wrong part.</li>
+  <li><strong>Critical dimensions:</strong> which features have tight tolerances? Which have GD&amp;T? These drive everything.</li>
+  <li><strong>Material and heat treat:</strong> from title block — drives tooling and speed choices.</li>
+  <li><strong>Surface finish requirements:</strong> which surfaces need grinding vs finish machining?</li>
+  <li><strong>Notes:</strong> deburr, chamfer, no scale, do not scale drawing — all apply.</li>
+  <li><strong>Missing info:</strong> if a dimension is unclear or missing, ask before machining. Don't guess.</li>
+</ul>
+
+<h2>Step 2 — Material Review</h2>
+<p>Confirm the raw material matches the drawing. Check:</p>
+<ul>
+  <li>Material type and condition (e.g., 6061-T6, 4140 pre-hard HRC 28–32).</li>
+  <li>Stock size: is there enough material on all sides? Add machining allowance (typically 1–3 mm per side for stock).</li>
+  <li>Mill cert / material cert available?</li>
+  <li>For heat-treated parts: will you machine before or after heat treat? Leave grind stock (0.2–0.5 mm) on hardened surfaces.</li>
+</ul>
+
+<h2>Step 3 — Datum Strategy</h2>
+<p>Identify the datums from the drawing (A|B|C). Plan how to establish them on the machine:</p>
+<table>
+  <tr><th>Datum</th><th>How to establish</th><th>Considerations</th></tr>
+  <tr><td>A (primary)</td><td>Flat on table, vise jaws, or fixture</td><td>Must be accessible, stable, and large enough</td></tr>
+  <tr><td>B (secondary)</td><td>Edge stop, vice jaw, pin</td><td>Must be perpendicular to A</td></tr>
+  <tr><td>C (tertiary)</td><td>Second stop or locating pin</td><td>Constrains last degree of freedom</td></tr>
+</table>
+
+<p><strong>Datum transfer:</strong> if the part needs multiple setups, the datums must transfer between setups. Machine datum A in setup 1, then use it to locate setup 2. Never switch datums mid-process without a reason — it introduces error.</p>
+
+<h2>Step 4 — Machine Selection</h2>
+<p>Choose the right machine for the part:</p>
+<table>
+  <tr><th>Machine</th><th>Best for</th><th>Considerations</th></tr>
+  <tr><td>3-axis mill</td><td>Parts with features on top/sides only</td><td>Most common, simplest setup</td></tr>
+  <tr><td>4-axis mill</td><td>Round parts, features around circumference</td><td>Needs rotary axis; reduces setups</td></tr>
+  <tr><td>5-axis mill</td><td>Complex geometries, impellers, molds</td><td>Fewer setups, but programming complex</td></tr>
+  <tr><td>CNC lathe</td><td>Round/rotational parts</td><td>Turning, boring, threading</td></tr>
+  <tr><td>Mill-turn</td><td>Complex turned parts with milled features</td><td>One setup for both turning and milling</td></tr>
+</table>
+
+<h2>Step 5 — Workholding Strategy</h2>
+<p>The workholding must hold the part rigidly, allow tool access to all features, and not deform thin walls. See <a href="../setup-workholding/">Setup &amp; Workholding</a> for details.</p>
+
+<h2>Step 6 — Operation Sequence</h2>
+<p>Order the operations from rough to finish:</p>
+<div class="example">
+  <p><strong>Typical sequence for a milled part:</strong></p>
+  <ol>
+    <li><strong>Face mill</strong> the top face (establishes datum A).</li>
+    <li><strong>Rough mill</strong> pockets, slots, contours — leave 0.3–0.5 mm finish stock.</li>
+    <li><strong>Drill</strong> holes (spot drill → drill → tap/ream as needed).</li>
+    <li><strong>Finish mill</strong> walls and floors to final size.</li>
+    <li><strong>Deburr/chamfer</strong> edges.</li>
+    <li><strong>Inspect</strong> critical dimensions.</li>
+  </ol>
+</div>
+
+<table>
+  <tr><th>Principle</th><th>Why</th></tr>
+  <tr><td>Rough before finish</td><td>Roughing generates heat and force; do it first while stock is stable</td></tr>
+  <tr><td>Machine datums first</td><td>Later operations reference them</td></tr>
+  <tr><td>Do heavy cuts before light cuts</td><td>Prevents deflection from carrying into finish passes</td></tr>
+  <tr><td>Finish critical surfaces last</td><td>Avoid damaging them during earlier operations</td></tr>
+  <tr><td>Minimize setups</td><td>Each setup introduces alignment error</td></tr>
+</table>
+
+<h2>Step 7 — Tool Selection</h2>
+<p>Pick tools based on material, operation, and required finish:</p>
+<ul>
+  <li><strong>Roughing:</strong> indexable insert end mills (APKT, LNMU) — fast metal removal, edge can be indexed when worn.</li>
+  <li><strong>Finishing:</strong> solid carbide end mills with sharp edge — for tight tolerances and good surface finish.</li>
+  <li><strong>Drilling:</strong> spot drill → twist drill → reamer (if hole tolerance is tight).</li>
+  <li><strong>Threading:</strong> tap (for standard holes) or thread mill (for large or custom threads).</li>
+  <li>Consider tool overhang — longer tools deflect more. Use the shortest tool that reaches.</li>
+</ul>
+
+<h2>Step 8 — Cutting Parameters</h2>
+<p>Set speed, feed, and depth of cut based on material and tool. Use the <a href="../../../engineering-tools/material-property-reference/">Material Property Reference</a> for starting values, then adjust based on machine, fixturing, and surface finish requirements.</p>
+
+<h2>Step 9 — CNC Programming</h2>
+<p>Write or CAM-generate the program. Key checks:</p>
+<ul>
+  <li>Work offset (G54) matches the datum setup.</li>
+  <li>Tool lengths and diameters set correctly.</li>
+  <li>Air-cut the program first (spindle off, above the part).</li>
+  <li>Confirm safe tool change positions.</li>
+</ul>
+
+<h2>Step 10 — Inspection Strategy</h2>
+<p>Decide how each feature will be checked (see <a href="../../06-metrology-inspection/inspection-strategy/">Inspection Strategy</a>). Critical dimensions need CMM or dedicated gauges; non-critical can be caliper-checked.</p>
+
+<h2>Step 11 — Process Validation (First Article)</h2>
+<p>The first part validates the entire plan. Run it, measure everything, and confirm:</p>
+<ul>
+  <li>All dimensions within tolerance?</li>
+  <li>Surface finish acceptable?</li>
+  <li>No chatter, no tool breakage, no unexpected deflection?</li>
+  <li>If something's off — fix the cause, not just the dimension. Adjust offsets if it's a small error; re-sequence if it's a setup issue.</li>
+</ul>
+
+<h2>Key Trade-Offs in Process Planning</h2>
+<table>
+  <tr><th>Decision</th><th>Tension</th></tr>
+  <tr><td>Cycle time vs tool life</td><td>Faster = more productive, but tools wear faster and cost more per part</td></tr>
+  <tr><td>Fewer setups vs accessibility</td><td>One setup = less error, but may require long tools or awkward angles</td></tr>
+  <tr><td>Tight tolerance vs cost</td><td>Tighter tolerances need more operations, more inspection, slower cuts</td></tr>
+  <tr><td>Automation vs flexibility</td><td>Dedicated fixtures are fast but only for one part; vises are flexible but slower</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Related tools:</strong> datum planning checklist — <a href="../../../engineering-tools/datum-planning-worksheet/">Datum Planning Worksheet</a>. Printable setup sheet — <a href="../../../engineering-tools/printable-setup-worksheet/">Setup Worksheet</a>. Workholding details — <a href="../setup-workholding/">Setup &amp; Workholding</a>.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../../#ch09">&larr; Knowledge Base</a>
+  <a href="../setup-workholding/">Next: Setup &amp; Workholding &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>
