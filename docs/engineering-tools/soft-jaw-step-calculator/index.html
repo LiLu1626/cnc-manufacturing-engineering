@@ -1,0 +1,79 @@
+---
+title: Soft-Jaw Step Calculator
+---
+
+<article class="tool-page">
+  <header class="tool-header">
+    <p class="eyebrow">Workholding · Released</p>
+    <h1>Soft-Jaw Step Calculator</h1>
+    <p>Calculate soft jaw boring dimensions for 3-jaw and 4-jaw chucks. When you bore soft jaws to hold a part, the "step" (back-cut) provides positive axial location. This tool computes the bore diameter, step diameter, and engagement depth from the part dimensions.</p>
+  </header>
+
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field">
+        <label for="partD">Part diameter to clamp — mm</label>
+        <input id="partD" type="number" step="0.001" placeholder="e.g. 25.0" />
+      </div>
+      <div class="field">
+        <label for="stepH">Step height (axial engagement) — mm</label>
+        <input id="stepH" type="number" step="0.01" placeholder="e.g. 1.5" />
+      </div>
+      <div class="field">
+        <label for="jawCount">Number of jaws</label>
+        <select id="jawCount">
+          <option value="3">3-jaw chuck</option>
+          <option value="4">4-jaw chuck</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="jawBore">Jaw bore depth — mm</label>
+        <input id="jawBore" type="number" step="0.1" placeholder="e.g. 15" />
+      </div>
+    </div>
+
+    <div class="result-grid">
+      <div class="result">
+        <p>Main bore diameter</p>
+        <p class="result-value" id="boreResult">—</p>
+        <p class="result-detail" id="boreDetail"></p>
+      </div>
+      <div class="result">
+        <p>Step (relief) diameter</p>
+        <p class="result-value" id="stepResult">—</p>
+        <p class="result-detail" id="stepDetail"></p>
+      </div>
+      <div class="result">
+        <p>Step radial depth</p>
+        <p class="result-value" id="radialResult">—</p>
+        <p class="result-detail" id="radialDetail"></p>
+      </div>
+      <div class="result">
+        <p>Contact arc per jaw</p>
+        <p class="result-value" id="contactResult">—</p>
+        <p class="result-detail" id="contactDetail"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>How soft jaw boring works</h2>
+    <p>Soft jaws are bored in the chuck they will be used in (to run true). Two diameters are machined:</p>
+    <ul>
+      <li><strong>Main bore:</strong> sized to the part OD with a small clearance (typically +0.02–0.05 mm).</li>
+      <li><strong>Step (back-cut / relief):</strong> a smaller diameter behind the main bore. The part butts against this shoulder for axial location. The radial step depth is typically 0.5–1.5 mm.</li>
+    </ul>
+    <p>The step height (axial engagement) should be at least 1× the radial depth, and 2–3 mm is typical for gripping strength. Bore the soft jaws at the same clamping pressure and chuck position they will run at in production.</p>
+    <p><strong>Important:</strong> Always bore soft jaws at the approximate clamping diameter you will use in production. If you bore them at a different jaw opening, they will not be concentric. Use a boring bar or the existing chuck bore tool.</p>
+  </section>
+
+  <aside class="notice">
+    <strong>Tip:</strong>
+    <p>The main bore is typically cut 0.02–0.05 mm larger than the part diameter for easy loading. The step diameter is then 2 × step_radial_depth smaller. For thin-wall parts, reduce clamping pressure and increase jaw contact area to prevent distortion.</p>
+  </aside>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</article>
+
+<link rel="stylesheet" href="styles.css" />
+<script src="calculator.js" defer></script>
