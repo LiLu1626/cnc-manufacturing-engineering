@@ -1,0 +1,23 @@
+---
+title: Power and Torque Estimator
+---
+<link rel="stylesheet" href="styles.css">
+<main class="tool-page">
+  <header class="tool-header">
+    <div class="eyebrow">Machining Parameters · Released</div>
+    <h1>Power and Torque Estimator</h1>
+    <p>Estimate cutting power and spindle torque from material removal rate, specific cutting energy, and spindle speed.</p>
+  </header>
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field"><label for="mrr">Material removal rate (cm³/min)</label><input id="mrr" type="number" value="17.19" min="0" step="any"></div>
+      <div class="field"><label for="specificEnergy">Specific cutting energy (J/mm³)</label><input id="specificEnergy" type="number" value="2.5" min="0" step="any"></div>
+      <div class="field"><label for="rpm">Spindle speed (RPM)</label><input id="rpm" type="number" value="4775" min="0" step="any"></div>
+    </div>
+    <div class="result"><div>Estimated cutting power</div><div class="result-value" id="powerResult">—</div><div class="result-detail" id="torqueResult"></div></div>
+  </section>
+  <section class="formula"><h2>Formula and use</h2><p><strong>Power (kW) = MRR (cm³/min) × Specific cutting energy ÷ 60</strong></p><p><strong>Torque (N·m) = 9,549 × Power (kW) ÷ RPM</strong></p><p>Specific cutting energy varies substantially by material, tool condition, and engagement. Use this as an early-stage estimate, then compare with machine and toolmaker data.</p></section>
+  <aside class="notice"><strong>For beginners:</strong> This is cutting power, not the complete machine demand. Allow a conservative margin for spindle efficiency, acceleration, coolant, and uncertainty in real tool engagement.</aside>
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</main>
+<script src="calculator.js"></script>
