@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learning Paths | Knowledge Base</title>
+<link rel="stylesheet" href="../../assets/css/site.css">
+<link rel="stylesheet" href="../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../" class="active">Knowledge Base</a></li>
+      <li><a href="../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../#ch14" class="back-link">&larr; Back to 14 &middot; Learning Paths</a>
+<div class="hero-eyebrow">14 &middot; Learning Paths</div>
+<h1>Learning Paths — How to Learn CNC Machining</h1>
+
+<p>Not sure where to start? These paths organize the knowledge base into structured learning sequences. Pick the one that matches your goal, and work through the articles in order. Each path builds on the previous one.</p>
+
+<h2>Path 1: CNC Machining Fundamentals</h2>
+<p><strong>Who it's for:</strong> beginners, operators, and anyone who wants a solid grounding in how machining works.</p>
+<p><strong>Time:</strong> 4–6 weeks, a few articles per day.</p>
+
+<table>
+  <tr><th>Step</th><th>Topic</th><th>Article</th></tr>
+  <tr><td>1</td><td>What is machining?</td><td><a href="../01-machining-fundamentals/introduction-to-machining/">Introduction to Machining</a></td></tr>
+  <tr><td>2</td><td>How metal cutting works</td><td><a href="../01-machining-fundamentals/cutting-mechanics/">Cutting Mechanics</a></td></tr>
+  <tr><td>3</td><td>Chip formation and control</td><td><a href="../01-machining-fundamentals/chip-formation/">Chip Formation</a></td></tr>
+  <tr><td>4</td><td>Speed, feed, depth of cut</td><td><a href="../02-machining-parameters/spindle-speed/">Spindle Speed</a> &middot; <a href="../02-machining-parameters/cutting-speed/">Cutting Speed</a> &middot; <a href="../02-machining-parameters/feed/">Feed</a></td></tr>
+  <tr><td>5</td><td>Material removal rate</td><td><a href="../02-machining-parameters/material-removal-rate/">MRR</a></td></tr>
+  <tr><td>6</td><td>Turning basics</td><td><a href="../03-machining-operations/turning/">Turning</a></td></tr>
+  <tr><td>7</td><td>Milling basics</td><td><a href="../03-machining-operations/milling/">Milling</a></td></tr>
+  <tr><td>8</td><td>Drilling and hole making</td><td><a href="../03-machining-operations/drilling-hole-making/">Drilling &amp; Hole Making</a></td></tr>
+  <tr><td>9</td><td>How to read drawings</td><td><a href="../05-drawings-gdt/drawing-fundamentals/">Drawing Fundamentals</a></td></tr>
+  <tr><td>10</td><td>Tolerances and fits</td><td><a href="../08-tolerances-fits/dimensional-tolerances/">Dimensional Tolerances</a> &middot; <a href="../08-tolerances-fits/fits-and-hole-basis/">Fits</a></td></tr>
+  <tr><td>11</td><td>Surface finish</td><td><a href="../07-surface-finish/surface-finish-basics/">Surface Finish Basics</a></td></tr>
+  <tr><td>12</td><td>Setup and workholding</td><td><a href="../09-process-planning/setup-workholding/">Setup &amp; Workholding</a></td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Practice:</strong> after each article, try the related calculator — <a href="../../engineering-tools/cutting-speed-calculator/">cutting speed</a>, <a href="../../engineering-tools/drilling-parameter-assistant/">drilling parameters</a>, <a href="../../engineering-tools/chip-load-reference/">chip load</a>. Calculators help you internalize the numbers.</p>
+</div>
+
+<h2>Path 2: CNC Programming</h2>
+<p><strong>Who it's for:</strong> operators who want to write G-code, or anyone moving toward programming.</p>
+<p><strong>Prerequisites:</strong> complete Path 1 first.</p>
+<p><strong>Time:</strong> 3–5 weeks.</p>
+
+<table>
+  <tr><th>Step</th><th>Topic</th><th>Resource</th></tr>
+  <tr><td>1</td><td>CNC coordinate systems</td><td><a href="../../cnc-programming/">CNC Programming section</a></td></tr>
+  <tr><td>2</td><td>G-code basics (G00, G01, G02/G03)</td><td>CNC Programming section</td></tr>
+  <tr><td>3</td><td>M-code basics (M03, M05, M08, M30)</td><td>CNC Programming section</td></tr>
+  <tr><td>4</td><td>Tool offsets and work offsets</td><td><a href="../09-process-planning/setup-workholding/">Setup &amp; Workholding</a></td></tr>
+  <tr><td>5</td><td>Cutter compensation (G41/G42)</td><td>CNC Programming section</td></tr>
+  <tr><td>6</td><td>Canned cycles (drilling, boring, tapping)</td><td><a href="../03-machining-operations/drilling-hole-making/">Drilling &amp; Hole Making</a></td></tr>
+  <tr><td>7</td><td>Taper and angle programming</td><td><a href="../../engineering-tools/taper-angle-calculator/">Taper Calculator</a></td></tr>
+  <tr><td>8</td><td>Bolt circle and hole patterns</td><td><a href="../../engineering-tools/bolt-circle-calculator/">Bolt Circle Calculator</a> &middot; <a href="../../engineering-tools/hole-pattern-generator/">Hole Pattern Generator</a></td></tr>
+  <tr><td>9</td><td>Troubleshooting programs</td><td><a href="../10-troubleshooting/">Chapter 10 — Troubleshooting</a></td></tr>
+</table>
+
+<div class="example">
+  <p><strong>Hands-on tip:</strong> start by modifying existing programs before writing from scratch. Change a feed rate, add a face mill pass, or adjust a drill cycle. Air-cut the program (spindle off) every time before running metal.</p>
+</div>
+
+<h2>Path 3: Manufacturing Engineer</h2>
+<p><strong>Who it's for:</strong> machinists advancing to engineering, or new manufacturing engineers who need the full picture.</p>
+<p><strong>Prerequisites:</strong> Path 1 and Path 2.</p>
+<p><strong>Time:</strong> 8–12 weeks.</p>
+
+<table>
+  <tr><th>Step</th><th>Topic</th><th>Article</th></tr>
+  <tr><td>1</td><td>Read drawings and GD&amp;T</td><td><a href="../05-drawings-gdt/drawing-fundamentals/">Drawing Fundamentals</a> &middot; <a href="../05-drawings-gdt/gdt-symbols/">GD&amp;T Symbols</a></td></tr>
+  <tr><td>2</td><td>MMC/LMC and bonus tolerance</td><td><a href="../05-drawings-gdt/mmc-lmc-bonus-tolerance/">MMC, LMC &amp; Bonus Tolerance</a></td></tr>
+  <tr><td>3</td><td>Materials and machinability</td><td><a href="../04-materials-machinability/material-fundamentals/">Material Fundamentals</a> &middot; <a href="../04-materials-machinability/steel-stainless/">Steel &amp; Stainless</a></td></tr>
+  <tr><td>4</td><td>Process planning workflow</td><td><a href="../09-process-planning/process-planning-workflow/">Process Planning Workflow</a></td></tr>
+  <tr><td>5</td><td>Workholding strategy</td><td><a href="../09-process-planning/setup-workholding/">Setup &amp; Workholding</a></td></tr>
+  <tr><td>6</td><td>Metrology and inspection</td><td><a href="../06-metrology-inspection/measurement-fundamentals/">Measurement Fundamentals</a> &middot; <a href="../06-metrology-inspection/advanced-inspection/">Advanced Inspection</a></td></tr>
+  <tr><td>7</td><td>Surface integrity</td><td><a href="../07-surface-finish/surface-integrity/">Surface Integrity</a></td></tr>
+  <tr><td>8</td><td>Process capability (Cp/Cpk)</td><td><a href="../11-quality/process-capability-spc/">Process Capability &amp; SPC</a></td></tr>
+  <tr><td>9</td><td>Root cause analysis</td><td><a href="../11-quality/root-cause-analysis/">Root Cause Analysis</a></td></tr>
+  <tr><td>10</td><td>Troubleshooting</td><td><a href="../10-troubleshooting/chatter-vibration/">Chatter</a> &middot; <a href="../10-troubleshooting/tool-wear-breakage/">Tool Wear</a> &middot; <a href="../10-troubleshooting/dimensional-error/">Dimensional Error</a></td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>The engineer's mindset:</strong> you're not just running a machine — you're designing a repeatable process. Every decision (datum, tool, speed, inspection) should be documented so the next person can run the same job the same way. See <a href="../13-engineering-reference/">Engineering Reference</a> for the formulas you'll use daily.</p>
+</div>
+
+<h2>How to Use These Paths</h2>
+<ul>
+  <li><strong>Don't skip around.</strong> Each path builds logically — fundamentals before operations, operations before programming.</li>
+  <li><strong>Read, then do.</strong> Every article has a related calculator. Run numbers through it — that's how the formulas stick.</li>
+  <li><strong>Take notes.</strong> Write down the speeds/feeds that worked on your machine. Every machine is different.</li>
+  <li><strong>Troubleshooting is learning.</strong> When a cut goes wrong, look it up in <a href="../10-troubleshooting/">Chapter 10</a> — that's where theory becomes practical.</li>
+</ul>
+
+<div class="nav-links">
+  <a href="../#ch14">&larr; Knowledge Base</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>
