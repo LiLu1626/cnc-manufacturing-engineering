@@ -49,7 +49,7 @@ function render(list) {
     card.style.cssText = 'border:1px solid var(--border); border-radius:8px; padding:0.75rem 1rem; margin-bottom:0.5rem;';
     card.innerHTML = '<strong>' + f.name + '</strong><br>' +
       '<code style="color:var(--accent);">' + f.formula + '</code><br>' +
-      '<a href="' + f.tool + '/" style="color:var(--accent); font-size:0.85rem;">Open ' + f.toolName + ' →</a>';
+      '<a href="../' + f.tool + '/" style="color:var(--accent); font-size:0.85rem;">Open ' + f.toolName + ' →</a>';
     listEl.appendChild(card);
   }
 }
