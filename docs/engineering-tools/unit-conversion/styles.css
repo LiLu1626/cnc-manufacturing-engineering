@@ -1,1 +1,105 @@
-:root{--ink:#172033;--teal:#0b7285;--teal-dark:#09313d;--line:#d7e0e5;--surface:#fff;--warning:#fff8e8}.tool-page{max-width:880px;margin:0 auto;color:var(--ink)}.tool-header{padding:24px 0 12px;border-bottom:1px solid var(--line);margin-bottom:24px}.tool-header h1{margin:0 0 8px}.eyebrow{color:var(--teal);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.85rem}.tool-card{padding:24px;border:1px solid var(--line);border-radius:12px;background:var(--surface);box-shadow:0 2px 8px rgba(18,38,53,.06)}.tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.field label{display:block;font-weight:700;margin-bottom:7px}.field input,.field select{width:100%;box-sizing:border-box;padding:11px;border:1px solid #9aaab5;border-radius:6px;font:inherit}.result{margin-top:22px;padding:18px;background:var(--teal-dark);color:#fff;border-radius:8px}.result-value{font-size:1.8rem;font-weight:800;margin:4px 0}.result-detail{color:#d7edf1}.notice{margin:24px 0;padding:16px;border-left:4px solid #d38b00;background:var(--warning)}.tool-footer{margin-top:32px;padding:20px 0;border-top:1px solid var(--line);color:#52616b;font-size:.9rem}@media(max-width:600px){.tool-grid{grid-template-columns:1fr}.tool-card{padding:18px}}
+:root {
+  --ink: #172033;
+  --teal: #0b7285;
+  --teal-dark: #09313d;
+  --line: #d7e0e5;
+  --surface: #ffffff;
+  --warning: #fff8e8;
+}
+
+.tool-page {
+  max-width: 880px;
+  margin: 0 auto;
+  color: var(--ink);
+}
+
+.tool-header {
+  padding: 24px 0 12px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.tool-header h1 {
+  margin: 0 0 8px;
+}
+
+.eyebrow {
+  color: var(--teal);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.tool-card {
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(18, 38, 53, 0.06);
+}
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 7px;
+  font-weight: 700;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px;
+  font: inherit;
+  border: 1px solid #9aaab5;
+  border-radius: 6px;
+}
+
+.result {
+  margin-top: 22px;
+  padding: 18px;
+  color: #ffffff;
+  background: var(--teal-dark);
+  border-radius: 8px;
+}
+
+.result-value {
+  margin: 4px 0;
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+
+.result-detail {
+  color: #d7edf1;
+}
+
+.notice {
+  margin: 24px 0;
+  padding: 16px;
+  background: var(--warning);
+  border-left: 4px solid #d38b00;
+}
+
+.tool-footer {
+  margin-top: 32px;
+  padding: 20px 0;
+  color: #52616b;
+  font-size: 0.9rem;
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 600px) {
+  .tool-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tool-card {
+    padding: 18px;
+  }
+}
