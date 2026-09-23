@@ -1,0 +1,88 @@
+---
+title: Bolt Circle Calculator
+---
+
+<article class="tool-page">
+  <header class="tool-header">
+    <p class="eyebrow">Layout · Released</p>
+    <h1>Bolt Circle Calculator</h1>
+    <p>Compute X/Y coordinates of holes on a pitch circle from center point, PCD, hole count, and start angle. Output is ready for CNC programming and inspection.</p>
+  </header>
+
+  <section class="tool-card">
+    <div class="tool-grid">
+      <div class="field">
+        <label for="centerX">Center X (mm)</label>
+        <input id="centerX" type="number" value="0" step="0.01" />
+      </div>
+      <div class="field">
+        <label for="centerY">Center Y (mm)</label>
+        <input id="centerY" type="number" value="0" step="0.01" />
+      </div>
+      <div class="field">
+        <label for="pcd">Pitch circle diameter (mm)</label>
+        <input id="pcd" type="number" value="100" min="1" step="0.1" />
+      </div>
+      <div class="field">
+        <label for="holeCount">Number of holes</label>
+        <input id="holeCount" type="number" value="4" min="2" step="1" />
+      </div>
+      <div class="field">
+        <label for="startAngle">Start angle (deg, 0 = +X axis)</label>
+        <input id="startAngle" type="number" value="0" step="1" />
+      </div>
+      <div class="field">
+        <label for="direction">Direction</label>
+        <select id="direction">
+          <option value="ccw">Counter-clockwise (CCW)</option>
+          <option value="cw">Clockwise (CW)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="result-grid">
+      <div class="result">
+        <p>Radius (R)</p>
+        <p class="result-value" id="radiusResult">—</p>
+        <p class="result-detail" id="radiusDetail"></p>
+      </div>
+      <div class="result">
+        <p>Angular spacing</p>
+        <p class="result-value" id="spacingResult">—</p>
+        <p class="result-detail" id="spacingDetail"></p>
+      </div>
+    </div>
+
+    <div class="table-wrap" style="margin-top:24px;">
+      <table class="coord-table" id="coordTable">
+        <thead>
+          <tr>
+            <th>Hole #</th>
+            <th>Angle (°)</th>
+            <th>X (mm)</th>
+            <th>Y (mm)</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="formula">
+    <h2>Formula and use</h2>
+    <p>X = Cx + R × cos(θ),&nbsp;&nbsp;Y = Cy + R × sin(θ)</p>
+    <p>R = PCD ÷ 2.&nbsp; Angular spacing = 360° ÷ N holes.&nbsp; θ<sub>i</sub> = startAngle + (i − 1) × spacing (CCW positive).</p>
+    <p>Angles are measured from the positive X axis (right), counter-clockwise positive. In CNC G-code, use G17 plane with these absolute coordinates. Verify against your machine's coordinate convention before running a program.</p>
+  </section>
+
+  <aside class="notice">
+    <strong>Note:</strong>
+    <p>Start angle 0° places hole 1 on the +X axis (3 o'clock). For a 12 o'clock first hole, set start angle = 90°. Clockwise direction subtracts spacing instead of adding. Coordinates are rounded to 3 decimals for readability; keep more digits in actual programs.</p>
+  </aside>
+
+  <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
+</article>
+
+<link rel="stylesheet" href="styles.css" />
+<script src="calculator.js" defer></script>
+
