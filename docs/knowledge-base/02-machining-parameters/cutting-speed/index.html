@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cutting Speed | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../" class="back-link">&larr; Back to Knowledge Base</a>
+<div class="hero-eyebrow">02.2 · Machining Parameters</div>
+<h1>Cutting Speed (Vc)</h1>
+
+<p>Cutting speed — also called <strong>surface speed</strong> — is the speed at which the tool edge moves across the workpiece surface. It is measured in meters per minute (m/min) or surface feet per minute (SFM). It is the single most important parameter for tool life.</p>
+
+<h2>Why Cutting Speed Matters More Than RPM</h2>
+<p>RPM is a machine setting. Cutting speed is a physical reality. The tool edge sees the same surface speed whether it is a 3 mm drill or a 50 mm face mill. If you run both at the same RPM, the large tool's edge is moving much faster — and will wear out much quicker.</p>
+
+<svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <rect x="50" y="60" width="200" height="80" rx="8" fill="#e6f4f2" stroke="#0b766e" stroke-width="2"/>
+  <text x="150" y="95" text-anchor="middle" font-size="14" fill="#0b766e" font-weight="bold">High Vc = Fast wear</text>
+  <text x="150" y="118" text-anchor="middle" font-size="12" fill="#5c6872">More heat, shorter tool life</text>
+  <rect x="350" y="60" width="200" height="80" rx="8" fill="#f0f5f4" stroke="#5c6872" stroke-width="2"/>
+  <text x="450" y="95" text-anchor="middle" font-size="14" fill="#17242f" font-weight="bold">Low Vc = Slow wear</text>
+  <text x="450" y="118" text-anchor="middle" font-size="12" fill="#5c6872">Less heat, longer tool life</text>
+  <line x1="250" y1="100" x2="350" y2="100" stroke="#5c6872" stroke-width="2" marker-end="url(#a)"/>
+  <defs><marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#5c6872"/></marker></defs>
+</svg>
+
+<h2>Typical Cutting Speeds</h2>
+<p>The right Vc depends on two things: <strong>workpiece material</strong> and <strong>tool material</strong>. Here are starting points for carbide inserts:</p>
+<table>
+  <tr><th>Workpiece</th><th>Roughing Vc</th><th>Finishing Vc</th><th>Coolant</th></tr>
+  <tr><td>Aluminum (6061)</td><td>200–400 m/min</td><td>400–800 m/min</td><td>Air or flood</td></tr>
+  <tr><td>Mild steel (1018)</td><td>120–180 m/min</td><td>200–300 m/min</td><td>Flood</td></tr>
+  <tr><td>Alloy steel (4140)</td><td>90–150 m/min</td><td>150–250 m/min</td><td>Flood</td></tr>
+  <tr><td>Stainless (304)</td><td>80–120 m/min</td><td>120–180 m/min</td><td>High-pressure</td></tr>
+  <tr><td>Cast iron (GGG40)</td><td>80–150 m/min</td><td>150–250 m/min</td><td>Dry or air</td></tr>
+  <tr><td>Titanium (Ti6Al4V)</td><td>40–60 m/min</td><td>60–100 m/min</td><td>High-pressure</td></tr>
+  <tr><td>Inconel 718</td><td>20–40 m/min</td><td>40–60 m/min</td><td>High-pressure</td></tr>
+</table>
+<p>Full reference: <a href="../../../engineering-tools/material-property-reference/">Material Property Reference</a></p>
+
+<h2>Tool Material Influence</h2>
+<p>The same workpiece can be cut at very different speeds depending on your tool:</p>
+<ul>
+  <li><strong>HSS (high-speed steel):</strong> slow, cheap, flexible — 20–50% of carbide speed.</li>
+  <li><strong>Carbide:</strong> the workhorse — 2–3× faster than HSS.</li>
+  <li><strong>Cermet / ceramic:</strong> very fast, high heat — for hardened steel and high volume.</li>
+  <li><strong>Diamond (PCD):</strong> only for non-ferrous (aluminum, carbon fiber) — never ferrous.</li>
+</ul>
+
+<h2>Cutting Speed and Tool Life</h2>
+<p>This is the famous Taylor tool-life relationship: doubling speed roughly halves tool life. A small increase in Vc causes a big drop in tool life.</p>
+<div class="callout warning">
+  <p><strong>Example:</strong> if Vc=150 m/min gives 30 minutes of tool life, running at Vc=180 m/min (20% faster) might reduce tool life to 12–15 minutes. This is why programmers carefully optimize speed, not just feed.</p>
+</div>
+
+<p>Calculate reverse: <a href="../../../engineering-tools/cutting-speed-calculator/">Cutting Speed Calculator</a> · Plan tool life: <a href="../../../engineering-tools/tool-life-planning/">Tool Life Planning</a></p>
+
+<div class="nav-links">
+  <a href="../spindle-speed/">&larr; Spindle Speed</a>
+  <a href="../feed/">Next: Feed &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

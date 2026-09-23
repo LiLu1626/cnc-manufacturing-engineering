@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Material Removal Rate | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../" class="back-link">&larr; Back to Knowledge Base</a>
+<div class="hero-eyebrow">02.5 · Machining Parameters</div>
+<h1>Material Removal Rate (MRR)</h1>
+
+<p>MRR is the volume of material removed per minute. It is the direct measure of productivity — higher MRR = more parts per hour. Every cutting parameter choice should be judged against its effect on MRR.</p>
+
+<h2>The Formulas</h2>
+<div class="formula-box">
+Milling: Q = Vf &times; ap &times; ae &nbsp;&nbsp;(cm³/min)
+</div>
+<div class="formula-box">
+Turning: Q = Vf &times; ap &times; f &nbsp;&nbsp;(cm³/min)
+</div>
+<div class="formula-box">
+Drilling: Q = (π &times; D² / 4) &times; Vf &nbsp;&nbsp;(cm³/min)
+</div>
+
+<h2>Worked Example</h2>
+<p>Face milling a steel block: Vf = 600 mm/min, ap = 2 mm, ae = 40 mm. What is the MRR?</p>
+<div class="formula-box">
+Q = 600 &times; 2 &times; 40 = 48,000 mm³/min = <strong>48 cm³/min</strong>
+</div>
+<p>For steel at kc=3,500 N/mm², this needs about P = kc × Q / 60,000 ≈ 2.8 kW of spindle power. Check: <a href="../../../engineering-tools/power-torque-estimator/">Power & Torque Estimator</a></p>
+
+<h2>MRR and Machine Power</h2>
+<p>There is a hard ceiling: the machine spindle can only deliver so much power. If MRR × specific cutting force exceeds spindle power, the spindle bogs down or stalls.</p>
+
+<table>
+  <tr><th>Machine</th><th>Typical power</th><th>Max MRR (steel)</th></tr>
+  <tr><td>Small hobby mill</td><td>1.5 kW</td><td>~15 cm³/min</td></tr>
+  <tr><td>Vertical machining center</td><td>7.5–15 kW</td><td>~60–120 cm³/min</td></tr>
+  <tr><td>Large horizontal mill</td><td>22–45 kW</td><td>~180–350 cm³/min</td></tr>
+</table>
+
+<div class="callout warning">
+  <p><strong>Why this matters:</strong> you can set the fastest feed and deepest cut in the world, but if the spindle runs out of power, the tool rubs instead of cutting — and you destroy the insert. Always verify power before committing to a high-MRR program.</p>
+</div>
+
+<p>Calculate: <a href="../../../engineering-tools/material-removal-rate-calculator/">MRR Calculator</a> · <a href="../../../engineering-tools/machining-time-estimator/">Machining Time</a></p>
+
+<div class="nav-links">
+  <a href="../depth-width-of-cut/">&larr; Depth & Width</a>
+  <a href="../parameter-relationships/">Next: Parameter Relationships &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

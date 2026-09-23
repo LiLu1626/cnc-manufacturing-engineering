@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parameter Relationships | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../" class="back-link">&larr; Back to Knowledge Base</a>
+<div class="hero-eyebrow">02.6 · Machining Parameters</div>
+<h1>Parameter Relationship Map</h1>
+
+<p>The three cutting conditions (speed, feed, depth) do not act independently. Changing one ripples through tool life, surface finish, power, and cycle time. This page maps those relationships so you can make trade-offs deliberately.</p>
+
+<h2>The Relationship Map</h2>
+<svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Center: cutting conditions -->
+  <rect x="220" y="170" width="160" height="60" rx="12" fill="#0b766e"/>
+  <text x="300" y="195" text-anchor="middle" font-size="14" fill="white" font-weight="bold">Cutting Conditions</text>
+  <text x="300" y="215" text-anchor="middle" font-size="12" fill="#e6f4f2">Speed · Feed · Depth</text>
+  <!-- Surrounding nodes -->
+  <ellipse cx="100" cy="80" rx="70" ry="30" fill="#e6f4f2" stroke="#0b766e" stroke-width="2"/>
+  <text x="100" y="85" text-anchor="middle" font-size="13" fill="#0b766e">Tool Life</text>
+
+  <ellipse cx="500" cy="80" rx="70" ry="30" fill="#e6f4f2" stroke="#0b766e" stroke-width="2"/>
+  <text x="500" y="85" text-anchor="middle" font-size="13" fill="#0b766e">Surface Finish</text>
+
+  <ellipse cx="100" cy="320" rx="70" ry="30" fill="#fdf0ef" stroke="#c0392b" stroke-width="2"/>
+  <text x="100" y="325" text-anchor="middle" font-size="13" fill="#c0392b">Power Demand</text>
+
+  <ellipse cx="500" cy="320" rx="70" ry="30" fill="#e6f4f2" stroke="#0b766e" stroke-width="2"/>
+  <text x="500" y="325" text-anchor="middle" font-size="13" fill="#0b766e">Productivity</text>
+
+  <ellipse cx="300" cy="370" rx="80" ry="25" fill="#f0f5f4" stroke="#5c6872" stroke-width="2"/>
+  <text x="300" y="375" text-anchor="middle" font-size="12" fill="#17242f">Chip Formation</text>
+
+  <!-- Arrows -->
+  <line x1="220" y1="180" x2="150" y2="100" stroke="#5c6872" stroke-width="1.5" marker-end="url(#ra)"/>
+  <line x1="380" y1="180" x2="450" y2="100" stroke="#5c6872" stroke-width="1.5" marker-end="url(#ra)"/>
+  <line x1="230" y1="220" x2="150" y2="300" stroke="#5c6872" stroke-width="1.5" marker-end="url(#ra)"/>
+  <line x1="370" y1="220" x2="450" y2="300" stroke="#5c6872" stroke-width="1.5" marker-end="url(#ra)"/>
+  <line x1="300" y1="230" x2="300" y2="345" stroke="#5c6872" stroke-width="1.5" marker-end="url(#ra)"/>
+  <defs><marker id="ra" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#5c6872"/></marker></defs>
+</svg>
+
+<h2>Quick Reference: What Happens If You...</h2>
+<table>
+  <tr><th>Action</th><th>Tool life</th><th>Finish</th><th>Power</th><th>Cycle time</th></tr>
+  <tr><td>Increase speed 20%</td><td>&darr;&darr; 40–50%</td><td>&uarr; better</td><td>&uarr; 20%</td><td>&darr; 17%</td></tr>
+  <tr><td>Increase feed 20%</td><td>&darr; ~10%</td><td>&darr; slightly</td><td>&uarr; 20%</td><td>&darr; 17%</td></tr>
+  <tr><td>Increase depth 50%</td><td>&darr; ~5%</td><td>&asymp; same</td><td>&uarr;&uarr; 50%</td><td>&darr; 33%</td></tr>
+  <tr><td>Use bigger tool nose radius</td><td>&asymp; same</td><td>&uarr; much better</td><td>&uarr; slightly</td><td>&asymp; same</td></tr>
+</table>
+
+<h2>The Optimization Ladder</h2>
+<p>When you want to remove material faster, adjust in this order (least tool life penalty first):</p>
+<ol>
+  <li><strong>Increase depth of cut</strong> — almost free in tool life.</li>
+  <li><strong>Increase feed</strong> — small penalty, big productivity gain.</li>
+  <li><strong>Increase speed</strong> — big tool life penalty, use only when needed.</li>
+</ol>
+
+<div class="callout">
+  <p><strong>Real example:</strong> a shop was finishing 4140 steel at Vc=200 m/min, f=0.1 mm/rev, changing inserts every 2 hours. They dropped Vc to 150 m/min and increased f to 0.15 mm/rev. Tool life tripled to 6 hours, surface finish stayed the same, and cycle time barely changed. Slower speed + higher feed = better economy.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../material-removal-rate/">&larr; MRR</a>
+  <a href="../../../">Back to Home</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

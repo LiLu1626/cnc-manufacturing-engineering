@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spindle Speed | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../" class="back-link">&larr; Back to Knowledge Base</a>
+<div class="hero-eyebrow">02.1 · Machining Parameters</div>
+<h1>Spindle Speed (RPM)</h1>
+
+<p>Spindle speed is how many revolutions per minute (RPM) your spindle turns. It is the most basic number you type into a CNC program — but it is derived from a more important concept: <strong>cutting speed (Vc)</strong>. This page explains why the same material needs different RPM for different tool diameters.</p>
+
+<h2>The Core Idea</h2>
+<p>Imagine cutting bread with a knife. If you move the knife too slowly, it squashes the bread. Too fast, and it tears. The <em>speed of the knife through the material</em> is what matters — not how many times your hand goes around.</p>
+
+<p>In machining, the knife edge must pass through the material at a certain <strong>surface speed</strong> (Vc, in m/min). But on a CNC machine, you cannot set Vc directly — you set RPM. The conversion depends on the tool or workpiece diameter.</p>
+
+<div class="formula-box">
+RPM = (Vc &times; 1000) / (&pi; &times; D)
+</div>
+<p>Where Vc = cutting speed (m/min), D = tool or workpiece diameter (mm).</p>
+
+<svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
+  <!-- Large tool -->
+  <circle cx="120" cy="110" r="70" fill="none" stroke="#0b766e" stroke-width="3"/>
+  <circle cx="120" cy="110" r="5" fill="#0b766e"/>
+  <text x="120" y="200" text-anchor="middle" font-size="14" fill="#17242f">Large tool D=20mm</text>
+  <text x="120" y="30" text-anchor="middle" font-size="13" fill="#0b766e">1,592 RPM</text>
+  <!-- Arrow showing surface speed -->
+  <path d="M 120 40 A 70 70 0 0 1 190 110" fill="none" stroke="#0b766e" stroke-width="2" marker-end="url(#arr)"/>
+  <!-- Small tool -->
+  <circle cx="430" cy="110" r="35" fill="none" stroke="#c0392b" stroke-width="3"/>
+  <circle cx="430" cy="110" r="4" fill="#c0392b"/>
+  <text x="430" y="180" text-anchor="middle" font-size="14" fill="#17242f">Small tool D=6mm</text>
+  <text x="430" y="30" text-anchor="middle" font-size="13" fill="#c0392b">5,305 RPM</text>
+  <path d="M 430 75 A 35 35 0 0 1 465 110" fill="none" stroke="#c0392b" stroke-width="2" marker-end="url(#arr2)"/>
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#0b766e"/></marker>
+    <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#c0392b"/></marker>
+  </defs>
+  <text x="300" y="115" text-anchor="middle" font-size="13" fill="#5c6872">Same Vc = 100 m/min</text>
+  <text x="300" y="135" text-anchor="middle" font-size="12" fill="#5c6872">Different diameter</text>
+  <text x="300" y="155" text-anchor="middle" font-size="12" fill="#5c6872">Different RPM</text>
+</svg>
+
+<div class="callout">
+  <p><strong>Key takeaway:</strong> a smaller tool must spin <em>faster</em> to achieve the same surface speed. A 6 mm end mill at Vc=100 m/min needs 5,305 RPM, while a 20 mm mill only needs 1,592 RPM.</p>
+</div>
+
+<h2>Worked Example</h2>
+<p>You are milling aluminum with a 12 mm carbide end mill. The recommended cutting speed for aluminum with carbide is Vc = 300 m/min. What RPM do you set?</p>
+<div class="formula-box">
+RPM = (300 &times; 1000) / (3.14159 &times; 12) = 300,000 / 37.7 = <strong>7,958 RPM</strong>
+</div>
+<p>On most machines, round down to 8,000 RPM (or whatever the machine's max RPM allows). Try it yourself in the <a href="../../../engineering-tools/spindle-speed-calculator/">Spindle Speed Calculator</a>.</p>
+
+<h2>Constant RPM vs Constant Surface Speed</h2>
+<p><strong>Constant RPM</strong> is what milling machines use: the spindle speed stays fixed, and surface speed changes as the cutter enters and exits the cut (e.g., in face milling, the center of the insert is slower than the edge).</p>
+<p><strong>Constant Surface Speed (CSS)</strong> is what lathes use: as the tool faces off the part, the diameter gets smaller. CSS automatically increases RPM to keep Vc constant. Learn more in the <a href="../../../engineering-tools/constant-surface-speed-reference/">CSS Reference</a>.</p>
+
+<h2>Typical Considerations</h2>
+<ul>
+  <li><strong>Max RPM limit:</strong> every spindle has a maximum. If your calculated RPM exceeds it, you must reduce Vc or use a smaller tool.</li>
+  <li><strong>Tool holder balance:</strong> above ~8,000 RPM, tool holders must be balanced (G2.5 grade) to avoid vibration.</li>
+  <li><strong>Machine capability:</strong> small hobby machines may top out at 6,000 RPM — you'll need lower Vc for small tools.</li>
+</ul>
+
+<div class="callout example">
+  <p><strong>Beginner tip:</strong> when in doubt, start low. It is better to start at 2,000 RPM and feed a bit slower than to redline the spindle and break an insert. You can always increase speed; you cannot undo a crashed tool.</p>
+</div>
+
+<div class="nav-links">
+  <a href="../../">&larr; Knowledge Base</a>
+  <a href="../cutting-speed/">Next: Cutting Speed &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>

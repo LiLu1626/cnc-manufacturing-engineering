@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Depth & Width of Cut | Knowledge Base</title>
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<link rel="stylesheet" href="../../../assets/css/article.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="../../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
+    <ul class="site-nav-links">
+      <li><a href="../../../engineering-tools/">Engineering Tools</a></li>
+      <li><a href="../../" class="active">Knowledge Base</a></li>
+      <li><a href="../../../machine-systems/">Machine Systems</a></li>
+      <li><a href="../../../cnc-programming/">CNC Programming</a></li>
+      <li><a href="../../../about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../" class="back-link">&larr; Back to Knowledge Base</a>
+<div class="hero-eyebrow">02.4 · Machining Parameters</div>
+<h1>Depth &amp; Width of Cut</h1>
+
+<p>Depth of cut and width of cut define how much material the tool removes in a single pass. They are different from feed — feed is how fast the tool moves, depth/width is how deep and wide it cuts.</p>
+
+<h2>Turning: Depth of Cut (ap)</h2>
+<p>In turning, <strong>ap</strong> is the radial depth the tool cuts into the workpiece per pass. If your bar is 50 mm and you want 48 mm, one pass at ap=1 mm removes 1 mm from the diameter (0.5 mm radius each side).</p>
+
+<svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="300" cy="100" r="80" fill="none" stroke="#5c6872" stroke-width="2"/>
+  <circle cx="300" cy="100" r="74" fill="#e6f4f2" stroke="#0b766e" stroke-width="2"/>
+  <line x1="300" y1="20" x2="300" y2="35" stroke="#c0392b" stroke-width="3"/>
+  <text x="310" y="30" font-size="12" fill="#c0392b">ap = depth of cut</text>
+  <text x="300" y="105" text-anchor="middle" font-size="12" fill="#17242f">Workpiece</text>
+</svg>
+
+<h2>Milling: Axial (ap) and Radial (ae)</h2>
+<p>In milling there are two:</p>
+<ul>
+  <li><strong>Axial depth ap (step down):</strong> how deep the cutter goes into the material (Z-direction).</li>
+  <li><strong>Radial width ae (step over):</strong> how wide the cutter engages in the cut (X/Y direction).</li>
+</ul>
+
+<svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
+  <!-- Workpiece block -->
+  <rect x="100" y="80" width="400" height="100" fill="#cfdbd8" rx="3"/>
+  <!-- Cutter -->
+  <circle cx="250" cy="80" r="30" fill="none" stroke="#0b766e" stroke-width="3"/>
+  <line x1="250" y1="50" x2="250" y2="30" stroke="#0b766e" stroke-width="2"/>
+  <!-- ap dimension -->
+  <line x1="200" y1="80" x2="200" y2="110" stroke="#c0392b" stroke-width="2" marker-end="url(#ad)"/>
+  <text x="130" y="100" font-size="13" fill="#c0392b">ap (axial)</text>
+  <!-- ae dimension -->
+  <line x1="220" y1="130" x2="280" y2="130" stroke="#c0392b" stroke-width="2" marker-end="url(#ad)"/>
+  <text x="225" y="148" font-size="13" fill="#c0392b">ae (radial)</text>
+  <defs><marker id="ad" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#c0392b"/></marker></defs>
+  <text x="400" y="140" text-anchor="middle" font-size="12" fill="#5c6872">Workpiece</text>
+</svg>
+
+<h2>Typical Values</h2>
+<table>
+  <tr><th>Operation</th><th>ap (depth)</th><th>ae (width)</th><th>Notes</th></tr>
+  <tr><td>Turning roughing</td><td>1–5 mm</td><td>— (full diameter)</td><td>Maximize ap to reduce passes</td></tr>
+  <tr><td>Turning finishing</td><td>0.2–0.5 mm</td><td>—</td><td>Light cut for good surface</td></tr>
+  <tr><td>Face milling</td><td>0.5–3 mm</td><td>up to 0.8× cutter dia</td><td>Wide, shallow cuts</td></tr>
+  <tr><td>End mill slotting</td><td>1–2× tool dia</td><td>= tool dia (full slot)</td><td>High radial load</td></tr>
+  <tr><td>Trochodial milling</td><td>up to 3× tool dia</td><td>10–20% of dia</td><td>Thin chip, high ap</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Rule of thumb:</strong> depth of cut has almost no effect on tool life compared to speed. So for roughing, take the deepest ap the machine can handle — this removes material fastest with the least tool penalty.</p>
+</div>
+
+<h2>Tool Engagement</h2>
+<p>Radial engagement (ae/D ratio) matters for tool life. In slotting (ae = D, 100% engagement), the tool spends half its time cutting and half rubbing — heat builds up. In trochoidal milling (ae ≈ 10% of D), the tool cuts a thin arc and cools in between — tool life doubles or triples.</p>
+
+<div class="nav-links">
+  <a href="../feed/">&larr; Feed</a>
+  <a href="../material-removal-rate/">Next: MRR &rarr;</a>
+</div>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC & Manufacturing Engineering</footer>
+</body>
+</html>
