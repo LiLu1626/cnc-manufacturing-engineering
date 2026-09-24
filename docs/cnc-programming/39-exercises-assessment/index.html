@@ -48,7 +48,7 @@
 <details><summary>Answer</summary><p>X40 means the tool is positioned at a 40 mm diameter, not 40 mm radius. The actual radial position is 20 mm from center. Radial depth of cut = (X_start &minus; X_end) / 2.</p></details></li>
 
 <li><strong>What does G80 do?</strong>
-<details><summary>Answer</summary><p>G80 cancels all canned drilling cycles. It stops the modal cycle mode so the next X/Y move is a positioning move, not a drill. Note: G80 does not retract Z — write G00 Z50 explicitly. On Haas, a G00 or G01 motion also cancels the cycle, but writing G80 explicitly makes the intent clear.</p></details></li>
+<details><summary>Answer</summary><p>G80 cancels all canned drilling cycles. It stops the modal cycle mode; after G80, subsequent X/Y/Z motion is explicitly controlled by G00/G01 rather than by an active cycle. Note: G80 does not retract Z — write G00 Z50 explicitly. On Haas, a G00 or G01 motion also cancels the cycle, but writing G80 explicitly makes the intent clear.</p></details></li>
 
 <li><strong>What is the difference between G98 and G99 in a drilling cycle?</strong>
 <details><summary>Answer</summary><p>G98 retracts to the initial Z plane (the height before the cycle was called). G99 retracts only to the R plane. Use G99 for holes with no obstructions between them; use G98 when there is a boss, clamp, or feature to clear.</p></details></li>
@@ -135,29 +135,62 @@ G80
 G00 Z50. M09
 M30</code></pre></details>
 
-<p><strong>18.</strong> Turn a raw &Oslash;50 bar to &Oslash;40 over Z&minus;40. Assume mild steel, a CNMG insert, G97 S1000, G99 F0.20 mm/rev. Show roughing and finishing passes.</p>
-<details><summary>Example</summary><pre class="cp-code"><code>O0018
+<p><strong>18.</strong> Turn a raw &Oslash;50 bar to &Oslash;40 over Z&minus;40. Assume mild steel, a CNMG insert, G97 S1000, G99 F0.20 mm/rev. Show layered roughing passes and finishing.</p>
+<details><summary>Example</summary><p>Roughing sequence from &Oslash;50 stock: five OD passes stepping down 1.0 mm radial each, then a final rough pass at 0.8 mm radial to leave 0.4 mm diameter / 0.2 mm radial finish stock:</p>
+<table class="data-table">
+<tr><th>Pass</th><th>Diameter X</th><th>Radial depth</th><th>Length</th></tr>
+<tr><td>Rough 1</td><td>X48</td><td>1.0 mm</td><td>Z2 to Z&minus;40</td></tr>
+<tr><td>Rough 2</td><td>X46</td><td>1.0 mm</td><td>Z2 to Z&minus;40</td></tr>
+<tr><td>Rough 3</td><td>X44</td><td>1.0 mm</td><td>Z2 to Z&minus;40</td></tr>
+<tr><td>Rough 4</td><td>X42</td><td>1.0 mm</td><td>Z2 to Z&minus;40</td></tr>
+<tr><td>Rough 5</td><td>X40.4</td><td>0.8 mm</td><td>Z2 to Z&minus;40 (finish stock)</td></tr>
+<tr><td>Finish</td><td>X40.0</td><td>0.2 mm</td><td>S1200, F0.10</td></tr>
+</table>
+<p>After each OD pass to Z&minus;40: first retract radially to X52 (clear of the cut), then retract Z to Z2. Never move X and Z simultaneously in a G00 sweep across uncut material.</p>
+<pre class="cp-code"><code>O0018
 G21 G97 G99
 T0101                    (OD tool, r0.4)
 S1000 M03
 G00 X52. Z2.
+(FACE - ESTABLISH Z0)
 G01 Z0 F0.2
-X-1.0 F0.15             (face past center)
-G00 X52. Z2.
-(ROUGH: leave 0.2mm dia finish stock)
+X-1.0 F0.15
+G00 Z2.
+G00 X52.
+(ROUGH 1 - O48, 1.0mm radial)
+G00 X48. Z2.
+G01 Z-40. F0.2
+G00 X52.
+Z2.
+(ROUGH 2 - O46)
 G00 X46. Z2.
-G01 Z0 F0.2
-X40.4                    (rough to O40.4)
-Z-40.
-G00 X52. Z2.
-(FINISH: cut to O40.0)
+G01 Z-40.
+G00 X52.
+Z2.
+(ROUGH 3 - O44)
+G00 X44. Z2.
+G01 Z-40.
+G00 X52.
+Z2.
+(ROUGH 4 - O42)
+G00 X42. Z2.
+G01 Z-40.
+G00 X52.
+Z2.
+(ROUGH 5 - O40.4, leave 0.4mm dia / 0.2mm radial)
+G00 X40.4 Z2.
+G01 Z-40.
+G00 X52.
+Z2.
+(FINISH - O40.0)
 S1200 M03
 G00 X40.0 Z2.
 G01 Z0 F0.1
 Z-40.
-G00 X50. Z100.
+G00 X52.
+Z100.
 M30</code></pre>
-<p>Note: roughing at X40.4 leaves 0.4 mm diameter (0.2 mm radial) finish stock. Real depth-of-cut limits depend on tool insert, material, and machine power — this is a teaching example.</p></details>
+<p>Note: 1.0 mm radial per pass is a teaching assumption. Real depth-of-cut limits depend on insert grade, material hardness, machine rigidity, and chip evacuation.</p></details>
 
 <p><strong>19.</strong> Four &Oslash;6 holes on a 40 mm square centered at (0,0), at (&minus;20,&minus;20), (20,&minus;20), (20,20), (&minus;20,20). Through holes in 6 mm plate: Z&minus;8. S2000, F120. Write the program.</p>
 <details><summary>Example</summary><pre class="cp-code"><code>O0019
