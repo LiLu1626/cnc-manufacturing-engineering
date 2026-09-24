@@ -36,6 +36,28 @@
 <h2>Why It Matters</h2>
 <p>Several things go wrong if you only cut the pocket boundary: (1) the interior material is never removed, leaving an island; (2) plunging straight to Z&minus;4 on a flat end mill is bad because the center of a flat end mill does not chip-load well — you need a ramp; (3) a through-hole is not done when the drill reaches Z&minus;12 — the conical drill tip must also break through; (4) corner radius R5 means the &Oslash;10 cutter naturally forms R5 corners without extra offset math.</p>
 
+<svg viewBox="0 0 500 350" style="width:100%;max-width:500px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <!-- plate outline -->
+  <rect x="50" y="50" width="400" height="280" fill="#e8e8e8" stroke="#999" stroke-width="1.5" rx="2"/>
+  <text x="55" y="45" font-size="10" fill="#666">Plate 100 x 80</text>
+  <!-- pocket (tool center boundary inset) -->
+  <rect x="175" y="130" width="150" height="120" fill="#fff" stroke="#54a0ff" stroke-width="1.5" rx="25"/>
+  <text x="220" y="195" font-size="11" fill="#54a0ff">Pocket 40x30</text>
+  <text x="225" y="210" font-size="10" fill="#54a0ff">R5 corners</text>
+  <!-- holes -->
+  <circle cx="90" cy="90" r="6" fill="none" stroke="#e74c3c" stroke-width="2"/>
+  <circle cx="410" cy="90" r="6" fill="none" stroke="#e74c3c" stroke-width="2"/>
+  <circle cx="410" cy="290" r="6" fill="none" stroke="#e74c3c" stroke-width="2"/>
+  <circle cx="90" cy="290" r="6" fill="none" stroke="#e74c3c" stroke-width="2"/>
+  <text x="75" y="80" font-size="9" fill="#e74c3c">Ø6</text>
+  <!-- work zero -->
+  <circle cx="50" cy="330" r="3" fill="#2ecc71"/>
+  <text x="55" y="345" font-size="10" fill="#2ecc71">G54 (0,0)</text>
+  <!-- dimensions -->
+  <line x1="50" y1="340" x2="450" y2="340" stroke="#333" stroke-width="0.5"/>
+  <text x="230" y="338" font-size="9" fill="#666">100 mm</text>
+</svg>
+
 <h2>How It Works</h2>
 <h3>Setup and Tooling</h3>
 <p><strong>Setup assumptions (classroom geometry, not a production fixture design):</strong></p>
