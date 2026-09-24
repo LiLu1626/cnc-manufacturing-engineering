@@ -22,10 +22,31 @@
 <p>A touch probe mounts in the spindle. It moves to the part, touches it, and records the position. The controller computes the offset. The measured coordinate is not directly G54 — it must be converted: edge touch = half stock offset from center.</p>
 <h2>Example</h2>
 <p>Probe a 60 mm square part edge: touch left edge at X-30, touch right edge at X+30. Center X = (X-30 + X+30)/2 = X0. Set G54 X to the machine position at X0. This replaces manual edge-finding.</p>
+<h2>Probe Applications</h2>
+<p>Beyond setting work offsets, probes are used for:</p>
+<ul>
+<li><strong>Fixture verification</strong> — confirm the part is clamped before cutting.</li>
+<li><strong>Work offset update</strong> — auto-set G54 after each job change.</li>
+<li><strong>In-process inspection</strong> — measure a feature mid-cycle and adjust offsets.</li>
+<li><strong>Tool setting</strong> — measure tool length and diameter automatically.</li>
+<li><strong>First-article check</strong> — probe critical dimensions after the first cut.</li>
+</ul>
+
+<h2>Rotary Axis Naming</h2>
+<table class="data-table">
+<tr><th>Axis</th><th>Rotates Around</th><th>Typical Use</th></tr>
+<tr><td>A</td><td>X axis</td><td>Tilt spindle or table for angled features</td></tr>
+<tr><td>B</td><td>Y axis</td><td>Swivel head on 5-axis machines</td></tr>
+<tr><td>C</td><td>Z axis</td><td>Rotate table for 4th-axis milling, bolt circles</td></tr>
+</table>
+
 <h2>Common Mistakes</h2>
-<ul><li><strong>Treating probe reading as G54 directly</strong> — the probe touches an edge, not the center. Convert: center = (edge1 + edge2)/2.</li>
-<li><strong>Probing at high speed</strong> — probe feed must be slow (500 mm/min max) to avoid breaking the stylus.</li>
-<li><strong>Confusing 3+2 with full 5-axis</strong> — 3+2 positions rotary once; full 5-axis interpolates simultaneously.</li></ul>
+<ul>
+<li><strong>Treating probe reading as G54 directly</strong> — the probe touches an edge, not the center. Convert: center = (edge1 + edge2)/2.</li>
+<li><strong>Probing at high speed</strong> — probe feed must be slow (typically 500 mm/min or less) to avoid breaking the stylus.</li>
+<li><strong>Confusing 3+2 with full 5-axis</strong> — 3+2 positions rotary once; full 5-axis interpolates simultaneously.</li>
+<li><strong>Forgetting probe calibration</strong> — the stylus length and radius must be calibrated on a reference sphere before probing.</li>
+</ul>
 <h2>Practice</h2>
 <p><strong>1.</strong> Probe left edge at X-25.3, right edge at X24.8. Center?</p><details><summary>Ans</summary><p>(-25.3 + 24.8)/2 = -0.25 mm. Part center is at X-0.25.</p></details>
 <p><strong>2.</strong> What is 3+2?</p><details><summary>Ans</summary><p>Rotary axes position at an angle, then XYZ linear milling — no simultaneous rotary motion.</p></details>
