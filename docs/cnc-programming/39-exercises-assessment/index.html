@@ -55,13 +55,19 @@ G41 D05
 G01 X80. Y30.
 G00 Z50.
 M30</pre>
-<details><summary>Find it — with full corrected program</summary><p><strong>The bug:</strong> G41 is turned on mid-cut while the tool is already at Z-5, with no lead-in move. Cutter radius compensation needs a straight XY approach move from outside the part. Also, the original path goes counter-clockwise with G41, which pushes the tool center <em>inside</em> the block — causing overcut. For an outer profile, clockwise travel with G41 keeps the tool on the outside.</p>
-<p><strong>Assumptions:</strong> 10 mm end mill (D05 = 5.0 mm radius in the offset table), 50&times;50 mm aluminum block from (0,0) to (50,50), cut depth Z-5, G17 XY plane, G21 metric, G94 mm/min. Tool length H01 set.</p>
-<p><strong>Corrected program:</strong></p>
+<details><summary>Find it — diagnosis and corrected program</summary><p><strong>Bugs in the given program:</strong></p>
+<ol>
+<li><strong>G41 activated mid-cut at Z-5</strong> — after G01 X50, the tool is already cutting at depth. Cutter compensation must be engaged during a lead-in move from outside the material, not mid-cut.</li>
+<li><strong>No G40 at the end</strong> — compensation is never cancelled before retracting Z. This can cause a crash on the next tool.</li>
+<li><strong>No startup block</strong> — missing G21 (units), G17 (plane), G94 (feed mode), G80 (cancel cycles), G49 (cancel length comp).</li>
+<li><strong>The path is not a defined part geometry</strong> — X0Y0&rarr;X50&rarr;X80Y30 has no statement of where the stock is, so the programmer cannot know which side to compensate toward.</li>
+</ol>
+<p><strong>Assumptions for the corrected example:</strong> 10 mm end mill (D05 = 5.0 mm radius; Haas Setting 40 set to radius mode), 50&times;50 mm aluminum block from (0,0) to (50,50), cut depth Z-5. Tool is already loaded in the spindle, G54 and H01 offsets have been verified, and Z50 is above all fixturing.</p>
+<p><strong>Corrected outer-profile program:</strong></p>
 <pre>G21 G17 G90 G94 G40 G80 G49
 G54 S2000 M03
 G43 H01 Z50. M08
-G00 X-10. Y-10.           (rapid to outside corner at safe Z)
+G00 X-10. Y-10.           (rapid to outside corner at safe Z50)
 G01 Z-5. F100.             (feed to cut depth)
 G01 G41 X0 Y0 D05 F300.    (lead-in: 14.1 mm diagonal, ramp in 5 mm offset)
 G01 Y50.                   (up left edge — left of +Y travel = -X, outside)
@@ -71,7 +77,7 @@ G01 X0.                    (left along bottom — left of -X travel = -Y, outsid
 G01 G40 X-10. Y-10.        (lead-out back outside, cancels compensation)
 G00 Z50. M09 M05
 M30</pre>
-<p><strong>Why clockwise + G41?</strong> Viewed from +Z, clockwise around the block means the tool travels up the left edge, across the top, down the right, and back along the bottom. With G41 (offset to the left of travel), the tool center sits outside the block on every side. The lead-in from (-10,-10) to (0,0) is 14.1 mm — long enough to ramp in the 5 mm radius. G40 must cancel before retracting Z.</p></details>
+<p>Clockwise travel around the block with G41 keeps the tool center outside on every side. The lead-in and lead-out diagonal moves (14.1 mm) are long enough to ramp in/out the 5 mm radius. G40 must cancel before retracting Z.</p></details>
 
 <h2>Write the Program</h2>
 <p>Given: 50&times;50 mm aluminum block, drill a &Oslash;10 hole at X25 Y25 to depth Z-15. Spindle 1500 RPM, feed 120 mm/min. Write the program.</p>
