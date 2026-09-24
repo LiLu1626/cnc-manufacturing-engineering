@@ -1,48 +1,102 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>From Drawing to Process Plan — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="Before you write a line of G-code: read the drawing, choose datum, sequence operations, select tools. This is the bridge between engineering and programming.">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>From Drawing to Process Plan — CNC & Manufacturing Engineering</title>
+<meta name="description" content="Drawing review, datum selection, operation sequencing, tool selection, cutting parameters, and inspection planning — before writing a single line of G-code.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/32-drawings-process-planning/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
 <main class="article">
-<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>From Drawing to Process Plan</h1>
-<p class="lead">Good programs start before the machine: they start on paper. Reading the drawing, choosing datum, and sequencing operations determines whether the part works.</p>
-<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
-<div class="callout"><strong>What you will learn:</strong><ul><li>Drawing review: dimensions, datums, tolerances</li><li>Datum selection and work zero</li><li>Operation sequence: rough before finish</li><li>Tool selection and cutting parameters</li></ul></div>
+<p class="lead">Good programs start before the machine: they start on paper. Reading the drawing, choosing the datum, and sequencing operations determines whether the part works or scrapes. This page is the bridge between engineering drawing and G-code.</p>
+
+<div class="callout"><strong>What you will learn:</strong>
+<ul>
+<li>Drawing review: dimensions, datums, tolerances, surface finish</li>
+<li>Datum selection and work zero placement</li>
+<li>Operation sequence: rough before finish, face before drill</li>
+<li>Tool selection and cutting parameter derivation</li>
+<li>Inspection planning</li>
+</ul></div>
+
 <h2>Concept</h2>
-<p>A <strong>process plan</strong> translates a drawing into ordered machine operations. Step 1: read the drawing and identify critical dimensions, datums, and surface finish. Step 2: choose work zero (datum). Step 3: sequence operations — roughing first, finishing last, holes after profile. Step 4: select tools and cutting parameters. Only then write G-code.</p>
+<p>A <strong>process plan</strong> translates a drawing into ordered machine operations. Step 1: read the drawing and identify critical dimensions, datums, and surface finish requirements. Step 2: choose work zero (datum). Step 3: sequence operations — roughing first, finishing last, holes after profile. Step 4: select tools and cutting parameters. Only then write G-code.</p>
+
 <h2>Why It Matters</h2>
-<p>Writing code before planning produces a program that machines the wrong features in the wrong order. A part that needs a Ø10 H7 hole should be roughed to Ø9.8 then bored/reamed — not drilled to size directly. The process plan determines the tool list and cycle time.</p>
-<h2>How</h2>
-<h3>Process plan template</h3>
-<ol><li><strong>Material and stock</strong>: what are you starting from?</li>
-<li><strong>Datum</strong>: which feature does the drawing reference? Set work zero there.</li>
-<li><strong>Operations in order</strong>: face, rough, finish, drill, tap, inspect.</li>
-<li><strong>Tools</strong>: which tool for each operation? What H/D offset?</li>
-<li><strong>Cutting parameters</strong>: RPM and feed from tooling data.</li>
-<li><strong>Inspection</strong>: which dimensions to check after each setup?</li></ol>
-<h2>Example</h2>
-<p>Plate 100×80×12 with a pocket and 4 holes. Process plan: (1) face top with Ø63 face mill, (2) rough pocket with Ø10 end mill, (3) finish pocket to size, (4) spot and drill 4×Ø6 holes, (5) deburr. Work zero at lower-left on top surface.</p>
+<p>Writing code before planning produces a program that machines the wrong features in the wrong order. A part that needs a &Oslash;10 H7 hole should be roughed to &Oslash;9.8 then bored or reamed — not drilled to size directly. The process plan determines the tool list, cycle time, and whether the part holds tolerance. Skipping planning is the #1 cause of scrapped first-article parts.</p>
+
+<h2>The Process Plan Template</h2>
+<ol>
+<li><strong>Material and stock</strong> — what are you starting from? Raw bar, plate, forging? Size and condition?</li>
+<li><strong>Datum</strong> — which feature does the drawing reference? Set work zero there. The datum should be a finished surface, not raw stock.</li>
+<li><strong>Operations in order</strong> — face, rough, finish, drill, tap, inspect. Always face first to establish Z0.</li>
+<li><strong>Tools</strong> — which tool for each operation? What H/D offset numbers? How many tools total?</li>
+<li><strong>Cutting parameters</strong> — RPM and feed from tooling data, not guesswork.</li>
+<li><strong>Inspection</strong> — which dimensions to check after each setup? What gauge?</li>
+</ol>
+
+<h2>Drawing Review Checklist</h2>
+<ul>
+<li><strong>Dimensions</strong> — identify all dimensions and their tolerances. Which are critical? Which are nominal?</li>
+<li><strong>Datums</strong> — where do the dimensions reference from? That is where G54 should be.</li>
+<li><strong>Surface finish</strong> — Ra requirements determine whether you need a finish pass.</li>
+<li><strong>Holes</strong> — what size, tolerance, and depth? Drill directly vs drill-ream vs drill-bore?</li>
+<li><strong>Threads</strong> — standard or custom? Internal or external? Tapping vs thread milling?</li>
+<li><strong>Chamfers/fillets</strong> — what size? Which tool can produce them?</li>
+</ul>
+
+<h2>Example: Plate 100&times;80&times;12</h2>
+<p>A rectangular plate with a pocket and 4 holes. Process plan:</p>
+<ol>
+<li>Face top surface with &Oslash;63 face mill (establishes Z0)</li>
+<li>Rough pocket with &Oslash;10 end mill (leave 0.2 mm finish stock)</li>
+<li>Finish pocket to size (light cut, good surface)</li>
+<li>Spot drill 4&times;&Oslash;6 holes (center drill)</li>
+<li>Drill 4&times;&Oslash;6 holes</li>
+<li>Deburr edges</li>
+</ol>
+<p>Work zero at lower-left corner on the top surface. Tool list: T01 face mill, T02 roughing end mill, T03 finishing end mill, T04 spot drill, T05 drill. Five tools, five operations, one setup.</p>
+
 <h2>Common Mistakes</h2>
-<ul><li>Drilling before milling the flat surface — holes start on uneven stock.</li>
-<li>Choosing work zero at a corner that is not the drawing datum.</li>
-<li>Skipping roughing and trying to finish in one cut.</li>
-<li>Not planning inspection points.</li></ul>
-<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> Why rough before finish?</p><details><summary>Show answer</summary><p>Roughing removes most stock quickly; finishing takes light cuts to hold tolerance and surface finish.</p></details><p><strong>2.</strong> What is the first operation on a raw plate?</p><details><summary>Show answer</summary><p>Face the top surface to establish Z zero, then machine features from that flat.</p></details></section>
-<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>[Printable Setup Worksheet](/cnc-manufacturing-engineering/engineering-tools/printable-setup-worksheet/).</li><li>[Knowledge Base: Process Planning](/cnc-manufacturing-engineering/knowledge-base/09-machining-process-planning/).</li></ul></section>
+<ul>
+<li><strong>Drilling before milling the flat surface</strong> — holes start on uneven stock and wander.</li>
+<li><strong>Choosing work zero at a corner that is not the drawing datum</strong> — dimensions accumulate from the wrong origin.</li>
+<li><strong>Skipping roughing and trying to finish in one cut</strong> — too much stock causes tool deflection and poor finish.</li>
+<li><strong>Not planning inspection points</strong> — you must know what to measure before you measure it.</li>
+<li><strong>Underestimating tool changes</strong> — each tool change takes time; consolidate operations where possible.</li>
+</ul>
+
+<h2>Practice</h2>
+<p><strong>1.</strong> Why rough before finish?</p>
+<details><summary>Show answer</summary><p>Roughing removes most stock quickly at high MRR; finishing takes light cuts at controlled feed to hold tolerance and surface finish. Combining both in one cut overloads the tool and ruins accuracy.</p></details>
+<p><strong>2.</strong> What is the first operation on a raw plate?</p>
+<details><summary>Show answer</summary><p>Face the top surface to establish Z zero and create a flat reference, then machine all features from that flat surface.</p></details>
+<p><strong>3.</strong> Why spot drill before drilling?</p>
+<details><summary>Show answer</summary><p>A spot drill creates a center dimple that guides the drill point, preventing it from wandering on the flat surface. Without spotting, drills walk off-center.</p></details>
+<p><strong>4.</strong> What is a datum, and why does it matter?</p>
+<details><summary>Show answer</summary><p>A datum is the reference surface from which dimensions are measured. If G54 is set at a different corner than the drawing datum, all referenced dimensions shift by the offset error.</p></details>
+
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/08-programming-math/">&larr; Programming Math</a><a href="/cnc-manufacturing-engineering/cnc-programming/03-coordinate-systems/">Coordinate Systems &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
