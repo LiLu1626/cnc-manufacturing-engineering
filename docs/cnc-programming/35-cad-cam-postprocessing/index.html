@@ -1,54 +1,25 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CAD/CAM and Post-Processing — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="How a CAM program becomes machine-specific G-code: CAD, CAM, post-processor, NC code.">
-<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/35-cad-cam-postprocessing/">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
-<main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>CAD/CAM and Post-Processing</h1>
-<p class="lead">Manual programming works for simple parts. Complex geometry comes from CAM software — but the toolpath must be post-processed for your specific machine.</p>
-<div class="callout"><strong>What you will learn:</strong><ul>
-<li>CAD draws the part; CAM generates the toolpath</li>
-<li>Post-processor converts CL data to machine G-code</li>
-<li>Why one CAM file does not work on every machine</li>
-<li>What to check after posting</li>
-</ul></div>
-<h2>The Pipeline</h2>
-<p><strong>CAD</strong> creates the geometry (STEP, IGES, native file). <strong>CAM</strong> assigns tools, feeds, and generates toolpaths — output is generic CL (cutter location) data. The <strong>post-processor</strong> converts CL data into machine-specific G-code for your controller (Haas, FANUC, Siemens).</p>
-<h2>Why the Post-Processor Matters</h2>
-<p>The same CAM toolpath posts differently for a Haas VF-2 vs a DMG MORI 5-axis: different cycle syntax, different tool change format, different coordinate output. A wrong post produces a program that alarms or crashes. Always verify the posted code, especially tool changes, cycles, and coordinates.</p>
-<h2>Checking Posted Code</h2>
-<ul><li>Open/close block structure (%, O number, M30).</li>
-<li>Tool change format (T01 M06 vs T0101).</li>
-<li>Work offset (G54) and tool length (G43 H) are present.</li>
-<li>Spindle direction and RPM are correct.</li>
-<li>Feed values match expected units.</li></ul>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>CAD, CAM & Post-Processing — CNC Programming</title><meta name="description" content="CAD to CAM to G-code workflow, post-processors, and why CAM output needs human review."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/35-cad-cam-postprocessing/"><link rel="stylesheet" href="../assets/css/site.css"><link rel="stylesheet" href="../assets/css/article.css"><link rel="stylesheet" href="../assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav"><a href="/cnc-manufacturing-engineering/">Home</a><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a><a href="/cnc-manufacturing-engineering/about/">About</a></nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>CAD, CAM & Post-Processing</h1><p class="lead">Most production programs start in CAM software. This page explains the CAD &rarr; CAM &rarr; post-processor &rarr; G-code chain and where things go wrong.</p><h2>Concept</h2>
+<p><strong>CAD</strong> creates the part geometry. <strong>CAM</strong> generates tool paths on that geometry. <strong>Post-processor</strong> translates tool paths into machine-specific G-code. Each step introduces potential errors.</p>
+<h2>Why It Matters</h2>
+<p>Operators who trust CAM output without review are the ones who crash machines. The post-processor only knows what you told it about the machine. If the toolholder isn't modeled, the CAM doesn't see the collision. If the work offset is wrong, CAM faithfully produces wrong coordinates.</p>
+<h2>How It Works</h2>
+<h3>The Workflow</h3>
+<ol><li>Import CAD model into CAM</li>
+<li>Define stock, fixtures, datums</li>
+<li>Assign tools, speeds, feeds</li>
+<li>Generate tool paths</li>
+<li>Simulate in CAM</li>
+<li>Post-process for specific machine</li>
+<li>Review G-code on controller</li>
+<li>First part verification</li></ol>
+<h2>Example</h2>
+<p>CAM says the program looks perfect. You still must: verify G54 offset, verify H tool lengths, verify tool numbers match the physical carousel, verify the post-processor is correct for your machine.</p>
 <h2>Common Mistakes</h2>
-<ul><li>Assuming the posted program is correct without reading it.</li>
-<li>Using the wrong post-processor for the machine.</li>
-<li>Not checking whether the post outputs G81 vs a vendor-specific cycle.</li></ul>
-<section class="cp-practice"><h2>Practice</h2>
-<p><strong>1.</strong> What does a post-processor do?</p>
-<details><summary>Show answer</summary><p>Converts generic CAM cutter-location data into machine-specific G-code, matching the controller's syntax, cycles, and tool change format.</p></details>
-<p><strong>2.</strong> Why should you always read posted G-code before running it?</p>
-<details><summary>Show answer</summary><p>The post may use wrong syntax, missing offsets, or unexpected feed/cycle values. Reading the code catches errors before the machine does.</p></details>
-</section>
-<section class="cp-sources"><h2>Sources</h2><ul>
-<li>CAM software documentation; verify against your machine manual.</li>
-</ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/34-tapping-thread-milling">&larr; Tapping & Thread Milling</a><a href="/cnc-manufacturing-engineering/cnc-programming/36-macro-foundations">Macro Foundations &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<ul><li><strong>Not modeling the toolholder</strong> — CAM sees the tip, not the holder. Collisions happen with holders.</li>
+<li><strong>Wrong post-processor</strong> — Haas post on a FANUC machine produces wrong cycle syntax.</li>
+<li><strong>Ignoring machine envelope</strong> — CAM doesn't know the machine's X/Y/Z limits.</li></ul>
+<h2>Practice</h2>
+<p><strong>1.</strong> What does a post-processor do?</p><details><summary>Ans</summary><p>Translates generic CAM tool paths into machine-specific G-code.</p></details>
+<p><strong>2.</strong> Why model the toolholder?</p><details><summary>Ans</summary><p>So CAM simulation detects holder collisions with fixture or part.</p></details>
+<p><strong>3.</strong> Does CAM simulation replace machine dry run?</p><details><summary>Ans</summary><p>No. CAM doesn't know your actual G54, H offsets, or tool positions. Dry run on the machine is still required.</p></details>
+<nav class="cp-nav-bottom"><a href="../34-tapping-thread-milling/">&larr; Tapping</a><a href="../36-macro-foundations/">Macro &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>

@@ -1,50 +1,21 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Multi-Axis and Probing Overview — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="Rotary axes, 4/5-axis concepts, and touch probing for setup and in-process measurement.">
-<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/37-multiaxis-probing-overview/">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
-<main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Multi-Axis and Probing Overview</h1>
-<p class="lead">Beyond 3-axis: rotary axes (A/B/C), 4/5-axis machining, and touch probes that measure the part while it is still on the machine.</p>
-<div class="callout"><strong>What you will learn:</strong><ul>
-<li>Rotary axes A, B, C and their relationships to X/Y/Z</li>
-<li>4-axis indexing vs full 5-axis simultaneous</li>
-<li>Touch probes: G31 records contact position</li>
-<li>Probing does not automatically update offsets</li>
-</ul></div>
-<h2>Rotary Axes</h2>
-<p><strong>A</strong> rotates around X, <strong>B</strong> around Y, <strong>C</strong> around Z. A 4-axis mill adds a rotary table (usually A or C). A 5-axis machine has two rotary axes for simultaneous orientation.</p>
-<h2>4-Axis vs 5-Axis</h2>
-<p><strong>4-axis indexing</strong>: the rotary axis positions the part, then milling happens in 3 axes while it stays still. <strong>5-axis simultaneous</strong>: the tool moves and rotates continuously during the cut — complex programming, usually CAM-generated.</p>
-<h2>Touch Probing</h2>
-<p>A probe in the spindle touches the part and records its position via <strong>G31</strong>. This measures edges, centerlines, and bores. Important: G31 records the position to a variable; it does <strong>not</strong> automatically update G54. You calculate the edge or center and enter the offset. See <a href="/cnc-manufacturing-engineering/cnc-programming/37-probing/">Probing Basics</a> for the edge-finding calculation.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Rotary Axes & Probing — CNC Programming</title><meta name="description" content="A-axis/B-axis/C-axis rotary motion, touch probing for work offset setting, and 3+2 vs full 5-axis."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/37-multiaxis-probing-overview/"><link rel="stylesheet" href="../assets/css/site.css"><link rel="stylesheet" href="../assets/css/article.css"><link rel="stylesheet" href="../assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav"><a href="/cnc-manufacturing-engineering/">Home</a><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a><a href="/cnc-manufacturing-engineering/about/">About</a></nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Rotary Axes & Probing Overview</h1><p class="lead">Rotary axes and probing extend what a CNC machine can do. This page introduces A/B/C axes, touch probes, and 3+2 machining without going deep into 5-axis programming.</p><h2>Concept</h2>
+<p><strong>Rotary axes</strong> (A, B, C) rotate the tool or workpiece around the linear axes. <strong>A</strong> rotates around X, <strong>B</strong> around Y, <strong>C</strong> around Z. A touch probe measures part position and feeds back into work offsets automatically.</p>
+<h2>Why It Matters</h2>
+<p>Without probing, setting work offset on a complex fixture is manual and error-prone. A probe touches the part, calculates the edge/center, and sets G54 automatically. Rotary axes let you machine multiple sides without re-fixturing — reducing setup error and cycle time.</p>
+<h2>How It Works</h2>
+<h3>3+2 vs Full 5-Axis</h3>
+<ul><li><strong>3+2</strong> — rotary axes position once, then XYZ linear milling. Simpler programming.</li>
+<li><strong>Full 5-axis</strong> — rotary and linear move simultaneously. Complex CAM required.</li></ul>
+<h3>Probing Basics</h3>
+<p>A touch probe mounts in the spindle. It moves to the part, touches it, and records the position. The controller computes the offset. The measured coordinate is not directly G54 — it must be converted: edge touch = half stock offset from center.</p>
+<h2>Example</h2>
+<p>Probe a 60 mm square part edge: touch left edge at X-30, touch right edge at X+30. Center X = (X-30 + X+30)/2 = X0. Set G54 X to the machine position at X0. This replaces manual edge-finding.</p>
 <h2>Common Mistakes</h2>
-<ul><li>Thinking G31 automatically sets work zero — it records; you calculate.</li>
-<li>Probing at high feed — the probe is delicate.</li>
-<li>Forgetting probe tip radius in the calculation.</li></ul>
-<section class="cp-practice"><h2>Practice</h2>
-<p><strong>1.</strong> Which rotary axis rotates around Z?</p>
-<details><summary>Show answer</summary><p>C axis. A rotates around X, B around Y, C around Z.</p></details>
-<p><strong>2.</strong> Does G31 update G54 automatically?</p>
-<details><summary>Show answer</summary><p>No. It records the touch position to a variable. You calculate and enter the offset yourself.</p></details>
-</section>
-<section class="cp-sources"><h2>Sources</h2><ul>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/37-probing/">Probing Basics</a></li>
-</ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/36-macro-foundations">&larr; Macro Foundations</a><a href="/cnc-manufacturing-engineering/cnc-programming/38-controller-specific">Controller-Specific &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<ul><li><strong>Treating probe reading as G54 directly</strong> — the probe touches an edge, not the center. Convert: center = (edge1 + edge2)/2.</li>
+<li><strong>Probing at high speed</strong> — probe feed must be slow (500 mm/min max) to avoid breaking the stylus.</li>
+<li><strong>Confusing 3+2 with full 5-axis</strong> — 3+2 positions rotary once; full 5-axis interpolates simultaneously.</li></ul>
+<h2>Practice</h2>
+<p><strong>1.</strong> Probe left edge at X-25.3, right edge at X24.8. Center?</p><details><summary>Ans</summary><p>(-25.3 + 24.8)/2 = -0.25 mm. Part center is at X-0.25.</p></details>
+<p><strong>2.</strong> What is 3+2?</p><details><summary>Ans</summary><p>Rotary axes position at an angle, then XYZ linear milling — no simultaneous rotary motion.</p></details>
+<p><strong>3.</strong> Why slow probe feed?</p><details><summary>Ans</summary><p>Probes are delicate. Fast feed bends the stylus and gives false readings.</p></details>
+<nav class="cp-nav-bottom"><a href="../36-macro-foundations/">&larr; Macro</a><a href="../38-process-optimization/">Process Optimization &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>

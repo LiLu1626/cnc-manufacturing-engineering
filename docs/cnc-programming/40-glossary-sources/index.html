@@ -1,50 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Glossary & Sources — CNC Programming</title>
-<link rel="stylesheet" href="../../assets/css/site.css">
-<link rel="stylesheet" href="../../assets/css/article.css">
-<link rel="stylesheet" href="../../assets/css/cnc-programming.css">
-</head>
-<body class="cnc-programming">
-<nav class="site-nav">
-  <a href="../../">Home</a>
-  <a href="../../engineering-tools/">Engineering Tools</a>
-  <a href="../../knowledge-base/">Knowledge Base</a>
-  <a href="../../machine-systems/">Machine Systems</a>
-  <a href="../" class="active">CNC Programming</a>
-  <a href="../../about/">About</a>
-</nav>
-<main class="article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
-<h1>Glossary &amp; Sources</h1>
-
-<h2>Glossary</h2>
-<dl>
-<dt>CAD / CAM</dt><dd>Computer-Aided Design / Manufacturing. The software that generates toolpaths from a 3D model.</dd>
-<dt>Canned Cycle</dt><dd>A pre-programmed subroutine (G81, G83, etc.) that handles positioning, feed, retract in one line.</dd>
-<dt>Coolant Through Spindle (CTS)</dt><dd>High-pressure coolant delivered through the tool holder, improving chip evacuation in deep holes.</dd>
-<dt>Fixture</dt><dd>A workholding device that locates and clamps the part repeatably.</dd>
-<dt>G-Code</dt><dd>Geometry code: commands that control tool motion (rapid, linear, arc, cycles).</dd>
-<dt>Home Position</dt><dd>The machine reference position (machine zero), set during reference return.</dd>
-<dt>MDI</dt><dd>Manual Data Input: typing commands directly on the controller for setup and test moves.</dd>
-<dt>Over-travel</dt><dd>An alarm when an axis moves beyond its physical limit switch.</dd>
-<dt>Post Processor</dt><dd>Software that translates generic CAM toolpath into machine-specific G-code.</dd>
-<dt>Work Offset</dt><dd>The shift between machine zero and work zero (G54&ndash;G59).</dd>
-</dl>
-
-<h2>Sources</h2>
-<ul>
-<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.html" target="_blank" rel="noopener">Haas G-Code Reference (Mill)</a></li>
-<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.html" target="_blank" rel="noopener">Haas G-Code Reference (Lathe)</a></li>
-<li><a href="https://www.haascnc.com/service/online-operator-s-manuals/mill-operator-s-manual/mill---macros.html" target="_blank" rel="noopener">Haas Mill Operator's Manual — Macros</a></li>
-<li>SCHUNK, Royal Products: workholding and chucking references.</li>
-<li>Sandvik Coromant: cutting parameters and tooling guides.</li>
-</ul>
-<p><em>Note: G-code behavior varies by controller. Always verify against your specific machine manual. This site uses Haas syntax as the reference dialect.</em></p>
-</main>
-<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
-</body>
-</html>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Glossary & Source Guide — CNC Programming</title><meta name="description" content="Key CNC terminology and recommended references for further study."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/40-glossary-sources/"><link rel="stylesheet" href="../assets/css/site.css"><link rel="stylesheet" href="../assets/css/article.css"><link rel="stylesheet" href="../assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav"><a href="/cnc-manufacturing-engineering/">Home</a><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a><a href="/cnc-manufacturing-engineering/about/">About</a></nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Glossary & Source Guide</h1><p class="lead">Key CNC terms defined, plus recommended sources for going deeper. This page links terminology to the detailed lessons.</p><h2>Concept</h2>
+<p>Quick definitions of common CNC terms. For full explanations, follow links to the relevant lesson.</p>
+<h2>Why It Matters</h2>
+<p>CNC has its own vocabulary. Knowing the correct terms helps you read manuals, ask questions, and communicate with machinists.</p>
+<h2>How It Works</h2>
+<h3>Glossary</h3>
+<table class="data-table">
+<tr><th>Term</th><th>Meaning</th></tr>
+<tr><td>Absolute (G90)</td><td>Coordinates measured from work zero</td></tr>
+<tr><td>ATC</td><td>Automatic Tool Changer</td></tr>
+<tr><td>Canned cycle</td><td>Preprogrammed motion sequence (G81 etc.)</td></tr>
+<tr><td>Chuck</td><td>Workholding on a lathe</td></tr>
+<tr><td>Climb milling</td><td>Tool rotates same direction as feed</td></tr>
+<tr><td>Coolant</td><td>Cutting fluid (M08 on, M09 off)</td></tr>
+<tr><td>CSS</td><td>Constant Surface Speed (G96)</td></tr>
+<tr><td>Datum</td><td>Reference point for dimensions</td></tr>
+<tr><td>Feed</td><td>Cutting speed of tool relative to work</td></tr>
+<tr><td>G54</td><td>Work coordinate system offset</td></tr>
+<tr><td>Machine zero</td><td>Fixed home position of the machine</td></tr>
+<tr><td>Modal</td><td>Code stays active until changed</td></tr>
+<tr><td>NC file</td><td>G-code program text file</td></tr>
+<tr><td>Rapid (G00)</td><td>Maximum-speed positioning move</td></tr>
+<tr><td>RPM</td><td>Spindle revolutions per minute</td></tr>
+<tr><td>Spindle</td><td>Rotating tool holder (mill) or work holder (lathe)</td></tr>
+<tr><td>Turret</td><td>Rotating tool holder on a lathe</td></tr>
+<tr><td>Work offset</td><td>Shift from machine zero to part origin</td></tr>
+</table>
+<h3>Sources</h3>
+<ul><li>Haas Automation CNC Programming Manual</li>
+<li>Society of Manufacturing Engineers (SME) publications</li>
+<li>Tooling catalogs: Sandvik Coromant, Kennametal, Iscar</li></ul>
+<h2>Example</h2>
+<p>When you encounter a new term, look it up here first, then follow the link to the detailed lesson.</p>
+<h2>Common Mistakes</h2>
+<ul><li><strong>Confusing similar terms</strong> — "feed per tooth" vs "feed per revolution" are different. Use the glossary.</li></ul>
+<h2>Practice</h2>
+<p><strong>1.</strong> What does G54 do?</p><details><summary>Ans</summary><p>Sets the work coordinate system offset.</p></details>
+<p><strong>2.</strong> Modal means?</p><details><summary>Ans</summary><p>The code stays active until another code in the same group replaces it.</p></details>
+<p><strong>3.</strong> What is ATC?</p><details><summary>Ans</summary><p>Automatic Tool Changer — the magazine that swaps tools on a mill.</p></details>
+<nav class="cp-nav-bottom"><a href="../39-exercises-assessment/">&larr; Exercises</a><a href="..//">Top &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>

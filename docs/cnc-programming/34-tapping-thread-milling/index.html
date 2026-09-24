@@ -1,51 +1,21 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tapping and Thread Milling — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="Rigid tapping (G84) vs thread milling: when to use which, and how they differ.">
-<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/34-tapping-thread-milling/">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
-<main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Tapping and Thread Milling</h1>
-<p class="lead">Tapping cuts internal threads with a tap. Thread milling uses a helical-interpolating cutter. They suit different hole sizes and materials.</p>
-<div class="callout"><strong>What you will learn:</strong><ul>
-<li>G84 rigid tapping cycle and synchronous feed</li>
-<li>Why feed override must not be touched during tapping</li>
-<li>Thread milling: helical interpolation, any pitch on any diameter</li>
-<li>When to choose tapping vs thread milling</li>
-</ul></div>
-<h2>Rigid Tapping (G84)</h2>
-<p>G84 feeds a tap down at synchronized spindle speed and feed, then reverses spindle and retracts. The feed in mm/rev must equal the thread pitch. <strong>Do not use feed override during G84</strong> — it breaks the tap. This is a synchronous operation.</p>
-<h2>Thread Milling</h2>
-<p>A thread mill is a solid carbide cutter that moves in a helical path: one full circle in X/Y while moving one pitch in Z. Advantages: one cutter works for any diameter (within range), produces chips instead of tapping debris, and is easier on hard materials. Requires helical interpolation capability.</p>
-<h2>Choosing</h2>
-<ul><li><strong>Tapping</strong>: simple, small holes, soft materials, short cycle time.</li>
-<li><strong>Thread milling</strong>: large holes, hard materials, good chip control, one tool for multiple sizes.</li></ul>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Tapping & Thread Milling — CNC Programming</title><meta name="description" content="Rigid tapping G84, tap drill size, thread mill vs tap, and feed calculation for tapping."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/34-tapping-thread-milling/"><link rel="stylesheet" href="../assets/css/site.css"><link rel="stylesheet" href="../assets/css/article.css"><link rel="stylesheet" href="../assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav"><a href="/cnc-manufacturing-engineering/">Home</a><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a><a href="/cnc-manufacturing-engineering/about/">About</a></nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Tapping & Thread Milling</h1><p class="lead">Tapping cuts internal threads. This page covers rigid tapping G84, tap drill sizing, and when thread milling is better.</p><h2>Concept</h2>
+<p><strong>Tapping</strong> uses a tap to cut internal threads in one operation. <strong>Rigid tapping</strong> (G84) synchronizes spindle rotation and Z feed so the tap follows the thread pitch exactly. <strong>Thread milling</strong> uses a rotating tool that helically interpolates around a bore — more flexible but more complex.</p>
+<h2>Why It Matters</h2>
+<p>Wrong tap drill size makes threads too shallow or too deep. Wrong feed in G84 strips the thread because feed must equal pitch. Tapping a blind hole requires bottoming tap and proper depth.</p>
+<h2>How It Works</h2>
+<h3>G84 Rigid Tapping</h3>
+<pre class="cp-code"><code>G84 R5. Z-20. F=P&times;S</code></pre>
+<p>F = pitch &times; spindle speed. For M10&times;1.5 at S500: F = 1.5 &times; 500 = 750 mm/min.</p>
+<h3>Tap Drill Size</h3>
+<p>Tap drill = major diameter &minus; pitch. M10&times;1.5: drill = 10 &minus; 1.5 = 8.5 mm.</p>
+<h2>Example</h2>
+<p>M10&times;1.5 blind hole, 15 mm deep. Tap drill O8.5. Drill to Z-16.5 (15 + 1.5 tip). Tap to Z-15 (full thread depth). G84 at S500 F750.</p>
 <h2>Common Mistakes</h2>
-<ul><li>Using feed override during G84 — breaks the tap.</li>
-<li>Choosing the wrong tap drill size — minor diameter must match the thread spec.</li>
-<li>Thread milling without understanding helical interpolation (G02/G03 with Z movement).</li></ul>
-<section class="cp-practice"><h2>Practice</h2>
-<p><strong>1.</strong> Why can you not use feed override during G84?</p>
-<details><summary>Show answer</summary><p>G84 is synchronous: spindle RPM and feed are locked together to maintain pitch. Changing feed breaks the thread form and likely the tap.</p></details>
-<p><strong>2.</strong> What is one advantage of thread milling over tapping?</p>
-<details><summary>Show answer</summary><p>One thread mill cutter works for multiple diameters within its range, and chips are small and controlled — good for hard materials.</p></details>
-</section>
-<section class="cp-sources"><h2>Sources</h2><ul>
-<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G84.html">Haas G84 — Tapping Cycle</a></li>
-</ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/33-milling-strategies">&larr; Milling Strategies</a><a href="/cnc-manufacturing-engineering/cnc-programming/35-cad-cam-postprocessing">CAD/CAM & Post &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<ul><li><strong>Feed not tied to pitch</strong> — F must = P &times; S. Wrong feed strips threads.</li>
+<li><strong>Wrong tap drill size</strong> — use tap drill = major &minus; pitch.</li>
+<li><strong>Blind hole with taper tap</strong> — use bottoming tap for full depth.</li></ul>
+<h2>Practice</h2>
+<p><strong>1.</strong> M8&times;1.25 at S600. G84 feed?</p><details><summary>Ans</summary><p>1.25 &times; 600 = 750 mm/min.</p></details>
+<p><strong>2.</strong> M12&times;1.75 tap drill size?</p><details><summary>Ans</summary><p>12 &minus; 1.75 = 10.25 mm.</p></details>
+<p><strong>3.</strong> When thread mill over tap?</p><details><summary>Ans</summary><p>Large threads, non-ferrous materials, or when one tool must cut multiple thread sizes.</p></details>
+<nav class="cp-nav-bottom"><a href="../33-milling-strategies/">&larr; Milling</a><a href="../35-cad-cam-postprocessing/">CAD/CAM &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>

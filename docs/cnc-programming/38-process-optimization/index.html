@@ -1,74 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Process Optimization — CNC Programming</title>
-<link rel="stylesheet" href="../../assets/css/site.css">
-<link rel="stylesheet" href="../../assets/css/article.css">
-<link rel="stylesheet" href="../../assets/css/cnc-programming.css">
-</head>
-<body class="cnc-programming">
-<nav class="site-nav">
-  <a href="../../">Home</a>
-  <a href="../../engineering-tools/">Engineering Tools</a>
-  <a href="../../knowledge-base/">Knowledge Base</a>
-  <a href="../../machine-systems/">Machine Systems</a>
-  <a href="../" class="active">CNC Programming</a>
-  <a href="../../about/">About</a>
-</nav>
-<main class="article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
-<h1>Process Optimization</h1>
-<p>Once a basic program runs safely, the next step is making it faster, more reliable, and gentler on tooling. This page covers the practical levers a programmer can pull without rewriting the whole process.</p>
-
-<h2>Cycle Time Reduction</h2>
-<p>The biggest gains usually come from cutting air time and reducing non-cut moves, not from cranking feed and speed.</p>
-<ul>
-  <li><strong>Rapid optimization:</strong> Stack Z retracts only as high as needed. Use G00 multi-axis moves when clearance allows.</li>
-  <li><strong>Tool change consolidation:</strong> Combine operations under one tool where geometry permits. Each tool change costs 5&ndash;15 seconds.</li>
-  <li><strong>Feed and speed:</strong> Increase feed per tooth (chip load) before increasing RPM. A heavier chip at lower RPM often improves tool life and surface finish.</li>
-  <li><strong>Cutting strategy:</strong> Trochoidal milling for deep slots reduces radial engagement and heat. Climb milling (vs conventional) improves tool life and surface.</li>
-</ul>
-
-<h2>Tool Life and Wear</h2>
-<p>Every tool wears. The goal is predictable, gradual wear rather than catastrophic failure.</p>
-<table>
-<tr><th>Symptom</th><th>Likely Cause</th><th>Action</th></tr>
-<tr><td>Flank wear even across edge</td><td>Normal abrasion</td><td>Index or replace at scheduled interval</td></tr>
-<tr><td>Notching at depth of cut</td><td>Work hardening (stainless, titanium)</td><td>Reduce DOC, use sharper geometry, increase feed</td></tr>
-<tr><td>Built-up edge</td><td>Speed too low, gummy material</td><td>Increase speed, use coated tool, improve coolant</td></tr>
-<tr><td>Cratering</td><td>Heat at cutting edge</td><td>Reduce speed, improve coolant through spindle</td></tr>
-</table>
-
-<h2>Surface Finish</h2>
-<p>Theoretical feed marks come from the tool nose radius sweeping across the part. The peak-to-valley height (Rmax) of the ideal feed mark is:</p>
-<p><code>Rmax &asymp; f&sup2; / (8 &times; r)</code> where f = feed mm/rev, r = nose radius mm.</p>
-<p><strong>Worked example:</strong> f = 0.2 mm/rev, r = 0.4 mm.<br>
-Rmax = 0.2&sup2; / (8 &times; 0.4) = 0.04 / 3.2 = <strong>0.0125 mm = 12.5 &micro;m</strong>.</p>
-<p>This is the theoretical peak-to-valley height of the feed mark, not the arithmetic average Ra. Actual surface texture also depends on tool wear, built-up edge, machine vibration, and material — the formula is a geometric estimate only, not a guaranteed finish. Always measure with a profilometer.</p>
-<p><strong>Back-calculation:</strong> for Rmax = 1.6 &micro;m = 0.0016 mm with r = 0.4 mm, solve f: f = &radic;(8 &times; r &times; Rmax) = &radic;(8 &times; 0.4 &times; 0.0016) = &radic;0.00512 &asymp; 0.072 mm/rev.</p>
-
-<h2>Stability and Chatter</h2>
-<p>Chatter (vibration marks) is the #1 enemy of finish and tool life. The fix hierarchy:</p>
-<ol>
-  <li>Reduce radial width of cut (ae) &mdash; often the biggest single lever.</li>
-  <li>Increase feed per tooth to move the cutting force frequency.</li>
-  <li>Shorten tool overhang. Every doubling of overhang drops rigidity by 8&times;.</li>
-  <li>Check spindle speed &mdash; a small RPM change can find a stable "sweet spot."</li>
-</ol>
-
-<h2>Verification</h2>
-<p>After optimization, always: dry-run at reduced feed, check the first piece, and record what changed. Document the new parameters so the next setup benefits.</p>
-
-<div class="cp-practice">
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Cycle Time & Process Improvement — CNC Programming</title><meta name="description" content="Time optimization, feed/speed adjustment, tool life vs cycle time tradeoff, and how to measure real cycle time."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/38-process-optimization/"><link rel="stylesheet" href="../assets/css/site.css"><link rel="stylesheet" href="../assets/css/article.css"><link rel="stylesheet" href="../assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav"><a href="/cnc-manufacturing-engineering/">Home</a><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a><a href="/cnc-manufacturing-engineering/about/">About</a></nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Cycle Time & Process Improvement</h1><p class="lead">Once a program runs correctly, the next question is: how fast can it run? This page covers cycle time analysis, tool life tradeoffs, and safe optimization.</p><h2>Concept</h2>
+<p><strong>Cycle time</strong> is the total time from program start to part complete. Optimization means reducing non-cutting time (rapid moves, tool changes) and cutting time (higher feed/speed) without sacrificing tool life or part quality.</p>
+<h2>Why It Matters</h2>
+<p>A 10-second cycle time saving per part on a 10,000-part run = 27 hours of machine time. Small improvements compound. But pushing feed too hard breaks tools and scrap parts — optimization is a balance, not maximum speed.</p>
+<h2>How It Works</h2>
+<h3>Where Time Goes</h3>
+<ul><li><strong>Cutting time</strong> — tool engaged with material</li>
+<li><strong>Rapid time</strong> — tool moving between cuts</li>
+<li><strong>Tool change time</strong> — ATC cycle</li>
+<li><strong>Dwell/idle</strong> — spindle stop, coolant wait</li></ul>
+<h3>Optimization Levers</h3>
+<ol><li>Reduce rapid moves (optimize hole order)</li>
+<li>Increase feed (within tool catalog)</li>
+<li>Increase stepover (reduce passes)</li>
+<li>Combine operations (fewer tool changes)</li></ol>
+<h2>Example</h2>
+<p>Fixed distance 120 mm. At F300: time = 120/300 = 0.4 min = 24 s. At F360: 120/360 = 0.333 min = 20 s. Saving = 4 s per pass. On a 1000-part run with 3 passes each: 4 &times; 3 &times; 1000 = 12,000 s = 3.3 hours saved.</p>
+<p>But: if feed increase doubles tool wear, tool changes add 30 s each. Break-even: if you change tools twice as often (+30 s per part) to save 4 s per pass, you lose. Optimize the whole process, not one number.</p>
+<h2>Common Mistakes</h2>
+<ul><li><strong>Increasing feed beyond tool rating</strong> — breaks tools, causes chatter, scrap parts.</li>
+<li><strong>Ignoring non-cutting time</strong> — rapid moves and tool changes often exceed cutting time.</li>
+<li><strong>Optimizing one operation in isolation</strong> — the bottleneck may be elsewhere (fixturing, inspection).</li></ul>
 <h2>Practice</h2>
-<p><strong>1.</strong> A tool change takes 8 seconds and the program has 12 tools. If you can combine two operations into one tool, how much time per cycle do you save?</p>
-<details><summary>Show answer</summary><p>8 seconds (one fewer tool change). Across 100 parts, that is 800 seconds = 13 minutes.</p></details>
-<p><strong>2.</strong> Why does reducing radial width of cut often eliminate chatter better than reducing speed?</p>
-<details><summary>Show answer</summary><p>Chatter comes from the force per tooth exciting a natural frequency. Narrowing ae reduces the cutting force amplitude directly; changing RPM shifts the frequency but may hit another resonance.</p></details>
-</div>
-</main>
-<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
-</body>
-</html>
+<p><strong>1.</strong> 120 mm at F300 vs F360. Time saving?</p><details><summary>Ans</summary><p>24 s vs 20 s = 4 s saved.</p></details>
+<p><strong>2.</strong> Name two non-cutting time savings.</p><details><summary>Ans</summary><p>Optimize hole order (shorter rapid) and reduce tool changes (combine operations).</p></details>
+<p><strong>3.</strong> Why not max feed always?</p><details><summary>Ans</summary><p>Tool life, surface finish, and machine power limit feed. Pushing too hard costs more in tooling and scrap than it saves in time.</p></details>
+<nav class="cp-nav-bottom"><a href="../37-multiaxis-probing-overview/">&larr; Rotary/Probing</a><a href="../39-exercises-assessment/">Exercises &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>
