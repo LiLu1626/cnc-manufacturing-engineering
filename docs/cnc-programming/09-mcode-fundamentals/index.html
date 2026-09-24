@@ -1,47 +1,94 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>M-Codes: Machine Functions — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="M03/M04/M05 spindle, M08/M09 coolant, M06 tool change, M30 program end — machine actions, not motion.">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M-Codes: Machine Functions — CNC & Manufacturing Engineering</title>
+<meta name="description" content="M03/M04/M05 spindle, M08/M09 coolant, M06 tool change, M00/M01/M30 program control, and the correct shutdown sequence.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/09-mcode-fundamentals/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
 <main class="article">
-<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>M-Codes: Machine Functions</h1>
-<p class="lead">G-codes control motion; M-codes control the machine itself: spindle, coolant, tool change, program stop.</p>
-<div class="cp-meta"><span><strong>Level:</strong> Beginner</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
-<div class="callout"><strong>What you will learn:</strong><ul><li>M03/M04/M05 spindle start/stop/direction</li><li>M08/M09 coolant</li><li>M06 tool change</li><li>M00/M01/M02/M30 program control</li></ul></div>
+<p class="lead">G-codes control tool motion; M-codes control the machine itself — spindle, coolant, tool change, program stop. This page covers the common M-codes and the correct program start/end sequence.</p>
+
+<div class="callout"><strong>What you will learn:</strong>
+<ul>
+<li>M03/M04/M05 spindle start/stop/direction</li>
+<li>M08/M09 coolant on/off</li>
+<li>M06 tool change</li>
+<li>M00/M01/M02/M30 program control</li>
+</ul></div>
+
 <h2>Concept</h2>
-<p>M-codes cause machine actions independent of axis motion. <strong>M03</strong> spindle clockwise, <strong>M04</strong> counterclockwise, <strong>M05</strong> stop. <strong>M08</strong> coolant on, <strong>M09</strong> off. <strong>M06</strong> tool change. <strong>M30</strong> program end and rewind. <strong>M00</strong> program stop (unconditional), <strong>M01</strong> optional stop (only if switch on).</p>
+<p>M-codes cause machine actions independent of axis motion. Where G01 says "move in a straight line," M03 says "start the spindle." M-codes are non-modal for the most part: they execute once when the block is read. Unlike G-codes, most M-codes do not persist across blocks.</p>
+
+<h2>Common M-Codes Reference</h2>
+<table class="data-table">
+<tr><th>Code</th><th>Function</th><th>Typical Use</th></tr>
+<tr><td>M03</td><td>Spindle forward (CW)</td><td>M03 S2000 — start at 2000 RPM clockwise</td></tr>
+<tr><td>M04</td><td>Spindle reverse (CCW)</td><td>Rarely used; specific tooling</td></tr>
+<tr><td>M05</td><td>Spindle stop</td><td>Before tool change or at program end</td></tr>
+<tr><td>M08</td><td>Coolant on</td><td>After spindle reaches speed</td></tr>
+<tr><td>M09</td><td>Coolant off</td><td>Before retract or program end</td></tr>
+<tr><td>M06</td><td>Tool change</td><td>T02 M06 on mills; lathes use T0202</td></tr>
+<tr><td>M00</td><td>Program stop</td><td>Unconditional pause; press cycle start to continue</td></tr>
+<tr><td>M01</td><td>Optional stop</td><td>Pauses only if optional-stop switch is on</td></tr>
+<tr><td>M02</td><td>Program end</td><td>Stops program without rewinding</td></tr>
+<tr><td>M30</td><td>Program end &amp; rewind</td><td>Standard end: stops and returns to program top</td></tr>
+</table>
+<p><strong>Important:</strong> M-codes are machine-specific. The same M-code may do different things on different machines. Always verify against your machine manual. The codes above are standard on FANUC/Haas; Siemens and Mazak may differ.</p>
+
 <h2>Why It Matters</h2>
-<p>M-codes are machine-specific. The same M-code may do different things on different machines. Always check your machine manual. A missing M05 before a tool change can be dangerous.</p>
-<h2>How</h2>
-<h3>Common M-codes</h3>
-<ul><li><strong>M03 S2000</strong> — spindle CW at 2000 rpm.</li>
-<li><strong>M05</strong> — stop spindle.</li>
-<li><strong>M08</strong> — coolant on.</li>
-<li><strong>M09</strong> — coolant off.</li>
-<li><strong>M06 T02</strong> — tool change to tool 2.</li>
-<li><strong>M30</strong> — end program, return to top.</li></ul>
-<h2>Example</h2>
-<p>Program ending: M09 (coolant off) &rarr; M05 (spindle stop) &rarr; G91 G28 Z0 (retract Z) &rarr; M30. The order matters: never M30 with spindle still running or coolant still on.</p>
+<p>A missing M05 before a tool change can be dangerous: the tool carousel indexes while the spindle is still spinning. Forgetting M09 leaves coolant flooding after the program ends. M30 with spindle still running is a safety hazard. The order of M-codes at program start and end matters.</p>
+
+<h2>The Correct Program End Sequence</h2>
+<pre class="cp-code"><code>G80                 (cancel cycles)
+G00 Z50.            (retract Z to safe height)
+M09                 (coolant off)
+M05                 (spindle stop)
+G91 G28 Z0          (optional: return Z to machine home)
+M30                 (end program, rewind)</code></pre>
+<p>The order: coolant off first, then spindle stop, then program end. Never M30 with spindle still running or coolant still on. On a lathe, the sequence is similar: M09, M05, then retract and M30.</p>
+
 <h2>Common Mistakes</h2>
-<ul><li>Forgetting M05 after machining — tool change with spindle running is dangerous.</li>
-<li>Starting spindle before positioning — always M03 after the tool is clear of the part.</li>
-<li>Assuming M06 automatically calls the right tool offset — T sets the tool, H sets the length offset separately.</li></ul>
-<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> What does M01 do?</p><details><summary>Show answer</summary><p>Optional stop — only pauses if the optional stop switch on the machine is on. Used for inspection at chosen points.</p></details><p><strong>2.</strong> Why M09 before M05?</p><details><summary>Show answer</summary><p>Order: turn off coolant, stop spindle, retract. Never M30 with spindle or coolant active.</p></details></section>
-<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Mill Operator's Manual — M-codes (haascnc.com, retrieved 2026-09-24).</li><li>M-codes vary by machine and builder; always verify against your manual.</li></ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/06-modal-codes/">&larr; Modal Codes</a><a href="/cnc-manufacturing-engineering/cnc-programming/11-controller-dialects/">Controllers &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<ul>
+<li><strong>Forgetting M05 before tool change</strong> — changing tools with the spindle running is dangerous. Always M05 first.</li>
+<li><strong>Starting spindle before the tool is clear</strong> — position the tool at safe Z, then M03. Do not start the spindle while the tool is near the part.</li>
+<li><strong>Assuming M06 sets the tool offset</strong> — T selects the tool number; H sets the length offset separately. T02 M06 does not automatically load H02.</li>
+<li><strong>M30 without M09/M05</strong> — the program ends but coolant and spindle stay on.</li>
+<li><strong>Using M02 instead of M30</strong> — M02 does not rewind to program top. M30 is the standard end command.</li>
+</ul>
+
+<section class="cp-practice">
+<h2>Practice</h2>
+<p><strong>1.</strong> What does M01 do?</p>
+<details><summary>Show answer</summary><p>Optional stop — pauses the program only if the optional-stop switch on the machine panel is on. Used for inspection at chosen points; skipped during production runs.</p></details>
+<p><strong>2.</strong> Why M09 before M05 at program end?</p>
+<details><summary>Show answer</summary><p>Turn off coolant first, then stop the spindle. This prevents coolant from flooding after shutdown and ensures a clean stop. Never M30 with spindle or coolant active.</p></details>
+<p><strong>3.</strong> What is the difference between M00 and M01?</p>
+<details><summary>Show answer</summary><p>M00 always stops the program (unconditional). M01 stops only if the optional-stop switch is on. M01 is used for spot checks; M00 is for mandatory pauses.</p></details>
+</section>
+
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/06-modal-codes/">&larr; Modal Codes</a><a href="/cnc-manufacturing-engineering/cnc-programming/11-feed-programming/">Feed Programming &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
