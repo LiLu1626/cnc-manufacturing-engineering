@@ -1,0 +1,1104 @@
+{
+  "summary": {
+    "main_articles": 40,
+    "B_pass": 0,
+    "K_pass": 0,
+    "under800": 28,
+    "min_words": 274,
+    "max_words": 1246,
+    "six_sections": 26,
+    "no_svg": 22,
+    "canonical": 40,
+    "bottom_nav": 40,
+    "full_nav": 40,
+    "back_link_class": 40,
+    "css_broken_refs": 0,
+    "css_broken_pages": 0,
+    "bad_refs_total": 0,
+    "compat_broken_pages": 0,
+    "six_missing": [
+      "03",
+      "04",
+      "05",
+      "06",
+      "08",
+      "09",
+      "10",
+      "11",
+      "12",
+      "13",
+      "16",
+      "30",
+      "32",
+      "39"
+    ],
+    "chain_errors": [
+      9,
+      10
+    ],
+    "homepage_missing_anchors": [],
+    "sitemap_urls": 143,
+    "svg_pass": 3
+  },
+  "rows": [
+    {
+      "id": "01",
+      "path": "docs/cnc-programming/01-getting-started/what-is-cnc-programming/index.html",
+      "level": "B",
+      "words": 752,
+      "min_words": 800,
+      "six_sections": true,
+      "svg": 0,
+      "answers": 3,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/31-learning-path/",
+        "/cnc-manufacturing-engineering/cnc-programming/02-machine-fundamentals/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 1
+    },
+    {
+      "id": "02",
+      "path": "docs/cnc-programming/02-machine-fundamentals/index.html",
+      "level": "B",
+      "words": 733,
+      "min_words": 800,
+      "six_sections": true,
+      "svg": 0,
+      "answers": 3,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/01-getting-started/what-is-cnc-programming/",
+        "/cnc-manufacturing-engineering/cnc-programming/23-program-safety/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 1
+    },
+    {
+      "id": "03",
+      "path": "docs/cnc-programming/03-coordinate-systems/index.html",
+      "level": "K",
+      "words": 742,
+      "min_words": 2000,
+      "six_sections": false,
+      "svg": 2,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/32-drawings-process-planning/",
+        "/cnc-manufacturing-engineering/cnc-programming/07-plane-units/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "1. Cartesian Coordinate System",
+        "2. Machine Coordinate System",
+        "3. Work Coordinate System (G54–G59)",
+        "4. Absolute vs Incremental Programming",
+        "5. Why Coordinate Errors Are Dangerous",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "04",
+      "path": "docs/cnc-programming/04-program-structure/index.html",
+      "level": "B",
+      "words": 402,
+      "min_words": 800,
+      "six_sections": false,
+      "svg": 0,
+      "answers": 3,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/07-plane-units/",
+        "/cnc-manufacturing-engineering/cnc-programming/05-gcode-fundamentals/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 1
+    },
+    {
+      "id": "05",
+      "path": "docs/cnc-programming/05-gcode-fundamentals/index.html",
+      "level": "B",
+      "words": 471,
+      "min_words": 800,
+      "six_sections": false,
+      "svg": 0,
+      "answers": 3,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/04-program-structure/",
+        "/cnc-manufacturing-engineering/cnc-programming/06-modal-codes/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 1
+    },
+    {
+      "id": "06",
+      "path": "docs/cnc-programming/06-modal-codes/index.html",
+      "level": "K",
+      "words": 584,
+      "min_words": 2000,
+      "six_sections": false,
+      "svg": 0,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/05-gcode-fundamentals/",
+        "/cnc-manufacturing-engineering/cnc-programming/09-mcode-fundamentals/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "Common Modal Groups",
+        "How It Works — Example",
+        "The Startup Block as State Reset",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "07",
+      "path": "docs/cnc-programming/07-plane-units/index.html",
+      "level": "B",
+      "words": 478,
+      "min_words": 800,
+      "six_sections": true,
+      "svg": 0,
+      "answers": 3,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/03-coordinate-systems/",
+        "/cnc-manufacturing-engineering/cnc-programming/04-program-structure/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 1
+    },
+    {
+      "id": "08",
+      "path": "docs/cnc-programming/08-programming-math/index.html",
+      "level": "K",
+      "words": 569,
+      "min_words": 2000,
+      "six_sections": false,
+      "svg": 0,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/23-program-safety/",
+        "/cnc-manufacturing-engineering/cnc-programming/32-drawings-process-planning/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "Right Triangle Trigonometry",
+        "Coordinates on a Circle",
+        "Example 1: Bolt Circle (4 Holes)",
+        "Example 2: Bolt Circle (6 Holes)",
+        "Example 3: Distance and Angle",
+        "Example 4: Chamfer Calculation",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "09",
+      "path": "docs/cnc-programming/09-mcode-fundamentals/index.html",
+      "level": "B",
+      "words": 533,
+      "min_words": 800,
+      "six_sections": false,
+      "svg": 0,
+      "answers": 3,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/06-modal-codes/",
+        "/cnc-manufacturing-engineering/cnc-programming/11-feed-programming/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Common M-Codes Reference",
+        "Why It Matters",
+        "The Correct Program End Sequence",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 1
+    },
+    {
+      "id": "10",
+      "path": "docs/cnc-programming/10-spindle-feed/index.html",
+      "level": "K",
+      "words": 657,
+      "min_words": 2000,
+      "six_sections": false,
+      "svg": 0,
+      "answers": 3,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/11-feed-programming/",
+        "/cnc-manufacturing-engineering/cnc-programming/13-work-offsets/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Spindle Control",
+        "Feed Modes",
+        "How to Choose Speed and Feed",
+        "Constant Surface Speed (G96) on Lathes",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "11",
+      "path": "docs/cnc-programming/11-controller-dialects/index.html",
+      "level": "B",
+      "words": 274,
+      "min_words": 800,
+      "six_sections": false,
+      "svg": 0,
+      "answers": 2,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/09-mcode-fundamentals/",
+        "/cnc-manufacturing-engineering/cnc-programming/10-spindle-feed/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Major Controllers",
+        "Key Differences",
+        "Why It Matters",
+        "Common Mistakes",
+        "Practice",
+        "Sources"
+      ],
+      "required_svg": 1
+    },
+    {
+      "id": "12",
+      "path": "docs/cnc-programming/12-tool-offsets/index.html",
+      "level": "K",
+      "words": 734,
+      "min_words": 2000,
+      "six_sections": false,
+      "svg": 0,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/13-work-offsets/",
+        "/cnc-manufacturing-engineering/cnc-programming/14-linear-interpolation/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "Mill: G43 Length Compensation",
+        "Geometry vs Wear Offsets",
+        "Lathe: Tool Nose Radius",
+        "Example",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "13",
+      "path": "docs/cnc-programming/13-work-offsets/index.html",
+      "level": "K",
+      "words": 750,
+      "min_words": 2000,
+      "six_sections": false,
+      "svg": 0,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/10-spindle-feed/",
+        "/cnc-manufacturing-engineering/cnc-programming/12-tool-offsets/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "The Offset Chain",
+        "Setting G54 on a Mill",
+        "Multiple Work Offsets",
+        "Example",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "14",
+      "path": "docs/cnc-programming/14-linear-interpolation/index.html",
+      "level": "K",
+      "words": 710,
+      "min_words": 2000,
+      "six_sections": true,
+      "svg": 1,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/12-tool-offsets/",
+        "/cnc-manufacturing-engineering/cnc-programming/15-circular-interpolation/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "15",
+      "path": "docs/cnc-programming/15-circular-interpolation/index.html",
+      "level": "K",
+      "words": 610,
+      "min_words": 2000,
+      "six_sections": true,
+      "svg": 2,
+      "answers": 3,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/14-linear-interpolation/",
+        "/cnc-manufacturing-engineering/cnc-programming/16-cutter-compensation/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example",
+        "Helical Interpolation",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "16",
+      "path": "docs/cnc-programming/16-cutter-compensation/index.html",
+      "level": "K",
+      "words": 748,
+      "min_words": 2000,
+      "six_sections": false,
+      "svg": 0,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/15-circular-interpolation/",
+        "/cnc-manufacturing-engineering/cnc-programming/33-milling-strategies/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Inner vs Outer Profiles",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "17",
+      "path": "docs/cnc-programming/17-drilling-cycles/index.html",
+      "level": "K",
+      "words": 1246,
+      "min_words": 2000,
+      "six_sections": true,
+      "svg": 2,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/33-milling-strategies/",
+        "/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "18",
+      "path": "docs/cnc-programming/18-canned-cycles/index.html",
+      "level": "K",
+      "words": 1025,
+      "min_words": 2000,
+      "six_sections": true,
+      "svg": 1,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/",
+        "/cnc-manufacturing-engineering/cnc-programming/34-tapping-thread-milling/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "19",
+      "path": "docs/cnc-programming/19-turning-fundamentals/index.html",
+      "level": "K",
+      "words": 978,
+      "min_words": 2000,
+      "six_sections": true,
+      "svg": 1,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/29-subprograms/",
+        "/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "20",
+      "path": "docs/cnc-programming/20-turning-cycles/index.html",
+      "level": "K",
+      "words": 798,
+      "min_words": 2000,
+      "six_sections": true,
+      "svg": 1,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/",
+        "/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "21",
+      "path": "docs/cnc-programming/21-grooving-parting-boring/index.html",
+      "level": "K",
+      "words": 733,
+      "min_words": 2000,
+      "six_sections": true,
+      "svg": 1,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/",
+        "/cnc-manufacturing-engineering/cnc-programming/22-threading/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "22",
+      "path": "docs/cnc-programming/22-threading/index.html",
+      "level": "K",
+      "words": 1156,
+      "min_words": 2000,
+      "six_sections": true,
+      "svg": 0,
+      "answers": 3,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring/",
+        "/cnc-manufacturing-engineering/cnc-programming/24-verification/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example",
+        "G32 — Single-Pass Threading (Manual)",
+        "Threading on a Mill: Tapping vs Thread Milling",
+        "Common Threading Problems",
+        "Common Mistakes",
+        "Practice",
+        "Sources"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "23",
+      "path": "docs/cnc-programming/23-program-safety/index.html",
+      "level": "K",
+      "words": 1210,
+      "min_words": 2000,
+      "six_sections": true,
+      "svg": 1,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/02-machine-fundamentals/",
+        "/cnc-manufacturing-engineering/cnc-programming/08-programming-math/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "24",
+      "path": "docs/cnc-programming/24-verification/index.html",
+      "level": "K",
+      "words": 822,
+      "min_words": 2000,
+      "six_sections": true,
+      "svg": 1,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/22-threading/",
+        "/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "25",
+      "path": "docs/cnc-programming/25-troubleshooting/index.html",
+      "level": "K",
+      "words": 820,
+      "min_words": 2000,
+      "six_sections": true,
+      "svg": 1,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/24-verification/",
+        "/cnc-manufacturing-engineering/cnc-programming/26-common-mistakes/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "26",
+      "path": "docs/cnc-programming/26-common-mistakes/index.html",
+      "level": "B",
+      "words": 530,
+      "min_words": 800,
+      "six_sections": true,
+      "svg": 0,
+      "answers": 3,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting/",
+        "/cnc-manufacturing-engineering/cnc-programming/28-milling-project/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "The Big Ten Checklist",
+        "Why It Matters",
+        "How to Use This Checklist",
+        "Example",
+        "Common Mistakes About the Mistakes",
+        "Practice"
+      ],
+      "required_svg": 1
+    },
+    {
+      "id": "27",
+      "path": "docs/cnc-programming/27-turning-project/index.html",
+      "level": "K",
+      "words": 745,
+      "min_words": 2000,
+      "six_sections": true,
+      "svg": 1,
+      "answers": 3,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/28-milling-project/",
+        "/cnc-manufacturing-engineering/cnc-programming/35-cad-cam-postprocessing/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example: Complete Program",
+        "Common Mistakes",
+        "Practice",
+        "Sources"
+      ],
+      "required_svg": 3
+    },
+    {
+      "id": "28",
+      "path": "docs/cnc-programming/28-milling-project/index.html",
+      "level": "K",
+      "words": 877,
+      "min_words": 2000,
+      "six_sections": true,
+      "svg": 1,
+      "answers": 3,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/26-common-mistakes/",
+        "/cnc-manufacturing-engineering/cnc-programming/27-turning-project/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example: Complete Program",
+        "Common Mistakes",
+        "Practice",
+        "Sources"
+      ],
+      "required_svg": 3
+    },
+    {
+      "id": "29",
+      "path": "docs/cnc-programming/29-subprograms/index.html",
+      "level": "K",
+      "words": 697,
+      "min_words": 2000,
+      "six_sections": true,
+      "svg": 0,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/34-tapping-thread-milling/",
+        "/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example: Four-Hole Pattern",
+        "When to Use Subprograms",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "30",
+      "path": "docs/cnc-programming/30-reference/index.html",
+      "level": "B",
+      "words": 330,
+      "min_words": 800,
+      "six_sections": false,
+      "svg": 0,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/29-subprograms/",
+        "/cnc-manufacturing-engineering/cnc-programming/31-learning-path/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "G-Codes",
+        "M-Codes",
+        "Common Formulas",
+        "Common Mistakes",
+        "Quick Self-Test"
+      ],
+      "required_svg": 1
+    },
+    {
+      "id": "31",
+      "path": "docs/cnc-programming/31-learning-path/index.html",
+      "level": "B",
+      "words": 544,
+      "min_words": 800,
+      "six_sections": true,
+      "svg": 0,
+      "answers": 3,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/39-exercises-assessment/",
+        "/cnc-manufacturing-engineering/cnc-programming/01-getting-started/what-is-cnc-programming/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "Estimated Time per Module",
+        "How It Works",
+        "Example",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 1
+    },
+    {
+      "id": "32",
+      "path": "docs/cnc-programming/32-drawings-process-planning/index.html",
+      "level": "K",
+      "words": 653,
+      "min_words": 2000,
+      "six_sections": false,
+      "svg": 0,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/08-programming-math/",
+        "/cnc-manufacturing-engineering/cnc-programming/03-coordinate-systems/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "The Process Plan Template",
+        "Drawing Review Checklist",
+        "Example: Plate 100×80×12",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "33",
+      "path": "docs/cnc-programming/33-milling-strategies/index.html",
+      "level": "K",
+      "words": 714,
+      "min_words": 2000,
+      "six_sections": true,
+      "svg": 1,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/16-cutter-compensation/",
+        "/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "34",
+      "path": "docs/cnc-programming/34-tapping-thread-milling/index.html",
+      "level": "K",
+      "words": 909,
+      "min_words": 2000,
+      "six_sections": true,
+      "svg": 1,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/",
+        "/cnc-manufacturing-engineering/cnc-programming/29-subprograms/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "35",
+      "path": "docs/cnc-programming/35-cad-cam-postprocessing/index.html",
+      "level": "K",
+      "words": 949,
+      "min_words": 2000,
+      "six_sections": true,
+      "svg": 1,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/27-turning-project/",
+        "/cnc-manufacturing-engineering/cnc-programming/36-macro-foundations/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "36",
+      "path": "docs/cnc-programming/36-macro-foundations/index.html",
+      "level": "K",
+      "words": 718,
+      "min_words": 2000,
+      "six_sections": true,
+      "svg": 1,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/35-cad-cam-postprocessing/",
+        "/cnc-manufacturing-engineering/cnc-programming/37-multiaxis-probing-overview/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "37",
+      "path": "docs/cnc-programming/37-multiaxis-probing-overview/index.html",
+      "level": "B",
+      "words": 431,
+      "min_words": 800,
+      "six_sections": true,
+      "svg": 0,
+      "answers": 3,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/36-macro-foundations/",
+        "/cnc-manufacturing-engineering/cnc-programming/38-process-optimization/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example",
+        "Probe Applications",
+        "Rotary Axis Naming",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 1
+    },
+    {
+      "id": "38",
+      "path": "docs/cnc-programming/38-process-optimization/index.html",
+      "level": "K",
+      "words": 847,
+      "min_words": 2000,
+      "six_sections": true,
+      "svg": 1,
+      "answers": 4,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/37-multiaxis-probing-overview/",
+        "/cnc-manufacturing-engineering/cnc-programming/39-exercises-assessment/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "39",
+      "path": "docs/cnc-programming/39-exercises-assessment/index.html",
+      "level": "K",
+      "words": 921,
+      "min_words": 2000,
+      "six_sections": false,
+      "svg": 0,
+      "answers": 20,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/38-process-optimization/",
+        "/cnc-manufacturing-engineering/cnc-programming/31-learning-path/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Part 1 — Knowledge Check (Questions 1–8)",
+        "Part 2 — Code Reading (Questions 9–12)",
+        "Part 3 — Find the Error (Questions 13–16)",
+        "Part 4 — Write the Program (Questions 17–20)"
+      ],
+      "required_svg": 2
+    },
+    {
+      "id": "40",
+      "path": "docs/cnc-programming/40-glossary-sources/index.html",
+      "level": "B",
+      "words": 454,
+      "min_words": 800,
+      "six_sections": true,
+      "svg": 0,
+      "answers": 3,
+      "canonical": true,
+      "bottom_nav": [
+        "/cnc-manufacturing-engineering/cnc-programming/39-exercises-assessment/",
+        "/cnc-manufacturing-engineering/cnc-programming/"
+      ],
+      "full_nav": true,
+      "back_link": true,
+      "headings": [
+        "Concept",
+        "Why It Matters",
+        "How It Works",
+        "Example",
+        "Common Mistakes",
+        "Practice"
+      ],
+      "required_svg": 1
+    }
+  ],
+  "bad_links": []
+}

@@ -48,7 +48,7 @@
 <details><summary>Answer</summary><p>X40 means the tool is positioned at a 40 mm diameter, not 40 mm radius. The actual radial position is 20 mm from center. Radial depth of cut = (X_start &minus; X_end) / 2.</p></details></li>
 
 <li><strong>What does G80 do?</strong>
-<details><summary>Answer</summary><p>G80 cancels all canned drilling cycles. It stops the modal cycle mode so the next X/Y move is a positioning move, not a drill. Note: G80 does not retract Z — write G00 Z50 explicitly.</p></details></li>
+<details><summary>Answer</summary><p>G80 cancels all canned drilling cycles. It stops the modal cycle mode so the next X/Y move is a positioning move, not a drill. Note: G80 does not retract Z — write G00 Z50 explicitly. On Haas, a G00 or G01 motion also cancels the cycle, but writing G80 explicitly makes the intent clear.</p></details></li>
 
 <li><strong>What is the difference between G98 and G99 in a drilling cycle?</strong>
 <details><summary>Answer</summary><p>G98 retracts to the initial Z plane (the height before the cycle was called). G99 retracts only to the R plane. Use G99 for holes with no obstructions between them; use G98 when there is a boss, clamp, or feature to clear.</p></details></li>
@@ -70,8 +70,8 @@ M30</code></pre>
 <details><summary>Trace</summary><p>1. Rapid to XY (20,20). 2. Spindle on at S2000, rapid to Z50 with tool length offset H01. 3. Feed down to Z&minus;2 at 100 mm/min. 4. Feed to X80 (Y stays at 20) at 300 mm/min. 5. Rapid up to Z50. 6. Rapid to X0 Y0. 7. Program end. Tool ends at X0 Y0 Z50.</p></details>
 
 <p><strong>10.</strong> What does this subprogram call do? How many times does it run?</p>
-<pre class="cp-code"><code>M98 P52000</code></pre>
-<details><summary>Answer (Haas)</summary><p>P52000: the leading digit 5 is the repeat count, and 2000 is the subprogram number. It calls O2000 five times in a row. If O2000 drills one hole, this line drills five holes at the current XY position set by the caller.</p></details>
+<pre class="cp-code"><code>M98 P2000 L5</code></pre>
+<details><summary>Answer (Haas)</summary><p>P2000 calls subprogram O2000; L5 repeats it five times. If O2000 drills one hole at the current XY, this line calls O2000 five times at the same XY — repeat count alone does not create five different hole positions. The caller must reposition XY before each call to drill at different locations.</p></details>
 
 <p><strong>11.</strong> Read the turning program. What diameter does it end at?</p>
 <pre class="cp-code"><code>G00 X50. Z2.
@@ -83,7 +83,7 @@ X52.</code></pre>
 
 <p><strong>12.</strong> After this line, what mode is the machine in?</p>
 <pre class="cp-code"><code>G99 G83 R2. Z-15. Q3. F120.</code></pre>
-<details><summary>Answer</summary><p>Peck drilling cycle (G83) is active, modal. Retract mode is G99 (return to R2 after each hole). The cycle stays active until G80. The next X/Y line will peck-drill at that position.</p></details>
+<details><summary>Answer</summary><p>Peck drilling cycle (G83) is active, modal. Retract mode is G99 (return to R2 after each hole). The cycle stays active until G80 or another documented cancelling motion command (such as G00/G01 on Haas). The next X/Y line will peck-drill at that position.</p></details>
 
 <h2>Part 3 — Find the Error (Questions 13–16)</h2>
 
@@ -98,7 +98,7 @@ G00 Z50.
 M30</code></pre>
 <details><summary>Diagnosis</summary><p>G41 is engaged at Z&minus;5 while already inside material, without a lead-in move from outside the part. There is no G40 at the end to cancel compensation. There is also no startup block (G21, G17, G94, G80, G49). G41 must be engaged on a lead-in move from outside the stock, not mid-cut.</p></details>
 
-<p><strong>14.</strong> This drilling program is wrong. What is the problem?</p>
+<p><strong>14.</strong> On a Haas, after the last hole at (50,50), this program uses <code>G00 Z50.</code> without writing <code>G80</code>. Does the machine continue drilling? How can the exit state be made clearer?</p>
 <pre class="cp-code"><code>G90 G54 G00 X10. Y10.
 G43 H01 Z50. M03 S1500
 G81 R2. Z-15. F100.
@@ -106,7 +106,7 @@ X50. Y10.
 X50. Y50.
 G00 Z50.
 M30</code></pre>
-<details><summary>Diagnosis</summary><p>Missing G80 after the hole pattern. The last hole at (50,50) is drilled, but G80 is never programmed. The G00 Z50 move happens while G81 is still modal — the machine may interpret Z50 as part of the cycle. Also, no explicit G00 Z50 after G80. Fix: add G80 before Z retract.</p></details>
+<details><summary>Diagnosis</summary><p>On Haas, the G00 Z50 motion itself cancels the G81 cycle — the machine will not continue drilling. However, writing an explicit G80 before the Z retract makes the program's intent unambiguous and protects against controller differences. Best practice: add G80 before G00 Z50. This is a clarity issue, not a crash bug.</p></details>
 
 <p><strong>15.</strong> This turning program cuts the wrong diameter. Why?</p>
 <pre class="cp-code"><code>G00 X30. Z2.
@@ -115,10 +115,10 @@ Z-30.
 X40.</code></pre>
 <details><summary>Diagnosis</summary><p>The tool starts at X30 (&Oslash;30 diameter) and turns along Z to Z&minus;30 without changing X — it cuts a &Oslash;30 shaft, not the intended &Oslash;40. If the goal is to turn from &Oslash;50 to &Oslash;40, the X should start at X50 and step to X40 before the Z move.</p></details>
 
-<p><strong>16.</strong> This tapping program will strip the threads. Why?</p>
+<p><strong>16.</strong> This tapping program will strip the threads. Why? Assume G94 (feed per minute) is active.</p>
 <pre class="cp-code"><code>G84 R5. Z-15. F500.
 (S500, M10x1.5 tap)</code></pre>
-<details><summary>Diagnosis</summary><p>F must = pitch &times; RPM. For M10&times;1.5 at S500, F = 1.5 &times; 500 = 750 mm/min, not 500. The feed is too slow for the spindle speed, so the tap does not follow the thread pitch and strips the threads.</p></details>
+<details><summary>Diagnosis</summary><p>In G94 mode, F must = pitch &times; RPM. For M10&times;1.5 at S500, F = 1.5 &times; 500 = 750 mm/min, not 500. The feed is too slow for the spindle speed, so the tap does not follow the thread pitch and strips the threads. If G95 were active instead, F would be in mm/rev and F1.5 would be correct — always know which feed mode is active.</p></details>
 
 <h2>Part 4 — Write the Program (Questions 17–20)</h2>
 
@@ -135,21 +135,29 @@ G80
 G00 Z50. M09
 M30</code></pre></details>
 
-<p><strong>18.</strong> Face turn a raw &Oslash;50 bar down to &Oslash;40 over Z&minus;40. S1000, F0.2. Write the turning program.</p>
+<p><strong>18.</strong> Turn a raw &Oslash;50 bar to &Oslash;40 over Z&minus;40. Assume mild steel, a CNMG insert, G97 S1000, G99 F0.20 mm/rev. Show roughing and finishing passes.</p>
 <details><summary>Example</summary><pre class="cp-code"><code>O0018
 G21 G97 G99
-T0101                    (OD tool)
+T0101                    (OD tool, r0.4)
 S1000 M03
 G00 X52. Z2.
 G01 Z0 F0.2
 X-1.0 F0.15             (face past center)
 G00 X52. Z2.
+(ROUGH: leave 0.2mm dia finish stock)
 G00 X46. Z2.
 G01 Z0 F0.2
-X40.0                    (step to O40)
-Z-40.                    (turn along Z)
+X40.4                    (rough to O40.4)
+Z-40.
+G00 X52. Z2.
+(FINISH: cut to O40.0)
+S1200 M03
+G00 X40.0 Z2.
+G01 Z0 F0.1
+Z-40.
 G00 X50. Z100.
-M30</code></pre></details>
+M30</code></pre>
+<p>Note: roughing at X40.4 leaves 0.4 mm diameter (0.2 mm radial) finish stock. Real depth-of-cut limits depend on tool insert, material, and machine power — this is a teaching example.</p></details>
 
 <p><strong>19.</strong> Four &Oslash;6 holes on a 40 mm square centered at (0,0), at (&minus;20,&minus;20), (20,&minus;20), (20,20), (&minus;20,20). Through holes in 6 mm plate: Z&minus;8. S2000, F120. Write the program.</p>
 <details><summary>Example</summary><pre class="cp-code"><code>O0019
@@ -167,17 +175,33 @@ G80
 G00 Z50. M09
 M30</code></pre></details>
 
-<p><strong>20.</strong> Milling project: face mill a 60&times;40 mm rectangular block to Z&minus;2, then drill two &Oslash;5 holes at (15,20) and (45,20) to Z&minus;10. Use &Oslash;10 end mill (T01) and &Oslash;5 drill (T02). S2000 F300 for mill, S1500 F100 for drill. Write the program.</p>
+<p><strong>20.</strong> Milling project: face mill a 60&times;40 mm rectangular block (X0&ndash;60, Y0&ndash;40) to Z&minus;2, then drill two &Oslash;5 holes at (15,20) and (45,20) to Z&minus;10. Use &Oslash;10 end mill (T01) and &Oslash;5 drill (T02). S2000 F300 for mill, S1500 F100 for drill. Z0 is the unfinished top surface; after facing, the new top is Z&minus;2.</p>
 <details><summary>Example</summary><pre class="cp-code"><code>O0020
 G21 G17 G90 G40 G80 G49
 G54
 T01 M06                 (O10 END MILL)
 S2000 M03
-G00 X-5. Y-5.
 G43 H01 Z50. M08
-G00 Z2.
+(FACE: 5 PASSES TO COVER Y0-40, tool radius 5)
+G00 X-6. Y4.
 G01 Z-2. F100.
-G01 X65. F300.          (face pass)
+G01 X66. F300.          (pass 1: covers Y[-1,9])
+G00 Z50.
+G00 X-6. Y12.
+G01 Z-2. F100.
+G01 X66. F300.          (pass 2: covers Y[7,17])
+G00 Z50.
+G00 X-6. Y20.
+G01 Z-2. F100.
+G01 X66. F300.          (pass 3: covers Y[15,25])
+G00 Z50.
+G00 X-6. Y28.
+G01 Z-2. F100.
+G01 X66. F300.          (pass 4: covers Y[23,33])
+G00 Z50.
+G00 X-6. Y36.
+G01 Z-2. F100.
+G01 X66. F300.          (pass 5: covers Y[31,41])
 G00 Z50. M09
 T02 M06                 (O5 DRILL)
 S1500 M03
@@ -187,7 +211,8 @@ G99 G81 R2. Z-10. F100.
 X45. Y20.
 G80
 G00 Z50. M09
-M30</code></pre></details>
+M30</code></pre>
+<p>The 5 passes at Y=4,12,20,28,36 with a &Oslash;10 tool cover Y0&ndash;40 with overlap. A single pass at Y=-5 would only tangent the bottom edge and leave the entire block unmilled.</p></details>
 </ol>
 
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/38-process-optimization/">&larr; Process Optimization</a><a href="/cnc-manufacturing-engineering/cnc-programming/31-learning-path/">Learning Path &rarr;</a></nav>

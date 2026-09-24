@@ -52,34 +52,34 @@
 <svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
   <!-- axes -->
   <line x1="40" y1="130" x2="370" y2="130" stroke="#999" stroke-width="1"/>
-  <line x1="200" y1="20" x2="200" y2="240" stroke="#999" stroke-width="1"/>
+  <line x1="200" y1="30" x2="200" y2="230" stroke="#999" stroke-width="1"/>
   <text x="372" y="134" font-size="11" fill="#666">X</text>
-  <text x="204" y="22" font-size="11" fill="#666">Y</text>
-  <!-- center C(25,0) at pixel (200,130) -->
+  <text x="204" y="25" font-size="11" fill="#666">Y</text>
+  <!-- center C(25,0) at pixel (200,130), radius 100px -->
   <circle cx="200" cy="130" r="2.5" fill="#333"/>
   <text x="206" y="126" font-size="11" fill="#333">C(25,0)</text>
-  <!-- start S(0,0) at pixel (50,130) -->
-  <circle cx="50" cy="130" r="3.5" fill="#c0392b"/>
-  <text x="30" y="148" font-size="11" fill="#c0392b">S(0,0)</text>
-  <!-- end E(50,0) at pixel (350,130) -->
-  <circle cx="350" cy="130" r="3.5" fill="#2980b9"/>
-  <text x="332" y="148" font-size="11" fill="#2980b9">E(50,0)</text>
-  <!-- G02 upper semicircle through (25,+25) -> pixel (200,30) -->
-  <path d="M 50 130 A 150 150 0 0 1 350 130" fill="none" stroke="#c0392b" stroke-width="2"/>
+  <!-- start S(0,0) at pixel (100,130) -->
+  <circle cx="100" cy="130" r="3.5" fill="#c0392b"/>
+  <text x="75" y="148" font-size="11" fill="#c0392b">S(0,0)</text>
+  <!-- end E(50,0) at pixel (300,130) -->
+  <circle cx="300" cy="130" r="3.5" fill="#2980b9"/>
+  <text x="285" y="148" font-size="11" fill="#2980b9">E(50,0)</text>
+  <!-- G02 upper semicircle: peak at y=30 -->
+  <path d="M 100 130 A 100 100 0 0 1 300 130" fill="none" stroke="#c0392b" stroke-width="2"/>
   <text x="155" y="55" font-size="12" fill="#c0392b" font-weight="bold">G02 CW upper</text>
-  <!-- G03 lower semicircle through (25,-25) -> pixel (200,230) -->
-  <path d="M 50 130 A 150 150 0 0 0 350 130" fill="none" stroke="#2980b9" stroke-width="2"/>
+  <!-- G03 lower semicircle: bottom at y=230 -->
+  <path d="M 100 130 A 100 100 0 0 0 300 130" fill="none" stroke="#2980b9" stroke-width="2"/>
   <text x="155" y="220" font-size="12" fill="#2980b9" font-weight="bold">G03 CCW lower</text>
 </svg>
 <figcaption>Same start (0,0) and end (50,0), center (25,0). G02 (clockwise) cuts the upper semicircle through (25,+25); G03 (counterclockwise) cuts the lower through (25,&minus;25). Radius = 25 mm.</figcaption>
 </figure>
 
-<p>The two lines below are <strong>independent examples</strong> — each starts from S=(0,0). They must not be run as consecutive code, because after the first line the tool is already at E=(50,0):</p>
-<pre class="cp-code"><code>(Example A — upper semicircle, already at S=(0,0), G90/G17/G21 set)
+<p>The two lines below are <strong>independent examples</strong> — each starts from S=(0,0) at a safe Z above the part. They must not be run as consecutive code without retracting and repositioning:</p>
+<pre class="cp-code"><code>(Example A — upper semicircle, already at S=(0,0) at safe Z, G90/G17/G21 set)
 G02 X50. Y0 I25. J0.        (clockwise through (25,+25), 78.54 mm)
 
-(Example B — lower semicircle, reposition back to S=(0,0) first)
-G00 X0 Y0
+(Example B — lower semicircle, separate program/setup)
+(First retract Z to safe height, rapid to X0 Y0 at safe Z, then feed down to cut level)
 G03 X50. Y0 I25. J0.        (counterclockwise through (25,-25), 78.54 mm)</code></pre>
 
 <h3>R Method (radius)</h3>
@@ -108,8 +108,11 @@ G03 I-25. J0  (full circle, ends back at start)</code></pre>
   <!-- E(20,20) pixel (220,60) -->
   <circle cx="220" cy="60" r="3.5" fill="#2980b9"/>
   <text x="226" y="56" font-size="11" fill="#2980b9">E(20,20)</text>
-  <!-- radius 20 -> 160px. G03 CCW short arc from S(60,220) to E(220,60) -->
-  <path d="M 60 220 A 160 160 0 0 1 220 60" fill="none" stroke="#2980b9" stroke-width="2"/>
+  <!-- radius 20 -> 160px. G03 CCW short arc from S(60,220) to E(220,60), center (60,60) -->
+  <path d="M 60 220 A 160 160 0 0 0 220 60" fill="none" stroke="#2980b9" stroke-width="2"/>
+  <!-- radius lines from center to start and end -->
+  <line x1="60" y1="60" x2="60" y2="220" stroke="#aaa" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="60" y1="60" x2="220" y2="60" stroke="#aaa" stroke-width="1" stroke-dasharray="3,2"/>
   <text x="110" y="130" font-size="12" fill="#2980b9" font-weight="bold">G03 90&deg;</text>
   <text x="110" y="146" font-size="11" fill="#2980b9">L = 31.416 mm</text>
 </svg>

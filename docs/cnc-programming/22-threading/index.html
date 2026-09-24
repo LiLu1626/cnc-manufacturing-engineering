@@ -83,40 +83,41 @@ G76 X8.16 Z-20. K0.92 D0.2 F1.5</code></pre>
 <p><strong>Tolerance and inspection:</strong> In this teaching example we assume a 6g external thread, checked with a thread ring gauge (go/no-go). The mating internal thread would use 6H and a thread plug gauge — but always follow the tolerance class specified on your drawing. The ring gauge confirms functional acceptance; it does not verify every dimension on the drawing.</p>
 
 <h2>G32 — Single-Pass Threading (Manual)</h2>
-<p>Before G76 canned cycles, programmers cut threads pass by pass using <strong>G32</strong> (constant lead threading). Each pass is a separate block:</p>
+<p>Before G76 canned cycles, programmers cut threads pass by pass using <strong>G32</strong> (constant lead threading). Each pass is a separate block. For an external M10&times;1.5 thread on &Oslash;10 stock, the first cut starts just below the major diameter and takes a small radial bite:</p>
 <pre class="cp-code"><code>G97 S500 M03
-G00 X10.5 Z3.           (first pass: X=10.5, just below major dia)
-G32 Z-20. F1.5          (cut thread at 1.5 mm/rev lead)
-G00 X12.                (retract X clear)
-Z3.                     (return Z to start)
-X10.2                   (next pass: 0.3 mm deeper in diameter)
-G32 Z-20. F1.5          (second pass)
+G00 X9.8 Z3.           (first pass: 0.1mm radial below Ø10)
+G32 Z-20. F1.5         (cut thread at 1.5 mm/rev lead)
+G00 X12.               (retract X clear)
+Z3.                    (return Z to start)
+X9.6                   (next pass: another 0.1mm radial deeper)
+G32 Z-20. F1.5         (second pass)
 G00 X12.
 Z3.
-... (repeat until X8.16)</code></pre>
-<p>G32 gives full control over each pass depth but is tedious. G76 automates the multi-pass strategy with decreasing depth. For learning, G32 shows exactly what G76 does internally.</p>
+... (repeat passes until target minor dia)</code></pre>
+<p>X9.8 means the tool cuts 0.1 mm radially below the &Oslash;10 surface. X9.6 cuts another 0.1 mm deeper. The number of passes and depth per pass depend on tool material, insert grade, and material — follow the tooling catalog. G32 gives full control but is tedious; G76 automates the multi-pass strategy.</p>
 
 <h2>Threading on a Mill: Tapping vs Thread Milling</h2>
-<p>On a mill, internal threads are made two ways: <strong>tapping</strong> (G84 rigid tap cycle) cuts the thread with a tap tool in one operation; <strong>thread milling</strong> uses a helical interpolation move with a circular thread mill. Tapping is faster for small holes; thread milling is more flexible for large holes and hard materials. Both require F = lead &times; RPM synchronization, same as lathe threading.</p>
+<p><strong>Tapping (G84 rigid tap cycle):</strong> A tap rotates and feeds synchronously. In G94 mode, F = pitch &times; RPM. For M10&times;1.5 at S500, F = 750 mm/min. The tap cuts the full thread form in one operation.</p>
+<p><strong>Thread milling:</strong> A threaded tool follows a helical interpolation path — one circular orbit around the hole, with one pitch of axial travel per orbit. The feed rate is based on feed per tooth, number of flutes, and the tool-center path speed, not simply F = lead &times; RPM. The 1.5 mm axial rise per orbit defines the pitch, but the programmed F is the tool-center feed around the circle. Thread milling is flexible for large holes and hard materials but requires CAM or careful helical math.</p>
 
 <h2>Common Threading Problems</h2>
 <table class="data-table">
-<tr><th>Problem</th><th>Cause</th><th>Fix</th></tr>
-<tr><td>Loose thread</td><td>Depth too shallow (minor dia too large)</td><td>Decrease X endpoint by 0.05, test with ring gauge</td></tr>
-<tr><td>Ring gauge won't go</td><td>Depth too deep</td><td>Increase X endpoint slightly</td></tr>
-<tr><td>Off-pitch at start</td><td>No lead-in distance</td><td>Increase Z start position to 3–5 mm before part</td></tr>
-<tr><td>Chatter / poor finish</td><td>Spindle speed too high or tool worn</td><td>Reduce RPM, check insert</td></tr>
-<tr><td>Tool breaks</td><td>Pass depth too aggressive</td><td>Reduce first-pass depth D</td></tr>
+<tr><th>Problem</th><th>Check</th><th>Corrective direction</th></tr>
+<tr><td>Ring gauge GO won't enter</td><td>Check pitch, setup, burrs, major diameter, then measure pitch diameter</td><td>If pitch diameter is too large, take one more light pass per tooling data; material already cut cannot be restored</td></tr>
+<tr><td>NO-GO gauge enters</td><td>Pitch diameter too small (cut too deep)</td><td>Thread is overcut; material already removed cannot be recovered — verify before the last pass</td></tr>
+<tr><td>Off-pitch at start</td><td>No lead-in distance</td><td>Increase Z start position to 3&ndash;5 mm before part face</td></tr>
+<tr><td>Chatter / poor finish</td><td>Spindle speed too high or tool worn</td><td>Reduce RPM, check insert condition</td></tr>
+<tr><td>Tool breaks</td><td>Pass depth too aggressive</td><td>Reduce first-pass depth per tooling catalog</td></tr>
 </table>
 
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Confusing pitch with lead on multi-start threads</strong> — F must be the lead, not the pitch.</li>
 <li><strong>Using a spindle mode not verified for this threading cycle</strong> — follow the chosen controller's documented setup; this example uses G97.</li>
-<li><strong>Changing feed override mid-thread</strong> — the synchronous relationship breaks. Feed override should be 100% during threading.</li>
-<li><strong>No lead-in distance</strong> — the first threads are off-pitch before sync is achieved. Start at Z3–Z5 before the part face.</li>
+<li><strong>Changing spindle RPM mid-thread</strong> — the controller syncs to a fixed spindle speed during the cut. Do not change S during threading.</li>
+<li><strong>No lead-in distance</strong> — the first threads are off-pitch before sync is achieved. Start at Z3&ndash;Z5 before the part face.</li>
 <li><strong>Treating 8.16 mm as a finished tolerance dimension</strong> — it is a theoretical minor diameter estimate used as the G76 X endpoint; actual acceptance is by gauge per drawing.</li>
-<li><strong>Forgetting G97 before G76</strong> — G96 (constant surface speed) changes RPM during the pass, which breaks synchronization. Always use G97 for threading.</li>
+<li><strong>Forgetting G97 before G76 on this Haas example</strong> — this teaching example follows the manufacturer's G97 setup. On other controllers, verify the recommended spindle mode for threading.</li>
 </ul>
 
 <h2>Practice</h2>
