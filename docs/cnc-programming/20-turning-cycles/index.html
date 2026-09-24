@@ -32,7 +32,12 @@
 <h2>G70 Finishing</h2>
 <p>G70 runs the contour between P and Q one time at finish size, after G71 has rough-removed most of the stock.</p>
 <h2>Important Constraint</h2>
-<p>On Haas/FANUC G71, the X and Z dimensions within the P-Q contour must be <strong>monotonic</strong> — X must increase or decrease consistently (not back up), and Z must not reverse. Non-monotonic contours cause alarms or bad cuts.</p>
+<p>G71 comes in two forms on Haas/FANUC controls:</p>
+<ul>
+<li><strong>Type I (standard):</strong> Both X and Z must be monotonic within the P-Q contour — X moves consistently outward or inward, and Z does not reverse. Stepped shafts, tapers, and straight OD turning work here. A contour that backs up in X causes an alarm.</li>
+<li><strong>Type II (Haas/FANUC option):</strong> Z must still be monotonic (progress in one direction), but X may reverse — allowing simple recesses, grooves, and profile changes within the roughing contour. Type II is selected by the parameter setting or by specifying the P/Q blocks differently; confirm availability in your controller manual.</li>
+</ul>
+<p>Always test with a dry run before committing. If Type II is not enabled, a contour that reverses X will alarm or cut incorrectly.</p>
 <h2>Common Mistakes</h2>
 <ul><li>Defining a contour where X goes back and forth — G71 requires monotonic geometry.</li>
 <li>Forgetting to leave stock for G70 — G71 leaves a finish allowance.</li>

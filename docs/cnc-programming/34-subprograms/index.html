@@ -67,7 +67,7 @@ G90 X10.                 <span class="cp-comment">(reset X to column 1, rapid at
 M99</code></pre>
 
 <h2>How the 12 Holes Are Produced</h2>
-<p>First call (main already at X10 Y10): G81 drills at (10,10), then X30 drills (30,10), X50 drills (50,10), X70 drills (70,10). G80 retracts. Y+20 moves to Y30. X10 resets. That is 4 holes.</p>
+<p>First call (main already at X10 Y10): G81 drills at (10,10), then X30 drills (30,10), X50 drills (50,10), X70 drills (70,10). G80 cancels the cycle (tool stays at R plane Z2). Then G00 Z50 raises to safe height before Y traversal. Y+20 moves to Y30. X10 resets. That is 4 holes.</p>
 <p>Second call: G81 drills at (10,30), then (30,30), (50,30), (70,30). Y+20 to Y50. X10 reset. 4 more holes.</p>
 <p>Third call: holes at (10,50), (30,50), (50,50), (70,50). Then G80, retract. Total: <strong>12 unique holes, exactly 12 drill cycles.</strong></p>
 
@@ -87,7 +87,7 @@ M99</code></pre>
 <p><strong>1.</strong> How many drill cycles does M98 P2000 L3 actually produce?</p>
 <details><summary>Show answer</summary><p>12. Each call drills 4 holes (X10 current position + X30 + X50 + X70), and the call repeats 3 times. No hole is repeated.</p></details>
 <p><strong>2.</strong> What happens if you write X10. on the line right after G81?</p>
-<details><summary>Show answer</summary><p>The G81 cycle drills again at X10 — re-drilling the first hole that was already drilled by the no-X/Y G81 line. You would get 13 cycles for 12 positions.</p></details>
+<details><summary>Show answer</summary><p>The G81 cycle drills again at X10 — re-drilling the first hole. Each subprogram call then does 5 cycles (X10 repeated + X30 + X50 + X70), and 3 calls = 15 cycles for 12 unique positions.</p></details>
 <p><strong>3.</strong> Why is G80 needed before G91 G00 Y20?</p>
 <details><summary>Show answer</summary><p>Without G80, the next XY move (Y20) would trigger another drill cycle at Z&minus;10 — it would drill a hole while moving. G80 retracts to the initial plane before the Y advance.</p></details>
 </section>

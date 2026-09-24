@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glossary & Sources — CNC Programming</title>
+<link rel="stylesheet" href="../../assets/css/site.css">
+<link rel="stylesheet" href="../../assets/css/article.css">
+<link rel="stylesheet" href="../../assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <a href="../../">Home</a>
+  <a href="../../engineering-tools/">Engineering Tools</a>
+  <a href="../../knowledge-base/">Knowledge Base</a>
+  <a href="../../machine-systems/">Machine Systems</a>
+  <a href="../" class="active">CNC Programming</a>
+  <a href="../../about/">About</a>
+</nav>
+<main class="article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Glossary &amp; Sources</h1>
+
+<h2>Glossary</h2>
+<dl>
+<dt>CAD / CAM</dt><dd>Computer-Aided Design / Manufacturing. The software that generates toolpaths from a 3D model.</dd>
+<dt>Canned Cycle</dt><dd>A pre-programmed subroutine (G81, G83, etc.) that handles positioning, feed, retract in one line.</dd>
+<dt>Coolant Through Spindle (CTS)</dt><dd>High-pressure coolant delivered through the tool holder, improving chip evacuation in deep holes.</dd>
+<dt>Fixture</dt><dd>A workholding device that locates and clamps the part repeatably.</dd>
+<dt>G-Code</dt><dd>Geometry code: commands that control tool motion (rapid, linear, arc, cycles).</dd>
+<dt>Home Position</dt><dd>The machine reference position (machine zero), set during reference return.</dd>
+<dt>MDI</dt><dd>Manual Data Input: typing commands directly on the controller for setup and test moves.</dd>
+<dt>Over-travel</dt><dd>An alarm when an axis moves beyond its physical limit switch.</dd>
+<dt>Post Processor</dt><dd>Software that translates generic CAM toolpath into machine-specific G-code.</dd>
+<dt>Work Offset</dt><dd>The shift between machine zero and work zero (G54&ndash;G59).</dd>
+</dl>
+
+<h2>Sources</h2>
+<ul>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.html" target="_blank" rel="noopener">Haas G-Code Reference (Mill)</a></li>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.html" target="_blank" rel="noopener">Haas G-Code Reference (Lathe)</a></li>
+<li><a href="https://www.haascnc.com/service/online-operator-s-manuals/mill-operator-s-manual/mill---macros.html" target="_blank" rel="noopener">Haas Mill Operator's Manual — Macros</a></li>
+<li>SCHUNK, Royal Products: workholding and chucking references.</li>
+<li>Sandvik Coromant: cutting parameters and tooling guides.</li>
+</ul>
+<p><em>Note: G-code behavior varies by controller. Always verify against your specific machine manual. This site uses Haas syntax as the reference dialect.</em></p>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
