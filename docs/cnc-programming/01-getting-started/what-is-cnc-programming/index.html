@@ -47,6 +47,17 @@
 </ol>
 <p><strong>Manual programming</strong> means you write each G-code line yourself. It is fast for simple parts (straight turns, basic drilling, rectangular pockets) and gives you direct control. <strong>CAM programming</strong> uses software to generate tool paths from a 3D model. It is essential for complex 3D surfaces, multi-axis work, and high-volume production — but the output still needs human review. A CAM post-processor can produce code that looks right yet crashes the machine if the toolholder or fixture was not modeled.</p>
 
+<table class="data-table">
+<tr><th></th><th>Manual Programming</th><th>CAM Programming</th></tr>
+<tr><td>Best for</td><td>Simple 2D parts, turning, drilling</td><td>Complex 3D surfaces, multi-axis</td></tr>
+<tr><td>Setup time</td><td>Minutes</td><td>Hours (model, toolpaths, post)</td></tr>
+<tr><td>Control</td><td>Full line-by-line control</td><td>Software-controlled; needs review</td></tr>
+<tr><td>Cost</td><td>Free (text editor)</td><td>Software license + training</td></tr>
+</table>
+
+<h3>NC vs CNC</h3>
+<p><strong>NC</strong> (Numerical Control) is the older technology using punched tape. <strong>CNC</strong> (Computer Numerical Control) is the modern version with a dedicated computer controller. The terms are often used interchangeably today, but "NC program" still refers to the G-code file itself, while "CNC machine" refers to the controlled machine tool.</p>
+
 <h2>Example</h2>
 <p>Two holes on a plate: Hole 1 at (10,10), Hole 2 at (50,30). In plain language, the machine needs to: move above Hole 1, drill, retract, move above Hole 2, drill, retract.</p>
 <pre class="cp-code"><code>G90 G54 G00 X10. Y10.     (rapid to above hole 1)
