@@ -1,4 +1,17 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Common Beginner Mistakes — CNC Programming</title><meta name="description" content="The most frequent CNC programming mistakes new programmers make, and how to avoid them."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/26-common-mistakes/"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Common Beginner Mistakes — CNC Programming</title>
+<meta name="description" content="The most frequent CNC programming mistakes new programmers make: wrong offsets, units, modal state, unsafe motion — and how to avoid them.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/26-common-mistakes/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
   <div class="site-nav-inner">
     <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
     <ul class="site-nav-links">
@@ -10,29 +23,55 @@
       <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
     </ul>
   </div>
-</nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Common Beginner Mistakes</h1><p class="lead">This is the checklist every new programmer should review before running their first program. These are the errors that cause crashes, scrap, and rework.</p><h2>Concept</h2>
-<p>Beginner CNC programming mistakes cluster around a few predictable areas: offsets, units, modal state, and unsafe motion. Knowing them in advance is the fastest way to avoid them.</p>
+</nav>
+<main class="article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Common Beginner Mistakes</h1>
+<p class="lead">This is the checklist every new programmer should review before running their first program. These are the errors that cause crashes, scrap, and rework — and almost every new programmer makes them.</p>
+
+<h2>Concept</h2>
+<p>Beginner CNC programming mistakes cluster around a few predictable areas: offsets, units, modal state, and unsafe motion. Knowing them in advance is the fastest way to avoid them. Almost every crash traces back to one of these ten mistakes.</p>
+
+<h2>The Big Ten Checklist</h2>
+<ol>
+<li><strong>Wrong work offset (G54)</strong> — G54 set on the wrong edge or corner. All coordinates shift by the offset error.</li>
+<li><strong>Wrong tool offset (H)</strong> — H number in the program does not match the tool physically in the spindle. Z depth is off by the tool length difference.</li>
+<li><strong>Wrong units</strong> — G20 (inch) vs G21 (metric). Dimensions off by 25.4&times;.</li>
+<li><strong>Wrong plane</strong> — G18/G19 on a mill, or wrong plane for circular interpolation.</li>
+<li><strong>Wrong G90/G91</strong> — incremental mode active when you think absolute. Coordinates become distances, not positions.</li>
+<li><strong>G41/G42 backwards</strong> — on an outer profile, wrong compensation side pushes the tool into the part, overcutting.</li>
+<li><strong>Missing G40</strong> — cutter compensation stays active after the cut, affecting the next move.</li>
+<li><strong>Missing G80</strong> — drilling cycle stays modal; the next X/Y move becomes an unexpected hole.</li>
+<li><strong>Z direction wrong</strong> — on a lathe, cutting toward the chuck is negative Z; on a mill, down is negative Z.</li>
+<li><strong>Unsafe G00</strong> — rapid XY while the tool is at cut depth, dragging through the part.</li>
+</ol>
+
 <h2>Why It Matters</h2>
-<p>Almost every new programmer makes these mistakes — and most make them repeatedly until they build a checklist. This page is that checklist.</p>
-<h2>How It Works</h2>
-<h3>The Big Ten</h3>
-<ol><li><strong>Wrong work offset</strong> — G54 set on the wrong edge or corner</li>
-<li><strong>Wrong tool offset</strong> — H number doesn't match the tool in spindle</li>
-<li><strong>Wrong units</strong> — G20/G21 mismatch</li>
-<li><strong>Wrong plane</strong> — G18 on a mill, G17 on a lathe</li>
-<li><strong>Wrong G90/G91</strong> — incremental after subprogram without reset</li>
-<li><strong>G41/G42 backwards</strong> — outer profile tool pushes inside</li>
-<li><strong>Missing G40</strong> — compensation stays active</li>
-<li><strong>Missing G80</strong> — drilling cycle continues</li>
-<li><strong>Z direction wrong</strong> — cutting upward instead of down</li>
-<li><strong>Unsafe G00</strong> — rapid XY at cut depth</li></ol>
+<p>Almost every new programmer makes these mistakes — and most make them repeatedly until they build a checklist. This page is that checklist. Running through the Big Ten before every program takes 30 seconds and prevents 90% of crashes.</p>
+
+<h2>How to Use This Checklist</h2>
+<p>Before pressing cycle start, read through the Big Ten in order. Each one takes 3 seconds to verify: Is G54 on the correct corner? Does H01 match the tool in the spindle? Is G21 active? This habit separates safe programmers from crashers.</p>
+
 <h2>Example</h2>
-<p>Before every program run, read through the Big Ten. It takes 30 seconds and prevents 90% of crashes.</p>
-<h2>Common Mistakes</h2>
-<ul><li><strong>Thinking you're too experienced for the checklist</strong> — even experienced programmers run the checklist. It takes 30 seconds.</li>
-<li><strong>Copying code without understanding</strong> — every line should make sense. If you can't explain it, don't run it.</li></ul>
+<p>A new programmer writes a milling program, loads it, and presses cycle start. The tool moves to X50 Y50 — but the hole appears at X70 Y70. Diagnosis: G54 X offset was set to 20 instead of 0. The programmer skipped the checklist. The fix: correct G54, not the program coordinates.</p>
+
+<h2>Common Mistakes About the Mistakes</h2>
+<ul>
+<li><strong>Thinking you're too experienced for the checklist</strong> — even experienced programmers run the checklist. It takes 30 seconds.</li>
+<li><strong>Copying code without understanding</strong> — every line should make sense. If you can't explain what a line does, don't run it.</li>
+<li><strong>Changing the program to compensate for offset errors</strong> — if the hole is 0.2 mm off, fix G54, not the X coordinates.</li>
+</ul>
+
 <h2>Practice</h2>
-<p><strong>1.</strong> Your first run: name the top three checks.</p><details><summary>Ans</summary><p>G54 work offset, H tool offset, G21 units.</p></details>
-<p><strong>2.</strong> Why does G41/G42 direction matter?</p><details><summary>Ans</summary><p>Wrong direction pushes the tool into the part instead of outside — overcut.</p></details>
-<p><strong>3.</strong> What two cycles must always be cancelled?</p><details><summary>Ans</summary><p>G80 (drilling) and G40 (cutter comp).</p></details>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting/">&larr; Troubleshooting</a><a href="/cnc-manufacturing-engineering/cnc-programming/28-milling-project/">Milling Project &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>
+<p><strong>1.</strong> On your first run, name the top three checks.</p>
+<details><summary>Ans</summary><p>G54 work offset (correct corner), H tool offset (matches physical tool), G21 units (metric).</p></details>
+<p><strong>2.</strong> Why does G41/G42 direction matter on an outer profile?</p>
+<details><summary>Ans</summary><p>Wrong direction pushes the tool center inside the programmed contour, overcutting the part. G41 on a clockwise outer profile keeps the tool outside.</p></details>
+<p><strong>3.</strong> What two modal modes must always be cancelled before the next operation?</p>
+<details><summary>Ans</summary><p>G80 (cancel drilling cycle) and G40 (cancel cutter compensation). Both are modal and persist until explicitly cancelled.</p></details>
+
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting/">&larr; Troubleshooting</a><a href="/cnc-manufacturing-engineering/cnc-programming/28-milling-project/">Milling Project &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
