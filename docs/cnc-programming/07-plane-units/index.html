@@ -46,6 +46,31 @@
 <tr><td>G19</td><td>YZ</td><td>Rare; special applications</td></tr>
 </table>
 
+<svg viewBox="0 0 400 140" style="width:100%;max-width:400px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="120" y="15" font-size="11" font-weight="bold" fill="#333">Three Plane Codes</text>
+  <!-- G17 XY -->
+  <rect x="20" y="30" width="100" height="80" fill="#e8f0fe" stroke="#54a0ff" rx="5"/>
+  <text x="45" y="48" font-size="10" font-weight="bold" fill="#54a0ff">G17</text>
+  <line x1="40" y1="90" x2="100" y2="90" stroke="#333" stroke-width="1.5"/>
+  <line x1="40" y1="90" x2="40" y2="55" stroke="#333" stroke-width="1.5"/>
+  <text x="100" y="100" font-size="9" fill="#333">X</text>
+  <text x="25" y="55" font-size="9" fill="#333">Y</text>
+  <!-- G18 XZ -->
+  <rect x="150" y="30" width="100" height="80" fill="#fef5e7" stroke="#e67e22" rx="5"/>
+  <text x="175" y="48" font-size="10" font-weight="bold" fill="#e67e22">G18</text>
+  <line x1="170" y1="90" x2="230" y2="90" stroke="#333" stroke-width="1.5"/>
+  <line x1="170" y1="90" x2="170" y2="55" stroke="#333" stroke-width="1.5"/>
+  <text x="230" y="100" font-size="9" fill="#333">X</text>
+  <text x="155" y="55" font-size="9" fill="#333">Z</text>
+  <!-- G19 YZ -->
+  <rect x="280" y="30" width="100" height="80" fill="#e8f8f5" stroke="#27ae60" rx="5"/>
+  <text x="305" y="48" font-size="10" font-weight="bold" fill="#27ae60">G19</text>
+  <line x1="300" y1="90" x2="360" y2="90" stroke="#333" stroke-width="1.5"/>
+  <line x1="300" y1="90" x2="300" y2="55" stroke="#333" stroke-width="1.5"/>
+  <text x="360" y="100" font-size="9" fill="#333">Y</text>
+  <text x="285" y="55" font-size="9" fill="#333">Z</text>
+</svg>
+
 <h3>Units</h3>
 <p>G21 mm: X25.4 means 25.4 mm. G20 inch: X1.0 means 1.0 inch. Always confirm units before running. On Haas, the default is set by machine parameter; the G-code should still explicitly command G21 (or G20) in the startup block.</p>
 
