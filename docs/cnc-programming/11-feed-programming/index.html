@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feed Programming — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="G94 feed per minute vs G95 feed per revolution, and how milling feed differs from turning feed.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/11-feed-programming/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body class="cnc-programming">
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Feed Programming</h1>
+<p class="lead">The F word sets how fast the tool moves. But whether F means mm/min or mm/rev changes everything.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
+<div class="callout"><strong>What you will learn:</strong><ul><li>G94 feed per minute (mm/min, IPM)</li><li>G95/G99 feed per revolution (mm/rev)</li><li>Milling: F = rpm &times; z &times; fz</li><li>Turning: F = mm/rev directly</li></ul></div>
+<h2>Concept</h2>
+<p><strong>G94</strong> = feed per minute (mm/min). This is the default on mills. <strong>G95</strong> (or G99 on Haas lathes) = feed per revolution (mm/rev). On a lathe, F0.2 means 0.2 mm per spindle revolution — a much smaller number than mm/min.</p>
+<h2>Why It Matters</h2>
+<p>On a lathe at 1000 rpm, F0.2 mm/rev = 200 mm/min. If you program F200 in G95 mode, the feed is 200 mm/rev = 200,000 mm/min — absurd and dangerous. Knowing which feed mode you are in is essential.</p>
+<h2>How</h2>
+<h3>Milling feed</h3>
+<p>Feed rate = spindle RPM &times; number of flutes &times; chip load per tooth. Example: 2000 rpm &times; 4 flutes &times; 0.03 mm/tooth = 240 mm/min. This is G94 mode.</p>
+<h3>Turning feed</h3>
+<p>Turning uses G99 (feed/rev on Haas lathes). F0.15 means 0.15 mm per revolution. At 1000 rpm, that is 150 mm/min.</p>
+<h2>Example</h2>
+<p>Ø10 end mill, 4 flutes, chip load 0.03 mm, cutting speed 80 m/min. RPM = 1000&times;80/(π&times;10) = 2546 rpm. Feed = 2546 &times; 4 &times; 0.03 = 305 mm/min (G94).</p>
+<p>[Spindle Speed Calculator](/cnc-manufacturing-engineering/engineering-tools/spindle-speed-calculator/) and [Feed Rate Calculator](/cnc-manufacturing-engineering/engineering-tools/feed-rate-calculator/) compute these for you.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Mixing G94 and G95 on a lathe — Haas uses G99 for feed/rev, not G95.</li>
+<li>Programming feed per tooth as if it were feed per minute.</li>
+<li>Forgetting that on a lathe, the spindle must be running for G99 feed to make sense.</li></ul>
+<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> 2000 rpm, 4 flutes, 0.03 mm/tooth. Feed in mm/min?</p><details><summary>Show answer</summary><p>2000 &times; 4 &times; 0.03 = 240 mm/min.</p></details><p><strong>2.</strong> On a Haas lathe, which code sets feed per revolution?</p><details><summary>Show answer</summary><p>G99. (G95 is FANUC convention; Haas uses G98/G99 for retract plane and feed mode.)</p></details></section>
+<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Lathe Operator's Manual — G98/G99 feed modes (haascnc.com, retrieved 2026-09-24).</li><li>[Feed Rate Calculator](/cnc-manufacturing-engineering/engineering-tools/feed-rate-calculator/).</li></ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/09-mcode-fundamentals/">&larr; M-Codes</a><a href="/cnc-manufacturing-engineering/cnc-programming/10-spindle-programming/">Spindle Programming &rarr;</a></nav>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

@@ -1,12 +1,12 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Practical Math for CNC — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="Right triangles, sine/cosine, bolt circle coordinates, chamfer and radius.">
+<title>Practical Mathematics for CNC Programming — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Trigonometry, Pythagoras, bolt circles, and coordinate calculations — the math you use every day at the machine.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/08-programming-math/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body>
+</head><body class="cnc-programming">
 <nav class="site-nav"><div class="site-nav-inner">
 <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
 <ul class="site-nav-links">
@@ -14,26 +14,46 @@
 <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
 <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
 <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
 <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
 </ul></div></nav>
-<main class="cp-article">
-<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Practical Math for CNC</h1>
-<p class="cp-lead">No calculus — triangles, circles, and converting drawings to coordinates.</p>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Practical Mathematics for CNC Programming</h1>
+<p class="lead">You do not need advanced calculus. You need right triangles, circles, and consistent arithmetic — done carefully.</p>
 <div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
-<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>Pythagorean theorem</li><li>Bolt circle coordinates</li><li>Chamfer calculation</li></ul></div>
+<div class="callout"><strong>What you will learn:</strong><ul><li>Right triangle trigonometry</li><li>Coordinates on a bolt circle</li><li>Pythagorean theorem for distances</li><li>Rounding and precision</li></ul></div>
 <h2>Concept</h2>
-<p>Every coordinate is either directly dimensioned or derived. Bolt circle at angle θ: X = R·cos(θ), Y = R·sin(θ). Verify CAM output yourself.</p>
+<p>Every CNC coordinate comes from a dimension on a drawing. The math converts that dimension into X and Y values you type into the machine. The three tools you use constantly are: (1) the Pythagorean theorem for distances, (2) sin/cos for coordinates around a circle, and (3) careful sign handling for negative quadrants.</p>
 <h2>Why It Matters</h2>
-<p>CAM says hole at (86.6, 50) on R=100 at 30°. Check: 100·cos30=86.6, 100·sin30=50.0. If you cannot check, you cannot catch CAM errors.</p>
+<p>A bolt circle with six holes at 60° spacing: if you use radians instead of degrees, or forget the Y is negative below X axis, every hole is wrong. CNC math is unforgiving — there is no "close enough." A 0.1 mm error at each coordinate compounds through the part.</p>
 <h2>How</h2>
-<p><strong>Distance:</strong> (10,20)→(50,50): √(40²+30²)=50 mm. <strong>Chamfer:</strong> 1×45° removes 1 mm in both axes.</p>
-<h2>Example</h2>
-<p>4 holes on 100 mm bolt circle (R=50): 0°=(50,0), 90°=(0,50), 180°=(-50,0), 270°=(0,-50).</p>
+<h3>Right triangle</h3>
+<p>For a right triangle with angle θ, adjacent side a, opposite side b, hypotenuse c:</p>
+<ul><li>sin(θ) = b/c &rarr; b = c &times; sin(θ)</li>
+<li>cos(θ) = a/c &rarr; a = c &times; cos(θ)</li>
+<li>tan(θ) = b/a</li>
+<li>c = √(a&sup2; + b&sup2;)</li></ul>
+<h3>Coordinates on a circle</h3>
+<p>Given center (Xc, Yc), radius R, angle θ measured counterclockwise from +X axis: X = Xc + R&times;cos(θ), Y = Yc + R&times;sin(θ).</p>
+<h2>Example 1: Bolt circle</h2>
+<p>Four holes on a pitch circle diameter (PCD) of 100 mm, center at (0,0), first hole at 0°:</p>
+<ul><li>Hole 1: R=50, θ=0° &rarr; (50, 0)</li>
+<li>Hole 2: θ=90° &rarr; (0, 50)</li>
+<li>Hole 3: θ=180° &rarr; (-50, 0)</li>
+<li>Hole 4: θ=270° &rarr; (0, -50)</li></ul>
+<p>Six holes at 60° spacing, R=50: Hole 1 at 0° = (50,0). Hole 2 at 60°: X = 50&times;cos60 = 25, Y = 50&times;sin60 = 43.301. So (25, 43.301).</p>
+<h2>Example 2: Distance and angle</h2>
+<p>Move from (0,0) to a point 20 mm away at 30°:</p>
+<ul><li>X = 20&times;cos(30°) = 20&times;0.866 = 17.321 mm</li>
+<li>Y = 20&times;sin(30°) = 20&times;0.5 = 10.000 mm</li></ul>
+<p>The straight-line distance between (10,10) and (50,30): ΔX=40, ΔY=20, distance = √(40&sup2;+20&sup2;) = √2000 = 44.721 mm.</p>
 <h2>Common Mistakes</h2>
-<ul><li>Using diameter as radius on bolt circles.</li></ul>
-<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> Hole on R=60 at 45°. X,Y?</p><details><summary>Show answer</summary><p>42.43, 42.43.</p></details><p><strong>2.</strong> Distance (0,0)→(30,40)?</p><details><summary>Show answer</summary><p>50 mm.</p></details></div>
-<h2>Sources and Applicability</h2><ul><li>Sandvik Coromant — Machining Math.</li></ul>
-<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/07-plane-units/">&larr; Planes & Units</a><a href="/cnc-manufacturing-engineering/cnc-programming/09-mcode-fundamentals/">M-Codes &rarr;</a></div>
+<ul><li>Treating PCD as radius — PCD 100 means diameter 100, radius is 50.</li>
+<li>Using radians when the calculator is in degrees (or vice versa). Most controllers use degrees.</li>
+<li>Forgetting signs in negative quadrants: θ=225° gives both X and Y negative.</li>
+<li>Rounding too early — keep full precision through calculations, round only the final coordinate to 0.001.</li></ul>
+<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> Center at (10,20), radius 20, point at 90°. What are the coordinates?</p><details><summary>Show answer</summary><p>X = 10 + 20&times;cos90 = 10 + 0 = 10. Y = 20 + 20&times;sin90 = 20 + 20 = 40. Answer: (10, 40).</p></details><p><strong>2.</strong> Two points at (5,8) and (-5,18). What is ΔX and ΔY?</p><details><summary>Show answer</summary><p>ΔX = -5 - 5 = -10. ΔY = 18 - 8 = +10. The displacement is (-10, +10).</p></details><p><strong>3.</strong> Why not round intermediate results to 0.1 mm?</p><details><summary>Show answer</summary><p>Rounding accumulates error. Keep full calculator precision and round only the final output.</p></details></section>
+<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Standard trigonometry.</li><li>[Hole Pattern Generator](/cnc-manufacturing-engineering/engineering-tools/hole-pattern-generator/) — verify your coordinates.</li><li>[Arc and Chord Calculator](/cnc-manufacturing-engineering/engineering-tools/arc-and-chord-calculator/).</li></ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/23-program-safety/">&larr; Safe Start</a><a href="/cnc-manufacturing-engineering/cnc-programming/32-drawings-process-planning/">Drawing to Plan &rarr;</a></nav>
 </main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

@@ -1,12 +1,12 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Planes, Units, and Conventions — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="G17/G18/G19, G20/G21, and why a units error scrapes a part.">
+<title>Planes, Units, and Numeric Conventions — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="G17/G18/G19 plane selection, G20/G21 units, and why a 1 mm mistake in inches is 25.4 mm.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/07-plane-units/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body>
+</head><body class="cnc-programming">
 <nav class="site-nav"><div class="site-nav-inner">
 <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
 <ul class="site-nav-links">
@@ -14,26 +14,32 @@
 <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
 <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
 <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
 <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
 </ul></div></nav>
-<main class="cp-article">
-<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Planes, Units, and Conventions</h1>
-<p class="cp-lead">Trivial until a 25.4 mm error appears.</p>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Planes, Units, and Numeric Conventions</h1>
+<p class="lead">Plane selection determines how arcs and compensation work. Units determine whether X10 is 10 mm or 10 inches.</p>
 <div class="cp-meta"><span><strong>Level:</strong> Beginner</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
-<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>G17/G18/G19 plane</li><li>G20/G21 units</li><li>Number formatting</li></ul></div>
+<div class="callout"><strong>What you will learn:</strong><ul><li>G17 XY, G18 XZ, G19 YZ planes</li><li>G20 inch vs G21 mm</li><li>How units affect offsets</li><li>Plane direction for G02/G03</li></ul></div>
 <h2>Concept</h2>
-<p><strong>G17</strong> = XY (mill), <strong>G18</strong> = XZ (lathe), <strong>G19</strong> = YZ. Plane determines arc interpretation. <strong>G20</strong> = inch, <strong>G21</strong> = mm.</p>
+<p>A <strong>plane</strong> defines which two axes are active for circular interpolation and cutter compensation. <strong>G17</strong> = XY plane (mill, most common). <strong>G18</strong> = XZ plane (lathe turning). <strong>G19</strong> = YZ plane. The plane determines the viewing direction: looking from the positive normal axis toward the origin, G02 is clockwise and G03 is counterclockwise.</p>
+<p><strong>G20</strong> = inch units, <strong>G21</strong> = metric (mm). This affects coordinates, feeds, and offsets.</p>
 <h2>Why It Matters</h2>
-<p>Program says X100 in mm but machine is G20: it moves 100 inches. Crash. Always set units explicitly.</p>
+<p>Programming in G21 (mm) when the machine is in G20 (inch) makes every move 25.4&times; larger than intended — X10 becomes 254 mm. Changing units also means your stored work offsets and tool length offsets may need verification; they do not automatically convert.</p>
 <h2>How</h2>
-<p>Always write decimal point: X50. = 50.0. X50 without decimal may be 0.05 on some controls.</p>
+<h3>Plane selection</h3>
+<p>On a mill, G17 (XY) is the default. On a lathe, G18 (XZ) is used for turning. The plane must be set before circular interpolation — G02/G03 direction depends on it.</p>
+<h3>Unit conversion</h3>
+<p>1 inch = 25.4 mm. 0.25 inch = 6.35 mm. F10 in/min = 254 mm/min. Always know which unit your program uses.</p>
 <h2>Example</h2>
-<p>G17 G02 X50 Y50 I25 J0 — CW arc in XY. G18 active would interpret XZ (lathe).</p>
+<p>0.5 inch = 12.7 mm. F12 in/min = 304.8 mm/min. If you accidentally program F12 thinking mm/min instead of in/min, the feed is 25.4&times; too fast.</p>
 <h2>Common Mistakes</h2>
-<ul><li>Forgetting G21.</li><li>No decimal point.</li></ul>
-<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> Why X50. not X50?</p><details><summary>Show answer</summary><p>Decimal point forces 50.0.</p></details><p><strong>2.</strong> Lathe plane?</p><details><summary>Show answer</summary><p>G18 (XZ).</p></details></div>
-<h2>Sources and Applicability</h2><ul><li>Haas Operator Manual.</li></ul>
-<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/06-modal-codes/">&larr; Modal Codes</a><a href="/cnc-manufacturing-engineering/cnc-programming/08-programming-math/">Programming Math &rarr;</a></div>
+<ul><li>Changing G20/G21 without verifying stored offsets.</li>
+<li>Using G18 arc direction on a G17 program.</li>
+<li>Mixing inch and mm values in one program.</li></ul>
+<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> 12.7 mm = how many inches?</p><details><summary>Show answer</summary><p>0.5 inch (12.7 / 25.4 = 0.5).</p></details><p><strong>2.</strong> Why does G17 matter for G02/G03?</p><details><summary>Show answer</summary><p>G17 sets the viewing direction (from +Z). Without it, the controller does not know which plane the arc lies in.</p></details></section>
+<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Mill Operator's Manual — G17/G20/G21 (haascnc.com, retrieved 2026-09-24).</li></ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/03-coordinate-systems/">&larr; Coordinate Systems</a><a href="/cnc-manufacturing-engineering/cnc-programming/04-program-structure/">Program Structure &rarr;</a></nav>
 </main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

@@ -1,12 +1,12 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Project: Mounting Plate — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="Complete worked example: 100x80x12 mm plate — face, pocket, 4 holes, chamfer.">
+<title>Complete Milling Project: Rectangular Plate — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Full G-code for a 100×80×12 plate: face, pocket, 4 holes. One tool per operation, correct coordinates, no broken blocks.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/28-milling-project/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body>
+</head><body class="cnc-programming">
 <nav class="site-nav"><div class="site-nav-inner">
 <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
 <ul class="site-nav-links">
@@ -14,55 +14,69 @@
 <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
 <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
 <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
 <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
 </ul></div></nav>
-<main class="cp-article">
-<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Project: Mounting Plate</h1>
-<p class="cp-lead">A complete mill program: rectangular block, face mill, pocket, bolt holes, and chamfer.</p>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Complete Milling Project: Rectangular Plate</h1>
+<p class="lead">A worked end-to-end example. Plate 100×80×12, pocket X30-70/Y25-55 deep 4, 4×Ø6 holes at corners. This is a complete, runnable-style program.</p>
 <div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill</span></div>
-<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>Read a simple plate drawing</li><li>Plan mill operations</li><li>Write a complete mill program</li><li>Verify approach and retract</li></ul></div>
+<div class="callout"><strong>What you will learn:</strong><ul><li>Tool table: face mill, end mill, drill</li><li>Pocket coordinates X30-70/Y25-55 R5</li><li>Holes at (10,10)/(90,10)/(90,70)/(10,70)</li><li>Drill depth -13.8 through 12 mm plate</li></ul></div>
 <h2>Concept</h2>
-<p><strong>Part:</strong> 100&times;80&times;12 mm aluminum plate. Mill 60&times;40&times;5 mm pocket centered, drill 4 &Oslash;8 holes at corners (10 mm in from edges), face top.</p>
-<h2>Process Plan</h2>
-<ol><li>Face top (T01, &Oslash;63 face mill).</li><li>Rough/finish pocket (T02, &Oslash;10 end mill).</li><li>Drill 4 holes (T03, &Oslash;8 drill).</li><li>Chamfer holes (T04).</li></ol>
-<h2>How: The Program</h2>
-<pre class="cp-code"><code>O2801
+<p>This program sequences three tools: face mill (T01), Ø10 end mill (T02), Ø6 drill (T03). Each tool has its own H offset. Work zero is on top of the plate at the lower-left corner.</p>
+<h2>Why It Matters</h2>
+<p>A complete project ties together everything: tool change, work offset, tool length, contour, pocket, drilling cycles. Coordinates match the drawing — no "X10 Y20 X30" in one block.</p>
+<h2>How</h2>
+<h3>Tool table</h3>
+<ul><li>T01 H01: Ø63 face mill, S1500 F300.</li>
+<li>T02 H02 D05: Ø10 end mill, S2000 F400 (profile/pocket).</li>
+<li>T03 H03: Ø6 drill, S1500 F80 (G83 peck Q3).</li></ul>
+<h3>Program</h3>
+<pre class="cp-code"><code>% (RECTANGULAR PLATE PROJECT)
+O2800
 G21 G17 G90 G40 G49 G80
-T01 M06          <span class="cp-comment">(face mill)</span>
-G54 G00 X-40 Y0 S2000 M03
+(T01 FACE MILL)
+T01 M06
+G54 G00 X-20. Y40. S1500 M03
 G43 H01 Z50. M08
 G00 Z2.
-G01 Z0. F300.
-X140. F400.      <span class="cp-comment">(face pass)</span>
-G00 Z50.
-T02 M06          <span class="cp-comment">(end mill)</span>
-G54 G00 X-30 Y-20 S2500 M03
-G43 H02 Z50.
+G01 Z0. F100.
+G01 X120. F300        <span class="cp-comment">(face pass across)</span>
+G00 Z50. M09 M05
+(T02 END MILL)
+T02 M06
+G54 G00 X30. Y25. S2000 M03
+G43 H02 Z50. M08
 G00 Z2.
-G01 Z-5. F150.   <span class="cp-comment">(pocket depth)</span>
-G41 X0 Y0 D02 F300.
-Y20. X60. Y-20. X0.  <span class="cp-comment">(pocket contour)</span>
-G40 X-30 Y-20.
-G00 Z50.
-T03 M06          <span class="cp-comment">(drill)</span>
-G54 G00 X10 Y10 S1500 M03
-G43 H03 Z50.
-G99 G81 Z-15. R5. F120.
+G01 Z-4. F100         <span class="cp-comment">(pocket depth 4)</span>
+G41 D05
+G01 X35. Y30. F400    <span class="cp-comment">(R5 corner lead-in)</span>
+X65.                  <span class="cp-comment">(pocket X30-70, offset by D5)</span>
+Y50.
+X35.
+Y30.
+G40 X30. Y25.
+G00 Z50. M09 M05
+(T03 DRILL)
+T03 M06
+G54 G90 S1500 M03
+G43 H03 Z50. M08
+G99 G83 X10. Y10. R2. Z-13.8 Q3. F80.
 X90. Y10.
 X90. Y70.
 X10. Y70.
 G80
-G00 Z50. M09
-M05
+G00 Z50. M09 M05
 G91 G28 Z0
-M30</code></pre>
-<h2>Verification</h2>
-<p>Check: face mill starts off the left edge, pocket lead-in with G41, holes at (10,10)/(90,10)/(90,70)/(10,70), G80 after drilling. Single block: confirm Z approach, pocket depth, hole positions.</p>
+M30
+%</code></pre>
+<p>Pocket interior X30-70, Y25-55. With D5 offset, tool center runs 5 mm inside the pocket walls. Corners R5 match the Ø10 tool radius. Holes at the four corners through the 12 mm plate (Z-13.8).</p>
 <h2>Common Mistakes</h2>
-<ul><li>Pocket lead-in on an arc (must be linear).</li><li>Forgetting G80 after holes.</li><li>Face mill starting on the part (must start off-edge).</li></ul>
-<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> Holes at corners 10 mm in from edges on 100x80 plate. Coordinates?</p><details><summary>Show answer</summary><p>(10,10), (90,10), (90,70), (10,70).</p></details><p><strong>2.</strong> Why G41 lead-in at X-30 Y-20?</p><details><summary>Show answer</summary><p>Start outside the pocket, ramp in with cutter comp engaged, then cut contour.</p></details></div>
-<h2>Sources and Applicability</h2><ul><li>Worked example; adjust speeds/feeds for aluminum.</li></ul>
-<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/27-turning-project/">&larr; Turning Project</a><a href="/cnc-manufacturing-engineering/cnc-programming/29-subprograms/">Subprograms &rarr;</a></div>
+<ul><li>Multiple X/Y in one block — each move goes to one target.</li>
+<li>Pocket dimensions wrong (center vs corner).</li>
+<li>Forgetting drill breakthrough depth.</li></ul>
+<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> Pocket is X30-70, Y25-55. How wide and deep?</p><details><summary>Show answer</summary><p>40 mm wide (70-30), 30 mm deep (55-25).</p></details><p><strong>2.</strong> Why Z-13.8 for a 12 mm plate?</p><details><summary>Show answer</summary><p>12 mm through + ~1.8 mm drill point geometry = 13.8 mm total depth.</p></details></section>
+<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Mill Operator's Manual (haascnc.com, retrieved 2026-09-24).</li><li>[Drilling Parameter Assistant](/cnc-manufacturing-engineering/engineering-tools/drilling-parameter-assistant/).</li></ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/26-common-mistakes/">&larr; Common Mistakes</a><a href="/cnc-manufacturing-engineering/cnc-programming/27-turning-project/">Turning Project &rarr;</a></nav>
 </main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

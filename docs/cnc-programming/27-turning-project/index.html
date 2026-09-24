@@ -1,12 +1,12 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Project: Stepped Shaft — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="Complete worked example: raw bar to finished stepped shaft with process plan, coordinates, and full program.">
+<title>Complete Turning Project: Front Profile — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Full Haas-style program for a front profile: Ø30 × Z0-20 and Ø36 × Z-20-40. G71 rough, G70 finish. No parting off.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/27-turning-project/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body>
+</head><body class="cnc-programming">
 <nav class="site-nav"><div class="site-nav-inner">
 <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
 <ul class="site-nav-links">
@@ -14,51 +14,50 @@
 <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
 <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
 <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
 <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
 </ul></div></nav>
-<main class="cp-article">
-<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Project: Stepped Shaft</h1>
-<p class="cp-lead">Put it all together: a &Oslash;40 bar turned to a two-step shaft with chamfer, faced, and parted off.</p>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Complete Turning Project: Front Profile</h1>
+<p class="lead">A worked Haas lathe program. Raw stock Ø40. Machine only the front profile — no cut-off. G71 rough leaves 0.4 mm stock; G70 finishes.</p>
 <div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Lathe</span></div>
-<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>Read a simple shaft drawing</li><li>Plan operations and tools</li><li>Calculate coordinates</li><li>Write a complete turning program</li></ul></div>
+<div class="callout"><strong>What you will learn:</strong><ul><li>Raw stock Ø40 × 100</li><li>Profile: Ø30 Z0-20, then Ø36 Z-20-40</li><li>G71 rough, G70 finish (Haas)</li><li>No parting off programmed</li></ul></div>
 <h2>Concept</h2>
-<p><strong>Part:</strong> &Oslash;40 bar stock. Turn to &Oslash;30 for 15 mm, then &Oslash;20 for 20 mm, with 1&times;45&deg; chamfers. Face, rough, finish, part off. Material: free-machining steel.</p>
-<h2>Process Plan</h2>
-<ol><li>Face part (T01).</li><li>Rough OD turns (T02, G71).</li><li>Finish OD turns (T02, G70).</li><li>Chamfer.</li><li>Part off (T03).</li></ol>
-<h2>How: The Program</h2>
-<pre class="cp-code"><code>O2701
+<p>The part is a shouldered shaft. Face it, then turn the front profile: Ø30 from Z0 to Z-20, then step out to Ø36 from Z-20 to Z-40. The contour changes Z monotonically (0 → -20 → -40) with no reversal, satisfying Haas G71 rules.</p>
+<h2>Why It Matters</h2>
+<p>R06: the previous version had Z direction changes inside the G71 contour (which Haas rejects) and claimed a parting-off operation that was not programmed. This version has monotonic Z and explicitly does NOT part off.</p>
+<h2>How</h2>
+<h3>Program</h3>
+<pre class="cp-code"><code>% (FRONT PROFILE, NO PARTING)
+O2700
 G21 G97 G99
-T0101 M03 S1500  <span class="cp-comment">(facing tool)</span>
-G00 X42. Z0.1
-G01 Z0 F0.2
-X-1. F0.15
+(T0101 OD ROUGHING)
+T0101 M03 S1200
+G54 G00 X42. Z2. M08
+G71 U1.0 R0.5
+G71 P10 Q20 U0.4 W0.1 F0.2
+N10 G00 X30.
+G01 Z0. F0.1
+Z-20.
+X36.
+Z-40.
+N20 X42.
+G00 X100. Z100.
+(T0202 FINISH)
+T0202 M03 S1800
 G00 X42. Z2.
-T0202 M03 S2000  <span class="cp-comment">(OD turn tool)</span>
-G71 U2. R1.
-G71 P10 Q20 U0.2 W0.1 F0.25
-N10 G00 X18.
-G01 Z0 F0.1
-X20. Z-1.  <span class="cp-comment">(chamfer)</span>
-Z-20.       <span class="cp-comment">(Ø20 step)</span>
-X30. Z-20.
-Z-35.       <span class="cp-comment">(Ø30 step)</span>
-X40.
-N20 G00 Z2.
 G70 P10 Q20
 G00 X100. Z100.
-T0303 M03 S1200  <span class="cp-comment">(part-off tool)</span>
-G00 X42. Z-36.
-G01 X1. F0.08
-G00 X45.
-M05
-M30</code></pre>
-<h2>Verification</h2>
-<p>Backplot the profile. Confirm: facing cuts from center outward, G71 leaves 0.2 mm stock, G70 finishes, part-off at Z-36 leaves the part length. Check G54 on face center. Single block first pass.</p>
+M09 M05
+M30
+%</code></pre>
+<p>N10 to N20: X30 at Z0, Z to -20, step to X36, Z to -40, clear to X42. Z goes 0 → -20 → -40 monotonically. No parting off — the bar remains in the chuck.</p>
 <h2>Common Mistakes</h2>
-<ul><li>Forgetting the chamfer block in N10–N20.</li><li>Part-off too early (part too short).</li><li>G71 stock U0.2 not set — finish pass has no stock.</li></ul>
-<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> Why G99 (feed/rev)?</p><details><summary>Show answer</summary><p>Lathe standard: feed per revolution. F0.25 = 0.25 mm per revolution.</p></details><p><strong>2.</strong> Part-off at Z-36 gives what part length?</p><details><summary>Show answer</summary><p>From face Z0 to Z-36 = 36 mm long part (plus parting tool width).</p></details></div>
-<h2>Sources and Applicability</h2><ul><li>Worked example; adjust speeds/feeds for your material and tooling.</li></ul>
-<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/26-common-mistakes/">&larr; Common Mistakes</a><a href="/cnc-manufacturing-engineering/cnc-programming/28-milling-project/">Milling Project &rarr;</a></div>
+<ul><li>Z direction reversing inside P10-Q20 — Haas G71 requires monotonic.</li>
+li>Claiming parting off without programming it.</li>
+<li>Using G96 during G70 finish — fine for finish, but switch to G97 before threading.</li></ul>
+<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> Why is Z monotonic important?</p><details><summary>Show answer</summary><p>Haas G71 expects the contour to progress in one Z direction. Reversing Z causes an alarm or wrong tool path.</p></details><p><strong>2.</strong> Why no parting off?</p><details><summary>Show answer</summary><p>The SPEC says only machine the front profile. Parting off would be a separate operation with a cutoff tool.</p></details></section>
+<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Lathe Operator's Manual — G71/G70 (haascnc.com, retrieved 2026-09-24).</li></ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/28-milling-project/">&larr; Milling Project</a><a href="/cnc-manufacturing-engineering/cnc-programming/35-practical-examples/">Practical Examples &rarr;</a></nav>
 </main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

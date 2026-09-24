@@ -1,12 +1,12 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CNC Program Structure — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="Anatomy of a real CNC program: program number, blocks, addresses, start and end, line by line.">
+<title>Reading and Structuring a CNC Program — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Program number, blocks, address words, comments, and how to read a complete program from top to bottom.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/04-program-structure/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body>
+</head><body class="cnc-programming">
 <nav class="site-nav"><div class="site-nav-inner">
 <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
 <ul class="site-nav-links">
@@ -14,45 +14,47 @@
 <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
 <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
 <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
 <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
 </ul></div></nav>
-<main class="cp-article">
-<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>CNC Program Structure</h1>
-<p class="cp-lead">Before you write G00, understand what each part of a program is for.</p>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Reading and Structuring a CNC Program</h1>
+<p class="lead">A CNC program is a sequence of blocks. Each block combines several states and actions — not one command per line.</p>
 <div class="cp-meta"><span><strong>Level:</strong> Beginner</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
-<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>Program number and file boundaries</li><li>Blocks, sequence numbers, words</li><li>Addresses: N/G/X/Y/Z/S/T/H/F/M</li><li>Startup and end blocks</li></ul></div>
+<div class="callout"><strong>What you will learn:</strong><ul><li>Program number, blocks, and address words</li><li>The anatomy of one line</li><li>Startup block, motion, retract, end</li><li>How T and H are paired</li></ul></div>
 <h2>Concept</h2>
-<p>A program is a text file. Lines are called <strong>blocks</strong>. Each block contains <strong>words</strong> like <code>G01</code>, <code>X50.</code>, <code>F200.</code>. A word = letter (address) + number. Blocks are separated by newlines. The controller executes them in order unless a jump or loop redirects it.</p>
+<p>A program starts with <code>O1001</code> (program number). Each line is a <strong>block</strong> containing <strong>address words</strong>: letter + number. <code>N10 G01 X25. Y10. F200.</code> means: sequence N10, linear feed, X to 25, Y to 10, feed 200. The machine reads one block at a time and combines all the words in it.</p>
 <h2>Why It Matters</h2>
-<p>Reading a program is like reading a sentence: you parse words left to right. Knowing that <code>N10</code> is just a label, <code>G01</code> is the action, and <code>X100.</code> is the target lets you read any program quickly.</p>
+<p>One block can set feed mode, select a plane, move two axes, and set speed — all simultaneously. If you read each letter as a separate command, you misunderstand how the machine executes. N numbers are just labels; they do not cause motion.</p>
 <h2>How</h2>
-<pre class="cp-code"><code>%             <span class="cp-comment">(file start, often required on FANUC)</span>
-O1001         <span class="cp-comment">(program number)</span>
-G21 G17 G90 G40 G49 G80  <span class="cp-comment">(known state)</span>
-T01 M06       <span class="cp-comment">(call tool 1, change)</span>
-G54 G00 X0 Y0 <span class="cp-comment">(work offset, position)</span>
-S2000 M03     <span class="cp-comment)">spindle on, CW</span>
-G43 H01 Z50.  <span class="cp-comment">(tool length offset)</span>
-M08           <span class="cp-comment">(coolant on)</span>
-...
-M09           <span class="cp-comment">(coolant off)</span>
-M05           <span class="cp-comment">(spindle stop)</span>
-G91 G28 Z0    <span class="cp-comment">(Z to home)</span>
-M30           <span class="cp-comment">(end, reset to start)</span>
+<h3>Block anatomy</h3>
+<p><code>N10 G01 X25. Y10. F200.</code></p>
+<ul><li><strong>N10</strong> — sequence number (label, optional).</li>
+<li><strong>G01</strong> — linear interpolation (motion mode).</li>
+<li><strong>X25.</strong> — X target = 25 mm.</li>
+<li><strong>Y10.</strong> — Y target = 10 mm.</li>
+<li><strong>F200.</strong> — feed rate = 200 mm/min.</li></ul>
+<h3>Program skeleton</h3>
+<pre class="cp-code"><code>% (program start)
+O1001
+G21 G17 G90 G40 G49 G80  <span class="cp-comment">(startup: known state)</span>
+T01 M06                     <span class="cp-comment">(tool change)</span>
+G54 G00 X0 Y0 S2000 M03     <span class="cp-comment">(work offset, position, spindle on)</span>
+G43 H01 Z50. M08            <span class="cp-comment">(tool length, coolant on)</span>
+...                         <span class="cp-comment">(machining)</span>
+M09 M05                     <span class="cp-comment">(coolant off, spindle stop)</span>
+G91 G28 Z0                  <span class="cp-comment">(Z to home)</span>
+M30                         <span class="cp-comment">(program end)</span>
 %</code></pre>
-<p>Breakdown of <code>N10 G01 X100.0 Y50.0 F300.</code>:</p>
-<ul><li><code>N10</code> — sequence number (label, does not execute).</li>
-<li><code>G01</code> — linear interpolation mode.</li>
-<li><code>X100.0</code> — X destination.</li>
-<li><code>Y50.0</code> — Y destination.</li>
-<li><code>F300.</code> — feed rate 300 mm/min.</li></ul>
 <h2>Example</h2>
-<p><code>O1001</code> names the program. <code>T01 M06</code> selects and changes to tool 1. <code>G54</code> activates work offset 1. <code>S2000 M03</code> starts spindle clockwise at 2000 RPM. <code>G43 H01</code> applies tool length offset #1. <code>M30</code> ends and rewinds.</p>
+<p>From start (5,10) in G90 G94 (feed/min): G01 X25 Y10 F200 moves 20 mm in X at 200 mm/min = 6 seconds ideal time. The Y already matches 10, so only X moves.</p>
 <h2>Common Mistakes</h2>
-<ul><li>Forgetting <code>%</code> start/end on FANUC-controlled machines.</li><li>Using duplicate O-numbers in memory.</li><li>Missing M30 — program runs off the end.</li><li>Putting comments in ways the controller does not accept (use parentheses).</li></ul>
-<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> What does O1001 do?</p><details><summary>Show answer</summary><p>It names/identifies the program. It does not move anything.</p></details><p><strong>2.</strong> Which word sets feed rate?</p><details><summary>Show answer</summary><p>The F word (e.g. F200). It is modal.</p></details><p><strong>3.</strong> Why G43 H01 before cutting?</p><details><summary>Show answer</summary><p>It applies the stored tool length offset so the Z position reflects the actual tool length, not just the machine's Z zero.</p></details></div>
-<h2>Sources and Applicability</h2><ul><li>Haas Mill Operator's Manual — Program Structure.</li><li>FANUC Series Manual — program number and block format.</li></ul>
-<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/03-coordinate-systems/">&larr; Coordinate Systems</a><a href="/cnc-manufacturing-engineering/cnc-programming/05-gcode-fundamentals/">G-Code Fundamentals &rarr;</a></div>
+<ul><li>Treating N as a motion amount.</li>
+<li>Confusing F (feed) with S (spindle speed).</li>
+<li>Assuming M30 retracts the tool — it just ends the program.</li>
+<li>Forgetting that T (tool number) and H (length offset number) are paired by setup, not automatically equal.</li></ul>
+<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> Distance 30 mm at F300. Ideal cutting time?</p><details><summary>Show answer</summary><p>30/300 = 0.1 min = 6 seconds.</p></details><p><strong>2.</strong> What does G43 H01 do?</p><details><summary>Show answer</summary><p>Applies tool length offset number 01 to Z moves. Without it, Z positions are wrong.</p></details></section>
+<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Mill Operator's Manual — Program structure (haascnc.com, retrieved 2026-09-24).</li></ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/07-plane-units/">&larr; Planes & Units</a><a href="/cnc-manufacturing-engineering/cnc-programming/05-gcode-fundamentals/">G-Code Basics &rarr;</a></nav>
 </main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

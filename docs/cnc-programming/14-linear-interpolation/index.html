@@ -1,12 +1,12 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rapid and Linear Motion (G00/G01) — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="G00 rapid vs G01 linear feed, safe approach and retract, envelope awareness.">
+<title>Linear and Rapid Motion (G00/G01) — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="How the machine moves in straight lines, safe approach/retract, and why diagonal G00 is not always diagonal.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/14-linear-interpolation/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body>
+</head><body class="cnc-programming">
 <nav class="site-nav"><div class="site-nav-inner">
 <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
 <ul class="site-nav-links">
@@ -14,32 +14,33 @@
 <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
 <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
 <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
 <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
 </ul></div></nav>
-<main class="cp-article">
-<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Rapid and Linear Motion (G00/G01)</h1>
-<p class="cp-lead">The two most-used motion codes. G00 gets you there fast; G01 cuts at controlled feed.</p>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Linear and Rapid Motion (G00/G01)</h1>
+<p class="lead">G00 repositions fast. G01 cuts in a straight line. The difference is speed and safety.</p>
 <div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
-<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>G00 rapid positioning vs G01 linear feed</li><li>Safe approach and retract paths</li><li>Multi-axis diagonal moves</li><li>Why rapid is not always diagonal</li></ul></div>
+<div class="callout"><strong>What you will learn:</strong><ul><li>G00 rapid positioning — above the part</li><li>G01 linear feed — cutting</li><li>Safe approach and retract sequence</li><li>Rapid vs feed speed limits</li></ul></div>
 <h2>Concept</h2>
-<p><strong>G00</strong> = rapid positioning. The machine moves at its fastest traverse (often 15-30 m/min), but the path may not be straight — each axis moves independently and may stop at different times. Never assume G00 takes a diagonal line.</p>
-<p><strong>G01</strong> = linear interpolation. The axes move simultaneously at a coordinated feed rate (F), cutting a straight line at exactly the programmed feed.</p>
+<p><strong>G00</strong> moves all axes at rapid traverse (typically 10-30 m/min) to position the tool. It is not a cutting move. <strong>G01</strong> moves at programmed feed F, and is used for cutting straight lines between points.</p>
 <h2>Why It Matters</h2>
-<p>A common crash: rapid to X50 Y30 Z-5 assuming a diagonal path. The machine may move Z first (into the vise), then X/Y. Use safe approach: rapid X/Y above the part, then Z down. Never rapid into cut material.</p>
+<p>G00 is fast and ignores F. If you rapid through the part, you crash. The safe pattern: rapid to a point above the part, feed down to depth, cut at feed, rapid up to clear height, then rapid to next position.</p>
 <h2>How</h2>
-<pre class="cp-code"><code>G00 X0 Y0        <span class="cp-comment">(rapid to XY position)</span>
-G00 Z5.         <span class="cp-comment">(rapid Z to 5 mm above part)</span>
-G01 Z-2. F100.  <span class="cp-comment">(feed down 2 mm deep)</span>
-G01 X100. F300. <span class="cp-comment">(cut straight line at 300 mm/min)</span>
-G00 Z5.         <span class="cp-comment">(rapid retract)</span></code></pre>
-<p>Approach: XY first, then Z down. Retract: Z up first, then XY. This avoids crashing into fixtures.</p>
+<h3>Safe approach</h3>
+<pre class="cp-code"><code>G00 X0 Y0        <span class="cp-comment">(position above start)</span>
+G00 Z5.           <span class="cp-comment">(rapid to 5 mm above part)</span>
+G01 Z-2. F100     <span class="cp-comment">(feed down to cut depth)</span>
+G01 X50. F300     <span class="cp-comment">(cut along X)</span>
+G00 Z5.           <span class="cp-comment">(rapid up)</span></code></pre>
 <h2>Example</h2>
-<p>G01 Z-2 F100 plunges at 100 mm/min (plunge feed). Then G01 X100 F300 cuts at 300 mm/min. Feed change on the fly is fine — F is modal.</p>
+<p>From (0,0) to (40,0) at F400: distance 40 mm, time = 40/400 = 0.1 min = 6 seconds. The Y stays at 0.</p>
 <h2>Common Mistakes</h2>
-<ul><li>Rapiding Z into the part instead of above it.</li><li>Assuming G00 takes a straight diagonal.</li><li>Not specifying F on the first G01 block — F is modal but may be unset.</li></ul>
-<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> Why G00 not safe for cutting?</p><details><summary>Show answer</summary><p>It moves at maximum traverse with no controlled feed; it would break the tool.</p></details><p><strong>2.</strong> Correct approach order?</p><details><summary>Show answer</summary><p>Rapid XY above part → rapid Z to clearance → feed Z down → cut.</p></details></div>
-<h2>Sources and Applicability</h2><ul><li>Haas Operator Manual — G00/G01.</li><li>Machine traverse speed specifications.</li></ul>
-<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/13-work-offsets/">&larr; Work Offsets</a><a href="/cnc-manufacturing-engineering/cnc-programming/15-circular-interpolation/">Circular Interpolation &rarr;</a></div>
+<ul><li>Rapid down to cutting depth — always feed down.</li>
+<li>Assuming G00 moves diagonally — on many machines, X/Y/Z move independently and may not be a straight line.</li>
+<li>Forgetting to retract to a clear Z before rapid in X/Y.</li></ul>
+<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> Distance 50 mm at F250. Cutting time?</p><details><summary>Show answer</summary><p>50/250 = 0.2 min = 12 seconds.</p></details><p><strong>2.</strong> Why not G00 to Z-2?</p><details><summary>Show answer</summary><p>G00 ignores F and moves at rapid speed. You would crash into the part at 20 m/min.</p></details></section>
+<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Mill Operator's Manual — G00/G01 (haascnc.com, retrieved 2026-09-24).</li></ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/12-tool-offsets/">&larr; Tool Offsets</a><a href="/cnc-manufacturing-engineering/cnc-programming/15-circular-interpolation/">Circular Motion &rarr;</a></nav>
 </main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

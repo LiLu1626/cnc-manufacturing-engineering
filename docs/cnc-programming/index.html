@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CNC Programming Tutorial — Learn G-Code from Zero</title>
-<meta name="description" content="A complete CNC programming course: coordinates, G-code, offsets, compensation, milling and turning projects, verification, and CAM workflow for beginners.">
+<title>CNC Programming Fundamentals & Applications</title>
+<meta name="description" content="A complete CNC programming course from zero: coordinates, G-code, offsets, compensation, milling and turning projects, verification, and macros.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
 </head>
-<body>
+<body class="cnc-programming">
 
 <nav class="site-nav">
   <div class="site-nav-inner">
@@ -19,121 +20,89 @@
       <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
       <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
       <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
       <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
     </ul>
   </div>
 </nav>
 
-<main class="page">
+<main class="article">
 
-<section class="hero">
-  <div class="hero-eyebrow">Structured Course</div>
-  <h1>CNC Programming Fundamentals &amp; Applications</h1>
-  <p class="cp-lead">Go from never having seen G-code to reading, writing, and checking basic mill and lathe programs. Built for machinists, operators, and engineers who want to understand &mdash; not just copy.</p>
-  <p>
-    <a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/01-getting-started/what-is-cnc-programming/" style="margin-right:20px;">Start with What Is CNC Programming &rarr;</a>
-    <a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/31-learning-path/">View the Learning Path &rarr;</a>
-  </p>
+<h1>CNC Programming Fundamentals &amp; Applications</h1>
+<p class="lead">A systematic course that takes you from zero to writing and verifying basic CNC programs. Follow the lessons in order — each builds on the previous.</p>
+
+<section class="cp-module">
+<h2>Level 1 — Foundations</h2>
+<ol class="cp-lessons">
+<li><a href="01-getting-started/what-is-cnc-programming/">What Is CNC Programming?</a></li>
+<li><a href="02-machine-fundamentals/">Machine Fundamentals for Programmers</a></li>
+<li><a href="23-program-safety/">Safe Program Start &amp; Restart</a></li>
+<li><a href="08-programming-math/">Programming Math</a></li>
+<li><a href="32-drawings-process-planning/">From Drawing to Process Plan</a></li>
+<li><a href="03-coordinate-systems/">Coordinate Systems</a></li>
+<li><a href="07-plane-units/">Planes &amp; Units</a></li>
+<li><a href="04-program-structure/">Program Structure</a></li>
+<li><a href="05-gcode-fundamentals/">G-Code Fundamentals</a></li>
+<li><a href="06-modal-codes/">Modal State</a></li>
+<li><a href="09-mcode-fundamentals/">M-Codes</a></li>
+</ol>
 </section>
 
-<section class="section">
-  <h2 class="section-title">Before You Start</h2>
-  <p>No prior programming experience required. You only need basic arithmetic and a willingness to draw coordinates on paper. Examples use metric units on a 3-axis vertical mill and a 2-axis lathe, with Haas-verified G-code syntax as the reference dialect. This course teaches manual programming concepts; it does not certify you to operate a real machine without hands-on training.</p>
+<section class="cp-module">
+<h2>Level 2 — Setup &amp; Motion</h2>
+<ol class="cp-lessons" start="12">
+<li><a href="11-feed-programming/">Feed Programming</a></li>
+<li><a href="10-spindle-programming/">Spindle Programming</a></li>
+<li><a href="13-work-offsets/">Work Offsets (G54–G59)</a></li>
+<li><a href="12-tool-offsets/">Tool Length &amp; Radius Offsets</a></li>
+<li><a href="14-linear-interpolation/">Linear &amp; Rapid Motion</a></li>
+<li><a href="15-circular-interpolation/">Circular Interpolation</a></li>
+<li><a href="16-cutter-compensation/">Cutter Radius Compensation</a></li>
+</ol>
 </section>
 
-<section class="section" id="foundations">
-  <h2 class="section-title">1 &middot; Foundations</h2>
-  <div class="card-grid">
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/01-getting-started/what-is-cnc-programming/"><h3>01 &middot; What Is CNC Programming?</h3><p>Drawing to code to machined part. (Beginner)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/02-machine-fundamentals/"><h3>02 &middot; Machine Fundamentals</h3><p>Axes, spindle, home, work zero. Mill vs lathe. (Beginner)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/23-program-safety/"><h3>23 &middot; Safe Start &amp; Restart</h3><p>Checklists, known state, safe approach. (Key)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/08-programming-math/"><h3>08 &middot; Practical Math</h3><p>Triangles, sine/cosine, hole coordinates. (Key)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/32-drawings-process-planning/"><h3>32 &middot; Drawing to Process Plan</h3><p>Read drawings, choose datums, sequence ops. (Key)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/03-coordinate-systems/"><h3>03 &middot; Coordinate Systems</h3><p>Absolute vs incremental, machine vs work. (Key)</p></a>
-  </div>
+<section class="cp-module">
+<h2>Level 3 — Machining Operations</h2>
+<ol class="cp-lessons" start="19">
+<li><a href="33-drilling-cycles/">Drilling &amp; Hole-Making Cycles</a></li>
+<li><a href="18-canned-cycles/">Canned Cycles Overview</a></li>
+<li><a href="34-subprograms/">Subprograms</a></li>
+<li><a href="19-turning-programming/">CNC Turning Programming</a></li>
+<li><a href="20-milling-programming/">CNC Milling Programming</a></li>
+<li><a href="21-threading-basics/">Threading Basics</a></li>
+<li><a href="22-lathe-threading/">Lathe Threading Cycles</a></li>
+</ol>
 </section>
 
-<section class="section" id="language">
-  <h2 class="section-title">2 &middot; Language and Control</h2>
-  <div class="card-grid">
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/07-plane-units/"><h3>07 &middot; Planes &amp; Units</h3><p>G17/G18/G19, G20/G21. (Beginner)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/04-program-structure/"><h3>04 &middot; Program Structure</h3><p>Blocks, addresses, O/N/T/H/S/F. (Beginner)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/05-gcode-fundamentals/"><h3>05 &middot; G-Code Fundamentals</h3><p>How G-codes are grouped. (Beginner)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/06-modal-codes/"><h3>06 &middot; Modal State</h3><p>Why X10 depends on context. (Key)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/09-mcode-fundamentals/"><h3>09 &middot; M-Codes</h3><p>Spindle, coolant, tool change. (Beginner)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/11-controller-dialects/"><h3>11 &middot; Controller Dialects</h3><p>Haas vs FANUC vs Siemens. (Beginner)</p></a>
-  </div>
+<section class="cp-module">
+<h2>Level 4 — Projects &amp; Verification</h2>
+<ol class="cp-lessons" start="26">
+<li><a href="24-program-verification/">Program Verification</a></li>
+<li><a href="25-troubleshooting/">Programming Troubleshooting</a></li>
+<li><a href="26-common-mistakes/">Common Beginner Mistakes</a></li>
+<li><a href="28-milling-project/">Complete Milling Project</a></li>
+<li><a href="27-turning-project/">Complete Turning Project</a></li>
+<li><a href="35-practical-examples/">Practical Examples</a></li>
+</ol>
 </section>
 
-<section class="section" id="setup-motion">
-  <h2 class="section-title">3 &middot; Setup and Motion</h2>
-  <div class="card-grid">
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/10-spindle-feed/"><h3>10 &middot; Spindle &amp; Feed</h3><p>RPM, SFM, fz, CSS. (Key)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/13-work-offsets/"><h3>13 &middot; Work Offsets</h3><p>G54–G59, datums, edge finder. (Key)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/12-tool-offsets/"><h3>12 &middot; Tool Offsets</h3><p>Tool length H, geometry, wear. (Key)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/14-linear-interpolation/"><h3>14 &middot; Rapid &amp; Linear</h3><p>G00 vs G01, approach, retract. (Key)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/15-circular-interpolation/"><h3>15 &middot; Circular Interpolation</h3><p>G02/G03, I/J, R. (Key)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/16-cutter-compensation/"><h3>16 &middot; Cutter Radius Comp</h3><p>G41/G42, lead-in/out. (Key)</p></a>
-  </div>
-</section>
-
-<section class="section" id="milling">
-  <h2 class="section-title">4 &middot; Milling Applications</h2>
-  <div class="card-grid">
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/33-milling-strategies/"><h3>33 &middot; Facing, Slots, Pockets</h3><p>Climb vs conventional, stepover. (Key)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/"><h3>17 &middot; Drilling &amp; Boring</h3><p>G81/G82/G83/G85. (Key)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/"><h3>18 &middot; Canned Cycles</h3><p>G98/G99, R-plane, G80. (Key)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/34-tapping-thread-milling/"><h3>34 &middot; Tapping &amp; Thread Milling</h3><p>G84, pitch/lead. (Key)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/29-subprograms/"><h3>29 &middot; Subprograms</h3><p>M98/M99, repeat features. (Key)</p></a>
-  </div>
-</section>
-
-<section class="section" id="turning">
-  <h2 class="section-title">5 &middot; Turning Applications</h2>
-  <div class="card-grid">
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/"><h3>19 &middot; Turning Coordinates</h3><p>Diameter mode, X/Z. (Key)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/"><h3>20 &middot; Roughing &amp; Finishing</h3><p>G71/G70, stock allowance. (Key)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring/"><h3>21 &middot; Grooving, Parting, Boring</h3><p>Tool reference edges. (Key)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/22-threading/"><h3>22 &middot; Single-Point Threads</h3><p>Pitch, lead, G76. (Key)</p></a>
-  </div>
-</section>
-
-<section class="section" id="verification-projects">
-  <h2 class="section-title">6 &middot; Verification &amp; Projects</h2>
-  <div class="card-grid">
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/24-verification/"><h3>24 &middot; Verification &amp; First Article</h3><p>Review, simulation, inspection. (Key)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting/"><h3>25 &middot; Diagnosing Problems</h3><p>Alarms, geometry, offsets. (Key)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/26-common-mistakes/"><h3>26 &middot; Common Mistakes</h3><p>15 traps and fixes. (Beginner)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/28-milling-project/"><h3>28 &middot; Project: Mounting Plate</h3><p>100&times;80&times;12 mm plate. (Key)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/27-turning-project/"><h3>27 &middot; Project: Stepped Shaft</h3><p>&Oslash;40 bar stepped part. (Key)</p></a>
-  </div>
-</section>
-
-<section class="section" id="cam-advanced">
-  <h2 class="section-title">7 &middot; CAM and Further Applications</h2>
-  <div class="card-grid">
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/35-cad-cam-postprocessing/"><h3>35 &middot; CAD/CAM &amp; Post</h3><p>Model to NC code. (Key)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/36-macro-foundations/"><h3>36 &middot; Macro Foundations</h3><p>Variables, logic, loops. (Key)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/37-multiaxis-probing-overview/"><h3>37 &middot; Rotary &amp; Probing</h3><p>4th axis, 3+2, probes. (Beginner)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/38-process-optimization/"><h3>38 &middot; Cycle Time &amp; Quality</h3><p>Where time goes. (Key)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/39-exercises-assessment/"><h3>39 &middot; Practice &amp; Exam</h3><p>20 questions, two projects. (Key)</p></a>
-  </div>
-</section>
-
-<section class="section" id="reference">
-  <h2 class="section-title">Reference</h2>
-  <div class="card-grid">
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/30-reference/"><h3>30 &middot; Quick Reference</h3><p>G/M code lookup. (Beginner)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/31-learning-path/"><h3>31 &middot; Learning Path</h3><p>Order and checkpoints. (Beginner)</p></a>
-    <a class="card" href="/cnc-manufacturing-engineering/cnc-programming/40-glossary-sources/"><h3>40 &middot; Glossary &amp; Sources</h3><p>Terms and verification. (Beginner)</p></a>
-  </div>
+<section class="cp-module">
+<h2>Level 5 — Advanced &amp; Reference</h2>
+<ol class="cp-lessons" start="32">
+<li><a href="36-macro-programming/">Macro Programming Introduction</a></li>
+<li><a href="37-probing/">Probing Basics</a></li>
+<li><a href="38-controller-specific/">Controller-Specific Programming</a></li>
+<li><a href="39-assessment/">Self-Assessment</a></li>
+<li><a href="31-learning-path/">Your Learning Path</a></li>
+<li><a href="30-reference/">Quick Reference</a></li>
+<li><a href="40-glossary/">Glossary</a></li>
+</ol>
 </section>
 
 </main>
 
 <footer class="site-footer">
-  Designed by Li Lu · CNC &amp; Manufacturing Engineering
+  <p>Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</p>
 </footer>
 
 </body>

@@ -1,12 +1,12 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CNC Programming Troubleshooting — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="Alarms, unexpected motion, wrong geometry, offset errors — diagnose methodically.">
+<meta name="description" content="Unexpected motion, wrong dimensions, alarms — systematic diagnosis of program problems.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body>
+</head><body class="cnc-programming">
 <nav class="site-nav"><div class="site-nav-inner">
 <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
 <ul class="site-nav-links">
@@ -14,34 +14,33 @@
 <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
 <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
 <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
 <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
 </ul></div></nav>
-<main class="cp-article">
-<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
 <h1>CNC Programming Troubleshooting</h1>
-<p class="cp-lead">When the machine does something unexpected, work the problem systematically — do not guess.</p>
+<p class="lead">When the machine does the wrong thing, do not panic. Work the problem: which state is wrong, which line caused it, and what to check.</p>
 <div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
-<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>Alarm diagnosis approach</li><li>Geometry errors: offset vs program</li><li>Unexpected motion: modal state</li><li>Wrong direction: G90/G91 or plane</li></ul></div>
+<div class="callout"><strong>What you will learn:</strong><ul><li>Wrong direction, wrong coordinate, wrong offset</li><li>Arc errors and overtravel</li><li>Cycle errors and unexpected drills</li><li>Systematic diagnosis: symptom → cause → fix</li></ul></div>
 <h2>Concept</h2>
-<p>Every problem has a symptom. Method: note the symptom → check the machine state (modal codes active) → review the relevant block → check offsets → test one change at a time. Never change multiple things at once.</p>
+<p>Program errors fall into categories: (1) wrong modal state (G90/G91, G94/G95, G17/G18), (2) wrong offset (G54, H, D), (3) wrong geometry (I/J arc center, pocket dimensions), (4) alarm codes (overtravel, program error). Diagnose by reproducing the motion in single block.</p>
 <h2>Why It Matters</h2>
-<p>A part cuts 0.5 mm off in X. Is the program wrong, the G54 offset wrong, or the tool wear offset wrong? Change one, test, measure. Change all three at once and you learn nothing.</p>
+<p>A part that is systematically off by 0.2 mm is an offset error. A part that is wrong only on one feature is a coordinate error. Wrong direction (X goes - instead of +) suggests G91/G90 confusion. Knowing the category narrows the search.</p>
 <h2>How</h2>
-<div class="cp-table-wrap"><table>
-<tr><th>Symptom</th><th>Check</th></tr>
-<tr><td>Tool moves wrong direction</td><td>G90 vs G91, G54 offset sign</td></tr>
-<tr><td>Dimension consistently off</td><td>Work offset or wear offset</td></tr>
-<tr><td>Dimension varies per feature</td><td>Program coordinate error</td></tr>
-<tr><td>Unexpected drill move</td><td>G80 missing; cycle still active</td></tr>
-<tr><td>Arc cuts wrong way</td><td>G02/G03 reversed or wrong plane</td></tr>
-<tr><td>Cutter comp alarm</td><td>Lead-in on arc or comp not engaged</td></tr>
-</table></div>
+<h3>Common symptoms</h3>
+<ul><li><strong>Tool moves wrong direction</strong>: check G90/G91.</li>
+<li><strong>Z depth wrong</strong>: check H offset and G43.</li>
+<li><strong>Every hole shifted</strong>: check G54.</li>
+<li><strong>Unexpected drill move</strong>: forgot G80.</li>
+<li><strong>Arc alarm</strong>: I/J wrong or end point unreachable from start+center.</li></ul>
 <h2>Example</h2>
-<p>All holes are 0.3 mm too far right. The program coordinates are correct (you checked). G54 X should be 0.000 but was entered as 0.300. Fix G54, rerun — holes correct. If only one hole is wrong, the program coordinate for that hole has a typo.</p>
+<p>Part is 0.2 mm too large in X only. Check: G54 X offset. If G54 should be -300.2 but is -300.0, every X dimension is off by 0.2. Correct the offset, not the program.</p>
 <h2>Common Mistakes</h2>
-<ul><li>Changing the program before checking offsets.</li><li>Changing multiple offsets at once.</li><li>Ignoring the alarm code — read it, look it up, do not just press reset.</li></ul>
-<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> All features off by 0.2 mm in X. First thing to check?</p><details><summary>Show answer</summary><p>G54 work offset X value. Consistent offset error = work offset issue.</p></details><p><strong>2.</strong> Only one hole is at the wrong position. Check?</p><details><summary>Show answer</summary><p>Program coordinate for that specific hole. Per-feature error = program typo.</p></details></div>
-<h2>Sources and Applicability</h2><ul><li>Haas Alarm Code List.</li><li>FANUC Programmer's Guide.</li></ul>
-<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/24-verification/">&larr; Verification</a><a href="/cnc-manufacturing-engineering/cnc-programming/26-common-mistakes/">Common Mistakes &rarr;</a></div>
+<ul><li>Editing the program when the offset is wrong.</li>
+<li>Ignoring the alarm number — it tells you what the controller thinks.</li>
+<li>Restarting without rebuilding modal state (see Lesson 23).</li></ul>
+<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> Every hole is 0.1 mm too high in Y. What to check?</p><details><summary>Show answer</summary><p>G54 Y offset. A systematic shift means work offset, not individual coordinates.</p></details><p><strong>2.</strong> Tool moves in unexpected Y during a drilling cycle. Why?</p><details><summary>Show answer</summary><p>G81 is still modal; the next X/Y move drills. G80 to cancel.</p></details></section>
+<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Mill Operator's Manual — Alarm codes (haascnc.com, retrieved 2026-09-24).</li></ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/24-program-verification/">&larr; Verification</a><a href="/cnc-manufacturing-engineering/cnc-programming/26-common-mistakes/">Common Mistakes &rarr;</a></nav>
 </main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

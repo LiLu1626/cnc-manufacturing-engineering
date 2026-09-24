@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Programming Examples — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Graded examples from simple facing to bolt-circle drilling, each with a process plan and worked G-code.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/35-practical-examples/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body class="cnc-programming">
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Practical Programming Examples</h1>
+<p class="lead">From facing a bar to drilling a bolt circle — real parts, real code, explained line by line.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
+<div class="callout"><strong>What you will learn:</strong><ul><li>Level 1: facing, straight turning, simple drilling</li><li>Level 2: bolt circle, multiple tools</li><li>Process plan: drawing → datum → tool → program</li></ul></div>
+<h2>Concept</h2>
+<p>Each example follows the same workflow: read the drawing, choose datum, select tools, calculate coordinates, write the program, verify. Start simple; add complexity gradually.</p>
+<h2>Example: Bolt circle drilling</h2>
+<p>4 holes on PCD 40, center at (0,0). Coordinates: (20,0), (0,20), (-20,0), (0,-20). Drill Z-10, R2, F100.</p>
+<pre class="cp-code"><code>G90 G99 G81 X20. Y0 R2. Z-10. F100.
+X0 Y20.
+X-20. Y0.
+X0 Y-20.
+G80</code></pre>
+<h2>Example: Facing a bar</h2>
+<p>Ø50 bar, face to Z0. Tool at X52 Z2, feed to X-1 at F0.2 (G99). G00 retract.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Skipping the process plan and writing code first.</li>
+<li>Not calculating coordinates before programming.</li>
+<li>Running the first part at 100% feed.</li></ul>
+<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> PCD 40, 4 holes at 0/90/180/270. Hole at 90°?</p><details><summary>Show answer</summary><p>(0, 20).</p></details><p><strong>2.</strong> Why process plan before code?</p><details><summary>Show answer</summary><p>Code without a plan produces a program that machines the wrong thing at high speed.</p></details></section>
+<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>[Hole Pattern Generator](/cnc-manufacturing-engineering/engineering-tools/hole-pattern-generator/).</li><li>[Bolt Circle Calculator](/cnc-manufacturing-engineering/engineering-tools/bolt-circle-calculator/).</li></ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/27-turning-project/">&larr; Turning Project</a><a href="/cnc-manufacturing-engineering/cnc-programming/36-macro-programming/">Macro Programming &rarr;</a></nav>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

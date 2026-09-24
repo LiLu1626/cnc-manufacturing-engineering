@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lathe Threading Cycles — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Haas G76 threading cycle uses K (or D) for depth and F for lead — not the FANUC two-line P-Q format.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/22-lathe-threading/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body class="cnc-programming">
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Lathe Threading Cycles</h1>
+<p class="lead">On a Haas lathe, G76 cuts a thread automatically. F is the lead (pitch for single-start). K/D is thread depth. Always G97 constant RPM.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Lathe</span></div>
+<div class="callout"><strong>What you will learn:</strong><ul><li>Haas G76 one-line format</li><li>F = lead (mm/rev)</li><li>K (or D) = thread depth</li><li>G97 S constant RPM required</li></ul></div>
+<h2>Concept</h2>
+<p>Single-point threading on a lathe uses a form tool that follows the thread helix. The <strong>G76</strong> cycle automates multiple passes. Haas uses a simplified format: the thread is defined by start X/Z, end X/Z, depth K (or D), and feed F (lead).</p>
+<h2>Why It Matters</h2>
+<p>FANUC's two-line G76 uses P/Q/R fancy parameters. Haas uses a simpler K/D format. Copying FANUC G76 code onto a Haas causes alarms. Always use the dialect of your controller.</p>
+<h2>How</h2>
+<h3>Haas G76 example: M10×1.5</h3>
+<pre class="cp-code"><code>G97 S500 M03            <span class="cp-comment">(constant RPM)</span>
+G00 X12. Z3.            <span class="cp-comment">(approach)</span>
+G76 X8.2 Z-20. K0.92 F1.5
+<span class="cp-comment">X8.2 = minor dia, Z-20 = thread end, K0.92 = depth, F1.5 = lead</span></code></pre>
+<p>F1.5 means feed = 1.5 mm/rev = lead. At 500 rpm, axial feed = 750 mm/min.</p>
+<h2>Example</h2>
+<p>M20×1.5 external thread on Ø20 bar. Major = 20, minor ≈ 20 - 2×0.92 = 18.16. G76 X18.16 Z-25. K0.92 F1.5. Always G97 before threading.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Using FANUC two-line G76 on a Haas — syntax mismatch.</li>
+<li>Forgetting G97 — G96 varies RPM and ruins pitch.</li>
+<li>Confusing F units: in G99, F is mm/rev = lead, not mm/min.</li></ul>
+<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> M10×1.5 at 500 rpm. F value in G99?</p><details><summary>Show answer</summary><p>F1.5 (mm/rev = lead). Axial feed = 750 mm/min.</p></details><p><strong>2.</strong> Why G97 before G76?</p><details><summary>Show answer</summary><p>Threading requires constant RPM to maintain lead. G96 would vary speed as diameter changes.</p></details></section>
+<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Lathe Operator's Manual — G76 threading cycle (haascnc.com, retrieved 2026-09-24).</li><li>[Threading Calculator](/cnc-manufacturing-engineering/engineering-tools/threading-calculator/).</li></ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/21-threading-basics/">&larr; Threading Basics</a><a href="/cnc-manufacturing-engineering/cnc-programming/24-program-verification/">Program Verification &rarr;</a></nav>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spindle Programming — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="S command, M03/M04 direction, and on lathes: G97 constant RPM vs G96 constant surface speed with a max RPM clamp.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/10-spindle-programming/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body class="cnc-programming">
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Spindle Programming</h1>
+<p class="lead">S sets spindle speed. On a lathe, G96 keeps surface speed constant as the tool moves across diameters — but you must clamp maximum RPM.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
+<div class="callout"><strong>What you will learn:</strong><ul><li>S command and M03/M04 direction</li><li>G97 constant RPM (mill and lathe)</li><li>G96 constant surface speed (lathe only)</li><li>G50 max RPM limit for G96</li></ul></div>
+<h2>Concept</h2>
+<p><strong>S2000 M03</strong> = spindle clockwise at 2000 rpm. On a mill, this is all you need. On a lathe, you can also use <strong>G96 S200</strong> (constant surface speed, 200 m/min) — the machine automatically increases RPM as the tool approaches center and decreases it at larger diameters. But small diameters would reach unlimited RPM, so you must set a maximum RPM with <strong>G50 S1800</strong>.</p>
+<h2>Why It Matters</h2>
+<p>Without a max RPM clamp, G96 at a small diameter can overspeed the spindle. With G97 (constant RPM), cutting speed drops as you approach center — tool wear increases at the nose. G96 with proper clamp is best for finishing.</p>
+<h2>How</h2>
+<h3>Mill: G97 equivalent</h3>
+<p>Mills always use constant RPM (G97 is lathe terminology). S2000 M03 sets 2000 rpm throughout.</p>
+<h3>Lathe: G96 with clamp</h3>
+<pre class="cp-code"><code>G50 S1800          <span class="cp-comment">(max RPM = 1800)</span>
+G96 S200 M03      <span class="cp-comment">(surface speed 200 m/min, auto-RPM)</span>
+...turning...
+G97 S800 M03      <span class="cp-comment">(back to constant 800 RPM for threading)</span></code></pre>
+<h2>Example</h2>
+<p>Cutting at 180 m/min: at Ø50, RPM = 1000&times;180/(π&times;50) = 1146 rpm. At Ø25, RPM = 2292 rpm — but clamped to 1800 by G50. At Ø100, RPM = 573 rpm. The surface speed stays at 180 m/min except where clamped.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Using G96 without G50 max RPM — small diameters can overspeed.</li>
+<li>Leaving G96 active during threading — threading requires constant RPM (G97).</li>
+<li>Confusing S value: in G97 it is RPM, in G96 it is m/min (SFM in inch).</li></ul>
+<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> G96 S180, G50 S1800. At Ø25, what RPM results?</p><details><summary>Show answer</summary><p>Ideal: 1000&times;180/(π&times;25) = 2292 rpm, but clamped to 1800.</p></details><p><strong>2.</strong> Why must threading use G97?</p><details><summary>Show answer</summary><p>Threading pitch requires constant RPM; if RPM changes during the cut, the thread pitch is wrong.</p></details></section>
+<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Lathe Operator's Manual — G96/G97/G50 (haascnc.com, retrieved 2026-09-24).</li><li>[Spindle Speed Calculator](/cnc-manufacturing-engineering/engineering-tools/spindle-speed-calculator/).</li></ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/11-feed-programming/">&larr; Feed Programming</a><a href="/cnc-manufacturing-engineering/cnc-programming/13-work-offsets/">Work Offsets &rarr;</a></nav>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

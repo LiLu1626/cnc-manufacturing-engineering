@@ -1,12 +1,12 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cutter Radius Compensation (G41/G42) — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="Program the part contour, not the tool center. Left/right comp, lead-in/out, and why G40 cleanup matters.">
+<meta name="description" content="Program the part contour, let the controller offset the tool center by the tool radius. Left vs right, lead-in/out, and G40 cancellation.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/16-cutter-compensation/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body>
+</head><body class="cnc-programming">
 <nav class="site-nav"><div class="site-nav-inner">
 <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
 <ul class="site-nav-links">
@@ -14,39 +14,29 @@
 <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
 <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
 <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
 <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
 </ul></div></nav>
-<main class="cp-article">
-<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
 <h1>Cutter Radius Compensation (G41/G42)</h1>
-<p class="cp-lead">Instead of calculating tool center offsets for every contour, let the controller do it.</p>
-<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
-<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>What cutter comp does and why use it</li><li>G41 left vs G42 right</li><li>Lead-in and lead-out moves</li><li>G40 cancellation and common errors</li></ul></div>
+<p class="lead">You program the edge of the part. The controller shifts the tool center left or right by the tool radius — so you can change tool diameter without rewriting the program.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill</span></div>
+<div class="callout"><strong>What you will learn:</strong><ul><li>Why program the contour, not the tool path</li><li>G41 left vs G42 right (looking along cut direction)</li><li>Lead-in and lead-out on straight approach</li><li>G40 cancellation before rapid</li></ul></div>
 <h2>Concept</h2>
-<p>When you mill a 50 mm square, you cannot program the part edges directly — the tool has a radius. Without comp, you must offset every coordinate by the tool radius yourself. <strong>Cutter radius compensation</strong> lets you program the part contour; the controller shifts the tool center path left or right by the stored tool radius (D offset).</p>
-<figure class="cp-figure"><svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
-<rect x="60" y="40" width="120" height="120" fill="none" stroke="#17242f" stroke-width="2"/>
-<circle cx="120" cy="100" r="30" fill="none" stroke="#0b766e" stroke-width="2" stroke-dasharray="5"/>
-<circle cx="120" cy="100" r="3" fill="#0b766e"/>
-<text x="190" y="60" font-size="11" fill="#17242f">Part contour</text>
-<text x="190" y="80" font-size="11" fill="#0b766e">Tool center path</text></svg>
-<figcaption>Program the contour; the controller offsets the tool center path by radius.</figcaption></figure>
+<p>Without compensation, you must calculate every coordinate offset by the tool radius. With <strong>G41/G42</strong>, you program the part edges and the controller shifts the tool center by the D offset value. <strong>G41</strong> = left (tool is left of cut direction), <strong>G42</strong> = right. <strong>G40</strong> cancels.</p>
 <h2>Why It Matters</h2>
-<p>With comp, you can switch from a 10 mm end mill to an 8 mm end mill by changing the D offset — no program changes. Without comp, every coordinate must be recalculated. This is why cutter comp is essential for production.</p>
+<p>If you wear a 10 mm end mill down to 9.8 mm, you only change D from 5.0 to 4.9 — no program changes. This is why production programs use compensation.</p>
 <h2>How</h2>
-<p><strong>G41</strong> = left compensation (tool left of directed path). <strong>G42</strong> = right compensation. <strong>G40</strong> = cancel.</p>
-<p>You must <strong>lead in</strong> on a linear move (G00/G01) at a distance greater than the tool radius — never engage comp on an arc. Cancel (G40) on a linear move away from the part.</p>
-<pre class="cp-code"><code>G00 X0 Y0
-G41 X10. Y10. D01  <span class="cp-comment">(lead in, left comp)</span>
-G01 X50. F200.    <span class="cp-comment">(mill contour)</span>
-...
-G40 X0 Y0         <span class="cp-comment">(cancel on linear move)</span></code></pre>
+<h3>Lead-in</h3>
+<p>Compensation must turn on during a straight move (not on an arc). Approach the part on a straight path, G41 D01 activates, then cut the contour. At the end, G40 on a straight move away from the part.</p>
 <h2>Example</h2>
-<p>Program a 50×50 mm square contour. D01 stores 5.000 (10 mm tool radius). The controller offsets the tool center 5 mm outside the programmed contour. Switch to an 8 mm tool: change D01 to 4.000. Program unchanged.</p>
+<p>Cutting a 50×50 square outline with a 10 mm end mill (D=5). Program the corners at (0,0),(50,0),(50,50),(0,50). The tool center runs 5 mm outside this rectangle automatically.</p>
 <h2>Common Mistakes</h2>
-<ul><li>Engaging G41/G42 on an arc — causes alarm.</li><li>Forgetting G40 before the next operation — comp stays active.</li><li>Lead-in shorter than tool radius — tool gouges the corner.</li><li>Using G41 vs G42 backwards (climb vs conventional).</li></ul>
-<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> G41 vs G42?</p><details><summary>Show answer</summary><p>G41 = tool left of directed path. G42 = tool right.</p></details><p><strong>2.</strong> Why must lead-in be linear?</p><details><summary>Show answer</summary><p>Comp engages on a straight move; arcs require comp already active.</p></details></div>
-<h2>Sources and Applicability</h2><ul><li>Haas Operator Manual — Cutter Compensation.</li><li>D offset = tool radius, not diameter.</li></ul>
-<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/15-circular-interpolation/">&larr; Circular Interpolation</a><a href="/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/">Drilling Cycles &rarr;</a></div>
+<ul><li>Turning on G41/G42 on an arc — always lead in on a straight line.</li>
+<li>Forgetting G40 — compensation stays modal and the next move shifts unexpectedly.</li>
+<li>Confusing left/right — it is from the perspective of the tool moving along the cut, looking in the direction of travel.</li></ul>
+<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> You replace a 10 mm mill with an 8 mm mill. What changes?</p><details><summary>Show answer</summary><p>D offset from 5.0 to 4.0. The program contour coordinates stay identical.</p></details><p><strong>2.</strong> Why must G41 turn on a straight move?</p><details><summary>Show answer</summary><p>The controller needs a straight segment to calculate the offset direction. Turning on an arc causes unpredictable tool path.</p></details></section>
+<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Mill Operator's Manual — G41/G42/G40 (haascnc.com, retrieved 2026-09-24).</li></ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/15-circular-interpolation/">&larr; Circular Motion</a><a href="/cnc-manufacturing-engineering/cnc-programming/33-drilling-cycles/">Drilling Cycles &rarr;</a></nav>
 </main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Controller-Specific Programming — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="FANUC, Siemens, HEIDENHAIN, and Haas: same part, different dialects. Know your controller.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/38-controller-specific/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body class="cnc-programming">
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Controller-Specific Programming</h1>
+<p class="lead">The same part programs differently on a FANUC vs a Haas. M-codes, cycle formats, and thread syntax vary. This page compares the major dialects.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Advanced</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
+<div class="callout"><strong>What you will learn:</strong><ul><li>FANUC: industry standard, G95 feed/rev</li><li>Haas: simplified cycles, G99 feed/rev on lathe</li><li>Siemens: ShopMill/ShopTurn conversational</li><li>HEIDENHAIN: conversational, clearly different</li></ul></div>
+<h2>Concept</h2>
+<p>G-code is not universal. FANUC set the standard; Haas simplified it; Siemens and HEIDENHAIN use entirely different conversational languages. A program that runs on one may alarm on another.</p>
+<h2>Why It Matters</h2>
+<p>Copying a FANUC two-line G76 onto a Haas fails. Copying Haas G99 feed/rev onto a FANUC mill may mean something different. Always translate, do not copy.</p>
+<h2>How</h2>
+<h3>Key differences</h3>
+<ul><li><strong>Feed/rev</strong>: FANUC uses G95; Haas lathe uses G99.</li>
+<li><strong>Thread cycle</strong>: FANUC two-line G76; Haas one-line G76 with K/D.</li>
+<li><strong>Subprogram call</strong>: FANUC M98 P O; Haas M98 P.</li>
+<li><strong>Units</strong>: G20/G21 universal, but default units vary.</li></ul>
+<h2>Common Mistakes</h2>
+<ul><li>Assuming G-code is universal.</li>
+<li>Running a FANUC backup on a Haas without translation.</li>
+<li>Using canned cycles that do not exist on your controller.</li></ul>
+<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> FANUC uses G95 for feed/rev. What does Haas use on a lathe?</p><details><summary>Show answer</summary><p>G99. G98/G99 on Haas lathe control retract and feed mode.</p></details><p><strong>2.</strong> Can you run a Siemens ShopTurn program on a Haas?</p><details><summary>Show answer</summary><p>No. Siemens conversational is a different language entirely.</p></details></section>
+<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Lathe Operator's Manual (haascnc.com, retrieved 2026-09-24).</li><li>FANUC Series Manual (general reference).</li></ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/37-probing/">&larr; Probing</a><a href="/cnc-manufacturing-engineering/cnc-programming/39-assessment/">Self-Assessment &rarr;</a></nav>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Program Verification Before Cutting — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Simulation, dry run, single block, first-part inspection — and why dry run at raised Z does NOT prove no collision.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/24-program-verification/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body class="cnc-programming">
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Program Verification Before Cutting</h1>
+<p class="lead">Writing a program is not the same as proving it safe. Verification is layered: each layer catches different errors. No single layer proves everything.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
+<div class="callout"><strong>What you will learn:</strong><ul><li>Simulation: virtual tool path</li><li>Dry run: real motion at rapid/feed override</li><li>Single block: one line at a time</li><li>First-part inspection: measure the actual part</li></ul></div>
+<h2>Concept</h2>
+<p>Verification happens in layers. <strong>Simulation</strong> (CAM or controller graphics) shows the tool path virtually. <strong>Dry run</strong> runs the program on the real machine with no tool (or tool at raised Z) at rapid/feed override. <strong>Single block</strong> executes one line per cycle start. <strong>First-part</strong> runs the real cut at reduced feed, then measures.</p>
+<h2>Why It Matters (R05 critical)</h2>
+<p><strong>Dry run at raised Z does NOT prove no collision.</strong> With the tool 50 mm above the part, you verify X/Y positioning, but the tool holder, spindle nose, and fixture heights are not tested. A collision between tool holder and vise at Z=-10 will not appear when Z is raised. Dry run catches positioning errors, not 3D interference. Only controller simulation with full tool geometry (holder included) or careful hand calculation proves clearance.</p>
+<h2>How</h2>
+<h3>Verification layers</h3>
+<ol><li><strong>Syntax review</strong>: read every line; check G90/G91, H/D numbers, units.</li>
+<li><strong>Coordinate review</strong>: compare programmed coordinates to the drawing.</li>
+<li><strong>Simulation</strong>: run controller graphics; look for gouges and wrong Z.</li>
+<li><strong>Dry run</strong>: tool at raised Z, rapid override at 50%, watch X/Y motion. Does NOT prove Z clearance.</li>
+<li><strong>Single block</strong>: first few blocks at 100% feed, verify each move.</li>
+<li><strong>First cut</strong>: feed override at 25-50%, tool above air, then actual cut.</li>
+<li><strong>Inspection</strong>: measure first part before continuing production.</li></ol>
+<h2>Example</h2>
+<p>A pocket program: simulation shows the tool path. Dry run at Z50 shows X/Y follows the pocket rectangle. But the 100 mm tool holder might hit the 80 mm vise jaw at Z=-5 — dry run at raised Z does not reveal this. Only checking holder geometry vs vise height proves clearance.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Thinking raised-Z dry run proves no collision — it does not.</li>
+<li>Skipping single block because simulation looked fine.</li>
+li>Running at 100% feed on the first part.</li></ul>
+<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> Dry run at Z50 shows no issues. Is it safe to cut?</p><details><summary>Show answer</summary><p>No. It proves X/Y positions are correct, but Z clearance between holder/fixture is untested. Verify holder geometry separately.</p></details><p><strong>2.</strong> What does simulation catch that dry run cannot?</p><details><summary>Show answer</summary><p>Tool path gouges, wrong Z depths, and (with full holder model) 3D interference.</p></details></section>
+<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Mill Operator's Manual — Dry run and single block (haascnc.com, retrieved 2026-09-24).</li><li>[Printable Setup Worksheet](/cnc-manufacturing-engineering/engineering-tools/printable-setup-worksheet/).</li></ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/22-lathe-threading/">&larr; Lathe Threading</a><a href="/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting/">Troubleshooting &rarr;</a></nav>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

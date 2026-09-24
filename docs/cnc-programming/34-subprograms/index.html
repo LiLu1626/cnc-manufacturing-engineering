@@ -1,0 +1,64 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Subprograms and Program Reuse — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="M98 P calls, M99 returns, and a real 4-column × 3-row hole grid built with incremental Y rows and X reset.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/34-subprograms/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body class="cnc-programming">
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Subprograms and Program Reuse</h1>
+<p class="lead">When you repeat a pattern, write it once as a subprogram and call it many times. This page builds an actual 4×3 hole grid.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill</span></div>
+<div class="callout"><strong>What you will learn:</strong><ul><li>Main program calls O-subprogram with M98</li><li>M99 returns to the caller</li><li>L/P repeat count</li><li>Building a rectangular hole grid</li></ul></div>
+<h2>Concept</h2>
+<p>A <strong>subprogram</strong> is a separate program (O-number) called by M98 and returned by M99. The main program calls the subprogram; the subprogram performs one unit of work and returns. Main program handles positioning; subprogram handles the repeated action.</p>
+<h2>Why It Matters</h2>
+<p>Without subprograms, drilling a 4×3 grid means 12 separate G81 lines. With a subprogram that drills one hole, the main program positions to each row/column and calls it. Better: the subprogram itself handles X advancement, and the main program advances Y per row.</p>
+<h2>How</h2>
+<h3>4 columns × 3 rows hole grid</h3>
+<p>Hole spacing: X=20 mm, Y=20 mm. Start at (10,10). Columns at X=10,30,50,70. Rows at Y=10,30,50.</p>
+<p><strong>Main program:</strong></p>
+<pre class="cp-code"><code>O1000 (MAIN: 4x3 GRID)
+G21 G90 G80
+T03 M06
+G54 S1500 M03
+G43 H03 Z50. M08
+G00 X10. Y10.        <span class="cp-comment">(row 1 start)</span>
+M98 O2000 L3         <span class="cp-comment">(call row subprogram 3 times)</span>
+G80 G00 Z50.
+M09 M05
+G91 G28 Z0
+M30</code></pre>
+<p><strong>Subprogram O2000 (one row: 4 holes, then Y advance):</strong></p>
+<pre class="cp-code"><code>O2000 (ROW: 4 holes in X, then Y+20)
+G90 G81 Z-10. R2. F100.
+X10.                 <span class="cp-comment">(hole col 1)</span>
+X30.                 <span class="cp-comment">(col 2)</span>
+X50.                 <span class="cp-comment">(col 3)</span>
+X70.                 <span class="cp-comment">(col 4)</span>
+G80
+G91 G00 Y20.         <span class="cp-comment">(advance row by 20)</span>
+G90 X10.             <span class="cp-comment">(reset X to column 1)</span>
+M99</code></pre>
+<p>This produces 12 holes: rows at Y=10,30,50; columns at X=10,30,50,70. Each call drills one row of 4 holes and moves Y+20.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Forgetting G90/G91 reset between main and subprogram — state carries over.</li>
+<li>Not resetting X after each row — the next row starts at the last X, not column 1.</li>
+<li>Using M99 P to jump within a program — that is branching, not subprogram return.</li></ul>
+<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> Why does the subprogram reset X to 10?</p><details><summary>Show answer</summary><p>After drilling columns 1-4 at X=10,30,50,70, the next Y row must start at column 1 (X=10), not continue from X=70.</p></details><p><strong>2.</strong> What does L3 do in M98 O2000 L3?</p><details><summary>Show answer</summary><p>Calls O2000 three times — once per row. 3 rows × 4 columns = 12 holes.</p></details></section>
+<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Mill Operator's Manual — M98/M99 subprograms (haascnc.com, retrieved 2026-09-24).</li><li>[Hole Pattern Generator](/cnc-manufacturing-engineering/engineering-tools/hole-pattern-generator/).</li></ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/">&larr; Canned Cycles</a><a href="/cnc-manufacturing-engineering/cnc-programming/19-turning-programming/">Turning Programming &rarr;</a></nav>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
