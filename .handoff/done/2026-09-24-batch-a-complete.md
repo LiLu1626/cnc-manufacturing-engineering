@@ -1,33 +1,26 @@
-# Batch A Completion Report
+# Batch A Completion Report (Updated)
 
-Commit: `b73d866`
+Commit: `08c93bf`
 
 ## A1 — Arc page (15)
-- Corrected: G02 clockwise from 180°→90°→0° passes through (25,+25) = **upper** semicircle
-- Corrected: G03 counterclockwise from 180°→270°→360° passes through (25,−25) = **lower** semicircle
-- Fixed arc length formula: L = 2πr×θ/360 (was missing factor of 2)
-- Semicircle: 2π×25×180/360 = 78.540 mm ✓
-- 90° short arc: 2π×20×90/360 = 31.416 mm ✓
-- Practice Q1: 2π×30×90/360 = 47.124 mm ✓
-- Added 2 inline SVG diagrams: upper/lower semicircle comparison, 90° short arc
-- Code blocks now labeled as independent examples (not consecutive code)
-- Removed the "short vs long arc on opposite endpoints" mistake (both are 180°, it's CW/CCW)
+- G02 clockwise = upper semicircle through (25,+25); G03 counterclockwise = lower through (25,−25)
+- Arc length: L = 2πr×θ/360 (factor of 2 restored)
+- Semicircle 78.540 mm; 90° short arc 31.416 mm; practice Q1 47.124 mm
+- 2 inline SVG diagrams added
 
 ## A2 — Subprograms (29) and Threading (22)
-- Page 29 Common Mistakes: G80 explanation replaced with Haas-accurate wording
-- Page 22 "Why It Matters": replaced absolute "always G97 never G96" with bounded teaching example language
-- Page 22 Common Mistakes: replaced with "using a spindle mode not verified for this cycle"
-- Page 22: removed UN/trapezoidal/buttress parenthetical generalization
+- G80 explanation matches Haas documentation
+- Threading: bounded teaching language, no universal G97/G96 claim
+- Removed UN/trapezoidal/buttress generalization
 
-## A3 — Navigation and template
-- Chain rebuilt: 01→02→**23**→08→32→... (page 23 now in main chain)
-- 38 pages bottom nav regenerated
-- 31 pages upgraded from flat nav to structured site-nav-inner
+## A3 — Navigation, homepage, sitemap
+- Chain: 01→02→**23**→08→32→... (38 pages nav rebuilt)
+- 31 pages upgraded to structured site-nav-inner
+- Homepage: 7 module entries present; old anchors ch01/ch05/ch10/ch14/ch17/ch23/ch30 added
+- Learning path (31): restructured to 7 modules with links to each module's first lesson
+- Sitemap: 15 alias URLs removed, 143 unique URLs remain
 
-## Remaining (not done in this batch)
-- Homepage (cnc-programming/index.html): 7 module entries and old anchors
-- Learning path page (31): restructure to 7 modules
-- Sitemap: remove 15 alias URLs, keep 41 main + 102 other = 143
-- Pages 10, 11, 39: six-section structure
-- B07: all 40 pages to word-count minimums (B=800, K=2000) with SVGs
-- No controller simulation performed; all checks are static source review
+## Remaining
+- Pages 10, 11, 39 six-section structure audit
+- B07: 40 pages word-count expansion (B=800, K=2000) + SVGs
+- No controller simulation; all checks static
