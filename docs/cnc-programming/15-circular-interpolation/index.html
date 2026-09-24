@@ -1,55 +1,57 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Circular Interpolation (G02/G03) — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="Arcs by center (I,J) or radius (R), direction by plane, and the 90-degree arc example with verified SVG.">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Circular & Helical Interpolation — CNC Programming</title>
+<meta name="description" content="G02/G03 clockwise/counterclockwise arcs, I/J/K center vectors, R radius, and how to program a circle.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/15-circular-interpolation/">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
+<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="stylesheet" href="../assets/css/article.css">
+<link rel="stylesheet" href="../assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <a href="/cnc-manufacturing-engineering/">Home</a>
+  <a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a>
+  <a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a>
+  <a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a>
+  <a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a>
+  <a href="/cnc-manufacturing-engineering/about/">About</a>
+</nav>
 <main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Circular Interpolation (G02/G03)</h1>
-<p class="lead">G02 cuts clockwise arcs; G03 counterclockwise. You define the end point and either the center (I,J) or a radius (R).</p>
-<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
-<div class="callout"><strong>What you will learn:</strong><ul><li>G02 CW vs G03 CCW in G17 plane</li><li>I,J = center relative to start</li><li>R = radius (short vs long arc)</li><li>Arc length = radius × angle in radians</li></ul></div>
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Circular & Helical Interpolation</h1>
+<p class="lead">Arcs are programmed with G02 (clockwise) and G03 (counterclockwise). This page covers I/J center vectors, R radius notation, and how to verify arc direction.</p>
 <h2>Concept</h2>
-<p>An arc is defined by: start point (current position), end point (X,Y), and either the arc center (I,J) or a radius (R). <strong>I</strong> = X distance from start to center, <strong>J</strong> = Y distance from start to center. G02 = clockwise when viewed from +Z (G17); G03 = counterclockwise.</p>
+<p><strong>G02</strong> cuts clockwise arcs. <strong>G03</strong> cuts counterclockwise. The arc is defined by: start point (current position), end point (X/Y), and either center (I/J) or radius (R). I is the center offset in X from start; J is the center offset in Y from start.</p>
+<p>Direction is viewed looking from the positive Z axis down (G17 XY plane). Clockwise = G02, counterclockwise = G03.</p>
 <h2>Why It Matters</h2>
-<p>Getting I,J backwards is the most common arc error. I and J are <strong>always incremental from the start point to the center</strong>, not absolute coordinates of the center.</p>
-<h2>How</h2>
-<h3>90-degree example</h3>
-<p>Start S=(0,0), center C=(0,20), end E=(20,20). This is a 90° CCW quarter circle of radius 20. Arc length = R × θ(radians) = 20 × (π/2) = 31.416 mm.</p>
-<pre class="cp-code"><code>G17 G90 G03 X20 Y20 I0 J20 F300</code></pre>
-<p>I = center X - start X = 0 - 0 = 0. J = center Y - start Y = 20 - 0 = 20. Correct.</p>
-<svg viewBox="-25 -10 145 130" xmlns="http://www.w3.org/2000/svg" style="max-width:340px;background:#f8faf9;border-radius:12px">
-<line x1="0" y1="0" x2="110" y2="0" stroke="#cfdbd8" stroke-width="1"/>
-<line x1="0" y1="0" x2="0" y2="110" stroke="#cfdbd8" stroke-width="1"/>
-<path d="M 0 0 A 20 20 0 0 1 20 20" fill="none" stroke="#0b766e" stroke-width="2.5"/>
-<circle cx="0" cy="0" r="2.5" fill="#e67e22"/>
-<circle cx="20" cy="20" r="2.5" fill="#0b766e"/>
-<circle cx="0" cy="20" r="2" fill="#5c6872"/>
-<text x="2" y="-3" font-size="7" fill="#5c6872">S(0,0)</text>
-<text x="22" y="22" font-size="7" fill="#0b766e">E(20,20)</text>
-<text x="-14" y="23" font-size="7" fill="#5c6872">C(0,20)</text>
-</svg>
+<p>Getting G02/G03 backwards means the tool cuts a bulge instead of a concave — or vice versa. Wrong I/J means the arc center is off, producing a lopsided circle. Always verify: start point, center, end point, direction.</p>
+<h2>How It Works</h2>
+<h3>I/J Method (center vector)</h3>
+<pre class="cp-code"><code>G17 G02 X50. Y0 I25. J0</code></pre>
+<p>Start at (25,0), end at (50,0), center at (50,0). Wait: I25 = center X - start X = 25 - 25 = 0. Let's redo: start at (0,0), center at (25,0), end at (50,0). I = 25 - 0 = 25. J = 0 - 0 = 0. This is a semicircle clockwise from (0,0) to (50,0) through (25,-25) — but wait, G02 clockwise from (0,0) with center (25,0) goes through (25,-25). For the upper semicircle use G03.</p>
+<h3>R Method (radius)</h3>
+<pre class="cp-code"><code>G17 G03 X50. Y0 R25.</code></pre>
+<p>R25 = 25 mm radius. R positive for arcs &lt; 180&deg;; R negative for arcs &gt; 180&deg;.</p>
 <h2>Example</h2>
-<p>Arc from (20,20) to (0,0) clockwise, center at (0,20): I = 0-20 = -20, J = 20-20 = 0. G02 X0 Y0 I-20 J0. Same quarter circle, opposite direction.</p>
+<p>Full circle: start at (25,0), center at (0,0):</p>
+<pre class="cp-code"><code>G01 X25. Y0 F300.
+G03 I-25. J0  (full circle, ends back at start)</code></pre>
+<p>I = center X - start X = 0 - 25 = -25. J = 0. G03 counterclockwise. R cannot do a full circle (start = end); you must use I/J.</p>
 <h2>Common Mistakes</h2>
-<ul><li>Using absolute center coordinates instead of incremental I,J.</li>
-<li>Forgetting plane selection (G17) — arc direction changes by plane.</li>
-<li>Using R for arcs &gt;180° — R sign must flip; I,J is safer for major arcs.</li></ul>
-<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> Start (0,0), center (30,0), end (30,30). Direction? Code?</p><details><summary>Show answer</summary><p>CW 90° (G02): G02 X30 Y30 I30 J0. Start relative to center = (-30,0) at 180°; end = (0,30) at 90°; going 180°→90° is clockwise. Length = 30 × π/2 = 47.1 mm.</p></details><p><strong>2.</strong> Why is I,J incremental?</p><details><summary>Show answer</summary><p>I = center X − start X, not absolute center X. If start moves, I changes.</p></details></section>
-<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Mill Operator's Manual — G02/G03 (haascnc.com, retrieved 2026-09-24).</li><li>[Arc and Chord Calculator](/cnc-manufacturing-engineering/engineering-tools/arc-and-chord-calculator/).</li></ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/14-linear-interpolation/">&larr; Linear Motion</a><a href="/cnc-manufacturing-engineering/cnc-programming/16-cutter-compensation/">Cutter Comp &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<ul>
+<li><strong>Confusing G02/G03 direction</strong> — view from positive Z. CW = G02, CCW = G03.</li>
+<li><strong>Using R for full circle</strong> — R cannot express a 360&deg; circle; use I/J.</li>
+<li><strong>I/J as absolute center</strong> — I/J are offsets from start point, not absolute coordinates.</li>
+</ul>
+<h2>Practice</h2>
+<p><strong>1.</strong> Start (0,0), center (30,0), end (30,30). G02 or G03?</p><details><summary>Ans</summary><p>From (0,0) to (30,30) around center (30,0): the arc goes up and right — that's clockwise? No. (0,0) is left of center, (30,30) is above center. Moving from left to above = counterclockwise. G03.</p></details>
+<p><strong>2.</strong> Start (25,0), center (0,0). What is I?</p><details><summary>Ans</summary><p>I = 0 - 25 = -25.</p></details>
+<p><strong>3.</strong> R positive vs negative?</p><details><summary>Ans</summary><p>R+ = arc &lt; 180&deg;. R- = arc &gt; 180&deg;.</p></details>
+
+<nav class="cp-nav-bottom"><a href="../14-linear-interpolation/">&larr; Linear Motion</a><a href="../16-cutter-compensation/">Cutter Comp &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body></html>
