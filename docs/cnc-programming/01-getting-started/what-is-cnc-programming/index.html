@@ -45,7 +45,32 @@
 <li><strong>CNC program</strong> — write coordinates, speeds, feeds, tool changes.</li>
 <li><strong>Program verification</strong> — dry run, single block, first part, inspect.</li>
 </ol>
+
+<svg viewBox="0 0 500 120" style="width:100%;max-width:500px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="140" y="18" font-size="11" font-weight="bold" fill="#333">Drawing to Part Workflow</text>
+  <rect x="10" y="40" width="70" height="40" fill="#54a0ff" rx="5"/>
+  <text x="20" y="63" font-size="9" fill="#fff">Drawing</text>
+  <text x="85" y="63" font-size="12" fill="#666">→</text>
+  <rect x="100" y="40" width="70" height="40" fill="#5f27cd" rx="5"/>
+  <text x="108" y="58" font-size="9" fill="#fff">Process</text>
+  <text x="108" y="70" font-size="9" fill="#fff">Plan</text>
+  <text x="175" y="63" font-size="12" fill="#666">→</text>
+  <rect x="190" y="40" width="70" height="40" fill="#e67e22" rx="5"/>
+  <text x="198" y="58" font-size="9" fill="#fff">Workhold</text>
+  <text x="198" y="70" font-size="9" fill="#fff">+ Set Datum</text>
+  <text x="265" y="63" font-size="12" fill="#666">→</text>
+  <rect x="280" y="40" width="70" height="40" fill="#27ae60" rx="5"/>
+  <text x="290" y="58" font-size="9" fill="#fff">CNC</text>
+  <text x="290" y="70" font-size="9" fill="#fff">Program</text>
+  <text x="355" y="63" font-size="12" fill="#666">→</text>
+  <rect x="370" y="40" width="70" height="40" fill="#e74c3c" rx="5"/>
+  <text x="380" y="58" font-size="9" fill="#fff">Verify +</text>
+  <text x="380" y="70" font-size="9" fill="#fff">Machining</text>
+</svg>
+
 <p><strong>Manual programming</strong> means you write each G-code line yourself. It is fast for simple parts (straight turns, basic drilling, rectangular pockets) and gives you direct control. <strong>CAM programming</strong> uses software to generate tool paths from a 3D model. It is essential for complex 3D surfaces, multi-axis work, and high-volume production — but the output still needs human review. A CAM post-processor can produce code that looks right yet crashes the machine if the toolholder or fixture was not modeled.</p>
+
+<p>A CNC program controls several machine systems at once: the spindle speed and direction, the linear axis positions and feed rates, tool selection and change, coolant on/off, and auxiliary functions like chuck clamp or tailstock. The controller reads the program line by line, interprets each word (e.g., X50, S2000, F300), and sends signals to the servo drives. Modal codes (like G01) stay active until canceled, which is why you can write three X moves without repeating G01.</p>
 
 <table class="data-table">
 <tr><th></th><th>Manual Programming</th><th>CAM Programming</th></tr>
