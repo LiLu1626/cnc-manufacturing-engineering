@@ -2,55 +2,79 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Cutter Radius Compensation — CNC Programming</title>
 <meta name="description" content="G41 left / G42 right cutter compensation, lead-in/lead-out, programmed vs tool center path, and common overcut errors.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/16-cutter-compensation/">
-<link rel="stylesheet" href="../assets/css/site.css">
-<link rel="stylesheet" href="../assets/css/article.css">
-<link rel="stylesheet" href="../assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
-  <a href="/cnc-manufacturing-engineering/">Home</a>
-  <a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a>
-  <a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a>
-  <a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a>
-  <a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a>
-  <a href="/cnc-manufacturing-engineering/about/">About</a>
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
 </nav>
 <main class="article">
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Cutter Radius Compensation</h1>
 <p class="lead">Cutter compensation lets you program the part outline, not the tool center path. The controller offsets the tool by the radius. This page covers G41/G42 direction, lead-in/out, and the overcut error.</p>
+
 <h2>Concept</h2>
 <p>Without compensation, you program the <strong>tool center path</strong> — offset by the tool radius from the part edge. With <strong>cutter radius compensation (G41/G42)</strong>, you program the part outline and the controller automatically offsets the tool center by the radius stored in the D offset.</p>
 <p><strong>G41</strong> = left compensation (tool is left of the direction of cut). <strong>G42</strong> = right compensation. <strong>G40</strong> cancels.</p>
+
 <h2>Why It Matters</h2>
-<p>Getting G41/G42 backwards is the classic overcut error: on an outer profile, if you cut clockwise with G41, the tool pushes inside the part and cuts away material it should leave. The rule: <strong>outer profile clockwise + G41</strong> keeps the tool outside. Outer profile counterclockwise + G41 pushes inside (overcut).</p>
+<p>Getting G41/G42 backwards causes overcut: on an outer profile, if you pair the wrong direction with the wrong compensation, the tool pushes inside the part and cuts away material it should leave. The rule (G17, viewed from +Z above the table, positive D offset): <strong>outer profile cut clockwise (CW) uses G41</strong>; outer profile cut counterclockwise (CCW) uses G42.</p>
+
 <h2>How It Works</h2>
 <h3>Lead-In / Lead-Out</h3>
 <p>Compensation must be activated on a straight lead-in move (at least tool radius long) before entering the contour, and canceled on a straight lead-out. Never activate G41/G42 directly on the part corner.</p>
-<pre class="cp-code"><code>G01 G41 X10. Y-10. D01 F300.  (lead-in)
-G01 Y40.                       (cut contour)
-G01 X50.
-G01 G40 X70. Y-10.             (lead-out, cancel)</code></pre>
+<h3>Direction Rule with a Coordinate Table</h3>
+<p>Program this outer rectangle <strong>clockwise</strong>: (0,0) &rarr; (0,50) &rarr; (50,50) &rarr; (50,0) &rarr; (0,0). Tool radius D=5. With <strong>G41</strong>, the tool center sits 5 mm to the left of each directed edge:</p>
+<table class="data-table">
+<tr><th>Edge</th><th>Direction</th><th>Tool left of direction</th><th>Tool center midpoint</th></tr>
+<tr><td>(0,0)&rarr;(0,50)</td><td>+Y (up)</td><td>&minus;X (west)</td><td>X=&minus;5, Y=25</td></tr>
+<tr><td>(0,50)&rarr;(50,50)</td><td>+X (right)</td><td>+Y (north)</td><td>X=25, Y=55</td></tr>
+<tr><td>(50,50)&rarr;(50,0)</td><td>&minus;Y (down)</td><td>+X (east)</td><td>X=55, Y=25</td></tr>
+<tr><td>(50,0)&rarr;(0,0)</td><td>&minus;X (left)</td><td>&minus;Y (south)</td><td>X=25, Y=&minus;5</td></tr>
+</table>
+<p>In every row the tool center falls <strong>outside</strong> the rectangle [0,50]&times;[0,50]. That is correct outer profiling. If you instead used G42 on this same CW path, the tool would shift inside and cut the part too small.</p>
+<pre class="cp-code"><code>G00 X-10. Y-10.          (start outside, below-left)
+G01 G41 X0. Y0. D01 F300.  (lead-in to corner, comp on)
+G01 Y50.                   (left edge up)
+G01 X50.                   (top edge right)
+G01 Y0.                    (right edge down)
+G01 X0.                    (bottom edge left)
+G01 G40 X-10. Y-10.        (lead-out, comp off)</code></pre>
+
 <h2>Example</h2>
-<p>Outer rectangle: cut clockwise, start at bottom-left.</p>
-<p>Clockwise path: bottom edge left-to-right, right edge bottom-to-top, top edge right-to-left, left edge top-to-bottom. With G41 (tool left of cut direction), on the bottom edge going right, "left" is up — tool is inside the rectangle. That's wrong for outer profile.</p>
-<p>Correct: outer profile clockwise uses G42 (tool right = outside). Or: outer profile counterclockwise uses G41. Match direction to compensation side.</p>
+<p>Same rectangle, same coordinates, G41 throughout. The controller reads D01 = 5 mm and shifts the tool center to X=&minus;5 on the left edge, Y=55 on the top edge, X=55 on the right edge, Y=&minus;5 on the bottom edge. The programmed path stays on the part outline; the machine follows the offset boundary.</p>
+
 <h2>Common Mistakes</h2>
 <ul>
-<li><strong>G41 on CCW outer profile</strong> — pushes tool inside, overcuts. Match: CW outer = G42, CCW outer = G41.</li>
+<li><strong>G42 on a CW outer profile</strong> — pushes tool inside, overcuts. Match: CW outer = G41, CCW outer = G42.</li>
 <li><strong>No lead-in move</strong> — compensation must ramp on a straight move, not instantly at a corner.</li>
 <li><strong>Forgetting G40</strong> — compensation stays active into the next move, causing unexpected offsets.</li>
+<li><strong>Confusing inner and outer profiles</strong> — the left/right rule flips for pockets (inner walls). Always trace the directed edge and ask which side is air.</li>
 </ul>
+
 <h2>Practice</h2>
-<p><strong>1.</strong> Outer profile, clockwise cut. G41 or G42?</p><details><summary>Ans</summary><p>G42 (tool right of cut direction = outside the part).</p></details>
+<p><strong>1.</strong> Outer rectangle cut clockwise: (0,0)&rarr;(0,50)&rarr;(50,50)&rarr;(50,0)&rarr;(0,0). G41 or G42?</p><details><summary>Ans</summary><p>G41. On the left edge going up (+Y), left is &minus;X = outside. On the top edge going right (+X), left is +Y = outside. On the right edge going down (&minus;Y), left is +X = outside. On the bottom edge going left (&minus;X), left is &minus;Y = outside. G41 keeps the tool outside on all four edges.</p></details>
 <p><strong>2.</strong> Why a lead-in move?</p><details><summary>Ans</summary><p>The controller needs a straight move to ramp the tool center from zero offset to full radius offset. Activating at a corner causes a sudden step.</p></details>
 <p><strong>3.</strong> What cancels G41/G42?</p><details><summary>Ans</summary><p>G40. Must be on a straight lead-out move.</p></details>
 
-<nav class="cp-nav-bottom"><a href="../15-circular-interpolation/">&larr; Circular</a><a href="../17-drilling-cycles/">Drilling &rarr;</a></nav>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/15-circular-interpolation/">&larr; Circular Motion</a><a href="/cnc-manufacturing-engineering/cnc-programming/33-milling-strategies/">Milling Strategies &rarr;</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
-</body></html>
+</body>
+</html>

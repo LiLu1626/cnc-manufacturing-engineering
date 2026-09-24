@@ -6,9 +6,9 @@
 <title>Single-Point Thread Programming — CNC Programming</title>
 <meta name="description" content="Pitch, lead, thread geometry, and G76 threading cycles on a CNC lathe, with worked M10x1.5 example and verified depth calculation.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/22-threading/">
-<link rel="stylesheet" href="../../assets/css/site.css">
-<link rel="stylesheet" href="../../assets/css/article.css">
-<link rel="stylesheet" href="../../assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -30,7 +30,7 @@
 <p><strong>Major diameter</strong> is the outer diameter of an external thread. <strong>Minor diameter</strong> (core diameter) is the diameter at the root. The radial thread depth determines how much material the tool removes on successive passes.</p>
 
 <h2>Why It Matters</h2>
-<p>If the spindle speed changes during threading, the feed per revolution changes and the helix pitch is ruined. This is why threading always uses <strong>G97</strong> (constant RPM), never G96 (constant surface speed). The G76 cycle handles the multi-pass strategy automatically — the programmer only specifies the final minor diameter, total thread depth, first-pass depth, and feed (= lead).</p>
+<p>The G76 threading cycle synchronizes tool feed to the spindle encoder: it starts each pass only when the spindle index pulse is at the correct angular position, so the tool re-enters the same groove every time. This synchronization requires a <strong>known, stable RPM</strong>. That is why threading always uses <strong>G97</strong> (constant RPM), never G96 (constant surface speed) — G96 would change RPM as the tool cuts from major toward minor diameter, and the encoder sync between passes would no longer line up. The F value (feed per revolution = lead) itself stays constant regardless of RPM; the issue is cycle synchronization, not the feed math. The G76 cycle handles the multi-pass strategy automatically — the programmer only specifies the final minor diameter, total thread depth, first-pass depth, and feed (= lead).</p>
 
 <h2>How It Works</h2>
 
@@ -80,7 +80,7 @@ G76 X8.16 Z-20. K0.92 D0.2 F1.5</code></pre>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Confusing pitch with lead on multi-start threads</strong> — F must be the lead, not the pitch.</li>
-<li><strong>Using G96 during threading</strong> — spindle speed changes ruin the helix. Always G97.</li>
+<li><strong>Using G96 during threading</strong> — G96 changes RPM as the diameter changes; the encoder sync between passes no longer lines up. Always G97.</li>
 <li><strong>Changing feed override mid-thread</strong> — the synchronous relationship breaks.</li>
 <li><strong>No lead-in distance</strong> — the first threads are off-pitch before sync is achieved.</li>
 <li><strong>Treating 8.16 mm as a finished tolerance dimension</strong> — it is a theoretical minor diameter estimate used as the G76 X endpoint; actual acceptance is by gauge per drawing.</li>
@@ -102,10 +102,7 @@ G76 X8.16 Z-20. K0.92 D0.2 F1.5</code></pre>
 <li>ISO 68-1:2023 — Basic profile of Metric ISO threads (H = 0.866 P fundamental triangle). Design profile h3 per the above Hexagon reference.</li>
 </ul>
 </section>
-<nav class="cp-nav-bottom">
-<a href="../21-grooving-parting-boring/">&larr; Grooving &amp; Parting</a>
-<a href="../23-program-safety/">Program Safety &rarr;</a>
-</nav>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring/">&larr; Grooving & Boring</a><a href="/cnc-manufacturing-engineering/cnc-programming/24-verification/">Verification &rarr;</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

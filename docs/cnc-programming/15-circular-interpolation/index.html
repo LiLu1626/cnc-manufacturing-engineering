@@ -2,56 +2,78 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Circular & Helical Interpolation — CNC Programming</title>
 <meta name="description" content="G02/G03 clockwise/counterclockwise arcs, I/J/K center vectors, R radius, and how to program a circle.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/15-circular-interpolation/">
-<link rel="stylesheet" href="../assets/css/site.css">
-<link rel="stylesheet" href="../assets/css/article.css">
-<link rel="stylesheet" href="../assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
-  <a href="/cnc-manufacturing-engineering/">Home</a>
-  <a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a>
-  <a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a>
-  <a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a>
-  <a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a>
-  <a href="/cnc-manufacturing-engineering/about/">About</a>
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
 </nav>
 <main class="article">
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Circular & Helical Interpolation</h1>
-<p class="lead">Arcs are programmed with G02 (clockwise) and G03 (counterclockwise). This page covers I/J center vectors, R radius notation, and how to verify arc direction.</p>
+<p class="lead">Arcs are programmed with G02 (clockwise) and G03 (counterclockwise). This page covers I/J center vectors, R radius notation, and how to verify arc direction with angles.</p>
+
 <h2>Concept</h2>
 <p><strong>G02</strong> cuts clockwise arcs. <strong>G03</strong> cuts counterclockwise. The arc is defined by: start point (current position), end point (X/Y), and either center (I/J) or radius (R). I is the center offset in X from start; J is the center offset in Y from start.</p>
 <p>Direction is viewed looking from the positive Z axis down (G17 XY plane). Clockwise = G02, counterclockwise = G03.</p>
+
 <h2>Why It Matters</h2>
 <p>Getting G02/G03 backwards means the tool cuts a bulge instead of a concave — or vice versa. Wrong I/J means the arc center is off, producing a lopsided circle. Always verify: start point, center, end point, direction.</p>
+
 <h2>How It Works</h2>
 <h3>I/J Method (center vector)</h3>
-<pre class="cp-code"><code>G17 G02 X50. Y0 I25. J0</code></pre>
-<p>Start at (25,0), end at (50,0), center at (50,0). Wait: I25 = center X - start X = 25 - 25 = 0. Let's redo: start at (0,0), center at (25,0), end at (50,0). I = 25 - 0 = 25. J = 0 - 0 = 0. This is a semicircle clockwise from (0,0) to (50,0) through (25,-25) — but wait, G02 clockwise from (0,0) with center (25,0) goes through (25,-25). For the upper semicircle use G03.</p>
+<p>Start at (0,0), center at (25,0), end at (50,0). I = 25 &minus; 0 = 25. J = 0 &minus; 0 = 0.</p>
+<p>From (0,0) to (50,0) around center (25,0): the start vector (&minus;25,0) points west (180&deg;), the end vector (25,0) points east (0&deg;).</p>
+<ul>
+<li><strong>G02 (clockwise)</strong>: angle decreases 180&deg; &rarr; 90&deg; &rarr; 0&deg;, passing through (25, &minus;25) — the <strong>lower</strong> semicircle. Arc length = &pi;&times;25 &asymp; 78.54 mm.</li>
+<li><strong>G03 (counterclockwise)</strong>: angle increases 180&deg; &rarr; 270&deg; &rarr; 360&deg;/0&deg;, passing through (25, +25) — the <strong>upper</strong> semicircle. Arc length = &pi;&times;25 &asymp; 78.54 mm.</li>
+</ul>
+<pre class="cp-code"><code>G17 G02 X50. Y0 I25. J0   (lower semicircle, clockwise)
+G17 G03 X50. Y0 I25. J0   (upper semicircle, counterclockwise)</code></pre>
+
 <h3>R Method (radius)</h3>
 <pre class="cp-code"><code>G17 G03 X50. Y0 R25.</code></pre>
 <p>R25 = 25 mm radius. R positive for arcs &lt; 180&deg;; R negative for arcs &gt; 180&deg;.</p>
+
 <h2>Example</h2>
-<p>Full circle: start at (25,0), center at (0,0):</p>
+<p><strong>Full circle:</strong> start at (25,0), center at (0,0). I = 0 &minus; 25 = &minus;25. J = 0. G03 counterclockwise. R cannot do a full circle (start = end); you must use I/J.</p>
 <pre class="cp-code"><code>G01 X25. Y0 F300.
 G03 I-25. J0  (full circle, ends back at start)</code></pre>
-<p>I = center X - start X = 0 - 25 = -25. J = 0. G03 counterclockwise. R cannot do a full circle (start = end); you must use I/J.</p>
+
+<p><strong>Short arc example:</strong> start (0,0), center (0,20), end (20,20). Start vector from center = (0,&minus;20) at 270&deg;. End vector = (20,0) at 0&deg;. Going from 270&deg; to 0&deg; counterclockwise (increasing angle) is a 90&deg; short arc = <strong>G03</strong>, length = &pi;&times;20&times;90/360 = 31.416 mm. G02 would take the long 270&deg; way around, length = 94.248 mm.</p>
+<pre class="cp-code"><code>G17 G03 X20. Y20. I0. J20.   (short 90deg arc, CCW)</code></pre>
+
 <h2>Common Mistakes</h2>
 <ul>
-<li><strong>Confusing G02/G03 direction</strong> — view from positive Z. CW = G02, CCW = G03.</li>
+<li><strong>Confusing G02/G03 direction</strong> — view from positive Z. CW = G02, CCW = G03. Use angles: if the start-to-end angle decreases, it's G02.</li>
 <li><strong>Using R for full circle</strong> — R cannot express a 360&deg; circle; use I/J.</li>
-<li><strong>I/J as absolute center</strong> — I/J are offsets from start point, not absolute coordinates.</li>
+<li><strong>I/J as absolute center</strong> — I/J are offsets from the start point, not absolute coordinates.</li>
+<li><strong>Forgetting to specify short vs long arc</strong> — when start and end are exactly opposite, both G02 and G03 can reach the end. Add "short arc" to the drawing note.</li>
 </ul>
-<h2>Practice</h2>
-<p><strong>1.</strong> Start (0,0), center (30,0), end (30,30). G02 or G03?</p><details><summary>Ans</summary><p>From (0,0) to (30,30) around center (30,0): the arc goes up and right — that's clockwise? No. (0,0) is left of center, (30,30) is above center. Moving from left to above = counterclockwise. G03.</p></details>
-<p><strong>2.</strong> Start (25,0), center (0,0). What is I?</p><details><summary>Ans</summary><p>I = 0 - 25 = -25.</p></details>
-<p><strong>3.</strong> R positive vs negative?</p><details><summary>Ans</summary><p>R+ = arc &lt; 180&deg;. R- = arc &gt; 180&deg;.</p></details>
 
-<nav class="cp-nav-bottom"><a href="../14-linear-interpolation/">&larr; Linear Motion</a><a href="../16-cutter-compensation/">Cutter Comp &rarr;</a></nav>
+<h2>Practice</h2>
+<p><strong>1.</strong> Start (0,0), center (30,0), end (30,30). This is a 90&deg; short arc. G02 or G03?</p><details><summary>Ans</summary><p>G02. Start vector from center = (&minus;30,0) at 180&deg;. End vector = (0,30) at 90&deg;. Angle decreases from 180&deg; to 90&deg; = clockwise = G02. Short arc length = &pi;&times;30&times;90/360 = 47.124 mm. (G03 would take the 270&deg; long way around, 141.372 mm.)</p></details>
+<p><strong>2.</strong> Start (25,0), center (0,0). What is I?</p><details><summary>Ans</summary><p>I = center X &minus; start X = 0 &minus; 25 = &minus;25.</p></details>
+<p><strong>3.</strong> R positive vs negative?</p><details><summary>Ans</summary><p>R+ = arc &lt; 180&deg; (short arc). R&minus; = arc &gt; 180&deg; (long arc).</p></details>
+
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/14-linear-interpolation/">&larr; Linear Motion</a><a href="/cnc-manufacturing-engineering/cnc-programming/16-cutter-compensation/">Cutter Comp &rarr;</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
-</body></html>
+</body>
+</html>

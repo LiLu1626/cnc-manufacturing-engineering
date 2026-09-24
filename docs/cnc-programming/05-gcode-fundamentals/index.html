@@ -6,9 +6,9 @@
 <title>G-Code Fundamentals — CNC Programming</title>
 <meta name="description" content="Motion G-codes G00, G01, G02, G03, how they work, and the difference between rapid and feed motion.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/05-gcode-fundamentals/">
-<link rel="stylesheet" href="../../assets/css/site.css">
-<link rel="stylesheet" href="../../assets/css/article.css">
-<link rel="stylesheet" href="../../assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -58,10 +58,7 @@ G00 Z50.         (retract up before XY move)</code></pre>
 <p><strong>3.</strong> Why is G00 not straight-line between axes?</p>
 <details><summary>Show answer</summary><p>On many controllers, G00 moves each axis at its own maximum speed independently, not interpolated at a programmed feed. The cornering path may be diagonal first, then straight.</p></details>
 
-<nav class="cp-nav-bottom">
-<a href="../04-program-structure/">&larr; Program Structure</a>
-<a href="../06-modal-codes/">Modal Codes &rarr;</a>
-</nav>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/04-program-structure/">&larr; Program Structure</a><a href="/cnc-manufacturing-engineering/cnc-programming/06-modal-codes/">Modal Codes &rarr;</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>
