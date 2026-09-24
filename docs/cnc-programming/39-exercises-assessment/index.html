@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Exercises & Assessment — CNC Programming</title>
-<meta name="description" content="CNC programming exercises: code reading, find-the-error, and write-the-program drills to test your understanding before running code on a machine.">
+<meta name="description" content="20 CNC programming exercises: knowledge checks, code reading, find-the-error, and write-the-program drills to test your understanding.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/39-exercises-assessment/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
@@ -27,77 +27,169 @@
 <main class="article">
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Exercises &amp; Assessment</h1>
-<p>Read the code, trace the tool path, find the bugs. These exercises build the habit of mentally simulating a program before running it on the machine.</p>
+<p class="lead">Reading and understanding code is the skill that prevents crashes. These 20 exercises test coordinate systems, G-code, offsets, cycles, compensation, and program structure. Work through them without looking at the answers first.</p>
 
-<h2>Knowledge Check</h2>
+<h2>Part 1 — Knowledge Check (Questions 1–8)</h2>
+
 <ol>
-<li>What does G01 do, and how is it different from G00?
-  <details><summary>Answer</summary><p>G01 is linear interpolation at a controlled feed rate F. G00 is rapid positioning at machine maximum speed, no feed rate used for cutting.</p></details></li>
-<li>What is G54?
-  <details><summary>Answer</summary><p>G54 is the first work coordinate system offset (work zero). It shifts the coordinate origin from machine zero to the workpiece datum.</p></details></li>
-<li>What is the difference between G90 and G91?
-  <details><summary>Answer</summary><p>G90 = absolute programming: coordinates refer to the work zero. G91 = incremental programming: coordinates refer to the current tool position.</p></details></li>
-<li>What does G41 do?
-  <details><summary>Answer</summary><p>G41 activates cutter radius compensation to the left of the programmed direction. The machine offsets the tool center by the radius stored in D code.</p></details></li>
+<li><strong>What does G01 do, and how is it different from G00?</strong>
+<details><summary>Answer</summary><p>G01 is linear interpolation at a controlled feed rate F — the tool cuts in a straight line at the programmed feed. G00 is rapid positioning at machine maximum speed, used for non-cutting moves, and does not use F for cutting.</p></details></li>
+
+<li><strong>What is G54?</strong>
+<details><summary>Answer</summary><p>G54 is the first work coordinate system offset (work zero). It shifts the coordinate origin from machine zero to the workpiece datum, so the programmer can use part coordinates instead of machine coordinates.</p></details></li>
+
+<li><strong>What is the difference between G90 and G91?</strong>
+<details><summary>Answer</summary><p>G90 = absolute programming: every coordinate is measured from the work zero. G91 = incremental programming: every coordinate is measured from the current tool position. G90 X50 means "go to X50"; G91 X50 means "move 50 mm in X."</p></details></li>
+
+<li><strong>What does G41 do?</strong>
+<details><summary>Answer</summary><p>G41 activates cutter radius compensation to the left of the programmed direction. The machine offsets the tool center by the radius stored in the D code, so you program the part outline rather than the tool center path.</p></details></li>
+
+<li><strong>On a lathe, what does X40 mean?</strong>
+<details><summary>Answer</summary><p>X40 means the tool is positioned at a 40 mm diameter, not 40 mm radius. The actual radial position is 20 mm from center. Radial depth of cut = (X_start &minus; X_end) / 2.</p></details></li>
+
+<li><strong>What does G80 do?</strong>
+<details><summary>Answer</summary><p>G80 cancels all canned drilling cycles. It stops the modal cycle mode so the next X/Y move is a positioning move, not a drill. Note: G80 does not retract Z — write G00 Z50 explicitly.</p></details></li>
+
+<li><strong>What is the difference between G98 and G99 in a drilling cycle?</strong>
+<details><summary>Answer</summary><p>G98 retracts to the initial Z plane (the height before the cycle was called). G99 retracts only to the R plane. Use G99 for holes with no obstructions between them; use G98 when there is a boss, clamp, or feature to clear.</p></details></li>
+
+<li><strong>Why program G21 G17 G90 G40 G49 G80 at the start of a program?</strong>
+<details><summary>Answer</summary><p>To establish a known machine state: G21 = metric units, G17 = XY plane, G90 = absolute programming, G40 = cancel compensation, G49 = cancel tool length offset, G80 = cancel cycles. It prevents inherited modal states from a previous program.</p></details></li>
 </ol>
 
-<h2>Code Reading</h2>
-<p>Trace this program step by step. Where does the tool end up?</p>
-<pre>G90 G54 G00 X20. Y20.
+<h2>Part 2 — Code Reading (Questions 9–12)</h2>
+
+<p><strong>9.</strong> Trace this program. Where does the tool end up at the end?</p>
+<pre class="cp-code"><code>G90 G54 G00 X20. Y20.
 G43 H01 Z50. M03 S2000
 G01 Z-2. F100.
 G01 X80. F300.
 G00 Z50.
 G00 X0 Y0
-M30</pre>
-<details><summary>Trace</summary><p>Assuming the machine starts at a safe Z height and G54 is set: 1. Rapid to XY (20,20). 2. Spindle on, rapid to Z50 with tool length offset H01. 3. Feed down to Z-2 at 100 mm/min. 4. Feed to X80 (still Y20) at 300 mm/min. 5. Rapid up to Z50. 6. Rapid to X0 Y0. 7. Program end.</p></details>
+M30</code></pre>
+<details><summary>Trace</summary><p>1. Rapid to XY (20,20). 2. Spindle on at S2000, rapid to Z50 with tool length offset H01. 3. Feed down to Z&minus;2 at 100 mm/min. 4. Feed to X80 (Y stays at 20) at 300 mm/min. 5. Rapid up to Z50. 6. Rapid to X0 Y0. 7. Program end. Tool ends at X0 Y0 Z50.</p></details>
 
-<h2>Find the Error</h2>
-<p>This program has a bug. What happens, and how do you fix it?</p>
-<pre>G90 G54 G00 X0 Y0
+<p><strong>10.</strong> What does this subprogram call do? How many times does it run?</p>
+<pre class="cp-code"><code>M98 P52000</code></pre>
+<details><summary>Answer (Haas)</summary><p>P52000: the leading digit 5 is the repeat count, and 2000 is the subprogram number. It calls O2000 five times in a row. If O2000 drills one hole, this line drills five holes at the current XY position set by the caller.</p></details>
+
+<p><strong>11.</strong> Read the turning program. What diameter does it end at?</p>
+<pre class="cp-code"><code>G00 X50. Z2.
+G01 Z0 F0.2
+X45.
+Z-30.
+X52.</code></pre>
+<details><summary>Trace</summary><p>Approach at X50 Z2. Feed to Z0. Step to X45 (now cutting &Oslash;45). Turn along Z to Z&minus;30 at &Oslash;45. Step out to X52. The turned diameter is &Oslash;45 over the length Z0 to Z&minus;30.</p></details>
+
+<p><strong>12.</strong> After this line, what mode is the machine in?</p>
+<pre class="cp-code"><code>G99 G83 R2. Z-15. Q3. F120.</code></pre>
+<details><summary>Answer</summary><p>Peck drilling cycle (G83) is active, modal. Retract mode is G99 (return to R2 after each hole). The cycle stays active until G80. The next X/Y line will peck-drill at that position.</p></details>
+
+<h2>Part 3 — Find the Error (Questions 13–16)</h2>
+
+<p><strong>13.</strong> This program has a bug. What happens?</p>
+<pre class="cp-code"><code>G90 G54 G00 X0 Y0
 G43 H01 Z50.
 G01 Z-5. F100.
 G01 X50.
 G41 D05
 G01 X80. Y30.
 G00 Z50.
-M30</pre>
-<details><summary>Find it — diagnosis and one fully defined replacement example</summary><p><strong>Bugs in the given program:</strong></p>
-<ol>
-<li><strong>G41 engaged without a valid lead-in, stock boundary, or compensation side</strong> — the program enables compensation at Z-5 after a straight move, but never defines where the material is or approaches from outside. Z-5 alone does not tell us whether the cutter is inside material.</li>
-<li><strong>No G40 at the end</strong> — compensation is never cancelled before retracting Z; it should be cancelled on a defined lead-out move.</li>
-<li><strong>No startup block</strong> — missing G21 (units), G17 (plane), G94 (feed mode), G80 (cancel cycles), G49 (cancel length comp).</li>
-<li><strong>The path is not a defined part geometry</strong> — X0Y0&rarr;X50&rarr;X80Y30 has no statement of where the stock is, so the programmer cannot know which side to compensate toward.</li>
-</ol>
-<p><strong>Entry conditions for the replacement example:</strong> The machine is in a verified setup position from which the commanded Z move to Z50 is clear of the stock, fixture, and machine limits. Tool is already loaded in the spindle, G54 and H01 offsets have been confirmed, D05 stores 5.0 mm radius (Haas Setting 40 = radius mode), and Z50 is above all fixturing. Part: 50&times;50 mm aluminum block from (0,0) to (50,50), cut depth Z-5.</p>
-<p><strong>One fully defined replacement example:</strong></p>
-<pre>G21 G17 G90 G94 G40 G80 G49
-G54 S2000 M03
-G00 G43 H01 Z50. M08      (rapid to Z50 with length comp, clear path)
-G00 X-10. Y-10.           (rapid to outside corner)
-G01 Z-5. F100.             (feed to cut depth)
-G01 G41 X0 Y0 D05 F300.    (lead-in: 14.1 mm diagonal, ramp in 5 mm offset)
-G01 Y50.                   (up left edge — left of +Y travel = -X, outside)
-G01 X50.                   (right along top — left of +X travel = +Y, outside)
-G01 Y0.                    (down right edge — left of -Y travel = +X, outside)
-G01 X0.                    (left along bottom — left of -X travel = -Y, outside)
-G01 G40 X-10. Y-10.        (lead-out back outside, cancels compensation)
-G00 Z50. M09 M05
-M30</pre>
-<p>Clockwise travel around the block with G41 keeps the tool center outside on every side. The 14.1 mm lead-in is longer than the 5 mm tool radius, but this static geometry check does not by itself prove controller simulation, toolholder clearance, or crash safety on the actual machine.</p></details>
+M30</code></pre>
+<details><summary>Diagnosis</summary><p>G41 is engaged at Z&minus;5 while already inside material, without a lead-in move from outside the part. There is no G40 at the end to cancel compensation. There is also no startup block (G21, G17, G94, G80, G49). G41 must be engaged on a lead-in move from outside the stock, not mid-cut.</p></details>
 
-<h2>Write the Program</h2>
-<p>Given: 50&times;50 mm aluminum block, drill a &Oslash;10 hole at X25 Y25 to depth Z-15. Spindle 1500 RPM, feed 120 mm/min. Write the program.</p>
-<details><summary>Example</summary><pre>O0001
-G21 G90 G54
-T01 M06 (&Oslash;10 DRILL)
+<p><strong>14.</strong> This drilling program is wrong. What is the problem?</p>
+<pre class="cp-code"><code>G90 G54 G00 X10. Y10.
+G43 H01 Z50. M03 S1500
+G81 R2. Z-15. F100.
+X50. Y10.
+X50. Y50.
+G00 Z50.
+M30</code></pre>
+<details><summary>Diagnosis</summary><p>Missing G80 after the hole pattern. The last hole at (50,50) is drilled, but G80 is never programmed. The G00 Z50 move happens while G81 is still modal — the machine may interpret Z50 as part of the cycle. Also, no explicit G00 Z50 after G80. Fix: add G80 before Z retract.</p></details>
+
+<p><strong>15.</strong> This turning program cuts the wrong diameter. Why?</p>
+<pre class="cp-code"><code>G00 X30. Z2.
+G01 Z0 F0.2
+Z-30.
+X40.</code></pre>
+<details><summary>Diagnosis</summary><p>The tool starts at X30 (&Oslash;30 diameter) and turns along Z to Z&minus;30 without changing X — it cuts a &Oslash;30 shaft, not the intended &Oslash;40. If the goal is to turn from &Oslash;50 to &Oslash;40, the X should start at X50 and step to X40 before the Z move.</p></details>
+
+<p><strong>16.</strong> This tapping program will strip the threads. Why?</p>
+<pre class="cp-code"><code>G84 R5. Z-15. F500.
+(S500, M10x1.5 tap)</code></pre>
+<details><summary>Diagnosis</summary><p>F must = pitch &times; RPM. For M10&times;1.5 at S500, F = 1.5 &times; 500 = 750 mm/min, not 500. The feed is too slow for the spindle speed, so the tap does not follow the thread pitch and strips the threads.</p></details>
+
+<h2>Part 4 — Write the Program (Questions 17–20)</h2>
+
+<p><strong>17.</strong> Drill one &Oslash;8 hole at X30 Y20 to depth Z&minus;12 in aluminum. S1500, F100. Write the program.</p>
+<details><summary>Example</summary><pre class="cp-code"><code>O0017
+G21 G17 G90 G40 G80 G49
+G54
+T01 M06                 (O8 DRILL)
 S1500 M03
-G00 X25. Y25.
+G00 X30. Y20.
 G43 H01 Z50. M08
-G81 R2. Z-15. F120.
+G99 G81 R2. Z-12. F100.
 G80
 G00 Z50. M09
-M30</pre></details>
+M30</code></pre></details>
+
+<p><strong>18.</strong> Face turn a raw &Oslash;50 bar down to &Oslash;40 over Z&minus;40. S1000, F0.2. Write the turning program.</p>
+<details><summary>Example</summary><pre class="cp-code"><code>O0018
+G21 G97 G99
+T0101                    (OD tool)
+S1000 M03
+G00 X52. Z2.
+G01 Z0 F0.2
+X-1.0 F0.15             (face past center)
+G00 X52. Z2.
+G00 X46. Z2.
+G01 Z0 F0.2
+X40.0                    (step to O40)
+Z-40.                    (turn along Z)
+G00 X50. Z100.
+M30</code></pre></details>
+
+<p><strong>19.</strong> Four &Oslash;6 holes on a 40 mm square centered at (0,0), at (&minus;20,&minus;20), (20,&minus;20), (20,20), (&minus;20,20). Through holes in 6 mm plate: Z&minus;8. S2000, F120. Write the program.</p>
+<details><summary>Example</summary><pre class="cp-code"><code>O0019
+G21 G17 G90 G40 G80
+G54
+T01 M06                 (O6 DRILL)
+S2000 M03
+G00 X-20. Y-20.
+G43 H01 Z50. M08
+G99 G81 R2. Z-8. F120.
+X20. Y-20.
+X20. Y20.
+X-20. Y20.
+G80
+G00 Z50. M09
+M30</code></pre></details>
+
+<p><strong>20.</strong> Milling project: face mill a 60&times;40 mm rectangular block to Z&minus;2, then drill two &Oslash;5 holes at (15,20) and (45,20) to Z&minus;10. Use &Oslash;10 end mill (T01) and &Oslash;5 drill (T02). S2000 F300 for mill, S1500 F100 for drill. Write the program.</p>
+<details><summary>Example</summary><pre class="cp-code"><code>O0020
+G21 G17 G90 G40 G80 G49
+G54
+T01 M06                 (O10 END MILL)
+S2000 M03
+G00 X-5. Y-5.
+G43 H01 Z50. M08
+G00 Z2.
+G01 Z-2. F100.
+G01 X65. F300.          (face pass)
+G00 Z50. M09
+T02 M06                 (O5 DRILL)
+S1500 M03
+G00 X15. Y20.
+G43 H02 Z50. M08
+G99 G81 R2. Z-10. F100.
+X45. Y20.
+G80
+G00 Z50. M09
+M30</code></pre></details>
+</ol>
+
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/38-process-optimization/">&larr; Process Optimization</a><a href="/cnc-manufacturing-engineering/cnc-programming/31-learning-path/">Learning Path &rarr;</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
