@@ -1,4 +1,17 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Roughing & Finishing Cycles — CNC Programming</title><meta name="description" content="G71 roughing cycle, G70 finishing cycle, P/Q contour blocks, depth of cut, finish allowance."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Roughing & Finishing Cycles — CNC Programming</title>
+<meta name="description" content="G71 roughing cycle, G70 finishing cycle, P/Q contour blocks, depth of cut, finish allowance, and a complete stepped-shaft example.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
   <div class="site-nav-inner">
     <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
     <ul class="site-nav-links">
@@ -10,31 +23,103 @@
       <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
     </ul>
   </div>
-</nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Roughing & Finishing Cycles</h1><p class="lead">G71 and G70 automate the bulk of lathe work. This page explains the roughing cycle, the P-Q contour definition, and finish allowance.</p><h2>Concept</h2>
-<p><strong>G71</strong> is the roughing cycle: it repeatedly cuts the stock down to the near-finished contour, leaving a finish allowance. <strong>G70</strong> is the finishing cycle: it takes one clean pass along the P-Q contour at finishing speed and feed.</p>
-<p>The P-Q blocks define the finished shape. G71 reads those blocks and automatically generates roughing passes.</p>
+</nav>
+<main class="article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Roughing &amp; Finishing Cycles</h1>
+<p class="lead">G71 and G70 automate the bulk of lathe work. Instead of writing every roughing pass by hand, you define the finished contour once and let the controller generate the passes. This page explains the G71 format, P/Q contour rules, finish allowance, and a complete stepped-shaft example.</p>
+
+<h2>Concept</h2>
+<p><strong>G71</strong> is the stock removal turning cycle. It repeatedly cuts the raw stock down to near the finished contour, leaving a small amount of material (the finish allowance) for a final clean pass. <strong>G70</strong> is the finishing cycle: it follows the same contour at finishing speed and feed, producing the final dimensions.</p>
+<p>The P and Q block numbers define the finished shape. You write the contour geometry between N10 and N20 just as you would machine it in one pass — G01 lines with X and Z coordinates. G71 reads those blocks and automatically generates all the roughing passes needed to reach them. This separates <em>geometry</em> (what the part looks like) from <em>process</em> (how many passes, how deep each one is).</p>
+
 <h2>Why It Matters</h2>
-<p>Writing roughing passes by hand for a 40 mm deep cut with 1 mm per pass means 40 passes — tedious and error-prone. G71 does it automatically. Getting the P-Q contour wrong (e.g., wrong X direction, or adding a groove) causes G71 to alarm or cut the wrong shape.</p>
+<p>Consider a stepped shaft starting at &Oslash;50 and finishing to &Oslash;30 over 50 mm. If you rough by hand at 2 mm radial depth per pass, that is (50&minus;30)/2 = 10 roughing passes. Writing each pass as separate G01 blocks means 20+ lines of code, and changing the depth per pass means rewriting all of them. G71 does it in one line plus the contour definition. Changing the depth from D1.0 to D1.5 changes one number — the controller recalculates all passes.</p>
+
 <h2>How It Works</h2>
-<h3>Haas Single-Line G71</h3>
+
+<h3>Haas Single-Line G71 Format</h3>
 <pre class="cp-code"><code>G71 P10 Q20 D1.0 U0.4 W0.1 F0.2</code></pre>
-<ul><li><strong>D1.0</strong> = depth per pass (radial)</li><li><strong>U0.4</strong> = finish allowance on diameter</li><li><strong>W0.1</strong> = finish allowance on Z</li><li><strong>P10 Q20</strong> = contour block range</li></ul>
-<h3>P-Q Contour Rules</h3>
-<ul><li>First block must be X-only (no Z)</li><li>X must move toward the part monotonically (Type I)</li><li>No grooves or undercuts in the contour</li></ul>
+<table class="data-table">
+<tr><th>Parameter</th><th>Meaning</th><th>Example</th></tr>
+<tr><td>P10</td><td>First block number of the finished contour</td><td>N10</td></tr>
+<tr><td>Q20</td><td>Last block number of the finished contour</td><td>N20</td></tr>
+<tr><td>D1.0</td><td>Depth of each roughing pass (radial, mm)</td><td>1.0 mm per pass</td></tr>
+<tr><td>U0.4</td><td>Finish allowance left on diameter (X direction)</td><td>0.4 mm diameter = 0.2 mm radial</td></tr>
+<tr><td>W0.1</td><td>Finish allowance left on Z face</td><td>0.1 mm</td></tr>
+<tr><td>F0.2</td><td>Roughing feed rate (mm/rev)</td><td>0.2 mm/rev</td></tr>
+</table>
+<p>After G71 finishes roughing, the part is U0.4 oversize in X and W0.1 oversize in Z. Then <code>G70 P10 Q20</code> takes one clean pass at the finishing speed and feed (set with S and F before G70).</p>
+
+<h3>P/Q Contour Rules (Type I G71)</h3>
+<ul>
+<li><strong>First block after P must be X-only</strong> — no Z movement in the first contour block. The controller needs to know the starting diameter before it can plan radial passes.</li>
+<li><strong>X must move monotonically</strong> — for OD turning, X must decrease steadily from the start to the end of the contour. If X reverses direction (a groove or undercut), Type I G71 alarms. Use G73 (pattern repeating) for grooved parts.</li>
+<li><strong>No grooving or threading in the G71 contour</strong> — G71 is for straight OD/ID turning only.</li>
+<li><strong>The contour blocks use G01/G00</strong> — describe the finished shape with linear moves.</li>
+</ul>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <!-- raw stock -->
+  <rect x="60" y="50" width="300" height="80" fill="#d4c5a9" stroke="#999" stroke-width="1"/>
+  <text x="210" y="95" font-size="11" fill="#666" text-anchor="middle">Raw stock O50</text>
+  <!-- finished contour: step down to O30 at Z-20, then O36 at Z-40 -->
+  <path d="M 60 50 L 60 90 L 160 90 L 160 110 L 360 110" fill="none" stroke="#c0392b" stroke-width="2"/>
+  <text x="100" y="80" font-size="10" fill="#c0392b">O30 step</text>
+  <text x="250" y="105" font-size="10" fill="#c0392b">O36 step</text>
+  <!-- Z0 line -->
+  <line x1="60" y1="30" x2="60" y2="150" stroke="#e67e22" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="40" y="28" font-size="10" fill="#e67e22">Z0</text>
+  <!-- roughing passes shown as dashed lines -->
+  <path d="M 60 60 L 360 60" fill="none" stroke="#999" stroke-width="0.8" stroke-dasharray="4,3"/>
+  <path d="M 60 70 L 200 70" fill="none" stroke="#999" stroke-width="0.8" stroke-dasharray="4,3"/>
+  <text x="310" y="55" font-size="9" fill="#999">rough passes</text>
+</svg>
+<figcaption>G71 roughing repeatedly steps down from the raw stock to the red finished contour, leaving U0.4 finish allowance. G70 then takes one clean pass.</figcaption>
+</figure>
+
 <h2>Example</h2>
-<pre class="cp-code"><code>G71 P10 Q20 D1.0 U0.4 W0.1 F0.2
-N10 G00 X30.
-G01 Z0. F0.1
-Z-20.
-X36.
-Z-40.
-N20 X42.
-G70 P10 Q20</code></pre>
-<p>Rough leaves O30.4 and O36.4 (U0.4 diameter). G70 at S1200 F0.10 cuts to O30 and O36.</p>
+<p><strong>Worked example:</strong> Stepped shaft. Start at &Oslash;50 raw. Finished: &Oslash;30 from Z0 to Z-20, then &Oslash;36 from Z-20 to Z-40. Rough at D1.0 (1 mm radial per pass), U0.4 diameter finish allowance, W0.1 Z allowance. Rough S1000 F0.2; finish S1500 F0.1.</p>
+<pre class="cp-code"><code>O0020 (G71/G70 EXAMPLE)
+G21 G97 G99
+T0101                    (OD turning tool)
+S1000 M03
+G00 X52. Z2.             (approach: above stock, off face)
+G71 P10 Q20 D1.0 U0.4 W0.1 F0.2
+N10 G00 X30.             (first block: X only, start of contour)
+G01 Z0 F0.1
+Z-20.                    (turn O30 to Z-20)
+X36.                     (step out to O36)
+Z-40.                    (turn O36 to Z-40)
+N20 X52.                 (last contour block, pull away)
+S1500 M03                (finish speed)
+G70 P10 Q20              (one finish pass)
+G00 X100. Z100.
+M30</code></pre>
+<p><strong>Trace:</strong> G71 reads N10–N20 and generates roughing passes from &Oslash;52 down to near &Oslash;30/&Oslash;36, leaving 0.4 mm on diameter and 0.1 mm on Z. Then G70 at S1500 takes one clean pass along the same contour to the exact finished dimensions. The N10 block is X30 only (no Z), which satisfies the first-block rule.</p>
+
 <h2>Common Mistakes</h2>
-<ul><li><strong>Grooves in G71 contour</strong> — Type I G71 cannot handle grooves. Use G73 or manual.</li><li><strong>First P block has Z</strong> — the first block after P must be X-only.</li><li><strong>Forgetting G70</strong> — G71 leaves stock; G70 is needed for final dimensions.</li></ul>
+<ul>
+<li><strong>Grooves in the G71 contour</strong> — Type I G71 alarms or cuts wrong. Use G73 for parts with grooves or undercuts.</li>
+<li><strong>First P block includes Z</strong> — the block after P must be X-only. If you write <code>N10 G00 X30. Z2.</code>, the cycle alarms.</li>
+<li><strong>Forgetting G70</strong> — G71 leaves U0.4 stock. Without G70, the part is 0.4 mm oversize on diameter.</li>
+<li><strong>Wrong sign on U</strong> — for OD turning, U is positive (leaving material outside). For ID boring, U is negative.</li>
+<li><strong>Rough and finish F on same line</strong> — the F in G71 is the roughing feed. G70 inherits the F from the contour blocks (F0.1 in N10), or set F before G70.</li>
+</ul>
+
 <h2>Practice</h2>
-<p><strong>1.</strong> U0.4 on diameter. Radial finish allowance?</p><details><summary>Ans</summary><p>0.2 mm radial.</p></details>
-<p><strong>2.</strong> Why no grooves in G71 contour?</p><details><summary>Ans</summary><p>Type I G71 assumes monotonic X. Grooves require G73 (pattern repeating) or manual programming.</p></details>
-<p><strong>3.</strong> What does G70 do?</p><details><summary>Ans</summary><p>Finishing cycle: one clean pass along the P-Q contour at finish speed/feed.</p></details>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/">&larr; Turning Basics</a><a href="/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring/">Grooving & Boring &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>
+<p><strong>1.</strong> U0.4 on diameter. What is the radial finish allowance?</p>
+<details><summary>Ans</summary><p>0.4 mm on diameter = 0.2 mm radial. The finish pass removes 0.2 mm from the radius.</p></details>
+<p><strong>2.</strong> Why can't Type I G71 machine grooves?</p>
+<details><summary>Ans</summary><p>Type I G71 assumes X moves monotonically in one direction. A groove reverses X direction, which the cycle cannot handle. Use G73 (pattern repeating) or program grooves manually after G70.</p></details>
+<p><strong>3.</strong> What does G70 do?</p>
+<details><summary>Ans</summary><p>Finishing cycle: takes one clean pass along the P–Q contour at the finishing S and F, cutting to exact dimensions.</p></details>
+<p><strong>4.</strong> Raw stock &Oslash;60, finish to &Oslash;40, D1.0 per pass. How many roughing passes?</p>
+<details><summary>Ans</summary><p>Radial stock = (60&minus;40)/2 = 10 mm. At D1.0 per pass = 10 passes. The last pass leaves U0.4 diameter (0.2 mm) for G70.</p></details>
+
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/">&larr; Turning Basics</a><a href="/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring/">Grooving &amp; Boring &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

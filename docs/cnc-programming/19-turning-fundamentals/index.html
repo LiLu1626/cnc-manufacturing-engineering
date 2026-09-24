@@ -1,4 +1,17 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Turning Coordinates & Toolpaths — CNC Programming</title><meta name="description" content="Lathe coordinate system, diameter vs radius programming, turning tool geometry, facing, OD/ID turning."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Turning Coordinates & Toolpaths — CNC Programming</title>
+<meta name="description" content="Lathe coordinate system, diameter programming, X/Z axes, turret tool selection, facing, OD turning, ID boring, and a worked facing-and-turning example.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
   <div class="site-nav-inner">
     <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
     <ul class="site-nav-links">
@@ -10,24 +23,119 @@
       <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
     </ul>
   </div>
-</nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Turning Coordinates & Toolpaths</h1><p class="lead">CNC lathes differ from mills in axes and programming. This page covers the lathe coordinate system, diameter programming, and basic turning operations.</p><h2>Concept</h2>
-<p>A CNC lathe has two axes: <strong>X</strong> (radial, programmed in diameter) and <strong>Z</strong> (axial, along the spindle). The workpiece rotates; the tool moves. X40 means 40 mm diameter, not 40 mm radial travel.</p>
-<p>Z0 is typically on the front face of the part. Positive Z moves away from the chuck; negative Z moves toward the chuck.</p>
+</nav>
+<main class="article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Turning Coordinates &amp; Toolpaths</h1>
+<p class="lead">CNC lathes work differently from mills: the part rotates, the tool moves in X and Z, and X is programmed in diameter. This page covers the lathe coordinate system, diameter programming, turret tool selection, and basic turning operations.</p>
+
+<h2>Concept</h2>
+<p>A CNC lathe has two linear axes: <strong>X</strong> (radial, in and out from the spindle centerline) and <strong>Z</strong> (axial, along the spindle). Unlike a milling machine where the workpiece stays still and the tool moves in X/Y/Z, on a lathe the <strong>workpiece rotates</strong> and the cutting tool moves in X and Z. The spindle chuck holds and rotates the part; the turret holds the tools.</p>
+<p>The most important concept in lathe programming: <strong>X is programmed in diameter, not radius</strong>. When you write X40, the tool tip is positioned so it cuts a 40 mm diameter, not 40 mm from center. This means the actual radial travel from X50 to X40 is only 5 mm (the radius changes by 5 mm, but the diameter changes by 10 mm).</p>
+<p><strong>Z0</strong> is typically set on the front finished face of the part. Positive Z moves the tool away from the chuck (toward the operator); negative Z moves the tool toward the chuck (into the part). Cutting along the part length happens in the negative Z direction.</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 440 260" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <!-- chuck -->
+  <rect x="20" y="80" width="60" height="100" fill="#7f8c8d" stroke="#555"/>
+  <text x="30" y="195" font-size="11" fill="#555">Chuck</text>
+  <!-- part -->
+  <rect x="80" y="100" width="280" height="60" fill="#d4c5a9" stroke="#999"/>
+  <text x="200" y="135" font-size="11" fill="#666" text-anchor="middle">Workpiece (rotating)</text>
+  <!-- tool -->
+  <rect x="200" y="50" width="20" height="40" fill="#c0392b"/>
+  <text x="180" y="45" font-size="11" fill="#c0392b">Tool</text>
+  <!-- axes -->
+  <line x1="100" y1="230" x2="400" y2="230" stroke="#27ae60" stroke-width="1.5"/>
+  <text x="405" y="234" font-size="12" fill="#27ae60">Z+ (away from chuck)</text>
+  <line x1="100" y1="230" x2="100" y2="180" stroke="#2980b9" stroke-width="1.5"/>
+  <text x="60" y="175" font-size="12" fill="#2980b9">X+</text>
+  <!-- Z0 -->
+  <line x1="360" y1="90" x2="360" y2="170" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="345" y="85" font-size="11" fill="#e67e22">Z0 (front face)</text>
+</svg>
+<figcaption>Lathe axes: X is radial (programmed in diameter), Z is axial. Z0 is on the front face; negative Z goes toward the chuck.</figcaption>
+</figure>
+
 <h2>Why It Matters</h2>
-<p>Programming X as radius on a diameter-mode lathe cuts diameters 50% too large or too small. The most common turning mistake. Also, Z direction: cutting into the part is negative Z, not positive.</p>
+<p>Programming X as if it were radius is the #1 beginner mistake on lathes. If you write X20 thinking you want a 20 mm radius (40 mm diameter), the machine actually moves to a 20 mm diameter — cutting the part in half. Every X value is a diameter, and every radial depth of cut is half the X difference between two positions.</p>
+<p>Z direction is the second trap. On a mill, Z negative goes down into the part. On a lathe, Z negative goes along the part toward the chuck. Writing Z50 instead of Z&minus;50 moves the tool away from the part — no cut, or worse, a crash into the chuck.</p>
+
 <h2>How It Works</h2>
-<h3>Diameter Programming</h3>
-<p>X is always diameter. Tool at X30 = 30 mm diameter. Movement from X40 to X30 = 5 mm radial cut (10 mm diameter reduction).</p>
-<h3>Basic Operations</h3>
-<ul><li><strong>Facing</strong> — tool moves X from OD to center at Z0</li><li><strong>OD turning</strong> — tool moves Z along the part at fixed X</li><li><strong>ID boring</strong> — tool moves inside a bore at fixed X</li></ul>
-<h3>Turret</h3>
-<p>Tools are indexed by T code (T0101 = tool 1, offset 1). No M06 needed — the turret indexes directly.</p>
+
+<h3>Diameter Programming in Detail</h3>
+<table class="data-table">
+<tr><th>Action</th><th>X Move</th><th>Diameter Change</th><th>Radial Depth</th></tr>
+<tr><td>OD turn from &Oslash;50 to &Oslash;44</td><td>X50 &rarr; X44</td><td>6 mm smaller</td><td>3 mm</td></tr>
+<tr><td>Face cut to center</td><td>X50 &rarr; X0</td><td>50 to 0</td><td>25 mm</td></tr>
+<tr><td>Take a 2 mm deep roughing pass</td><td>X50 &rarr; X46</td><td>4 mm smaller</td><td>2 mm</td></tr>
+<tr><td>Finish to &Oslash;30</td><td>X32 &rarr; X30</td><td>2 mm smaller</td><td>1 mm</td></tr>
+</table>
+<p>The radial depth of cut is always <strong>(X_start &minus; X_end) / 2</strong>. When you plan a 2 mm depth of cut, the X coordinate drops by 4 mm.</p>
+
+<h3>Basic Turning Operations</h3>
+<ul>
+<li><strong>Facing</strong> — tool feeds from outside diameter toward center (X decreasing) at Z0. Produces a flat front face. Often the first operation after gripping raw stock.</li>
+<li><strong>OD (outside diameter) turning</strong> — tool feeds along Z at a fixed X, reducing the outer diameter. Roughing takes multiple passes; finishing takes one light pass.</li>
+<li><strong>ID (inside diameter) boring</strong> — tool feeds inside a pre-drilled hole at a fixed X, enlarging the bore. X increases as the bore gets larger.</li>
+<li><strong>Taper turning</strong> — X and Z move simultaneously to produce an angled surface.</li>
+<li><strong>Grooving and parting</strong> — see page 21.</li>
+<li><strong>Threading</strong> — see page 22.</li>
+</ul>
+
+<h3>Turret and Tool Selection</h3>
+<p>On a CNC lathe, tools are mounted on a turret that indexes directly to the next tool station. There is no automatic tool changer (M06) like on a mill. Instead, a <strong>T code</strong> both selects the tool and activates its offset. <code>T0101</code> means tool station 1, offset register 1. The first two digits select the turret position; the last two digits select the tool offset (geometry and wear).</p>
+<p>Common practice: T0101 = OD turning tool, T0202 = facing tool, T0303 = drill, T0404 = boring bar, T0505 = grooving/parting tool, T0606 = threading tool. The offset numbers must match the tool being used; T0102 would select tool 1 but apply offset 2, which is wrong.</p>
+
+<h3>Spindle Control on Lathes</h3>
+<p>Lathe spindles use <strong>G97 S</strong> (constant RPM) or <strong>G96 S</strong> (constant surface speed). G96 keeps the cutting speed constant as the tool moves across different diameters — the spindle automatically slows down as the tool moves toward center (facing) and speeds up for larger diameters. G97 holds a fixed RPM regardless of diameter. Threading always uses G97. See page 10 for details.</p>
+
 <h2>Example</h2>
-<p>Turn from O40 to O30 over Z50: starting at X42 Z2, feed to X30 Z0, then Z-50. At F0.2 mm/rev and S1000, feed = 200 mm/min. Ideal time for 50 mm Z cut = 50/200 = 15 s.</p>
+<p><strong>Worked example:</strong> Raw stock &Oslash;45 &times; 80 mm in a chuck. Operations: (1) face the front, (2) rough turn OD from &Oslash;45 to &Oslash;40 over 50 mm length, (3) finish turn to &Oslash;39.5. Z0 on the front face after facing. S1000 RPM, F0.2 mm/rev for rough, F0.1 for finish.</p>
+<pre class="cp-code"><code>O0019 (TURNING FUNDAMENTALS EXAMPLE)
+G21 G97 G99
+T0101                    (OD turning tool)
+S1000 M03
+G00 X47. Z2.             (approach: above stock, 2 mm off face)
+(FACE)
+G01 Z0 F0.2
+X-1.0 F0.15              (feed past center to clean face)
+G00 X47. Z2.
+(ROUGH TURN O45 TO O41, Z-50)
+G00 X46. Z2.
+G01 Z0 F0.2
+X41.0                    (rough to O41, 2 mm radial depth)
+Z-50.                    (turn along Z to -50 mm)
+G00 X47. Z2.
+(FINISH TURN TO O39.5)
+G00 X39.5 Z2.
+G01 Z0 F0.1
+Z-50.                    (finish pass, 0.75 mm radial)
+G00 X50. Z100.           (retract clear)
+M30</code></pre>
+<p><strong>Feed rate calculation:</strong> At S1000 and F0.2 mm/rev, the actual feed in mm/min is 1000 &times; 0.2 = 200 mm/min. The Z-50 roughing pass takes 50/200 = 0.25 minutes = 15 seconds. The finish pass at F0.1 gives 100 mm/min, taking 30 seconds.</p>
+
 <h2>Common Mistakes</h2>
-<ul><li><strong>Treating X as radius</strong> — X is diameter; radial movement is half the X difference.</li><li><strong>Z direction reversed</strong> — cutting into the part is negative Z.</li><li><strong>Forgetting T0101 offset</strong> — T01 selects tool; T0101 activates both tool and offset.</li></ul>
+<ul>
+<li><strong>Treating X as radius</strong> — X40 means 40 mm diameter. Radial depth = (X_start &minus; X_end)/2.</li>
+<li><strong>Z direction reversed</strong> — cutting into the part (along the spindle) is negative Z, not positive.</li>
+<li><strong>Forgetting the second offset number</strong> — T01 selects the tool but T0101 also activates the offset. T01 alone may not load geometry.</li>
+<li><strong>Not retracting X before Z retract</strong> — after turning to Z-50, retract X away from the part before moving Z, or the tool rubs along the finished surface.</li>
+<li><strong>Facing past center with a nose-radius tool</strong> — facing to X0 leaves a small nub unless you feed to X&minus;1 or X&minus;2.</li>
+</ul>
+
 <h2>Practice</h2>
-<p><strong>1.</strong> X moves from O50 to O44. Radial depth?</p><details><summary>Ans</summary><p>(50-44)/2 = 3 mm.</p></details>
-<p><strong>2.</strong> Z0 is where?</p><details><summary>Ans</summary><p>On the front finished face of the part.</p></details>
-<p><strong>3.</strong> Why no M06 on a lathe?</p><details><summary>Ans</summary><p>The turret indexes tools directly. T0202 indexes to tool 2 and activates its offset.</p></details>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/29-subprograms/">&larr; Subprograms</a><a href="/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/">Turning Cycles &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>
+<p><strong>1.</strong> X moves from &Oslash;50 to &Oslash;44. What is the radial depth of cut?</p>
+<details><summary>Ans</summary><p>(50 &minus; 44) / 2 = 3 mm radial depth. The diameter reduces by 6 mm.</p></details>
+<p><strong>2.</strong> Where is Z0 typically set?</p>
+<details><summary>Ans</summary><p>On the finished front face of the part, after facing. Positive Z is away from the chuck; negative Z goes into the part.</p></details>
+<p><strong>3.</strong> Why is there no M06 on a lathe?</p>
+<details><summary>Ans</summary><p>The turret indexes tools directly. T0202 rotates the turret to tool station 2 and activates offset register 2 in one command.</p></details>
+<p><strong>4.</strong> You want a 2 mm deep roughing pass on &Oslash;50 stock. What X do you program?</p>
+<details><summary>Ans</summary><p>2 mm radial depth = 4 mm diameter reduction. X goes from 50 to 46. Program X46. for the pass.</p></details>
+
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/29-subprograms/">&larr; Subprograms</a><a href="/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/">Turning Cycles &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

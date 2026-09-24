@@ -1,4 +1,17 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Drilling, Pecking & Boring — CNC Programming</title><meta name="description" content="G81 drilling, G82 spot drilling, G83 peck drilling, G85 boring, R plane, Z depth, G98/G99 retract modes."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Drilling, Pecking & Boring — CNC Programming</title>
+<meta name="description" content="G81 drilling, G82 spot drilling, G83 peck drilling, G85 boring, R plane, Z depth, drill point compensation, and G98/G99 retract modes with worked examples.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
   <div class="site-nav-inner">
     <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
     <ul class="site-nav-links">
@@ -10,27 +23,136 @@
       <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
     </ul>
   </div>
-</nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Drilling, Pecking & Boring</h1><p class="lead">Drilling cycles automate repeated hole-making. This page covers G81, G82, G83, G85 — when to use each, R plane, depth, and retract modes.</p><h2>Concept</h2>
-<p>A <strong>drilling cycle</strong> is a canned sequence: rapid to R plane, feed to Z depth, retract. G81 is simple drilling. G82 dwells at the bottom (for spot faces). G83 pecks in increments (for deep holes). G85 bores with feed in and feed out.</p>
+</nav>
+<main class="article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Drilling, Pecking &amp; Boring</h1>
+<p class="lead">Canned drilling cycles turn five or six manual moves into one block of code. This page explains G81, G82, G83, G85, the R plane, drill-point compensation, G98/G99 retract modes, and how to choose the right cycle for each hole.</p>
+
+<h2>Concept</h2>
+<p>A <strong>drilling cycle</strong> is a pre-programmed sequence stored in the CNC controller. Instead of writing G00 to position, G01 down to depth, G00 back up, and repeating for every hole, you activate a cycle once and then just give new X/Y positions. The controller handles the rapid-to-feed-to-retract sequence automatically.</p>
+<p>The basic sequence for every drilling cycle is: (1) rapid to the hole's X/Y position, (2) rapid to the R plane, (3) feed to the programmed Z depth, (4) dwell or retract as specified, (5) retract to either the R plane (G99) or the initial Z height (G98). Once activated, the cycle stays modal — every subsequent X/Y line repeats the entire drill sequence at the new position. G80 cancels the cycle.</p>
+
 <h2>Why It Matters</h2>
-<p>Deep holes without pecking pack chips and break the drill. Wrong R plane means the tool retracts into chips or collides with the fixture. G98 vs G99 retract height determines whether the tool clears the workpiece between holes.</p>
+<p>Without canned cycles, drilling a 16-hole pattern means writing 80+ blocks of code. With G83, you write one cycle line and 16 X/Y positions. More importantly, canned cycles enforce a consistent, repeatable motion: the R plane, feed rate, and retract height are the same for every hole, which prevents human error on repeated operations.</p>
+<p>Choosing the wrong cycle has real consequences. Drilling a deep hole with G81 (no pecking) packs chips into the flutes, overheats the drill, and can snap it. Drilling around a fixture boss with G99 (retract to R plane) crashes the tool into the boss. Forgetting G80 turns the next G00 XY move into an unintended drill. Each parameter exists for a reason.</p>
+
 <h2>How It Works</h2>
+
 <h3>Cycle Parameters</h3>
-<ul><li><strong>X/Y</strong> — hole position</li><li><strong>R</strong> — R plane (start of feed, above stock)</li><li><strong>Z</strong> — final depth</li><li><strong>F</strong> — feed rate</li><li><strong>G98</strong> — retract to initial Z plane</li><li><strong>G99</strong> — retract to R plane</li></ul>
-<h3>Common Cycles</h3>
-<ul><li><strong>G81</strong> — simple drill, no dwell</li><li><strong>G82</strong> — drill with dwell at bottom</li><li><strong>G83</strong> — peck drill (chip breaking)</li><li><strong>G85</strong> — bore, feed in/feed out</li></ul>
+<table class="data-table">
+<tr><th>Parameter</th><th>Meaning</th><th>Typical Value</th></tr>
+<tr><td>X / Y</td><td>Hole position in work coordinates</td><td>e.g. X10. Y10.</td></tr>
+<tr><td>R</td><td>R plane: height where feed starts, above the stock</td><td>1–3 mm above top surface</td></tr>
+<tr><td>Z</td><td>Final hole depth (negative into the part)</td><td>e.g. Z-15.</td></tr>
+<tr><td>F</td><td>Feed rate in mm/min</td><td>per tooling chart</td></tr>
+<tr><td>Q</td><td>Peck depth (G83 only)</td><td>1–3 mm per peck</td></tr>
+<tr><td>P</td><td>Dwell time at bottom (G82 only)</td><td>e.g. P500 = 0.5 s</td></tr>
+<tr><td>G98</td><td>Retract to initial Z plane after each hole</td><td>use around fixtures/bosses</td></tr>
+<tr><td>G99</td><td>Retract only to R plane after each hole</td><td>use for flat patterns</td></tr>
+</table>
+
+<h3>The R Plane: Your Safety Buffer</h3>
+<p>The R plane is the Z height where rapid motion switches to feed motion. It must be high enough above the stock that rapid XY moves between holes do not hit clamps, bosses, or chips. A common mistake is setting R too low (e.g. R0.5) to save a fraction of a second; this leaves almost no clearance and risks collision. For most work, R = 2–3 mm above the top surface is safe. If there are clamps or raised features between holes, use G98 to retract all the way to Z50 between holes instead of G99.</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 420 280" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <!-- stock -->
+  <rect x="80" y="100" width="280" height="140" fill="#d4c5a9" stroke="#999" stroke-width="1"/>
+  <text x="370" y="175" font-size="11" fill="#666">stock</text>
+  <!-- initial plane Z50 -->
+  <line x1="40" y1="40" x2="400" y2="40" stroke="#27ae60" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="45" y="35" font-size="11" fill="#27ae60">Initial plane Z50</text>
+  <!-- R plane -->
+  <line x1="40" y1="80" x2="400" y2="80" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="45" y="75" font-size="11" fill="#e67e22">R plane Z2</text>
+  <!-- top surface -->
+  <line x1="40" y1="100" x2="400" y2="100" stroke="#999" stroke-width="2"/>
+  <text x="340" y="96" font-size="11" fill="#666">Top surface Z0</text>
+  <!-- drill -->
+  <rect x="195" y="40" width="10" height="200" fill="#7f8c8d"/>
+  <polygon points="195,240 205,240 200,255" fill="#7f8c8d"/>
+  <!-- hole depth -->
+  <line x1="180" y1="230" x2="220" y2="230" stroke="#c0392b" stroke-width="1.5"/>
+  <text x="225" y="234" font-size="11" fill="#c0392b">Z depth Z-15</text>
+  <!-- motion arrows -->
+  <text x="215" y="60" font-size="10" fill="#333">G00 rapid</text>
+  <text x="215" y="160" font-size="10" fill="#333">G01 feed</text>
+</svg>
+<figcaption>Drilling cycle motion: rapid from initial plane to R plane, then feed to Z depth. G98 retracts to initial plane; G99 retracts only to R plane.</figcaption>
+</figure>
+
+<h3>G81 — Simple Drilling</h3>
+<p>G81 is the basic drill cycle: rapid to R, feed to Z, rapid retract. No dwell at the bottom. Use it for through-holes in thin-to-medium plate, spot centering, and any hole where the drill does not need time at the bottom. It is the fastest drilling cycle but does not clean up the hole bottom.</p>
+
+<h3>G82 — Drilling with Dwell</h3>
+<p>G82 adds a dwell (pause) at the bottom of the hole before retracting. The dwell time is set with P (in milliseconds on Haas). The dwell lets the drill finish cutting a flat bottom, which matters for spot facing, counterboring, and holes that will accept a bolt head or washer. Without dwell, the drill point leaves a slight cone at the bottom. Typical dwell: P200–P500 (0.2–0.5 seconds).</p>
+
+<h3>G83 — Peck Drilling (Chip Breaking)</h3>
+<p>G83 is for deep holes (depth &gt; 3&times; drill diameter). Instead of feeding all the way to depth in one motion, the drill feeds in increments of Q, retracts fully to break and clear chips, then re-approaches and feeds the next Q increment. Each peck lifts chips out of the hole so they do not pack in the flutes. Q is typically 1–3 mm per peck for steel, larger for aluminum.</p>
+<p><strong>Example:</strong> G83 R2. Z-30. Q3. F100. means: feed 3 mm, retract to R, feed 3 mm deeper, retract, repeat until reaching Z-30. This keeps chips clear and prevents drill breakage in deep holes.</p>
+
+<h3>G85 — Boring</h3>
+<p>G85 bores a hole: feed in to Z depth, then feed back out at the same feed rate. Unlike drilling (which retracts at rapid), G85's controlled feed-out produces a smoother bore surface. Use it with a boring bar or reamer. The bore diameter is controlled by the boring bar's offset, not by the tool size.</p>
+
+<h3>Drill Point Compensation</h3>
+<p>A standard twist drill has a conical tip. The full cutting edge reaches diameter D only at the outer corners; the center point extends beyond by approximately 0.3&times;D. For a through-hole, the drill must break through the back surface by this tip length or the hole will have an uncut nub in the center. For a 10 mm drill, add about 3 mm of breakthrough. For a 12 mm plate: Z depth = 12 + 3 = 15 mm (Z-15).</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <rect x="60" y="30" width="240" height="80" fill="#d4c5a9" stroke="#999"/>
+  <text x="310" y="75" font-size="11" fill="#666">12 mm plate</text>
+  <!-- drill above -->
+  <rect x="165" y="5" width="10" height="120" fill="#7f8c8d"/>
+  <polygon points="165,125 175,125 170,145" fill="#7f8c8d"/>
+  <!-- dimension lines -->
+  <line x1="50" y1="30" x2="50" y2="110" stroke="#c0392b" stroke-width="1"/>
+  <text x="20" y="75" font-size="10" fill="#c0392b">12 mm</text>
+  <line x1="50" y1="110" x2="50" y2="145" stroke="#e67e22" stroke-width="1"/>
+  <text x="10" y="132" font-size="10" fill="#e67e22">0.3D = 3 mm</text>
+  <text x="100" y="175" font-size="11" fill="#333">Total Z depth = 12 + 3 = 15 mm</text>
+</svg>
+<figcaption>Drill point geometry: the conical tip adds ~0.3&times;D beyond the full-diameter cutting edge. Through-holes must account for this breakthrough distance.</figcaption>
+</figure>
+
 <h2>Example</h2>
-<pre class="cp-code"><code>G90 G54 G00 X10. Y10.
+<p><strong>Worked example:</strong> Two &Oslash;8 mm through-holes in a 10 mm aluminum plate. Hole 1 at X10 Y10, Hole 2 at X50 Y30. R plane = Z2. Through-hole depth = 10 + 0.3&times;8 = 12.4 mm, round to Z-12.5. Peck drilling Q2. No obstructions between holes, so G99 retract to R plane saves time.</p>
+<pre class="cp-code"><code>O0017 (DRILLING CYCLE EXAMPLE)
+G21 G17 G90 G40 G80
+G54
+T01 M06                 (&Oslash;8 HSS DRILL)
 S1500 M03
+G00 X10. Y10.
 G43 H01 Z50. M08
-G98 G81 R2. Z-15. F120.
-X50. Y30.          (second hole, same cycle)
-G80 G00 Z50. M09</code></pre>
-<p>G98 retracts to Z50 between holes (clear of workpiece). G99 would retract to R2. For plate drilling with no obstructions, G99 saves time; for holes around a boss, G98 clears it.</p>
+G99 G83 R2. Z-12.5 Q2. F120.   (first hole, retract to R)
+X50. Y30.                      (second hole, same cycle)
+G80
+G00 Z50. M09
+M30</code></pre>
+<p><strong>What happens line by line:</strong> After G83, the machine moves to (10,10), rapid to Z2, feeds down in 2 mm pecks to Z-12.5, retracts to R2 (G99). Then it moves XY to (50,30) — staying at R2 — and repeats the peck cycle. G80 cancels the cycle. G00 Z50 lifts to safe height. The program uses G99 because there are no clamps between the two holes; if a boss sat between them, G98 would be required.</p>
+
 <h2>Common Mistakes</h2>
-<ul><li><strong>Forgetting G80</strong> — cycle stays active on next X/Y move.</li><li><strong>Ignoring drill point geometry</strong> — the drill tip adds ~0.3&times;D extra depth. For a 10 mm drill, add 3 mm breakthrough.</li><li><strong>G98 vs G99 wrong choice</strong> — G99 around a fixture causes collision.</li></ul>
+<ul>
+<li><strong>Forgetting G80</strong> — the cycle stays modal. The next G00 X move will drill at that position. Always write G80 after the hole pattern.</li>
+<li><strong>Setting R too low</strong> — R0.5 leaves no clearance for chips or clamps. Use R2–3 mm minimum.</li>
+<li><strong>G99 around a fixture</strong> — retracting only to R2 between holes crashes into clamps. Use G98 when there is any obstacle between holes.</li>
+<li><strong>Ignoring drill point geometry</strong> — through-holes that are too shallow leave a nub. Add 0.3&times;D.</li>
+<li><strong>Using G81 for deep holes</strong> — chips pack and the drill snaps. Use G83 for depth &gt; 3&times;D.</li>
+<li><strong>No coolant</strong> — M08 should be on before the cycle; drilling without coolant in steel overheats the tip.</li>
+</ul>
+
 <h2>Practice</h2>
-<p><strong>1.</strong> Through-hole in 12 mm plate, O10 drill. Programmed Z depth?</p><details><summary>Ans</summary><p>12 + 3 (tip) = 15 mm. Z-15. from top surface.</p></details>
-<p><strong>2.</strong> When use G83 over G81?</p><details><summary>Ans</summary><p>Deep holes (&gt;3&times;D) where chips pack. G83 pecks to break and clear chips.</p></details>
-<p><strong>3.</strong> What does G98 do?</p><details><summary>Ans</summary><p>Retract to initial Z plane after drilling. G99 retracts only to R plane.</p></details>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/33-milling-strategies/">&larr; Milling Strategies</a><a href="/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/">Canned Cycles &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>
+<p><strong>1.</strong> Through-hole in 15 mm plate, &Oslash;12 drill. What Z depth?</p>
+<details><summary>Ans</summary><p>15 + 0.3&times;12 = 15 + 3.6 = 18.6 mm. Program Z-18.6 from top surface. Round to Z-18.5 or Z-19 depending on tolerance.</p></details>
+<p><strong>2.</strong> When do you use G83 instead of G81?</p>
+<details><summary>Ans</summary><p>For holes deeper than about 3&times;D, where chips pack in the flutes. G83 pecks in Q increments and retracts to clear chips, preventing drill breakage and overheating.</p></details>
+<p><strong>3.</strong> What is the difference between G98 and G99?</p>
+<details><summary>Ans</summary><p>G98 retracts to the initial Z plane (the height before the cycle was called). G99 retracts only to the R plane. G99 is faster for flat patterns; G98 is safer around fixtures.</p></details>
+<p><strong>4.</strong> Write a G82 line for a spot face that dwells 0.5 seconds at Z-2, R2, F100.</p>
+<details><summary>Ans</summary><p>G82 R2. Z-2. P500 F100. (P500 = 500 ms = 0.5 seconds on Haas.)</p></details>
+
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/33-milling-strategies/">&larr; Milling Strategies</a><a href="/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/">Canned Cycles &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

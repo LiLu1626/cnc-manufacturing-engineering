@@ -1,4 +1,17 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Canned Cycles & Hole Patterns — CNC Programming</title><meta name="description" content="What canned cycles are, how they work, modal behavior, G80 cancellation, and hole pattern programming."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Canned Cycles & Hole Patterns — CNC Programming</title>
+<meta name="description" content="How canned drilling cycles work, modal behavior, G80 cancellation, G98/G99 retract, repeating hole patterns, and the full cycle code reference.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
   <div class="site-nav-inner">
     <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
     <ul class="site-nav-links">
@@ -10,28 +23,131 @@
       <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
     </ul>
   </div>
-</nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Canned Cycles & Hole Patterns</h1><p class="lead">Canned cycles package multi-step motions into one line. This page explains how they work, their modal behavior, and how to drill multiple holes efficiently.</p><h2>Concept</h2>
-<p>A <strong>canned cycle</strong> is a preprogrammed sequence: position, rapid to R, feed to depth, retract. One line replaces 5-6 manual lines. Cycles are modal: once activated, every X/Y move repeats the cycle with the same R, Z, and F until G80 cancels.</p>
+</nav>
+<main class="article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Canned Cycles &amp; Hole Patterns</h1>
+<p class="lead">Canned cycles package a multi-step drilling or boring sequence into one line of code. This page explains how they work internally, their modal behavior, G80 cancellation, retract modes, and how to program efficient hole patterns.</p>
+
+<h2>Concept</h2>
+<p>A <strong>canned cycle</strong> is a pre-programmed motion sequence stored in the CNC controller. When you write a single line like <code>G83 R2. Z-15. Q3. F120.</code>, the controller remembers a whole recipe: rapid to the hole X/Y, rapid down to R2, feed in 3 mm pecks to Z-15, retract to clear chips, and return to the R plane. You only need to give new X/Y positions for each subsequent hole.</p>
+<p>Canned cycles are <strong>modal</strong>. Once activated by a G81, G82, G83, G84, G85, or similar code, the cycle stays active until G80 cancels it. Every subsequent X/Y line triggers the full cycle at the new position. This is powerful — a 20-hole pattern needs only one cycle line and 20 position lines — but also dangerous: forget G80 and the next G00 move becomes an unexpected hole.</p>
+
 <h2>Why It Matters</h2>
-<p>Modal cycles are powerful but dangerous: forget G80 and the next X/Y move becomes a hole. Conversely, understanding modal cycles lets you drill a 20-hole pattern with 20 lines instead of 100.</p>
+<p>Before canned cycles existed, a drilling program looked like this for each hole:</p>
+<pre class="cp-code"><code>G00 X10. Y10.        (rapid to hole)
+G00 Z2.              (rapid to R)
+G01 Z-15. F120.      (feed down)
+G00 Z2.              (rapid back up)
+G00 X50. Y30.        (rapid to next hole)
+G01 Z-15. F120.      (feed down again)
+G00 Z2.              (back up)</code></pre>
+<p>That is 7 lines per hole. For a 16-hole pattern, over 100 lines. With canned cycles, the same job is:</p>
+<pre class="cp-code"><code>G99 G81 R2. Z-15. F120.
+X10. Y10.
+X50. Y30.
+X50. Y70.
+X10. Y70.
+G80</code></pre>
+<p>5 lines total. The controller handles the rapid-feed-retract sequence for every hole. Beyond saving typing, canned cycles ensure every hole uses identical R plane, depth, and feed — no variation between hole 1 and hole 16.</p>
+
 <h2>How It Works</h2>
-<h3>Canned Cycle Structure</h3>
-<ol><li>Rapid to X/Y position</li><li>Rapid to R plane</li><li>Feed to Z depth</li><li>Retract (G98 to initial Z, G99 to R)</li></ol>
-<h3>Cancellation</h3>
-<p><strong>G80</strong> cancels all canned cycles. It must be programmed after the hole pattern before any non-drilling motion. Note: G80 cancels the cycle mode but does NOT retract the tool — if you need to be at a safe Z position, program G00 Z50 explicitly.</p>
+
+<h3>Inside Every Canned Cycle</h3>
+<p>When the controller executes a canned cycle, it performs these five steps in order:</p>
+<ol>
+<li><strong>Rapid to X/Y position</strong> — moves the tool to the hole coordinate at rapid traverse.</li>
+<li><strong>Rapid to R plane</strong> — moves Z down to the R plane at rapid speed. R is typically 2–3 mm above the workpiece.</li>
+<li><strong>Feed to Z depth</strong> — switches to feed rate F and cuts to the programmed Z depth. Peck cycles (G83) do this in Q increments with retracts between.</li>
+<li><strong>Dwell or special motion</strong> — G82 dwells at the bottom; G84 reverses spindle for tapping; G85 feeds back out.</li>
+<li><strong>Retract</strong> — G98 retracts to the initial Z plane (the height before the cycle was called); G99 retracts only to the R plane.</li>
+</ol>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 420 300" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <!-- stock -->
+  <rect x="60" y="120" width="300" height="140" fill="#d4c5a9" stroke="#999"/>
+  <!-- initial plane -->
+  <line x1="30" y1="40" x2="390" y2="40" stroke="#27ae60" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="35" y="35" font-size="11" fill="#27ae60">Initial Z50 (G98 retracts here)</text>
+  <!-- R plane -->
+  <line x1="30" y1="100" x2="390" y2="100" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="35" y="95" font-size="11" fill="#e67e22">R plane Z2 (G99 retracts here)</text>
+  <!-- top surface -->
+  <line x1="30" y1="120" x2="390" y2="120" stroke="#999" stroke-width="2"/>
+  <text x="340" y="116" font-size="11" fill="#666">Z0</text>
+  <!-- hole -->
+  <rect x="195" y="120" width="10" height="110" fill="#999" opacity="0.3"/>
+  <!-- step labels -->
+  <circle cx="300" cy="55" r="10" fill="#3498db"/><text x="300" y="59" font-size="10" fill="white" text-anchor="middle">1</text>
+  <text x="315" y="59" font-size="10" fill="#333">Rapid XY to hole</text>
+  <circle cx="300" cy="85" r="10" fill="#3498db"/><text x="300" y="89" font-size="10" fill="white" text-anchor="middle">2</text>
+  <text x="315" y="89" font-size="10" fill="#333">Rapid to R plane</text>
+  <circle cx="300" cy="170" r="10" fill="#e74c3c"/><text x="300" y="174" font-size="10" fill="white" text-anchor="middle">3</text>
+  <text x="315" y="174" font-size="10" fill="#333">Feed to Z depth</text>
+  <circle cx="300" cy="250" r="10" fill="#27ae60"/><text x="300" y="254" font-size="10" fill="white" text-anchor="middle">4</text>
+  <text x="315" y="254" font-size="10" fill="#333">Retract (G98 or G99)</text>
+</svg>
+<figcaption>The five steps of every canned cycle. Steps 1–4 are repeated at each new X/Y position while the cycle is modal.</figcaption>
+</figure>
+
+<h3>Common Canned Cycles Reference</h3>
+<table class="data-table">
+<tr><th>Code</th><th>Name</th><th>Motion</th><th>Use For</th></tr>
+<tr><td>G81</td><td>Simple drill</td><td>Feed in, rapid out</td><td>Through holes, centering</td></tr>
+<tr><td>G82</td><td>Drill with dwell</td><td>Feed in, dwell P, rapid out</td><td>Spot faces, counterbores</td></tr>
+<tr><td>G83</td><td>Peck drill</td><td>Feed Q, retract, repeat</td><td>Deep holes, chip clearing</td></tr>
+<tr><td>G84</td><td>Tapping</td><td>Feed in reverse, feed out</td><td>Tapped holes (see page 34)</td></tr>
+<tr><td>G85</td><td>Bore</td><td>Feed in, feed out</td><td>Reaming, boring</td></tr>
+<tr><td>G80</td><td>Cancel cycle</td><td>—</td><td>End of hole pattern</td></tr>
+</table>
+
+<h3>Modal Behavior and Re-Commanding</h3>
+<p>When a cycle is active, the R, Z, F, Q, P values are stored and reused. You only need to re-specify a value when it changes. For example, if all holes are the same depth, you write Z once in the G81 line. If hole 3 needs a different depth, you write a new Z on that line — the controller updates the stored Z for subsequent holes too.</p>
+<p>This means you can mix depths in one pattern: drill three holes at Z-15, then change to Z-25 for the next two, all within the same active cycle. Just remember to G80 when done.</p>
+
+<h3>G80: Canceling the Cycle</h3>
+<p><strong>G80</strong> cancels all canned cycle modes. It must be programmed after the hole pattern before any non-drilling motion — otherwise the next X/Y move will be interpreted as another hole. A critical detail: <strong>G80 cancels the cycle mode but does not move Z</strong>. After G80, the tool is still at whatever Z height the last retract left it at. Always write an explicit G00 Z50. after G80 to guarantee a safe Z position.</p>
+
 <h2>Example</h2>
-<p>4-hole pattern on a 50 mm square, centered at (0,0):</p>
-<pre class="cp-code"><code>G98 G81 R2. Z-15. F120.
-X-25. Y-25.
-X25. Y-25.
-X25. Y25.
-X-25. Y25.
-G80 G00 Z50.</code></pre>
-<p>Each X/Y line drills one hole. The R, Z, F values are inherited from the cycle. 5 lines (including G81 and G80) for 4 holes.</p>
+<p><strong>Worked example:</strong> Four &Oslash;6 mm holes on a 50 mm square, centered at (0,0). Holes at (&minus;25,&minus;25), (25,&minus;25), (25,25), (&minus;25,25). Through-holes in 8 mm plate: Z depth = 8 + 0.3&times;6 = 9.8 mm, use Z-10. R plane Z2. No obstructions, so G99. Feed 100 mm/min at S2000.</p>
+<pre class="cp-code"><code>O0018 (4-HOLE PATTERN)
+G21 G17 G90 G40 G80
+G54
+T01 M06                 (&Oslash;6 DRILL)
+S2000 M03
+G00 X-25. Y-25.
+G43 H01 Z50. M08
+G99 G81 R2. Z-10. F100.   (hole 1, cycle activates)
+X25. Y-25.                 (hole 2)
+X25. Y25.                  (hole 3)
+X-25. Y25.                 (hole 4)
+G80                        (cancel cycle)
+G00 Z50. M09               (explicit safe retract)
+M30</code></pre>
+<p><strong>Trace:</strong> The G81 line drills hole 1 at (&minus;25,&minus;25) and retracts to R2 (G99). Then X25. Y&minus;25. moves XY to hole 2 at R2 height and immediately repeats the drill cycle. After hole 4, G80 cancels the cycle. G00 Z50 lifts to safe height. Total: 4 holes drilled with one cycle line.</p>
+
 <h2>Common Mistakes</h2>
-<ul><li><strong>Forgetting G80</strong> — cycle continues unexpectedly.</li><li><strong>Thinking G80 retracts to Z50</strong> — G80 only cancels mode; explicit Z retract needed.</li><li><strong>Changing R/Z between holes without re-commanding</strong> — R and Z are modal; re-specify only when they change.</li></ul>
+<ul>
+<li><strong>Forgetting G80</strong> — the cycle stays active. The next G00 X10 Y10 (intended as a positioning move) will drill a hole there. Always write G80 after the pattern.</li>
+<li><strong>Thinking G80 retracts to Z50</strong> — G80 only cancels the cycle mode. The tool stays at its current Z. Write G00 Z50 explicitly.</li>
+<li><strong>Changing R or Z without re-commanding</strong> — R and Z are stored from the cycle line. If you forget to re-specify Z for a deeper hole, it drills to the old depth.</li>
+<li><strong>G99 around a boss or clamp</strong> — retracting only to R2 between holes can hit a raised feature. Use G98 when there is any obstacle.</li>
+<li><strong>No G80 between tools</strong> — if the cycle is still active when you call the next tool, the first move of the new tool becomes a drill.</li>
+</ul>
+
 <h2>Practice</h2>
-<p><strong>1.</strong> After G81, you write X10 Y20. What happens?</p><details><summary>Ans</summary><p>Drills at (10,20) with the same R, Z, F as G81.</p></details>
-<p><strong>2.</strong> Why program G00 Z50 after G80?</p><details><summary>Ans</summary><p>G80 cancels cycle mode but leaves the tool at whatever Z it was at. Explicit retract ensures safe Z before tool change or XY move.</p></details>
-<p><strong>3.</strong> 8 holes on bolt circle, same depth. How many G81 lines?</p><details><summary>Ans</summary><p>One G81 line + 8 X/Y position lines + G80.</p></details>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/">&larr; Drilling Cycles</a><a href="/cnc-manufacturing-engineering/cnc-programming/34-tapping-thread-milling/">Tapping &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>
+<p><strong>1.</strong> After writing <code>G99 G81 R2. Z-15. F120.</code>, you write <code>X10. Y20.</code>. What happens?</p>
+<details><summary>Ans</summary><p>The machine rapidly positions to (10,20), rapid to R2, feeds to Z-15 at 120 mm/min, and retracts to R2 (G99). The R, Z, and F are inherited from the G81 line.</p></details>
+<p><strong>2.</strong> Why write G00 Z50 after G80?</p>
+<details><summary>Ans</summary><p>G80 cancels the cycle mode but does not move Z. The tool may still be at R2 or Z depth. An explicit G00 Z50 guarantees a safe height before the next operation.</p></details>
+<p><strong>3.</strong> Eight holes on a bolt circle at the same depth. How many G81 lines do you write?</p>
+<details><summary>Ans</summary><p>One G81 line (with R, Z, F), followed by 8 X/Y coordinate lines, then G80. The cycle repeats automatically at each position.</p></details>
+<p><strong>4.</strong> You need hole 1 at Z-10 and holes 2–4 at Z-20 in the same pattern. How do you do it?</p>
+<details><summary>Ans</summary><p>Write G81 with Z-10 for hole 1. On the hole 2 line, write <code>X... Y... Z-20.</code> The new Z overrides the stored depth. Holes 3 and 4 inherit Z-20. Then G80.</p></details>
+
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/">&larr; Drilling Cycles</a><a href="/cnc-manufacturing-engineering/cnc-programming/34-tapping-thread-milling/">Tapping &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
