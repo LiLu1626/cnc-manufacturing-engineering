@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Reading & Structuring a CNC Program — CNC Programming</title>
-<meta name="description" content="Program number, blocks, word addresses, sequence numbers, and how to read a CNC program line by line.">
+<meta name="description" content="Program number, blocks, word addresses, sequence numbers, program skeleton, and how to read a CNC program line by line.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/04-program-structure/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
@@ -27,48 +27,72 @@
 <main class="article">
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Reading and Structuring a CNC Program</h1>
-<p class="lead">A CNC program is not a random list of numbers. This page teaches you the anatomy: program number, blocks, word addresses, and how to read any G-code line.</p>
+<p class="lead">A CNC program is not a random list of numbers. This page teaches the anatomy: program number, blocks, word addresses, sequence numbers, and the standard program skeleton every program follows.</p>
+
 <h2>Concept</h2>
-<p>A CNC program consists of <strong>blocks</strong> (lines), each containing <strong>words</strong> (letter + number). A word like X25.5 means "the X coordinate is 25.5." A block may contain multiple words: <code>G01 X25.5 Y10. F200.</code> means linear motion to (25.5, 10) at 200 mm/min.</p>
-<p><strong>Program number</strong> (O1001) identifies the program on the controller. <strong>Sequence numbers</strong> (N10, N20) label blocks for reference but do not affect execution. <strong>Comments</strong> in parentheses explain what the code does.</p>
+<p>A CNC program consists of <strong>blocks</strong> (lines), each containing <strong>words</strong> (letter + number). A word like <code>X25.5</code> means "the X coordinate is 25.5." A block may contain multiple words: <code>G01 X25.5 Y10. F200.</code> means linear motion to (25.5, 10) at 200 mm/min.</p>
+<p>The <strong>program number</strong> (O1001) identifies the program on the controller. <strong>Sequence numbers</strong> (N10, N20) label blocks for reference but do not affect execution. <strong>Comments</strong> in parentheses explain what the code does for human readers.</p>
+
 <h2>Why It Matters</h2>
-<p>One line is a combination of states and actions. G01 stays active until another motion code replaces it. If you forget that G01 is modal and write X100 without an F, the feed rate from earlier still applies. Reading a program means tracking state, not just reading line by line in isolation.</p>
+<p>One line is a combination of states and actions. G01 stays active until another motion code replaces it. If you forget that G01 is modal and write X100 without F, the feed from earlier still applies. Reading a program means tracking state as you go, not just reading each line in isolation.</p>
+
 <h2>How It Works</h2>
+
 <h3>Anatomy of a Block</h3>
 <pre class="cp-code"><code>N10 G01 X100.0 Y50.0 F300.0</code></pre>
 <ul>
-<li><strong>N10</strong> — sequence number (label only)</li>
-<li><strong>G01</strong> — linear interpolation (motion mode)</li>
+<li><strong>N10</strong> — sequence number (label only; does not affect motion)</li>
+<li><strong>G01</strong> — linear interpolation (motion mode, modal)</li>
 <li><strong>X100.0</strong> — X coordinate target</li>
 <li><strong>Y50.0</strong> — Y coordinate target</li>
-<li><strong>F300.0</strong> — feed rate</li>
+<li><strong>F300.0</strong> — feed rate (modal)</li>
 </ul>
-<h3>Program Skeleton</h3>
+
+<h3>Standard Program Skeleton</h3>
 <ol>
-<li>Program start (%, O number)</li>
-<li>Startup block (G21, G17, G90, G40, G49, G80)</li>
-<li>Tool change and spindle start</li>
-<li>Positioning and machining</li>
-<li>Retract and spindle off</li>
-<li>Program end (M30, %)</li>
+<li><strong>Program start</strong> — % and O number</li>
+<li><strong>Startup block</strong> — G21 G17 G90 G40 G49 G80 (known state)</li>
+<li><strong>Tool change and spindle</strong> — T01 M06, S2000 M03</li>
+<li><strong>Positioning and machining</strong> — G00 approach, G01 cuts, cycles</li>
+<li><strong>Retract and shutdown</strong> — G00 Z50, M09, M05</li>
+<li><strong>Program end</strong> — M30, %</li>
 </ol>
-<h2>Example</h2>
-<p>Starting at (5,10) in G90 G21 G94: <code>G01 X25 Y10 F200</code> moves 20 mm in X at 200 mm/min. Ideal time = 20/200 = 0.1 min = 6 seconds. This is the steady-state cutting time, not including acceleration/deceleration.</p>
+
+<h3>Complete Example Program</h3>
+<pre class="cp-code"><code>%
+O1001 (DEMO PROGRAM)
+G21 G17 G90 G40 G49 G80
+G54
+T01 M06
+S2000 M03
+G00 X0 Y0
+G43 H01 Z50. M08
+G00 Z2.
+G01 Z-2. F100.
+G01 X50. F300.
+G00 Z50. M09
+M05
+M30
+%</code></pre>
+<p>Read it top to bottom: startup, tool, spindle, approach, cut, retract, shutdown. Every CNC program follows this skeleton.</p>
+
 <h2>Common Mistakes</h2>
 <ul>
-<li><strong>Treating N numbers as move distances</strong> — N10 is a label, not a coordinate.</li>
-<li><strong>Confusing S and F</strong> — S is RPM (spindle speed), F is feed rate.</li>
-<li><strong>Using M30 as a retract move</strong> — M30 ends the program and resets. It does not move axes.</li>
+<li><strong>Treating N numbers as coordinates</strong> — N10 is a label, not a move distance.</li>
+<li><strong>Confusing S and F</strong> — S is spindle RPM; F is feed rate. They are independent.</li>
+<li><strong>Using M30 as a move command</strong> — M30 ends the program and rewinds; it does not move axes.</li>
+<li><strong>Forgetting the startup block</strong> — leftover modal state from a previous program causes unexpected motion.</li>
 </ul>
-<h2>Practice</h2>
-<p><strong>1.</strong> Distance = 30 mm, feed = 300 mm/min. Ideal cutting time?</p>
-<details><summary>Show answer</summary><p>30/300 = 0.1 min = 6 seconds.</p></details>
-<p><strong>2.</strong> What does T03 M06 do?</p>
-<details><summary>Show answer</summary><p>Select tool 3 and execute the automatic tool change. The actual tool change sequence depends on the machine.</p></details>
-<p><strong>3.</strong> Why is the startup block G21 G17 G90 G40 G49 G80 important?</p>
-<details><summary>Show answer</summary><p>It establishes known machine state: metric units, XY plane, absolute mode, compensation off, cycles off. Without it, leftover modal state from a previous program could cause unexpected motion.</p></details>
 
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/07-plane-units/">&larr; Plane & Units</a><a href="/cnc-manufacturing-engineering/cnc-programming/05-gcode-fundamentals/">G-Code Basics &rarr;</a></nav>
+<h2>Practice</h2>
+<p><strong>1.</strong> Distance 30 mm at F300. Cutting time?</p>
+<details><summary>Show answer</summary><p>30/300 = 0.1 minutes = 6 seconds.</p></details>
+<p><strong>2.</strong> What does T03 M06 do?</p>
+<details><summary>Show answer</summary><p>Select tool 3 and execute the automatic tool change on a mill. On a lathe, T0303 indexes turret to station 3 and loads offset 3.</p></details>
+<p><strong>3.</strong> Why is the startup block important?</p>
+<details><summary>Show answer</summary><p>It establishes known machine state: metric units, XY plane, absolute mode, compensation off, cycles off. Without it, leftover state from the previous program can cause crashes.</p></details>
+
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/07-plane-units/">&larr; Plane &amp; Units</a><a href="/cnc-manufacturing-engineering/cnc-programming/05-gcode-fundamentals/">G-Code Basics &rarr;</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>
