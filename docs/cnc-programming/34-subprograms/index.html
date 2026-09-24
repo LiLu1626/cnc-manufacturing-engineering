@@ -1,106 +1,32 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Subprograms and Program Reuse — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="M98 P calls, M99 returns, and a 4x3 hole grid built with subprograms on a Haas mill.">
-<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/34-subprograms/">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moved — CNC Programming</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/29-subprograms/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
-<main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Subprograms and Program Reuse</h1>
-<p class="lead">When you repeat a pattern, write it once as a subprogram and call it many times. This page builds a real 4-column &times; 3-row hole grid.</p>
-<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill</span></div>
-<div class="callout"><strong>What you will learn:</strong><ul>
-<li>How M98 P calls a subprogram and M99 returns</li>
-<li>The L repeat-count parameter</li>
-<li>Building a rectangular hole grid with incremental Y rows</li>
-<li>Why the first G81 line drills at the current position</li>
-</ul></div>
-
-<h2>Concept</h2>
-<p>A <strong>subprogram</strong> is a separate program (identified by an O-number) called by <strong>M98 P</strong> and returned by <strong>M99</strong>. The main program positions the machine; the subprogram performs one repeating unit of work and returns. The <strong>L</strong> parameter on M98 tells the controller how many times to repeat the call.</p>
-
-<h2>Why It Matters</h2>
-<p>Without subprograms, drilling a 4&times;3 grid means 12 separate G81 lines. With a subprogram that drills one row of holes, the main program calls it three times. This shortens the program, reduces typo risk, and makes pattern changes easy.</p>
-
-<h2>Syntax — Haas Dialect</h2>
-<p>On Haas mills, the call uses <strong>P</strong> to specify the subprogram number (not O):</p>
-<pre class="cp-code"><code>M98 P2000 L3   <span class="cp-comment">(call O2000 three times)</span></code></pre>
-<p>The O-number in the subprogram header identifies the program; the P-address in M98 references it. M99 at the end of the subprogram returns to the block after the M98 call.</p>
-
-<h2>Worked Example: 4&times;3 Hole Grid</h2>
-<p>Hole spacing: X = 20 mm, Y = 20 mm. First hole at (10, 10). Columns at X = 10, 30, 50, 70. Rows at Y = 10, 30, 50. Drill depth Z = &minus;10, R plane at Z = +2.</p>
-
-<p><strong>Main program O1000:</strong></p>
-<pre class="cp-code"><code>O1000 (MAIN: 4x3 HOLE GRID)
-G21 G17 G90 G80 G40 G49 G99
-T03 M06                 <span class="cp-comment">(6mm drill)</span>
-G54 S1500 M03
-G43 H03 Z50. M08        <span class="cp-comment">(initial plane Z50)</span>
-G00 X10. Y10.           <span class="cp-comment">(position above first hole)</span>
-M98 P2000 L3            <span class="cp-comment">(call row subprogram, 3 rows)</span>
-G80 G00 Z50. M09 M05
-G91 G28 Z0
-M30</code></pre>
-<p><strong>G99</strong> means each drill retracts to the R plane (Z2) between holes in the same row — efficient, no need to climb back to Z50 between adjacent holes. After the row is done, the subprogram explicitly raises to Z50 before the Y advance to the next row. If holes were spread over tall fixtures or clamps, you would use <strong>G98</strong> (retract to Z50 after every hole) instead.</p>
-
-<p><strong>Subprogram O2000 (one row: 4 holes, then advance Y):</strong></p>
-<pre class="cp-code"><code>O2000 (ROW: 4 HOLES IN X, THEN Y+20)
-G90 G81 Z-10. R2. F100.  <span class="cp-comment">(activates cycle, drills at current X=10,Y=10)</span>
-X30.                     <span class="cp-comment">(col 2 — G81 modal drills here)</span>
-X50.                     <span class="cp-comment">(col 3)</span>
-X70.                     <span class="cp-comment">(col 4)</span>
-G80                      <span class="cp-comment">(cancel cycle mode; tool stays at R plane Z2)</span>
-G00 Z50.                 <span class="cp-comment">(explicit retract to safe height before Y traversal)</span>
-G91 G00 Y20.             <span class="cp-comment">(incremental Y advance for next row)</span>
-G90 X10.                 <span class="cp-comment">(reset X to column 1 at safe height)</span>
-M99</code></pre>
-
-<h2>How the 12 Holes Are Produced</h2>
-<p>First call (main already at X10 Y10): G81 drills at (10,10), then X30 drills (30,10), X50 drills (50,10), X70 drills (70,10). G80 cancels the cycle mode (tool stays at R plane Z2). Then G00 Z50 raises to safe height before Y traversal. Y+20 moves to Y30. X10 resets. That is 4 holes.</p>
-<p>Second call: G81 drills at (10,30), then (30,30), (50,30), (70,30). Y+20 to Y50. X10 reset. 4 more holes.</p>
-<p>Third call: holes at (10,50), (30,50), (50,50), (70,50). Then G80, retract. Total: <strong>12 unique holes, exactly 12 drill cycles.</strong></p>
-
-<h2>Why No Redundant X10 Line</h2>
-<p>The first G81 line has no X/Y word. On Haas, a modal G81 with no new X/Y repeats the cycle at the <strong>current XY position</strong>. Since the main program already positioned at X10 Y10, that first line drills hole (10,10). Adding another X10 line would re-drill the same hole — each subprogram call would then have 5 cycles (X10 repeated + X30 + X50 + X70), and 3 calls = 15 cycles for 12 positions. The X30/X50/X70 lines provide the new positions for columns 2&ndash;4.</p>
-
-<h2>Common Mistakes</h2>
-<ul>
-<li>Using <code>M98 O2000</code> instead of <code>M98 P2000</code> — Haas uses P for the subprogram address.</li>
-<li>Adding a redundant X10 after G81 — re-drills the first hole.</li>
-<li>Forgetting G90/G91 state reset — modal coordinates carry between main and subprogram.</li>
-<li>Not resetting X after the Y advance — the next row starts at X70 instead of X10.</li>
-<li>Assuming G80 is automatic — always cancel the cycle before rapid traversing at height.</li>
-</ul>
-
-<section class="cp-practice"><h2>Practice</h2>
-<p><strong>1.</strong> How many drill cycles does M98 P2000 L3 actually produce?</p>
-<details><summary>Show answer</summary><p>12. Each call drills 4 holes (X10 current position + X30 + X50 + X70), and the call repeats 3 times. No hole is repeated.</p></details>
-<p><strong>2.</strong> What happens if you write X10. on the line right after G81?</p>
-<details><summary>Show answer</summary><p>The G81 cycle drills again at X10 — re-drilling the first hole. Each subprogram call then does 5 cycles (X10 repeated + X30 + X50 + X70), and 3 calls = 15 cycles for 12 unique positions.</p></details>
-<p><strong>3.</strong> Why is G80 needed before G91 G00 Y20?</p>
-<details><summary>Show answer</summary><p>G80 cancels the canned cycle mode so the controller stops drilling. But G80 does <strong>not</strong> raise the tool — after G80 the tool sits at the R plane (Z2). You must add an explicit G00 Z50 to reach a safe height before Y traversing over the fixture. On Haas, an explicit G00 also cancels the cycle mode, but again does not guarantee the tool is at Z50.</p></details>
-</section>
-
-<section class="cp-sources"><h2>Sources</h2><ul>
-<li><a href="https://www.haascnc.com/service/codes-settings.type=mcode.machine=mill.value=M98.html">Haas M98 — Subprogram Call</a></li>
-<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G81.html">Haas G81 — Drilling Cycle</a></li>
-</ul></section>
-
-<nav class="cp-nav-bottom">
-<a href="/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/">&larr; Canned Cycles</a>
-<a href="/cnc-manufacturing-engineering/cnc-programming/19-turning-programming/">Turning Programming &rarr;</a>
+<meta http-equiv="refresh" content="0;url=29-subprograms/">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+    </ul>
+  </div>
 </nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<main class="article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>This lesson has moved</h1>
+<p>The content that was at this URL has been consolidated into:
+<a href="29-subprograms/"><strong>Subprograms</strong></a>.</p>
+<p>If you are not redirected automatically, <a href="29-subprograms/">click here</a>.</p>
+</main>
+<footer class="site-footer"><p>Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</p></footer>
+</body>
+</html>

@@ -1,58 +1,32 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CNC Milling Programming — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="A complete beginner milling project: 100×80×12 plate, 40×30×4 pocket at X30-70/Y25-55, R5 corners, 4×Ø6 holes at corners.">
-<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/20-milling-programming/">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moved — CNC Programming</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/33-milling-strategies/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
+<meta http-equiv="refresh" content="0;url=33-milling-strategies/">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+    </ul>
+  </div>
+</nav>
 <main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>CNC Milling Programming</h1>
-<p class="lead">From a rectangular block to a finished plate: face, profile, pocket, drill holes — one tool at a time, with a real tool table.</p>
-<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill</span></div>
-<div class="callout"><strong>What you will learn:</strong><ul><li>Plate: 100×80×12, origin at corner</li><li>Pocket: X30-70, Y25-55, depth 4, R5 corners</li><li>4×Ø6 through holes at plate corners</li><li>Tool table and H/D offsets</li></ul></div>
-<h2>Concept</h2>
-<p>Milling removes material from a solid block. Operations: face mill the top, contour the outside, mill a pocket, drill holes. Each operation uses a different tool with its own H (length) and D (radius) offset. The program changes tools with T01 M06.</p>
-<h2>Why It Matters</h2>
-<p>A real milling project sequences tools: face mill first, then end mill for profile/pocket, then drill. Each tool has its own H offset. Forgetting to call the right H number means wrong Z depth.</p>
-<h2>How</h2>
-<h3>Specifications</h3>
-<ul><li>Plate: 100 × 80 × 12 mm, work zero at lower-left corner on top surface.</li>
-<li>Pocket: X30 to X70 (40 mm wide), Y25 to Y55 (30 mm deep), pocket depth 4 mm, corner R5.</li>
-<li>4× Ø6 through holes at (10,10), (90,10), (90,70), (10,70). Drill point breakthrough: Z=-12-1.8 = -13.8.</li></ul>
-<h3>Tool table</h3>
-<ul><li>T01: Ø63 face mill (H01, rough face).</li>
-<li>T02: Ø10 end mill (H02, D05, profile and pocket).</li>
-<li>T03: Ø6 drill (H03, drill holes).</li></ul>
-<h2>Example: Hole drilling section</h2>
-<pre class="cp-code"><code>T03 M06                 <span class="cp-comment">(Ø6 drill)</span>
-G54 G90 S1500 M03
-G43 H03 Z50. M08
-G99 G83 X10. Y10. R2. Z-13.8 Q3. F80.
-X90. Y10.
-X90. Y70.
-X10. Y70.
-G80
-G00 Z50. M09
-M05</code></pre>
-<p>Pocket roughing uses T02 at Z=-4 depth, following the X30-70/Y25-55 rectangle with R5 corners. Face milling with T01 passes across X0-100 at Z=0.</p>
-<h2>Common Mistakes</h2>
-<ul><li>Programming pocket dimensions wrong (e.g. 40×30 center vs corner).</li>
-<li>Forgetting drill breakthrough depth on a 12 mm plate.</li>
-<li>Calling T03 but H02 — wrong tool length.</li></ul>
-<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> Plate is 12 mm thick, Ø6 through holes. Z depth?</p><details><summary>Show answer</summary><p>-13.8 mm (12 through + 1.8 drill point).</p></details><p><strong>2.</strong> Why is the pocket at X30-70?</p><details><summary>Show answer</summary><p>That is 40 mm wide centered: (100-40)/2 = 30 margin on each side.</p></details></section>
-<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Mill Operator's Manual (haascnc.com, retrieved 2026-09-24).</li><li>[Drilling Parameter Assistant](/cnc-manufacturing-engineering/engineering-tools/drilling-parameter-assistant/).</li></ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/19-turning-programming/">&larr; Turning Programming</a><a href="/cnc-manufacturing-engineering/cnc-programming/21-threading-basics/">Threading Basics &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>This lesson has moved</h1>
+<p>The content that was at this URL has been consolidated into:
+<a href="33-milling-strategies/"><strong>Milling Strategies</strong></a>.</p>
+<p>If you are not redirected automatically, <a href="33-milling-strategies/">click here</a>.</p>
+</main>
+<footer class="site-footer"><p>Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</p></footer>
+</body>
+</html>

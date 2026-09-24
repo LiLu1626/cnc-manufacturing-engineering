@@ -1,64 +1,32 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CNC Turning Programming — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="Lathe coordinates, diameter programming, G71 roughing and G70 finishing on Haas — and a front-profile example with no parting off.">
-<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/19-turning-programming/">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moved — CNC Programming</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
+<meta http-equiv="refresh" content="0;url=19-turning-fundamentals/">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+    </ul>
+  </div>
+</nav>
 <main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>CNC Turning Programming</h1>
-<p class="lead">On a lathe, X is diameter, Z is along the spindle. G71 roughs, G70 finishes. This page writes a front profile: Ø30 × Z0-20 and Ø36 × Z-20 to -40.</p>
-<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Lathe</span></div>
-<div class="callout"><strong>What you will learn:</strong><ul><li>Diameter vs radius programming</li><li>G99 feed/rev and G97 constant RPM for threading</li><li>G71 rough cycle, G70 finish cycle</li><li>Front profile example (no parting off)</li></ul></div>
-<h2>Concept</h2>
-<p>A CNC lathe turns cylindrical parts. <strong>X is diameter</strong> (X50 = 50 mm diameter, 25 mm radius). <strong>Z</strong> runs along the spindle. Work zero is typically at the face center. Tool moves in X (plunge) and Z (along the bar).</p>
-<h2>Why It Matters</h2>
-<p>Diameter programming means X moves are doubled in radius. If you confuse diameter and radius, the part is half or double the size. Haas lathes use G99 for feed/rev (not G95), and G97 for constant RPM during threading.</p>
-<h2>How</h2>
-<h3>Haas G71 roughing cycle</h3>
-<p>G71 follows a contour you describe between P (start) and Q (end). It leaves stock for finishing, then G70 finishes to size.</p>
-<h2>Example</h2>
-<p>Raw stock Ø40 × 100. Face off. Rough and finish: Ø30 × Z0 to Z-20, then Ø36 × Z-20 to Z-40. No parting off — only the front profile.</p>
-<pre class="cp-code"><code>O2000 (FRONT PROFILE, NO PARTING)
-G21 G97 G99
-T0101 (OD roughing tool)
-G54 S1200 M03
-G00 X42. Z2. M08        <span class="cp-comment">(approach)</span>
-G71 U1.0 R0.5
-G71 P10 Q20 U0.4 W0.1 F0.2
-N10 G00 X30.            <span class="cp-comment">(profile start: Ø30)</span>
-G01 Z0 F0.1
-Z-20.                   <span class="cp-comment">(Ø30 for 20 mm long)</span>
-X36.                    <span class="cp-comment">(step out to Ø36)</span>
-Z-40.                   <span class="cp-comment">(Ø36 to Z-40)</span>
-N20 X42.                <span class="cp-comment">(profile end: clear bar)</span>
-G00 X100. Z100.
-T0202 (finishing tool)
-G97 S1800 M03
-G00 X42. Z2.
-G70 P10 Q20             <span class="cp-comment">(finish to 30/36)</span>
-G00 X100. Z100.
-M09 M05
-M30</code></pre>
-<p>The contour N10–N20 only changes Z direction monotonically from Z0 to Z-40 (no Z reversal), which satisfies Haas G71 rules. No parting off is programmed — the part remains in the bar.</p>
-<h2>Common Mistakes</h2>
-<ul><li>Z direction reversing inside a G71 P-Q contour — Haas requires monotonic X or Z.</li>
-<li>Using G96 during threading — must switch to G97.</li>
-<li>Confusing diameter and radius X values.</li></ul>
-<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> X50 in diameter programming. What is the radial position?</p><details><summary>Show answer</summary><p>25 mm from center (radius = diameter/2).</p></details><p><strong>2.</strong> Why no parting off in this example?</p><details><summary>Show answer</summary><p>Only the front profile is machined in this example; the part stays in the bar for later operations.</p></details></section>
-<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Lathe Operator's Manual — G71/G70 rough/finish cycles (haascnc.com, retrieved 2026-09-24).</li><li>[Turning Speed Calculator](/cnc-manufacturing-engineering/engineering-tools/turning-speed-feed-calculator/).</li></ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/34-subprograms/">&larr; Subprograms</a><a href="/cnc-manufacturing-engineering/cnc-programming/20-milling-programming/">Milling Programming &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>This lesson has moved</h1>
+<p>The content that was at this URL has been consolidated into:
+<a href="19-turning-fundamentals/"><strong>Turning Coordinates & Toolpaths</strong></a>.</p>
+<p>If you are not redirected automatically, <a href="19-turning-fundamentals/">click here</a>.</p>
+</main>
+<footer class="site-footer"><p>Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</p></footer>
+</body>
+</html>

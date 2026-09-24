@@ -1,42 +1,32 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Threading Basics — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="Pitch vs lead, major/minor diameter, single-point threading on a lathe, and the axial feed = RPM × lead relationship.">
-<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/21-threading-basics/">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moved — CNC Programming</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/22-threading/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
+<meta http-equiv="refresh" content="0;url=22-threading/">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+    </ul>
+  </div>
+</nav>
 <main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Threading Basics</h1>
-<p class="lead">A screw thread is a helix. Pitch is distance between adjacent threads; lead is distance per revolution. Axial feed must equal lead at the programmed RPM.</p>
-<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
-<div class="callout"><strong>What you will learn:</strong><ul><li>Pitch vs lead (single vs multi-start)</li><li>Major, minor, pitch diameter</li><li>Axial feed = RPM × lead</li><li>Why threading uses G97 constant RPM</li></ul></div>
-<h2>Concept</h2>
-<p>On a lathe, single-point threading cuts a V-shaped groove along a rotating part. The tool moves axially exactly one <strong>lead</strong> per spindle revolution. For a single-start thread, lead = pitch. Axial feed (mm/min) = RPM × lead (mm/rev).</p>
-<h2>Why It Matters</h2>
-<p>If the feed is wrong, the thread pitch is wrong — it will not mate. If RPM changes mid-cut (G96), the pitch wanders. Threading always uses G97 constant RPM.</p>
-<h2>How</h2>
-<h3>M10×1.5 example</h3>
-<p>M10: major diameter 10 mm, pitch 1.5 mm. Single-start, lead = 1.5 mm. At 500 RPM, axial feed = 500 × 1.5 = 750 mm/min. Thread depth ≈ 0.613 × pitch = 0.92 mm each side.</p>
-<h2>Example</h2>
-<p>M20×1.5 at 500 rpm: F = 500 × 1.5 = 750 mm/min. (In G99 feed/rev mode, F = 1.5 directly.) Multi-start: 2-start thread with pitch 1.5 has lead 3.0 — F = RPM × 3.0.</p>
-<h2>Common Mistakes</h2>
-<ul><li>Confusing pitch and lead on multi-start threads.</li>
-<li>Using G96 during threading — RPM varies, pitch is inconsistent.</li>
-<li>Forgetting spring pass (one final pass at 0 depth) to clean up.</li></ul>
-<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> M10×1.5 at 500 rpm. Axial feed?</p><details><summary>Show answer</summary><p>500 × 1.5 = 750 mm/min.</p></details><p><strong>2.</strong> What is the lead of a 2-start thread with pitch 1.5?</p><details><summary>Show answer</summary><p>Lead = 2 × 1.5 = 3.0 mm per revolution.</p></details></section>
-<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Lathe Operator's Manual — Threading cycles (haascnc.com, retrieved 2026-09-24).</li><li>[Threading Calculator](/cnc-manufacturing-engineering/engineering-tools/threading-calculator/).</li></ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/20-milling-programming/">&larr; Milling Programming</a><a href="/cnc-manufacturing-engineering/cnc-programming/22-lathe-threading/">Lathe Threading &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>This lesson has moved</h1>
+<p>The content that was at this URL has been consolidated into:
+<a href="22-threading/"><strong>Single-Point Thread Programming</strong></a>.</p>
+<p>If you are not redirected automatically, <a href="22-threading/">click here</a>.</p>
+</main>
+<footer class="site-footer"><p>Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</p></footer>
+</body>
+</html>

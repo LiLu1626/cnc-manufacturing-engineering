@@ -1,104 +1,32 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Macro Programming Introduction — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="Variables, IF/WHILE loops, N labels for branching, and a bolt-circle drill macro with input validation.">
-<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/36-macro-programming/">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moved — CNC Programming</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/36-macro-foundations/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
-<main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Macro Programming Introduction</h1>
-<p class="lead">Macros add variables, logic, and loops to G-code. This page teaches N-label branching, input validation (including integer checks), and safe arithmetic.</p>
-<div class="cp-meta"><span><strong>Level:</strong> Advanced</span><span><strong>Machine:</strong> Mill</span></div>
-<div class="callout"><strong>What you will learn:</strong><ul>
-<li>Variables #1&ndash;#33 (local) and #100+ (common)</li>
-<li>IF/GOTO and WHILE/DO branching with N labels</li>
-<li>Input validation: reject zero, negatives, and non-integers</li>
-<li>Divide-by-zero protection</li>
-</ul></div>
-
-<h2>Concept</h2>
-<p>A <strong>macro</strong> is a program with variables and logic. Variables like <code>#1</code>, <code>#2</code> hold numbers. Conditional branching uses <code>IF[condition] GOTO n</code>, where <strong>n is a number that matches an N label in the same program</strong>. The syntax is <code>GOTO 100</code> (jump to the block marked <code>N100</code>) — you do <em>not</em> write <code>GOTO N100</code> with the N in the GOTO statement.</p>
-
-<h2>Why It Matters</h2>
-<p>Branching within a program uses N labels. An O-number identifies a separate program (called by M98); GOTO never references an O-number. If you write <code>GOTO 1000</code> but no block in the program is marked <code>N1000</code>, the controller cannot find the target — it is not "calling O1000," it is simply missing a label.</p>
-
-<h2>Branching Syntax</h2>
-<pre class="cp-code"><code>IF[#1 LE 0] GOTO 100   <span class="cp-comment">(jump to N100 if #1 is zero or negative)</span>
-WHILE[#3 LT #2] DO 1  <span class="cp-comment">(loop while #3 < #2)</span>
-...
-END 1                   <span class="cp-comment">(end of loop body)</span>
-...
-N100 (ERROR HANDLER)
-#3000 = 1 (BAD INPUT)
-M30</code></pre>
-
-<h2>Worked Example: Bolt-Circle Drill Macro</h2>
-<p>Input <code>#1</code> = circle radius. Input <code>#2</code> = number of holes. This example assumes the program already established: G21, G17, G90, G54, spindle on, coolant on, tool at initial plane. The macro drills holes around a circle centered at G54 X0 Y0.</p>
-
-<pre class="cp-code"><code>O3600 (BOLT CIRCLE DRILL MACRO)
-#1 = 20.                  <span class="cp-comment">(radius, PCD 40 / 2)</span>
-#2 = 4                    <span class="cp-comment">(number of holes)</span>
-#3 = 0                    <span class="cp-comment">(hole counter)</span>
-<span class="cp-comment">(input validation)</span>
-IF[#1 LE 0] GOTO 100      <span class="cp-comment">(radius must be positive)</span>
-IF[#2 LT 3] GOTO 100      <span class="cp-comment">(at least 3 holes)</span>
-IF[#2 GT 12] GOTO 100     <span class="cp-comment">(at most 12 holes)</span>
-IF[FIX[#2] NE #2] GOTO 100  <span class="cp-comment">(#2 must be an integer)</span>
-WHILE[#3 LT #2] DO 1
-#4 = 360 * #3 / #2        <span class="cp-comment">(angle in degrees)</span>
-#5 = #1 * COS[#4]
-#6 = #1 * SIN[#4]
-G90 G81 X#5 Y#6 R2. Z-10. F100.
-#3 = #3 + 1
-END 1
-G80
-M30
-N100 (ERROR HANDLER)
-#3000 = 1 (BAD INPUT — CHECK RADIUS AND HOLE COUNT)
-M30</code></pre>
-
-<p>With #1=20, #2=4: hole angles are 0&deg;, 90&deg;, 180&deg;, 270&deg;. Positions: (20,0), (0,20), (&minus;20,0), (0,&minus;20). The loop runs exactly 4 times.</p>
-
-<h2>Integer Validation</h2>
-<p>The line <code>IF[FIX[#2] NE #2] GOTO 100</code> rejects non-integer hole counts. Without it, entering #2=3.5 would make the loop condition <code>#3 LT 3.5</code>, executing 4 times (count 0,1,2,3) with angle step 102.857&deg; — not a legal equal-spaced bolt circle. <code>FIX[#2]</code> truncates toward zero; if the truncated value differs from the original, the input was not an integer.</p>
-
-<h2>Common Mistakes</h2>
-<ul>
-<li>Writing <code>GOTO N100</code> — the GOTO statement takes a bare number (<code>GOTO 100</code>); the N prefix only appears on the label block.</li>
-<li>Using an O-number as a GOTO target — GOTO stays in the current program; O-numbers are separate programs called by M98.</li>
-<li>Not validating that #2 is an integer — 3.5 holes is not a valid bolt circle.</li>
-<li>Dividing by an input that could be zero without a guard clause.</li>
-<li>Forgetting that trig functions use degrees, not radians, on Haas/FANUC.</li>
-</ul>
-
-<section class="cp-practice"><h2>Practice</h2>
-<p><strong>1.</strong> What happens if someone sets #2 = 3.5?</p>
-<details><summary>Show answer</summary><p>The integer check <code>IF[FIX[3.5] NE 3.5]</code> is true (FIX[3.5]=3, 3&ne;3.5), so the program jumps to N100 and alarms. Without this check, the loop would run 4 times at 102.857&deg; spacing.</p></details>
-<p><strong>2.</strong> What is the correct syntax to jump to the block marked N200?</p>
-<details><summary>Show answer</summary><p><code>GOTO 200</code> — bare number, no N prefix in the GOTO statement. The N200 appears on the target block itself.</p></details>
-<p><strong>3.</strong> Why is radius validation needed before the WHILE loop?</p>
-<details><summary>Show answer</summary><p>Radius enters the COS/SIN calculations. A zero or negative radius produces wrong (or mirrored) hole positions. The guard clause catches it before any motion.</p></details>
-</section>
-
-<section class="cp-sources"><h2>Sources</h2><ul>
-<li>Haas Mill Operator's Manual — Macros, Variables, and Branching (haascnc.com).</li>
-</ul></section>
-
-<nav class="cp-nav-bottom">
-<a href="/cnc-manufacturing-engineering/cnc-programming/35-practical-examples/">&larr; Practical Examples</a>
-<a href="/cnc-manufacturing-engineering/cnc-programming/37-probing/">Probing &rarr;</a>
+<meta http-equiv="refresh" content="0;url=36-macro-foundations/">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+    </ul>
+  </div>
 </nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<main class="article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>This lesson has moved</h1>
+<p>The content that was at this URL has been consolidated into:
+<a href="36-macro-foundations/"><strong>Macro Programming Foundations</strong></a>.</p>
+<p>If you are not redirected automatically, <a href="36-macro-foundations/">click here</a>.</p>
+</main>
+<footer class="site-footer"><p>Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</p></footer>
+</body>
+</html>

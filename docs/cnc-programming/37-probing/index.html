@@ -1,40 +1,32 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Probing Basics — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="G31 records a position when the probe touches. It does NOT automatically update work offsets — you read variables and calculate.">
-<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/37-probing/">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moved — CNC Programming</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/37-multiaxis-probing-overview/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
+<meta http-equiv="refresh" content="0;url=37-multiaxis-probing-overview/">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+    </ul>
+  </div>
+</nav>
 <main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Probing Basics</h1>
-<p class="lead">A touch probe is a precision measuring tool in the spindle. G31 records the contact position. Work offset updates are your calculation, not automatic.</p>
-<div class="cp-meta"><span><strong>Level:</strong> Advanced</span><span><strong>Machine:</strong> Mill</span></div>
-<div class="callout"><strong>What you will learn:</strong><ul><li>G31 = skip-on-touch, record position</li><li>Probe variables hold X/Y/Z at touch</li><li>Work offset update is manual calculation</li><li>Probing cycles vs DIY G31</li></ul></div>
-<h2>Concept</h2>
-<p>A <strong>touch probe</strong> touches the part and triggers a signal. <strong>G31</strong> moves toward the part at feed; when the probe triggers, the controller records the current position into a variable. That position is a measurement — the controller does not automatically move the tool or update G54. You calculate the edge center and set the offset yourself (or run a canned probing cycle that does).</p>
-<h2>Why It Matters</h2>
-<p>A common mistake is thinking G31 automatically "sets work zero." It does not. G31 gives you a measured position; you calculate the edge or center and enter the work offset yourself (or use a canned probing cycle that does the calculation). It records — it does not move the tool or write G54.</p>
-<h2>How</h2>
-<h3>Edge finding with G31</h3>
-<p>Probe approaches the left edge from the left at slow feed. On touch, #5061 records the ball center position <strong>in the currently active work coordinate system</strong>. If the ball is Ø4 (radius 2) and the recorded X = -100, the left edge of the part is at -100 + 2 = <strong>-98</strong> in work coordinates. If the part is 40 mm wide, the center is 20 mm to the right of the left edge: center in work coordinates = -98 + 20 = <strong>-78</strong>.</p><p>However, <strong>-78 is in work coordinates, not machine coordinates.</strong> To set a new G54 X offset, you must convert: machine position = old G54 X + measured work position. If old G54 X = -300, the part center in machine coordinates is -300 + (-78) = -378. The new G54 X = -378 - 0 (if you want work zero at center) = -378. Entering -78 directly into G54 would be wrong unless the old G54 X happened to be 0. Always account for the existing offset and probe ball calibration.</p>
-<h2>Common Mistakes</h2>
-<ul><li>Thinking G31 auto-sets G54 — it records, you calculate.</li>
-<li>Probing at high feed — probe is delicate.</li>
-<li>Forgetting probe tip radius in the calculation.</li></ul>
-<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> G31 touches left edge at X=-100, probe tip Ø4. Edge position?</p><details><summary>Show answer</summary><p>-100 + 2 = -98. The ball center is at -100; the contact point (left edge) is 2 mm to the right of the ball center.</p></details><p><strong>2.</strong> Does G31 update G54?</p><details><summary>Show answer</summary><p>No. It records the touch position to a variable. You calculate and enter the offset.</p></details></section>
-<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Mill Operator's Manual — G31 probe input (haascnc.com, retrieved 2026-09-24).</li></ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/36-macro-programming/">&larr; Macro Programming</a><a href="/cnc-manufacturing-engineering/cnc-programming/38-controller-specific/">Controller Differences &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>This lesson has moved</h1>
+<p>The content that was at this URL has been consolidated into:
+<a href="37-multiaxis-probing-overview/"><strong>Rotary Axes & Probing</strong></a>.</p>
+<p>If you are not redirected automatically, <a href="37-multiaxis-probing-overview/">click here</a>.</p>
+</main>
+<footer class="site-footer"><p>Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</p></footer>
+</body>
+</html>

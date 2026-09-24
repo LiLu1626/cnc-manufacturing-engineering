@@ -1,47 +1,32 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Drilling and Hole-Making Canned Cycles — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="G81 drill, G82 dwell, G83 peck, G84 tap, G85 bore — position, R plane, depth, feed, retract.">
-<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/33-drilling-cycles/">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moved — CNC Programming</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
+<meta http-equiv="refresh" content="0;url=17-drilling-cycles/">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+    </ul>
+  </div>
+</nav>
 <main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Drilling and Hole-Making Canned Cycles</h1>
-<p class="lead">G81 drills in one feed. G83 pecks to clear chips. G84 taps. Each cycle is one line: position, plunge, retract, repeat at the next hole.</p>
-<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill</span></div>
-<div class="callout"><strong>What you will learn:</strong><ul><li>G81 drill, G82 drill with dwell, G83 peck</li><li>G84 tapping, G85 boring</li><li>R plane and initial plane</li><li>G80 cancellation and G98/G99 retract</li></ul></div>
-<h2>Concept</h2>
-<p>A <strong>canned cycle</strong> encodes a multi-step drill into one line. <strong>G81</strong> = rapid to R, feed to Z depth, rapid retract. <strong>G83</strong> = peck drill (repeated retracts to clear chips). <strong>G84</strong> = tapping (feed synchronized to spindle). <strong>G80</strong> cancels the cycle.</p>
-<h2>Why It Matters</h2>
-<p>Without canned cycles, each hole needs 5-6 lines of G00/G01. With G81, one line per hole. And because the cycle is modal, every X/Y block drills — which is also why G80 is critical.</p>
-<h2>How</h2>
-<h3>G81 example</h3>
-<pre class="cp-code"><code>G90 G99 G81 X10. Y10. R2. Z-15. F100.
-X50. Y10.        <span class="cp-comment">(hole 2: same cycle, new position)</span>
-X50. Y50.        <span class="cp-comment">(hole 3)</span>
-X10. Y50.        <span class="cp-comment">(hole 4)</span>
-G80              <span class="cp-comment">(cancel cycle)</span></code></pre>
-<p>G99 = retract to R plane between holes (faster). G98 = retract to initial plane (for obstacles).</p>
-<h2>Example</h2>
-<p>12 mm plate, Ø6 through holes. Z depth = -12 - drill point (~1.8mm) = -13.8. R plane = 2 mm above surface. F100 mm/min for a Ø6 drill in steel.</p>
-<h2>Common Mistakes</h2>
-<ul><li>Forgetting G80 — the next rapid move drills a hole.</li>
-<li>Using G81 for deep holes without peck — packing chips causes drill breakage. Use G83.</li>
-<li>Wrong R plane too close to the part — collisions on the way to the next hole.</li></ul>
-<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> After G81, you move X0 Y0 to reposition. What happens?</p><details><summary>Show answer</summary><p>On Haas, G00 cancels the canned cycle — but verify. Safer: G80 before repositioning.</p></details><p><strong>2.</strong> Why G83 for deep holes?</p><details><summary>Show answer</summary><p>Repeated retract breaks and clears chips, preventing drill overheating and work hardening.</p></details></section>
-<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Mill Operator's Manual — G81/G82/G83/G84/G85 (haascnc.com, retrieved 2026-09-24).</li><li>[Drilling Parameter Assistant](/cnc-manufacturing-engineering/engineering-tools/drilling-parameter-assistant/).</li></ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/16-cutter-compensation/">&larr; Cutter Comp</a><a href="/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/">Canned Cycles &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>This lesson has moved</h1>
+<p>The content that was at this URL has been consolidated into:
+<a href="17-drilling-cycles/"><strong>Drilling, Pecking & Boring</strong></a>.</p>
+<p>If you are not redirected automatically, <a href="17-drilling-cycles/">click here</a>.</p>
+</main>
+<footer class="site-footer"><p>Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</p></footer>
+</body>
+</html>
