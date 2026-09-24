@@ -38,14 +38,49 @@
 
 <h2>How It Works</h2>
 <h3>I/J Method (center vector)</h3>
-<p>Start at (0,0), center at (25,0), end at (50,0). I = 25 &minus; 0 = 25. J = 0 &minus; 0 = 0.</p>
-<p>From (0,0) to (50,0) around center (25,0): the start vector (&minus;25,0) points west (180&deg;), the end vector (25,0) points east (0&deg;).</p>
+<p>Take G90, G17, G21 as already active. Start S = (0,0), center C = (25,0), end E = (50,0), radius r = 25. I = C&minus;S in X = 25&minus;0 = 25. J = C&minus;S in Y = 0&minus;0 = 0.</p>
+<p>Using x = Cx + r&middot;cos&theta;, y = Cy + r&middot;sin&theta;:</p>
 <ul>
-<li><strong>G02 (clockwise)</strong>: angle decreases 180&deg; &rarr; 90&deg; &rarr; 0&deg;, passing through (25, &minus;25) — the <strong>lower</strong> semicircle. Arc length = &pi;&times;25 &asymp; 78.54 mm.</li>
-<li><strong>G03 (counterclockwise)</strong>: angle increases 180&deg; &rarr; 270&deg; &rarr; 360&deg;/0&deg;, passing through (25, +25) — the <strong>upper</strong> semicircle. Arc length = &pi;&times;25 &asymp; 78.54 mm.</li>
+<li>At S (0,0): (&minus;25,0) relative to C &rarr; &theta; = 180&deg;.</li>
+<li>At E (50,0): (+25,0) relative to C &rarr; &theta; = 0&deg;.</li>
 </ul>
-<pre class="cp-code"><code>G17 G02 X50. Y0 I25. J0   (lower semicircle, clockwise)
-G17 G03 X50. Y0 I25. J0   (upper semicircle, counterclockwise)</code></pre>
+<p><strong>G02 (clockwise)</strong>: angle decreases 180&deg; &rarr; 90&deg; &rarr; 0&deg;. At 90&deg;: x = 25 + 25&middot;cos90&deg; = 25, y = 0 + 25&middot;sin90&deg; = +25. So G02 passes through (25, <strong>+25</strong>) — the <strong>upper</strong> semicircle.</p>
+<p><strong>G03 (counterclockwise)</strong>: angle increases 180&deg; &rarr; 270&deg; &rarr; 360&deg;. At 270&deg;: x = 25, y = &minus;25. So G03 passes through (25, <strong>&minus;25</strong>) — the <strong>lower</strong> semicircle.</p>
+<p>Both are 180&deg; arcs; arc length L = 2&pi;r&times;&theta;/360 = 2&pi;&times;25&times;180/360 = <strong>78.540 mm</strong>.</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <!-- axes -->
+  <line x1="40" y1="130" x2="370" y2="130" stroke="#999" stroke-width="1"/>
+  <line x1="200" y1="20" x2="200" y2="240" stroke="#999" stroke-width="1"/>
+  <text x="372" y="134" font-size="11" fill="#666">X</text>
+  <text x="204" y="22" font-size="11" fill="#666">Y</text>
+  <!-- center C(25,0) at pixel (200,130) -->
+  <circle cx="200" cy="130" r="2.5" fill="#333"/>
+  <text x="206" y="126" font-size="11" fill="#333">C(25,0)</text>
+  <!-- start S(0,0) at pixel (50,130) -->
+  <circle cx="50" cy="130" r="3.5" fill="#c0392b"/>
+  <text x="30" y="148" font-size="11" fill="#c0392b">S(0,0)</text>
+  <!-- end E(50,0) at pixel (350,130) -->
+  <circle cx="350" cy="130" r="3.5" fill="#2980b9"/>
+  <text x="332" y="148" font-size="11" fill="#2980b9">E(50,0)</text>
+  <!-- G02 upper semicircle through (25,+25) -> pixel (200,30) -->
+  <path d="M 50 130 A 150 150 0 0 1 350 130" fill="none" stroke="#c0392b" stroke-width="2"/>
+  <text x="155" y="55" font-size="12" fill="#c0392b" font-weight="bold">G02 CW upper</text>
+  <!-- G03 lower semicircle through (25,-25) -> pixel (200,230) -->
+  <path d="M 50 130 A 150 150 0 0 0 350 130" fill="none" stroke="#2980b9" stroke-width="2"/>
+  <text x="155" y="220" font-size="12" fill="#2980b9" font-weight="bold">G03 CCW lower</text>
+</svg>
+<figcaption>Same start (0,0) and end (50,0), center (25,0). G02 (clockwise) cuts the upper semicircle through (25,+25); G03 (counterclockwise) cuts the lower through (25,&minus;25). Radius = 25 mm.</figcaption>
+</figure>
+
+<p>The two lines below are <strong>independent examples</strong> — each starts from S=(0,0). They must not be run as consecutive code, because after the first line the tool is already at E=(50,0):</p>
+<pre class="cp-code"><code>(Example A — upper semicircle, already at S=(0,0), G90/G17/G21 set)
+G02 X50. Y0 I25. J0.        (clockwise through (25,+25), 78.54 mm)
+
+(Example B — lower semicircle, reposition back to S=(0,0) first)
+G00 X0 Y0
+G03 X50. Y0 I25. J0.        (counterclockwise through (25,-25), 78.54 mm)</code></pre>
 
 <h3>R Method (radius)</h3>
 <pre class="cp-code"><code>G17 G03 X50. Y0 R25.</code></pre>
@@ -56,20 +91,43 @@ G17 G03 X50. Y0 I25. J0   (upper semicircle, counterclockwise)</code></pre>
 <pre class="cp-code"><code>G01 X25. Y0 F300.
 G03 I-25. J0  (full circle, ends back at start)</code></pre>
 
-<p><strong>Short arc example:</strong> start (0,0), center (0,20), end (20,20). Start vector from center = (0,&minus;20) at 270&deg;. End vector = (20,0) at 0&deg;. Going from 270&deg; to 0&deg; counterclockwise (increasing angle) is a 90&deg; short arc = <strong>G03</strong>, length = &pi;&times;20&times;90/360 = 31.416 mm. G02 would take the long 270&deg; way around, length = 94.248 mm.</p>
-<pre class="cp-code"><code>G17 G03 X20. Y20. I0. J20.   (short 90deg arc, CCW)</code></pre>
+<p><strong>Short 90&deg; arc example:</strong> start S=(0,0), center C=(0,20), end E=(20,20). Start vector from C = (0,&minus;20) at 270&deg;. End vector = (20,0) at 0&deg;. Going 270&deg; &rarr; 360&deg;/0&deg; counterclockwise (increasing angle) is a 90&deg; arc = <strong>G03</strong>. Arc length L = 2&pi;r&times;&theta;/360 = 2&pi;&times;20&times;90/360 = <strong>31.416 mm</strong>. G02 would take the long 270&deg; way around: 2&pi;&times;20&times;270/360 = 94.248 mm.</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 320 260" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <line x1="30" y1="220" x2="300" y2="220" stroke="#999" stroke-width="1"/>
+  <line x1="60" y1="240" x2="60" y2="20" stroke="#999" stroke-width="1"/>
+  <text x="302" y="224" font-size="11" fill="#666">X</text>
+  <text x="64" y="22" font-size="11" fill="#666">Y</text>
+  <!-- center C(0,20) pixel (60, 60) -->
+  <circle cx="60" cy="60" r="2.5" fill="#333"/>
+  <text x="66" y="56" font-size="11" fill="#333">C(0,20)</text>
+  <!-- S(0,0) pixel (60,220) -->
+  <circle cx="60" cy="220" r="3.5" fill="#c0392b"/>
+  <text x="38" y="238" font-size="11" fill="#c0392b">S(0,0)</text>
+  <!-- E(20,20) pixel (220,60) -->
+  <circle cx="220" cy="60" r="3.5" fill="#2980b9"/>
+  <text x="226" y="56" font-size="11" fill="#2980b9">E(20,20)</text>
+  <!-- radius 20 -> 160px. G03 CCW short arc from S(60,220) to E(220,60) -->
+  <path d="M 60 220 A 160 160 0 0 1 220 60" fill="none" stroke="#2980b9" stroke-width="2"/>
+  <text x="110" y="130" font-size="12" fill="#2980b9" font-weight="bold">G03 90&deg;</text>
+  <text x="110" y="146" font-size="11" fill="#2980b9">L = 31.416 mm</text>
+</svg>
+<figcaption>Short 90&deg; arc S(0,0) &rarr; E(20,20) around C(0,20), r=20. G03 counterclockwise. Length = 2&pi;&times;20&times;90/360 = 31.416 mm.</figcaption>
+</figure>
 
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Confusing G02/G03 direction</strong> — view from positive Z. CW = G02, CCW = G03. Use angles: if the start-to-end angle decreases, it's G02.</li>
 <li><strong>Using R for full circle</strong> — R cannot express a 360&deg; circle; use I/J.</li>
 <li><strong>I/J as absolute center</strong> — I/J are offsets from the start point, not absolute coordinates.</li>
-<li><strong>Forgetting to specify short vs long arc</strong> — when start and end are exactly opposite, both G02 and G03 can reach the end. Add "short arc" to the drawing note.</li>
+<li><strong>Running two arc blocks as consecutive code without repositioning</strong> — after an arc the start point has moved; the next I/J refers to the new start.</li>
 </ul>
 
 <h2>Practice</h2>
-<p><strong>1.</strong> Start (0,0), center (30,0), end (30,30). This is a 90&deg; short arc. G02 or G03?</p><details><summary>Ans</summary><p>G02. Start vector from center = (&minus;30,0) at 180&deg;. End vector = (0,30) at 90&deg;. Angle decreases from 180&deg; to 90&deg; = clockwise = G02. Short arc length = &pi;&times;30&times;90/360 = 47.124 mm. (G03 would take the 270&deg; long way around, 141.372 mm.)</p></details>
-<p><strong>2.</strong> Start (25,0), center (0,0). What is I?</p><details><summary>Ans</summary><p>I = center X &minus; start X = 0 &minus; 25 = &minus;25.</p></details>
+<p><strong>1.</strong> Start S=(0,0), center C=(30,0), end E=(30,30). G02 or G03?</p>
+<details><summary>Ans</summary><p>G02. Start vector from C = (&minus;30,0) at 180&deg;. End vector = (0,30) at 90&deg;. Angle decreases 180&deg; &rarr; 90&deg; = clockwise = G02. Short 90&deg; arc length L = 2&pi;&times;30&times;90/360 = <strong>47.124 mm</strong>. (G03 would take the 270&deg; long way around: 2&pi;&times;30&times;270/360 = 141.372 mm.)</p></details>
+<p><strong>2.</strong> Start (25,0), center (0,0). What is I?</p><details><summary>Ans</summary><p>I = Cx &minus; Sx = 0 &minus; 25 = &minus;25.</p></details>
 <p><strong>3.</strong> R positive vs negative?</p><details><summary>Ans</summary><p>R+ = arc &lt; 180&deg; (short arc). R&minus; = arc &gt; 180&deg; (long arc).</p></details>
 
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/14-linear-interpolation/">&larr; Linear Motion</a><a href="/cnc-manufacturing-engineering/cnc-programming/16-cutter-compensation/">Cutter Comp &rarr;</a></nav>

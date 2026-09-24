@@ -73,7 +73,7 @@ M99</code></pre>
 <li><strong>Confusing P and O</strong> — Haas uses M98 P2000 (call), not O2000. The subprogram itself is labeled O2000.</li>
 <li><strong>Using G91 in subprogram without restoring G90</strong> — subsequent main-program coordinates become incremental, causing holes to drift.</li>
 <li><strong>Assuming G80 retracts to Z50</strong> — G80 cancels cycle mode; the return height was set by G98/G99. Always write explicit G00 Z retract.</li>
-<li><strong>Leaving cycle active between calls</strong> — the subprogram should G80 before M99 so the main program's next G00 move is not interpreted as a drill.</li>
+<li><strong>Leaving cycle active between calls</strong> — cancel the cycle with G80 before M99 to make the exit state explicit. On Haas, an explicit G00 also cancels the cycle; an XY block without a cancelling motion command could repeat it.</li>
 </ul>
 
 <h2>Practice</h2>
