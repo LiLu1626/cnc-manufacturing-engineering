@@ -1,4 +1,17 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Tapping & Thread Milling — CNC Programming</title><meta name="description" content="Rigid tapping G84, tap drill size, thread mill vs tap, and feed calculation for tapping."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/34-tapping-thread-milling/"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tapping & Thread Milling — CNC Programming</title>
+<meta name="description" content="Rigid tapping G84, tap drill sizing, feed calculation, blind vs through holes, and when thread milling beats conventional tapping.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/34-tapping-thread-milling/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
   <div class="site-nav-inner">
     <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
     <ul class="site-nav-links">
@@ -10,24 +23,123 @@
       <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
     </ul>
   </div>
-</nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Tapping & Thread Milling</h1><p class="lead">Tapping cuts internal threads. This page covers rigid tapping G84, tap drill sizing, and when thread milling is better.</p><h2>Concept</h2>
-<p><strong>Tapping</strong> uses a tap to cut internal threads in one operation. <strong>Rigid tapping</strong> (G84) synchronizes spindle rotation and Z feed so the tap follows the thread pitch exactly. <strong>Thread milling</strong> uses a rotating tool that helically interpolates around a bore — more flexible but more complex.</p>
+</nav>
+<main class="article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Tapping &amp; Thread Milling</h1>
+<p class="lead">Tapping cuts internal threads with a tap. This page covers rigid tapping with G84, how to calculate the feed, choosing the right tap drill size, blind-hole considerations, and when thread milling is the better choice.</p>
+
+<h2>Concept</h2>
+<p><strong>Tapping</strong> is the process of cutting internal threads using a threaded tool called a tap. On a CNC mill, <strong>rigid tapping</strong> (G84) synchronizes spindle rotation with Z feed so the tap follows the thread pitch exactly: every spindle revolution advances the tap by exactly one pitch. The spindle reverses at the bottom and retracts, still synchronized, so the tap backs out cleanly.</p>
+<p><strong>Thread milling</strong> is an alternative: a rotating single-profile thread mill tool follows a helical path around a pre-drilled bore. The tool circularly interpolates in XY while simultaneously moving in Z, cutting the thread in one or more helical passes. Thread mills are more expensive and more complex to program, but they offer flexibility: one tool can cut many thread sizes, and they work well on large or non-ferrous parts.</p>
+
 <h2>Why It Matters</h2>
-<p>Wrong tap drill size makes threads too shallow or too deep. Wrong feed in G84 strips the thread because feed must equal pitch. Tapping a blind hole requires bottoming tap and proper depth.</p>
+<p>Tapping errors are expensive. If the feed does not match the pitch exactly, the threads are stripped or deformed. If the tap drill is too small, the tap binds and breaks in the hole — broken taps are notoriously hard to remove. If you tap a blind hole too deep, the tap hits the bottom and snaps. Getting the tap drill size, feed, and depth right the first time matters.</p>
+
 <h2>How It Works</h2>
-<h3>G84 Rigid Tapping</h3>
-<pre class="cp-code"><code>G84 R5. Z-20. F=P&times;S</code></pre>
-<p>F = pitch &times; spindle speed. For M10&times;1.5 at S500: F = 1.5 &times; 500 = 750 mm/min.</p>
+
+<h3>G84 Rigid Tapping Cycle</h3>
+<p>G84 works like other canned cycles: rapid to R plane, feed to Z depth, then retract. The difference is that during G84, the spindle turns clockwise (M03) on the way in, then automatically reverses (M04) on the way out. The Z feed is locked to spindle RPM by the controller — but the programmer must set F correctly.</p>
+<p><strong>The critical formula:</strong></p>
+<p style="text-align:center; font-size:1.1em;"><strong>F = pitch (mm/rev) &times; spindle speed (RPM)</strong></p>
+<p>For M10&times;1.5 at S500: F = 1.5 &times; 500 = 750 mm/min. At S1000: F = 1.5 &times; 1000 = 1500 mm/min. The feed is not arbitrary — it must equal the pitch multiplied by RPM, or the thread pitch is wrong.</p>
+
+<table class="data-table">
+<tr><th>Parameter</th><th>Meaning</th><th>Example (M10&times;1.5)</th></tr>
+<tr><td>R</td><td>Start plane above stock</td><td>R5. (generous for tapping)</td></tr>
+<tr><td>Z</td><td>Full thread depth</td><td>Z-15.</td></tr>
+<tr><td>S</td><td>Spindle speed</td><td>S500</td></tr>
+<tr><td>F</td><td>Feed = pitch &times; S</td><td>F750</td></tr>
+</table>
+
 <h3>Tap Drill Size</h3>
-<p>Tap drill = major diameter &minus; pitch. M10&times;1.5: drill = 10 &minus; 1.5 = 8.5 mm.</p>
+<p>Before tapping, you drill a pilot hole. The tap drill is not the same as the thread major diameter — it is smaller, leaving material for the tap to cut. The general rule for metric threads:</p>
+<p style="text-align:center; font-size:1.1em;"><strong>Tap drill diameter = major diameter &minus; pitch</strong></p>
+<table class="data-table">
+<tr><th>Thread</th><th>Pitch</th><th>Tap Drill</th></tr>
+<tr><td>M6&times;1.0</td><td>1.0</td><td>5.0 mm</td></tr>
+<tr><td>M8&times;1.25</td><td>1.25</td><td>6.75 mm (use 6.8 mm)</td></tr>
+<tr><td>M10&times;1.5</td><td>1.5</td><td>8.5 mm</td></tr>
+<tr><td>M12&times;1.75</td><td>1.75</td><td>10.25 mm (use 10.2 or 10.5 mm)</td></tr>
+</table>
+<p>This formula gives approximately 75% thread engagement, which is strong enough for most applications. For more precise sizing, consult a tap drill chart or the tool manufacturer's recommendations.</p>
+
+<h3>Blind Hole vs Through Hole</h3>
+<p><strong>Through holes</strong> are simpler: the tap goes through the part, so you only need to program the thread depth. <strong>Blind holes</strong> (holes that do not go through) require planning: the tap cannot reach the bottom, and the chip evacuation space matters. Use a <strong>bottoming tap</strong> (short chamfer) for near-full depth in blind holes. A taper/starting tap has a long chamfer and leaves several incomplete threads at the bottom. Program the tap Z depth slightly shallower than the drill depth to avoid bottoming out.</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <!-- plate -->
+  <rect x="80" y="40" width="240" height="160" fill="#d4c5a9" stroke="#999"/>
+  <!-- drill hole -->
+  <rect x="185" y="40" width="10" height="140" fill="#fff" stroke="#999"/>
+  <!-- tap -->
+  <rect x="183" y="20" width="14" height="100" fill="#7f8c8d"/>
+  <!-- tap depth line -->
+  <line x1="170" y1="120" x2="210" y2="120" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="215" y="124" font-size="11" fill="#c0392b">Tap depth Z-15</text>
+  <!-- drill depth -->
+  <line x1="170" y1="180" x2="210" y2="180" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="215" y="184" font-size="11" fill="#e67e22">Drill depth Z-16.5</text>
+  <text x="90" y="35" font-size="11" fill="#666">Blind hole: tap does not reach bottom</text>
+</svg>
+<figcaption>Blind hole tapping: the drill goes deeper than the tap. The extra drill depth provides chip clearance at the bottom.</figcaption>
+</figure>
+
+<h3>Thread Milling vs Tapping</h3>
+<table class="data-table">
+<tr><th>Factor</th><th>Rigid Tapping</th><th>Thread Milling</th></tr>
+<tr><td>Cost</td><td>Cheap taps</td><td>Expensive tools</td></tr>
+<tr><td>Programming</td><td>One G84 line</td><td>Helical interpolation code</td></tr>
+<tr><td>Large threads</td><td>Large taps, high torque</td><td>Better: smaller tool, less force</td></tr>
+<tr><td>Material flexibility</td><td>One tap per size/pitch</td><td>One tool cuts many sizes</td></tr>
+<tr><td>Blind holes</td><td>Risk of breaking tap</td><td>Safer: less force, controlled depth</td></tr>
+<tr><td>Machine requirement</td><td>Rigid tapping or tension holder</td><td>3-axis interpolated mill</td></tr>
+</table>
+
 <h2>Example</h2>
-<p>M10&times;1.5 blind hole, 15 mm deep. Tap drill O8.5. Drill to Z-16.5 (15 + 1.5 tip). Tap to Z-15 (full thread depth). G84 at S500 F750.</p>
+<p><strong>Worked example:</strong> One M10&times;1.5 blind tapped hole, 15 mm deep, in aluminum. Step 1: drill &Oslash;8.5 pilot hole to Z-16.5 (15 thread depth + 1.5 tap chamfer). Step 2: tap with G84 at S500, F750, to Z-15.</p>
+<pre class="cp-code"><code>O0034 (TAPPING EXAMPLE)
+G21 G17 G90 G40 G80
+G54
+T02 M06                 (O8.5 DRILL)
+S1500 M03
+G00 X10. Y10.
+G43 H02 Z50. M08
+G83 R2. Z-16.5 Q3. F120.
+G80
+G00 Z50. M09
+T03 M06                 (M10x1.5 TAP)
+S500 M03
+G00 X10. Y10.
+G43 H03 Z50. M08
+G84 R5. Z-15. F750.     (rigid tap: F = 1.5 x 500 = 750)
+G80
+G00 Z50. M09
+M30</code></pre>
+<p><strong>Key points:</strong> Drill depth Z-16.5 is deeper than tap depth Z-15. The R plane for tapping is R5 (higher than drilling's R2) to give the tap room to start and stop synchronized rotation. F750 = 1.5 pitch &times; 500 RPM.</p>
+
 <h2>Common Mistakes</h2>
-<ul><li><strong>Feed not tied to pitch</strong> — F must = P &times; S. Wrong feed strips threads.</li>
-<li><strong>Wrong tap drill size</strong> — use tap drill = major &minus; pitch.</li>
-<li><strong>Blind hole with taper tap</strong> — use bottoming tap for full depth.</li></ul>
+<ul>
+<li><strong>Feed not tied to pitch</strong> — F must = P &times; S. A wrong feed strips the thread pitch. Calculate it every time.</li>
+<li><strong>Wrong tap drill size</strong> — too small and the tap binds; too large and the thread is weak. Use tap drill = major &minus; pitch.</li>
+<li><strong>Tapping a blind hole too deep</strong> — the tap hits bottom and snaps. Leave 1–2 mm clearance below full thread depth.</li>
+<li><strong>Using a taper tap in a blind hole</strong> — the long chamfer leaves incomplete threads. Use a bottoming tap.</li>
+<li><strong>No coolant</strong> — tapping generates heat; use cutting fluid or tap-specific coolant.</li>
+</ul>
+
 <h2>Practice</h2>
-<p><strong>1.</strong> M8&times;1.25 at S600. G84 feed?</p><details><summary>Ans</summary><p>1.25 &times; 600 = 750 mm/min.</p></details>
-<p><strong>2.</strong> M12&times;1.75 tap drill size?</p><details><summary>Ans</summary><p>12 &minus; 1.75 = 10.25 mm.</p></details>
-<p><strong>3.</strong> When thread mill over tap?</p><details><summary>Ans</summary><p>Large threads, non-ferrous materials, or when one tool must cut multiple thread sizes.</p></details>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/">&larr; Canned Cycles</a><a href="/cnc-manufacturing-engineering/cnc-programming/29-subprograms/">Subprograms &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>
+<p><strong>1.</strong> M8&times;1.25 at S600. What is the G84 feed?</p>
+<details><summary>Ans</summary><p>F = 1.25 &times; 600 = 750 mm/min.</p></details>
+<p><strong>2.</strong> What tap drill for M12&times;1.75?</p>
+<details><summary>Ans</summary><p>12 &minus; 1.75 = 10.25 mm. Use a 10.2 mm or 10.5 mm drill depending on available stock.</p></details>
+<p><strong>3.</strong> When would you choose thread milling over rigid tapping?</p>
+<details><summary>Ans</summary><p>For large threads, blind holes where tap breakage risk is high, non-ferrous materials (aluminum, plastic), or when one tool must cut multiple thread sizes on the same machine.</p></details>
+<p><strong>4.</strong> Why is R5 used for tapping instead of R2?</p>
+<details><summary>Ans</summary><p>The tap needs a longer approach and retract distance because it must reach synchronized RPM before engaging the work, and it needs room to reverse and back out. R5 provides that clearance.</p></details>
+
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/">&larr; Canned Cycles</a><a href="/cnc-manufacturing-engineering/cnc-programming/29-subprograms/">Subprograms &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

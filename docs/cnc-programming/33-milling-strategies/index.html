@@ -1,4 +1,17 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Milling Strategies — CNC Programming</title><meta name="description" content="Face milling, slot milling, pocket milling, climb vs conventional, stepover, and radial engagement."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/33-milling-strategies/"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Milling Strategies — CNC Programming</title>
+<meta name="description" content="Face milling, slot milling, pocket milling, climb vs conventional cutting, stepover, radial engagement, and toolpath strategy choices.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/33-milling-strategies/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
   <div class="site-nav-inner">
     <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
     <ul class="site-nav-links">
@@ -10,24 +23,85 @@
       <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
     </ul>
   </div>
-</nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Milling Strategies: Facing, Slots & Pockets</h1><p class="lead">Milling has distinct strategies for different features. This page covers facing, slots, pockets, and the climb vs conventional cut decision.</p><h2>Concept</h2>
-<p><strong>Face milling</strong> removes material from the top surface. <strong>Slot milling</strong> cuts a channel using full-width engagement. <strong>Pocket milling</strong> clears an enclosed area. Each strategy uses different stepover, depth, and toolpath.</p>
+</nav>
+<main class="article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Milling Strategies: Facing, Slots &amp; Pockets</h1>
+<p class="lead">Different milling features call for different strategies. This page covers face milling, slot milling, pocket milling, climb vs conventional cutting, stepover, and how to choose the right approach for each feature.</p>
+
+<h2>Concept</h2>
+<p>Milling is not just moving the tool in a line. The way the tool engages the material — how wide, how deep, which direction — determines tool life, surface finish, and cycle time. <strong>Face milling</strong> removes material from the top surface. <strong>Slot milling</strong> cuts a channel with full-width tool engagement. <strong>Pocket milling</strong> clears an enclosed area, typically with raster or zig-zag passes. Each strategy uses different stepover, axial depth, and toolpath direction.</p>
+
 <h2>Why It Matters</h2>
-<p>Using a 10 mm end mill to slot through a 12 mm deep block in one pass overloads the spindle. Pocketing without climb milling causes chatter. Strategy choice directly affects tool life, surface finish, and cycle time.</p>
+<p>Using a &Oslash;10 end mill to slot through a 12 mm deep block in one pass overloads the spindle and snaps the tool. Pocketing without climb milling causes chatter and poor surface finish. Taking stepover too wide exceeds spindle power. Strategy choice directly affects tool life, surface finish, and whether you can actually make the part on your machine.</p>
+
 <h2>How It Works</h2>
+
 <h3>Stepover (Radial Engagement)</h3>
-<p>For finishing: stepover = 25-40% of cutter diameter. For roughing: up to 50-75%. A 10 mm tool at 50% stepover takes 5 mm wide passes.</p>
-<h3>Climb vs Conventional</h3>
-<ul><li><strong>Climb (up-milling)</strong> — tool rotates same direction as feed. Chip starts thick, ends thin. Better finish, preferred on CNC machines.</li>
-<li><strong>Conventional (down-milling)</strong> — tool rotates opposite feed. Chip starts thin, rubs. Causes work hardening.</li></ul>
+<p>Stepover is the width of each pass relative to the cutter diameter. For a &Oslash;10 tool at 50% stepover, each pass removes 5 mm width.</p>
+<table class="data-table">
+<tr><th>Operation</th><th>Stepover (% of cutter D)</th><th>&Oslash;10 Tool Width/Pass</th></tr>
+<tr><td>Roughing</td><td>50–75%</td><td>5–7.5 mm</td></tr>
+<tr><td>Semi-finishing</td><td>30–50%</td><td>3–5 mm</td></tr>
+<tr><td>Finishing</td><td>10–25%</td><td>1–2.5 mm</td></tr>
+</table>
+<p>Wider stepover = fewer passes = faster cycle time, but heavier load on the tool and spindle. Narrower stepover = lighter cut = better finish but more passes.</p>
+
+<h3>Climb vs Conventional Milling</h3>
+<p>This is one of the most important strategy decisions:</p>
+<ul>
+<li><strong>Climb milling (up-milling):</strong> the cutter rotates in the same direction as the table feed. The chip starts thick and gets thinner. The tool cuts cleanly, pushes the work down, and produces a better surface finish. <strong>Preferred on CNC machines</strong>, which have preloaded ball screws with no backlash.</li>
+<li><strong>Conventional milling (down-milling):</strong> the cutter rotates against the feed direction. The chip starts thin (rubbing) and gets thicker. The tool rubs and work-hardens the surface, and tends to climb the workpiece. Traditional manual machines used conventional because of backlash; CNC machines prefer climb.</li>
+</ul>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <!-- climb milling -->
+  <text x="100" y="20" font-size="12" fill="#27ae60" text-anchor="middle">Climb Milling</text>
+  <circle cx="100" cy="80" r="30" fill="#bbb" stroke="#666"/>
+  <path d="M 100 50 A 30 30 0 0 1 130 80" fill="none" stroke="#27ae60" stroke-width="2"/>
+  <rect x="30" y="110" width="140" height="50" fill="#d4c5a9" stroke="#999"/>
+  <line x1="30" y1="135" x2="170" y2="135" stroke="#27ae60" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="100" y="180" font-size="10" fill="#666" text-anchor="middle">Same direction: thick chip, clean cut</text>
+  <!-- conventional -->
+  <text x="300" y="20" font-size="12" fill="#c0392b" text-anchor="middle">Conventional</text>
+  <circle cx="300" cy="80" r="30" fill="#bbb" stroke="#666"/>
+  <path d="M 300 50 A 30 30 0 0 0 270 80" fill="none" stroke="#c0392b" stroke-width="2"/>
+  <rect x="230" y="110" width="140" height="50" fill="#d4c5a9" stroke="#999"/>
+  <line x1="370" y1="135" x2="230" y2="135" stroke="#c0392b" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="300" y="180" font-size="10" fill="#666" text-anchor="middle">Opposite: rubs, work-hardens</text>
+</svg>
+<figcaption>Climb milling (left) vs conventional milling (right). CNC machines use climb for better finish and longer tool life.</figcaption>
+</figure>
+
+<h3>Axial Depth of Cut (ap)</h3>
+<p>Axial depth is how deep the tool cuts per pass, in the Z direction. For a &Oslash;10 end mill: roughing at 1&times;D (10 mm axial) is common in aluminum; in steel, 0.5&times;D (5 mm) is more typical. Full-width slotting (100% radial engagement) requires much smaller axial depth — often 0.2–0.5&times;D — because the tool is fully buried in chips.</p>
+
 <h2>Example</h2>
-<p>Face mill a 100 mm wide plate with O50 face mill: stepover = 35 mm (70% of O50). Number of passes = 100/35 = 3 passes. At F300, each pass traverses 100 mm. Total facing time &asymp; 3 &times; 100/300 = 60 seconds.</p>
+<p><strong>Face milling example:</strong> Face mill a 100 mm wide steel plate with a &Oslash;50 face mill. Stepover = 35 mm (70% of &Oslash;50). Number of passes = ceil(100/35) = 3 passes. At feed F300 mm/min, each pass traverses 100 mm. Facing time &asymp; 3 &times; 100/300 = 100 seconds total (including approach/retract, about 2 minutes).</p>
+<p><strong>Pocketing example:</strong> Mill a 40&times;40 mm pocket with a &Oslash;10 end mill at 50% stepover. The pocket width is 40 mm; each pass removes 5 mm width. Number of raster passes = 40/5 = 8 passes. If the pocket is 10 mm deep, you might rough in 2 axial passes (5 mm each), then finish the walls and floor separately.</p>
+
 <h2>Common Mistakes</h2>
-<ul><li><strong>Full-width slotting in one deep pass</strong> — use peck cycles or smaller depth per pass.</li>
-<li><strong>Conventional milling on CNC</strong> — CNC machines prefer climb; conventional causes chatter and tool wear.</li>
-<li><strong>Stepover too wide</strong> — exceeds spindle power and torque.</li></ul>
+<ul>
+<li><strong>Full-width slotting in one deep pass</strong> — the tool is 100% engaged and cannot evacuate chips. Use smaller axial depth or peck drilling for deep slots.</li>
+<li><strong>Conventional milling on a CNC machine</strong> — CNC machines have no backlash; climb milling gives better finish and longer tool life. Program climb.</li>
+<li><strong>Stepover too wide</strong> — exceeds spindle power and torque. Start conservative and increase as you learn the machine.</li>
+<li><strong>No air gap in pocket corners</strong> — if the tool is &Oslash;10 and the pocket corner is &Oslash;6, the tool cannot reach the corner. Program a corner cleanup pass or use a smaller tool.</li>
+<li><strong>Plunge feeding too fast</strong> — end mills are not drills. Plunge at 1/3 to 1/2 of the normal feed, or use a center-cutting end mill.</li>
+</ul>
+
 <h2>Practice</h2>
-<p><strong>1.</strong> O12 end mill, 50% stepover. Width per pass?</p><details><summary>Ans</summary><p>6 mm.</p></details>
-<p><strong>2.</strong> Climb or conventional on CNC?</p><details><summary>Ans</summary><p>Climb. CNC machines have no backlash to worry about.</p></details>
-<p><strong>3.</strong> Pocket 40&times;40, O10 tool. How many raster passes?</p><details><summary>Ans</summary><p>40/(10&times;0.5) = 8 passes (at 50% stepover).</p></details>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/16-cutter-compensation/">&larr; Cutter Comp</a><a href="/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/">Drilling Cycles &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>
+<p><strong>1.</strong> &Oslash;12 end mill at 50% stepover. Width per pass?</p>
+<details><summary>Ans</summary><p>12 &times; 0.5 = 6 mm per pass.</p></details>
+<p><strong>2.</strong> Climb or conventional on a CNC machining center?</p>
+<details><summary>Ans</summary><p>Climb. CNC ball screws are preloaded with no backlash, so climb milling is safe and preferred for finish and tool life.</p></details>
+<p><strong>3.</strong> Pocket 40&times;40 mm, &Oslash;10 tool at 50% stepover. How many raster passes?</p>
+<details><summary>Ans</summary><p>Effective cut width = 10 &times; 0.5 = 5 mm. 40/5 = 8 passes across the pocket.</p></details>
+<p><strong>4.</strong> Why is full-width slotting limited to shallow axial depth?</p>
+<details><summary>Ans</summary><p>At 100% radial engagement, chips cannot evacuate. The tool re-cut chips, overheats, and snaps. Use small axial depth (0.2–0.5&times;D) or peck cycles.</p></details>
+
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/16-cutter-compensation/">&larr; Cutter Comp</a><a href="/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/">Drilling Cycles &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
