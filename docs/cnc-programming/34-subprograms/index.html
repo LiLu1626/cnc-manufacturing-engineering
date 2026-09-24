@@ -45,15 +45,16 @@
 
 <p><strong>Main program O1000:</strong></p>
 <pre class="cp-code"><code>O1000 (MAIN: 4x3 HOLE GRID)
-G21 G17 G90 G80 G40 G49
+G21 G17 G90 G80 G40 G49 G99
 T03 M06                 <span class="cp-comment">(6mm drill)</span>
 G54 S1500 M03
-G43 H03 Z50. M08
+G43 H03 Z50. M08        <span class="cp-comment">(initial plane Z50)</span>
 G00 X10. Y10.           <span class="cp-comment">(position above first hole)</span>
 M98 P2000 L3            <span class="cp-comment">(call row subprogram, 3 rows)</span>
 G80 G00 Z50. M09 M05
 G91 G28 Z0
 M30</code></pre>
+<p><strong>G99</strong> means each drill retracts to the R plane (Z2) between holes in the same row — efficient, no need to climb back to Z50 between adjacent holes. After the row is done, the subprogram explicitly raises to Z50 before the Y advance to the next row. If holes were spread over tall fixtures or clamps, you would use <strong>G98</strong> (retract to Z50 after every hole) instead.</p>
 
 <p><strong>Subprogram O2000 (one row: 4 holes, then advance Y):</strong></p>
 <pre class="cp-code"><code>O2000 (ROW: 4 HOLES IN X, THEN Y+20)

@@ -43,7 +43,7 @@ G01 X80. F300.
 G00 Z50.
 G00 X0 Y0
 M30</pre>
-<details><summary>Trace</summary><p>1. Rapid to (20,20) at safety height. 2. Spindle on, rapid to Z50 with tool length offset. 3. Feed down to Z-2 at 100 mm/min. 4. Feed to X80 (still Y20) at 300 mm/min. 5. Rapid up to Z50. 6. Rapid to X0 Y0. 7. Program end.</p></details>
+<details><summary>Trace</summary><p>Assuming the machine starts at a safe Z height and G54 is set: 1. Rapid to XY (20,20). 2. Spindle on, rapid to Z50 with tool length offset H01. 3. Feed down to Z-2 at 100 mm/min. 4. Feed to X80 (still Y20) at 300 mm/min. 5. Rapid up to Z50. 6. Rapid to X0 Y0. 7. Program end.</p></details>
 
 <h2>Find the Error</h2>
 <p>This program has a bug. What happens, and how do you fix it?</p>
@@ -55,7 +55,21 @@ G41 D05
 G01 X80. Y30.
 G00 Z50.
 M30</pre>
-<details><summary>Find it</summary><p>G41 is turned on mid-cut while the tool is already at Z-5, with no lead-in move. Cutter radius compensation needs a straight XY approach move (at least one tool radius long) from outside the part to build the offset. The fix: position the tool at a start point outside the part at Z50, feed to cutting depth, then use a linear G01 move toward the contour with G41 active. At the end, use a lead-out move and G40 to cancel. Example: position at X-10 Y-10 (outside), feed Z-5, then G01 G41 X0 Y0 D05 (lead-in), cut the contour, then lead-out and G40 before retracting Z. Always end with G40.</p></details>
+<details><summary>Find it — with full corrected program</summary><p><strong>The bug:</strong> G41 is turned on mid-cut while the tool is already at Z-5, with no lead-in move. Cutter radius compensation needs a straight XY approach move from outside the part to build the offset over a distance of at least one tool radius. Also, the program never cancels with G40.</p>
+<p><strong>Assumptions:</strong> 10 mm end mill (D05 stores 5 mm radius), part is a 50&times;50 mm block from (0,0) to (50,50), cut depth Z-5, G17 XY plane.</p>
+<p><strong>Corrected program:</strong></p>
+<pre>G90 G54 G00 X-10. Y-10.   (position outside part at Z50)
+G43 H01 Z50. S2000 M03
+G01 Z-5. F100.             (feed to cut depth)
+G01 G41 X0 Y0 D05 F300.    (lead-in: 14.1 mm diagonal from outside, builds compensation)
+G01 X50.                   (cut left edge)
+G01 Y50.                   (cut bottom edge)
+G01 X0                     (cut right edge)
+G01 Y0                     (cut top edge)
+G01 G40 X-10. Y-10.        (lead-out: back outside, cancels compensation)
+G00 Z50. M05
+M30</pre>
+<p>The lead-in from (-10,-10) to (0,0) is 14.1 mm — long enough for the controller to ramp in the 5 mm radius offset. The lead-out mirrors it. G40 must be active before retracting Z.</p></details>
 
 <h2>Write the Program</h2>
 <p>Given: 50&times;50 mm aluminum block, drill a &Oslash;10 hole at X25 Y25 to depth Z-15. Spindle 1500 RPM, feed 120 mm/min. Write the program.</p>

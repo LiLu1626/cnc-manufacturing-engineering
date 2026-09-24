@@ -44,8 +44,10 @@
 <h2>Surface Finish</h2>
 <p>Theoretical feed marks come from the tool nose radius sweeping across the part. The peak-to-valley height (Rmax) of the ideal feed mark is:</p>
 <p><code>Rmax &asymp; f&sup2; / (8 &times; r)</code> where f = feed mm/rev, r = nose radius mm.</p>
-<p>Example: f=0.2, r=0.4 &rarr; Rmax &asymp; 0.125 mm = 125 µm. Note this is <strong>peak-to-valley</strong>, not arithmetic average Ra. Ra is typically much smaller (roughly Rmax/4 to Rmax/10 depending on process). Actual Ra also depends on tool wear, built-up edge, machine vibration, and material — the formula is a geometric estimate only, not a guaranteed finish.</p>
-<p>To reduce theoretical feed mark height: lower feed f (strongest effect) or increase nose radius r. For f=0.07, r=0.4: Rmax &asymp; 0.015 mm = 15 µm. Always verify with a profilometer on the actual part.</p>
+<p><strong>Worked example:</strong> f = 0.2 mm/rev, r = 0.4 mm.<br>
+Rmax = 0.2&sup2; / (8 &times; 0.4) = 0.04 / 3.2 = <strong>0.0125 mm = 12.5 &micro;m</strong>.</p>
+<p>This is the theoretical peak-to-valley height of the feed mark, not the arithmetic average Ra. Actual surface texture also depends on tool wear, built-up edge, machine vibration, and material — the formula is a geometric estimate only, not a guaranteed finish. Always measure with a profilometer.</p>
+<p><strong>Back-calculation:</strong> for Rmax = 1.6 &micro;m = 0.0016 mm with r = 0.4 mm, solve f: f = &radic;(8 &times; r &times; Rmax) = &radic;(8 &times; 0.4 &times; 0.0016) = &radic;0.00512 &asymp; 0.072 mm/rev.</p>
 
 <h2>Stability and Chatter</h2>
 <p>Chatter (vibration marks) is the #1 enemy of finish and tool life. The fix hierarchy:</p>
