@@ -1,0 +1,17 @@
+{
+  "scope": "Static mathematical check only; no controller simulation, no cutting-load or fixture validation",
+  "pocket_grid_spacing_mm": 0.25,
+  "pocket_target_samples": 19057,
+  "uncovered_target_samples": 0,
+  "outside_target_samples": 0,
+  "continuous_argument": "All center segments lie in center rectangle; boundary traversal covers its 5mm exterior dilation, raster covers interior. Grid corroborates but does not replace this argument.",
+  "area_mm2": 1178.539816339745,
+  "volume_mm3": 4714.15926535898,
+  "ramp_degrees": 1.9091524329963763,
+  "drill_point_mm": 1.8025818570826808,
+  "breakthrough_extra_mm": 0.6974181429173192,
+  "thread_H_mm": 1.299038105676658,
+  "thread_h3_mm": 0.920151991520966,
+  "thread_d3_mm": 8.159696016958067,
+  "course_unique_ids": 40
+}

@@ -1,50 +1,112 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Threading Overview — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="Threads on a lathe: pitch, lead, major/minor diameter, and why constant RPM matters.">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Single-Point Thread Programming — CNC Programming</title>
+<meta name="description" content="Pitch, lead, thread geometry, and G76 threading cycles on a CNC lathe, with worked M10x1.5 example and verified depth calculation.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/22-threading/">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
+<link rel="stylesheet" href="../../assets/css/site.css">
+<link rel="stylesheet" href="../../assets/css/article.css">
+<link rel="stylesheet" href="../../assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <a href="../../">Home</a>
+  <a href="../../engineering-tools/">Engineering Tools</a>
+  <a href="../../knowledge-base/">Knowledge Base</a>
+  <a href="../../machine-systems/">Machine Systems</a>
+  <a href="../" class="active">CNC Programming</a>
+  <a href="../../about/">About</a>
+</nav>
 <main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Threading Overview</h1>
-<p class="lead">Single-point threading cuts a helical thread by synchronizing spindle rotation with tool feed. The feed per revolution must equal the thread pitch.</p>
-<div class="callout"><strong>What you will learn:</strong><ul>
-<li>Pitch vs lead, major vs minor diameter</li>
-<li>Why threading requires G97 (constant RPM)</li>
-<li>Multiple passes with decreasing depth</li>
-<li>Lead-in and lead-out distances</li>
-</ul></div>
-<h2>Thread Terminology</h2>
-<p><strong>Pitch</strong> = distance between adjacent threads (mm). <strong>Lead</strong> = distance the tool advances in one spindle revolution (pitch for single-start threads). <strong>Major diameter</strong> = outer diameter. <strong>Minor diameter</strong> = root diameter.</p>
-<h2>Why Constant RPM</h2>
-<p>The tool feed in mm/rev must equal the pitch. If spindle speed varies (G96), the lead changes and the thread is ruined. Threading always uses <strong>G97</strong> fixed RPM.</p>
-<h2>Multiple Passes</h2>
-<p>A thread cannot be cut in one pass. The cycle takes successive radial cuts with decreasing depth, using the full thread depth K and first-pass depth D. See <a href="/cnc-manufacturing-engineering/cnc-programming/22-lathe-threading/">Lathe Threading Cycles</a> for the G76 parameter details.</p>
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Single-Point Thread Programming</h1>
+<p class="lead">Single-point threading cuts a helical groove by synchronizing spindle rotation with tool feed. For a single-start thread, the feed per revolution must equal the pitch exactly. This page covers the geometry, the G76 cycle, and a worked M10&times;1.5 example.</p>
+
+<h2>Concept</h2>
+<p>A screw thread is a helical ridge wrapped around a cylinder. On a CNC lathe, a single-point threading tool moves along Z while the spindle rotates. The controller must keep the tool position synchronized with spindle angle so that every pass follows the same helix.</p>
+<p><strong>Pitch (P)</strong> is the distance between adjacent thread crests, measured along the axis. <strong>Lead (L)</strong> is the axial distance the tool advances in one full spindle revolution. For a single-start thread, pitch = lead. For a multi-start thread (two or more parallel helices), lead = pitch &times; number of starts.</p>
+<p><strong>Major diameter</strong> is the outer diameter of an external thread. <strong>Minor diameter</strong> (core diameter) is the diameter at the root. The radial thread depth determines how much material the tool removes on successive passes.</p>
+
+<h2>Why It Matters</h2>
+<p>If the spindle speed changes during threading, the feed per revolution changes and the helix pitch is ruined. This is why threading always uses <strong>G97</strong> (constant RPM), never G96 (constant surface speed). The G76 cycle handles the multi-pass strategy automatically — the programmer only specifies the final minor diameter, total thread depth, first-pass depth, and feed (= lead).</p>
+
+<h2>How It Works</h2>
+
+<h3>Thread Geometry: H, h3, and the 0.613 factor</h3>
+<p>The theoretical sharp 60&deg; triangle has height:</p>
+<p style="text-align:center; font-size:1.1em;"><strong>H = (&radic;3 / 2) &times; P &asymp; 0.8660254 &times; P</strong></p>
+<p>Actual metric external threads (per ISO 68-1 / DIN 13 design profile) truncate the crest and root, leaving a smaller working radial height. The selected design geometry uses:</p>
+<p style="text-align:center; font-size:1.1em;"><strong>h3 = 17H / 24 &asymp; 0.6134347 &times; P</strong></p>
+<p>This 0.61343 factor is documented in Hexagon Infoletter No. 37 (thread depth bolt h3 = 0.61343 P for metric DIN threads). It applies to the selected external thread design geometry; it is not a universal constant for all thread forms (UN, trapezoidal, buttress, etc. use different truncation).</p>
+
+<h3>Worked Calculation: M10&times;1.5</h3>
+<table class="data-table">
+<tr><th>Quantity</th><th>Formula</th><th>Value</th></tr>
+<tr><td>Pitch P</td><td>given</td><td>1.5 mm</td></tr>
+<tr><td>Sharp triangle H</td><td>0.8660254 &times; 1.5</td><td>1.299038 mm</td></tr>
+<tr><td>Design thread depth h3</td><td>0.6134347 &times; 1.5</td><td>0.920152 mm</td></tr>
+<tr><td>Minor diameter d3</td><td>10 &minus; 2&times;0.920152</td><td>8.159696 mm</td></tr>
+</table>
+<p>For teaching, we round to <strong>K = 0.92 mm</strong> and <strong>X endpoint = 8.16 mm</strong>. The rounding introduces about 0.0003 mm of diameter difference — negligible for a programming example but not a 6g limit dimension.</p>
+
+<h3>G76 Threading Cycle (Haas lathe)</h3>
+<p>The single-line Haas G76 format:</p>
+<pre class="cp-code"><code>G97 S500 M03            <span class="cp-comment">(constant RPM — required for threading)</span>
+G00 X11. Z3.            <span class="cp-comment">(approach: above stock, 3 mm lead-in)</span>
+G76 X8.16 Z-20. K0.92 D0.2 F1.5</code></pre>
+<p><strong>Reading the line:</strong></p>
+<ul>
+<li><strong>X8.16</strong> = final minor diameter (program endpoint in diameter mode)</li>
+<li><strong>Z-20</strong> = thread end position</li>
+<li><strong>K0.92</strong> = total radial thread height (truncated from K=0.920152)</li>
+<li><strong>D0.2</strong> = first pass depth (a teaching assumption, not a recommended cutting parameter)</li>
+<li><strong>F1.5</strong> = lead in mm/rev (= pitch for single-start)</li>
+</ul>
+<p>The controller automatically takes successive passes with decreasing radial depth until reaching X8.16. D0.2 is a teaching value — real first-pass depth depends on insert grade, material, coolant, and machine rigidity; follow the tool manufacturer's charts.</p>
+
+<h3>Lead-In and Lead-Out</h3>
+<p>The Z3. approach position provides lead-in distance so the spindle speed reaches sync before the tool cuts the first thread. A lead-out (or thread relief groove) at Z-20+ allows the tool to retract cleanly. Without lead-in, the first few threads may be off-pitch.</p>
+
+<h3>Pitch vs Lead on Multi-Start Threads</h3>
+<p>For a double-start thread with P=1.5, the lead is 3.0 mm/rev, so F=3.0. The controller cuts one groove per pass sequence, then shifts Z by one pitch to cut the second start. This is why F in G76 is always the <em>lead</em>, not the pitch — the programmer must account for multiple starts.</p>
+
+<h2>Example</h2>
+<p><strong>Example 1 — Single-start M10&times;1.5:</strong> At S500 RPM, the ideal synchronous axial feed is 500 &times; 1.5 = 750 mm/min. The tool must not change feed override during the cut.</p>
+<p><strong>Example 2 — Double-start M10&times;1.5 (pitch 1.5, lead 3.0):</strong> F=3.0 mm/rev. At S500, axial feed = 1500 mm/min. The program cuts the first helix, then shifts Z by 1.5 and repeats for the second start.</p>
+<p><strong>Tolerance and inspection:</strong> In this teaching example we assume a 6g external thread, checked with a thread ring gauge (go/no-go). The mating internal thread would use 6H and a thread plug gauge — but always follow the tolerance class specified on your drawing. The ring gauge confirms functional acceptance; it does not verify every dimension on the drawing.</p>
+
 <h2>Common Mistakes</h2>
-<ul><li>Confusing pitch (mm/rev) with feed rate (mm/min).</li>
-<li>Not leaving lead-in distance — the spindle needs to sync before the thread starts.</li>
-<li>Cutting the full depth in one pass — tool breaks.</li></ul>
-<section class="cp-practice"><h2>Practice</h2>
-<p><strong>1.</strong> M10&times;1.5: what is the feed in mm/rev?</p>
-<details><summary>Show answer</summary><p>F1.5 mm/rev (the pitch, for single-start).</p></details>
-<p><strong>2.</strong> Why must threading use G97?</p>
-<details><summary>Show answer</summary><p>The feed per revolution must equal pitch. G97 keeps RPM constant; G96 would vary it and ruin the thread form.</p></details>
+<ul>
+<li><strong>Confusing pitch with lead on multi-start threads</strong> — F must be the lead, not the pitch.</li>
+<li><strong>Using G96 during threading</strong> — spindle speed changes ruin the helix. Always G97.</li>
+<li><strong>Changing feed override mid-thread</strong> — the synchronous relationship breaks.</li>
+<li><strong>No lead-in distance</strong> — the first threads are off-pitch before sync is achieved.</li>
+<li><strong>Treating 8.16 mm as a finished tolerance dimension</strong> — it is a theoretical minor diameter estimate used as the G76 X endpoint; actual acceptance is by gauge per drawing.</li>
+</ul>
+
+<h2>Practice</h2>
+<p><strong>1.</strong> Single-start M12&times;1.75: what is F? Compute H and h3.</p>
+<details><summary>Show answer</summary><p>F = 1.75 mm/rev (lead = pitch). H = 0.8660 &times; 1.75 = 1.5155 mm. h3 = 0.61343 &times; 1.75 = 1.0735 mm. Minor &asymp; 12 &minus; 2&times;1.0735 = 9.853 mm.</p></details>
+<p><strong>2.</strong> Given G76 K0.92 on a 60&deg; metric thread, find P.</p>
+<details><summary>Show answer</summary><p>P = 0.92 / 0.61343 = 1.4998 &asymp; 1.5 mm. This confirms the M10&times;1.5 example.</p></details>
+<p><strong>3.</strong> A double-start thread has pitch 1.5. What is F in G76, and why?</p>
+<details><summary>Show answer</summary><p>F = 3.0 mm/rev (lead = 2 &times; pitch). G76 feed is always the lead, so on a multi-start thread it is larger than the pitch. At S500, axial feed = 1500 mm/min.</p></details>
+
+<section class="cp-sources">
+<h2>Sources</h2>
+<ul>
+<li>Hexagon Infoletter No. 37, "SR1 – Thread up to M160": h3 = 0.61343 P for metric DIN external thread design geometry. <a href="https://www.hexagon.de/info37_e.htm" target="_blank" rel="noopener">hexagon.de/info37_e.htm</a>, retrieved 2026-09-24.</li>
+<li>Haas Automation Mill/Lathe Operator's Manual — G76 thread cycle parameter definitions (K, D, F, X, Z). <a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G76.html" target="_blank" rel="noopener">haascnc.com</a>.</li>
+<li>ISO 68-1:2023 — Basic profile of Metric ISO threads (H = 0.866 P fundamental triangle). Design profile h3 per the above Hexagon reference.</li>
+</ul>
 </section>
-<section class="cp-sources"><h2>Sources</h2><ul>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/22-lathe-threading/">Lathe Threading Cycles (G76)</a></li>
-</ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring">&larr; Grooving & Parting</a><a href="/cnc-manufacturing-engineering/cnc-programming/23-program-safety">Program Safety &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<nav class="cp-nav-bottom">
+<a href="../21-grooving-parting-boring/">&larr; Grooving &amp; Parting</a>
+<a href="../23-program-safety/">Program Safety &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

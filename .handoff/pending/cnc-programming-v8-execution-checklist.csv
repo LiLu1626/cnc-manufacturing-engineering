@@ -1,0 +1,42 @@
+id,path,title,level,current_words,target_words,status
+00,docs/cnc-programming/index.html,CNC Programming Fundamentals & Applications,首页,140,,pending
+01,docs/cnc-programming/01-getting-started/what-is-cnc-programming/index.html,What Is CNC Programming?,B,786,1100,pending
+02,docs/cnc-programming/02-machine-fundamentals/index.html,Machine Fundamentals for Programmers,B,623,1100,pending
+03,docs/cnc-programming/03-coordinate-systems/index.html,Coordinate Systems and Positioning,K,417,2400,pending
+04,docs/cnc-programming/04-program-structure/index.html,Reading and Structuring a CNC Program,B,304,1100,pending
+05,docs/cnc-programming/05-gcode-fundamentals/index.html,G-Code Fundamentals,B,327,1100,pending
+06,docs/cnc-programming/06-modal-codes/index.html,Modal State and Program Execution,K,299,2400,pending
+07,docs/cnc-programming/07-plane-units/index.html,"Planes, Units, and Numeric Conventions",B,313,1100,pending
+08,docs/cnc-programming/08-programming-math/index.html,Practical Mathematics for CNC Programming,K,401,2400,pending
+09,docs/cnc-programming/09-mcode-fundamentals/index.html,M-Codes and Machine Functions,B,292,1100,pending
+10,docs/cnc-programming/10-spindle-feed/index.html,Spindle Speed and Feed Programming,K,288,2400,pending
+11,docs/cnc-programming/11-controller-dialects/index.html,Controller Dialects and Manual Reading,B,274,1100,pending
+12,docs/cnc-programming/12-tool-offsets/index.html,"Tool Length, Geometry, and Wear Offsets",K,744,2400,pending
+13,docs/cnc-programming/13-work-offsets/index.html,Work Offsets and Datum Setting,K,363,2400,pending
+14,docs/cnc-programming/14-linear-interpolation/index.html,Rapid Positioning and Linear Interpolation,K,239,2400,pending
+15,docs/cnc-programming/15-circular-interpolation/index.html,Circular and Helical Interpolation,K,298,2400,pending
+16,docs/cnc-programming/16-cutter-compensation/index.html,Cutter Radius Compensation,K,326,2400,pending
+17,docs/cnc-programming/17-drilling-cycles/index.html,"Drilling, Pecking, and Boring",K,301,2400,pending
+18,docs/cnc-programming/18-canned-cycles/index.html,Canned-Cycle State and Hole Patterns,K,288,2400,pending
+19,docs/cnc-programming/19-turning-fundamentals/index.html,Turning Coordinates and Basic Toolpaths,K,300,2400,pending
+20,docs/cnc-programming/20-turning-cycles/index.html,Turning Roughing and Finishing Cycles,K,425,2400,pending
+21,docs/cnc-programming/21-grooving-parting-boring/index.html,"Grooving, Parting, and Internal Turning",K,267,2400,pending
+22,docs/cnc-programming/22-threading/index.html,Single-Point Thread Programming,K,236,2400,pending
+23,docs/cnc-programming/23-program-safety/index.html,"Safe Program Start, Retraction, and Restart",K,850,2400,pending
+24,docs/cnc-programming/24-verification/index.html,Program Verification and First-Article Checks,K,279,2400,pending
+25,docs/cnc-programming/25-troubleshooting/index.html,Diagnosing CNC Program Problems,K,308,2400,pending
+26,docs/cnc-programming/26-common-mistakes/index.html,Common Beginner Mistakes and Corrections,B,300,1100,pending
+27,docs/cnc-programming/27-turning-project/index.html,Worked Project: A Stepped Shaft,K,247,2400,pending
+28,docs/cnc-programming/28-milling-project/index.html,Worked Project: A Pocketed Mounting Plate,K,247,2400,pending
+29,docs/cnc-programming/29-subprograms/index.html,Subprograms and Repeated Features,K,218,2400,pending
+30,docs/cnc-programming/30-reference/index.html,CNC Programming Quick Reference,B,192,1100,pending
+31,docs/cnc-programming/31-learning-path/index.html,Learning Path and Progress Checkpoints,B,185,1100,pending
+32,docs/cnc-programming/32-drawings-process-planning/index.html,From Engineering Drawing to Process Plan,K,351,2400,pending
+33,docs/cnc-programming/33-milling-strategies/index.html,"Facing, Slots, Pockets, and Contours",K,291,2400,pending
+34,docs/cnc-programming/34-tapping-thread-milling/index.html,Tapping and Thread Milling,K,292,2400,pending
+35,docs/cnc-programming/35-cad-cam-postprocessing/index.html,"CAD, CAM, and Post-Processor Verification",K,287,2400,pending
+36,docs/cnc-programming/36-macro-foundations/index.html,"Variables, Logic, and Macro Foundations",K,225,2400,pending
+37,docs/cnc-programming/37-multiaxis-probing-overview/index.html,"Rotary Axes, Multi-Axis Motion, and Probing",B,260,1100,pending
+38,docs/cnc-programming/38-process-optimization/index.html,"Cycle Time, Quality, and Process Improvement",K,495,2400,pending
+39,docs/cnc-programming/39-exercises-assessment/index.html,Practice Projects and Final Assessment,K,458,2400,pending
+40,docs/cnc-programming/40-glossary-sources/index.html,CNC Programming Glossary and Source Guide,B,189,1100,pending
