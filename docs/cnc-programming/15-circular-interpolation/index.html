@@ -116,12 +116,19 @@ G03 I-25. J0  (full circle, ends back at start)</code></pre>
 <figcaption>Short 90&deg; arc S(0,0) &rarr; E(20,20) around C(0,20), r=20. G03 counterclockwise. Length = 2&pi;&times;20&times;90/360 = 31.416 mm.</figcaption>
 </figure>
 
+<h2>Helical Interpolation</h2>
+<p>By adding a Z (or other axis) word to a G02/G03 block, the machine interpolates a helix — an arc that simultaneously moves in Z. This is used for helical interpolation milling of circular pockets and oil grooves:</p>
+<pre class="cp-code"><code>G01 X25. Y0 F300.
+G03 I-25. J0 Z-5.   (helical: circle in XY while descending Z from 0 to -5)</code></pre>
+<p>The Z coordinate in the arc block is the end Z. The machine spirals down while completing the circle. This is how many CAM routines rough circular pockets: plunge helically rather than drilling straight down.</p>
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Confusing G02/G03 direction</strong> — view from positive Z. CW = G02, CCW = G03. Use angles: if the start-to-end angle decreases, it's G02.</li>
 <li><strong>Using R for full circle</strong> — R cannot express a 360&deg; circle; use I/J.</li>
-<li><strong>I/J as absolute center</strong> — I/J are offsets from the start point, not absolute coordinates.</li>
+<li><strong>I/J as absolute center</strong> — I/J are offsets from the start point, not absolute coordinates. I = Cx &minus; Sx.</li>
 <li><strong>Running two arc blocks as consecutive code without repositioning</strong> — after an arc the start point has moved; the next I/J refers to the new start.</li>
+<li><strong>Forgetting plane selection</strong> — G02/G03 direction and I/J interpretation depend on G17/G18/G19. On a lathe (G18 XZ), the CW/CCW convention flips relative to a mill.</li>
 </ul>
 
 <h2>Practice</h2>
