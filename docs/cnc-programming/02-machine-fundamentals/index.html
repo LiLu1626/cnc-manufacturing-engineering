@@ -66,6 +66,31 @@
 <tr><td>Coolant</td><td>Flood through spindle</td><td>Flood through turret</td></tr>
 </table>
 
+<svg viewBox="0 0 480 200" style="width:100%;max-width:480px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="140" y="15" font-size="11" font-weight="bold" fill="#333">Mill vs Lathe Axes</text>
+  <!-- Mill side -->
+  <rect x="20" y="30" width="200" height="150" fill="#e8f0fe" stroke="#54a0ff" rx="5"/>
+  <text x="80" y="48" font-size="11" font-weight="bold" fill="#54a0ff">Mill</text>
+  <line x1="120" y1="150" x2="120" y2="60" stroke="#333" stroke-width="1.5" marker-end="url(#aX)"/>
+  <text x="125" y="65" font-size="10" fill="#333">Z (spindle)</text>
+  <line x1="50" y1="140" x2="180" y2="140" stroke="#333" stroke-width="1.5" marker-end="url(#aX)"/>
+  <text x="170" y="155" font-size="10" fill="#333">X</text>
+  <line x1="60" y1="150" x2="60" y2="80" stroke="#333" stroke-width="1.5" marker-end="url(#aX)"/>
+  <text x="40" y="75" font-size="10" fill="#333">Y</text>
+  <circle cx="120" cy="100" r="8" fill="#e74c3c"/>
+  <text x="135" y="103" font-size="9" fill="#e74c3c">Tool rotates</text>
+  <!-- Lathe side -->
+  <rect x="260" y="30" width="200" height="150" fill="#fef5e7" stroke="#e67e22" rx="5"/>
+  <text x="330" y="48" font-size="11" font-weight="bold" fill="#e67e22">Lathe</text>
+  <line x1="290" y1="100" x2="430" y2="100" stroke="#333" stroke-width="1.5" marker-end="url(#aX)"/>
+  <text x="420" y="95" font-size="10" fill="#333">Z</text>
+  <line x1="360" y1="150" x2="360" y2="60" stroke="#333" stroke-width="1.5" marker-end="url(#aX)"/>
+  <text x="365" y="65" font-size="10" fill="#333">X (diameter)</text>
+  <rect x="300" y="85" width="80" height="30" fill="#c8d6e5" rx="2"/>
+  <text x="310" y="103" font-size="9" fill="#333">Work rotates</text>
+  <defs><marker id="aX" markerWidth="8" markerHeight="8" refX="8" refY="3"><path d="M0,0 L8,3 L0,6" fill="#333"/></marker></defs>
+</svg>
+
 <h3>Machine Zero vs Work Zero</h3>
 <p><strong>Machine zero</strong> is the fixed reference point the machine establishes on power-up by moving each axis to a home switch. It never changes. <strong>Work zero</strong> is where you define the part origin using a work offset (G54). You set G54 by touching the part edge with an edge finder or probe. The controller computes: <em>machine position = machine zero + work offset + programmed coordinate</em>. This three-layer relationship is the core mental model of CNC.</p>
 
