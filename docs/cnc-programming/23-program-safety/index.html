@@ -1,62 +1,144 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Safe Program Start, Retraction, and Restart — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="How to start a program safely, verify machine state, and restart after a stop without losing established conditions.">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Safe Program Start, Retraction, and Restart — CNC & Manufacturing Engineering</title>
+<meta name="description" content="Safe program startup blocks, machine state verification, retraction strategy, mid-program restart procedure, and why you cannot just jump to a line number.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/23-program-safety/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
 <main class="article">
-<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Safe Program Start, Retraction, and Restart</h1>
-<p class="lead">Running from the top restores a known start state, but it is not a guarantee of safety by itself — fixtures, work offsets, and tool setup must still be verified. When you must restart mid-program, you must rebuild the modal state the controller has already forgotten.</p>
-<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
-<div class="callout"><strong>What you will learn:</strong><ul><li>Pre-startup checks before cycle start</li><li>Safe approach and retraction strategy</li><li>What state a mid-program restart needs</li><li>Why you cannot just jump to a line number</li></ul></div>
+<p class="lead">Running from the top restores a known start state, but it is not a guarantee of safety by itself. When you must restart mid-program after a tool break or alarm, you must rebuild the modal state the controller has already forgotten. This page covers startup blocks, safe approach/retract, and the mid-program restart procedure.</p>
+
+<div class="callout"><strong>What you will learn:</strong>
+<ul>
+<li>Pre-startup checks before cycle start</li>
+<li>What the startup block G21 G17 G90 G40 G49 G80 actually does</li>
+<li>Safe approach and retraction strategy</li>
+<li>What state a mid-program restart needs</li>
+<li>Why you cannot just jump to a line number</li>
+</ul></div>
+
 <h2>Concept</h2>
-<p>Safe programming means the machine always starts from a known state: correct tool, correct offsets, correct work zero, correct spindle direction, and a clear path from tool change position to the first cut. The startup block sets these conditions explicitly rather than relying on whatever the previous program left behind.</p>
-<p><strong>Restart</strong> after a tool break, dimension stop, or alarm is different. You cannot simply position the tool near the last cut line and press cycle start. The controller has lost (or never had) the tool length offset, cutter compensation, work offset, feed mode, and cycle state that earlier lines established. Jumping to N80 without rebuilding that state means the controller moves in X,Y correctly but with the wrong Z height and wrong offsets.</p>
+<p>Safe programming means the machine always starts from a known state: correct tool, correct offsets, correct work zero, correct spindle direction, and a clear path from tool change position to the first cut. The startup block sets these conditions explicitly rather than relying on whatever the previous program left behind. Because G codes are modal, the controller remembers settings from the last program that ran — which may be completely different from what your new program expects.</p>
+<p><strong>Restart</strong> after a tool break, dimension stop, or alarm is different. You cannot simply position the tool near the last cut line and press cycle start. The controller has lost (or never had) the tool length offset, cutter compensation, work offset, feed mode, and cycle state that earlier lines established. Jumping to N80 without rebuilding that state means the controller moves in X/Y correctly but with the wrong Z height and wrong offsets.</p>
+
 <h2>Why It Matters</h2>
-<p>Haas machines have a <strong>Program Restart</strong> setting (Setting 36 on mills) that scans back through the program to rebuild modal state before resuming. This is not a universal "jump to line" feature — it must be configured, and even then you must verify the tool and offsets are physically correct. If the program left G91 (incremental mode) active and you restart at a drilling block, the next X move is incremental from wherever the tool happens to be, not absolute to the drawing coordinate.</p>
-<h2>How</h2>
-<h3>Before cycle start (mill example)</h3>
-<ol><li>Check the part is securely clamped; clears are empty.</li>
+<p>Every crash that happened on a CNC machine started as an assumed state. "The previous program was fine, so this one should be too" is how tools break into the fixture. The startup block exists precisely because the controller's modal state is unpredictable between programs. Similarly, mid-program restart errors — leftover G91, wrong H offset, active G81 — are among the most common causes of second crashes (after the first tool break already stopped the machine).</p>
+
+<h2>How It Works</h2>
+
+<h3>The Startup Block, Line by Line</h3>
+<pre class="cp-code"><code>O1001
+G21 G17 G90 G40 G49 G80</code></pre>
+<table class="data-table">
+<tr><th>Code</th><th>What It Does</th><th>Why It Matters</th></tr>
+<tr><td>G21</td><td>Metric units (mm)</td><td>Prevents inch/mm mismatch — 25.4&times; errors</td></tr>
+<tr><td>G17</td><td>XY plane selection</td><td>Required before circular interpolation (G02/G03)</td></tr>
+<tr><td>G90</td><td>Absolute programming</td><td>Coordinates refer to work zero, not incremental</td></tr>
+<tr><td>G40</td><td>Cancel cutter compensation</td><td>Prevents unexpected G41/G42 offset from previous program</td></tr>
+<tr><td>G49</td><td>Cancel tool length offset</td><td>Prevents inherited H offset from another tool</td></tr>
+<tr><td>G80</td><td>Cancel canned cycles</td><td>Prevents drilling cycle from triggering on first XY move</td></tr>
+</table>
+<p>This block does not set the offsets — it cancels old ones so they can be re-established cleanly. After G49, Z moves are at machine position; after G43 H01, Z moves include the tool length. The order matters: cancel first, then set new values.</p>
+
+<h3>Before Cycle Start (Mill Example)</h3>
+<ol>
+<li>Check the part is securely clamped; chips and coolant clear from the work area.</li>
 <li>Confirm the right tool is in the spindle and H/D offset numbers match the setup sheet.</li>
 <li>Read the first block: units (G21), plane (G17), distance mode (G90), compensation canceled (G40 G49 G80).</li>
-<li>Jog the tool to a known safe position; check that Z retracts above all fixtures.</li>
-<li>Single-block the first few blocks; verify motion before continuous run.</li></ol>
-<h3>Mill vs lathe startup</h3>
-<p>A mill startup typically uses <code>G21 G17 G90 G40 G49 G80</code>. A lathe uses different codes: <code>G21 G97 G99</code> (constant RPM, feed per revolution), and does not use G17/G49 the same way. Do not copy a mill startup block into a lathe program.</p>
-<h3>Mid-program restart procedure</h3>
-<ol><li>Note where the program stopped (block number, tool, operation).</li>
-<li>Identify every modal state that block depends on: G90/G91, G54 offset, H tool length, G41/G42 compensation, G94/G95 feed mode, any active G80+ cycle.</li>
-<li>Jog the tool to a <strong>known safe position</strong> (not near the part).</li>
-<li>Manually establish the missing state: call the correct tool, set H offset, select G54, set G90, cancel any cycles.</li>
+<li>Jog the tool to a known safe position; check that Z retracts above all fixtures and clamps.</li>
+<li>Single-block the first few blocks; verify motion before switching to continuous run.</li>
+</ol>
+
+<h3>Mill vs Lathe Startup</h3>
+<p>A mill startup uses <code>G21 G17 G90 G40 G49 G80</code>. A lathe uses different codes: <code>G21 G97 G99</code> (constant RPM, feed per revolution). Lathes do not use G17 (plane) or G49 (length offset) the same way. Do not copy a mill startup block into a lathe program — the G codes mean different things or do not exist.</p>
+
+<h3>Safe Approach and Retraction</h3>
+<p>The rule: <strong>always move Z first when approaching, and Z first when retracting</strong>. When approaching the part: rapid XY to the position at a safe Z height, THEN feed down to cut depth. When retracting from a cut: rapid Z up to safe height, THEN move XY. This prevents the tool from traveling sideways at cut depth and crashing into the fixture or part.</p>
+<p>A common crash pattern: after finishing a cut, the program does G00 X50 Y50 while the tool is still at Z-5. The tool drags sideways through the part, gouging everything in its path. The fix: G00 Z50 before any XY move.</p>
+
+<h3>Mid-Program Restart Procedure</h3>
+<ol>
+<li>Note where the program stopped: block number, tool, operation, current modal state.</li>
+<li>Identify every modal state that the restart block depends on: G90/G91, G54 offset, H tool length, G41/G42, G94/G95 feed mode, any active G80+ cycle.</li>
+<li>Jog the tool to a <strong>known safe position</strong> away from the part.</li>
+<li>Manually establish the missing state: call the correct tool with its H offset, select G54, set G90, cancel any cycles.</li>
 <li>Move the tool to a safe approach point above the restart location.</li>
-<li>Use single-block to step through the first few resumed blocks, verifying motion.</li></ol>
+<li>Use single-block to step through the first few resumed blocks, verifying motion before continuous run.</li>
+</ol>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <!-- safe approach -->
+  <text x="100" y="20" font-size="11" fill="#27ae60" text-anchor="middle">Safe Approach</text>
+  <rect x="40" y="80" width="120" height="60" fill="#d4c5a9" stroke="#999"/>
+  <circle cx="100" cy="50" r="8" fill="#3498db"/>
+  <line x1="100" y1="58" x2="100" y2="80" stroke="#27ae60" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="100" y="45" font-size="10" fill="#333">Z up, XY first</text>
+  <text x="100" y="160" font-size="10" fill="#27ae60" text-anchor="middle">1. Rapid XY at safe Z  2. Feed Z down</text>
+  <!-- crash pattern -->
+  <text x="300" y="20" font-size="11" fill="#c0392b" text-anchor="middle">Crash Pattern</text>
+  <rect x="240" y="80" width="120" height="60" fill="#d4c5a9" stroke="#999"/>
+  <circle cx="260" cy="110" r="8" fill="#c0392b"/>
+  <line x1="268" y1="110" x2="330" y2="110" stroke="#c0392b" stroke-width="2" stroke-dasharray="4,2" marker-end="url(#arr)"/>
+  <text x="300" y="160" font-size="10" fill="#c0392b" text-anchor="middle">XY move at cut Z = gouge</text>
+</svg>
+<figcaption>Safe approach (left): XY first at safe Z, then feed down. Crash pattern (right): XY move while tool is at cut depth.</figcaption>
+</figure>
+
 <h2>Example</h2>
 <p>A drilling program stops at hole 4 of 6 because the drill broke. The program used G81 with G99 (retract to R plane). To restart:</p>
-<ul><li>Replace the broken drill, update H offset if the new tool differs in length.</li>
-<li>The program was in G90, G54, G81 modal. You cannot just M98 or jump to the hole-4 line.</li>
+<ul>
+<li>Replace the broken drill. If the new drill differs in length, update the H offset.</li>
+<li>The program was in G90, G54, G81 modal. You cannot just jump to the hole-4 line.</li>
 <li>Instead: manually position above hole 4, call the tool with H offset, re-issue G81 with correct R/Z/F, then drill remaining holes.</li>
-<li>After drilling, G80 before moving away.</li></ul>
-<p>Three failure modes to recognize: (1) leftover G91 means coordinates are interpreted as distances, not positions; (2) wrong H number means Z depth is off by the tool length difference; (3) an active G81 means any X/Y move drills a hole even if you think you are just repositioning.</p>
+<li>After drilling, G80 before moving away.</li>
+</ul>
+<p><strong>Three failure modes to recognize:</strong> (1) leftover G91 means coordinates are interpreted as distances, not positions; (2) wrong H number means Z depth is off by the tool length difference; (3) an active G81 means any X/Y move drills a hole even if you think you are just repositioning.</p>
+
 <h2>Common Mistakes</h2>
-<ul><li>Jogging the tool near the break point and pressing cycle start — without rebuilding state.</li>
-<li>Assuming "from the top" is always safe — it is usually the safest option, but not always practical for long programs.</li>
-<li>Using the same startup block for mill and lathe.</li>
-<li>Assuming single-block or feed override prevents collisions — they do not; they just slow them down.</li></ul>
-<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> A program restart leaves G91 active. What happens when the next block says X50?</p><details><summary>Show answer</summary><p>The tool moves 50 mm in X from current position (incremental), not to absolute X50. You must issue G90 first.</p></details><p><strong>2.</strong> Why is G80 needed after a restart at a drilling block?</p><details><summary>Show answer</summary><p>If a canned cycle is still modal, any subsequent X/Y move executes a drill. You must explicitly G80 before repositioning.</p></details><p><strong>3.</strong> You broke a tap and replaced it with a tap 3 mm longer. What offset must change?</p><details><summary>Show answer</summary><p>The H (tool length) offset. Without updating it, the Z depth will be off by 3 mm, potentially drilling too deep.</p></details></section>
-<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Mill Operator's Manual — Program Restart (Setting 36) (haascnc.com, retrieved 2026-09-24).</li><li>Haas Lathe Operator's Manual — startup and restart procedures.</li><li>Always follow your machine's specific restart procedure; this is general guidance, not a substitute for your manual.</li></ul></section>
+<ul>
+<li><strong>Jogging near the break point and pressing cycle start</strong> — without rebuilding modal state.</li>
+<li><strong>Assuming "from the top" is always safe</strong> — it is the safest option, but not always practical for long programs or after a tool change.</li>
+<li><strong>Using the same startup block for mill and lathe</strong> — G17/G49 do not apply to lathes.</li>
+<li><strong>Assuming single-block or feed override prevents collisions</strong> — they slow the motion but do not prevent the crash.</li>
+<li><strong>Forgetting G80 before repositioning</strong> — an active drilling cycle makes every X/Y move a hole.</li>
+</ul>
+
+<section class="cp-practice">
+<h2>Practice</h2>
+<p><strong>1.</strong> A program restart leaves G91 active. What happens when the next block says X50?</p>
+<details><summary>Show answer</summary><p>The tool moves 50 mm in X from its current position (incremental), not to absolute X50. You must issue G90 first.</p></details>
+<p><strong>2.</strong> Why is G80 needed after a restart at a drilling block?</p>
+<details><summary>Show answer</summary><p>If a canned cycle is still modal, any subsequent X/Y move executes a drill. You must explicitly G80 before repositioning.</p></details>
+<p><strong>3.</strong> You broke a drill and replaced it with one 3 mm longer. What offset must change?</p>
+<details><summary>Show answer</summary><p>The H (tool length) offset. Without updating it, the Z depth will be off by 3 mm, potentially drilling too deep or not deep enough.</p></details>
+<p><strong>4.</strong> Why does the startup block cancel G49 before calling G43 H01?</p>
+<details><summary>Show answer</summary><p>G49 cancels any inherited tool length offset from the previous program. If you called G43 H01 while another H was still active, the machine might use the wrong length. Cancel first, then set the new one.</p></details>
+</section>
+
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/02-machine-fundamentals/">&larr; Machine Fundamentals</a><a href="/cnc-manufacturing-engineering/cnc-programming/08-programming-math/">Programming Math &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
