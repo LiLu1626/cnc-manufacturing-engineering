@@ -34,7 +34,7 @@
 <p><strong>G21</strong> = metric (mm). <strong>G20</strong> = inch. Everything in the program — coordinates, feeds, offsets — follows the active unit mode. Mixing mm and inch is catastrophic: a program written in mm run in inch mode cuts everything 25.4&times; off.</p>
 
 <h2>Why It Matters</h2>
-<p>A G20/G21 mismatch produces parts that are 25.4 times too small or too large. Plane errors cause arcs to be in the wrong plane — the tool makes a circular move in XZ instead of XY, producing a groove instead of a circle. These errors are not caught by syntax checkers; they only show up when the part is measured. Always set units explicitly in the startup block.</p>
+<p>A G20/G21 mismatch produces parts that are 25.4 times too small or too large. Plane errors cause arcs to be in the wrong plane — the tool makes a circular move in XZ instead of XY, producing a groove instead of a circle. These errors are not caught by syntax checkers; they may be caught by graphical verification, travel checks, or inspection — not only by final measurement. Always set units explicitly in the startup block.</p>
 
 <h2>How It Works</h2>
 
@@ -78,13 +78,13 @@
 <p>On Haas controls, Setting 162 determines whether numbers without a decimal point are treated as if they had one (e.g., <code>X100</code> = 100.0) or scaled down. The safe habit regardless of setting: always write the decimal point — <code>X100.</code> or <code>X100.0</code>. This removes ambiguity when programs are moved between machines or settings.</p>
 
 <h2>Example</h2>
-<p>A program written in mm (G21) drills at X25.4 Y12.7. If you forget G21 and the machine defaults to G20 (inch), X25.4 means 25.4 inches = 645.16 mm — far outside the typical mill travel. The tool tries to move to that position and hits a limit switch or alarm. Always set G21 explicitly in the startup block.</p>
+<p>A program written in mm (G21) drills at X25.4 Y12.7. If you forget G21 and the machine defaults to G20 (inch), X25.4 means 25.4 inches = 645.16 mm — 25.4 times larger than intended. Whether this exceeds travel depends on the machine, work offset, and current limits; even if it does not overtravel, it can still cause a collision or a badly wrong part. Always set G21 explicitly in the startup block.</p>
 
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Omitting G21/G20</strong> — relying on the machine default is dangerous. Always set units explicitly.</li>
 <li><strong>Selecting the wrong plane</strong> — if you intend to cut an XY arc but G18 (XZ) is active, the circular move goes in the wrong plane. Mills can intentionally use G18 for XZ arcs, but the plane must match the intended contour.</li>
-<li><strong>Writing 100 without a decimal</strong> — ambiguous on older controllers. Always write 100. or 100.0.</li>
+<li><strong>Writing 100 without a decimal</strong> — interpretation depends on the control and its numeric-input settings. Always write 100. or 100.0.</li>
 <li><strong>Changing units mid-program</strong> — G20/G21 should only appear in the startup block, never mid-cut.</li>
 </ul>
 
@@ -99,7 +99,8 @@
 <section class="cp-sources">
 <h2>Sources</h2>
 <ul>
-<li>Haas Automation Mill/Lathe Operator Manuals — G-code definitions, modal behavior, machine functions.</li>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G17.html">Haas G17 Plane Selection</a> — supports G17/G18/G19 plane codes on mills.</li>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=setting.machine=lathe.value=S162.html">Haas Setting 162</a> — controls whether numbers without a decimal point are treated as having one.</li>
 <li>Program examples and speeds/feeds are classroom teaching assumptions; verify against tooling catalogs and machine documentation.</li>
 </ul>
 </section>

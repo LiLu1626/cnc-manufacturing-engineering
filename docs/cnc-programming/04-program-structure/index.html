@@ -76,12 +76,12 @@
 <h3>Complete Example Program</h3>
 <pre class="cp-code"><code>%
 O1001 (DEMO PROGRAM)
-G21 G17 G90 G40 G49 G80
+G21 G17 G90 G94 G40 G49 G80
 G54
 T01 M06
 S2000 M03
+G00 G43 H01 Z50. M08
 G00 X0 Y0
-G43 H01 Z50. M08
 G00 Z2.
 G01 Z-2. F100.
 G01 X50. F300.
@@ -92,32 +92,20 @@ M30
 <p>Read it top to bottom: startup, tool, spindle, approach, cut, retract, shutdown. Every CNC program follows this skeleton.</p>
 
 <h2>Example: Line-by-Line Trace</h2>
-<p>Take this short program on a Haas mill. We trace what the machine does at each line, tracking modal state:</p>
-<pre class="cp-code"><code>%
-O1001 (DEMO PROGRAM)
-G21 G17 G90 G40 G49 G80
-G54
-T01 M06
-S2000 M03
-G00 X0 Y0
-G43 H01 Z50. M08
-G00 Z2.
-G01 Z-2. F100.
-G01 X50. F300.
-G00 Z50. M09
-M05
-M30
-%</code></pre>
+<p><strong>Entry conditions:</strong> Haas mill, tool changed, G54 and H01 offsets already set, Z50 and all XY paths verified clear of fixtures. We trace what the machine does at each line, tracking modal state:</p>
 <table class="data-table">
 <tr><th>Line</th><th>What happens</th><th>State after</th></tr>
-<tr><td>G21 G17 G90...</td><td>Known state: metric, XY, absolute, comp off</td><td>G21/G17/G90/G40/G49/G80 active</td></tr>
+<tr><td>G21 G17 G90 G94...</td><td>Known state: metric, XY plane, absolute, feed/min, comp off</td><td>G21/G17/G90/G94/G40/G49/G80 active</td></tr>
+<tr><td>G54</td><td>Select work offset 54</td><td>G54 active</td></tr>
 <tr><td>T01 M06</td><td>ATC picks tool 1</td><td>Tool 1 in spindle</td></tr>
-<tr><td>S2000 M03</td><td>Spindle on clockwise at 2000 RPM</td><td>Spindle running</td></tr>
-<tr><td>G00 X0 Y0</td><td>Rapid to XY (0,0) at safe Z</td><td>At X0 Y0 Z50</td></tr>
-<tr><td>G43 H01 Z50.</td><td>Apply tool length offset H01</td><td>Z offset active</td></tr>
-<tr><td>G01 Z-2. F100.</td><td>Feed down to Z-2 at 100 mm/min</td><td>G01 active, F100</td></tr>
-<tr><td>G01 X50. F300.</td><td>Feed to X50 at 300 mm/min</td><td>F300 now modal</td></tr>
-<tr><td>G00 Z50.</td><td>Rapid up to Z50</td><td>G00 active</td></tr>
+<tr><td>S2000 M03</td><td>Spindle on CW at 2000 RPM</td><td>Spindle running CW</td></tr>
+<tr><td>G00 G43 H01 Z50.</td><td>Rapid to Z50 with tool length offset H01</td><td>Z50 reached, H01 active, M08 coolant on</td></tr>
+<tr><td>G00 X0 Y0</td><td>Rapid XY to (0,0) at Z50</td><td>X0 Y0 Z50</td></tr>
+<tr><td>G00 Z2.</td><td>Rapid Z to 2 mm above surface</td><td>X0 Y0 Z2</td></tr>
+<tr><td>G01 Z-2. F100.</td><td>Feed down to Z-2 at 100 mm/min (G94)</td><td>G01 active, F100 modal</td></tr>
+<tr><td>G01 X50. F300.</td><td>Feed to X50 at 300 mm/min</td><td>F300 modal, at X50 Y0 Z-2</td></tr>
+<tr><td>G00 Z50. M09</td><td>Rapid up to Z50, coolant off</td><td>G00 active, Z50, M09</td></tr>
+<tr><td>M05</td><td>Spindle stop</td><td>Spindle off</td></tr>
 <tr><td>M30</td><td>End program, rewind</td><td>Program stops</td></tr>
 </table>
 
@@ -140,7 +128,8 @@ M30
 <section class="cp-sources">
 <h2>Sources</h2>
 <ul>
-<li>Haas Automation Mill/Lathe Operator Manuals — G-code definitions, modal behavior, machine functions.</li>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G00.html">Haas G00 Rapid Positioning</a> — supports rapid motion behavior.</li>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G01.html">Haas G01 Linear Interpolation</a> — supports feed motion and F command rules.</li>
 <li>Program examples and speeds/feeds are classroom teaching assumptions; verify against tooling catalogs and machine documentation.</li>
 </ul>
 </section>

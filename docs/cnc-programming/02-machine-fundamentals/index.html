@@ -35,6 +35,7 @@
 
 <h2>Why It Matters</h2>
 <p>The same X20 means different things on different machines. On a mill, X20 moves the tool 20 mm in the X direction. On a lathe in diameter mode, X20 means the tool is at a 20 mm diameter — the actual radial movement from X40 to X20 is only 10 mm. If you treat lathe X as a linear coordinate like a mill, you will cut diameters wrong by a factor of two.</p>
+<p>Coordinates being legal does not mean they are safe. A vise jaw at Y40 and a &Oslash;10 tool means the tool center can only approach Y35 without hitting the jaw — even though Y40 is within the machine's travel. The machine envelope tells you where it <em>can</em> go; the fixture envelope tells you where it <em>may</em> go. Always visualize the fixture, tool, and spindle before commanding a move.</p>
 
 <h2>How It Works</h2>
 <h3>Mill Axes</h3>
@@ -123,7 +124,8 @@
 <section class="cp-sources">
 <h2>Sources</h2>
 <ul>
-<li>Haas Automation Mill/Lathe Operator Manuals — G-code definitions, modal behavior, machine functions.</li>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G00.html">Haas G00 Rapid Positioning</a> — supports rapid motion behavior.</li>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G01.html">Haas G01 Linear Interpolation</a> — supports feed motion and F command rules.</li>
 <li>Program examples and speeds/feeds are classroom teaching assumptions; verify against tooling catalogs and machine documentation.</li>
 </ul>
 </section>
