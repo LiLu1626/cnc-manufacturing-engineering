@@ -1,46 +1,24 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CNC Programming Troubleshooting — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="Unexpected motion, wrong dimensions, alarms — systematic diagnosis of program problems.">
-<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting/">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
-<main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>CNC Programming Troubleshooting</h1>
-<p class="lead">When the machine does the wrong thing, do not panic. Work the problem: which state is wrong, which line caused it, and what to check.</p>
-<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
-<div class="callout"><strong>What you will learn:</strong><ul><li>Wrong direction, wrong coordinate, wrong offset</li><li>Arc errors and overtravel</li><li>Cycle errors and unexpected drills</li><li>Systematic diagnosis: symptom → cause → fix</li></ul></div>
-<h2>Concept</h2>
-<p>Program errors fall into categories: (1) wrong modal state (G90/G91, G94/G95, G17/G18), (2) wrong offset (G54, H, D), (3) wrong geometry (I/J arc center, pocket dimensions), (4) alarm codes (overtravel, program error). Diagnose by reproducing the motion in single block.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Diagnosing Program Problems — CNC Programming</title><meta name="description" content="Common CNC programming errors: unexpected motion, wrong dimensions, alarms, overtravel, arc errors — and how to diagnose each."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting/"><link rel="stylesheet" href="../assets/css/site.css"><link rel="stylesheet" href="../assets/css/article.css"><link rel="stylesheet" href="../assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav"><a href="/cnc-manufacturing-engineering/">Home</a><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a><a href="/cnc-manufacturing-engineering/about/">About</a></nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Diagnosing Program Problems</h1><p class="lead">When the machine does something unexpected, systematic diagnosis beats trial and error. This page covers common symptoms and where to look.</p><h2>Concept</h2>
+<p>Program problems fall into categories: <strong>motion errors</strong> (tool goes where it shouldn't), <strong>dimension errors</strong> (part size wrong), <strong>alarm errors</strong> (machine stops with a fault), and <strong>surface errors</strong> (finish is poor). Each has a diagnostic path.</p>
 <h2>Why It Matters</h2>
-<p>A part that is systematically off by 0.2 mm is an offset error. A part that is wrong only on one feature is a coordinate error. Wrong direction (X goes - instead of +) suggests G91/G90 confusion. Knowing the category narrows the search.</p>
-<h2>How</h2>
-<h3>Common symptoms</h3>
-<ul><li><strong>Tool moves wrong direction</strong>: check G90/G91.</li>
-<li><strong>Z depth wrong</strong>: check H offset and G43.</li>
-<li><strong>Every hole shifted</strong>: check G54.</li>
-<li><strong>Unexpected drill move</strong>: forgot G80.</li>
-<li><strong>Arc alarm</strong>: I/J wrong or end point unreachable from start+center.</li></ul>
+<p>The #1 debugging mistake is changing a random line and re-running. This compounds errors. Systematic diagnosis: read the alarm, check the relevant modal state, verify coordinates on paper, then make one change.</p>
+<h2>How It Works</h2>
+<h3>Common Symptoms</h3>
+<table class="data-table">
+<tr><th>Symptom</th><th>Likely Cause</th><th>Check</th></tr>
+<tr><td>Tool goes wrong direction</td><td>G90/G91 mode</td><td>Which distance mode is active?</td></tr>
+<tr><td>Dimensions off by 25.4</td><td>Units</td><td>G20 vs G21</td></tr>
+<tr><td>Hole at wrong position</td><td>Work offset</td><td>Is G54 correct?</td></tr>
+<tr><td>Arc is lopsided</td><td>I/J error</td><td>Center offset from start?</td></tr>
+<tr><td>Cycle drills extra holes</td><td>Missing G80</td><td>Was cycle cancelled?</td></tr>
+<tr><td>Tool crashes at cut depth</td><td>No Z retract</td><td>Was G00 Z before XY?</td></tr>
+</table>
 <h2>Example</h2>
-<p>Part is 0.2 mm too large in X only. Check: G54 X offset. If G54 should be -300.2 but is -300.0, every X dimension is off by 0.2. Correct the offset, not the program.</p>
+<p>Symptom: hole appears at X50 when program says X30. Diagnosis: (1) Is G90 active? (2) Is G54 X offset correct? (3) Is there a G55 active by mistake? (4) Is the program actually the file you think it is? Check the O number on the controller.</p>
 <h2>Common Mistakes</h2>
-<ul><li>Editing the program when the offset is wrong.</li>
-<li>Ignoring the alarm number — it tells you what the controller thinks.</li>
-<li>Restarting without rebuilding modal state (see Lesson 23).</li></ul>
-<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> Every hole is 0.1 mm too high in Y. What to check?</p><details><summary>Show answer</summary><p>G54 Y offset. A systematic shift means work offset, not individual coordinates.</p></details><p><strong>2.</strong> Tool moves in unexpected Y during a drilling cycle. Why?</p><details><summary>Show answer</summary><p>G81 is still modal; the next X/Y move drills. G80 to cancel.</p></details></section>
-<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Mill Operator's Manual — Alarm codes (haascnc.com, retrieved 2026-09-24).</li></ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/24-program-verification/">&larr; Verification</a><a href="/cnc-manufacturing-engineering/cnc-programming/26-common-mistakes/">Common Mistakes &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<ul><li><strong>Guessing and re-running</strong> — make one change at a time, observe, then continue.</li><li><strong>Ignoring the alarm text</strong> — the alarm number and message usually point directly to the problem.</li><li><strong>Changing offsets before checking program</strong> — if the program says X30 and the hole is at X50, the offset is off by 20 — fix the offset, don't change the program.</li></ul>
+<h2>Practice</h2>
+<p><strong>1.</strong> Part is 25.4x too small. What happened?</p><details><summary>Ans</summary><p>Program in mm but machine set to G20 inch, or vice versa.</p></details>
+<p><strong>2.</strong> After drilling, the next X/Y move drills a hole unexpectedly. Why?</p><details><summary>Ans</summary><p>Missing G80. The drilling cycle stayed modal.</p></details>
+<p><strong>3.</strong> How do you verify which program is loaded?</p><details><summary>Ans</summary><p>Check the O number on the controller display. Machine shops have many programs with similar names.</p></details>
+<nav class="cp-nav-bottom"><a href="../24-verification/">&larr; Verification</a><a href="../26-common-mistakes/">Common Mistakes &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>

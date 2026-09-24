@@ -1,49 +1,26 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Common Beginner Programming Mistakes — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="The mistakes every new programmer makes — and how to avoid them.">
-<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/26-common-mistakes/">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
-<main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Common Beginner Programming Mistakes</h1>
-<p class="lead">These are the errors that crash machines, scrap parts, and waste time. Learn them before you make them.</p>
-<div class="cp-meta"><span><strong>Level:</strong> Beginner</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
-<div class="callout"><strong>What you will learn:</strong><ul><li>Wrong offsets, wrong units, wrong plane</li><li>Unsafe rapid, missing G80/G40</li><li>Copying code without understanding</li><li>Missing startup block</li></ul></div>
-<h2>Concept</h2>
-<p>Beginner errors are not random. They cluster around: (1) state confusion (G90/G91, G41/G42), (2) offset confusion (G54, H, D), (3) safety (rapid through part, missing cancel), (4) copying code without understanding the machine dialect.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Common Beginner Mistakes — CNC Programming</title><meta name="description" content="The most frequent CNC programming mistakes new programmers make, and how to avoid them."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/26-common-mistakes/"><link rel="stylesheet" href="../assets/css/site.css"><link rel="stylesheet" href="../assets/css/article.css"><link rel="stylesheet" href="../assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav"><a href="/cnc-manufacturing-engineering/">Home</a><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a><a href="/cnc-manufacturing-engineering/about/">About</a></nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Common Beginner Mistakes</h1><p class="lead">This is the checklist every new programmer should review before running their first program. These are the errors that cause crashes, scrap, and rework.</p><h2>Concept</h2>
+<p>Beginner CNC programming mistakes cluster around a few predictable areas: offsets, units, modal state, and unsafe motion. Knowing them in advance is the fastest way to avoid them.</p>
 <h2>Why It Matters</h2>
-<p>Most crashes are not exotic — they are one of about ten repeated errors. Recognizing them by name lets you check for them before cycle start.</p>
-<h2>How</h2>
-<h3>Top mistakes</h3>
-<ul><li><strong>Wrong work offset</strong>: G54 set to wrong edge.</li>
-<li><strong>Wrong tool length</strong>: T02 but H01.</li>
-<li><strong>Wrong units</strong>: G20/G21 mismatch.</li>
-<li><strong>Missing G80</strong>: next move drills.</li>
-<li><strong>Missing G40</strong>: compensation never turns off.</li>
-<li><strong>Rapid through stock</strong>: G00 down to depth.</li>
-<li><strong>Wrong plane</strong>: G17 vs G18 for arcs.</li>
-<li><strong>Unsafe Z approach</strong>: not above part before rapid in X/Y.</li></ul>
+<p>Almost every new programmer makes these mistakes — and most make them repeatedly until they build a checklist. This page is that checklist.</p>
+<h2>How It Works</h2>
+<h3>The Big Ten</h3>
+<ol><li><strong>Wrong work offset</strong> — G54 set on the wrong edge or corner</li>
+<li><strong>Wrong tool offset</strong> — H number doesn't match the tool in spindle</li>
+<li><strong>Wrong units</strong> — G20/G21 mismatch</li>
+<li><strong>Wrong plane</strong> — G18 on a mill, G17 on a lathe</li>
+<li><strong>Wrong G90/G91</strong> — incremental after subprogram without reset</li>
+<li><strong>G41/G42 backwards</strong> — outer profile tool pushes inside</li>
+<li><strong>Missing G40</strong> — compensation stays active</li>
+<li><strong>Missing G80</strong> — drilling cycle continues</li>
+<li><strong>Z direction wrong</strong> — cutting upward instead of down</li>
+<li><strong>Unsafe G00</strong> — rapid XY at cut depth</li></ol>
 <h2>Example</h2>
-<p>Copying a FANUC G76 thread cycle onto a Haas produces an alarm — not because the thread is wrong, but because the dialect is different. Always adapt code to your machine.</p>
+<p>Before every program run, read through the Big Ten. It takes 30 seconds and prevents 90% of crashes.</p>
 <h2>Common Mistakes</h2>
-<ul><li>Running a program you did not read line by line.</li>
-<li>Assuming "it worked on the other machine" — offsets and defaults differ.</li>
-<li>Skipping the startup block because "the last program left it right."</li></ul>
-<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> Why start every program with G21 G17 G90 G40 G49 G80?</p><details><summary>Show answer</summary><p>To force a known state regardless of what the previous program left behind.</p></details><p><strong>2.</strong> You copied a program from a FANUC shop and it alarms on your Haas. Why?</p><details><summary>Show answer</summary><p>M-codes and cycle syntax differ. Translate, do not copy.</p></details></section>
-<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Mill Operator's Manual (haascnc.com, retrieved 2026-09-24).</li></ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting/">&larr; Troubleshooting</a><a href="/cnc-manufacturing-engineering/cnc-programming/28-milling-project/">Milling Project &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<ul><li><strong>Thinking you're too experienced for the checklist</strong> — even experienced programmers run the checklist. It takes 30 seconds.</li>
+<li><strong>Copying code without understanding</strong> — every line should make sense. If you can't explain it, don't run it.</li></ul>
+<h2>Practice</h2>
+<p><strong>1.</strong> Your first run: name the top three checks.</p><details><summary>Ans</summary><p>G54 work offset, H tool offset, G21 units.</p></details>
+<p><strong>2.</strong> Why does G41/G42 direction matter?</p><details><summary>Ans</summary><p>Wrong direction pushes the tool into the part instead of outside — overcut.</p></details>
+<p><strong>3.</strong> What two cycles must always be cancelled?</p><details><summary>Ans</summary><p>G80 (drilling) and G40 (cutter comp).</p></details>
+<nav class="cp-nav-bottom"><a href="../25-troubleshooting/">&larr; Troubleshooting</a><a href="../27-turning-project/">Turning Project &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>
