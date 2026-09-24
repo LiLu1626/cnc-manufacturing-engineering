@@ -1,54 +1,21 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Turning Fundamentals — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="CNC lathe basics: X/Z coordinates, diameter vs radius programming, spindle direction, turret.">
-<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
-<main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Turning Fundamentals</h1>
-<p class="lead">A CNC lathe rotates the workpiece and tools move in X (diameter) and Z (along the part). Understanding diameter programming is the first step.</p>
-<div class="callout"><strong>What you will learn:</strong><ul>
-<li>Lathe axes: X (diameter), Z (along spindle)</li>
-<li>Diameter programming vs radius programming</li>
-<li>Spindle direction and turret orientation</li>
-<li>Basic turning operations: face, OD, bore</li>
-</ul></div>
-<h2>Lathe Coordinates</h2>
-<p>On a CNC lathe, <strong>Z</strong> runs along the spindle axis (toward/away from the chuck). <strong>X</strong> is the radial axis. Most lathes use <strong>diameter programming</strong>: X values are the actual diameter of the part, not the radius. A 40 mm bar has X40.0, not X20.0.</p>
-<h2>Diameter vs Radius</h2>
-<p>Diameter programming means the X coordinate you read on the drawing (the OD) goes directly into the program. If you see a 50 mm diameter on the drawing, you write X50.0. The controller knows that radius = X/2.</p>
-<h2>Spindle and Turret</h2>
-<p>On most horizontal lathes, the spindle turns clockwise (M03) when viewed from the headstock. The turret holds multiple tools. Positive X moves away from the centerline (larger diameter); positive Z moves away from the chuck.</p>
-<h2>Basic Operations</h2>
-<ul><li><strong>Facing</strong>: tool moves across the end of the part to square it.</li>
-<li><strong>OD turning</strong>: tool moves along Z to reduce the diameter.</li>
-<li><strong>Boring</strong>: tool enters a hole and moves along Z to enlarge it internally.</li></ul>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Turning Coordinates & Toolpaths — CNC Programming</title><meta name="description" content="Lathe coordinate system, diameter vs radius programming, turning tool geometry, facing, OD/ID turning."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/"><link rel="stylesheet" href="../assets/css/site.css"><link rel="stylesheet" href="../assets/css/article.css"><link rel="stylesheet" href="../assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav"><a href="/cnc-manufacturing-engineering/">Home</a><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a><a href="/cnc-manufacturing-engineering/about/">About</a></nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Turning Coordinates & Toolpaths</h1><p class="lead">CNC lathes differ from mills in axes and programming. This page covers the lathe coordinate system, diameter programming, and basic turning operations.</p><h2>Concept</h2>
+<p>A CNC lathe has two axes: <strong>X</strong> (radial, programmed in diameter) and <strong>Z</strong> (axial, along the spindle). The workpiece rotates; the tool moves. X40 means 40 mm diameter, not 40 mm radial travel.</p>
+<p>Z0 is typically on the front face of the part. Positive Z moves away from the chuck; negative Z moves toward the chuck.</p>
+<h2>Why It Matters</h2>
+<p>Programming X as radius on a diameter-mode lathe cuts diameters 50% too large or too small. The most common turning mistake. Also, Z direction: cutting into the part is negative Z, not positive.</p>
+<h2>How It Works</h2>
+<h3>Diameter Programming</h3>
+<p>X is always diameter. Tool at X30 = 30 mm diameter. Movement from X40 to X30 = 5 mm radial cut (10 mm diameter reduction).</p>
+<h3>Basic Operations</h3>
+<ul><li><strong>Facing</strong> — tool moves X from OD to center at Z0</li><li><strong>OD turning</strong> — tool moves Z along the part at fixed X</li><li><strong>ID boring</strong> — tool moves inside a bore at fixed X</li></ul>
+<h3>Turret</h3>
+<p>Tools are indexed by T code (T0101 = tool 1, offset 1). No M06 needed — the turret indexes directly.</p>
+<h2>Example</h2>
+<p>Turn from O40 to O30 over Z50: starting at X42 Z2, feed to X30 Z0, then Z-50. At F0.2 mm/rev and S1000, feed = 200 mm/min. Ideal time for 50 mm Z cut = 50/200 = 15 s.</p>
 <h2>Common Mistakes</h2>
-<ul><li>Programming X as radius instead of diameter — the cut is half as large as intended.</li>
-<li>Confusing positive/negative Z direction relative to the chuck.</li>
-<li>Forgetting that lathe feed is in mm/rev (G99 on Haas), not mm/min.</li></ul>
-<section class="cp-practice"><h2>Practice</h2>
-<p><strong>1.</strong> A drawing shows an OD of 35 mm. What X value do you program?</p>
-<details><summary>Show answer</summary><p>X35.0 (diameter programming). Not X17.5.</p></details>
-<p><strong>2.</strong> On a lathe, which axis runs along the spindle?</p>
-<details><summary>Show answer</summary><p>Z. X is the radial/diameter axis.</p></details>
-</section>
-<section class="cp-sources"><h2>Sources</h2><ul>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/03-horizontal-lathes/lathe-fundamentals/">Horizontal CNC Lathes</a></li>
-</ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles">&larr; Canned Cycles</a><a href="/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles">Turning Cycles &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<ul><li><strong>Treating X as radius</strong> — X is diameter; radial movement is half the X difference.</li><li><strong>Z direction reversed</strong> — cutting into the part is negative Z.</li><li><strong>Forgetting T0101 offset</strong> — T01 selects tool; T0101 activates both tool and offset.</li></ul>
+<h2>Practice</h2>
+<p><strong>1.</strong> X moves from O50 to O44. Radial depth?</p><details><summary>Ans</summary><p>(50-44)/2 = 3 mm.</p></details>
+<p><strong>2.</strong> Z0 is where?</p><details><summary>Ans</summary><p>On the front finished face of the part.</p></details>
+<p><strong>3.</strong> Why no M06 on a lathe?</p><details><summary>Ans</summary><p>The turret indexes tools directly. T0202 indexes to tool 2 and activates its offset.</p></details>
+<nav class="cp-nav-bottom"><a href="../18-canned-cycles/">&larr; Canned Cycles</a><a href="../20-turning-cycles/">Turning Cycles &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>

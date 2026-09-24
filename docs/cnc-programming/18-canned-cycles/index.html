@@ -1,47 +1,25 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Canned Cycles Overview — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="What a canned cycle is, its fixed sequence of motions, and how parameters differ between drill, bore, tap, and turn.">
-<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
-<main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Canned Cycles Overview</h1>
-<p class="lead">A canned cycle is a pre-programmed sequence: position, plunge, feed, retract. You supply the parameters; the controller does the rest.</p>
-<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
-<div class="callout"><strong>What you will learn:</strong><ul><li>The six-step cycle sequence</li><li>Common parameters: R, Z, F, Q, P</li><li>Why cycles are modal</li><li>Turning cycles G71/G72/G70</li></ul></div>
-<h2>Concept</h2>
-<p>Every milling canned cycle follows the same pattern: (1) rapid to X/Y position, (2) rapid to R plane, (3) feed to Z depth, (4) dwell (optional), (5) retract to R or initial plane, (6) repeat at next X/Y. You code this once with G81/G83/etc.; subsequent X/Y blocks repeat it.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Canned Cycles & Hole Patterns — CNC Programming</title><meta name="description" content="What canned cycles are, how they work, modal behavior, G80 cancellation, and hole pattern programming."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/"><link rel="stylesheet" href="../assets/css/site.css"><link rel="stylesheet" href="../assets/css/article.css"><link rel="stylesheet" href="../assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav"><a href="/cnc-manufacturing-engineering/">Home</a><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a><a href="/cnc-manufacturing-engineering/about/">About</a></nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Canned Cycles & Hole Patterns</h1><p class="lead">Canned cycles package multi-step motions into one line. This page explains how they work, their modal behavior, and how to drill multiple holes efficiently.</p><h2>Concept</h2>
+<p>A <strong>canned cycle</strong> is a preprogrammed sequence: position, rapid to R, feed to depth, retract. One line replaces 5-6 manual lines. Cycles are modal: once activated, every X/Y move repeats the cycle with the same R, Z, and F until G80 cancels.</p>
 <h2>Why It Matters</h2>
-<p>Canned cycles reduce 6 lines per hole to 1. On a part with 20 holes, that is the difference between a 20-line and a 120-line program. But the modal behavior means forgetting G80 drills unwanted holes.</p>
-<h2>How</h2>
-<h3>Common parameters</h3>
-<ul><li><strong>X/Y</strong> — hole position.</li>
-<li><strong>R</strong> — R plane (rapid-to height above part).</li>
-<li><strong>Z</strong> — final depth.</li>
-<li><strong>F</strong> — feed rate.</li>
-<li><strong>Q</strong> — peck depth (G83).</li>
-<li><strong>P</strong> — dwell time (G82).</li></ul>
+<p>Modal cycles are powerful but dangerous: forget G80 and the next X/Y move becomes a hole. Conversely, understanding modal cycles lets you drill a 20-hole pattern with 20 lines instead of 100.</p>
+<h2>How It Works</h2>
+<h3>Canned Cycle Structure</h3>
+<ol><li>Rapid to X/Y position</li><li>Rapid to R plane</li><li>Feed to Z depth</li><li>Retract (G98 to initial Z, G99 to R)</li></ol>
+<h3>Cancellation</h3>
+<p><strong>G80</strong> cancels all canned cycles. It must be programmed after the hole pattern before any non-drilling motion. Note: G80 cancels the cycle mode but does NOT retract the tool — if you need to be at a safe Z position, program G00 Z50 explicitly.</p>
 <h2>Example</h2>
-<p>G83 (peck) Q5: plunge 5 mm, retract fully, re-plunge 5+5, etc. This clears chips after every 5 mm of drill depth.</p>
+<p>4-hole pattern on a 50 mm square, centered at (0,0):</p>
+<pre class="cp-code"><code>G98 G81 R2. Z-15. F120.
+X-25. Y-25.
+X25. Y-25.
+X25. Y25.
+X-25. Y25.
+G80 G00 Z50.</code></pre>
+<p>Each X/Y line drills one hole. The R, Z, F values are inherited from the cycle. 5 lines (including G81 and G80) for 4 holes.</p>
 <h2>Common Mistakes</h2>
-<ul><li>Mixing R plane units with Z units (both mm in G21).</li>
-<li>Forgetting that on a lathe, canned cycles (G71/G70) work differently — they use P/Q/U/W for stock allowance.</li>
-<li>Not verifying cycle behavior on your controller — G84 tapping direction and retract speed vary by machine.</li></ul>
-<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> What does Q5 mean in G83?</p><details><summary>Show answer</summary><p>Each peck plunges 5 mm deeper before retracting to clear chips.</p></details><p><strong>2.</strong> Why is G80 important?</p><details><summary>Show answer</summary><p>It cancels the modal cycle. Without it, any X/Y move repeats the drill.</p></details></section>
-<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Mill Operator's Manual — Canned cycles (haascnc.com, retrieved 2026-09-24).</li></ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/33-drilling-cycles/">&larr; Drilling Cycles</a><a href="/cnc-manufacturing-engineering/cnc-programming/34-subprograms/">Subprograms &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<ul><li><strong>Forgetting G80</strong> — cycle continues unexpectedly.</li><li><strong>Thinking G80 retracts to Z50</strong> — G80 only cancels mode; explicit Z retract needed.</li><li><strong>Changing R/Z between holes without re-commanding</strong> — R and Z are modal; re-specify only when they change.</li></ul>
+<h2>Practice</h2>
+<p><strong>1.</strong> After G81, you write X10 Y20. What happens?</p><details><summary>Ans</summary><p>Drills at (10,20) with the same R, Z, F as G81.</p></details>
+<p><strong>2.</strong> Why program G00 Z50 after G80?</p><details><summary>Ans</summary><p>G80 cancels cycle mode but leaves the tool at whatever Z it was at. Explicit retract ensures safe Z before tool change or XY move.</p></details>
+<p><strong>3.</strong> 8 holes on bolt circle, same depth. How many G81 lines?</p><details><summary>Ans</summary><p>One G81 line + 8 X/Y position lines + G80.</p></details>
+<nav class="cp-nav-bottom"><a href="../17-drilling-cycles/">&larr; Drilling</a><a href="../19-turning-fundamentals/">Turning &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>
