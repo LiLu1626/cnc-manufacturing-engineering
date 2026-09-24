@@ -1,63 +1,151 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Complete Turning Project: Front Profile — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="Full Haas-style program for a front profile: Ø30 × Z0-20 and Ø36 × Z-20-40. G71 rough, G70 finish. No parting off.">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Worked Project: Stepped Shaft — CNC Programming</title>
+<meta name="description" content="Complete CNC lathe project: facing, roughing and finishing a stepped shaft with Haas G71/G70, setup data, and tool nose radius considerations.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/27-turning-project/">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
+<link rel="stylesheet" href="../../assets/css/site.css">
+<link rel="stylesheet" href="../../assets/css/article.css">
+<link rel="stylesheet" href="../../assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <a href="../../">Home</a>
+  <a href="../../engineering-tools/">Engineering Tools</a>
+  <a href="../../knowledge-base/">Knowledge Base</a>
+  <a href="../../machine-systems/">Machine Systems</a>
+  <a href="../" class="active">CNC Programming</a>
+  <a href="../../about/">About</a>
+</nav>
 <main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Complete Turning Project: Front Profile</h1>
-<p class="lead">A worked Haas lathe program. Raw stock Ø40. Machine only the front profile — no cut-off. G71 rough leaves 0.4 mm stock; G70 finishes.</p>
-<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Lathe</span></div>
-<div class="callout"><strong>What you will learn:</strong><ul><li>Raw stock Ø40 × 100</li><li>Profile: Ø30 Z0-20, then Ø36 Z-20-40</li><li>G71 rough, G70 finish (Haas)</li><li>No parting off programmed</li></ul></div>
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Worked Project: Stepped Shaft</h1>
+<p class="lead">A &Oslash;40&times;100 mm bar stock, faced to establish Z0, then rough-turned and finish-turned to a two-step profile (&Oslash;30 and &Oslash;36). This project covers facing, setup, Haas single-line G71 roughing, and G70 finishing.</p>
+
 <h2>Concept</h2>
-<p>The part is a shouldered shaft. Face it, then turn the front profile: Ø30 from Z0 to Z-20, then step out to Ø36 from Z-20 to Z-40. The contour changes Z monotonically (0 → -20 → -40) with no reversal, satisfying Haas G71 rules.</p>
+<p>We machine the front end of a &Oslash;40&times;100 bar. The finished part has two diameters: &Oslash;30 from Z0 to Z&minus;20, and &Oslash;36 from Z&minus;20 to Z&minus;40. We do <strong>not</strong> part off or turn the back — this setup completes only the front contour.</p>
+<table class="data-table">
+<tr><th>Item</th><th>Classroom model</th></tr>
+<tr><td>Raw stock</td><td>&Oslash;40 &times; 100 mm; axial range Z&minus;99 to +1</td></tr>
+<tr><td>Finished datum</td><td>Final face at Z0 (1 mm stock to remove from original face at +1)</td></tr>
+<tr><td>Chuck jaw front</td><td>Z&minus;55; gripping from Z&minus;99 to Z&minus;55 (44 mm grip length)</td></tr>
+<tr><td>Original projection</td><td>56 mm from jaw front to stock end; 55 mm after facing</td></tr>
+<tr><td>Front section</td><td>&Oslash;30, Z0 to Z&minus;20</td></tr>
+<tr><td>Rear section</td><td>&Oslash;36, Z&minus;20 to Z&minus;40</td></tr>
+<tr><td>Retained zone</td><td>Z&minus;40 to Z&minus;55 (15 mm gap, not machined)</td></tr>
+<tr><td>Tolerances</td><td>&Oslash;30/&Oslash;36 &plusmn;0.05; shoulder position &plusmn;0.10</td></tr>
+</table>
+<p><strong>Tool:</strong> T0101, a right-hand turning/facing tool with 0.4 mm nose radius. X is programmed in diameter. The virtual tool tip defines the geometry offset; the actual r0.4 nose leaves a small radius at the shoulder root — this is allowed and is not a sharp internal corner.</p>
+
 <h2>Why It Matters</h2>
-<p>This example machines the front profile only. The part stays in the bar for later operations. The G71 contour progresses monotonically in Z, which Haas requires.</p>
-<h2>How</h2>
-<h3>Program</h3>
-<pre class="cp-code"><code>% (FRONT PROFILE, NO PARTING)
-O2700
-G21 G97 G99
-(T0101 OD ROUGHING)
-T0101 M03 S1200
-G54 G00 X42. Z2. M08
-G71 U1.0 R0.5
-G71 P10 Q20 U0.4 W0.1 F0.2
+<p>The facing operation is not optional: it establishes the axial datum (Z0). If you skip facing and set Z0 on the rough stock face at +1, every axial dimension is off by 1 mm. The 44 mm grip length and 55 mm projection are classroom geometry assumptions — real gripping force, jaw envelope, and toolholder clearance must be verified on the actual machine.</p>
+
+<h2>How It Works</h2>
+
+<h3>Two Facing Cuts</h3>
+<p>We take two 0.5 mm facing passes to remove the 1 mm stock from the original face at Z+1 down to Z0:</p>
+<ol>
+<li>Approach at X42 Z2 (outside the stock).</li>
+<li>Feed to Z0.5, then face from X42 to X&minus;0.5 (0.5 mm cut).</li>
+<li>Retract +Z to 2, then return X42 (do not radial-retract in the cut).</li>
+<li>Feed to Z0, face from X42 to X&minus;0.5 (remaining 0.5 mm).</li>
+<li>Retract +Z to 2, return X42, ready for roughing.</li>
+</ol>
+<p>At S1000 and F0.10 mm/rev, ideal feed = 100 mm/min. Each facing pass traverses X42.5 radially (21.25 mm actual radius), taking about 12.75 seconds of ideal cutting time — not including acceleration, approach, or center-cutting effects.</p>
+
+<h3>Haas Single-Line G71 Roughing</h3>
+<p>We use the Haas single-line format:</p>
+<pre class="cp-code"><code>G71 P10 Q20 D1.0 U0.4 W0.1 F0.20</code></pre>
+<ul>
+<li><strong>D1.0</strong> = radial depth of cut per pass (1.0 mm)</li>
+<li><strong>U0.4</strong> = finish allowance on diameter (0.4 mm diameter = 0.2 mm radial)</li>
+<li><strong>W0.1</strong> = finish allowance on Z</li>
+<li><strong>P10 Q20</strong> = contour block range</li>
+</ul>
+<p>The P-Q contour defines the finished shape (Type I, no grooves):</p>
+<pre class="cp-code"><code>N10 G00 X30.
+G01 Z0. F0.10
+Z-20.
+X36.
+Z-40.
+N20 X42.</code></pre>
+
+<h3>G70 Finishing</h3>
+<p>After G71, the same T0101 runs G70 at S1200 to cut the finished profile at F0.10. Rough diameter after G71: &Oslash;30.4 and &Oslash;36.4 (U0.4 diameter allowance). Final: &Oslash;30 and &Oslash;36.</p>
+
+<h3>Clearance and Retraction</h3>
+<p>After machining, retract in two axes: first to X100 (clear of OD), then to Z100 (away from chuck). These X100/Z100 numbers are classroom safe positions for this model — verify on your machine. The toolholder's rearward Z envelope is 8 mm, so at Z&minus;40 the tool body reaches Z&minus;48, leaving 7 mm to the jaw front at Z&minus;55.</p>
+
+<h2>Example: Complete Program</h2>
+<pre class="cp-code"><code>O0027 (STEPPED SHAFT PROJECT)
+G21 G18 G97 G99
+T0101 (RIGHT-HAND TURNING/FACING TOOL, R0.4)
+G54 S1000 M03
+
+(FACING PASS 1 - REMOVE 0.5mm)
+G00 X42. Z2.
+G01 Z0.5 F0.10
+G01 X-0.5
+G00 Z2.
+G00 X42.
+
+(FACING PASS 2 - REMOVE REMAINING 0.5mm TO Z0)
+G01 Z0 F0.10
+G01 X-0.5
+G00 Z2.
+G00 X42.
+
+(ROUGHING CYCLE)
+G71 P10 Q20 D1.0 U0.4 W0.1 F0.20
 N10 G00 X30.
-G01 Z0. F0.1
+G01 Z0. F0.10
 Z-20.
 X36.
 Z-40.
 N20 X42.
-G00 X100. Z100.
-(T0202 FINISH)
-T0202 M03 S1800
-G00 X42. Z2.
+
+(FINISHING CYCLE)
+S1200 M03
 G70 P10 Q20
-G00 X100. Z100.
-M09 M05
-M30
-%</code></pre>
-<p>N10 to N20: X30 at Z0, Z to -20, step to X36, Z to -40, clear to X42. Z goes 0 → -20 → -40 monotonically. No parting off — the bar remains in the chuck.</p>
+
+(RETRACT)
+G00 X100.
+G00 Z100.
+M05
+M30</code></pre>
+
 <h2>Common Mistakes</h2>
-<ul><li>Z direction reversing inside P10-Q20 — Haas G71 requires monotonic.</li>
-li>Claiming parting off without programming it.</li>
-<li>Using G96 during G70 finish — fine for finish, but switch to G97 before threading.</li></ul>
-<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> Why is Z monotonic important?</p><details><summary>Show answer</summary><p>Haas G71 expects the contour to progress in one Z direction. Reversing Z causes an alarm or wrong tool path.</p></details><p><strong>2.</strong> Why no parting off?</p><details><summary>Show answer</summary><p>Only the front profile is machined here. Parting off would be a separate operation with a cutoff tool.</p></details></section>
-<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Lathe Operator's Manual — G71/G70 (haascnc.com, retrieved 2026-09-24).</li></ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/28-milling-project/">&larr; Milling Project</a><a href="/cnc-manufacturing-engineering/cnc-programming/35-practical-examples/">Practical Examples &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<ul>
+<li><strong>Saying "face it" without writing the facing code</strong> — the 1 mm face stock must be actually removed to establish Z0.</li>
+<li><strong>Treating U0.4 as 0.4 mm radial</strong> — U is diameter allowance, so radial is 0.2 mm.</li>
+<li><strong>Ignoring the r0.4 nose radius</strong> — the shoulder root has a small radius, not a sharp 90&deg; corner. Do not measure diameter at the shoulder root.</li>
+<li><strong>Confusing tool clearance with toolholder clearance</strong> — the tip clearance to the chuck is not the same as the toolholder body clearance.</li>
+<li><strong>Claiming the part is complete</strong> — we only machined the front contour; parting, back-facing, and final length are separate operations.</li>
+</ul>
+
+<h2>Practice</h2>
+<p><strong>1.</strong> After G71 with U0.4, what are the rough diameters?</p>
+<details><summary>Show answer</summary><p>&Oslash;30.4 and &Oslash;36.4. U0.4 is diameter allowance, so each rough diameter is 0.4 mm over finished.</p></details>
+<p><strong>2.</strong> You measure &Oslash;30.03 and &Oslash;36.07. Are both acceptable at &plusmn;0.05?</p>
+<details><summary>Show answer</summary><p>&Oslash;30.03 is within 30.00&plusmn;0.05 (29.95&ndash;30.05) — OK. &Oslash;36.07 is above 36.05 — out of tolerance by 0.02 mm.</p></details>
+<p><strong>3.</strong> If the toolholder rearward envelope is 8 mm behind the tip, and the jaw front is at Z&minus;55, what is the minimum gap when machining to Z&minus;40?</p>
+<details><summary>Show answer</summary><p>Tool body reaches Z = &minus;40 &minus; 8 = &minus;48. Gap to jaw at Z&minus;55 is 7 mm. This is a geometric model; verify the actual toolholder envelope on the machine.</p></details>
+
+<section class="cp-sources">
+<h2>Sources</h2>
+<ul>
+<li>Haas Automation Lathe Operator's Manual — G71 roughing cycle (single-line format), G70 finishing cycle.</li>
+<li>Tool nose radius compensation: r0.4 insert leaves a fillet at shoulders; measure diameters away from the shoulder root.</li>
+<li>All speeds, feeds, depths, and grip lengths are classroom teaching assumptions. Real process parameters require tooling catalogs and machine verification.</li>
+</ul>
+</section>
+<nav class="cp-nav-bottom">
+<a href="../26-common-mistakes/">&larr; Common Mistakes</a>
+<a href="../28-milling-project/">Milling Project &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
