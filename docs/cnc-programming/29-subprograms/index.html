@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Subprograms — CNC Programming</title>
-<meta name="description" content="M98 subprogram call, M99 return, Haas P/L syntax, repeating hole patterns, and safe absolute-coordinate examples.">
+<meta name="description" content="M98 subprogram call, M99 return, Haas P/L syntax, repeating hole patterns, nested subprograms, and safe absolute-coordinate examples.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/29-subprograms/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
@@ -27,24 +27,29 @@
 <main class="article">
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Subprograms</h1>
-<p class="lead">Subprograms let you repeat a block of code without copying it. This page covers M98/M99, Haas P/L syntax, and a safe absolute-coordinate hole pattern example.</p>
+<p class="lead">Subprograms let you repeat a block of code without copying it. This page covers M98/M99, Haas P/L syntax, nested calls, repeating hole patterns, and the safety rules that prevent drift between repetitions.</p>
 
 <h2>Concept</h2>
-<p>A <strong>subprogram</strong> is a separate O-numbered program called from the main program. On a Haas control, <strong>M98 P2000 L3</strong> calls O2000 three times. <strong>M99</strong> returns to the line after M98. Subprograms reduce repetition and make programs easier to maintain.</p>
+<p>A <strong>subprogram</strong> is a separate O-numbered program called from the main program. On a Haas control, <strong>M98 P2000 L3</strong> calls O2000 three times. <strong>M99</strong> returns to the line after M98. Subprograms reduce repetition, make programs shorter, and centralize changes — if the hole depth changes, you edit one line instead of sixteen.</p>
 
 <h2>Why It Matters</h2>
-<p>Without subprograms, drilling 16 holes in a pattern means 16 blocks of G81 code. With a subprogram, you write the hole once and call it 16 times. If the hole depth changes, you edit one line instead of 16. But subprograms inherit modal state — if the subprogram uses G91, the main program must restore G90 after.</p>
+<p>Without subprograms, drilling 16 holes in a pattern means 16 blocks of G81 code. With a subprogram, you write the hole once and call it 16 times. But subprograms inherit modal state — if the subprogram uses G91, the main program must restore G90 after. This is the #1 cause of subprogram bugs: leaked modal state.</p>
 
 <h2>How It Works</h2>
+
 <h3>Haas Syntax</h3>
 <pre class="cp-code"><code>M98 P2000 L3   (call O2000, repeat 3 times)</code></pre>
-<p>Inside O2000, M99 returns to the line after M98. The subprogram has its own O-number and lives as a separate program on the machine.</p>
+<p>Inside O2000, M99 returns to the line after M98. The subprogram has its own O-number and lives as a separate program on the machine. On FANUC, the format is similar: M98 P00032000 (repeat 3 times, call O2000). On Haas, L3 means repeat 3 times.</p>
+
+<h3>Nested Subprograms</h3>
+<p>A subprogram can itself call another subprogram (up to 4 levels deep on most controllers). This is how you build reusable building blocks: the main program calls a pattern routine, which calls a single-hole routine. Nested calls return in reverse order: inner M99 returns to the outer M98 line.</p>
+
 <h3>Safe Pattern: Always Restore State</h3>
 <p>Before M98, always: (1) know the current G90/G91 state, (2) ensure G80 cancels any active cycle, (3) declare G90 explicitly after each call. The example below uses <strong>absolute coordinates only</strong> — no G91 — so there is no drift between holes.</p>
 
-<h2>Example</h2>
+<h2>Example: Four-Hole Pattern</h2>
 <p>Four holes on a 40 mm square at (0,0), (40,0), (40,40), (0,40). The main program positions XY in absolute G90, then calls O2000 which drills at the current position and returns to Z50.</p>
-<p><strong>Main program O0029</strong> (this is a teaching excerpt after tool, spindle, H offset, G54, and safe entry have already been set up):</p>
+<p><strong>Main program O0029</strong> (entry setup and tool already verified):</p>
 <pre class="cp-code"><code>O0029 (MAIN - ENTRY SETUP AND TOOL ALREADY VERIFIED)
 G21 G17 G90 G94 G40 G80 G98
 G00 Z50.
@@ -68,18 +73,33 @@ M99</code></pre>
 <p><strong>Trace:</strong> Call 1 drills at (0,0). Call 2 drills at (40,0). Call 3 drills at (40,40). Call 4 drills at (0,40). Each call: G81 drills at the current XY, G98 retracts to initial plane Z50, G80 cancels cycle, explicit G00 Z50 ensures safe height, M99 returns. Every hole is at Z&minus;15 — no drift.</p>
 <p><strong>Note on G80:</strong> G80 cancels the canned-cycle mode. After G81 completes, the Z position depends on G98 (retract to initial plane) or G99 (retract to R plane). G80 itself does <strong>not</strong> retract — that is why we write explicit G00 Z50. after G80.</p>
 
+<h2>When to Use Subprograms</h2>
+<ul>
+<li><strong>Repeated hole patterns</strong> — bolt circles, grid arrays, repeated pocket shapes.</li>
+<li><strong>Multiple identical parts</strong> on a tombstone — one subprogram, called at each part origin.</li>
+<li><strong>Repeated features</strong> — same chamfer, same groove, same profile at different positions.</li>
+<li><strong>Organization</strong> — break a long program into readable chunks by operation.</li>
+</ul>
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Confusing P and O</strong> — Haas uses M98 P2000 (call), not O2000. The subprogram itself is labeled O2000.</li>
 <li><strong>Using G91 in subprogram without restoring G90</strong> — subsequent main-program coordinates become incremental, causing holes to drift.</li>
 <li><strong>Assuming G80 retracts to Z50</strong> — G80 cancels cycle mode; the return height was set by G98/G99. Always write explicit G00 Z retract.</li>
-<li><strong>Leaving cycle active between calls</strong> — cancel the cycle with G80 before M99 to make the exit state explicit. On Haas, an explicit G00 also cancels the cycle; an XY block without a cancelling motion command could repeat it.</li>
+<li><strong>Leaving cycle active between calls</strong> — cancel with G80 before M99 to make exit state explicit.</li>
+<li><strong>Too many nested levels</strong> — most controllers limit nesting to 4 levels. Keep subprograms shallow.</li>
+<li><strong>Modifying offsets inside subprograms</strong> — if the subprogram changes H or D, the offset leaks into the next call. Reset offsets explicitly.</li>
 </ul>
 
 <h2>Practice</h2>
-<p><strong>1.</strong> M98 P3000 L5 does what?</p><details><summary>Ans</summary><p>Calls O3000 five times, then returns to the line after M98.</p></details>
-<p><strong>2.</strong> Why does the subprogram write G90 G00 Z50. before M99?</p><details><summary>Ans</summary><p>To guarantee the tool is at safe height Z50 before returning. G80 cancels cycle mode but does not guarantee Z position; G98 retracts to the initial plane, but being explicit removes ambiguity.</p></details>
-<p><strong>3.</strong> Why does the main program write G90 before each X/Y position?</p><details><summary>Ans</summary><p>To prevent any leftover modal G91 from the subprogram. Declaring G90 explicitly makes each hole position an absolute coordinate, not a delta from the previous one.</p></details>
+<p><strong>1.</strong> M98 P3000 L5 does what?</p>
+<details><summary>Ans</summary><p>Calls O3000 five times, then returns to the line after M98.</p></details>
+<p><strong>2.</strong> Why does the subprogram write G90 G00 Z50. before M99?</p>
+<details><summary>Ans</summary><p>To guarantee the tool is at safe height Z50 before returning. G80 cancels cycle mode but does not guarantee Z position; being explicit removes ambiguity.</p></details>
+<p><strong>3.</strong> Why does the main program write G90 before each X/Y position?</p>
+<details><summary>Ans</summary><p>To prevent any leftover modal G91 from the subprogram. Declaring G90 explicitly makes each hole position an absolute coordinate, not a delta from the previous one.</p></details>
+<p><strong>4.</strong> What is the maximum nesting depth on most controllers?</p>
+<details><summary>Ans</summary><p>Typically 4 levels. A subprogram can call another subprogram, which calls another, up to 4 deep. Beyond that, the controller alarms.</p></details>
 
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/34-tapping-thread-milling/">&larr; Tapping</a><a href="/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/">Turning Basics &rarr;</a></nav>
 </main>
