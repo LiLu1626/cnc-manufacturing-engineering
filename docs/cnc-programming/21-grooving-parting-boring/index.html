@@ -1,4 +1,17 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Grooving, Parting & Boring — CNC Programming</title><meta name="description" content="Groove tool paths, parting off, boring bars, and the special considerations for internal turning."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring/"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Grooving, Parting & Boring — CNC Programming</title>
+<meta name="description" content="Groove toolpaths, cutoff/parting operations, boring bars, internal turning, feed/speed considerations, and a worked parting example.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
   <div class="site-nav-inner">
     <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
     <ul class="site-nav-links">
@@ -10,23 +23,80 @@
       <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
     </ul>
   </div>
-</nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Grooving, Parting & Boring</h1><p class="lead">Grooving, parting, and boring use special tools and toolpaths. This page covers groove programming, cutoff operations, and internal boring.</p><h2>Concept</h2>
-<p><strong>Grooving</strong> uses a narrow tool to cut a recess. <strong>Parting (cutoff)</strong> separates the finished part from the bar. <strong>Boring</strong> uses an internal tool to enlarge an existing hole. Each has unique tool geometry and feed/speed considerations.</p>
+</nav>
+<main class="article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Grooving, Parting &amp; Boring</h1>
+<p class="lead">Grooving, parting (cutoff), and boring use special tools and toolpaths that differ from OD turning. This page covers groove programming, cutoff operations, internal boring, and the feed/speed considerations that prevent chatter and tool breakage.</p>
+
+<h2>Concept</h2>
+<p><strong>Grooving</strong> uses a narrow, rectangular insert to cut a recess (groove) into the part. The tool feeds radially in X to the groove depth, may dwell to clean the floor, and retracts. <strong>Parting (cutoff)</strong> is a specialized groove operation: the tool feeds radially all the way to near center to separate the finished part from the bar stock. <strong>Boring</strong> uses an internal boring bar to enlarge an existing drilled hole from the inside. Each operation has unique tool geometry, feed rates, and rigidity challenges.</p>
+
 <h2>Why It Matters</h2>
-<p>Groove tools are weak in X and prone to chatter. Parting tools must clear the chuck. Boring bars deflect at length, limiting depth. Wrong feeds cause chatter, poor finish, or tool breakage.</p>
+<p>Groove tools are narrow and weak in the X direction — they chatter easily and break if fed too fast. Parting tools must clear the chuck and the finished part. Boring bars deflect because they reach into a hole, limiting how deep you can bore. Wrong feeds cause chatter, poor surface finish, or snapped tools. These operations demand slower feeds than OD turning and careful toolpath planning.</p>
+
 <h2>How It Works</h2>
+
 <h3>Grooving</h3>
-<p>Groove tool moves in X to the groove depth, then may move in Z to widen. Program X depth as diameter. For a 2 mm wide groove at O30: feed X to O26, dwell, retract to O30.</p>
-<h3>Parting</h3>
-<p>Part off at the finished length. Feed X to near center (leave ~0.5 mm), then stop and break off, or feed through at very slow feed. Never feed through at normal feed — it is dangerous.</p>
+<p>The groove tool is positioned at the correct Z location, then feeds radially in X to the groove diameter. For a 2 mm wide groove at &Oslash;30 on a &Oslash;35 bar: position the tool at X37 Z&minus;20, feed X to X30, dwell briefly, then retract to X37. X is programmed as diameter, so the radial depth is (35&minus;30)/2 = 2.5 mm.</p>
+<p>For wider grooves, the tool may take multiple Z passes: cut to depth, shift Z by the tool width minus overlap, cut again, until the groove is the desired width. A dwell at the bottom cleans up the groove floor and reduces chatter.</p>
+
+<h3>Parting (Cutoff)</h3>
+<p>Part off at the finished length: position the groove/parting tool at the Z face, then feed radially toward center at very slow feed (0.05–0.1 mm/rev). As the tool approaches center, the remaining cross-section gets thinner. Never feed through to X0 at normal feed — the tool grabs and snaps. Instead, feed to about X1 (leaving a thin nub), stop the spindle, and break the part off by hand, or feed through at very slow feed under constant supervision.</p>
+
 <h3>Boring</h3>
-<p>Boring bar reaches into a drilled hole. X moves from smaller bore to larger (opposite of OD turning). Depth limited by bar length-to-diameter ratio (keep &lt; 4:1 for steel).</p>
+<p>A boring bar reaches into a pre-drilled hole. The X direction is opposite to OD turning: X starts at the drilled hole diameter and increases as the bore gets larger (you are cutting from the inside out). Boring bar rigidity is limited by length-to-diameter ratio: keep the bar overhang under 4&times; the bar diameter for steel, or deflection and chatter ruin the bore finish.</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <!-- bar -->
+  <rect x="40" y="70" width="300" height="60" fill="#d4c5a9" stroke="#999"/>
+  <!-- groove tool -->
+  <rect x="200" y="40" width="8" height="30" fill="#c0392b"/>
+  <text x="180" y="35" font-size="11" fill="#c0392b">Groove tool</text>
+  <!-- groove -->
+  <rect x="200" y="70" width="8" height="60" fill="#999" opacity="0.3"/>
+  <!-- Z position -->
+  <line x1="204" y1="140" x2="204" y2="160" stroke="#e67e22" stroke-width="1.5"/>
+  <text x="175" y="175" font-size="11" fill="#e67e22">Z-20 groove location</text>
+  <!-- depth label -->
+  <line x1="215" y1="70" x2="215" y2="100" stroke="#c0392b" stroke-width="1.5"/>
+  <text x="225" y="90" font-size="11" fill="#c0392b">X to groove depth</text>
+</svg>
+<figcaption>Grooving: the tool feeds radially in X to the groove diameter at a fixed Z position. Dwell at the bottom, then retract.</figcaption>
+</figure>
+
 <h2>Example</h2>
-<p>Part off at Z-45 from O40 bar: position groove tool at X42 Z-45, feed X to X1 at F0.05 mm/rev. At S800, feed = 40 mm/min. Radial cut depth = (40-1)/2 = 19.5 mm. Time = 19.5/40 &asymp; 29 s.</p>
+<p><strong>Parting example:</strong> Part off at Z&minus;45 from a &Oslash;40 bar. S800 RPM, parting feed F0.05 mm/rev. Position the parting tool at X42 Z&minus;45. Feed X toward center.</p>
+<pre class="cp-code"><code>T0505                    (parting tool)
+S800 M03
+G00 X42. Z-45.
+G01 X1.0 F0.05          (feed to near center, 0.05 mm/rev)
+G00 X42.                 (retract)
+M05</code></pre>
+<p><strong>Feed rate calculation:</strong> At S800 and F0.05 mm/rev, the feed in mm/min is 800 &times; 0.05 = 40 mm/min. The radial cut from X42 to X1 is (42&minus;1)/2 = 20.5 mm. Time = 20.5/40 = 0.51 minutes = 31 seconds. Note the slow feed: OD turning at F0.2 would snap the parting tool.</p>
+
 <h2>Common Mistakes</h2>
-<ul><li><strong>Normal feed on parting</strong> — parting feed should be 0.05-0.1 mm/rev, much slower than turning.</li><li><strong>Boring bar too long</strong> — length-to-diameter &gt; 4:1 causes chatter and deflection.</li><li><strong>Forgetting dwell in groove</strong> — dwell at bottom cleans up the groove floor.</li></ul>
+<ul>
+<li><strong>Normal feed on parting</strong> — parting feed must be 0.05–0.1 mm/rev, much slower than turning. Normal feed snaps the tool.</li>
+<li><strong>Boring bar too long</strong> — length-to-diameter ratio over 4:1 causes chatter and deflection. Use the shortest bar possible.</li>
+<li><strong>No dwell at groove bottom</strong> — a brief dwell cleans up the groove floor and reduces tool marks.</li>
+<li><strong>Feeding to X0 on parting</strong> — leaving a thin nub and breaking by hand is safer than feeding through at speed.</li>
+<li><strong>Boring X direction reversed</strong> — X increases as the bore gets larger, opposite to OD turning.</li>
+</ul>
+
 <h2>Practice</h2>
-<p><strong>1.</strong> Groove to O26 from O35. Radial depth?</p><details><summary>Ans</summary><p>(35-26)/2 = 4.5 mm.</p></details>
-<p><strong>2.</strong> Why slow feed on parting?</p><details><summary>Ans</summary><p>The tool cuts at increasing diameter-to-center ratio; slow feed prevents chatter and tool breakage as the cross-section thins.</p></details>
-<p><strong>3.</strong> Boring direction: X moves from smaller to larger or larger to smaller?</p><details><summary>Ans</summary><p>Smaller to larger (enlarging the bore).</p></details>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/">&larr; Turning Cycles</a><a href="/cnc-manufacturing-engineering/cnc-programming/22-threading/">Threading &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>
+<p><strong>1.</strong> Groove to &Oslash;26 from &Oslash;35 stock. What is the radial depth?</p>
+<details><summary>Ans</summary><p>(35 &minus; 26) / 2 = 4.5 mm radial depth.</p></details>
+<p><strong>2.</strong> Why use slow feed on parting?</p>
+<details><summary>Ans</summary><p>As the tool approaches center, the remaining cross-section thins rapidly. Slow feed prevents the tool from grabbing and breaking, and produces a cleaner break.</p></details>
+<p><strong>3.</strong> In boring, does X move from smaller to larger or larger to smaller?</p>
+<details><summary>Ans</summary><p>From smaller to larger — you are enlarging the bore from the inside. X increases as the bore diameter grows.</p></details>
+<p><strong>4.</strong> A boring bar is 20 mm diameter and 120 mm overhang. Is this OK?</p>
+<details><summary>Ans</summary><p>No. Length-to-diameter ratio = 120/20 = 6:1, well over the 4:1 limit. Expect chatter and deflection. Use a shorter bar or larger diameter bar.</p></details>
+
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/">&larr; Turning Cycles</a><a href="/cnc-manufacturing-engineering/cnc-programming/22-threading/">Threading &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
