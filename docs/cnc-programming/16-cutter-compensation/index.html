@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Cutter Radius Compensation — CNC Programming</title>
-<meta name="description" content="G41 left / G42 right cutter compensation, lead-in/lead-out, programmed vs tool center path, and common overcut errors.">
+<meta name="description" content="G41 left / G42 right cutter radius compensation, lead-in/lead-out, programmed vs tool center path, D offset, and the common overcut error.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/16-cutter-compensation/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
@@ -27,18 +27,23 @@
 <main class="article">
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Cutter Radius Compensation</h1>
-<p class="lead">Cutter compensation lets you program the part outline, not the tool center path. The controller offsets the tool by the radius. This page covers G41/G42 direction, lead-in/out, and the overcut error.</p>
+<p class="lead">Cutter compensation lets you program the part outline, not the tool center path. The controller offsets the tool by the radius stored in the D offset. This page covers G41/G42 direction, lead-in/out, and the overcut error that scraps parts.</p>
 
 <h2>Concept</h2>
-<p>Without compensation, you program the <strong>tool center path</strong> — offset by the tool radius from the part edge. With <strong>cutter radius compensation (G41/G42)</strong>, you program the part outline and the controller automatically offsets the tool center by the radius stored in the D offset.</p>
-<p><strong>G41</strong> = left compensation (tool is left of the direction of cut). <strong>G42</strong> = right compensation. <strong>G40</strong> cancels.</p>
+<p>Without compensation, you program the <strong>tool center path</strong> — manually offset by the tool radius from the part edge. If you switch from a &Oslash;10 to a &Oslash;12 end mill, you must recalculate every coordinate. With <strong>cutter radius compensation (G41/G42)</strong>, you program the part outline exactly as drawn, and the controller automatically shifts the tool center by the radius stored in the D offset register.</p>
+<p><strong>G41</strong> = left compensation (tool center is to the left of the direction of cut). <strong>G42</strong> = right compensation. <strong>G40</strong> cancels compensation.</p>
 
 <h2>Why It Matters</h2>
-<p>Getting G41/G42 backwards causes overcut: on an outer profile, if you pair the wrong direction with the wrong compensation, the tool pushes inside the part and cuts away material it should leave. The rule (G17, viewed from +Z above the table, positive D offset): <strong>outer profile cut clockwise (CW) uses G41</strong>; outer profile cut counterclockwise (CCW) uses G42.</p>
+<p>Getting G41/G42 backwards causes overcut: on an outer profile, the wrong compensation pushes the tool center inside the part, cutting away material it should leave. The rule (G17, viewed from +Z above the table, positive D offset): <strong>outer profile cut clockwise (CW) uses G41</strong>; outer profile cut counterclockwise (CCW) uses G42. For inner pockets, the rule flips.</p>
 
 <h2>How It Works</h2>
+
+<h3>The D Offset</h3>
+<p>You store the tool radius (e.g., 5.000 for a &Oslash;10 end mill) in a D offset register. The program calls D01 on the G41/G42 line. If the tool wears down by 0.02 mm, you adjust D01 from 5.000 to 4.980 — the whole contour shifts 0.02 mm smaller without changing the program. This is the biggest practical benefit: one program works for any tool radius.</p>
+
 <h3>Lead-In / Lead-Out</h3>
-<p>Compensation must be activated on a straight lead-in move (at least tool radius long) before entering the contour, and canceled on a straight lead-out. Never activate G41/G42 directly on the part corner.</p>
+<p>Compensation must be activated on a straight lead-in move (at least one tool radius long) before entering the contour, and canceled on a straight lead-out. Never activate G41/G42 directly on the part corner — the controller needs a straight move to ramp the offset. The lead-in should approach from outside the part.</p>
+
 <h3>Direction Rule with a Coordinate Table</h3>
 <p>Program this outer rectangle <strong>clockwise</strong>: (0,0) &rarr; (0,50) &rarr; (50,50) &rarr; (50,0) &rarr; (0,0). Tool radius D=5. With <strong>G41</strong>, the tool center sits 5 mm to the left of each directed edge:</p>
 <table class="data-table">
@@ -49,7 +54,8 @@
 <tr><td>(50,0)&rarr;(0,0)</td><td>&minus;X (left)</td><td>&minus;Y (south)</td><td>X=25, Y=&minus;5</td></tr>
 </table>
 <p>In every row the tool center falls <strong>outside</strong> the rectangle [0,50]&times;[0,50]. That is correct outer profiling. If you instead used G42 on this same CW path, the tool would shift inside and cut the part too small.</p>
-<pre class="cp-code"><code>G00 X-10. Y-10.          (start outside, below-left)
+
+<pre class="cp-code"><code>G00 X-10. Y-10.            (start outside, below-left)
 G01 G41 X0. Y0. D01 F300.  (lead-in to corner, comp on)
 G01 Y50.                   (left edge up)
 G01 X50.                   (top edge right)
@@ -57,21 +63,27 @@ G01 Y0.                    (right edge down)
 G01 X0.                    (bottom edge left)
 G01 G40 X-10. Y-10.        (lead-out, comp off)</code></pre>
 
-<h2>Example</h2>
-<p>Same rectangle, same coordinates, G41 throughout. The controller reads D01 = 5 mm and shifts the tool center to X=&minus;5 on the left edge, Y=55 on the top edge, X=55 on the right edge, Y=&minus;5 on the bottom edge. The programmed path stays on the part outline; the machine follows the offset boundary.</p>
+<h2>Inner vs Outer Profiles</h2>
+<p>The left/right rule depends on whether you are cutting an outer profile or an inner pocket. For an inner pocket (e.g., a rectangular cavity), the "air" is inside the pocket. If you cut the pocket CW, the tool needs to be on the inside wall — which means G42, not G41. The safe way: trace the directed edge and ask "which side of the edge is the open air where the tool should be?" That side determines G41 (left) or G42 (right).</p>
 
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>G42 on a CW outer profile</strong> — pushes tool inside, overcuts. Match: CW outer = G41, CCW outer = G42.</li>
 <li><strong>No lead-in move</strong> — compensation must ramp on a straight move, not instantly at a corner.</li>
-<li><strong>Forgetting G40</strong> — compensation stays active into the next move, causing unexpected offsets.</li>
-<li><strong>Confusing inner and outer profiles</strong> — the left/right rule flips for pockets (inner walls). Always trace the directed edge and ask which side is air.</li>
+<li><strong>Forgetting G40</strong> — compensation stays active into the next move, causing unexpected offsets. Always lead out with G40.</li>
+<li><strong>Confusing inner and outer profiles</strong> — the rule flips for pockets. Trace the edge and ask which side is air.</li>
+<li><strong>D offset set to diameter instead of radius</strong> — D01 should be 5.0 for a &Oslash;10 tool, not 10.0. Getting diameter/radius wrong doubles the offset error.</li>
 </ul>
 
 <h2>Practice</h2>
-<p><strong>1.</strong> Outer rectangle cut clockwise: (0,0)&rarr;(0,50)&rarr;(50,50)&rarr;(50,0)&rarr;(0,0). G41 or G42?</p><details><summary>Ans</summary><p>G41. On the left edge going up (+Y), left is &minus;X = outside. On the top edge going right (+X), left is +Y = outside. On the right edge going down (&minus;Y), left is +X = outside. On the bottom edge going left (&minus;X), left is &minus;Y = outside. G41 keeps the tool outside on all four edges.</p></details>
-<p><strong>2.</strong> Why a lead-in move?</p><details><summary>Ans</summary><p>The controller needs a straight move to ramp the tool center from zero offset to full radius offset. Activating at a corner causes a sudden step.</p></details>
-<p><strong>3.</strong> What cancels G41/G42?</p><details><summary>Ans</summary><p>G40. Must be on a straight lead-out move.</p></details>
+<p><strong>1.</strong> Outer rectangle cut clockwise: (0,0)&rarr;(0,50)&rarr;(50,50)&rarr;(50,0)&rarr;(0,0). G41 or G42?</p>
+<details><summary>Ans</summary><p>G41. On the left edge going up (+Y), left is &minus;X = outside. On the top edge going right (+X), left is +Y = outside. On the right edge going down (&minus;Y), left is +X = outside. On the bottom edge going left (&minus;X), left is &minus;Y = outside. G41 keeps the tool outside on all four edges.</p></details>
+<p><strong>2.</strong> Why a lead-in move?</p>
+<details><summary>Ans</summary><p>The controller needs a straight move to ramp the tool center from zero offset to full radius offset. Activating at a corner causes a sudden step that can gouge the part.</p></details>
+<p><strong>3.</strong> What cancels G41/G42?</p>
+<details><summary>Ans</summary><p>G40. Must be on a straight lead-out move away from the contour.</p></details>
+<p><strong>4.</strong> You switch from a &Oslash;10 to a &Oslash;12 end mill. What changes in the program?</p>
+<details><summary>Ans</summary><p>Nothing in the program. You change D01 from 5.000 to 6.000. The controller automatically offsets the tool center by the new radius. This is the key advantage of cutter compensation.</p></details>
 
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/15-circular-interpolation/">&larr; Circular Motion</a><a href="/cnc-manufacturing-engineering/cnc-programming/33-milling-strategies/">Milling Strategies &rarr;</a></nav>
 </main>
