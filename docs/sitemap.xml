@@ -13,9 +13,7 @@
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/08-programming-math/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/09-mcode-fundamentals/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/10-spindle-feed/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
-  <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/10-spindle-programming/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/11-controller-dialects/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
-  <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/11-feed-programming/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/12-tool-offsets/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/13-work-offsets/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/14-linear-interpolation/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
@@ -24,15 +22,10 @@
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
-  <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/19-turning-programming/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
-  <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/20-milling-programming/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
-  <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/21-threading-basics/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
-  <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/22-lathe-threading/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/22-threading/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/23-program-safety/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
-  <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/24-program-verification/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/24-verification/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/26-common-mistakes/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
@@ -42,22 +35,14 @@
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/30-reference/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/31-learning-path/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/32-drawings-process-planning/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
-  <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/33-drilling-cycles/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/33-milling-strategies/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
-  <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/34-subprograms/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/34-tapping-thread-milling/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/35-cad-cam-postprocessing/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
-  <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/35-practical-examples/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/36-macro-foundations/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
-  <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/36-macro-programming/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/37-multiaxis-probing-overview/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
-  <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/37-probing/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
-  <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/38-controller-specific/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/38-process-optimization/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
-  <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/39-assessment/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/39-exercises-assessment/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/40-glossary-sources/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
-  <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/40-glossary/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/engineering-tools/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/engineering-tools/arc-and-chord-calculator/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
   <url><loc>https://lilu1626.github.io/cnc-manufacturing-engineering/engineering-tools/basic-fit-reference/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq></url>
