@@ -1,0 +1,22 @@
+{
+  "commit": "f7345df",
+  "raster_17_points_match": true,
+  "drill_tip_cone_height_mm": 1.8025818570826808,
+  "drill_tip_below_bottom_mm": 2.5,
+  "g71_drawn_pass_radii": [
+    16.0,
+    17.0
+  ],
+  "g71_rear_finished_radius": 18,
+  "g71_overcut_radial_mm": [
+    2.0,
+    1.0
+  ],
+  "roughing_radial_depths": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    0.8000000000000007
+  ]
+}

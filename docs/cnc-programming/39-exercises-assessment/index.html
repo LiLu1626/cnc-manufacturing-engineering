@@ -136,7 +136,7 @@ G00 Z50. M09
 M30</code></pre></details>
 
 <p><strong>18.</strong> Turn a raw &Oslash;50 bar to &Oslash;40 over Z&minus;40. Assume mild steel, a CNMG insert, G97 S1000, G99 F0.20 mm/rev. Show layered roughing passes and finishing.</p>
-<details><summary>Example</summary><p>Roughing sequence from &Oslash;50 stock: five OD passes stepping down 1.0 mm radial each, then a final rough pass at 0.8 mm radial to leave 0.4 mm diameter / 0.2 mm radial finish stock:</p>
+<details><summary>Example</summary><p>Four roughing passes remove 1.0 mm radially each; the fifth removes 0.8 mm, leaving 0.4 mm on diameter for the finishing pass:</p>
 <table class="data-table">
 <tr><th>Pass</th><th>Diameter X</th><th>Radial depth</th><th>Length</th></tr>
 <tr><td>Rough 1</td><td>X48</td><td>1.0 mm</td><td>Z2 to Z&minus;40</td></tr>
@@ -190,7 +190,8 @@ Z-40.
 G00 X52.
 Z100.
 M30</code></pre>
-<p>Note: 1.0 mm radial per pass is a teaching assumption. Real depth-of-cut limits depend on insert grade, material hardness, machine rigidity, and chip evacuation.</p></details>
+<p>Note: 1.0 mm radial per pass is a teaching assumption. Real depth-of-cut limits depend on insert grade, material hardness, machine rigidity, and chip evacuation.</p>
+<p><strong>Clearance model (classroom geometry):</strong> final face at Z0, original face at Z+1, chuck jaw front at Z&minus;60, raw stock projection 61 mm. Toolholder extends 8 mm behind the tip, so at Z&minus;40 the tool body reaches Z&minus;48, leaving 12 mm axial clearance to the jaw. The X52 retract position must also clear the toolholder body radially outside the chuck and workholding. These values are teaching assumptions, not production recommendations.</p></details>
 
 <p><strong>19.</strong> Four &Oslash;6 holes on a 40 mm square centered at (0,0), at (&minus;20,&minus;20), (20,&minus;20), (20,20), (&minus;20,20). Through holes in 6 mm plate: Z&minus;8. S2000, F120. Write the program.</p>
 <details><summary>Example</summary><pre class="cp-code"><code>O0019
