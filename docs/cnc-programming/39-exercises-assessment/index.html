@@ -55,7 +55,7 @@ G41 D05
 G01 X80. Y30.
 G00 Z50.
 M30</pre>
-<details><summary>Find it</summary><p>G41 is activated while the tool is at Z-5 (already cutting). Cutter compensation must be engaged during a lead-in move at Z safety height, not mid-cut. Move G41 to the Z50 approach line, before feeding down.</p></details>
+<details><summary>Find it</summary><p>G41 is turned on mid-cut while the tool is already at Z-5, with no lead-in move. Cutter radius compensation needs a straight XY approach move (at least one tool radius long) from outside the part to build the offset. The fix: position the tool at a start point outside the part at Z50, feed to cutting depth, then use a linear G01 move toward the contour with G41 active. At the end, use a lead-out move and G40 to cancel. Example: position at X-10 Y-10 (outside), feed Z-5, then G01 G41 X0 Y0 D05 (lead-in), cut the contour, then lead-out and G40 before retracting Z. Always end with G40.</p></details>
 
 <h2>Write the Program</h2>
 <p>Given: 50&times;50 mm aluminum block, drill a &Oslash;10 hole at X25 Y25 to depth Z-15. Spindle 1500 RPM, feed 120 mm/min. Write the program.</p>

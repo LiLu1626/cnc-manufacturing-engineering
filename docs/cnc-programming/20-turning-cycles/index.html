@@ -39,14 +39,14 @@
 </ul>
 <p>Always test with a dry run before committing. If Type II is not enabled, a contour that reverses X will alarm or cut incorrectly.</p>
 <h2>Common Mistakes</h2>
-<ul><li>Defining a contour where X goes back and forth — G71 requires monotonic geometry.</li>
+<ul><li>Assuming all G71 contours require monotonic X — Type I does; Type II allows X reversal for simple recesses. Confirm which type your controller supports.</li>
 <li>Forgetting to leave stock for G70 — G71 leaves a finish allowance.</li>
-<li>Not specifying the depth of cut — the cycle takes one cut.</li></ul>
+<li>Omitting the depth-of-cut parameter — behavior is controller-specific; do not assume it defaults to a single pass.</li></ul>
 <section class="cp-practice"><h2>Practice</h2>
 <p><strong>1.</strong> What is the difference between G71 and G70?</p>
 <details><summary>Show answer</summary><p>G71 roughs the contour in multiple passes leaving finish stock. G70 finishes the contour in one clean pass at final size.</p></details>
 <p><strong>2.</strong> Why must the G71 contour be monotonic?</p>
-<details><summary>Show answer</summary><p>G71 assumes the tool moves consistently along Z while stepping in X. A contour that reverses direction confuses the automatic pass generation.</p></details>
+<details><summary>Show answer</summary><p>Z must always progress in one direction for both Type I and Type II. Type I additionally requires X to be monotonic; Type II allows X to reverse for simple recesses if your controller supports it. A contour that reverses Z, or reverses X on a Type I machine, confuses the automatic pass generation.</p></details>
 </section>
 <section class="cp-sources"><h2>Sources</h2><ul>
 <li>Haas Lathe Operator's Manual — G71/G70 turning cycles.</li>

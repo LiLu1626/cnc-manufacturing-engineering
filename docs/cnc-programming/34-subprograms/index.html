@@ -61,18 +61,19 @@ G90 G81 Z-10. R2. F100.  <span class="cp-comment">(activates cycle, drills at cu
 X30.                     <span class="cp-comment">(col 2 — G81 modal drills here)</span>
 X50.                     <span class="cp-comment">(col 3)</span>
 X70.                     <span class="cp-comment">(col 4)</span>
-G80                      <span class="cp-comment">(cancel cycle, retract to initial plane Z50)</span>
+G80                      <span class="cp-comment">(cancel cycle mode; tool stays at R plane Z2)</span>
+G00 Z50.                 <span class="cp-comment">(explicit retract to safe height before Y traversal)</span>
 G91 G00 Y20.             <span class="cp-comment">(incremental Y advance for next row)</span>
-G90 X10.                 <span class="cp-comment">(reset X to column 1, rapid at R-plane height)</span>
+G90 X10.                 <span class="cp-comment">(reset X to column 1 at safe height)</span>
 M99</code></pre>
 
 <h2>How the 12 Holes Are Produced</h2>
-<p>First call (main already at X10 Y10): G81 drills at (10,10), then X30 drills (30,10), X50 drills (50,10), X70 drills (70,10). G80 cancels the cycle (tool stays at R plane Z2). Then G00 Z50 raises to safe height before Y traversal. Y+20 moves to Y30. X10 resets. That is 4 holes.</p>
+<p>First call (main already at X10 Y10): G81 drills at (10,10), then X30 drills (30,10), X50 drills (50,10), X70 drills (70,10). G80 cancels the cycle mode (tool stays at R plane Z2). Then G00 Z50 raises to safe height before Y traversal. Y+20 moves to Y30. X10 resets. That is 4 holes.</p>
 <p>Second call: G81 drills at (10,30), then (30,30), (50,30), (70,30). Y+20 to Y50. X10 reset. 4 more holes.</p>
 <p>Third call: holes at (10,50), (30,50), (50,50), (70,50). Then G80, retract. Total: <strong>12 unique holes, exactly 12 drill cycles.</strong></p>
 
 <h2>Why No Redundant X10 Line</h2>
-<p>The first G81 line has no X/Y word. On Haas, a modal G81 with no new X/Y repeats the cycle at the <strong>current XY position</strong>. Since the main program already positioned at X10 Y10, that first line drills hole (10,10). Adding another X10 line would re-drill the same hole — 13 cycles for 12 positions. The X30/X50/X70 lines provide the new positions for columns 2&ndash;4.</p>
+<p>The first G81 line has no X/Y word. On Haas, a modal G81 with no new X/Y repeats the cycle at the <strong>current XY position</strong>. Since the main program already positioned at X10 Y10, that first line drills hole (10,10). Adding another X10 line would re-drill the same hole — each subprogram call would then have 5 cycles (X10 repeated + X30 + X50 + X70), and 3 calls = 15 cycles for 12 positions. The X30/X50/X70 lines provide the new positions for columns 2&ndash;4.</p>
 
 <h2>Common Mistakes</h2>
 <ul>
@@ -89,7 +90,7 @@ M99</code></pre>
 <p><strong>2.</strong> What happens if you write X10. on the line right after G81?</p>
 <details><summary>Show answer</summary><p>The G81 cycle drills again at X10 — re-drilling the first hole. Each subprogram call then does 5 cycles (X10 repeated + X30 + X50 + X70), and 3 calls = 15 cycles for 12 unique positions.</p></details>
 <p><strong>3.</strong> Why is G80 needed before G91 G00 Y20?</p>
-<details><summary>Show answer</summary><p>Without G80, the next XY move (Y20) would trigger another drill cycle at Z&minus;10 — it would drill a hole while moving. G80 retracts to the initial plane before the Y advance.</p></details>
+<details><summary>Show answer</summary><p>G80 cancels the canned cycle mode so the controller stops drilling. But G80 does <strong>not</strong> raise the tool — after G80 the tool sits at the R plane (Z2). You must add an explicit G00 Z50 to reach a safe height before Y traversing over the fixture. On Haas, an explicit G00 also cancels the cycle mode, but again does not guarantee the tool is at Z50.</p></details>
 </section>
 
 <section class="cp-sources"><h2>Sources</h2><ul>

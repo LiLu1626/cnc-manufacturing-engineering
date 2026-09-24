@@ -42,9 +42,10 @@
 </table>
 
 <h2>Surface Finish</h2>
-<p>Finish is a function of feed, nose radius, tool wear, and stability. The feed formula for turning is:</p>
-<p><code>Finish (µm Ra) &asymp; f&sup2; / (8 &times; r) &times; 1000</code> where f = feed mm/rev, r = nose radius mm.</p>
-<p>Example: f=0.2, r=0.4 &rarr; Ra &asymp; 12.5 µm. For Ra 1.6, reduce f to ~0.07 mm/rev or use r=0.8.</p>
+<p>Theoretical feed marks come from the tool nose radius sweeping across the part. The peak-to-valley height (Rmax) of the ideal feed mark is:</p>
+<p><code>Rmax &asymp; f&sup2; / (8 &times; r)</code> where f = feed mm/rev, r = nose radius mm.</p>
+<p>Example: f=0.2, r=0.4 &rarr; Rmax &asymp; 0.125 mm = 125 µm. Note this is <strong>peak-to-valley</strong>, not arithmetic average Ra. Ra is typically much smaller (roughly Rmax/4 to Rmax/10 depending on process). Actual Ra also depends on tool wear, built-up edge, machine vibration, and material — the formula is a geometric estimate only, not a guaranteed finish.</p>
+<p>To reduce theoretical feed mark height: lower feed f (strongest effect) or increase nose radius r. For f=0.07, r=0.4: Rmax &asymp; 0.015 mm = 15 µm. Always verify with a profilometer on the actual part.</p>
 
 <h2>Stability and Chatter</h2>
 <p>Chatter (vibration marks) is the #1 enemy of finish and tool life. The fix hierarchy:</p>

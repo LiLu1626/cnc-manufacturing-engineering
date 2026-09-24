@@ -46,9 +46,9 @@
 </ul>
 
 <h2>Worked Example: M10&times;1.5 External</h2>
-<p>Major diameter = 10 mm. Pitch = 1.5 mm. For a 60&deg; metric thread, approximate thread height (radial) = 0.613 &times; pitch = 0.613 &times; 1.5 &asymp; <strong>0.92 mm</strong>.</p>
-<p>Minor diameter = major &minus; 2 &times; K = 10 &minus; 2 &times; 0.92 = <strong>8.16 mm</strong>.</p>
-<p>First cut depth D &asymp; 0.2 mm (typical for steel).</p>
+<p>Major diameter = 10 mm. Pitch = 1.5 mm. For a 60&deg; metric thread, the theoretical thread height (radial) = 0.613 &times; pitch = 0.613 &times; 1.5 &asymp; <strong>0.92 mm</strong>. This is a geometric ideal for a sharp 60&deg; V-thread; actual minor diameter depends on tolerance class (6g/6H), tool nose radius, and chamfer. Always verify against the thread standard.</p>
+<p>Minor diameter = major &minus; 2 &times; K = 10 &minus; 2 &times; 0.92 = <strong>8.16 mm</strong> (theoretical; adjust per tolerance).</p>
+<p>First cut depth D = 0.2 mm is a teaching starting point for carbide inserts in steel. Real values depend on insert grade, material, coolant, and machine rigidity — consult the tool manufacturer's recommendations.</p>
 <pre class="cp-code"><code>G97 S500 M03            <span class="cp-comment">(constant RPM — required for threading)</span>
 G00 X11. Z3.            <span class="cp-comment">(approach: above stock, 3mm lead-in)</span>
 G76 X8.16 Z-20. K0.92 D0.2 F1.5</code></pre>
