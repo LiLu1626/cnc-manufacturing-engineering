@@ -103,8 +103,50 @@ N20 X42.</code></pre>
 <h3>G70 Finishing</h3>
 <p>After G71, the same T0101 runs G70 at S1200 to cut the finished profile at F0.10. Rough diameter after G71: &Oslash;30.4 and &Oslash;36.4 (U0.4 diameter allowance). Final: &Oslash;30 and &Oslash;36.</p>
 
+<svg viewBox="0 0 400 180" style="width:100%;max-width:400px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="120" y="20" font-size="12" font-weight="bold" fill="#333">Nose Radius at Shoulder (r0.4)</text>
+  <!-- shoulder cross-section -->
+  <path d="M 100 80 L 200 80 L 200 120 L 300 120" fill="none" stroke="#333" stroke-width="2"/>
+  <!-- tool nose arc -->
+  <path d="M 200 80 A 5 5 0 0 1 205 85" fill="none" stroke="#e74c3c" stroke-width="2"/>
+  <circle cx="200" cy="80" r="2" fill="#e74c3c"/>
+  <text x="215" y="75" font-size="10" fill="#e74c3c">r0.4 fillet</text>
+  <text x="120" y="145" font-size="10" fill="#666">Measure Ø30 away from shoulder root</text>
+  <text x="120" y="160" font-size="10" fill="#666">The corner is not a sharp 90°</text>
+</svg>
+
 <h3>Clearance and Retraction</h3>
 <p>After machining, retract in two axes: first to X100 (clear of OD), then to Z100 (away from chuck). These X100/Z100 numbers are classroom safe positions for this model — verify on your machine. The toolholder's rearward Z envelope is 8 mm, so at Z&minus;40 the tool body reaches Z&minus;48, leaving 7 mm to the jaw front at Z&minus;55.</p>
+
+<svg viewBox="0 0 500 200" style="width:100%;max-width:500px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="20" y="20" font-size="12" font-weight="bold" fill="#333">G71 Roughing Passes (schematic)</text>
+  <!-- stock outline -->
+  <rect x="180" y="50" width="250" height="100" fill="none" stroke="#999" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="380" y="45" font-size="10" fill="#999">Stock Ø40</text>
+  <!-- finish contour -->
+  <path d="M 180 80 L 280 80 L 280 100 L 380 100" fill="none" stroke="#27ae60" stroke-width="2.5"/>
+  <text x="200" y="75" font-size="10" fill="#27ae60">Finish Ø30</text>
+  <text x="300" y="95" font-size="10" fill="#27ae60">Ø36</text>
+  <!-- rough passes -->
+  <path d="M 180 85 L 280 85 L 280 105 L 380 105" fill="none" stroke="#e67e22" stroke-width="1" stroke-dasharray="3,2"/>
+  <path d="M 180 90 L 280 90 L 280 110 L 380 110" fill="none" stroke="#e67e22" stroke-width="1" stroke-dasharray="3,2"/>
+  <path d="M 180 95 L 280 95 L 280 115 L 380 115" fill="none" stroke="#e67e22" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="390" y="115" font-size="9" fill="#e67e22">Rough passes</text>
+  <!-- arrows -->
+  <text x="20" y="130" font-size="10" fill="#666">D1.0 = 1.0mm radial depth</text>
+  <text x="20" y="145" font-size="10" fill="#666">U0.4 = 0.4mm dia finish stock</text>
+  <text x="20" y="160" font-size="10" fill="#666">W0.1 = 0.1mm Z finish stock</text>
+</svg>
+
+<h3>Setup Procedure Summary</h3>
+<ol>
+<li>Mount raw &Oslash;40 bar in 3-jaw chuck, project 56 mm from jaw face.</li>
+<li>Install T0101 right-hand turning tool in turret station 1.</li>
+<li>Set G54: X offset at center (touch off bar, spin indicator), Z offset at faced face.</li>
+<li>Set tool geometry offset H01 on the virtual tool tip.</li>
+<li>Test air cut at rapid override 25% before full run.</li>
+<li>Face, then run G71 roughing, inspect diameters, then G70 finishing.</li>
+</ol>
 
 <h2>Example: Complete Program</h2>
 <pre class="cp-code"><code>O0027 (STEPPED SHAFT PROJECT)
