@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Work Offsets & Datums — CNC Programming</title>
-<meta name="description" content="G54-G59 work coordinate systems, fixture offsets, datum selection, and how machine zero + work offset + tool offset defines the part position.">
+<meta name="description" content="G54-G59 work coordinate systems, fixture offsets, datum selection, multiple work offsets, and the offset chain: machine zero + work offset + tool offset.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/13-work-offsets/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
@@ -27,49 +27,68 @@
 <main class="article">
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Work Offsets &amp; Datums</h1>
-<p class="lead">G54 tells the machine where the part is. This page explains work coordinate systems, datum selection, multiple work offsets, and the critical formula: machine zero + work offset + tool offset = actual tool position.</p>
+<p class="lead">G54 tells the machine where the part is. This page explains work coordinate systems, datum selection, multiple work offsets, and the critical formula that combines machine zero, work offset, and tool offset into the actual tool position.</p>
 
 <h2>Concept</h2>
-<p>A <strong>work offset</strong> (also called fixture offset or work coordinate system) shifts the coordinate system from machine zero to a chosen point on the part. <strong>G54</strong> is the default work offset. <strong>G55 through G59</strong> provide additional work coordinate systems for multiple parts, multiple setups, or multiple datums.</p>
-<p>The machine always operates in machine coordinates. The G54 offset tells the controller: "the part origin is at this machine position." When you program X0 Y0, the machine goes to the G54 origin in work coordinates, which is a specific machine position.</p>
+<p>A <strong>work offset</strong> (also called fixture offset or work coordinate system) shifts the coordinate system from machine zero to a chosen point on the part. <strong>G54</strong> is the default work offset. <strong>G55 through G59</strong> provide additional work coordinate systems for multiple parts, multiple setups, or multiple datums on the same part.</p>
+<p>The machine always operates in machine coordinates internally. The G54 offset tells the controller: "the part origin is at this machine position." When you program X0 Y0, the machine goes to the G54 origin in work coordinates, which maps to a specific machine position.</p>
 
 <h2>Why It Matters</h2>
-<p>If G54 is set 2 mm off in X, every feature on the part shifts 2 mm. This is the most common cause of scrap parts: the program is correct, but the setup offset is wrong. Work offsets let you run the same program on multiple setups without changing code — just enter a different G55, G56, etc.</p>
+<p>If G54 is set 2 mm off in X, every feature on the part shifts 2 mm. This is the most common cause of scrap parts: the program is correct, but the setup offset is wrong. Work offsets also let you run the same program on multiple setups without changing code — just enter a different G55, G56, etc.</p>
 
-<h2>How It Works</h2>
-<h3>The Offset Chain</h3>
-<pre class="cp-code"><code>Machine position = Machine zero + Work offset + Tool offset</code></pre>
-<p>Three independent systems combine:</p>
+<h2>The Offset Chain</h2>
+<pre class="cp-code"><code>Machine position = Machine zero + Work offset (G54) + Tool offset (H)</code></pre>
+<p>Three independent systems combine to place the tool tip exactly where you want it:</p>
 <ol>
-<li><strong>Machine zero</strong> — fixed, established on homing</li>
-<li><strong>Work offset (G54)</strong> — where the part origin is, set during setup</li>
-<li><strong>Tool offset (H/D)</strong> — where the tool tip is relative to spindle</li>
+<li><strong>Machine zero</strong> — fixed, established on homing. Never changes.</li>
+<li><strong>Work offset (G54)</strong> — where the part origin is, set during setup by touching off.</li>
+<li><strong>Tool offset (H)</strong> — where the tool tip is relative to the spindle face, set during tool measurement.</li>
 </ol>
-<h3>Setting G54</h3>
-<p>On a mill, you touch off: move the tool to the part edge, measure, and enter the result. On a lathe, you touch the face (Z0) and OD (X diameter). The controller calculates the offset automatically.</p>
-<h3>Multiple Work Offsets</h3>
-<p>Run two identical parts on a tombstone: G54 for part 1, G55 for part 2. The same program runs without modification — just switch G54 to G55.</p>
+<p>If any one of these three is wrong, the tool tip lands in the wrong place. This is why verifying all three before the first cut is essential.</p>
+
+<h2>Setting G54 on a Mill</h2>
+<ol>
+<li>Mount an edge finder or dial indicator in the spindle.</li>
+<li>Jog the tool to touch the left edge of the part. Set G54 X = that machine position + tool radius (edge finder center).</li>
+<li>Repeat for the right edge to verify, or touch the known corner.</li>
+<li>Touch the top surface for Z0. Set G54 Z = that machine position.</li>
+<li>Verify by moving to X0 Y0 and checking the tool is at the part corner.</li>
+</ol>
+
+<h2>Multiple Work Offsets</h2>
+<p>Run two identical parts on a tombstone or fixture plate: G54 for part 1, G55 for part 2. The same program runs without modification — just switch G54 to G55 in the program. This is how production machines handle multiple parts per setup.</p>
+<table class="data-table">
+<tr><th>Code</th><th>Typical Use</th></tr>
+<tr><td>G54</td><td>Primary fixture / part 1</td></tr>
+<tr><td>G55</td><td>Part 2 on same tombstone</td></tr>
+<tr><td>G56</td><td>Part 3 / second operation</td></tr>
+<tr><td>G57–G59</td><td>Additional datums or fixtures</td></tr>
+</table>
 
 <h2>Example</h2>
-<p>Machine zero is at X0 Y0 (home position). You set G54 so the part corner is at machine position X350 Y200. When the program says G00 X0 Y0, the machine goes to machine (350, 200). When it says X10 Y10, the machine goes to (360, 210).</p>
-<p>You have two parts on the table: part 1 at machine (350, 200), part 2 at machine (450, 200). Set G54 = (350, 200) and G55 = (450, 200). The program <code>G54 X0 Y0</code> goes to part 1; <code>G55 X0 Y0</code> goes to part 2.</p>
+<p>Machine zero is at the home position. You set G54 so the part corner is at machine position X350 Y200. When the program says <code>G00 X0 Y0</code>, the machine goes to machine (350, 200). When it says <code>X10 Y10</code>, the machine goes to (360, 210).</p>
+<p>Two parts on the table: part 1 at machine (350, 200), part 2 at machine (450, 200). Set G54 = (350, 200) and G55 = (450, 200). The program <code>G54 X0 Y0</code> goes to part 1; <code>G55 X0 Y0</code> goes to part 2.</p>
 
 <h2>Common Mistakes</h2>
 <ul>
-<li><strong>Setting G54 on the wrong edge</strong> — touching the left edge vs right edge changes the X offset by the part width.</li>
-<li><strong>Using G54 for tool length</strong> — G54 is work offset (X/Y/Z position); tool length is G43 H offset. They are separate.</li>
-<li><strong>Running G55 setup with G54 active</strong> — verify which offset is active before cutting.</li>
+<li><strong>Setting G54 on the wrong edge</strong> — touching left vs right changes X offset by the part width. Verify the corner.</li>
+<li><strong>Using G54 for tool length</strong> — G54 is work offset (X/Y/Z part position); tool length is G43 H offset. They are separate tables.</li>
+<li><strong>Running G55 setup with G54 active</strong> — always verify which offset is active before cutting.</li>
+<li><strong>Forgetting to reset G54 after a fixture change</strong> — if the fixture moved, G54 must be re-established.</li>
+<li><strong>Probing and entering raw machine coordinates as G54</strong> — the probe result needs to be transformed: if you probe the left edge, G54 X = probe position + tool radius, not the raw probe coordinate.</li>
 </ul>
 
 <h2>Practice</h2>
 <p><strong>1.</strong> Machine zero is at X0. G54 X offset = 350. Program X20. What machine position?</p>
 <details><summary>Show answer</summary><p>350 + 20 = X370.</p></details>
 <p><strong>2.</strong> Why use G55 instead of manually moving the stock?</p>
-<details><summary>Show answer</summary><p>G55 lets you run the same program on a second part without modifying code. The program stays identical; only the offset changes.</p></details>
+<details><summary>Show answer</summary><p>G55 lets you run the same program on a second part without modifying code. The program stays identical; only the offset changes. This is essential for tombstone production.</p></details>
 <p><strong>3.</strong> You touch off the wrong side (left instead of right) on a 60 mm part. What is the error?</p>
-<details><summary>Show answer</summary><p>The X offset is off by 60 mm — the part origin is at the wrong corner. Every X coordinate is shifted by 60 mm.</p></details>
+<details><summary>Show answer</summary><p>The X offset is off by 60 mm — the part origin is at the wrong corner. Every X coordinate shifts by 60 mm.</p></details>
+<p><strong>4.</strong> What is the difference between G54 and H01?</p>
+<details><summary>Show answer</summary><p>G54 is the work offset (where the part origin is in machine coordinates). H01 is the tool length offset (where the tool tip is relative to the spindle). They are independent tables that combine to position the tool tip correctly.</p></details>
 
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/10-spindle-feed/">&larr; Spindle & Feed</a><a href="/cnc-manufacturing-engineering/cnc-programming/12-tool-offsets/">Tool Offsets &rarr;</a></nav>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/10-spindle-feed/">&larr; Spindle &amp; Feed</a><a href="/cnc-manufacturing-engineering/cnc-programming/12-tool-offsets/">Tool Offsets &rarr;</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>
