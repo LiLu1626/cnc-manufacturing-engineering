@@ -1,49 +1,38 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Subprograms and Repeated Patterns — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="M98 calls, M99 returns, and how to build repeated hole patterns with subprograms.">
-<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/29-subprograms/">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
-<main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Subprograms and Repeated Patterns</h1>
-<p class="lead">When a pattern repeats, write it once as a subprogram and call it many times. M98 P calls, M99 returns.</p>
-<div class="callout"><strong>What you will learn:</strong><ul>
-<li>M98 P subprogram call (Haas uses P, not O)</li>
-<li>M99 return to the main program</li>
-<li>L repeat count</li>
-<li>Building hole grids and repeated features</li>
-</ul></div>
-<h2>Concept</h2>
-<p>A subprogram is a separate O-number program called by <strong>M98 P</strong> and returned by <strong>M99</strong>. The main program positions the machine; the subprogram performs one repeating unit of work. The <strong>L</strong> parameter sets the repeat count.</p>
-<h2>Worked Example</h2>
-<p>For a 4&times;3 hole grid, the subprogram drills one row of 4 holes and advances Y. The main program calls it 3 times. See <a href="/cnc-manufacturing-engineering/cnc-programming/34-subprograms/">Subprograms — Detailed Example</a> for the full code with the 12-hole trace.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Subprograms — CNC Programming</title><meta name="description" content="Main program calls, M98 subprogram call, M99 return, repeating hole patterns, and Haas P/L syntax."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/29-subprograms/"><link rel="stylesheet" href="../assets/css/site.css"><link rel="stylesheet" href="../assets/css/article.css"><link rel="stylesheet" href="../assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav"><a href="/cnc-manufacturing-engineering/">Home</a><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a><a href="/cnc-manufacturing-engineering/about/">About</a></nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Subprograms</h1><p class="lead">Subprograms let you repeat a block of code without copying it. This page covers M98/M99, Haas syntax, and how to use subprograms for hole patterns.</p><h2>Concept</h2>
+<p>A <strong>subprogram</strong> is a separate O-numbered program called from the main program. <strong>M98 P2000 L3</strong> calls O2000 three times (Haas syntax). <strong>M99</strong> returns to the main program. Subprograms reduce repetition and make programs easier to maintain.</p>
+<h2>Why It Matters</h2>
+<p>Without subprograms, drilling 16 holes in a pattern means 16 blocks of G81 code. With a subprogram, you write the hole once and call it 16 times. If the hole depth changes, you edit one line instead of 16.</p>
+<h2>How It Works</h2>
+<h3>Haas Syntax</h3>
+<pre class="cp-code"><code>M98 P2000 L3   (call O2000, repeat 3 times)</code></pre>
+<p>Inside O2000, M99 returns to the line after M98. The subprogram can use incremental (G91) coordinates to move to the next pattern position.</p>
+<h3>Safe Subprogram Pattern</h3>
+<p>Before M98, always: (1) retract Z to safe height, (2) declare G90 or G91 explicitly, (3) ensure G80 cancels any active cycle. The subprogram should start from a known position.</p>
+<h2>Example</h2>
+<p>4 holes on a 40 mm grid:</p>
+<pre class="cp-code"><code>(MAIN)
+G90 G00 X0 Y0
+M98 P2000
+X40 Y0
+M98 P2000
+X40 Y40
+M98 P2000
+X0 Y40
+M98 P2000
+G80 Z50.
+M30
+
+(SUB O2000)
+G91 G81 R2. Z-15. F120.
+G80 G00 Z5.
+M99</code></pre>
+<p>Each call: drill at current XY, retract to R plane, return. The main program positions XY in absolute; the subprogram drills and returns. Note: G80 inside subprogram cancels cycle; explicit G00 Z5. lifts between holes.</p>
 <h2>Common Mistakes</h2>
-<ul><li>Using M98 O instead of M98 P on Haas.</li>
-<li>Adding a redundant first hole that re-drills the current position.</li>
-<li>Forgetting to reset X or Y after each row.</li>
-<li>Not cancelling the drill cycle (G80) before moving at height.</li></ul>
-<section class="cp-practice"><h2>Practice</h2>
-<p><strong>1.</strong> On a Haas, how do you call subprogram O2000 three times?</p>
-<details><summary>Show answer</summary><p>M98 P2000 L3. P specifies the program number; L is the repeat count.</p></details>
-<p><strong>2.</strong> What does M99 do?</p>
-<details><summary>Show answer</summary><p>Returns from the subprogram to the block after the M98 call in the main program.</p></details>
-</section>
-<section class="cp-sources"><h2>Sources</h2><ul>
-<li><a href="https://www.haascnc.com/service/codes-settings.type=mcode.machine=mill.value=M98.html">Haas M98</a></li>
-</ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/28-milling-project">&larr; Milling Project</a><a href="/cnc-manufacturing-engineering/cnc-programming/30-reference">Reference &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<ul><li><strong>Confusing P and O</strong> — Haas uses M98 P2000 (not O2000).</li>
+<li><strong>Forgetting G80 in subprogram</strong> — cycle stays active into the next main program line.</li>
+<li><strong>Assuming G80 retracts to Z50</strong> — it doesn't. Explicit G00 Z retract needed.</li></ul>
+<h2>Practice</h2>
+<p><strong>1.</strong> M98 P3000 L5 does what?</p><details><summary>Ans</summary><p>Calls O3000 five times, then returns.</p></details>
+<p><strong>2.</strong> Why explicit G00 Z5 after G80?</p><details><summary>Ans</summary><p>G80 cancels cycle mode but leaves Z at the bottom. Explicit retract ensures safe height before the next XY move.</p></details>
+<p><strong>3.</strong> Why declare G90/G91 in both main and sub?</p><details><summary>Ans</summary><p>Subprograms inherit modal state. If the subprogram uses G91, the main program must restore G90 after.</p></details>
+<nav class="cp-nav-bottom"><a href="../28-milling-project/">&larr; Milling Project</a><a href="../30-reference/">Quick Reference &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>

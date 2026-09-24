@@ -1,50 +1,44 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CNC Programming Quick Reference — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="One-page lookup: common G-codes, M-codes, addresses, and formulas.">
-<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/30-reference/">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
-<main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>CNC Programming Quick Reference</h1>
-<p class="lead">For when you are at the machine and need a fast lookup, not a tutorial.</p>
-<div class="cp-meta"><span><strong>Level:</strong> Reference</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
-<div class="callout"><strong>What you will learn:</strong><ul><li>Common G-codes</li><li>Common M-codes</li><li>Addresses and units</li><li>Key formulas</li></ul></div>
-<h2>G-codes</h2>
-<ul><li>G00 rapid, G01 linear, G02 CW arc, G03 CCW arc.</li>
-<li>G17 XY, G18 XZ, G19 YZ plane.</li>
-<li>G20 inch, G21 mm.</li>
-<li>G40 cancel comp, G41 left, G42 right.</li>
-<li>G43 tool length offset, G49 cancel.</li>
-<li>G54–G59 work offsets.</li>
-<li>G80 cancel cycle, G81 drill, G82 dwell, G83 peck, G84 tap, G85 bore.</li>
-<li>G90 absolute, G91 incremental.</li>
-<li>G94 feed/min, G95 (FANUC)/G99 (Haas lathe) feed/rev.</li>
-<li>G96 CSS (lathe), G97 constant RPM, G50 max RPM.</li>
-<li>G71 rough turn, G70 finish turn (lathe).</li></ul>
-<h2>M-codes</h2>
-<ul><li>M00 stop, M01 optional stop, M02 end, M30 end rewind.</li>
-<li>M03 CW, M04 CCW, M05 stop spindle.</li>
-<li>M06 tool change, M08 coolant on, M09 off.</li></ul>
-<h2>Formulas</h2>
-<ul><li>RPM = 1000 &times; Vc / (π &times; D).</li>
-<li>Feed = RPM &times; z &times; fz (milling).</li>
-<li>Arc length = R &times; θ(radians).</li>
-<li>Axial feed for thread = RPM &times; lead.</li></ul>
-<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> Bookmark this page for machine-side lookup.</p><details><summary>Show answer</summary><p></p></details></section>
-<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Operator's Manuals (haascnc.com, retrieved 2026-09-24).</li><li>[Spindle Speed Calculator](/cnc-manufacturing-engineering/engineering-tools/spindle-speed-calculator/).</li></ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/31-learning-path/">&larr; Learning Path</a><a href="/cnc-manufacturing-engineering/cnc-programming/40-glossary/">Glossary &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Quick Reference — CNC Programming</title><meta name="description" content="Quick lookup of common G-codes, M-codes, addresses, and formulas used in CNC programming."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/30-reference/"><link rel="stylesheet" href="../assets/css/site.css"><link rel="stylesheet" href="../assets/css/article.css"><link rel="stylesheet" href="../assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav"><a href="/cnc-manufacturing-engineering/">Home</a><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a><a href="/cnc-manufacturing-engineering/about/">About</a></nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Quick Reference</h1><p class="lead">A one-page lookup of the most common G-codes, M-codes, and formulas. Use this while working — not while learning.</p><h2>Concept</h2>
+<p>This is a reference, not a tutorial. For explanations, follow the links to each topic.</p>
+<h2>Why It Matters</h2>
+<p>When you're mid-setup and can't remember whether G84 is tapping or boring, this page saves you 5 minutes of searching the manual.</p>
+<h2>How It Works</h2>
+<h3>G-Codes</h3>
+<table class="data-table">
+<tr><th>Code</th><th>Function</th></tr>
+<tr><td>G00</td><td>Rapid positioning</td></tr>
+<tr><td>G01</td><td>Linear feed</td></tr>
+<tr><td>G02</td><td>Clockwise arc</td></tr>
+<tr><td>G03</td><td>Counterclockwise arc</td></tr>
+<tr><td>G17/G18/G19</td><td>XY / XZ / YZ plane</td></tr>
+<tr><td>G20/G21</td><td>Inch / mm</td></tr>
+<tr><td>G40/G41/G42</td><td>Cutter comp off/left/right</td></tr>
+<tr><td>G43/G49</td><td>Tool length comp on/off</td></tr>
+<tr><td>G54-G59</td><td>Work offsets</td></tr>
+<tr><td>G80</td><td>Cancel canned cycle</td></tr>
+<tr><td>G81/G82/G83</td><td>Drill / drill dwell / peck</td></tr>
+<tr><td>G84/G85</td><td>Tap / bore</td></tr>
+<tr><td>G90/G91</td><td>Absolute / incremental</td></tr>
+<tr><td>G94/G95</td><td>Feed per min / per rev</td></tr>
+<tr><td>G96/G97</td><td>CSS / constant RPM</td></tr>
+</table>
+<h3>M-Codes</h3>
+<table class="data-table">
+<tr><th>Code</th><th>Function</th></tr>
+<tr><td>M03/M04/M05</td><td>Spindle CW / CCW / stop</td></tr>
+<tr><td>M06</td><td>Tool change</td></tr>
+<tr><td>M08/M09</td><td>Coolant on/off</td></tr>
+<tr><td>M30</td><td>Program end</td></tr>
+</table>
+<h2>Example</h2>
+<h3>Formulas</h3>
+<ul><li>RPM = Vc &times; 1000 / (&pi; &times; D)</li>
+<li>Feed (mm/min) = fz &times; flutes &times; RPM</li>
+<li>Time = distance / feed</li></ul>
+<h2>Common Mistakes</h2>
+<p>This page is intentionally brief. For each code, follow the link to the detailed lesson.</p>
+<h2>Practice</h2>
+<p><strong>1.</strong> Quick: G83 is what?</p><details><summary>Ans</summary><p>Peck drilling cycle.</p></details>
+<p><strong>2.</strong> Quick: M08?</p><details><summary>Ans</summary><p>Coolant on.</p></details>
+<p><strong>3.</strong> Quick: G41?</p><details><summary>Ans</summary><p>Cutter radius compensation, left.</p></details>
+<nav class="cp-nav-bottom"><a href="../29-subprograms/">&larr; Subprograms</a><a href="../31-learning-path/">Learning Path &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>

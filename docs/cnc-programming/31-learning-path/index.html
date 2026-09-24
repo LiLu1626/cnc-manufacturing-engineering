@@ -1,39 +1,32 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Your Learning Path — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="Four levels from zero to macro programming. Follow the order; do not skip ahead.">
-<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/31-learning-path/">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
-<main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Your Learning Path</h1>
-<p class="lead">Level 1: foundations. Level 2: basic turning/milling. Level 3: intermediate cycles. Level 4: macros and automation.</p>
-<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> All</span></div>
-<div class="callout"><strong>What you will learn:</strong><ul><li>Level 1: 10 lessons to a basic program</li><li>Level 2: turning, milling, cycles</li><li>Level 3: subprograms, multiple tools</li><li>Level 4: macros, probing, automation</li></ul></div>
-<h2>Concept</h2>
-<p>Do not learn G-codes in isolation. Build up: coordinate systems first, then motion, then offsets, then a complete program. Each lesson depends on the previous.</p>
-<h2>Level 1: Fundamentals</h2>
-<ol><li>What is CNC Programming (01)</li><li>Machine Fundamentals (02)</li><li>Program Safety (23)</li><li>Programming Math (08)</li><li>Coordinate Systems (03)</li><li>Planes & Units (07)</li><li>Program Structure (04)</li><li>G-Code Basics (05)</li><li>Modal State (06)</li><li>M-Codes (09)</li></ol>
-<h2>Level 2: Basic Machining</h2>
-<ol><li>Feed (11), Spindle (10), Work Offsets (13), Tool Offsets (12)</li><li>Linear (14), Circular (15), Cutter Comp (16)</li><li>Drilling Cycles (33), Canned Cycles (18)</li><li>Turning (19), Milling (20)</li></ol>
-<h2>Level 3: Intermediate</h2>
-<ol><li>Threading (21, 22), Subprograms (34)</li><li>Verification (24), Troubleshooting (25), Common Mistakes (26)</li><li>Complete projects (28, 27), Examples (35)</li></ol>
-<h2>Level 4: Advanced</h2>
-<ol><li>Macros (36), Probing (37), Controllers (38)</li><li>Self-assessment (39), Reference (30), Glossary (40)</li></ol>
-<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> Which lesson should you start if you already know G00/G01?</p><details><summary>Show answer</summary><p>Jump to Lesson 13 (Work Offsets) — offsets are where mistakes happen.</p></details><p><strong>2.</strong> Why learn subprograms before macros?</p><details><summary>Show answer</summary><p>Subprograms teach reuse; macros add variables and logic on top.</p></details></section>
-<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Follow this order; revisit earlier lessons when stuck.</li></ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/39-assessment/">&larr; Self-Assessment</a><a href="/cnc-manufacturing-engineering/cnc-programming/30-reference/">Reference &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Learning Path & Checkpoints — CNC Programming</title><meta name="description" content="The recommended order to learn CNC programming, with checkpoints after each level."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/31-learning-path/"><link rel="stylesheet" href="../assets/css/site.css"><link rel="stylesheet" href="../assets/css/article.css"><link rel="stylesheet" href="../assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav"><a href="/cnc-manufacturing-engineering/">Home</a><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a><a href="/cnc-manufacturing-engineering/about/">About</a></nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Learning Path & Checkpoints</h1><p class="lead">Not sure what to learn next? This page gives you a sequenced path from zero to capable, with checkpoints to test yourself.</p><h2>Concept</h2>
+<p>CNC programming is cumulative. Trying to learn subprograms before you understand coordinates is like building a house starting from the roof. This path sequences the material in dependency order.</p>
+<h2>Why It Matters</h2>
+<p>A structured path prevents the "I read everything but can't program anything" problem. Each checkpoint requires you to write and verify code before moving on.</p>
+<h2>How It Works</h2>
+<h3>Level 1: Foundations</h3>
+<ol><li>What is CNC? &rarr; Machine axes</li>
+<li>Coordinate systems &rarr; G90/G91</li>
+<li>Program structure &rarr; G00/G01</li>
+<li>Spindle & feed &rarr; Work offsets</li>
+<li>Tool offsets &rarr; First program</li></ol>
+<p><strong>Checkpoint:</strong> Write a 10-line milling program that faces a rectangular block.</p>
+<h3>Level 2: Machining</h3>
+<ol><li>Circular interpolation &rarr; Cutter comp</li>
+<li>Drilling cycles &rarr; Canned cycles</li>
+<li>Turning basics &rarr; G71/G70</li></ol>
+<p><strong>Checkpoint:</strong> Complete the turning and milling projects.</p>
+<h3>Level 3: Advanced</h3>
+<ol><li>Subprograms &rarr; Verification</li>
+<li>Troubleshooting &rarr; Common mistakes</li>
+<li>CAM basics &rarr; Macro intro</li></ol>
+<p><strong>Checkpoint:</strong> Read a random shop-floor program and explain every line.</p>
+<h2>Example</h2>
+<p>If you're starting now: do Level 1 first. Don't skip to G-code projects. Coordinates and offsets are the foundation; everything else builds on them.</p>
+<h2>Common Mistakes</h2>
+<ul><li><strong>Skipping levels</strong> — if you can't explain G90 vs G91, don't start subprograms.</li>
+<li><strong>Reading without practicing</strong> — every checkpoint requires writing code, not just reading.</li></ul>
+<h2>Practice</h2>
+<p><strong>1.</strong> What should you learn first?</p><details><summary>Ans</summary><p>Coordinate systems. Everything else depends on them.</p></details>
+<p><strong>2.</strong> When are you ready for subprograms?</p><details><summary>Ans</summary><p>When you can write and verify a basic drilling cycle with G81 and G80.</p></details>
+<p><strong>3.</strong> What's the Level 1 checkpoint?</p><details><summary>Ans</summary><p>Write a 10-line milling program that faces a rectangular block.</p></details>
+<nav class="cp-nav-bottom"><a href="../30-reference/">&larr; Quick Reference</a><a href="../32-drawings-process-planning/">Drawings &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>
