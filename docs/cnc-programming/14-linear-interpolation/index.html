@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Rapid & Linear Motion — CNC Programming</title>
-<meta name="description" content="G00 rapid positioning vs G01 linear feed, safe approach/retract patterns, and cutting time calculation.">
+<meta name="description" content="G00 rapid positioning vs G01 linear feed, modal behavior, safe approach/retract patterns, diagonal vs independent axis motion, and cutting time calculation.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/14-linear-interpolation/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
@@ -26,44 +26,91 @@
 </nav>
 <main class="article">
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
-<h1>Rapid & Linear Motion</h1>
-<p class="lead">G00 and G01 are the workhorses of CNC motion. This page explains when to use which, safe approach patterns, and how to estimate cutting time.</p>
+<h1>Rapid &amp; Linear Motion</h1>
+<p class="lead">G00 and G01 are the workhorses of CNC motion — rapid positioning and linear feed. This page explains when to use which, why G00 is not straight-line, safe approach and retract patterns, and how to estimate cutting time.</p>
+
 <h2>Concept</h2>
-<p><strong>G00</strong> moves at rapid traverse (typically 15-30 m/min) for positioning only. <strong>G01</strong> moves at programmed feed rate while cutting. Both are modal. The tool path between points depends on whether the move is rapid or feed: G00 may move axes independently (not straight line), while G01 always interpolates a straight line between start and end.</p>
+<p><strong>G00</strong> (rapid positioning) moves the tool at the machine's maximum rapid traverse rate (typically 15–40 m/min) for non-cutting moves. <strong>G01</strong> (linear interpolation) moves the tool at the programmed feed rate F while cutting in a straight line. Both are modal: once commanded, they stay active until another motion G code replaces them.</p>
+<p>A critical difference: G01 always interpolates a straight line between the start and end point — all axes move together at coordinated feed. G00 may move axes independently: on many machines, X reaches its end before Y, so the path is two segments (an L-shape), not a diagonal. This means G00 can hit obstacles that a straight diagonal would clear, and vice versa.</p>
+
 <h2>Why It Matters</h2>
-<p>The #1 crash cause is G00 XY motion while the tool is at cut depth. A safe program always: positions XY first, then lowers Z, cuts, then raises Z before the next XY move. Breaking this sequence crashes the tool into the vise or part.</p>
+<p>The #1 crash cause on CNC mills is G00 XY motion while the tool is at cut depth. A safe program always: positions XY first at a safe Z, then lowers Z to cut depth, does the XY cutting, then raises Z before the next XY move. Breaking this sequence — moving sideways while the tool is buried in the part — gouges the part, snaps the tool, or crashes into the fixture.</p>
+
 <h2>How It Works</h2>
-<h3>Safe Approach Pattern</h3>
+
+<h3>The Safe Approach Pattern</h3>
 <ol>
-<li>G00 to XY target (above stock)</li>
-<li>G00 Z to clearance (e.g., Z5)</li>
-<li>G01 Z to cut depth at feed</li>
-<li>G01 XY cut moves at feed</li>
-<li>G00 Z retract to clearance</li>
-<li>G00 to next XY</li>
+<li><strong>G00 to XY target</strong> — position above the cut at a safe Z height.</li>
+<li><strong>G00 Z to clearance plane</strong> — rapid down to R2 or R5 above the stock.</li>
+<li><strong>G01 Z to cut depth</strong> — feed down to Z depth at a controlled feed rate.</li>
+<li><strong>G01 XY cut moves</strong> — feed along the cut path at cutting feed.</li>
+<li><strong>G00 Z retract</strong> — rapid back up to clearance plane.</li>
+<li><strong>G00 to next XY</strong> — rapid to the next position at safe Z.</li>
 </ol>
-<h3>Cutting Time</h3>
-<p>Time = distance / feed rate. For a 50 mm cut at F200: 50/200 = 0.25 min = 15 seconds. This is steady-state time; add acceleration/deceleration for short moves.</p>
+<p>This XY-first, Z-second sequence is the foundation of safe milling. Never move XY while Z is at cut depth.</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <!-- stock -->
+  <rect x="80" y="100" width="260" height="90" fill="#d4c5a9" stroke="#999"/>
+  <!-- Z5 clearance -->
+  <line x1="60" y1="80" x2="380" y2="80" stroke="#27ae60" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="65" y="76" font-size="11" fill="#27ae60">Z5 clearance</text>
+  <!-- tool start -->
+  <circle cx="100" cy="80" r="6" fill="#3498db"/>
+  <text x="85" y="72" font-size="10" fill="#3498db">1. Rapid XY</text>
+  <!-- feed down -->
+  <line x1="100" y1="86" x2="100" y2="140" stroke="#e74c3c" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="105" y="115" font-size="10" fill="#e74c3c">2. Feed Z down</text>
+  <!-- cut -->
+  <line x1="100" y1="140" x2="300" y2="140" stroke="#e74c3c" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="180" y="135" font-size="10" fill="#e74c3c">3. G01 cut at feed</text>
+  <!-- retract -->
+  <line x1="300" y1="140" x2="300" y2="80" stroke="#27ae60" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="305" y="115" font-size="10" fill="#27ae60">4. G00 Z up</text>
+</svg>
+<figcaption>Safe approach pattern: XY at safe Z, feed down, cut at feed, retract Z, then move XY.</figcaption>
+</figure>
+
+<h3>G00 Is Not Always a Straight Line</h3>
+<p>On many CNC machines, G00 commands each axis to move at its own maximum speed. If X and Y have different rapid rates, or if the distances are different, one axis arrives first. The tool path is not a clean diagonal — it is an L-shape or dog-leg. This matters for collision checking: visualize both axes independently, not as a straight diagonal line.</p>
+
+<h3>Cutting Time Calculation</h3>
+<p>Steady-state cutting time = distance &divide; feed rate. For a 50 mm cut at F300 mm/min: 50/300 = 0.167 min = 10 seconds. For short moves (under 10 mm), add acceleration/deceleration time — the tool never reaches programmed feed. For rough estimates, the distance/feed formula is accurate enough.</p>
+
 <h2>Example</h2>
-<pre class="cp-code"><code>G00 X0 Y0        (position above hole 1)
-G00 Z5.          (rapid to 5mm clearance)
-G01 Z-5. F100.   (feed down 100mm/min)
-G01 X50. F300.   (cut 50mm at 300mm/min = 10s)
-G00 Z5.          (retract before XY)
-G00 X100. Y0.    (rapid to next position)
-G01 Z-5. F100.   (feed down again)</code></pre>
+<pre class="cp-code"><code>G00 X0 Y0        (rapid XY above first position, at Z50)
+G00 Z5.          (rapid to 5 mm clearance)
+G01 Z-5. F100.   (feed down to Z-5 at 100 mm/min)
+G01 X50. F300.   (cut 50 mm at 300 mm/min = 10 s)
+G00 Z5.          (retract to clearance BEFORE XY)
+G00 X100. Y0.    (rapid to next position at safe Z)
+G01 Z-5. F100.   (feed down again)
+G01 X150. F300.  (next cut)
+G00 Z50.         (final retract)</code></pre>
+<p><strong>Trace:</strong> Note the order at every step: Z goes up before XY moves. The cut at Z&minus;5 is always followed by G00 Z5. before any G00 X move. This is the safe pattern.</p>
+
 <h2>Common Mistakes</h2>
 <ul>
-<li><strong>G00 XY at cut depth</strong> — always retract Z first.</li>
-<li><strong>Forgetting F on first G01</strong> — the feed may default to a dangerous value.</li>
-<li><strong>Assuming G00 is straight-line</strong> — axes may move independently; the diagonal path may hit obstacles.</li>
+<li><strong>G00 XY at cut depth</strong> — always retract Z to clearance before moving XY. This is the #1 crash cause.</li>
+<li><strong>Forgetting F on the first G01</strong> — the first G01 after G00 needs an F command. Without F, the machine may use a default or alarm.</li>
+<li><strong>Assuming G00 is straight-line</strong> — axes move independently; visualize the dog-leg path for collision checking.</li>
+<li><strong>Feeding Z at cutting feed too late</strong> — the first G01 Z needs a plunge feed (slower than XY feed) to push chips out.</li>
+<li><strong>No clearance plane between cuts</strong> — always retract to Z5 or higher between features.</li>
 </ul>
+
 <h2>Practice</h2>
-<p><strong>1.</strong> Cut length 75 mm at F250. Time?</p><details><summary>Ans</summary><p>75/250 = 0.3 min = 18 s.</p></details>
-<p><strong>2.</strong> Why retract Z before moving XY?</p><details><summary>Ans</summary><p>At cut depth, rapid XY would drag the tool through the part or fixture.</p></details>
-<p><strong>3.</strong> What is the difference between G00 and G01 path?</p><details><summary>Ans</summary><p>G01 interpolates straight line at feed. G00 moves each axis at max speed independently — the path may be two segments, not a diagonal.</p></details>
+<p><strong>1.</strong> Cut length 75 mm at F250. Cutting time?</p>
+<details><summary>Ans</summary><p>75 / 250 = 0.3 minutes = 18 seconds.</p></details>
+<p><strong>2.</strong> Why retract Z before moving XY?</p>
+<details><summary>Ans</summary><p>At cut depth, rapid XY would drag the tool through the part or fixture. Retracting Z to clearance first ensures the tool moves above the work.</p></details>
+<p><strong>3.</strong> What is the path difference between G00 and G01?</p>
+<details><summary>Ans</summary><p>G01 interpolates a coordinated straight line at feed. G00 moves each axis at max speed independently — the path may be an L-shape, not a diagonal.</p></details>
+<p><strong>4.</strong> Why does the first G01 Z use a slower feed than XY?</p>
+<details><summary>Ans</summary><p>Plunging straight down into material is harder than cutting sideways. A slower plunge feed (100 mm/min vs 300 mm/min) pushes chips out and prevents tool jam.</p></details>
 
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/12-tool-offsets/">&larr; Tool Offsets</a><a href="/cnc-manufacturing-engineering/cnc-programming/15-circular-interpolation/">Circular Motion &rarr;</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
-</body></html>
+</body>
+</html>
