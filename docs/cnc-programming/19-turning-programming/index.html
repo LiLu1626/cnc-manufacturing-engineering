@@ -30,7 +30,7 @@
 <h2>How</h2>
 <h3>Haas G71 roughing cycle</h3>
 <p>G71 follows a contour you describe between P (start) and Q (end). It leaves stock for finishing, then G70 finishes to size.</p>
-<h2>Example (R06 fix: front profile, no parting)</h2>
+<h2>Example</h2>
 <p>Raw stock Ø40 × 100. Face off. Rough and finish: Ø30 × Z0 to Z-20, then Ø36 × Z-20 to Z-40. No parting off — only the front profile.</p>
 <pre class="cp-code"><code>O2000 (FRONT PROFILE, NO PARTING)
 G21 G97 G99
@@ -58,7 +58,7 @@ M30</code></pre>
 <ul><li>Z direction reversing inside a G71 P-Q contour — Haas requires monotonic X or Z.</li>
 <li>Using G96 during threading — must switch to G97.</li>
 <li>Confusing diameter and radius X values.</li></ul>
-<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> X50 in diameter programming. What is the radial position?</p><details><summary>Show answer</summary><p>25 mm from center (radius = diameter/2).</p></details><p><strong>2.</strong> Why no parting off in this example?</p><details><summary>Show answer</summary><p>The SPEC says only machine the front profile; the part stays in the bar for later operations.</p></details></section>
+<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> X50 in diameter programming. What is the radial position?</p><details><summary>Show answer</summary><p>25 mm from center (radius = diameter/2).</p></details><p><strong>2.</strong> Why no parting off in this example?</p><details><summary>Show answer</summary><p>Only the front profile is machined in this example; the part stays in the bar for later operations.</p></details></section>
 <section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Lathe Operator's Manual — G71/G70 rough/finish cycles (haascnc.com, retrieved 2026-09-24).</li><li>[Turning Speed Calculator](/cnc-manufacturing-engineering/engineering-tools/turning-speed-feed-calculator/).</li></ul></section>
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/34-subprograms/">&larr; Subprograms</a><a href="/cnc-manufacturing-engineering/cnc-programming/20-milling-programming/">Milling Programming &rarr;</a></nav>
 </main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Program Verification — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="How to verify a CNC program before cutting: simulation, dry run, single block, first part.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/24-verification/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body class="cnc-programming">
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Program Verification</h1>
+<p class="lead">Writing a program is not the same as proving it safe. Verification is layered — each layer catches different errors. No single step proves everything.</p>
+<div class="callout"><strong>What you will learn:</strong><ul>
+<li>Simulation vs dry run vs single block</li>
+<li>Why raised-Z dry run does not prove 3D clearance</li>
+<li>What to check on the first part</li>
+<li>What verification does and does not cover</li>
+</ul></div>
+<h2>Layers of Verification</h2>
+<ol>
+<li><strong>Syntax review</strong>: read the program line by line.</li>
+<li><strong>Simulation</strong>: verify tool path in CAM or controller graphics, with holder geometry.</li>
+<li><strong>Dry run</strong>: tool at raised Z, reduced rapid, observe X/Y motion. Does NOT prove Z or holder clearance.</li>
+<li><strong>Single block</strong>: step through first moves at controlled feed.</li>
+<li><strong>First cut</strong>: start in air, then engage at reduced feed appropriate to the operation. Do not override feed on tapping or synchronous operations.</li>
+</ol>
+<h2>What Verification Does Not Prove</h2>
+<p>A raised-Z dry run shows X/Y positioning but does not test whether the tool holder clears the vise, the chuck, or the fixture. Only simulation with full holder geometry, or a documented physical clearance check, reveals 3D interference.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Thinking dry run at raised Z proves no collision.</li>
+<li>Running at 100% feed on the first part.</li>
+<li>Skipping simulation and going straight to single block on a complex part.</li></ul>
+<section class="cp-practice"><h2>Practice</h2>
+<p><strong>1.</strong> Dry run at Z50 looks fine. Is it safe to cut?</p>
+<details><summary>Show answer</summary><p>No. X/Y positions are verified, but Z clearance between holder and fixture is untested. Check holder geometry separately.</p></details>
+<p><strong>2.</strong> What does simulation catch that dry run cannot?</p>
+<details><summary>Show answer</summary><p>Tool path gouges, wrong Z depths, and (with holder model) 3D interference with fixtures.</p></details>
+</section>
+<section class="cp-sources"><h2>Sources</h2><ul>
+<li>Shop-floor practice; always follow your machine and facility procedures.</li>
+</ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/23-program-safety">&larr; Program Safety</a><a href="/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting">Troubleshooting &rarr;</a></nav>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

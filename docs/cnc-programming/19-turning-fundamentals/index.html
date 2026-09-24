@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turning Fundamentals — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="CNC lathe basics: X/Z coordinates, diameter vs radius programming, spindle direction, turret.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body class="cnc-programming">
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Turning Fundamentals</h1>
+<p class="lead">A CNC lathe rotates the workpiece and tools move in X (diameter) and Z (along the part). Understanding diameter programming is the first step.</p>
+<div class="callout"><strong>What you will learn:</strong><ul>
+<li>Lathe axes: X (diameter), Z (along spindle)</li>
+<li>Diameter programming vs radius programming</li>
+<li>Spindle direction and turret orientation</li>
+<li>Basic turning operations: face, OD, bore</li>
+</ul></div>
+<h2>Lathe Coordinates</h2>
+<p>On a CNC lathe, <strong>Z</strong> runs along the spindle axis (toward/away from the chuck). <strong>X</strong> is the radial axis. Most lathes use <strong>diameter programming</strong>: X values are the actual diameter of the part, not the radius. A 40 mm bar has X40.0, not X20.0.</p>
+<h2>Diameter vs Radius</h2>
+<p>Diameter programming means the X coordinate you read on the drawing (the OD) goes directly into the program. If you see a 50 mm diameter on the drawing, you write X50.0. The controller knows that radius = X/2.</p>
+<h2>Spindle and Turret</h2>
+<p>On most horizontal lathes, the spindle turns clockwise (M03) when viewed from the headstock. The turret holds multiple tools. Positive X moves away from the centerline (larger diameter); positive Z moves away from the chuck.</p>
+<h2>Basic Operations</h2>
+<ul><li><strong>Facing</strong>: tool moves across the end of the part to square it.</li>
+<li><strong>OD turning</strong>: tool moves along Z to reduce the diameter.</li>
+<li><strong>Boring</strong>: tool enters a hole and moves along Z to enlarge it internally.</li></ul>
+<h2>Common Mistakes</h2>
+<ul><li>Programming X as radius instead of diameter — the cut is half as large as intended.</li>
+<li>Confusing positive/negative Z direction relative to the chuck.</li>
+<li>Forgetting that lathe feed is in mm/rev (G99 on Haas), not mm/min.</li></ul>
+<section class="cp-practice"><h2>Practice</h2>
+<p><strong>1.</strong> A drawing shows an OD of 35 mm. What X value do you program?</p>
+<details><summary>Show answer</summary><p>X35.0 (diameter programming). Not X17.5.</p></details>
+<p><strong>2.</strong> On a lathe, which axis runs along the spindle?</p>
+<details><summary>Show answer</summary><p>Z. X is the radial/diameter axis.</p></details>
+</section>
+<section class="cp-sources"><h2>Sources</h2><ul>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/horizontal-cnc-lathes/">Horizontal CNC Lathes</a></li>
+</ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles">&larr; Canned Cycles</a><a href="/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles">Turning Cycles &rarr;</a></nav>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

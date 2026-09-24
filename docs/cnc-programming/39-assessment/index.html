@@ -45,7 +45,7 @@
 <li>What does G31 do?</li>
 <li>Why use N labels not O numbers for GOTO?</li></ol>
 <h2>Part B: Code Reviews (10 pts each)</h2>
-<p><strong>Review 1:</strong> <code>G90 G54 G00 X20 Y20 / G01 Z-2 F100 / G01 X80 F300 / G00 X0 Y0</code> — after G01 X80 F300, G00 X0 Y0. Does the G00 line drill? <strong>Answer (R10):</strong> On Haas, G00 cancels the canned cycle — but this program has no active G81, so G00 just repositions. The trick: if a G81 were active, G00 cancels it on Haas (unlike some FANUCs). Verify against your controller.</p>
+<p><strong>Review 1:</strong> <code>G90 G54 G00 X20 Y20 / G01 Z-2 F100 / G01 X80 F300 / G00 X0 Y0</code> — after G01 X80 F300, G00 X0 Y0. Does the G00 line drill? <strong>Answer:</strong> On Haas, an explicit G00 cancels the canned cycle mode. But this program has no active G81, so G00 X0 Y0 just repositions. Note: if a G81 were active, G00 would cancel it on Haas — verify against your controller manual.</p>
 <p><strong>Review 2:</strong> <code>G01 X10 Y10 F100 / X20 / G91 X5 / X5</code> — starting at X0, where does the tool end? Answer: X10 (G90) → X20 → G91 X5 = X25 → X5 = X30. Y stays at 10.</p>
 <h2>Part C: Project Proposals (20 pts each)</h2>
 <p>1. Describe a process plan for a 50×50×10 plate with 4 corner holes. 2. Describe a lathe program for a shouldered shaft Ø20/Ø30.</p>

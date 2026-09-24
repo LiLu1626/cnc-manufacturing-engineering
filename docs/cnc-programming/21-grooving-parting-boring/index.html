@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grooving, Parting, and Boring — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Groove tools, cutoff/parting tools, and boring bars: operations that need special tool geometry.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body class="cnc-programming">
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Grooving, Parting, and Boring</h1>
+<p class="lead">These operations use specialized tools: grooving blades for O-ring and retaining ring grooves, cutoff blades for parting off, and boring bars for internal turning.</p>
+<div class="callout"><strong>What you will learn:</strong><ul>
+<li>Groove tool geometry and infeed direction</li>
+<li>Parting off: feed, speed, and safety</li>
+<li>Boring bars: rigidity, overhang, and deflection</li>
+<li>Programming differences from OD turning</li>
+</ul></div>
+<h2>Grooving</h2>
+<p>A groove tool feeds radially (X direction) into the part to cut a recess. The tool width determines the groove width; multiple X passes may be needed for wide grooves. Program at the groove bottom diameter.</p>
+<h2>Parting Off</h2>
+<p>A cutoff (parting) tool feeds radially until the part separates from the bar. Use reduced feed for the last 1-2 mm to prevent a burr. Always make sure there is clearance behind the part for the blade to exit.</p>
+<h2>Boring</h2>
+<p>A boring bar reaches into a pre-drilled hole and machines the ID. Boring bars are inherently less rigid than OD tools — keep overhang minimal and use light cuts to avoid chatter.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Parting off without enough clearance behind the part — the blade crashes into the chuck.</li>
+<li>Using too long a boring bar — chatter and poor surface finish.</li>
+<li>Forgetting that groove tool nose radius affects the bottom corner.</li></ul>
+<section class="cp-practice"><h2>Practice</h2>
+<p><strong>1.</strong> Which direction does a groove tool primarily feed?</p>
+<details><summary>Show answer</summary><p>Radially (X direction on a lathe). It feeds in to the groove depth, then may move along Z for face grooving.</p></details>
+<p><strong>2.</strong> Why should boring bar overhang be minimized?</p>
+<details><summary>Show answer</summary><p>Boring bars deflect easily. Longer overhang increases chatter, poor finish, and dimensional error.</p></details>
+</section>
+<section class="cp-sources"><h2>Sources</h2><ul>
+<li>Sandvik Coromant — Grooving and Parting Technical Guide.</li>
+</ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles">&larr; Turning Cycles</a><a href="/cnc-manufacturing-engineering/cnc-programming/22-threading">Threading &rarr;</a></nav>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

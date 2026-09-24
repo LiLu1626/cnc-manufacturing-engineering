@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Milling Strategies — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Face milling, end mill roughing, pocketing, climb vs conventional, chip thinning.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/33-milling-strategies/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body class="cnc-programming">
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Milling Strategies</h1>
+<p class="lead">How you move the tool matters as much as where you move it. Climb vs conventional, stepover, radial engagement, and chip thinning all affect tool life and finish.</p>
+<div class="callout"><strong>What you will learn:</strong><ul>
+<li>Climb (down) milling vs conventional (up) milling</li>
+<li>Radial engagement (ae) and axial depth (ap)</li>
+<li>Stepover for face milling and pocketing</li>
+<li>Why chip thinning matters at low radial engagement</li>
+</ul></div>
+<h2>Climb vs Conventional</h2>
+<p><strong>Climb milling</strong> (down cut): the tool feeds in the same direction as the rotation at the cut point. Chip thickness starts thick and tapers — better finish, less wear, preferred on modern machines.</p>
+<p><strong>Conventional milling</strong> (up cut): the tool feeds against the rotation. Chip starts thin and gets thick — rubbing work-hardens the surface, more tool wear. Used on older machines with backlash.</p>
+<h2>Engagement</h2>
+<p><strong>Radial engagement (ae)</strong> is how much of the cutter diameter is in the cut (stepover). <strong>Axial depth (ap)</strong> is how deep the cut is axially. For finishing pockets, ae is small and ap may be full flute length.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Full slotting (ae = 100% of diameter) with an end mill — too much heat and chip packing.</li>
+<li>Not considering chip thinning at low ae — feed per tooth must increase to maintain chip thickness.</li>
+<li>Plunging straight down with a flat-end mill unless it has center-cutting geometry.</li></ul>
+<section class="cp-practice"><h2>Practice</h2>
+<p><strong>1.</strong> Which milling direction is preferred on a modern CNC mill?</p>
+<details><summary>Show answer</summary><p>Climb (down) milling. Chip starts thick, less rubbing, better finish, and modern machines have minimal backlash.</p></details>
+<p><strong>2.</strong> Why can you not plunge with a regular end mill?</p>
+<details><summary>Show answer</summary><p>Regular end mills have no center cutting edge. Plunge straight in and the rubs at the center instead of cutting. Use a center-cutting end mill, a spot drill, or ramp in.</p></details>
+</section>
+<section class="cp-sources"><h2>Sources</h2><ul>
+<li>Sandvik Coromant — Milling Knowledge.</li>
+</ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/32-drawings-process-planning">&larr; Drawing to Plan</a><a href="/cnc-manufacturing-engineering/cnc-programming/34-tapping-thread-milling">Tapping & Thread Milling &rarr;</a></nav>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

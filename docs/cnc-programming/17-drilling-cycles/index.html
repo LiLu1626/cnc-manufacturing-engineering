@@ -1,0 +1,55 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drilling and Hole-Making Cycles — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="G81, G83, G84 drilling cycles: positioning, R plane, depth, feed, and retract.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body class="cnc-programming">
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Drilling and Hole-Making Cycles</h1>
+<p class="lead">Canned drilling cycles (G81, G83, G84) automate positioning, plunge, feed, and retract. Each has a defined R plane and depth.</p>
+<div class="callout"><strong>What you will learn:</strong><ul>
+<li>G81 simple drill, G83 peck drill, G84 tapping</li>
+<li>R plane, initial plane, Z depth</li>
+<li>G80 cancels the cycle</li>
+<li>On Haas: XY movement continues the cycle; explicit G00 cancels it</li>
+</ul></div>
+<h2>Cycle Structure</h2>
+<p>A drilling cycle combines four moves into one line: rapid to R plane, feed to Z depth, retract to R plane (or initial plane on G80), then rapid to next position.</p>
+<h2>Common Cycles</h2>
+<ul>
+<li><strong>G81</strong>: simple drill — rapid to R, feed to Z, retract to R plane.</li>
+<li><strong>G83</strong>: peck drill — feeds in increments, retracts to break chips (deep holes).</li>
+<li><strong>G84</strong>: tapping — feed down and reverse tap out at synchronized speed.</li>
+<li><strong>G80</strong>: cancel cycle — retracts to initial plane.</li>
+</ul>
+<h2>Cycle Cancellation on Haas</h2>
+<p>Once G81 is active, writing a new X/Y position automatically repeats the drill cycle at that position. To stop cycling, write <strong>G80</strong> or use an explicit <strong>G00</strong> — on Haas, G00 cancels the canned cycle mode. Do not rely on the next rapid to "just move" — it will drill.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Forgetting G80 before moving at Z height — the next XY move drills a hole.</li>
+<li>Using G81 for deep holes — chips pack and the tool binds; use G83 peck.</li>
+<li>Setting the R plane too low — rapid approach collides with fixtures.</li></ul>
+<section class="cp-practice"><h2>Practice</h2>
+<p><strong>1.</strong> After G81 Z-10 R2, you write X50. What happens?</p>
+<details><summary>Show answer</summary><p>The machine moves to X50 and drills a hole to Z-10 — the cycle is modal. You must write G80 to cancel.</p></details>
+<p><strong>2.</strong> When do you use G83 instead of G81?</p>
+<details><summary>Show answer</summary><p>For deep holes where chips need to be broken and cleared. G83 pecks back to the R plane between cuts.</p></details>
+</section>
+<section class="cp-sources"><h2>Sources</h2><ul>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G83.html">Haas G83 — Peck Drilling</a></li>
+</ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/16-cutter-compensation">&larr; Cutter Comp</a><a href="/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles">Canned Cycles &rarr;</a></nav>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

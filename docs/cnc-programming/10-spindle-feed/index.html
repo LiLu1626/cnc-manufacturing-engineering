@@ -1,0 +1,51 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spindle and Feed Programming — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="S command, M03/M04/M05, G94/G95 feed modes, and how speed and feed relate to tool life.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/10-spindle-feed/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body class="cnc-programming">
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Spindle and Feed Programming</h1>
+<p class="lead">The spindle speed (S) and feed rate (F) are the two cut-rate commands. Getting them right is the difference between a good finish and a broken tool.</p>
+<div class="callout"><strong>What you will learn:</strong><ul>
+<li>S command sets RPM; M03/M04/M05 start/stop direction</li>
+<li>G94 = feed per minute (mm/min); G95 = feed per revolution (mm/rev)</li>
+<li>On Haas lathes, G99 selects feed per revolution</li>
+<li>Speed and feed come from tooling data, not guesswork</li>
+</ul></div>
+<h2>Spindle</h2>
+<p><strong>S</strong> sets spindle RPM. <strong>M03</strong> starts clockwise, <strong>M04</strong> counterclockwise, <strong>M05</strong> stops. Most milling and turning tools cut clockwise when viewed from the spindle.</p>
+<h2>Feed Modes</h2>
+<p><strong>G94</strong>: F is feed per minute (mm/min). Used on mills. <strong>G95</strong> (or <strong>G99</strong> on Haas lathes): F is feed per revolution (mm/rev). Used on lathes and for threading. Check which mode your machine defaults to.</p>
+<h2>How to Choose Values</h2>
+<p>Look up the recommended cutting speed (m/min) and feed per tooth (mm/tooth) from your tooling supplier. Use the <a href="/cnc-manufacturing-engineering/engineering-tools/cutting-speed-calculator/">Cutting Speed Calculator</a> and <a href="/cnc-manufacturing-engineering/engineering-tools/feed-rate-calculator/">Feed Rate Calculator</a> to convert to RPM and mm/min.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Using mm/min feed on a lathe defaulting to mm/rev — feed is 100x too high.</li>
+<li>Starting spindle before the tool is clear of the part.</li>
+<li>Running at a fixed RPM for all diameters — use CSS (G96) on lathes for varying diameters.</li></ul>
+<section class="cp-practice"><h2>Practice</h2>
+<p><strong>1.</strong> On a Haas lathe in G99, what does F0.2 mean?</p>
+<details><summary>Show answer</summary><p>0.2 mm per revolution — not 0.2 mm/min. At 1000 RPM, actual feed = 200 mm/min.</p></details>
+<p><strong>2.</strong> Why does a lathe use G96 (CSS) for facing?</p>
+<details><summary>Show answer</summary><p>As the tool moves across the face, the cutting diameter changes. Constant surface speed keeps the chip load consistent across the cut.</p></details>
+</section>
+<section class="cp-sources"><h2>Sources</h2><ul>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/cutting-speed-calculator/">Cutting Speed Calculator</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/feed-rate-calculator/">Feed Rate Calculator</a></li>
+</ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/09-mcode-fundamentals">&larr; M-Codes</a><a href="/cnc-manufacturing-engineering/cnc-programming/11-controller-dialects">Controller Dialects &rarr;</a></nav>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

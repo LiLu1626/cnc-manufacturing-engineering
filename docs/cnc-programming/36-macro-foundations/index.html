@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Macro Programming Foundations — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Variables, arithmetic, conditional branching, and loops — the building blocks of parametric CNC programs.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/36-macro-foundations/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body class="cnc-programming">
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Macro Programming Foundations</h1>
+<p class="lead">Macros add variables, arithmetic, and logic to G-code. They let you write one program that drills any bolt circle, bores any diameter, or repeats any pattern.</p>
+<div class="callout"><strong>What you will learn:</strong><ul>
+<li>Local (#1-#33) and common (#100+) variables</li>
+<li>Arithmetic: +, -, *, /, SQRT, COS, SIN</li>
+<li>IF/GOTO conditional branching to N labels</li>
+<li>WHILE/DO loops</li>
+<li>Input validation before motion</li>
+</ul></div>
+<h2>Variables</h2>
+<p>Variables like <code>#1</code>, <code>#2</code> store numbers. <code>#1-#33</code> are local (lost when the program ends); <code>#100+</code> are common (retained between programs). Assign with <code>#1 = 20.</code></p>
+<h2>Branching and Loops</h2>
+<pre class="cp-code"><code>IF[#1 LE 0] GOTO 100    <span class="cp-comment">(conditional jump to N100)</span>
+WHILE[#3 LT #2] DO 1    <span class="cp-comment">(loop while #3 < #2)</span>
+  ...
+  #3 = #3 + 1
+END 1</code></pre>
+<p>GOTO takes a bare number matching an N label. Do not write "GOTO N100" — the N is only on the label block.</p>
+<h2>Why It Matters</h2>
+<p>Macros turn a fixed 4-hole program into a parameterized bolt circle: change #1 (radius) and #2 (hole count), and the same code works. See <a href="/cnc-manufacturing-engineering/cnc-programming/36-macro-programming/">Macro Programming — Worked Example</a> for the bolt-circle drill macro with integer validation.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Writing GOTO N100 instead of GOTO 100.</li>
+<li>Not validating inputs — a zero radius divides by zero.</li>
+<li>Forgetting that trig functions use degrees, not radians.</li></ul>
+<section class="cp-practice"><h2>Practice</h2>
+<p><strong>1.</strong> What is the correct way to jump to the block marked N200?</p>
+<details><summary>Show answer</summary><p>GOTO 200 — bare number, no N in the GOTO statement.</p></details>
+<p><strong>2.</strong> Why validate inputs before motion?</p>
+<details><summary>Show answer</summary><p>A zero or negative radius, or a non-integer hole count, produces wrong positions or crashes. Catch bad input with IF/GOTO before any G81.</p></details>
+</section>
+<section class="cp-sources"><h2>Sources</h2><ul>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/36-macro-programming/">Macro Programming — Worked Example</a></li>
+</ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/35-cad-cam-postprocessing">&larr; CAD/CAM & Post</a><a href="/cnc-manufacturing-engineering/cnc-programming/37-multiaxis-probing-overview">Multiaxis & Probing &rarr;</a></nav>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

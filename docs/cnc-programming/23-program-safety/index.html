@@ -20,7 +20,7 @@
 <main class="article">
 <a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
 <h1>Safe Program Start, Retraction, and Restart</h1>
-<p class="lead">A program that runs from the top every time is safe. When you must restart mid-program, you must rebuild the state the controller has already forgotten.</p>
+<p class="lead">Running from the top restores a known start state, but it is not a guarantee of safety by itself — fixtures, work offsets, and tool setup must still be verified. When you must restart mid-program, you must rebuild the modal state the controller has already forgotten.</p>
 <div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
 <div class="callout"><strong>What you will learn:</strong><ul><li>Pre-startup checks before cycle start</li><li>Safe approach and retraction strategy</li><li>What state a mid-program restart needs</li><li>Why you cannot just jump to a line number</li></ul></div>
 <h2>Concept</h2>

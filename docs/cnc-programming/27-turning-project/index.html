@@ -26,7 +26,7 @@
 <h2>Concept</h2>
 <p>The part is a shouldered shaft. Face it, then turn the front profile: Ø30 from Z0 to Z-20, then step out to Ø36 from Z-20 to Z-40. The contour changes Z monotonically (0 → -20 → -40) with no reversal, satisfying Haas G71 rules.</p>
 <h2>Why It Matters</h2>
-<p>R06: the previous version had Z direction changes inside the G71 contour (which Haas rejects) and claimed a parting-off operation that was not programmed. This version has monotonic Z and explicitly does NOT part off.</p>
+<p>This example machines the front profile only. The part stays in the bar for later operations. The G71 contour progresses monotonically in Z, which Haas requires.</p>
 <h2>How</h2>
 <h3>Program</h3>
 <pre class="cp-code"><code>% (FRONT PROFILE, NO PARTING)
@@ -57,7 +57,7 @@ M30
 <ul><li>Z direction reversing inside P10-Q20 — Haas G71 requires monotonic.</li>
 li>Claiming parting off without programming it.</li>
 <li>Using G96 during G70 finish — fine for finish, but switch to G97 before threading.</li></ul>
-<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> Why is Z monotonic important?</p><details><summary>Show answer</summary><p>Haas G71 expects the contour to progress in one Z direction. Reversing Z causes an alarm or wrong tool path.</p></details><p><strong>2.</strong> Why no parting off?</p><details><summary>Show answer</summary><p>The SPEC says only machine the front profile. Parting off would be a separate operation with a cutoff tool.</p></details></section>
+<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> Why is Z monotonic important?</p><details><summary>Show answer</summary><p>Haas G71 expects the contour to progress in one Z direction. Reversing Z causes an alarm or wrong tool path.</p></details><p><strong>2.</strong> Why no parting off?</p><details><summary>Show answer</summary><p>Only the front profile is machined here. Parting off would be a separate operation with a cutoff tool.</p></details></section>
 <section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Lathe Operator's Manual — G71/G70 (haascnc.com, retrieved 2026-09-24).</li></ul></section>
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/28-milling-project/">&larr; Milling Project</a><a href="/cnc-manufacturing-engineering/cnc-programming/35-practical-examples/">Practical Examples &rarr;</a></nav>
 </main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

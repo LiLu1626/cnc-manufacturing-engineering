@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turning Cycles (G70/G71) — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="G71 roughing cycle and G70 finishing cycle: how lathes automate repeated passes.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body class="cnc-programming">
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Turning Cycles (G70/G71)</h1>
+<p class="lead">G71 roughs a contour automatically with multiple Z passes; G70 finishes it in one clean pass. You define the rough stock, the final contour, and the depth per pass.</p>
+<div class="callout"><strong>What you will learn:</strong><ul>
+<li>G71 roughing cycle: automatic multiple passes</li>
+<li>G70 finishing cycle: one pass at finish size</li>
+<li>P/Q contour definition block</li>
+<li>Monotonic X/Z requirement for G71</li>
+</ul></div>
+<h2>G71 Roughing</h2>
+<p>G71 takes a starting diameter and automatically removes stock in layers along Z until the contour near-net shape is reached. You define: depth of cut, stock allowance (X and Z), and the contour between P (start) and Q (end) labels. The controller generates all the roughing passes.</p>
+<h2>G70 Finishing</h2>
+<p>G70 runs the contour between P and Q one time at finish size, after G71 has rough-removed most of the stock.</p>
+<h2>Important Constraint</h2>
+<p>On Haas/FANUC G71, the X and Z dimensions within the P-Q contour must be <strong>monotonic</strong> — X must increase or decrease consistently (not back up), and Z must not reverse. Non-monotonic contours cause alarms or bad cuts.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Defining a contour where X goes back and forth — G71 requires monotonic geometry.</li>
+<li>Forgetting to leave stock for G70 — G71 leaves a finish allowance.</li>
+<li>Not specifying the depth of cut — the cycle takes one cut.</li></ul>
+<section class="cp-practice"><h2>Practice</h2>
+<p><strong>1.</strong> What is the difference between G71 and G70?</p>
+<details><summary>Show answer</summary><p>G71 roughs the contour in multiple passes leaving finish stock. G70 finishes the contour in one clean pass at final size.</p></details>
+<p><strong>2.</strong> Why must the G71 contour be monotonic?</p>
+<details><summary>Show answer</summary><p>G71 assumes the tool moves consistently along Z while stepping in X. A contour that reverses direction confuses the automatic pass generation.</p></details>
+</section>
+<section class="cp-sources"><h2>Sources</h2><ul>
+<li>Haas Lathe Operator's Manual — G71/G70 turning cycles.</li>
+</ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals">&larr; Turning Fundamentals</a><a href="/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring">Grooving & Parting &rarr;</a></nav>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

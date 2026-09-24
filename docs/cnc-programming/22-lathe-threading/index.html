@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lathe Threading Cycles — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="Haas G76 threading cycle uses K (or D) for depth and F for lead — not the FANUC two-line P-Q format.">
+<meta name="description" content="Haas G76 threading cycle: K is total thread height, D is first-pass depth, F is lead.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/22-lathe-threading/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
@@ -20,27 +20,68 @@
 <main class="article">
 <a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
 <h1>Lathe Threading Cycles</h1>
-<p class="lead">On a Haas lathe, G76 cuts a thread automatically. F is the lead (pitch for single-start). K/D is thread depth. Always G97 constant RPM.</p>
+<p class="lead">On a Haas lathe, G76 cuts a thread automatically. K is the total thread height, D is the first-pass depth, and F is the lead. They are not interchangeable.</p>
 <div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Lathe</span></div>
-<div class="callout"><strong>What you will learn:</strong><ul><li>Haas G76 one-line format</li><li>F = lead (mm/rev)</li><li>K (or D) = thread depth</li><li>G97 S constant RPM required</li></ul></div>
+<div class="callout"><strong>What you will learn:</strong><ul>
+<li>Haas G76 one-line format and each parameter</li>
+<li>K = total thread height (radial depth from major to minor)</li>
+<li>D = first cut depth (depth of the initial pass)</li>
+<li>F = lead (mm/rev); G97 constant RPM required</li>
+</ul></div>
+
 <h2>Concept</h2>
-<p>Single-point threading on a lathe uses a form tool that follows the thread helix. The <strong>G76</strong> cycle automates multiple passes. Haas uses a simplified format: the thread is defined by start X/Z, end X/Z, depth K (or D), and feed F (lead).</p>
+<p>Single-point threading uses a form tool that follows the thread helix. The <strong>G76</strong> cycle automates multiple passes with decreasing infeed. On a Haas lathe, G76 is programmed on one line with separate parameters for the total depth and the first cut.</p>
+
 <h2>Why It Matters</h2>
-<p>FANUC's two-line G76 uses P/Q/R fancy parameters. Haas uses a simpler K/D format. Copying FANUC G76 code onto a Haas causes alarms. Always use the dialect of your controller.</p>
-<h2>How</h2>
-<h3>Haas G76 example: M10×1.5</h3>
-<pre class="cp-code"><code>G97 S500 M03            <span class="cp-comment">(constant RPM)</span>
-G00 X12. Z3.            <span class="cp-comment">(approach)</span>
-G76 X8.2 Z-20. K0.92 F1.5
-<span class="cp-comment">X8.2 = minor dia, Z-20 = thread end, K0.92 = depth, F1.5 = lead</span></code></pre>
-<p>F1.5 means feed = 1.5 mm/rev = lead. At 500 rpm, axial feed = 750 mm/min.</p>
-<h2>Example</h2>
-<p>M20×1.5 external thread on Ø20 bar. Major = 20, minor ≈ 20 - 2×0.92 = 18.16. G76 X18.16 Z-25. K0.92 F1.5. Always G97 before threading.</p>
+<p>K and D are <strong>not synonyms</strong>. K defines how deep the thread ends up; D defines how aggressive the very first pass bites. Confusing them — or omitting D — leads to broken tools or wrong thread depth. Also, FANUC's two-line G76 (P/Q/R) is different; copying it onto a Haas causes alarms.</p>
+
+<h2>Haas G76 Parameters</h2>
+<pre class="cp-code"><code>G76 X_ Z_ K_ D_ F_</code></pre>
+<ul>
+<li><strong>X</strong> — final (minor) diameter of the thread at the end.</li>
+<li><strong>Z</strong> — end position of the thread along Z.</li>
+<li><strong>K</strong> — total thread height, radial depth from the major diameter to the minor diameter (always positive).</li>
+<li><strong>D</strong> — depth of the first cut (smaller than K; the cycle distributes remaining passes automatically).</li>
+<li><strong>F</strong> — lead in mm/rev (for single-start threads, F = pitch).</li>
+</ul>
+
+<h2>Worked Example: M10&times;1.5 External</h2>
+<p>Major diameter = 10 mm. Pitch = 1.5 mm. For a 60&deg; metric thread, approximate thread height (radial) = 0.613 &times; pitch = 0.613 &times; 1.5 &asymp; <strong>0.92 mm</strong>.</p>
+<p>Minor diameter = major &minus; 2 &times; K = 10 &minus; 2 &times; 0.92 = <strong>8.16 mm</strong>.</p>
+<p>First cut depth D &asymp; 0.2 mm (typical for steel).</p>
+<pre class="cp-code"><code>G97 S500 M03            <span class="cp-comment">(constant RPM — required for threading)</span>
+G00 X11. Z3.            <span class="cp-comment">(approach: above stock, 3mm lead-in)</span>
+G76 X8.16 Z-20. K0.92 D0.2 F1.5</code></pre>
+<p>Reading the line: final minor diameter X8.16, thread ends at Z&minus;20, total radial thread height K0.92, first pass D0.2, lead F1.5 mm/rev. The controller takes successive passes with decreasing depth until reaching X8.16.</p>
+
+<h2>Why G97, Not G96</h2>
+<p>Threading requires the spindle to turn at a <strong>constant RPM</strong> so the lead (mm/rev) stays consistent. G96 (constant surface speed) would increase RPM as the tool cuts deeper and diameter shrinks, distorting the pitch. Always use <strong>G97 S_ M03</strong> before G76.</p>
+
 <h2>Common Mistakes</h2>
-<ul><li>Using FANUC two-line G76 on a Haas — syntax mismatch.</li>
+<ul>
+<li>Treating K and D as interchangeable — K is total depth, D is first-pass depth; both are required.</li>
+<li>Computing X as major &minus; K instead of major &minus; 2&times;K — the depth is radial, so diameter reduces by twice K.</li>
 <li>Forgetting G97 — G96 varies RPM and ruins pitch.</li>
-<li>Confusing F units: in G99, F is mm/rev = lead, not mm/min.</li></ul>
-<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> M10×1.5 at 500 rpm. F value in G99?</p><details><summary>Show answer</summary><p>F1.5 (mm/rev = lead). Axial feed = 750 mm/min.</p></details><p><strong>2.</strong> Why G97 before G76?</p><details><summary>Show answer</summary><p>Threading requires constant RPM to maintain lead. G96 would vary speed as diameter changes.</p></details></section>
-<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Lathe Operator's Manual — G76 threading cycle (haascnc.com, retrieved 2026-09-24).</li><li>[Threading Calculator](/cnc-manufacturing-engineering/engineering-tools/threading-calculator/).</li></ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/21-threading-basics/">&larr; Threading Basics</a><a href="/cnc-manufacturing-engineering/cnc-programming/24-program-verification/">Program Verification &rarr;</a></nav>
+<li>Using FANUC two-line G76 (P/Q format) on a Haas — syntax mismatch causes alarms.</li>
+<li>Not leaving lead-in distance (Z3. before the thread start) — the spindle needs time to sync.</li>
+</ul>
+
+<section class="cp-practice"><h2>Practice</h2>
+<p><strong>1.</strong> M10&times;1.5: what is K, and what is the minor diameter?</p>
+<details><summary>Show answer</summary><p>K &asymp; 0.613 &times; 1.5 = 0.92 mm. Minor diameter = 10 &minus; 2&times;0.92 = 8.16 mm.</p></details>
+<p><strong>2.</strong> In G76 X8.16 Z-20 K0.92 D0.2 F1.5, what does D0.2 mean?</p>
+<details><summary>Show answer</summary><p>The first pass cuts 0.2 mm deeper radially than the starting diameter. Subsequent passes are distributed by the cycle until total K0.92 is reached.</p></details>
+<p><strong>3.</strong> Why must G97 (not G96) be active during threading?</p>
+<details><summary>Show answer</summary><p>Threading needs constant RPM so F (mm/rev = lead) produces the correct pitch. G96 would change RPM as diameter changes, ruining thread form.</p></details>
+</section>
+
+<section class="cp-sources"><h2>Sources</h2><ul>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G76.html">Haas G76 — Threading Cycle (Lathe)</a></li>
+<li>Sandvik Coromant — Threading Formulas (thread height = 0.613 &times; pitch for 60&deg; metric).</li>
+</ul></section>
+
+<nav class="cp-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cnc-programming/21-threading-basics/">&larr; Threading Basics</a>
+<a href="/cnc-manufacturing-engineering/cnc-programming/24-program-verification/">Program Verification &rarr;</a>
+</nav>
 </main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

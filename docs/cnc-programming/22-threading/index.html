@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Threading Overview — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Threads on a lathe: pitch, lead, major/minor diameter, and why constant RPM matters.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/22-threading/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body class="cnc-programming">
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="article">
+<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Threading Overview</h1>
+<p class="lead">Single-point threading cuts a helical thread by synchronizing spindle rotation with tool feed. The feed per revolution must equal the thread pitch.</p>
+<div class="callout"><strong>What you will learn:</strong><ul>
+<li>Pitch vs lead, major vs minor diameter</li>
+<li>Why threading requires G97 (constant RPM)</li>
+<li>Multiple passes with decreasing depth</li>
+<li>Lead-in and lead-out distances</li>
+</ul></div>
+<h2>Thread Terminology</h2>
+<p><strong>Pitch</strong> = distance between adjacent threads (mm). <strong>Lead</strong> = distance the tool advances in one spindle revolution (pitch for single-start threads). <strong>Major diameter</strong> = outer diameter. <strong>Minor diameter</strong> = root diameter.</p>
+<h2>Why Constant RPM</h2>
+<p>The tool feed in mm/rev must equal the pitch. If spindle speed varies (G96), the lead changes and the thread is ruined. Threading always uses <strong>G97</strong> fixed RPM.</p>
+<h2>Multiple Passes</h2>
+<p>A thread cannot be cut in one pass. The cycle takes successive radial cuts with decreasing depth, using the full thread depth K and first-pass depth D. See <a href="/cnc-manufacturing-engineering/cnc-programming/22-lathe-threading/">Lathe Threading Cycles</a> for the G76 parameter details.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Confusing pitch (mm/rev) with feed rate (mm/min).</li>
+<li>Not leaving lead-in distance — the spindle needs to sync before the thread starts.</li>
+<li>Cutting the full depth in one pass — tool breaks.</li></ul>
+<section class="cp-practice"><h2>Practice</h2>
+<p><strong>1.</strong> M10&times;1.5: what is the feed in mm/rev?</p>
+<details><summary>Show answer</summary><p>F1.5 mm/rev (the pitch, for single-start).</p></details>
+<p><strong>2.</strong> Why must threading use G97?</p>
+<details><summary>Show answer</summary><p>The feed per revolution must equal pitch. G97 keeps RPM constant; G96 would vary it and ruin the thread form.</p></details>
+</section>
+<section class="cp-sources"><h2>Sources</h2><ul>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/22-lathe-threading/">Lathe Threading Cycles (G76)</a></li>
+</ul></section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring">&larr; Grooving & Parting</a><a href="/cnc-manufacturing-engineering/cnc-programming/23-program-safety">Program Safety &rarr;</a></nav>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
