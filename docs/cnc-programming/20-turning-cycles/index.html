@@ -1,55 +1,28 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Turning Cycles (G70/G71) — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="G71 roughing cycle and G70 finishing cycle: how lathes automate repeated passes.">
-<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
-<main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Turning Cycles (G70/G71)</h1>
-<p class="lead">G71 roughs a contour automatically with multiple Z passes; G70 finishes it in one clean pass. You define the rough stock, the final contour, and the depth per pass.</p>
-<div class="callout"><strong>What you will learn:</strong><ul>
-<li>G71 roughing cycle: automatic multiple passes</li>
-<li>G70 finishing cycle: one pass at finish size</li>
-<li>P/Q contour definition block</li>
-<li>Monotonic X/Z requirement for G71</li>
-</ul></div>
-<h2>G71 Roughing</h2>
-<p>G71 takes a starting diameter and automatically removes stock in layers along Z until the contour near-net shape is reached. You define: depth of cut, stock allowance (X and Z), and the contour between P (start) and Q (end) labels. The controller generates all the roughing passes.</p>
-<h2>G70 Finishing</h2>
-<p>G70 runs the contour between P and Q one time at finish size, after G71 has rough-removed most of the stock.</p>
-<h2>Important Constraint</h2>
-<p>G71 comes in two forms on Haas/FANUC controls:</p>
-<ul>
-<li><strong>Type I (standard):</strong> Both X and Z must be monotonic within the P-Q contour — X moves consistently outward or inward, and Z does not reverse. Stepped shafts, tapers, and straight OD turning work here. A contour that backs up in X causes an alarm.</li>
-<li><strong>Type II (Haas/FANUC option):</strong> Z must still be monotonic (progress in one direction), but X may reverse — allowing simple recesses, grooves, and profile changes within the roughing contour. Type II is selected by the parameter setting or by specifying the P/Q blocks differently; confirm availability in your controller manual.</li>
-</ul>
-<p>Always test with a dry run before committing. If Type II is not enabled, a contour that reverses X will alarm or cut incorrectly.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Roughing & Finishing Cycles — CNC Programming</title><meta name="description" content="G71 roughing cycle, G70 finishing cycle, P/Q contour blocks, depth of cut, finish allowance."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/"><link rel="stylesheet" href="../assets/css/site.css"><link rel="stylesheet" href="../assets/css/article.css"><link rel="stylesheet" href="../assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav"><a href="/cnc-manufacturing-engineering/">Home</a><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a><a href="/cnc-manufacturing-engineering/about/">About</a></nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Roughing & Finishing Cycles</h1><p class="lead">G71 and G70 automate the bulk of lathe work. This page explains the roughing cycle, the P-Q contour definition, and finish allowance.</p><h2>Concept</h2>
+<p><strong>G71</strong> is the roughing cycle: it repeatedly cuts the stock down to the near-finished contour, leaving a finish allowance. <strong>G70</strong> is the finishing cycle: it takes one clean pass along the P-Q contour at finishing speed and feed.</p>
+<p>The P-Q blocks define the finished shape. G71 reads those blocks and automatically generates roughing passes.</p>
+<h2>Why It Matters</h2>
+<p>Writing roughing passes by hand for a 40 mm deep cut with 1 mm per pass means 40 passes — tedious and error-prone. G71 does it automatically. Getting the P-Q contour wrong (e.g., wrong X direction, or adding a groove) causes G71 to alarm or cut the wrong shape.</p>
+<h2>How It Works</h2>
+<h3>Haas Single-Line G71</h3>
+<pre class="cp-code"><code>G71 P10 Q20 D1.0 U0.4 W0.1 F0.2</code></pre>
+<ul><li><strong>D1.0</strong> = depth per pass (radial)</li><li><strong>U0.4</strong> = finish allowance on diameter</li><li><strong>W0.1</strong> = finish allowance on Z</li><li><strong>P10 Q20</strong> = contour block range</li></ul>
+<h3>P-Q Contour Rules</h3>
+<ul><li>First block must be X-only (no Z)</li><li>X must move toward the part monotonically (Type I)</li><li>No grooves or undercuts in the contour</li></ul>
+<h2>Example</h2>
+<pre class="cp-code"><code>G71 P10 Q20 D1.0 U0.4 W0.1 F0.2
+N10 G00 X30.
+G01 Z0. F0.1
+Z-20.
+X36.
+Z-40.
+N20 X42.
+G70 P10 Q20</code></pre>
+<p>Rough leaves O30.4 and O36.4 (U0.4 diameter). G70 at S1200 F0.10 cuts to O30 and O36.</p>
 <h2>Common Mistakes</h2>
-<ul><li>Assuming all G71 contours require monotonic X — Type I does; Type II allows X reversal for simple recesses. Confirm which type your controller supports.</li>
-<li>Forgetting to leave stock for G70 — G71 leaves a finish allowance.</li>
-<li>Omitting the depth-of-cut parameter — behavior is controller-specific; do not assume it defaults to a single pass.</li></ul>
-<section class="cp-practice"><h2>Practice</h2>
-<p><strong>1.</strong> What is the difference between G71 and G70?</p>
-<details><summary>Show answer</summary><p>G71 roughs the contour in multiple passes leaving finish stock. G70 finishes the contour in one clean pass at final size.</p></details>
-<p><strong>2.</strong> Why must the G71 contour be monotonic?</p>
-<details><summary>Show answer</summary><p>Z must always progress in one direction for both Type I and Type II. Type I additionally requires X to be monotonic; Type II allows X to reverse for simple recesses if your controller supports it. A contour that reverses Z, or reverses X on a Type I machine, confuses the automatic pass generation.</p></details>
-</section>
-<section class="cp-sources"><h2>Sources</h2><ul>
-<li>Haas Lathe Operator's Manual — G71/G70 turning cycles.</li>
-</ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals">&larr; Turning Fundamentals</a><a href="/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring">Grooving & Parting &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<ul><li><strong>Grooves in G71 contour</strong> — Type I G71 cannot handle grooves. Use G73 or manual.</li><li><strong>First P block has Z</strong> — the first block after P must be X-only.</li><li><strong>Forgetting G70</strong> — G71 leaves stock; G70 is needed for final dimensions.</li></ul>
+<h2>Practice</h2>
+<p><strong>1.</strong> U0.4 on diameter. Radial finish allowance?</p><details><summary>Ans</summary><p>0.2 mm radial.</p></details>
+<p><strong>2.</strong> Why no grooves in G71 contour?</p><details><summary>Ans</summary><p>Type I G71 assumes monotonic X. Grooves require G73 (pattern repeating) or manual programming.</p></details>
+<p><strong>3.</strong> What does G70 do?</p><details><summary>Ans</summary><p>Finishing cycle: one clean pass along the P-Q contour at finish speed/feed.</p></details>
+<nav class="cp-nav-bottom"><a href="../19-turning-fundamentals/">&larr; Turning Basics</a><a href="../21-grooving-parting-boring/">Grooving &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>
