@@ -103,10 +103,41 @@
 
 <p><strong>Coverage check:</strong> Stepover 4 mm is less than the 10 mm tool diameter, giving 6 mm overlap between adjacent rows. The four wall-cleanup passes ensure side edges and corners are fully swept. Target pocket area = 40&times;30 &minus; (4&minus;&pi;)&times;5&sup2; &asymp; 1178.5 mm&sup2;. At 4 mm depth, theoretical volume &asymp; 4714 mm&sup3;.</p>
 
+<svg viewBox="0 0 400 250" style="width:100%;max-width:400px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="100" y="20" font-size="12" font-weight="bold" fill="#333">Raster Tool Path (top view)</text>
+  <rect x="80" y="50" width="240" height="150" fill="none" stroke="#54a0ff" stroke-width="1.5" rx="25"/>
+  <line x1="80" y1="60" x2="320" y2="60" stroke="#e67e22" stroke-width="1.5"/>
+  <line x1="320" y1="74" x2="80" y2="74" stroke="#e67e22" stroke-width="1.5"/>
+  <line x1="80" y1="88" x2="320" y2="88" stroke="#e67e22" stroke-width="1.5"/>
+  <line x1="320" y1="102" x2="80" y2="102" stroke="#e67e22" stroke-width="1.5"/>
+  <line x1="80" y1="116" x2="320" y2="116" stroke="#e67e22" stroke-width="1.5"/>
+  <line x1="320" y1="130" x2="80" y2="130" stroke="#e67e22" stroke-width="1.5"/>
+  <line x1="80" y1="144" x2="320" y2="144" stroke="#e67e22" stroke-width="1.5"/>
+  <line x1="320" y1="158" x2="80" y2="158" stroke="#e67e22" stroke-width="1.5"/>
+  <line x1="80" y1="172" x2="320" y2="172" stroke="#e67e22" stroke-width="1.5"/>
+  <line x1="320" y1="186" x2="80" y2="186" stroke="#e67e22" stroke-width="1.5"/>
+  <rect x="100" y="60" width="200" height="126" fill="none" stroke="#27ae60" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="100" y="220" font-size="10" fill="#666">Stepover 4mm, tool Ø10 → 6mm overlap between rows</text>
+</svg>
+
 <h3>Drilling: Drill-Tip Breakthrough</h3>
 <p>A &Oslash;6 drill with 118&deg; point angle has a conical tip height:</p>
 <p style="text-align:center;"><strong>h = (6/2) / tan(118&deg;/2) = 3 / tan(59&deg;) &asymp; 1.8026 mm</strong></p>
 <p>Full-diameter breakthrough requires the drill tip to reach Z &le; &minus;(12 + 1.8026) = &minus;13.8026. We choose a teaching target of <strong>Z&minus;14.5</strong>, giving 0.697 mm extra breakthrough. The clearance channel below runs to Z&minus;18, leaving 3.5 mm geometric gap. Drilling uses <strong>G98</strong> (retract to initial Z50 between holes).</p>
+
+<svg viewBox="0 0 400 200" style="width:100%;max-width:400px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="80" y="20" font-size="12" font-weight="bold" fill="#333">Drill Tip Breakthrough (side view)</text>
+  <rect x="100" y="50" width="200" height="60" fill="#c8d6e5" stroke="#999"/>
+  <text x="170" y="85" font-size="10" fill="#333">12 mm plate</text>
+  <polygon points="190,30 210,30 200,80" fill="#e74c3c" opacity="0.7"/>
+  <text x="220" y="55" font-size="10" fill="#e74c3c">Ø6 drill</text>
+  <line x1="320" y1="50" x2="320" y2="110" stroke="#333" stroke-width="1"/>
+  <text x="325" y="85" font-size="9" fill="#333">12mm</text>
+  <line x1="340" y1="50" x2="340" y2="128" stroke="#e74c3c" stroke-width="1"/>
+  <text x="345" y="95" font-size="9" fill="#e74c3c">Z-14.5</text>
+  <text x="120" y="130" font-size="9" fill="#666">Tip h=1.8mm below plate bottom</text>
+  <text x="120" y="145" font-size="9" fill="#666">Extra breakthrough 0.7mm</text>
+</svg>
 
 <h2>Example: Complete Program</h2>
 <pre class="cp-code"><code>O0028 (POCKETED PLATE PROJECT)
