@@ -1,45 +1,65 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Planes, Units, and Numeric Conventions — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="G17/G18/G19 plane selection, G20/G21 units, and why a 1 mm mistake in inches is 25.4 mm.">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planes, Units and Numeric Conventions — CNC Programming</title>
+<meta name="description" content="G17/G18/G19 plane selection, G20/G21 units, and decimal point conventions in CNC programming.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/07-plane-units/">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
+<link rel="stylesheet" href="../../assets/css/site.css">
+<link rel="stylesheet" href="../../assets/css/article.css">
+<link rel="stylesheet" href="../../assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <a href="/cnc-manufacturing-engineering/">Home</a>
+  <a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a>
+  <a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a>
+  <a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a>
+  <a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a>
+  <a href="/cnc-manufacturing-engineering/about/">About</a>
+</nav>
 <main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Planes, Units, and Numeric Conventions</h1>
-<p class="lead">Plane selection determines how arcs and compensation work. Units determine whether X10 is 10 mm or 10 inches.</p>
-<div class="cp-meta"><span><strong>Level:</strong> Beginner</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
-<div class="callout"><strong>What you will learn:</strong><ul><li>G17 XY, G18 XZ, G19 YZ planes</li><li>G20 inch vs G21 mm</li><li>How units affect offsets</li><li>Plane direction for G02/G03</li></ul></div>
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Planes, Units & Numeric Conventions</h1>
+<p class="lead">Plane selection and units seem trivial but cause real scrap parts. This page explains G17/G18/G19, G20/G21, and why 100 might mean 100 mm or 1.00 inch.</p>
 <h2>Concept</h2>
-<p>A <strong>plane</strong> defines which two axes are active for circular interpolation and cutter compensation. <strong>G17</strong> = XY plane (mill, most common). <strong>G18</strong> = XZ plane (lathe turning). <strong>G19</strong> = YZ plane. The plane determines the viewing direction: looking from the positive normal axis toward the origin, G02 is clockwise and G03 is counterclockwise.</p>
-<p><strong>G20</strong> = inch units, <strong>G21</strong> = metric (mm). This affects coordinates, feeds, and offsets.</p>
+<p><strong>G17</strong> selects the XY plane (mill default). <strong>G18</strong> selects XZ plane (lathe default). <strong>G19</strong> selects YZ plane. Plane selection matters for circular interpolation: I/J vectors and G02/G03 direction are interpreted in the selected plane.</p>
+<p><strong>G21</strong> = metric (mm). <strong>G20</strong> = inch. Everything in the program — coordinates, feeds, offsets — follows the active unit mode. Mixing mm and inch is catastrophic: a program written in mm run in inch mode cuts everything 25.4x smaller.</p>
 <h2>Why It Matters</h2>
-<p>Programming in G21 (mm) when the machine is in G20 (inch) makes every move 25.4&times; larger than intended — X10 becomes 254 mm. Changing units also means your stored work offsets and tool length offsets may need verification; they do not automatically convert.</p>
-<h2>How</h2>
-<h3>Plane selection</h3>
-<p>On a mill, G17 (XY) is the default. On a lathe, G18 (XZ) is used for turning. The plane must be set before circular interpolation — G02/G03 direction depends on it.</p>
-<h3>Unit conversion</h3>
-<p>1 inch = 25.4 mm. 0.25 inch = 6.35 mm. F10 in/min = 254 mm/min. Always know which unit your program uses.</p>
+<p>A G20/G21 mismatch can produce parts that are 25.4 times too small or too large. Plane errors cause arcs to be in the wrong plane — the tool makes a circular move in XZ instead of XY, producing a groove instead of a circle. These errors are not caught by syntax checkers; they only show up when the part is measured.</p>
+<h2>How It Works</h2>
+<h3>Plane Selection</h3>
+<ul>
+<li><strong>G17 XY</strong> — milling, drilling, pocketing</li>
+<li><strong>G18 XZ</strong> — lathe turning, facing</li>
+<li><strong>G19 YZ</strong> — rare, typically special applications</li>
+</ul>
+<h3>Units</h3>
+<p>G21 mm: X25.4 means 25.4 mm. G20 inch: X1.0 means 1.0 inch. Always confirm units before running a program. On Haas, the default is set by a machine parameter; the G-code should still explicitly command G20 or G21.</p>
+<h3>Decimal Point</h3>
+<p>Most modern controllers accept 100. = 100.0 and 100 = 100.0. But some older systems interpret 100 without a decimal as 0.100 inch (or 0.01 mm). Always use decimal points in programs.</p>
 <h2>Example</h2>
-<p>0.5 inch = 12.7 mm. F12 in/min = 304.8 mm/min. If you accidentally program F12 thinking mm/min instead of in/min, the feed is 25.4&times; too fast.</p>
+<p>Program in mm (G21): drill at X25.4 Y12.7. If you forget G21 and the machine defaults to G20 (inch), X25.4 means 25.4 inches = 645 mm — far outside the machine envelope. Always explicitly set units.</p>
 <h2>Common Mistakes</h2>
-<ul><li>Changing G20/G21 without verifying stored offsets.</li>
-<li>Using G18 arc direction on a G17 program.</li>
-<li>Mixing inch and mm values in one program.</li></ul>
-<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> 12.7 mm = how many inches?</p><details><summary>Show answer</summary><p>0.5 inch (12.7 / 25.4 = 0.5).</p></details><p><strong>2.</strong> Why does G17 matter for G02/G03?</p><details><summary>Show answer</summary><p>G17 sets the viewing direction (from +Z). Without it, the controller does not know which plane the arc lies in.</p></details></section>
-<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Mill Operator's Manual — G17/G20/G21 (haascnc.com, retrieved 2026-09-24).</li></ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/03-coordinate-systems/">&larr; Coordinate Systems</a><a href="/cnc-manufacturing-engineering/cnc-programming/04-program-structure/">Program Structure &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<ul>
+<li><strong>Omitting G21/G20</strong> — relying on the machine default is dangerous; always set it explicitly.</li>
+<li><strong>Using G18 on a mill</strong> — G18 is for lathes; on a mill, circular moves will be in the wrong plane.</li>
+<li><strong>Writing 100 without decimal</strong> — ambiguous on older controllers; always write 100. or 100.0.</li>
+</ul>
+<h2>Practice</h2>
+<p><strong>1.</strong> You program X10.5 in G21. What is the actual position in mm?</p>
+<details><summary>Show answer</summary><p>10.5 mm.</p></details>
+<p><strong>2.</strong> Same number X10.5 in G20. What is that in mm?</p>
+<details><summary>Show answer</summary><p>10.5 inches = 266.7 mm. This is why unit mismatch is catastrophic.</p></details>
+<p><strong>3.</strong> Which plane should a mill use for pocketing?</p>
+<details><summary>Show answer</summary><p>G17 (XY plane). G18 would make circular moves in XZ.</p></details>
+
+<nav class="cp-nav-bottom">
+<a href="../06-modal-codes/">&larr; Modal Codes</a>
+<a href="../08-programming-math/">Programming Math &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

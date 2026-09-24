@@ -1,48 +1,69 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Modal State and Program Execution — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="Modal codes persist until canceled. Understanding current machine state prevents half-understood programs.">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modal State and Execution — CNC Programming</title>
+<meta name="description" content="What modal means, modal groups, code persistence, and why one G01 affects every subsequent line.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/06-modal-codes/">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
+<link rel="stylesheet" href="../../assets/css/site.css">
+<link rel="stylesheet" href="../../assets/css/article.css">
+<link rel="stylesheet" href="../../assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <a href="/cnc-manufacturing-engineering/">Home</a>
+  <a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a>
+  <a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a>
+  <a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a>
+  <a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a>
+  <a href="/cnc-manufacturing-engineering/about/">About</a>
+</nav>
 <main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
-<h1>Modal State and Program Execution</h1>
-<p class="lead">A line that says X20 means different things depending on what came before. Modal state is invisible but critical.</p>
-<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
-<div class="callout"><strong>What you will learn:</strong><ul><li>What modal means and why it matters</li><li>Modal groups and conflicts</li><li>How subprograms inherit state</li><li>Tracking state through a program</li></ul></div>
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Modal State and Code Persistence</h1>
+<p class="lead">Modal codes are one of the most important and least understood concepts in G-code. This page explains what modal means and how it affects program execution.</p>
 <h2>Concept</h2>
-<p>A <strong>modal</strong> G-code stays active after its block. <strong>G01</strong> is modal: once set, every following X/Y block is also G01 until G00, G02, or G03 replaces it. <strong>Non-modal</strong> codes (like G04 dwell) only affect their one block.</p>
+<p>A <strong>modal</strong> code stays active after it is commanded. Once G01 is on, every motion block remains G01 until G00, G02, or G03 replaces it. A <strong>non-modal</strong> code (like G53 or G04) is active for one block only.</p>
+<p>Modal codes are organized into <strong>groups</strong>. Within a group, only one code can be active. Motion codes (G00/G01/G02/G03) are one group. Plane selection (G17/G18/G19) is another. Units (G20/G21) is another. Setting a new code in the same group cancels the previous one.</p>
 <h2>Why It Matters</h2>
-<p>Writing <code>X10 F100</code> after G01 means "feed to X10." Writing it after G00 means "rapid to X10." The same coordinates, completely different motion. You must know the modal state at every point in the program.</p>
-<h2>How</h2>
-<h3>State example</h3>
-<pre class="cp-code"><code>G90 G01 X10 F100  <span class="cp-comment">(feed to X10 at 100)</span>
-X20               <span class="cp-comment">(still G01 F100 → feed to X20)</span>
-G91 X5            <span class="cp-comment">(incremental: move +5 → X25)</span>
-X5                <span class="cp-comment">(still G91: move +5 → X30)</span></code></pre>
-<p>Starting from X0: X10, X20, X25, X30.</p>
-<h3>Subprograms inherit state</h3>
-<p>If the main program calls a subprogram in G90, the subprogram starts in G90 unless it changes it. Always reset modes explicitly in subprograms.</p>
+<p>Missing one line — like forgetting G80 after a drilling cycle — means the cycle stays active on the next hole. This is how programs drill holes at unexpected positions. Modal state errors are silent: the code looks fine, but the machine executes a different mode than you intended.</p>
+<h2>How It Works</h2>
+<h3>Common Modal Groups</h3>
+<table class="data-table">
+<tr><th>Group</th><th>Codes</th><th>Default</th></tr>
+<tr><td>Motion</td><td>G00, G01, G02, G03</td><td>G00 at startup</td></tr>
+<tr><td>Plane</td><td>G17, G18, G19</td><td>G17</td></tr>
+<tr><td>Units</td><td>G20, G21</td><td>G21 (mm)</td></tr>
+<tr><td>Distance</td><td>G90, G91</td><td>G90</td></tr>
+<tr><td>Cycle</td><td>G80, G81, G82, G83, G84, G85</td><td>G80</td></tr>
+</table>
 <h2>Example</h2>
-<p>G81 drilling cycle is modal: once active, every X/Y block drills. G80 cancels it. Forgetting G80 means your next rapid move accidentally drills a hole.</p>
+<pre class="cp-code"><code>G01 X10 F200
+X50        (still G01, still F200)
+Y30        (still G01, still F200)
+G00 X0 Y0  (now rapid)
+</code></pre>
+<p>Lines 2 and 3 inherit G01 and F200. If the second line had been intended as rapid, you must explicitly write G00.</p>
 <h2>Common Mistakes</h2>
-<ul><li>Only setting F once and assuming it persists across mode changes — it does, but check.</li>
-<li>Restarting mid-program and losing modal state (see Lesson 23).</li>
-<li>Assuming M30 resets everything to defaults — controller defaults vary by machine.</li></ul>
-<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> From X20 with G91 accidentally left on, you write X30. Where does the tool go?</p><details><summary>Show answer</summary><p>G91 is incremental: X20 + 30 = X50, not X30. Always verify G90/G91 state.</p></details><p><strong>2.</strong> Why is G80 needed after drilling?</p><details><summary>Show answer</summary><p>G81 is modal; without G80, the next X/Y move drills. Always cancel cycles explicitly.</p></details></section>
-<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Mill Operator's Manual — Modal groups (haascnc.com, retrieved 2026-09-24).</li></ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/05-gcode-fundamentals/">&larr; G-Code Basics</a><a href="/cnc-manufacturing-engineering/cnc-programming/09-mcode-fundamentals/">M-Codes &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<ul>
+<li><strong>Forgetting G80</strong> after drilling — the cycle continues on the next X/Y move.</li>
+<li><strong>Assuming G01 resets each line</strong> — it does not. Modal persists.</li>
+<li><strong>Mixing G90/G91 without tracking</strong> — switching modes mid-program without resetting causes coordinate errors.</li>
+</ul>
+<h2>Practice</h2>
+<p><strong>1.</strong> After G81 R2. Z-15. F100, you write X30 Y20. What happens?</p>
+<details><summary>Show answer</summary><p>The machine moves to (30,20) and drills another hole at R2 Z-15 F100. G81 is modal. You need G80 to cancel.</p></details>
+<p><strong>2.</strong> What cancels G41/G42?</p>
+<details><summary>Show answer</summary><p>G40 cancels cutter compensation. It must be explicitly programmed.</p></details>
+<p><strong>3.</strong> Why is the startup block G21 G17 G90 G40 G49 G80 important?</p>
+<details><summary>Show answer</summary><p>It resets all modal groups to known defaults, preventing leftover state from a previous program.</p></details>
+
+<nav class="cp-nav-bottom">
+<a href="../05-gcode-fundamentals/">&larr; G-Code</a>
+<a href="../07-plane-units/">Planes & Units &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

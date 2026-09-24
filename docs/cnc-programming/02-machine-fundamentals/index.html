@@ -1,61 +1,81 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Machine Fundamentals for Programmers — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="Machine axes, spindle, tool change, reference position, and why X20 means different things on a mill vs lathe.">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machine Fundamentals for Programmers — CNC Programming</title>
+<meta name="description" content="CNC machine axes, spindle, turret, tool magazine, machine zero vs work zero, and why the same X coordinate means different things on a mill vs lathe.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/02-machine-fundamentals/">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
+<link rel="stylesheet" href="../../assets/css/site.css">
+<link rel="stylesheet" href="../../assets/css/article.css">
+<link rel="stylesheet" href="../../assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <a href="/cnc-manufacturing-engineering/">Home</a>
+  <a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a>
+  <a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a>
+  <a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a>
+  <a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a>
+  <a href="/cnc-manufacturing-engineering/about/">About</a>
+</nav>
 <main class="article">
-<a class="cp-back" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Machine Fundamentals for Programmers</h1>
-<p class="lead">Before writing code, you must know what the machine physically is: what rotates, what moves, and where the reference points are.</p>
-<div class="cp-meta"><span><strong>Level:</strong> Beginner</span><span><strong>Machine:</strong> 3-axis VMC and 2-axis lathe</span></div>
-<div class="callout"><strong>What you will learn:</strong><ul><li>Mill vs lathe: what rotates</li><li>Linear and rotary axes</li><li>Machine home vs work zero</li><li>Tool changer and envelope</li></ul></div>
-<figure class="cp-figure"><svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
-<line x1="40" y1="200" x2="290" y2="200" stroke="#17242f" stroke-width="1.5" marker-end="url(#mx)"/>
-<line x1="40" y1="200" x2="40" y2="20" stroke="#17242f" stroke-width="1.5" marker-end="url(#my)"/>
-<line x1="40" y1="200" x2="20" y2="220" stroke="#5c6872" stroke-width="1.2" stroke-dasharray="4" marker-end="url(#mz)"/>
-<defs><marker id="mx" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#17242f"/></marker>
-<marker id="my" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#17242f"/></marker>
-<marker id="mz" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6872"/></marker></defs>
-<text x="285" y="218" font-size="12" fill="#17242f">X+</text>
-<text x="25" y="25" font-size="12" fill="#17242f">Y+</text>
-<text x="5" y="230" font-size="11" fill="#5c6872">Z+ (up)</text>
-<rect x="80" y="130" width="100" height="50" fill="none" stroke="#0b766e" stroke-width="1.5"/>
-<text x="95" y="160" font-size="10" fill="#0b766e">Workpiece</text>
-<circle cx="130" cy="155" r="3" fill="#e07a3f"/>
-<text x="138" y="152" font-size="10" fill="#e07a3f">G54 zero</text>
-<text x="60" y="235" font-size="9" fill="#5c6872">Schematic, not to scale</text></svg><figcaption>Vertical mill axes: X and Y move the table, Z moves the spindle up and down. Work zero is set by the operator.</figcaption></figure>
+<p class="lead">Before writing code, you need to know what the machine actually moves. This page covers axes, spindle, turret, tool magazine, and the critical difference between machine zero and work zero.</p>
+
 <h2>Concept</h2>
-<p>A <strong>vertical machining center (VMC)</strong>: the spindle holds the tool and rotates it; the table moves X and Y. A <strong>CNC lathe</strong>: the chuck holds the workpiece and rotates it; the turret moves the tool in X (radial) and Z (along the part). This distinction is fundamental: on a mill the tool spins, on a lathe the part spins.</p>
-<p><strong>Machine axes</strong> follow the right-hand rule: X, Y, Z are linear; A, B, C are rotary around X, Y, Z respectively. <strong>Machine home</strong> (reference position) is a fixed physical location the machine finds on startup. <strong>Work zero</strong> (program zero) is where you tell the machine the part origin is — set in a work offset like G54.</p>
+<p>Every CNC machine has a set of linear axes (X, Y, Z) and optionally rotary axes (A, B, C). The machine moves the tool relative to the workpiece along these axes. On a <strong>mill</strong>, the tool rotates in the spindle and moves in X, Y, and Z. On a <strong>lathe</strong>, the workpiece rotates in the spindle and the tool moves in X (radial) and Z (axial). Understanding which one rotates — tool or workpiece — explains most of the differences between mill and lathe programming.</p>
+<p><strong>Machine zero</strong> (machine home, reference position) is a fixed physical position established when the machine is turned on and homed. <strong>Work zero</strong> (program zero, G54 origin) is where you choose the part origin — typically a corner or center of the workpiece. The machine always knows where it is relative to machine zero; the work offset tells it where the part is.</p>
+
 <h2>Why It Matters</h2>
-<p>The same coordinate X20 means different things. On a mill, X20 means the table (and workpiece) has moved so the tool tip is 20 mm in +X from work zero. On a lathe in <strong>diameter programming</strong>, X20 means the tool tip is at a position corresponding to a 20 mm diameter — the actual radial movement is only 10 mm from center. Writing X coordinates without knowing whether you are on a mill or lathe, and whether the lathe uses diameter or radius mode, leads to crashes.</p>
-<h2>How</h2>
-<h3>Mill axes</h3>
-<ul><li><strong>X</strong> — table left/right.</li><li><strong>Y</strong> — table in/out.</li><li><strong>Z</strong> — spindle up/down. Z+ is away from the table (tool up).</li></ul>
-<h3>Lathe axes</h3>
-<ul><li><strong>X</strong> — radial. In diameter programming, the commanded value is the workpiece diameter, not the distance from center.</li><li><strong>Z</strong> — along the spindle. Z0 is usually the part face; Z− goes into the workpiece.</li><li><strong>C</strong> (optional) — spindle rotation for live tooling or positioning.</li></ul>
-<h3>Tool changer</h3>
-<p>A VMC has a tool magazine and automatic tool changer (ATC). The program calls T01 M06; the machine swaps tools. A lathe has a turret that indexes tools. The tool number in the program must match the physical slot.</p>
+<p>The same X20 means different things on different machines. On a mill, X20 moves the tool 20 mm in the X direction. On a lathe in diameter mode, X20 means the tool is at a 20 mm diameter — the actual radial movement from X40 to X20 is only 10 mm. If you treat lathe X as a linear coordinate like a mill, you will cut diameters wrong by a factor of two.</p>
+
+<h2>How It Works</h2>
+<h3>Mill Axes</h3>
+<ul>
+<li><strong>X</strong> — left/right table movement</li>
+<li><strong>Y</strong> — in/out table movement</li>
+<li><strong>Z</strong> — spindle up/down</li>
+<li><strong>A/B/C</strong> — rotary axes (if equipped)</li>
+<li><strong>Spindle</strong> — holds the rotating tool</li>
+<li><strong>Tool magazine / ATC</strong> — stores tools, changes them with M06</li>
+</ul>
+<h3>Lathe Axes</h3>
+<ul>
+<li><strong>X</strong> — radial movement (programmed in diameter)</li>
+<li><strong>Z</strong> — axial movement along the spindle</li>
+<li><strong>C</strong> — spindle orientation / rotary axis (on sub-spindle or live-tool machines)</li>
+<li><strong>Turret</strong> — holds multiple tools, indexes with T code</li>
+<li><strong>Chuck</strong> — holds the rotating workpiece</li>
+</ul>
+<p>Both machines have a reference position (machine zero) that they return to on power-up. The work offset (G54) shifts the coordinate system from machine zero to the part. For machine architecture details beyond programming, see <a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a>.</p>
+
 <h2>Example</h2>
-<p><strong>Mill:</strong> tool moves from X10 to X30 — the table moves 20 mm. <strong>Lathe (diameter mode):</strong> tool moves from X40 to X30 — the tool moves radially 5 mm (because diameter changes from &Oslash;40 to &Oslash;30, radius changes from 20 to 15). This factor-of-two difference catches every beginner.</p>
-<p>Machine home is not work zero. On startup the machine goes home to establish its reference; then you set G54 to tell it where the part is. These are two different coordinate systems (Lesson 03).</p>
+<p><strong>Mill:</strong> Tool moves from X10 to X30. Actual travel = 20 mm.</p>
+<p><strong>Lathe (diameter mode):</strong> Tool moves from X40 to X30. Actual radial travel = (40 &minus; 30) / 2 = 5 mm, because X is programmed as diameter.</p>
+<p>This is why lathe programmers think in diameters: X30 means "cut to a 30 mm diameter," not "move 30 mm radially."</p>
+
 <h2>Common Mistakes</h2>
-<ul><li>Confusing machine home with work zero — they are never the same point.</li><li>Ignoring the tool holder, chuck, or vise envelope — a safe X,Y path can still collide with the fixture.</li><li>Assuming X+ always means "right" from the operator's viewpoint — it depends on machine orientation. Check the machine's axis labels.</li><li>Forgetting that on a lathe, X values are diameters.</li></ul>
-<section class="cp-practice"><h2>Practice</h2><p><strong>1.</strong> On a lathe in diameter mode, the tool commands X50 then X46. How far does it move radially?</p><details><summary>Show answer</summary><p>Diameter changes from 50 to 46 mm, so radius changes from 25 to 23 mm — a radial movement of 2 mm, not 4 mm.</p></details><p><strong>2.</strong> Why does a safe X,Y coordinate not guarantee no collision?</p><details><summary>Show answer</summary><p>The tool holder, spindle nose, and fixture all occupy space. The coordinate only positions the tool tip; the rest of the tool may hit the vise.</p></details></section>
-<section class="cp-sources"><h2>Sources and Applicability</h2><ul><li>Haas Mill/Lathe Operator's Manuals — Axis descriptions (haascnc.com, retrieved 2026-09-24).</li><li>Right-hand coordinate system: standard ISO 841.</li></ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/01-getting-started/what-is-cnc-programming/">&larr; What Is CNC?</a><a href="/cnc-manufacturing-engineering/cnc-programming/23-program-safety/">Safe Start &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+<ul>
+<li><strong>Confusing machine zero with work zero</strong> — machine zero is fixed; work zero is where you set the part. They are not the same.</li>
+<li><strong>Ignoring turret/fixture envelope</strong> — the tool tip may be clear of the part while the toolholder or turret collides with the chuck or fixture.</li>
+<li><strong>Judging axis direction from a photo</strong> — always use the right-hand rule and machine documentation, not what the photo looks like.</li>
+</ul>
+
+<h2>Practice</h2>
+<p><strong>1.</strong> On a lathe, the tool moves from X50 to X46. What is the actual radial depth of cut?</p>
+<details><summary>Show answer</summary><p>(50 &minus; 46) / 2 = 2 mm radial depth. X is diameter mode.</p></details>
+<p><strong>2.</strong> Why does the same XYZ coordinate not guarantee the toolholder is clear of the fixture?</p>
+<details><summary>Show answer</summary><p>The coordinate describes the tool tip position. The toolholder, shank, and turret extend beyond the tip and may collide even when the tip is clear. You must consider the full tool assembly envelope.</p></details>
+<p><strong>3.</strong> What happens to work zero when you turn the machine off and back on?</p>
+<details><summary>Show answer</summary><p>The machine re-homes to machine zero. The G54 work offset is stored in the controller's memory and should still be correct — but you should always verify the part position before cutting.</p></details>
+
+<nav class="cp-nav-bottom">
+<a href="../01-getting-started/what-is-cnc-programming/">&larr; What Is CNC?</a>
+<a href="../23-program-safety/">Program Safety &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
