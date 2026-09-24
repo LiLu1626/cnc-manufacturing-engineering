@@ -145,17 +145,17 @@ N20 X42.</code></pre>
   <!-- finish stock boundary: front r=15.2 (y=129.2), rear r=18.2 (y=117.2) -->
   <line x1="400" y1="129.2" x2="300" y2="129.2" stroke="#27ae60" stroke-width="0.8" stroke-dasharray="2,2"/>
   <line x1="300" y1="117.2" x2="200" y2="117.2" stroke="#27ae60" stroke-width="0.8" stroke-dasharray="2,2"/>
-  <!-- front rough passes: r16 (y=126), r17 (y=122) — only Z0→Z-20 -->
-  <line x1="400" y1="126" x2="300" y2="126" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="3,2"/>
-  <line x1="400" y1="122" x2="300" y2="122" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="3,2"/>
-  <!-- rear rough pass: r=19 (y=114) — only Z-20→Z-40 -->
-  <line x1="300" y1="114" x2="200" y2="114" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <!-- front rough passes: r16 (y=126), r17 (y=122) — Z0 to Z-19.9 (W0.1 stock) -->
+  <line x1="400" y1="126" x2="300.5" y2="126" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="400" y1="122" x2="300.5" y2="122" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <!-- rear rough pass: r=19 (y=114) — Z-20 to Z-39.9 -->
+  <line x1="300" y1="114" x2="200.5" y2="114" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="3,2"/>
   <!-- Z markers -->
   <text x="395" y="205" font-size="9" fill="#666">Z0</text>
   <text x="290" y="205" font-size="9" fill="#666">Z-20</text>
   <text x="195" y="205" font-size="9" fill="#666">Z-40</text>
-  <text x="60" y="170" font-size="9" fill="#e67e22">Front rough (r16, r17) stops at shoulder</text>
-  <text x="60" y="182" font-size="9" fill="#e67e22">Rear rough (r19) starts at shoulder</text>
+  <text x="60" y="170" font-size="9" fill="#e67e22">Selected cutting segments (not full G71 simulation)</text>
+  <text x="60" y="182" font-size="9" fill="#e67e22">W0.1 = 0.1mm axial finish stock</text>
 </svg>
 
 <h3>Setup Procedure Summary</h3>

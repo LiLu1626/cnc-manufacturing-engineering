@@ -91,6 +91,36 @@ M30
 %</code></pre>
 <p>Read it top to bottom: startup, tool, spindle, approach, cut, retract, shutdown. Every CNC program follows this skeleton.</p>
 
+<h2>Example: Line-by-Line Trace</h2>
+<p>Take this short program on a Haas mill. We trace what the machine does at each line, tracking modal state:</p>
+<pre class="cp-code"><code>%
+O1001 (DEMO PROGRAM)
+G21 G17 G90 G40 G49 G80
+G54
+T01 M06
+S2000 M03
+G00 X0 Y0
+G43 H01 Z50. M08
+G00 Z2.
+G01 Z-2. F100.
+G01 X50. F300.
+G00 Z50. M09
+M05
+M30
+%</code></pre>
+<table class="data-table">
+<tr><th>Line</th><th>What happens</th><th>State after</th></tr>
+<tr><td>G21 G17 G90...</td><td>Known state: metric, XY, absolute, comp off</td><td>G21/G17/G90/G40/G49/G80 active</td></tr>
+<tr><td>T01 M06</td><td>ATC picks tool 1</td><td>Tool 1 in spindle</td></tr>
+<tr><td>S2000 M03</td><td>Spindle on clockwise at 2000 RPM</td><td>Spindle running</td></tr>
+<tr><td>G00 X0 Y0</td><td>Rapid to XY (0,0) at safe Z</td><td>At X0 Y0 Z50</td></tr>
+<tr><td>G43 H01 Z50.</td><td>Apply tool length offset H01</td><td>Z offset active</td></tr>
+<tr><td>G01 Z-2. F100.</td><td>Feed down to Z-2 at 100 mm/min</td><td>G01 active, F100</td></tr>
+<tr><td>G01 X50. F300.</td><td>Feed to X50 at 300 mm/min</td><td>F300 now modal</td></tr>
+<tr><td>G00 Z50.</td><td>Rapid up to Z50</td><td>G00 active</td></tr>
+<tr><td>M30</td><td>End program, rewind</td><td>Program stops</td></tr>
+</table>
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Treating N numbers as coordinates</strong> — N10 is a label, not a move distance.</li>
@@ -106,6 +136,14 @@ M30
 <details><summary>Show answer</summary><p>Select tool 3 and execute the automatic tool change on a mill. On a lathe, T0303 indexes turret to station 3 and loads offset 3.</p></details>
 <p><strong>3.</strong> Why is the startup block important?</p>
 <details><summary>Show answer</summary><p>It establishes known machine state: metric units, XY plane, absolute mode, compensation off, cycles off. Without it, leftover state from the previous program can cause crashes.</p></details>
+
+<section class="cp-sources">
+<h2>Sources</h2>
+<ul>
+<li>Haas Automation Mill/Lathe Operator Manuals — G-code definitions, modal behavior, machine functions.</li>
+<li>Program examples and speeds/feeds are classroom teaching assumptions; verify against tooling catalogs and machine documentation.</li>
+</ul>
+</section>
 
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/07-plane-units/">&larr; Plane &amp; Units</a><a href="/cnc-manufacturing-engineering/cnc-programming/05-gcode-fundamentals/">G-Code Basics &rarr;</a></nav>
 </main>

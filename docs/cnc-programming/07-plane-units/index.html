@@ -75,15 +75,15 @@
 <p>G21 mm: X25.4 means 25.4 mm. G20 inch: X1.0 means 1.0 inch. Always confirm units before running. On Haas, the default is set by machine parameter; the G-code should still explicitly command G21 (or G20) in the startup block.</p>
 
 <h3>Decimal Point Convention</h3>
-<p>Modern controllers accept both <code>100.</code> and <code>100</code> as 100.0. But older systems may interpret <code>100</code> without a decimal as 0.100 inch (or 0.01 mm). Always write decimal points: <code>X100.</code> not <code>X100</code>. This is a habit that prevents inherited errors.</p>
+<p>On Haas controls, Setting 162 determines whether numbers without a decimal point are treated as if they had one (e.g., <code>X100</code> = 100.0) or scaled down. The safe habit regardless of setting: always write the decimal point — <code>X100.</code> or <code>X100.0</code>. This removes ambiguity when programs are moved between machines or settings.</p>
 
 <h2>Example</h2>
-<p>A program written in mm (G21) drills at X25.4 Y12.7. If you forget G21 and the machine defaults to G20 (inch), X25.4 means 25.4 inches = 645 mm — far outside the machine envelope. The tool tries to move to X645 and hits a limit switch. This is why G21 is always in the startup block.</p>
+<p>A program written in mm (G21) drills at X25.4 Y12.7. If you forget G21 and the machine defaults to G20 (inch), X25.4 means 25.4 inches = 645.16 mm — far outside the typical mill travel. The tool tries to move to that position and hits a limit switch or alarm. Always set G21 explicitly in the startup block.</p>
 
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Omitting G21/G20</strong> — relying on the machine default is dangerous. Always set units explicitly.</li>
-<li><strong>Using G18 on a mill</strong> — G18 is for lathes. On a mill, circular moves will be in the wrong plane.</li>
+<li><strong>Selecting the wrong plane</strong> — if you intend to cut an XY arc but G18 (XZ) is active, the circular move goes in the wrong plane. Mills can intentionally use G18 for XZ arcs, but the plane must match the intended contour.</li>
 <li><strong>Writing 100 without a decimal</strong> — ambiguous on older controllers. Always write 100. or 100.0.</li>
 <li><strong>Changing units mid-program</strong> — G20/G21 should only appear in the startup block, never mid-cut.</li>
 </ul>
@@ -95,6 +95,14 @@
 <details><summary>Show answer</summary><p>10.5 inches = 266.7 mm. This is why unit mismatch is catastrophic.</p></details>
 <p><strong>3.</strong> Which plane should a mill use for pocketing?</p>
 <details><summary>Show answer</summary><p>G17 (XY plane). G18 would make circular moves in XZ, producing arcs in the wrong plane.</p></details>
+
+<section class="cp-sources">
+<h2>Sources</h2>
+<ul>
+<li>Haas Automation Mill/Lathe Operator Manuals — G-code definitions, modal behavior, machine functions.</li>
+<li>Program examples and speeds/feeds are classroom teaching assumptions; verify against tooling catalogs and machine documentation.</li>
+</ul>
+</section>
 
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/03-coordinate-systems/">&larr; Coordinate Systems</a><a href="/cnc-manufacturing-engineering/cnc-programming/04-program-structure/">Program Structure &rarr;</a></nav>
 </main>
