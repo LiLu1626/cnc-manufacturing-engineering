@@ -1,66 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cutter Compensation (G41/G42) | CNC Programming</title>
-<link rel="stylesheet" href="../../assets/css/site.css">
-<link rel="stylesheet" href="../../assets/css/article.css">
-</head>
-<body>
-<nav class="site-nav">
-  <div class="site-nav-inner">
-    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
-    <ul class="site-nav-links">
-      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
-      <li><a href="../../knowledge-base/">Knowledge Base</a></li>
-      <li><a href="../../machine-systems/">Machine Systems</a></li>
-      <li><a href="../" class="active">CNC Programming</a></li>
-      <li><a href="../../about/">About</a></li>
-    </ul>
-  </div>
-</nav>
-<main class="article">
-<a href="../#ch14" class="back-link">&larr; Back to Level 4 · Motion &amp; Compensation</a>
-<div class="hero-eyebrow">Lesson 16 · Cutter Compensation ⭐⭐⭐</div>
-<h1>Cutter Compensation (G41 / G42)</h1>
-
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cutter Radius Compensation (G41/G42) — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Program the part contour, not the tool center. Left/right comp, lead-in/out, and why G40 cleanup matters.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/16-cutter-compensation/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body>
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="cp-article">
+<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Cutter Radius Compensation (G41/G42)</h1>
+<p class="cp-lead">Instead of calculating tool center offsets for every contour, let the controller do it.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
+<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>What cutter comp does and why use it</li><li>G41 left vs G42 right</li><li>Lead-in and lead-out moves</li><li>G40 cancellation and common errors</li></ul></div>
 <h2>Concept</h2>
-<p>When you mill a contour, you program the <em>part outline</em> — not the path the tool center must follow. The controller uses cutter compensation to offset the tool center by the tool radius automatically.</p>
-
+<p>When you mill a 50 mm square, you cannot program the part edges directly — the tool has a radius. Without comp, you must offset every coordinate by the tool radius yourself. <strong>Cutter radius compensation</strong> lets you program the part contour; the controller shifts the tool center path left or right by the stored tool radius (D offset).</p>
+<figure class="cp-figure"><svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
+<rect x="60" y="40" width="120" height="120" fill="none" stroke="#17242f" stroke-width="2"/>
+<circle cx="120" cy="100" r="30" fill="none" stroke="#0b766e" stroke-width="2" stroke-dasharray="5"/>
+<circle cx="120" cy="100" r="3" fill="#0b766e"/>
+<text x="190" y="60" font-size="11" fill="#17242f">Part contour</text>
+<text x="190" y="80" font-size="11" fill="#0b766e">Tool center path</text></svg>
+<figcaption>Program the contour; the controller offsets the tool center path by radius.</figcaption></figure>
 <h2>Why It Matters</h2>
-<p>Without compensation, you'd have to recalculate every coordinate by hand for every tool diameter. With compensation, you program the part dimensions directly. If the tool wears 0.1 mm smaller, you just update the offset — no program change.</p>
-
-<svg viewBox="0 0 480 220" xmlns="http://www.w3.org/2000/svg" style="max-width:480px;width:100%;margin:1rem auto;display:block;">
-  <!-- programmed contour -->
-  <rect x="120" y="60" width="200" height="120" fill="none" stroke="#0b766e" stroke-width="2"/>
-  <text x="220" y="50" text-anchor="middle" font-size="12" fill="#0b766e">Programmed contour (part shape)</text>
-  <!-- tool center path (offset) -->
-  <rect x="105" y="45" width="230" height="150" fill="none" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="5,3"/>
-  <text x="220" y="210" text-anchor="middle" font-size="12" fill="#c0392b">Tool center path (offset by radius)</text>
-  <!-- tool circle -->
-  <circle cx="105" cy="120" r="15" fill="none" stroke="#17242f" stroke-width="1.5"/>
-  <circle cx="105" cy="120" r="2" fill="#17242f"/>
-</svg>
-
-<h2>G41 vs G42</h2>
-<table>
-  <tr><th>Code</th><th>Meaning</th><th>Direction</th></tr>
-  <tr><td><strong>G41</strong></td><td>Cutter left</td><td>Tool is to the <em>left</em> of the programmed direction of travel</td></tr>
-  <tr><td><strong>G42</strong></td><td>Cutter right</td><td>Tool is to the <em>right</em> of the programmed direction of travel</td></tr>
-  <tr><td><strong>G40</strong></td><td>Cancel</td><td>Turn compensation off</td></tr>
-</table>
-
-<div class="warning">
-  <p><strong>Compensation must engage on a straight lead-in move.</strong> You cannot turn G41 on while cutting an arc. The standard pattern: approach on a straight line away from the part, engage G41, then cut the contour. At the end, straight lead-out, then G40. Engaging compensation mid-cut causes the tool to jump sideways — a crash.</p>
-</div>
-
-<div class="nav-links">
-  <a href="../15-circular-interpolation/">&larr; Circular Interpolation</a>
-  <a href="../17-drilling-cycles/">Next: Drilling &amp; Cycles &rarr;</a>
-</div>
-
-</main>
-<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
-</body>
-</html>
+<p>With comp, you can switch from a 10 mm end mill to an 8 mm end mill by changing the D offset — no program changes. Without comp, every coordinate must be recalculated. This is why cutter comp is essential for production.</p>
+<h2>How</h2>
+<p><strong>G41</strong> = left compensation (tool left of directed path). <strong>G42</strong> = right compensation. <strong>G40</strong> = cancel.</p>
+<p>You must <strong>lead in</strong> on a linear move (G00/G01) at a distance greater than the tool radius — never engage comp on an arc. Cancel (G40) on a linear move away from the part.</p>
+<pre class="cp-code"><code>G00 X0 Y0
+G41 X10. Y10. D01  <span class="cp-comment">(lead in, left comp)</span>
+G01 X50. F200.    <span class="cp-comment">(mill contour)</span>
+...
+G40 X0 Y0         <span class="cp-comment">(cancel on linear move)</span></code></pre>
+<h2>Example</h2>
+<p>Program a 50×50 mm square contour. D01 stores 5.000 (10 mm tool radius). The controller offsets the tool center 5 mm outside the programmed contour. Switch to an 8 mm tool: change D01 to 4.000. Program unchanged.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Engaging G41/G42 on an arc — causes alarm.</li><li>Forgetting G40 before the next operation — comp stays active.</li><li>Lead-in shorter than tool radius — tool gouges the corner.</li><li>Using G41 vs G42 backwards (climb vs conventional).</li></ul>
+<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> G41 vs G42?</p><details><summary>Show answer</summary><p>G41 = tool left of directed path. G42 = tool right.</p></details><p><strong>2.</strong> Why must lead-in be linear?</p><details><summary>Show answer</summary><p>Comp engages on a straight move; arcs require comp already active.</p></details></div>
+<h2>Sources and Applicability</h2><ul><li>Haas Operator Manual — Cutter Compensation.</li><li>D offset = tool radius, not diameter.</li></ul>
+<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/15-circular-interpolation/">&larr; Circular Interpolation</a><a href="/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/">Drilling Cycles &rarr;</a></div>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

@@ -1,63 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Program Safety &amp; Startup Blocks | CNC Programming</title>
-<link rel="stylesheet" href="../../assets/css/site.css">
-<link rel="stylesheet" href="../../assets/css/article.css">
-</head>
-<body>
-<nav class="site-nav">
-  <div class="site-nav-inner">
-    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
-    <ul class="site-nav-links">
-      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
-      <li><a href="../../knowledge-base/">Knowledge Base</a></li>
-      <li><a href="../../machine-systems/">Machine Systems</a></li>
-      <li><a href="../" class="active">CNC Programming</a></li>
-      <li><a href="../../about/">About</a></li>
-    </ul>
-  </div>
-</nav>
-<main class="article">
-<a href="../#ch23" class="back-link">&larr; Back to Level 6 · Safety &amp; Verification</a>
-<div class="hero-eyebrow">Lesson 23 · Program Safety ⭐⭐⭐</div>
-<h1>Program Safety &amp; Startup Blocks</h1>
-
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safe Program Start and Restart — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Why G21 G17 G90 G40 G49 G80 exists, known machine state, safe approach, and restart procedure.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/23-program-safety/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body>
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="cp-article">
+<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Safe Program Start and Restart</h1>
+<p class="cp-lead">The startup block is not superstition — it resets the machine to a known state.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
+<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>Why every program starts with known-state codes</li><li>Safe approach and clearance plane</li><li>Program restart after tool breakage</li><li>Checklists before cycle start</li></ul></div>
 <h2>Concept</h2>
-<p>Every program should start by putting the machine in a known, safe state. This is the "safe start" block: <code>G21 G17 G90 G40 G49 G80</code>. Don't just copy it — understand what each word does.</p>
-
-<h2>The Safe-Start Block Explained</h2>
-<table>
-  <tr><th>Code</th><th>What it resets</th><th>Why it matters</th></tr>
-  <tr><td><code>G21</code></td><td>Units = mm</td><td>Prevents inch/mm mismatch</td></tr>
-  <tr><td><code>G17</code></td><td>Plane = XY</td><td>Correct plane for arcs</td></tr>
-  <tr><td><code>G90</code></td><td>Absolute mode</td><td>Coordinates measured from work zero</td></tr>
-  <tr><td><code>G40</code></td><td>Cancel cutter comp</td><td>No unexpected radius offset</td></tr>
-  <tr><td><code>G49</code></td><td>Cancel length offset</td><td>No unexpected Z offset</td></tr>
-  <tr><td><code>G80</code></td><td>Cancel canned cycle</td><td>No leftover drilling cycle</td></tr>
-</table>
-
-<div class="callout">
-  <p><strong>Why this matters:</strong> The previous program may have ended with cutter compensation active, in G91 incremental mode, or in G20 inches. If you don't reset, your new program runs in the wrong state. The safe-start block costs one line and prevents a dozen crashes.</p>
-</div>
-
-<h2>Safe End-of-Program</h2>
-<div class="formula-box">
-<pre style="margin:0;font-family:monospace;font-size:12.5px;">
-G00 Z50. M09    (retract, coolant off)
-M05             (spindle stop)
-G91 G28 Z0      (Z to machine home)
-M30             (program end, reset)</pre>
-</div>
-
-<div class="nav-links">
-  <a href="../18-canned-cycles/">&larr; Canned Cycles</a>
-  <a href="../24-verification/">Next: Verification &rarr;</a>
-</div>
-
-</main>
-<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
-</body>
-</html>
+<p>At the top of every program: <code>G21 G17 G90 G40 G49 G80</code>. This explicitly sets: mm units, XY plane, absolute mode, cutter comp off, tool length comp off, canned cycles off. It wipes any leftover modal state from the previous job.</p>
+<h2>Why It Matters</h2>
+<p>If the previous program left G41 active and your new program does not cancel it, the machine silently offsets the tool path. The startup block prevents this. Safe approach means never moving Z below the part until X/Y is positioned above it.</p>
+<h2>How</h2>
+<p><strong>Before cycle start:</strong> check tool number, work offset, spindle direction, coolant. <strong>Safe approach:</strong> rapid XY to position, then Z down. <strong>Restart:</strong> after a tool break, find the line number, position the tool manually, and restart from that block — never from the top.</p>
+<div class="cp-safety-note"><strong>Safety:</strong> Always run the first part in single block with feed hold ready. Never assume the program is safe because it backplots correctly.</div>
+<h2>Example</h2>
+<p>Startup block: G21 (mm), G17 (XY plane), G90 (absolute), G40 (comp off), G49 (length off), G80 (cycles off). Then T01 M06, G54, S2000 M03, G43 H01 Z50, M08.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Skipping the startup block to "save lines."</li><li>Rapiding Z into the part before XY is clear.</li><li>Restarting from program top after a mid-program tool break — re-cuts already-machined geometry.</li></ul>
+<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> Why G40 G49 G80 at startup?</p><details><summary>Show answer</summary><p>Cancels any leftover cutter comp, tool length comp, or drill cycles from the previous job.</p></details><p><strong>2.</strong> After a tool breaks at line N80, what do you do?</p><details><summary>Show answer</summary><p>Replace tool, position manually near N80, restart from that block — not from the top.</p></details></div>
+<h2>Sources and Applicability</h2><ul><li>Haas Operator Manual — Program Restart.</li><li>Shop safety practices; always follow your machine's lockout/tagout procedures.</li></ul>
+<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/22-threading/">&larr; Threading</a><a href="/cnc-manufacturing-engineering/cnc-programming/24-verification/">Verification &rarr;</a></div>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

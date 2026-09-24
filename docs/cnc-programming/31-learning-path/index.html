@@ -1,91 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Learning Path | CNC Programming</title>
-<link rel="stylesheet" href="../../assets/css/site.css">
-<link rel="stylesheet" href="../../assets/css/article.css">
-</head>
-<body>
-<nav class="site-nav">
-  <div class="site-nav-inner">
-    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
-    <ul class="site-nav-links">
-      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
-      <li><a href="../../knowledge-base/">Knowledge Base</a></li>
-      <li><a href="../../machine-systems/">Machine Systems</a></li>
-      <li><a href="../" class="active">CNC Programming</a></li>
-      <li><a href="../../about/">About</a></li>
-    </ul>
-  </div>
-</nav>
-<main class="article">
-<a href="../#ch30" class="back-link">&larr; Back to Reference &amp; Learning Path</a>
-<div class="hero-eyebrow">Learning Path ⭐⭐⭐</div>
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CNC Programming Learning Path — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Recommended order from zero to capable: foundations, motion, offsets, applications, projects.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/31-learning-path/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body>
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="cp-article">
+<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
 <h1>CNC Programming Learning Path</h1>
-
-<p>Follow these in order. Each lesson builds on the last. Don't skip — coordinates and offsets are the foundation everything else stands on.</p>
-
-<h2>Level 1 — Foundations (Start Here)</h2>
-<table>
-  <tr><th>#</th><th>Lesson</th><th>You'll be able to...</th></tr>
-  <tr><td>1</td><td><a href="../01-getting-started/what-is-cnc-programming/">What Is CNC Programming?</a></td><td>Explain how code becomes machine motion</td></tr>
-  <tr><td>2</td><td><a href="../02-machine-fundamentals/">Machine Fundamentals for Programmers</a></td><td>Know axes, spindle, machine zero, work zero</td></tr>
-  <tr><td>3</td><td><a href="../03-coordinate-systems/">Coordinate Systems</a></td><td>Understand G54, G90/G91, absolute vs incremental</td></tr>
-  <tr><td>4</td><td><a href="../04-program-structure/">Program Structure</a></td><td>Read and explain every line of a basic program</td></tr>
-</table>
-
-<h2>Level 2 — G-Code &amp; M-Code</h2>
-<table>
-  <tr><th>#</th><th>Lesson</th><th>You'll be able to...</th></tr>
-  <tr><td>5</td><td><a href="../05-gcode-fundamentals/">G00/G01/G02/G03</a></td><td>Write straight and arc cutting motion</td></tr>
-  <tr><td>6</td><td><a href="../06-modal-codes/">Modal Codes</a></td><td>Understand why G01 persists across lines</td></tr>
-  <tr><td>7</td><td><a href="../07-plane-units/">Plane &amp; Units</a></td><td>Use G17/G18/G19, G20/G21 correctly</td></tr>
-  <tr><td>8</td><td><a href="../09-mcode-fundamentals/">M-Codes</a></td><td>Control spindle, coolant, tool change, end</td></tr>
-</table>
-
-<h2>Level 3 — Spindle, Feed &amp; Offsets</h2>
-<table>
-  <tr><th>#</th><th>Lesson</th><th>You'll be able to...</th></tr>
-  <tr><td>9</td><td><a href="../10-spindle-feed/">Spindle &amp; Feed</a></td><td>Use S, G96/G97, G94/G95</td></tr>
-  <tr><td>10</td><td><a href="../12-tool-offsets/">Tool Offsets</a></td><td>Set length and radius compensation</td></tr>
-  <tr><td>11</td><td><a href="../13-work-offsets/">Work Offsets</a></td><td>Set up G54 and run multiple setups</td></tr>
-</table>
-
-<h2>Level 4 — Motion &amp; Compensation</h2>
-<table>
-  <tr><th>#</th><th>Lesson</th><th>You'll be able to...</th></tr>
-  <tr><td>12</td><td><a href="../14-linear-interpolation/">Linear Interpolation</a></td><td>Safely approach, plunge, cut, retract</td></tr>
-  <tr><td>13</td><td><a href="../15-circular-interpolation/">Circular Interpolation</a></td><td>Program arcs with IJK or R</td></tr>
-  <tr><td>14</td><td><a href="../16-cutter-compensation/">Cutter Compensation</a></td><td>Program contours without hand-calculating tool paths</td></tr>
-</table>
-
-<h2>Level 5 — Drilling &amp; Cycles</h2>
-<table>
-  <tr><th>#</th><th>Lesson</th><th>You'll be able to...</th></tr>
-  <tr><td>15</td><td><a href="../17-drilling-cycles/">Drilling &amp; Hole-Making</a></td><td>Use G81/G83/G84 hole cycles</td></tr>
-  <tr><td>16</td><td><a href="../18-canned-cycles/">Canned Cycles</a></td><td>Drill hole patterns efficiently</td></tr>
-</table>
-
-<h2>Level 6 — Safety &amp; Verification</h2>
-<table>
-  <tr><th>#</th><th>Lesson</th><th>You'll be able to...</th></tr>
-  <tr><td>17</td><td><a href="../23-program-safety/">Program Safety</a></td><td>Write safe startup and end blocks</td></tr>
-  <tr><td>18</td><td><a href="../24-verification/">Verification</a></td><td>Prove a program is safe before cutting</td></tr>
-  <tr><td>19</td><td><a href="../25-troubleshooting/">Troubleshooting</a></td><td>Diagnose alarms and wrong motion</td></tr>
-  <tr><td>20</td><td><a href="../26-common-mistakes/">Common Mistakes</a></td><td>Recognize and avoid classic errors</td></tr>
-</table>
-
-<div class="callout">
-  <p><strong>Coming next:</strong> CNC turning complete programs, milling complete programs, threading, subprograms, controller-specific details (FANUC/Siemens/Haas), practical worked examples, and exercises. After these fundamentals, you'll be ready to read, write, and check real shop programs.</p>
-</div>
-
-<div class="nav-links">
-  <a href="../#ch30">&larr; CNC Programming</a>
-</div>
-
-</main>
-<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
-</body>
-</html>
+<p class="cp-lead">Follow this order. Do not skip ahead — each chapter builds on the previous one.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Beginner</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
+<h2>Stage 1: Foundations</h2>
+<ol><li><a href="/cnc-manufacturing-engineering/cnc-programming/01-getting-started/what-is-cnc-programming/">What Is CNC Programming?</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/02-machine-fundamentals/">Machine Fundamentals</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/03-coordinate-systems/">Coordinate Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/08-programming-math/">Practical Math</a></li></ol>
+<h2>Stage 2: Language</h2>
+<ol><li><a href="/cnc-manufacturing-engineering/cnc-programming/04-program-structure/">Program Structure</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/05-gcode-fundamentals/">G-Code Fundamentals</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/06-modal-codes/">Modal Codes</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/07-plane-units/">Planes &amp; Units</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/09-mcode-fundamentals/">M-Codes</a></li></ol>
+<h2>Stage 3: Motion &amp; Setup</h2>
+<ol><li><a href="/cnc-manufacturing-engineering/cnc-programming/10-spindle-feed/">Spindle &amp; Feed</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/13-work-offsets/">Work Offsets</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/12-tool-offsets/">Tool Offsets</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/14-linear-interpolation/">Rapid &amp; Linear</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/15-circular-interpolation/">Circular Interpolation</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/16-cutter-compensation/">Cutter Compensation</a></li></ol>
+<h2>Stage 4: Applications</h2>
+<ol><li><a href="/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/">Drilling Cycles</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/">Canned Cycles</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/">Turning Coordinates</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/">Turning Cycles</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/22-threading/">Threading</a></li></ol>
+<h2>Stage 5: Projects &amp; Safety</h2>
+<ol><li><a href="/cnc-manufacturing-engineering/cnc-programming/23-program-safety/">Program Safety</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/24-verification/">Verification</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/28-milling-project/">Milling Project</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/27-turning-project/">Turning Project</a></li></ol>
+<h2>Stage 6: Beyond Hand Coding</h2>
+<ol><li><a href="/cnc-manufacturing-engineering/cnc-programming/35-cad-cam-postprocessing/">CAD/CAM &amp; Post</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/36-macro-foundations/">Macro Foundations</a></li></ol>
+<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> Where should a complete beginner start?</p><details><summary>Show answer</summary><p>01 What Is CNC Programming, then follow Stage 1 through 5 in order.</p></details><p><strong>2.</strong> I already know G00/G01. Where to jump?</p><details><summary>Show answer</summary><p>Stage 3: offsets and motion. Review Stage 2 quickly.</p></details></div>
+<h2>Sources and Applicability</h2><ul><li>Learning path designed for first-time CNC programmers.</li></ul>
+<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/30-reference/">&larr; Quick Reference</a><a href="/cnc-manufacturing-engineering/cnc-programming/32-drawings-process-planning/">Drawings & Planning &rarr;</a></div>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

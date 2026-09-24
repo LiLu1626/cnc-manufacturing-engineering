@@ -1,76 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Linear Interpolation (G00/G01) | CNC Programming</title>
-<link rel="stylesheet" href="../../assets/css/site.css">
-<link rel="stylesheet" href="../../assets/css/article.css">
-</head>
-<body>
-<nav class="site-nav">
-  <div class="site-nav-inner">
-    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
-    <ul class="site-nav-links">
-      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
-      <li><a href="../../knowledge-base/">Knowledge Base</a></li>
-      <li><a href="../../machine-systems/">Machine Systems</a></li>
-      <li><a href="../" class="active">CNC Programming</a></li>
-      <li><a href="../../about/">About</a></li>
-    </ul>
-  </div>
-</nav>
-<main class="article">
-<a href="../#ch14" class="back-link">&larr; Back to Level 4 · Motion &amp; Compensation</a>
-<div class="hero-eyebrow">Lesson 14 · Linear Interpolation</div>
-<h1>Linear Interpolation — Safe Approach and Cutting</h1>
-
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rapid and Linear Motion (G00/G01) — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="G00 rapid vs G01 linear feed, safe approach and retract, envelope awareness.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/14-linear-interpolation/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body>
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="cp-article">
+<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Rapid and Linear Motion (G00/G01)</h1>
+<p class="cp-lead">The two most-used motion codes. G00 gets you there fast; G01 cuts at controlled feed.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
+<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>G00 rapid positioning vs G01 linear feed</li><li>Safe approach and retract paths</li><li>Multi-axis diagonal moves</li><li>Why rapid is not always diagonal</li></ul></div>
 <h2>Concept</h2>
-<p>G00 moves fast (no cut). G01 moves at feed rate (cutting). The skill is in the sequence: how to approach the part, plunge, cut, and retract without crashing.</p>
-
-<h2>The Safe Approach Sequence</h2>
-<svg viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg" style="max-width:480px;width:100%;margin:1rem auto;display:block;">
-  <!-- part block -->
-  <rect x="100" y="180" width="200" height="50" fill="#d5dbdb" stroke="#5c6872"/>
-  <text x="200" y="210" text-anchor="middle" font-size="11" fill="#5c6872">Part (top surface Z=0)</text>
-  <!-- tool at safe position -->
-  <circle cx="120" cy="60" r="6" fill="#0b766e"/>
-  <text x="120" y="50" text-anchor="middle" font-size="11" fill="#0b766e">1. G00 to X0 Y0 (Z=50 safe)</text>
-  <!-- rapid down to Z5 -->
-  <line x1="120" y1="66" x2="120" y2="120" stroke="#0b766e" stroke-dasharray="4,3"/>
-  <text x="135" y="100" font-size="11" fill="#0b766e">2. G00 Z5</text>
-  <!-- feed down to Z-2 -->
-  <line x1="120" y1="120" x2="120" y2="190" stroke="#c0392b" stroke-width="2"/>
-  <text x="135" y="160" font-size="11" fill="#c0392b">3. G01 Z-2 F100 (plunge)</text>
-  <!-- feed cut along X -->
-  <line x1="120" y1="190" x2="300" y2="190" stroke="#c0392b" stroke-width="2.5"/>
-  <text x="210" y="180" text-anchor="middle" font-size="11" fill="#c0392b">4. G01 X100 F300 (cut)</text>
-  <!-- retract -->
-  <line x1="300" y1="190" x2="300" y2="60" stroke="#0b766e" stroke-dasharray="4,3"/>
-  <text x="315" y="130" font-size="11" fill="#0b766e">5. G00 Z50 (retract)</text>
-</svg>
-
-<h2>Line-by-Line Tool Path</h2>
-<div class="formula-box">
-<pre style="margin:0;font-family:monospace;font-size:12.5px;line-height:1.7;">
-G00 X0 Y0         (1. Rapid to XY position, Z still at 50 = safe)
-G00 Z5.           (2. Rapid down to 5mm above part)
-G01 Z-2. F100.    (3. Feed down 2mm deep at 100 mm/min — PLUNGE)
-G01 X100. F300.   (4. Cut along X to 100mm at 300 mm/min)
-G00 Z50.          (5. Rapid retract to safe height)
-G00 X0 Y0         (6. Rapid back to start)</pre>
-</div>
-
-<div class="warning">
-  <p><strong>Never G00 into the part.</strong> Step 2 goes to Z5 (just above the part), then step 3 switches to G01 for the plunge. If you wrote <code>G00 Z-2.</code>, the tool would slam into the part at rapid speed. Always use G01 for any Z move that reaches material.</p>
-</div>
-
-<div class="nav-links">
-  <a href="../13-work-offsets/">&larr; Work Offsets</a>
-  <a href="../15-circular-interpolation/">Next: Circular Interpolation &rarr;</a>
-</div>
-
-</main>
-<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
-</body>
-</html>
+<p><strong>G00</strong> = rapid positioning. The machine moves at its fastest traverse (often 15-30 m/min), but the path may not be straight — each axis moves independently and may stop at different times. Never assume G00 takes a diagonal line.</p>
+<p><strong>G01</strong> = linear interpolation. The axes move simultaneously at a coordinated feed rate (F), cutting a straight line at exactly the programmed feed.</p>
+<h2>Why It Matters</h2>
+<p>A common crash: rapid to X50 Y30 Z-5 assuming a diagonal path. The machine may move Z first (into the vise), then X/Y. Use safe approach: rapid X/Y above the part, then Z down. Never rapid into cut material.</p>
+<h2>How</h2>
+<pre class="cp-code"><code>G00 X0 Y0        <span class="cp-comment">(rapid to XY position)</span>
+G00 Z5.         <span class="cp-comment">(rapid Z to 5 mm above part)</span>
+G01 Z-2. F100.  <span class="cp-comment">(feed down 2 mm deep)</span>
+G01 X100. F300. <span class="cp-comment">(cut straight line at 300 mm/min)</span>
+G00 Z5.         <span class="cp-comment">(rapid retract)</span></code></pre>
+<p>Approach: XY first, then Z down. Retract: Z up first, then XY. This avoids crashing into fixtures.</p>
+<h2>Example</h2>
+<p>G01 Z-2 F100 plunges at 100 mm/min (plunge feed). Then G01 X100 F300 cuts at 300 mm/min. Feed change on the fly is fine — F is modal.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Rapiding Z into the part instead of above it.</li><li>Assuming G00 takes a straight diagonal.</li><li>Not specifying F on the first G01 block — F is modal but may be unset.</li></ul>
+<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> Why G00 not safe for cutting?</p><details><summary>Show answer</summary><p>It moves at maximum traverse with no controlled feed; it would break the tool.</p></details><p><strong>2.</strong> Correct approach order?</p><details><summary>Show answer</summary><p>Rapid XY above part → rapid Z to clearance → feed Z down → cut.</p></details></div>
+<h2>Sources and Applicability</h2><ul><li>Haas Operator Manual — G00/G01.</li><li>Machine traverse speed specifications.</li></ul>
+<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/13-work-offsets/">&larr; Work Offsets</a><a href="/cnc-manufacturing-engineering/cnc-programming/15-circular-interpolation/">Circular Interpolation &rarr;</a></div>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

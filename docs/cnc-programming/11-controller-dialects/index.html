@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Controller Dialects — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Why Haas, FANUC, Siemens, HEIDENHAIN differ — read the manual.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/11-controller-dialects/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body>
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="cp-article">
+<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Controller Dialects</h1>
+<p class="cp-lead">G-code is not one language. UK vs US vs Australian English — close, but details bite.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Beginner</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
+<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>Why G-codes differ</li><li>FANUC/Haas vs Siemens/HEIDENHAIN</li><li>Post-processors</li></ul></div>
+<h2>Concept</h2>
+<p>FANUC defined much of G-code; Haas follows FANUC. Siemens uses its own cycles. HEIDENHAIN uses conversational input. The <strong>post-processor</strong> translates CAM to machine-specific code.</p>
+<h2>Why It Matters</h2>
+<p>G84 on FANUC may be rigid tapping; on older machines it expects a floating tap. Copying code across machines without checking causes errors.</p>
+<h2>How</h2>
+<p>Learn the family: FANUC-style (Haas, Doosan, Hyundai) shares core codes. Siemens/HEIDENHAIN are different. Read the manual's G-code appendix.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Assuming G84 is always rigid tapping.</li><li>Running CAM output without verifying post.</li></ul>
+<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> What is a post-processor?</p><details><summary>Show answer</summary><p>Translates CAM toolpath into machine-specific G-code.</p></details></div>
+<h2>Sources and Applicability</h2><ul><li>Builder manuals.</li></ul>
+<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/10-spindle-feed/">&larr; Spindle & Feed</a><a href="/cnc-manufacturing-engineering/cnc-programming/12-tool-offsets/">Tool Offsets &rarr;</a></div>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

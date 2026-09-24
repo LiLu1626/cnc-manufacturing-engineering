@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turning Coordinates and Setup — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Lathe coordinate system, diameter programming, X/Z, tool nose, and G18 plane.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body>
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="cp-article">
+<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Turning Coordinates and Setup</h1>
+<p class="cp-lead">The lathe looks like a different world because X means diameter, not position.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Lathe</span></div>
+<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>Lathe X/Z axes and diameter programming</li><li>Tool post orientation and turret</li><li>G18 XZ plane</li><li>Work offset setup on a chuck</li></ul></div>
+<h2>Concept</h2>
+<p>On a lathe, <strong>Z</strong> runs along the spindle axis (away from chuck is negative). <strong>X</strong> is radial, but in <strong>diameter programming</strong> — the standard — X values are the full diameter, not the radius. The workpiece spins; the tool feeds in X and Z.</p>
+<h2>Why It Matters</h2>
+<p>Commanding X30 on a lathe means the tool tip sits at a 30 mm diameter = 15 mm from center. If you think radius, you double-cut depth. This is the #1 lathe beginner mistake.</p>
+<h2>How</h2>
+<p>Work zero is on the face center (Z=0 at the part face, X=0 at spindle center). Z negative cuts into the part. X increases outward. G18 selects the XZ plane for arcs.</p>
+<p>Tool tip geometry: insert has a nose radius (e.g. 0.4 mm). Tool nose radius compensation (G41/G42 in G18) adjusts for this on profiled work.</p>
+<h2>Example</h2>
+<p>Bar stock &Oslash;50. Face the part: G01 X0 Z0 F0.2. Then turn OD to &Oslash;40: G01 X40 Z-20. The tool moves from X50 to X40 (diameter), cutting 5 mm radial depth (10 mm diameter reduction over the pass).</p>
+<h2>Common Mistakes</h2>
+<ul><li>Programming X as radius instead of diameter.</li><li>Z positive direction confusion (away from chuck = negative on most lathes).</li><li>Forgetting G18 when programming arcs.</li></ul>
+<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> Bar &Oslash;50, command X46. Radial depth?</p><details><summary>Show answer</summary><p>Diameter drop 4 mm; radial depth = 2 mm.</p></details><p><strong>2.</strong> Where is work zero on a lathe?</p><details><summary>Show answer</summary><p>Typically on the face center: X0 at spindle center, Z0 at the part face.</p></details></div>
+<h2>Sources and Applicability</h2><ul><li>Haas Lathe Operator Manual — Coordinates and Diameter Programming.</li></ul>
+<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/">&larr; Canned Cycles</a><a href="/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/">Turning Cycles &rarr;</a></div>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

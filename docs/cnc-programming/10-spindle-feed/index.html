@@ -1,65 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spindle &amp; Feed Programming | CNC Programming</title>
-<link rel="stylesheet" href="../../assets/css/site.css">
-<link rel="stylesheet" href="../../assets/css/article.css">
-</head>
-<body>
-<nav class="site-nav">
-  <div class="site-nav-inner">
-    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
-    <ul class="site-nav-links">
-      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
-      <li><a href="../../knowledge-base/">Knowledge Base</a></li>
-      <li><a href="../../machine-systems/">Machine Systems</a></li>
-      <li><a href="../" class="active">CNC Programming</a></li>
-      <li><a href="../../about/">About</a></li>
-    </ul>
-  </div>
-</nav>
-<main class="article">
-<a href="../#ch10" class="back-link">&larr; Back to Level 3 · Spindle, Feed &amp; Offsets</a>
-<div class="hero-eyebrow">Lesson 10 · Spindle &amp; Feed</div>
-<h1>Spindle Speed and Feed Programming</h1>
-
-<h2>Spindle Speed: S Command</h2>
-<p><code>S</code> sets spindle RPM. Combined with M03 (forward) or M04 (reverse):</p>
-<div class="formula-box">
-<pre style="margin:0;font-family:monospace;font-size:13px;">
-S2000 M03     (spindle forward at 2000 RPM)
-S800 M04      (spindle reverse at 800 RPM)</pre>
-</div>
-
-<h2>G97 vs G96 (Lathes)</h2>
-<table>
-  <tr><th></th><th>G97 — Constant RPM</th><th>G96 — Constant Surface Speed</th></tr>
-  <tr><td>What it does</td><td>Spindle stays at fixed RPM</td><td>Spindle speed adjusts automatically as diameter changes</td></tr>
-  <tr><td>Use for</td><td>Drilling, threading, facing small diameters</td><td>OD turning — keeps cutting speed constant</td></tr>
-  <tr><td>Example</td><td><code>G97 S800 M03</code></td><td><code>G96 S180 M03</code></td></tr>
-  <tr><td>Why it matters</td><td>Simple, predictable</td><td>Consistent surface finish and tool life</td></tr>
-</table>
-
-<div class="callout">
-  <p><strong>G96 needs G50 to cap max RPM.</strong> When facing down to center, the diameter approaches zero — without a limit, RPM would go to infinity. Always pair G96 with a max RPM limit: <code>G50 S2000</code> (max 2000 RPM). Learn more: <a href="../../engineering-tools/cutting-speed-calculator/">Cutting Speed Calculator</a>.</p>
-</div>
-
-<h2>Feed Programming</h2>
-<table>
-  <tr><th>Mode</th><th>Code</th><th>Units</th><th>Used on</th></tr>
-  <tr><td>Feed per minute</td><td><code>G94 F300.</code></td><td>mm/min</td><td>Milling</td></tr>
-  <tr><td>Feed per revolution</td><td><code>G95 F0.2</code></td><td>mm/rev</td><td>Turning</td></tr>
-</table>
-<p>On a mill, F300 means the tool moves 300 mm every minute. On a lathe, F0.2 means the tool moves 0.2 mm per spindle revolution. <strong>Never mix these up</strong> — F0.2 in G94 mode would move at 0.2 mm/min (way too slow), and F300 in G95 would be 300 mm/rev (way too fast — crash!).</p>
-
-<div class="nav-links">
-  <a href="../09-mcode-fundamentals/">&larr; M-Codes</a>
-  <a href="../12-tool-offsets/">Next: Tool Offsets &rarr;</a>
-</div>
-
-</main>
-<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
-</body>
-</html>
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spindle and Feed Programming — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="S command, RPM vs CSS, G96/G97, G94/G95, and cutting speed vs tool life.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/10-spindle-feed/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body>
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="cp-article">
+<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Spindle and Feed Programming</h1>
+<p class="cp-lead">Speed and feed decide whether the tool cuts or burns.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
+<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>S and RPM</li><li>V = πDN/1000</li><li>G96 CSS vs G97</li><li>G94 mm/min vs G95 mm/rev</li></ul></div>
+<h2>Concept</h2>
+<p><strong>S</strong> sets RPM. V = π·D·N/1000. On a lathe facing OD→center, G96 CSS holds surface speed by adjusting RPM as D changes.</p>
+<h2>Why It Matters</h2>
+<p>Too fast = burned tool. Too slow = rub and work-hardening. G97 S800 leaves the tool rubbing at center. G96 S200 adjusts RPM — but must be capped.</p>
+<h2>How</h2>
+<p><strong>Mill:</strong> N = 1000·V/(π·D). <strong>Lathe G97:</strong> constant RPM. <strong>G96:</strong> CSS + G50 S1800 cap. <strong>Feed:</strong> G94 mm/min (mill), G95 mm/rev (lathe). Feed = N × teeth × fz.</p>
+<h2>Example</h2>
+<p>D=50, V=200: N=1273. At D=25, G96 would give 2546 RPM — capped at 1800. 2000 RPM × 4 teeth × 0.03 = 240 mm/min.</p>
+<h2>Common Mistakes</h2>
+<ul><li>G96 without RPM cap.</li><li>G95 on a mill.</li></ul>
+<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> D=10, V=100. RPM?</p><details><summary>Show answer</summary><p>3183.</p></details><p><strong>2.</strong> 2000×4×0.03. Feed?</p><details><summary>Show answer</summary><p>240 mm/min.</p></details><p><strong>3.</strong> Why cap G96?</p><details><summary>Show answer</summary><p>As D→0, RPM→∞.</p></details></div>
+<h2>Sources and Applicability</h2><ul><li>Sandvik Coromant formulas.</li><li>Haas Lathe Manual — G96/G97/G50.</li></ul>
+<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/09-mcode-fundamentals/">&larr; M-Codes</a><a href="/cnc-manufacturing-engineering/cnc-programming/11-controller-dialects/">Controller Dialects &rarr;</a></div>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

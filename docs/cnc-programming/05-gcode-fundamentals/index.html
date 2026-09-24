@@ -1,137 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>G-Code Fundamentals | CNC Programming</title>
-<link rel="stylesheet" href="../../assets/css/site.css">
-<link rel="stylesheet" href="../../assets/css/article.css">
-</head>
-<body>
-<nav class="site-nav">
-  <div class="site-nav-inner">
-    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
-    <ul class="site-nav-links">
-      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
-      <li><a href="../../knowledge-base/">Knowledge Base</a></li>
-      <li><a href="../../machine-systems/">Machine Systems</a></li>
-      <li><a href="../" class="active">CNC Programming</a></li>
-      <li><a href="../../about/">About</a></li>
-    </ul>
-  </div>
-</nav>
-<main class="article">
-<a href="../#ch05" class="back-link">&larr; Back to Level 2 · G-Code &amp; M-Code</a>
-<div class="hero-eyebrow">Lesson 05 · G-Code Fundamentals ⭐⭐⭐</div>
-<h1>G00, G01, G02, G03 — Motion Codes</h1>
-
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G-Code Fundamentals — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="G-codes grouped by function: motion, setup, cycles, compensation — not just a lookup table.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/05-gcode-fundamentals/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body>
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="cp-article">
+<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>G-Code Fundamentals</h1>
+<p class="cp-lead">G-codes are not random magic letters. They are grouped by function, and understanding the groups prevents confusion.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Beginner</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
+<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>How G-codes are organized into modal groups</li><li>The four motion codes you must know</li><li>Setup, offset, and cycle group codes</li><li>Why group membership matters</li></ul></div>
 <h2>Concept</h2>
-<p>G-codes tell the machine <em>how</em> to move. The four motion codes you'll use 90% of the time are: G00 (rapid), G01 (linear cut), G02 (clockwise arc), G03 (counterclockwise arc). This lesson teaches you not just what each code does, but <em>how to use it safely</em>.</p>
-
+<p>G-codes are <strong>preparatory functions</strong> — they prepare the controller for a type of motion. They fall into <strong>modal groups</strong>: only one code in a group can be active at a time. Choosing a new one cancels the old. The most important group is <strong>motion</strong>: G00, G01, G02, G03.</p>
 <h2>Why It Matters</h2>
-<p>Everything a machine does is motion. If you understand these four codes deeply, you can read most of any program. The rest is just offsets, cycles, and housekeeping.</p>
-
-<h2>G00 — Rapid Positioning</h2>
-<p><strong>Purpose:</strong> Move the tool at maximum speed to a position. No cutting happens.</p>
-<p><strong>Syntax:</strong> <code>G00 X__ Y__ Z__</code></p>
-<p><strong>How it works:</strong> All specified axes move simultaneously at the machine's rapid rate (often 20–40 m/min). On many machines, the axes don't move in a straight line — they move at their own maximum speed, so the path may be diagonal or segmented.</p>
-
-<svg viewBox="0 0 440 200" xmlns="http://www.w3.org/2000/svg" style="max-width:440px;width:100%;margin:1rem auto;display:block;">
-  <line x1="40" y1="160" x2="400" y2="160" stroke="#5c6872"/>
-  <line x1="40" y1="160" x2="40" y2="30" stroke="#5c6872"/>
-  <circle cx="40" cy="160" r="5" fill="#17242f"/>
-  <text x="35" y="180" text-anchor="end" font-size="11">Start</text>
-  <!-- G00 diagonal dashed -->
-  <line x1="40" y1="160" x2="300" y2="60" stroke="#c0392b" stroke-width="2.5" stroke-dasharray="6,4"/>
-  <circle cx="300" cy="60" r="5" fill="#17242f"/>
-  <text x="310" y="55" font-size="12" fill="#c0392b">G00 rapid (diagonal!)</text>
-  <text x="150" y="95" font-size="11" fill="#c0392b">Note: may not be straight</text>
-</svg>
-
-<div class="warning">
-  <p><strong>G00 is dangerous.</strong> Because axes move at max speed and possibly not in a straight line, the tool can crash into the part or fixture. <strong>Never use G00 in Z near the material.</strong> Always: (1) rapid XY at a safe height, (2) then feed down in Z. The safe approach sequence is G00 XY → G00 Z high → G01 Z down.</p>
-</div>
-
-<h2>G01 — Linear Interpolation</h2>
-<p><strong>Purpose:</strong> Cut in a straight line at a controlled feed rate.</p>
-<p><strong>Syntax:</strong> <code>G01 X__ Y__ Z__ F__</code></p>
-<p><strong>How it works:</strong> The controller coordinates all axes to move in a perfectly straight line at the programmed feed F. This is cutting motion.</p>
-
-<div class="example">
-  <p><strong>Example: Cut a straight groove</strong></p>
-  <div class="formula-box">
-  <pre style="margin:0;font-family:monospace;font-size:12.5px;line-height:1.7;">
-G90 G54 G00 X0 Y0        (rapid to start position)
-G43 H01 Z50. M08         (safe Z, coolant on)
-G01 Z-2. F100.           (plunge 2mm deep at 100 mm/min)
-G01 X100. F300.          (cut along X to 100mm at 300 mm/min)
-G00 Z50. M09             (retract)
-M30</pre>
-  </div>
-  <p><strong>Line-by-line:</strong></p>
-  <ul>
-    <li><code>G01 Z-2. F100.</code> — Z moves down 2mm at 100 mm/min (plunge feed, slower)</li>
-    <li><code>G01 X100. F300.</code> — X moves to 100mm at 300 mm/min (cutting feed, faster). Notice G01 and F are modal — they persist from the previous line.</li>
-  </ul>
-</div>
-
-<h2>G02 / G03 — Circular Interpolation</h2>
-<p><strong>Purpose:</strong> Cut arcs and circles.</p>
-<p><strong>Syntax:</strong> <code>G02/G03 X__ Y__ I__ J__ F__</code> or <code>G02/G03 X__ Y__ R__ F__</code></p>
-<table>
-  <tr><th>Code</th><th>Direction</th></tr>
-  <tr><td><strong>G02</strong></td><td>Clockwise arc</td></tr>
-  <tr><td><strong>G03</strong></td><td>Counterclockwise arc</td></tr>
-</table>
-
-<svg viewBox="0 0 440 220" xmlns="http://www.w3.org/2000/svg" style="max-width:440px;width:100%;margin:1rem auto;display:block;">
-  <!-- arc -->
-  <path d="M 80 160 A 80 80 0 0 1 240 160" fill="none" stroke="#0b766e" stroke-width="3"/>
-  <!-- start -->
-  <circle cx="80" cy="160" r="5" fill="#17242f"/>
-  <text x="65" y="180" text-anchor="end" font-size="11">Start</text>
-  <!-- end -->
-  <circle cx="240" cy="160" r="5" fill="#17242f"/>
-  <text x="250" y="180" font-size="11">End</text>
-  <!-- center -->
-  <circle cx="160" cy="160" r="4" fill="#c0392b"/>
-  <line x1="80" y1="160" x2="160" y2="160" stroke="#c0392b" stroke-dasharray="3,3"/>
-  <text x="115" y="155" font-size="11" fill="#c0392b">I=80</text>
-  <text x="165" y="155" font-size="11" fill="#c0392b">Center</text>
-  <!-- direction -->
-  <text x="160" y="100" text-anchor="middle" font-size="12" fill="#0b766e">G02 (CW)</text>
-</svg>
-
-<p><strong>I and J are the arc center offset from the start point</strong> (not absolute coordinates):</p>
-<ul>
-  <li><strong>I</strong> = distance from start X to center X</li>
-  <li><strong>J</strong> = distance from start Y to center Y</li>
-</ul>
-<p>Alternatively, use <strong>R</strong> (radius): <code>G02 X240. Y160. R80.</code></p>
-
-<div class="warning">
-  <p><strong>Common mistake:</strong> I/J are <em>incremental from start</em>, not absolute. If start is at X80 and center is at X160, I=80 (the difference), not I=160. When in doubt, use R.</p>
-</div>
-
-<h2>Practice Exercise</h2>
-<div class="example">
-  <p><strong>Question:</strong> Write the code to cut a straight line from (X0, Y0) to (X50, Y0) at 250 mm/min, starting from a safe Z height of 50.</p>
-  <p><strong>Answer:</strong></p>
-  <div class="formula-box">
-  <pre style="margin:0;font-family:monospace;font-size:12.5px;">
-G00 X0 Y0
-G01 Z-2. F100.
-G01 X50. F250.
-G00 Z50.</pre>
-  </div>
-</div>
-
-<div class="nav-links">
-  <a href="../04-program-structure/">&larr; Program Structure</a>
-  <a href="../06-modal-codes/">Next: Modal Codes &rarr;</a>
-</div>
-
-</main>
-<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
-</body>
-</html>
+<p>If you understand groups, you know that writing G81 then G83 automatically cancels G81 (same cycle group). But writing G43 does not cancel G01 (different groups). This is how you avoid "why is my machine doing X?" surprises.</p>
+<h2>How</h2>
+<div class="cp-table-wrap"><table>
+<tr><th>Group</th><th>Codes</th><th>What they do</th></tr>
+<tr><td>Motion</td><td>G00, G01, G02, G03</td><td>Rapid, linear, CW arc, CCW arc</td></tr>
+<tr><td>Plane</td><td>G17, G18, G19</td><td>XY / XZ / YZ plane for arcs</td></tr>
+<tr><td>Units</td><td>G20, G21</td><td>Inch / mm</td></tr>
+<tr><td>Offset</td><td>G54–G59</td><td>Work coordinate systems</td></tr>
+<tr><td>Cycle</td><td>G80, G81, G82, G83, G84, G85</td><td>Cancel / drilling / boring cycles</td></tr>
+<tr><td>Compensation</td><td>G40, G41, G42</td><td>Cutter radius comp off / left / right</td></tr>
+<tr><td>Tool length</td><td>G43, G49</td><td>Apply length offset / cancel</td></tr>
+<tr><td>Mode</td><td>G90, G91</td><td>Absolute / incremental</td></tr>
+</table></div>
+<h2>Example</h2>
+<p><code>G01 X50 F200</code> — linear feed. Then <code>X100</code> — still G01 (modal), now at X100. Then <code>G00 X0</code> — G00 replaces G01; rapid back to X0. Then <code>G81 Z-10 R5 F100</code> — G81 cancels G00 in the motion group? No: cycles are their own group. G81 activates a canned drill cycle; once drilling completes, motion returns to rapid positioning.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Assuming every G-code is modal — some (like G28) are one-shot.</li><li>Forgetting to cancel a cycle with G80 before another motion.</li><li>Mixing up which group cancels which code.</li></ul>
+<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> After G01 X50, you write X80. What happens?</p><details><summary>Show answer</summary><p>Linear feed to X80 — G01 is modal, still active.</p></details><p><strong>2.</strong> Which code cancels a drilling cycle?</p><details><summary>Show answer</summary><p>G80.</p></details><p><strong>3.</strong> Can G43 and G01 be active at once?</p><details><summary>Show answer</summary><p>Yes — different modal groups. Tool length offset applies to whatever motion mode is active.</p></details></div>
+<h2>Sources and Applicability</h2><ul><li>Haas Mill Operator's Manual — modal groups table.</li><li>FANUC G-code lists differ by option; verify on your machine.</li></ul>
+<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/04-program-structure/">&larr; Program Structure</a><a href="/cnc-manufacturing-engineering/cnc-programming/06-modal-codes/">Modal Codes &rarr;</a></div>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

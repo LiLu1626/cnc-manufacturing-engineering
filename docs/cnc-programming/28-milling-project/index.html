@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project: Mounting Plate — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Complete worked example: 100x80x12 mm plate — face, pocket, 4 holes, chamfer.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/28-milling-project/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body>
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="cp-article">
+<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Project: Mounting Plate</h1>
+<p class="cp-lead">A complete mill program: rectangular block, face mill, pocket, bolt holes, and chamfer.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill</span></div>
+<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>Read a simple plate drawing</li><li>Plan mill operations</li><li>Write a complete mill program</li><li>Verify approach and retract</li></ul></div>
+<h2>Concept</h2>
+<p><strong>Part:</strong> 100&times;80&times;12 mm aluminum plate. Mill 60&times;40&times;5 mm pocket centered, drill 4 &Oslash;8 holes at corners (10 mm in from edges), face top.</p>
+<h2>Process Plan</h2>
+<ol><li>Face top (T01, &Oslash;63 face mill).</li><li>Rough/finish pocket (T02, &Oslash;10 end mill).</li><li>Drill 4 holes (T03, &Oslash;8 drill).</li><li>Chamfer holes (T04).</li></ol>
+<h2>How: The Program</h2>
+<pre class="cp-code"><code>O2801
+G21 G17 G90 G40 G49 G80
+T01 M06          <span class="cp-comment">(face mill)</span>
+G54 G00 X-40 Y0 S2000 M03
+G43 H01 Z50. M08
+G00 Z2.
+G01 Z0. F300.
+X140. F400.      <span class="cp-comment">(face pass)</span>
+G00 Z50.
+T02 M06          <span class="cp-comment">(end mill)</span>
+G54 G00 X-30 Y-20 S2500 M03
+G43 H02 Z50.
+G00 Z2.
+G01 Z-5. F150.   <span class="cp-comment">(pocket depth)</span>
+G41 X0 Y0 D02 F300.
+Y20. X60. Y-20. X0.  <span class="cp-comment">(pocket contour)</span>
+G40 X-30 Y-20.
+G00 Z50.
+T03 M06          <span class="cp-comment">(drill)</span>
+G54 G00 X10 Y10 S1500 M03
+G43 H03 Z50.
+G99 G81 Z-15. R5. F120.
+X90. Y10.
+X90. Y70.
+X10. Y70.
+G80
+G00 Z50. M09
+M05
+G91 G28 Z0
+M30</code></pre>
+<h2>Verification</h2>
+<p>Check: face mill starts off the left edge, pocket lead-in with G41, holes at (10,10)/(90,10)/(90,70)/(10,70), G80 after drilling. Single block: confirm Z approach, pocket depth, hole positions.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Pocket lead-in on an arc (must be linear).</li><li>Forgetting G80 after holes.</li><li>Face mill starting on the part (must start off-edge).</li></ul>
+<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> Holes at corners 10 mm in from edges on 100x80 plate. Coordinates?</p><details><summary>Show answer</summary><p>(10,10), (90,10), (90,70), (10,70).</p></details><p><strong>2.</strong> Why G41 lead-in at X-30 Y-20?</p><details><summary>Show answer</summary><p>Start outside the pocket, ramp in with cutter comp engaged, then cut contour.</p></details></div>
+<h2>Sources and Applicability</h2><ul><li>Worked example; adjust speeds/feeds for aluminum.</li></ul>
+<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/27-turning-project/">&larr; Turning Project</a><a href="/cnc-manufacturing-engineering/cnc-programming/29-subprograms/">Subprograms &rarr;</a></div>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

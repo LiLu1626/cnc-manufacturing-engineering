@@ -1,69 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Work Offsets G54–G59 | CNC Programming</title>
-<link rel="stylesheet" href="../../assets/css/site.css">
-<link rel="stylesheet" href="../../assets/css/article.css">
-</head>
-<body>
-<nav class="site-nav">
-  <div class="site-nav-inner">
-    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
-    <ul class="site-nav-links">
-      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
-      <li><a href="../../knowledge-base/">Knowledge Base</a></li>
-      <li><a href="../../machine-systems/">Machine Systems</a></li>
-      <li><a href="../" class="active">CNC Programming</a></li>
-      <li><a href="../../about/">About</a></li>
-    </ul>
-  </div>
-</nav>
-<main class="article">
-<a href="../#ch10" class="back-link">&larr; Back to Level 3 · Spindle, Feed &amp; Offsets</a>
-<div class="hero-eyebrow">Lesson 13 · Work Offsets ⭐⭐⭐</div>
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Work Offsets (G54–G59) — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Set part zero, multiple work offsets, datums, and why machine zero + work offset + tool offset = actual position.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/13-work-offsets/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body>
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="cp-article">
+<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
 <h1>Work Offsets (G54–G59)</h1>
-
+<p class="cp-lead">Work offsets tell the machine where your part sits. Get them wrong and every feature shifts by the same error.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
+<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>G54–G59 work coordinate systems</li><li>Edge finder and indicator setup</li><li>Multiple work offsets for setups</li><li>Datum strategy and why it matters</li></ul></div>
 <h2>Concept</h2>
-<p>The work offset tells the controller where your part sits on the machine table. It's the difference between machine zero and your chosen part zero. You set it during setup by touching off.</p>
-
-<h2>The Core CNC Equation</h2>
-<div class="formula-box">
-  <p style="text-align:center;font-size:15px;"><strong>Machine Zero + Work Offset (G54) + Tool Offset = Actual Tool–Workpiece Position</strong></p>
-</div>
-<p>This is the single most important equation in CNC programming. Every coordinate you write is measured from work zero. The controller figures out where that is in machine space by adding the offset.</p>
-
-<h2>Multiple Work Offsets</h2>
-<table>
-  <tr><th>Offset</th><th>Typical use</th></tr>
-  <tr><td>G54</td><td>Primary part / first setup</td></tr>
-  <tr><td>G55</td><td>Second part on the same table (second vise)</td></tr>
-  <tr><td>G56, G57</td><td>Additional parts / fixtures</td></tr>
-  <tr><td>G58, G59</td><td>Pallet positions or special setups</td></tr>
-</table>
-
-<div class="example">
-  <p><strong>Example: Two identical parts side by side</strong></p>
-  <p>You clamp two vises 200 mm apart on the table. You set G54 for vise 1 and G55 for vise 2. The program runs:</p>
-  <div class="formula-box">
-  <pre style="margin:0;font-family:monospace;font-size:12.5px;">
-G54 ... (cut part in vise 1)
-G55 ... (cut part in vise 2, same program)</pre>
-  </div>
-  <p>You don't rewrite coordinates — you just switch the offset. This is how you run multiple parts per setup.</p>
-</div>
-
-<div class="warning">
-  <p><strong>Wrong G54 is the #1 crash cause.</strong> If you set the offset on the wrong corner, or forget to update it after moving the part, the machine cuts exactly where you tell it — which is the wrong location. Always verify with a dry run or single-block the first cut.</p>
-</div>
-
-<div class="nav-links">
-  <a href="../12-tool-offsets/">&larr; Tool Offsets</a>
-  <a href="../14-linear-interpolation/">Next: Linear Interpolation &rarr;</a>
-</div>
-
-</main>
-<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
-</body>
-</html>
+<p><strong>G54–G59</strong> are six stored work offsets. Each offset stores X, Y, Z (and sometimes rotation) that tell the controller: "part zero is here relative to machine home." The program always uses work coordinates; the controller adds the G54 value to every move.</p>
+<h2>Why It Matters</h2>
+<p>If G54 X is off by 0.5 mm, every feature on the part is off by 0.5 mm — consistently. The program itself is perfect. This is why first-article inspection checks datum-to-feature relationships, not just individual dimensions.</p>
+<h2>How</h2>
+<p><strong>Mill setup:</strong> edge finder or indicator touches the part edge. X=0 on left edge, Y=0 on front edge. Z=0 on top surface. Values entered into G54.</p>
+<p><strong>Multiple offsets:</strong> G54 for part 1, G55 for part 2 on a tombstone. One program machines both by switching G54↔G55.</p>
+<p>The chain: <strong>machine position + work offset + tool offset = actual tool–workpiece relationship.</strong></p>
+<h2>Example</h2>
+<p>G54 X0.000 Y0.000 Z0.000. Program moves G00 X50 Y30. The machine goes to machine_home + G54 + (50,30). If you touched the wrong edge and G54 should be X-0.1, the hole is 0.1 mm off in X on every feature.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Setting work zero on a feature that is not the drawing datum.</li><li>Using G54 for everything even when a second offset would avoid re-fixturing.</li><li>Forgetting to update G54 after moving the part.</li><li>Confusing tool length offset with work offset (Z work offset is part top; H is tool length).</li></ul>
+<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> If G54 X should be 0.000 but you entered 0.200, what happens?</p><details><summary>Show answer</summary><p>Every X coordinate shifts +0.2 mm. All features consistently wrong by 0.2 mm.</p></details><p><strong>2.</strong> Why use G55 instead of G54?</p><details><summary>Show answer</summary><p>For a second part on the same tombstone or a second setup on the same program.</p></details></div>
+<h2>Sources and Applicability</h2><ul><li>Haas Operator Manual — Work Offsets.</li><li>Edge finder and indicator setup procedure.</li></ul>
+<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/12-tool-offsets/">&larr; Tool Offsets</a><a href="/cnc-manufacturing-engineering/cnc-programming/14-linear-interpolation/">Linear Interpolation &rarr;</a></div>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

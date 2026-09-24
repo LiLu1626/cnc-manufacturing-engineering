@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practical Math for CNC — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Right triangles, sine/cosine, bolt circle coordinates, chamfer and radius.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/08-programming-math/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body>
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="cp-article">
+<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Practical Math for CNC</h1>
+<p class="cp-lead">No calculus — triangles, circles, and converting drawings to coordinates.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
+<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>Pythagorean theorem</li><li>Bolt circle coordinates</li><li>Chamfer calculation</li></ul></div>
+<h2>Concept</h2>
+<p>Every coordinate is either directly dimensioned or derived. Bolt circle at angle θ: X = R·cos(θ), Y = R·sin(θ). Verify CAM output yourself.</p>
+<h2>Why It Matters</h2>
+<p>CAM says hole at (86.6, 50) on R=100 at 30°. Check: 100·cos30=86.6, 100·sin30=50.0. If you cannot check, you cannot catch CAM errors.</p>
+<h2>How</h2>
+<p><strong>Distance:</strong> (10,20)→(50,50): √(40²+30²)=50 mm. <strong>Chamfer:</strong> 1×45° removes 1 mm in both axes.</p>
+<h2>Example</h2>
+<p>4 holes on 100 mm bolt circle (R=50): 0°=(50,0), 90°=(0,50), 180°=(-50,0), 270°=(0,-50).</p>
+<h2>Common Mistakes</h2>
+<ul><li>Using diameter as radius on bolt circles.</li></ul>
+<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> Hole on R=60 at 45°. X,Y?</p><details><summary>Show answer</summary><p>42.43, 42.43.</p></details><p><strong>2.</strong> Distance (0,0)→(30,40)?</p><details><summary>Show answer</summary><p>50 mm.</p></details></div>
+<h2>Sources and Applicability</h2><ul><li>Sandvik Coromant — Machining Math.</li></ul>
+<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/07-plane-units/">&larr; Planes & Units</a><a href="/cnc-manufacturing-engineering/cnc-programming/09-mcode-fundamentals/">M-Codes &rarr;</a></div>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

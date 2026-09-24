@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practice Exercises and Self-Assessment — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Test your CNC programming knowledge: code reading, error finding, and written programs.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/39-exercises-assessment/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body>
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="cp-article">
+<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Practice Exercises and Self-Assessment</h1>
+<p class="cp-lead">Reading about CNC is not enough. These exercises check whether you can actually do it.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
+<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>Code reading comprehension</li><li>Finding intentional errors</li><li>Writing simple programs</li><li>Self-assessment checklist</li></ul></div>
+<h2>Code Reading</h2>
+<p>Read this block and answer:</p>
+<pre class="cp-code"><code>G90 G54 G00 X20. Y20.
+G01 Z-2. F100.
+G01 X80. F300.
+G00 Z5.</code></pre>
+<p><strong>Q:</strong> What does the tool do?<br>
+<strong>A:</strong> Rapid to X20 Y20 above part → feed down to Z-2 at 100 mm/min → feed to X80 at 300 mm/min → rapid up to Z5.</p>
+<h2>Find the Error</h2>
+<p>This program has a bug. What is it?</p>
+<pre class="cp-code"><code>G81 G99 X10. Y10. Z-10. R5. F100.
+X50. Y30.
+G00 X0 Y0
+G00 Z50.</code></pre>
+<p><strong>A:</strong> Missing G80 before G00 X0 Y0. The drilling cycle is still active — the G00 X0 Y0 will execute a drill at X0 Y0. Insert G80 after the last hole.</p>
+<h2>Write the Program</h2>
+<p>Drill 3 holes at (10,10), (30,10), (50,10) through a 10 mm plate. R plane 5 mm, Z depth -12. Feed 100. Show the G-code.</p>
+<details><summary>Sample answer</summary>
+<pre class="cp-code"><code>G90 G54 G00 X10. Y10. S1500 M03
+G43 H01 Z50. M08
+G99 G81 Z-12. R5. F100.
+X30. Y10.
+X50. Y10.
+G80
+G00 Z50. M09
+M05
+M30</code></pre>
+</details>
+<h2>Self-Assessment Checklist</h2>
+<p>Before calling yourself competent:</p>
+<ul><li>I can read a G-code block and predict tool motion.</li>
+<li>I know G90 vs G91 without looking it up.</li>
+<li>I know why G40 G49 G80 are in startup blocks.</li>
+<li>I can set up G54 work offset and H tool offset.</li>
+<li>I can write a simple drilling program from a drawing.</li>
+<li>I know when to use G98 vs G99.</li>
+<li>I verify programs with dry run, not just backplot.</li></ul>
+<h2>Sources and Applicability</h2><ul><li>Exercises are self-paced. Verify answers against your machine's manual.</li></ul>
+<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/38-process-optimization/">&larr; Process Optimization</a><a href="/cnc-manufacturing-engineering/cnc-programming/40-glossary-sources/">Glossary & Sources &rarr;</a></div>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

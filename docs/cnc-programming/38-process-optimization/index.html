@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cycle Time and Quality — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Where cycle time goes, how to improve it without wrecking parts, and process capability basics.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/38-process-optimization/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body>
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="cp-article">
+<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Cycle Time and Quality</h1>
+<p class="cp-lead">A correct program is the start. A fast, repeatable program is the goal.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
+<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>Where time goes in a cycle</li><li>Rapid vs cutting time</li><li>Tool change and pallet time</li><li>Process capability Cp/Ck concept</li></ul></div>
+<h2>Concept</h2>
+<p>Cycle time = rapid moves + cutting feeds + tool changes + spindle acceleration + probing. Reducing air cuts (rapid repositioning) often saves more than speeding feeds. A good program balances: safe approach, minimal air cuts, optimized chip load, and repeatable offsets.</p>
+<h2>Why It Matters</h2>
+<p>Running 20% faster may break tools or ruin finish. Cutting air 20% shorter is free. Tool changes and spindle accel/decel are often 30%+ of cycle time on small parts.</p>
+<h2>How</h2>
+<ul><li>Minimize R plane height — just enough clearance.</li><li>Use G99 (retract to R) between holes, not G98.</li><li>Combine operations where possible.</li><li>Optimize tool paths for climb milling (better tool life = less downtime).</li><li>Stable offsets = fewer inspection stops.</li></ul>
+<h2>Common Mistakes</h2>
+<ul><li>Cranking feed too high to save seconds — tool wears faster, net time worse.</li><li>Ignoring tool change time on multiple-tool programs.</li></ul>
+<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> Where is cycle time on a 4-hole drill program?</p><details><summary>Show answer</summary><p>Mostly rapid repositioning between holes. G99 saves time vs G98.</p></details><p><strong>2.</strong> Why does climb milling reduce total cost?</p><details><summary>Show answer</summary><p>Longer tool life = less tool change and insert cost, despite similar cutting time.</p></details></div>
+<h2>Sources and Applicability</h2><ul><li>Sandvik Coromant — Productivity.</li><li>Process capability: Cp/Cpk references in Manufacturing Quality.</li></ul>
+<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/37-multiaxis-probing-overview/">&larr; Multi-axis & Probing</a><a href="/cnc-manufacturing-engineering/cnc-programming/39-exercises-assessment/">Exercises &rarr;</a></div>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

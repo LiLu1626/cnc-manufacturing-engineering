@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roughing and Finishing Cycles (G71/G70) — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="G71 stock removal, G70 finish pass, profile definition with P/Q, and stock allowance.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body>
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="cp-article">
+<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Roughing and Finishing Cycles (G71/G70)</h1>
+<p class="cp-lead">Instead of writing every roughing pass, G71 automatically steps over the entire profile.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Lathe</span></div>
+<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>G71 roughing cycle mechanics</li><li>P/Q profile definition blocks</li><li>U/W stock allowance</li><li>G70 finish pass</li></ul></div>
+<h2>Concept</h2>
+<p><strong>G71</strong> (stock removal turning) automatically cuts multiple roughing passes along a defined profile. You define the final shape between P (start) and Q (end) blocks, set depth of cut and stock allowance, and the machine does the rest. <strong>G70</strong> then takes the finish pass.</p>
+<h2>Why It Matters</h2>
+<p>Without G71, roughing a 5-step shaft means writing 15+ passes by hand. G71 does it in one cycle call, recalculating each pass automatically. This is why lathe programming relies on cycles.</p>
+<h2>How</h2>
+<pre class="cp-code"><code>G71 U2. R1.       <span class="cp-comment">(depth of cut 2mm, retract 1mm)</span>
+G71 P10 Q20 U0.2 W0.1 F200.  <span class="cp-comment">(stock: X0.2, Z0.1)</span>
+N10 G00 X20.      <span class="cp-comment">(profile start)</span>
+G01 Z0 F100.
+X40. Z-20.
+Z-40.
+N20 X50.          <span class="cp-comment">(profile end)</span>
+G70 P10 Q20       <span class="cp-comment">(finish pass)</span></code></pre>
+<p>U2 = depth of cut per pass. R1 = retract distance. U0.2 = finishing stock in X (diameter). W0.1 = finishing stock in Z.</p>
+<h2>Example</h2>
+<p>&Oslash;50 bar turned to a profile: &Oslash;40 for 20 mm, &Oslash;30 for 20 mm, with a chamfer. G71 roughs in 2 mm passes leaving 0.2 mm diameter stock. G70 then takes a single finish pass at full feed to size.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Profile start/end blocks (P/Q) not properly defined.</li><li>Stock allowance U0.2 too large or zero.</li><li>Changing feed inside the profile — G71 overrides with its own F.</li></ul>
+<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> G71 U2 R1 means?</p><details><summary>Show answer</summary><p>2 mm depth of cut per roughing pass, 1 mm retract between passes.</p></details><p><strong>2.</strong> What does G70 do?</p><details><summary>Show answer</summary><p>Takes the finishing pass along the same P/Q profile at finish feed/speed.</p></details></div>
+<h2>Sources and Applicability</h2><ul><li>Haas Lathe Operator Manual — G71/G70.</li><li>FANUC lathe cycle programming guide.</li></ul>
+<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/">&larr; Turning Coordinates</a><a href="/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring/">Grooving, Parting, Boring &rarr;</a></div>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

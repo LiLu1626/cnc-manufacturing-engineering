@@ -1,71 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>M-Code Fundamentals | CNC Programming</title>
-<link rel="stylesheet" href="../../assets/css/site.css">
-<link rel="stylesheet" href="../../assets/css/article.css">
-</head>
-<body>
-<nav class="site-nav">
-  <div class="site-nav-inner">
-    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
-    <ul class="site-nav-links">
-      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
-      <li><a href="../../knowledge-base/">Knowledge Base</a></li>
-      <li><a href="../../machine-systems/">Machine Systems</a></li>
-      <li><a href="../" class="active">CNC Programming</a></li>
-      <li><a href="../../about/">About</a></li>
-    </ul>
-  </div>
-</nav>
-<main class="article">
-<a href="../#ch05" class="back-link">&larr; Back to Level 2 · G-Code &amp; M-Code</a>
-<div class="hero-eyebrow">Lesson 09 · M-Code Fundamentals</div>
-<h1>M-Codes — Machine Functions</h1>
-
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M-Codes and Machine Functions — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="M00/M03/M05/M06/M08/M30 — what each does and why M-codes are machine-specific.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/09-mcode-fundamentals/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body>
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="cp-article">
+<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>M-Codes and Machine Functions</h1>
+<p class="cp-lead">G-codes control motion; M-codes control the machine itself.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Beginner</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
+<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>Stop/end codes</li><li>Spindle direction</li><li>Coolant and tool change</li><li>Why M-codes vary</li></ul></div>
 <h2>Concept</h2>
-<p>G-codes control motion. M-codes control everything else: spindle, coolant, tool change, stops, and program end. They're called "miscellaneous" but they're essential.</p>
-
-<h2>Common M-Codes</h2>
-<table>
-  <tr><th>Code</th><th>Function</th><th>When you use it</th></tr>
-  <tr><td><strong>M03</strong></td><td>Spindle forward (clockwise)</td><td>Before cutting: <code>S2000 M03</code></td></tr>
-  <tr><td><strong>M04</strong></td><td>Spindle reverse (CCW)</td><td>Rarely needed</td></tr>
-  <tr><td><strong>M05</strong></td><td>Spindle stop</td><td>After cutting, before tool change</td></tr>
-  <tr><td><strong>M06</strong></td><td>Tool change</td><td>After T-code: <code>T03 M06</code></td></tr>
-  <tr><td><strong>M08</strong></td><td>Coolant on</td><td>Before cutting</td></tr>
-  <tr><td><strong>M09</strong></td><td>Coolant off</td><td>After cutting</td></tr>
-  <tr><td><strong>M00</strong></td><td>Program stop</td><td>Machine stops; press cycle start to continue</td></tr>
-  <tr><td><strong>M01</strong></td><td>Optional stop</td><td>Only stops if operator turns the switch on</td></tr>
-  <tr><td><strong>M30</strong></td><td>Program end &amp; reset</td><td>Last line of every program</td></tr>
-</table>
-
-<h2>Typical Program Flow</h2>
-<div class="formula-box">
-<pre style="margin:0;font-family:monospace;font-size:12.5px;line-height:1.7;">
-T01 M06          (1. Change tool)
-G54 S2000 M03    (2. Work offset, spindle on forward)
-G00 X0 Y0        (3. Position at safe height)
-G43 H01 Z50. M08 (4. Tool length offset, coolant on)
-... CUT ...
-G00 Z50. M09     (5. Retract, coolant off)
-M05              (6. Spindle stop)
-G91 G28 Z0       (7. Z to home)
-M30              (8. End program)</pre>
-</div>
-
-<div class="callout">
-  <p><strong>M-codes can be machine-specific.</strong> The list above is standard Fanuc-compatible. On different machines, chuck clamp, tailstock, and pallet functions use different M-codes. Always check your machine manual for non-obvious codes.</p>
-</div>
-
-<div class="nav-links">
-  <a href="../07-plane-units/">&larr; Plane &amp; Units</a>
-  <a href="../10-spindle-feed/">Next: Spindle &amp; Feed &rarr;</a>
-</div>
-
-</main>
-<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
-</body>
-</html>
+<p>M-codes are hardware functions. Near-standard but machine-specific. Verify on your machine.</p>
+<h2>How</h2>
+<div class="cp-table-wrap"><table>
+<tr><th>Code</th><th>Function</th></tr>
+<tr><td>M00</td><td>Program stop (always)</td></tr>
+<tr><td>M01</td><td>Optional stop (switch ON)</td></tr>
+<tr><td>M03</td><td>Spindle CW</td></tr>
+<tr><td>M05</td><td>Spindle stop</td></tr>
+<tr><td>M06</td><td>Tool change</td></tr>
+<tr><td>M08/M09</td><td>Coolant on/off</td></tr>
+<tr><td>M30</td><td>End and rewind</td></tr>
+</table></div>
+<h2>Example</h2>
+<pre class="cp-code"><code>S2000 M03
+G43 H01 Z50.
+M08
+... cut ...
+M09 M05
+G91 G28 Z0
+M30</code></pre>
+<h2>Common Mistakes</h2>
+<ul><li>M00 vs M01 confusion.</li></ul>
+<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> M00 vs M01?</p><details><summary>Show answer</summary><p>M00 always stops; M01 only if switch ON.</p></details></div>
+<h2>Sources and Applicability</h2><ul><li>Haas Operator Manual — M-Codes.</li></ul>
+<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/08-programming-math/">&larr; Programming Math</a><a href="/cnc-manufacturing-engineering/cnc-programming/10-spindle-feed/">Spindle & Feed &rarr;</a></div>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

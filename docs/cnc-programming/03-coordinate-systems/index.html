@@ -1,122 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coordinate Systems | CNC Programming</title>
-<link rel="stylesheet" href="../../assets/css/site.css">
-<link rel="stylesheet" href="../../assets/css/article.css">
-</head>
-<body>
-<nav class="site-nav">
-  <div class="site-nav-inner">
-    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
-    <ul class="site-nav-links">
-      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
-      <li><a href="../../knowledge-base/">Knowledge Base</a></li>
-      <li><a href="../../machine-systems/">Machine Systems</a></li>
-      <li><a href="../" class="active">CNC Programming</a></li>
-      <li><a href="../../about/">About</a></li>
-    </ul>
-  </div>
-</nav>
-<main class="article">
-<a href="../#ch01" class="back-link">&larr; Back to Level 1 · Foundations</a>
-<div class="hero-eyebrow">Lesson 03 · Coordinate Systems ⭐⭐⭐</div>
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CNC Coordinate Systems — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Master machine vs work coordinates, G54-G59 work offsets, and absolute vs incremental programming.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/03-coordinate-systems/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body>
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="cp-article">
+<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
 <h1>CNC Coordinate Systems</h1>
-
+<p class="cp-lead">The single most important chapter. Coordinates are the language of CNC; get this wrong and nothing else matters.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill & Lathe</span></div>
+<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>Machine coordinate system and home position</li><li>Work coordinate system and G54–G59</li><li>Absolute (G90) vs incremental (G91)</li><li>How offsets chain: machine + work + tool = actual position</li></ul></div>
 <h2>Concept</h2>
-<p>Every position a tool moves to is a coordinate. CNC uses the Cartesian coordinate system: X, Y, Z. But there are <strong>two coordinate systems</strong> you must understand: the machine's own (machine zero) and the part's (workpiece zero). The bridge between them is the work offset.</p>
-
+<p>There are three nested coordinate systems. The <strong>machine coordinate system</strong> is fixed to the machine — its origin is the machine home. The <strong>work coordinate system</strong> (WCS) is where you place your part origin via a G54–G59 offset. The <strong>program</strong> uses WCS coordinates; it never sees machine coordinates.</p>
+<p>The chain is: <em>machine position + work offset + tool offset = actual tool–workpiece relationship.</em> The controller does this math every block. You only program in work coordinates.</p>
 <h2>Why It Matters</h2>
-<p>This is the #1 source of beginner errors. If you don't understand the difference between machine coordinates and work coordinates, you will crash. If you mix up G90 and G91, your coordinates mean the wrong thing. This is the most important lesson in the entire course — take your time here.</p>
-
-<h2>1. Cartesian Coordinates</h2>
-<p>Just like math class: you have an origin (0,0,0), and each axis goes positive and negative. On a mill:</p>
-<ul>
-  <li><strong>+X</strong> = table moves right</li>
-  <li><strong>+Y</strong> = table moves toward you (away from the column)</li>
-  <li><strong>+Z</strong> = spindle moves up (away from the table)</li>
-</ul>
-
-<h2>2. Machine Coordinate System</h2>
-<p>The machine has its own fixed zero point called <strong>machine zero</strong> or <strong>home</strong>. When you turn on the machine, it "homes" itself — the axes move to the limit switches and establish where (0,0,0) is for the machine. You never program machine coordinates directly; the controller uses them internally.</p>
-
-<h2>3. Work Coordinate System (G54)</h2>
-<p>The part is not sitting at machine zero. It's clamped somewhere on the table. During setup, you "touch off" the part corner: the tool touches the X edge, the Y edge, and the top surface. You press <em>set</em>, and the controller records the offset between machine zero and the part corner. That offset is stored in <strong>G54</strong>.</p>
-
-<div class="formula-box">
-  <p style="text-align:center;font-size:15px;"><strong>Machine Position + Work Offset (G54) = Work Coordinate</strong></p>
-</div>
-
-<table>
-  <tr><th>Offset</th><th>Use</th></tr>
-  <tr><td>G54</td><td>Primary part setup</td></tr>
-  <tr><td>G55</td><td>Second part on the table (e.g. second vise)</td></tr>
-  <tr><td>G56, G57</td><td>Additional parts or fixtures</td></tr>
-  <tr><td>G58, G59</td><td>Pallets or multi-setup jobs</td></tr>
-</table>
-
-<h2>4. Absolute vs Incremental (G90 vs G91) ⭐</h2>
-<p>This is the concept that confuses every beginner. <strong>G90</strong> means coordinates are absolute — every X/Y/Z is measured from work zero. <strong>G91</strong> means coordinates are incremental (relative) — every X/Y/Z is a distance from the <em>current position</em>.</p>
-
-<svg viewBox="0 0 520 260" xmlns="http://www.w3.org/2000/svg" style="max-width:520px;width:100%;margin:1rem auto;display:block;">
-  <!-- Left: Absolute -->
-  <text x="130" y="20" text-anchor="middle" font-size="13" fill="#0b766e" font-weight="bold">G90 Absolute</text>
-  <line x1="30" y1="220" x2="240" y2="220" stroke="#5c6872"/>
-  <line x1="30" y1="220" x2="30" y2="40" stroke="#5c6872"/>
-  <circle cx="30" cy="220" r="4" fill="#0b766e"/>
-  <text x="30" y="240" text-anchor="middle" font-size="11" fill="#0b766e">0,0</text>
-  <circle cx="180" cy="120" r="5" fill="#c0392b"/>
-  <text x="180" y="110" text-anchor="middle" font-size="11" fill="#c0392b">X150 Y100</text>
-  <line x1="30" y1="220" x2="180" y2="220" stroke="#c0392b" stroke-dasharray="3,3"/>
-  <line x1="180" y1="220" x2="180" y2="120" stroke="#c0392b" stroke-dasharray="3,3"/>
-  <text x="100" y="235" text-anchor="middle" font-size="10" fill="#5c6872">always measured from 0,0</text>
-
-  <!-- Right: Incremental -->
-  <text x="390" y="20" text-anchor="middle" font-size="13" fill="#0b766e" font-weight="bold">G91 Incremental</text>
-  <line x1="290" y1="220" x2="500" y2="220" stroke="#5c6872"/>
-  <line x1="290" y1="220" x2="290" y2="40" stroke="#5c6872"/>
-  <circle cx="290" cy="220" r="4" fill="#0b766e"/>
-  <text x="290" y="240" text-anchor="middle" font-size="11" fill="#0b766e">start</text>
-  <!-- move 1 -->
-  <circle cx="370" cy="220" r="4" fill="#17242f"/>
-  <line x1="290" y1="220" x2="370" y2="220" stroke="#2980b9" stroke-width="2"/>
-  <text x="330" y="212" text-anchor="middle" font-size="10" fill="#2980b9">X+80</text>
-  <!-- move 2 -->
-  <circle cx="450" cy="140" r="5" fill="#c0392b"/>
-  <line x1="370" y1="220" x2="450" y2="140" stroke="#c0392b" stroke-width="2"/>
-  <text x="420" y="170" font-size="10" fill="#c0392b">X+80 Y-80</text>
-  <text x="390" y="255" text-anchor="middle" font-size="10" fill="#5c6872">each move = distance from current spot</text>
-</svg>
-
-<h2>Example: Same Destination, Different Meaning</h2>
-<div class="example">
-  <p>Start at X0 Y0. You want to end at X50 Y20.</p>
-  <table>
-    <tr><th>Mode</th><th>Code</th><th>What the machine does</th></tr>
-    <tr><td><strong>G90 Absolute</strong></td><td><code>G90 G01 X50. Y20.</code></td><td>"Go to position X50 Y20" (from work zero)</td></tr>
-    <tr><td><strong>G91 Incremental</strong></td><td><code>G91 G01 X50. Y20.</code></td><td>"Move 50 in X and 20 in Y" (from where you are now)</td></tr>
-  </table>
-  <p>If you start at X10 Y5 and write G91 X50 Y20, you end up at X60 Y25 — not X50 Y20. That's the trap.</p>
-</div>
-
-<div class="warning">
-  <p><strong>Most programs run in G90 (absolute).</strong> G91 is used for specific moves like <code>G91 G28 Z0</code> (return to home: move to machine zero relative to current position). If you're ever unsure which mode you're in, look at the controller screen — it shows G90 or G91.</p>
-</div>
-
-<h2>Practice Exercise</h2>
-<div class="example">
-  <p><strong>Question:</strong> You're at X20 Y10. You write <code>G91 G01 X30. Y15.</code>. Where do you end up? Now write the equivalent G90 code.</p>
-  <p><strong>Answer:</strong> In G91, you move +30 in X and +15 in Y from current position: X50 Y25. The G90 equivalent is <code>G90 G01 X50. Y25.</code></p>
-</div>
-
-<div class="nav-links">
-  <a href="../02-machine-fundamentals/">&larr; Machine Fundamentals</a>
-  <a href="../04-program-structure/">Next: Program Structure &rarr;</a>
-</div>
-
-</main>
-<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
-</body>
-</html>
+<p>If your G54 X/Y is off by 2 mm, every feature programs to the wrong place by 2 mm — but the program itself is "correct." This is why setup verification matters more than code review. Absolute vs incremental errors are the #1 beginner crash cause.</p>
+<h2>How</h2>
+<p><strong>G90 (absolute):</strong> every X/Y/Z word is a destination in work coordinates. <strong>G91 (incremental):</strong> every word is a distance moved from the current position.</p>
+<p>Start at X0 Y0. To reach (50,20):</p>
+<ul><li>Absolute: <code>G90 G01 X50. Y20. F200</code> — go to the point (50,20).</li>
+<li>Incremental: <code>G91 G01 X50. Y20. F200</code> — move 50 in X and 20 in Y from wherever you are.</li></ul>
+<p>If you were at (100,50), G91 X50 Y20 lands at (150,70) — not (50,20). That is the difference.</p>
+<figure class="cp-figure"><svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+<line x1="30" y1="190" x2="280" y2="190" stroke="#17242f" stroke-width="1.5" marker-end="url(#ax)"/>
+<line x1="50" y1="210" x2="50" y2="20" stroke="#17242f" stroke-width="1.5" marker-end="url(#ay)"/>
+<defs><marker id="ax" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#17242f"/></marker>
+<marker id="ay" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#17242f"/></marker></defs>
+<text x="275" y="205" font-size="13" fill="#17242f">X+</text><text x="35" y="25" font-size="13" fill="#17242f">Y+</text>
+<circle cx="150" cy="100" r="4" fill="#0b766e"/><text x="160" y="95" font-size="12" fill="#07574f">Work zero</text>
+<circle cx="220" cy="140" r="4" fill="#e07a3f"/><text x="225" y="155" font-size="11" fill="#e07a3f">P(40,30)</text>
+</svg><figcaption>Work coordinates: X right, Y up, origin at your chosen part zero.</figcaption></figure>
+<p><strong>G54–G59</strong> are six stored work offsets. Use G54 for setup 1, G55 for setup 2, etc. — useful when machining multiple parts on a tombstone or running two setups on one program.</p>
+<h2>Example</h2>
+<p>Programmed point X100 Y50. G54 work offset is X0.000 Y0.000. Machine axis target = machine_home + G54 + (100,50). If you measured the edge wrong and G54 should be X0.5, the part is off by 0.5 mm in X — consistently on every feature.</p>
+<p>Compare: G90 G01 X30 F150 (go to X=30) vs G91 G01 X30 F150 (move 30 mm away). Same numbers, completely different motion.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Switching G90/G91 mid-program and forgetting — subsequent moves accumulate wrong.</li>
+<li>Using G54 for every setup even when a second offset would avoid re-fixturing.</li>
+<li>Assuming work zero is always on the part corner — choose it by datum, not by convenience.</li>
+<li>Mixing G90 and G91 in the same block without understanding the state.</li></ul>
+<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> In G90 at X20 Y10, you command G91 X30 Y10. Where is the tool now?</p><details><summary>Show answer</summary><p>X50 Y20 (20+30, 10+10). Incremental adds to current position.</p></details><p><strong>2.</strong> You want the tool to go from (20,20) to (60,45). Write it in G91.</p><details><summary>Show answer</summary><p>G91 G01 X40. Y25. (60−20=40, 45−20=25).</p></details><p><strong>3.</strong> Why is G54 called an offset, not a zero?</p><details><summary>Show answer</summary><p>It shifts the work origin relative to machine home. The machine never moves the part; it just adds a stored number to every programmed coordinate.</p></details></div>
+<h2>Sources and Applicability</h2><ul><li>Haas Mill Operator's Manual — Work Offsets, G54–G59.</li><li>HEIDENHAIN and Siemens manuals use equivalent datum plane / zero offset concepts.</li><li>Always confirm offset behavior on your controller.</li></ul>
+<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/02-machine-fundamentals/">&larr; Machine Fundamentals</a><a href="/cnc-manufacturing-engineering/cnc-programming/04-program-structure/">Program Structure &rarr;</a></div>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

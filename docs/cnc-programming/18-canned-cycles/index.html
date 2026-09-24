@@ -1,68 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Canned Cycles Reference | CNC Programming</title>
-<link rel="stylesheet" href="../../assets/css/site.css">
-<link rel="stylesheet" href="../../assets/css/article.css">
-</head>
-<body>
-<nav class="site-nav">
-  <div class="site-nav-inner">
-    <a href="../../" class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</a>
-    <ul class="site-nav-links">
-      <li><a href="../../engineering-tools/">Engineering Tools</a></li>
-      <li><a href="../../knowledge-base/">Knowledge Base</a></li>
-      <li><a href="../../machine-systems/">Machine Systems</a></li>
-      <li><a href="../" class="active">CNC Programming</a></li>
-      <li><a href="../../about/">About</a></li>
-    </ul>
-  </div>
-</nav>
-<main class="article">
-<a href="../#ch17" class="back-link">&larr; Back to Level 5 · Drilling &amp; Cycles</a>
-<div class="hero-eyebrow">Lesson 18 · Canned Cycles</div>
-<h1>Canned Cycles — How They Work</h1>
-
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canned Cycles Reference — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="G98/G99 retract mode, R plane, cycle repetition, G80 cancel, and how cycles chain.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head><body>
+<nav class="site-nav"><div class="site-nav-inner">
+<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+<ul class="site-nav-links">
+<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+<li><a href="/cnc-manufacturing-engineering/cnc-programming/" aria-current="page">CNC Programming</a></li>
+<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+</ul></div></nav>
+<main class="cp-article">
+<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<h1>Canned Cycles Reference</h1>
+<p class="cp-lead">One block repeats a multi-step operation at every hole position. This page explains the cycle structure itself.</p>
+<div class="cp-meta"><span><strong>Level:</strong> Key</span><span><strong>Machine:</strong> Mill</span></div>
+<div class="cp-objectives"><strong>What you will learn:</strong><ul><li>Anatomy of a canned cycle</li><li>G98 retract to initial plane vs G99 to R plane</li><li>Repetition with L/K</li><li>G80 cancel and cycle state</li></ul></div>
 <h2>Concept</h2>
-<p>A canned cycle packages a repeated motion sequence (position → rapid down → feed down → retract) into a single line. Once activated, every X/Y coordinate becomes a new hole. This is how you drill a 40-hole plate in 40 lines instead of 400.</p>
-
-<h2>The 6 Steps of Every Cycle</h2>
-<svg viewBox="0 0 480 180" xmlns="http://www.w3.org/2000/svg" style="max-width:480px;width:100%;margin:1rem auto;display:block;">
-  <rect x="20" y="60" width="80" height="40" rx="5" fill="#e6f4f2" stroke="#0b766e"/>
-  <text x="60" y="85" text-anchor="middle" font-size="11" fill="#07574f">1. Position X/Y</text>
-  <line x1="100" y1="80" x2="120" y2="80" stroke="#0b766e"/>
-  <rect x="120" y="60" width="80" height="40" rx="5" fill="#e6f4f2" stroke="#0b766e"/>
-  <text x="160" y="85" text-anchor="middle" font-size="11" fill="#07574f">2. Rapid to R plane</text>
-  <line x1="200" y1="80" x2="220" y2="80" stroke="#0b766e"/>
-  <rect x="220" y="60" width="80" height="40" rx="5" fill="#e6f4f2" stroke="#0b766e"/>
-  <text x="260" y="85" text-anchor="middle" font-size="11" fill="#07574f">3. Feed to Z depth</text>
-  <line x1="300" y1="80" x2="320" y2="80" stroke="#0b766e"/>
-  <rect x="320" y="60" width="80" height="40" rx="5" fill="#e6f4f2" stroke="#0b766e"/>
-  <text x="360" y="85" text-anchor="middle" font-size="11" fill="#07574f">4. Dwell (if G82)</text>
-  <line x1="400" y1="80" x2="420" y2="80" stroke="#0b766e"/>
-  <rect x="420" y="60" width="50" height="40" rx="5" fill="#0b766e"/>
-  <text x="445" y="85" text-anchor="middle" font-size="11" fill="#fff">5. Retract</text>
-</svg>
-
-<h2>G98 vs G99 Retract</h2>
-<table>
-  <tr><th>Code</th><th>Retract to</th><th>Use when</th></tr>
-  <tr><td><strong>G99</strong></td><td>R plane (e.g. Z5)</td><td>No obstacles between holes — faster</td></tr>
-  <tr><td><strong>G98</strong></td><td>Initial Z height (e.g. Z50)</td><td>Fixtures or tall parts between holes</td></tr>
-</table>
-
-<div class="callout">
-  <p><strong>Cycle definitions vary by controller.</strong> G81 on Fanuc is standard, but some Haas or Siemens cycles have extra parameters. Always check your controller's manual. The structure (position → R plane → Z depth → retract) is universal.</p>
-</div>
-
-<div class="nav-links">
-  <a href="../17-drilling-cycles/">&larr; Drilling Cycles</a>
-  <a href="../23-program-safety/">Next: Program Safety &rarr;</a>
-</div>
-
-</main>
-<footer class="site-footer">Designed by Li Lu · CNC & Manufacturing Engineering</footer>
-</body>
-</html>
+<p>Every canned cycle follows the same 5-step sequence: (1) rapid to X/Y position, (2) rapid to R plane, (3) feed to Z depth, (4) dwell or optional actions, (5) retract — either to R plane (G99) or to the initial Z height (G98).</p>
+<h2>Why It Matters</h2>
+<p>G99 retracts to R plane between holes — faster when no obstacles. G98 retracts to the initial Z height — needed when crossing a clamp or boss. Choosing wrong means crashing the drill head into a fixture.</p>
+<h2>How</h2>
+<p><strong>G99</strong>: retract to R plane (stay low, faster). Use when holes are in a clear pattern.</p>
+<p><strong>G98</strong>: retract to initial plane (go high). Use when crossing over a fixture, wall, or clamp.</p>
+<p><strong>L/K repetition</strong> (controller-dependent): repeat the cycle at incremental positions for a row of holes.</p>
+<pre class="cp-code"><code>G90 G00 X0 Y0 Z50.     <span class="cp-comment">(initial plane Z50)</span>
+G99 G81 X10. Y10. Z-15. R5. F100.  <span class="cp-comment">(retract to R=5)</span>
+X50. Y30.              <span class="cp-comment">(next hole, retract to R=5)</span>
+G98 X80. Y10.          <span class="cp-comment">(retract to Z50, crossing a boss)</span>
+G80</code></pre>
+<h2>Example</h2>
+<p>4 holes in a row at X10, X30, X50, X70, Y20. With G99, each hole retracts only to R5 between them — efficient. If a clamp sits between hole 2 and 3, switch to G98 for that move so the drill lifts over the clamp.</p>
+<h2>Common Mistakes</h2>
+<ul><li>Using G99 when a fixture stands between holes.</li><li>Forgetting G80 — cycle stays active after all holes.</li><li>Confusing R plane with initial plane.</li><li>Changing Z depth mid-cycle without resetting the cycle.</li></ul>
+<div class="cp-practice"><h3>Practice</h3><p><strong>1.</strong> G98 vs G99?</p><details><summary>Show answer</summary><p>G98 retracts to initial Z height. G99 retracts only to R plane.</p></details><p><strong>2.</strong> When must you use G98?</p><details><summary>Show answer</summary><p>When the drill must clear an obstacle between hole positions.</p></details></div>
+<h2>Sources and Applicability</h2><ul><li>Haas Mill Operator Manual — G98/G99.</li><li>FANUC canned cycle programming guide.</li></ul>
+<div class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/">&larr; Drilling Cycles</a><a href="/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/">Turning Fundamentals &rarr;</a></div>
+</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>

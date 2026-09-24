@@ -1,0 +1,130 @@
+/* CNC Programming module styles — scoped, does not affect other sections */
+
+.cnc-programming body,
+body.cnc-programming { line-height: 1.6; }
+
+.cp-article { width: min(100% - 32px, 780px); margin: 0 auto; padding: 40px 0 60px; }
+.cp-article p, .cp-article li { line-height: 1.6; }
+
+.cp-eyebrow {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-light);
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+
+.cp-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 16px 0 28px;
+  padding: 12px 16px;
+  background: var(--accent-light);
+  border-radius: var(--radius);
+}
+.cp-meta strong { color: var(--ink); }
+
+.cp-toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 22px;
+  margin: 24px 0;
+  font-size: 0.92rem;
+}
+.cp-toc-title { font-weight: 700; margin-bottom: 8px; }
+.cp-toc ol { margin: 0 0 0 18px; padding: 0; }
+.cp-toc li { margin: 4px 0; }
+
+.cp-figure { margin: 24px 0; text-align: center; }
+.cp-figure svg { max-width: 100%; height: auto; }
+.cp-figure figcaption {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 8px;
+  text-align: center;
+}
+
+.cp-code {
+  background: #1e2a33;
+  color: #e6f4f2;
+  border-radius: 10px;
+  padding: 16px 18px;
+  overflow-x: auto;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  margin: 16px 0;
+}
+.cp-code code { background: none; padding: 0; color: inherit; }
+.cp-code .cp-comment { color: #7fa8a0; }
+.cp-code .cp-keyword { color: #7fd4c8; }
+
+.cp-table-wrap { overflow-x: auto; margin: 16px 0; }
+.cp-table-wrap table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+.cp-table-wrap th, .cp-table-wrap td {
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  text-align: left;
+}
+.cp-table-wrap th { background: var(--accent-light); font-weight: 600; }
+
+.cp-safety-note {
+  border-left: 4px solid var(--accent);
+  background: var(--accent-light);
+  padding: 14px 18px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin: 20px 0;
+}
+.cp-safety-note strong { color: var(--accent-dark); }
+
+.cp-practice {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin: 28px 0;
+}
+.cp-practice h3 { margin-top: 0; color: var(--accent-dark); }
+.cp-practice details {
+  margin-top: 12px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+.cp-practice summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--accent);
+}
+.cp-practice details[open] summary { margin-bottom: 8px; }
+
+.cp-nav-bottom {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.cp-nav-bottom a {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.cp-lead { font-size: 1.1rem; color: var(--muted); margin-bottom: 24px; }
+.cp-objectives { background: var(--accent-light); padding: 16px 20px; border-radius: var(--radius); margin: 20px 0; }
+.cp-objectives ul { margin: 8px 0 0 20px; }
+
+@media print {
+  .site-nav, .site-footer, .cp-nav-bottom { display: none; }
+  .cp-article { width: 100%; padding: 0; }
+}
