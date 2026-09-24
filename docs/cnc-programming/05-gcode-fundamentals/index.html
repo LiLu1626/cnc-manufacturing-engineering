@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>G-Code Fundamentals — CNC Programming</title>
-<meta name="description" content="Motion G-codes G00, G01, G02, G03, how they work, and the difference between rapid and feed motion.">
+<meta name="description" content="Motion G-codes G00, G01, G02, G03: purpose, syntax, safe use, modal behavior, and the critical difference between rapid and feed motion.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/05-gcode-fundamentals/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
@@ -27,41 +27,51 @@
 <main class="article">
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>G-Code Fundamentals</h1>
-<p class="lead">G-codes tell the machine what kind of motion to perform. This page covers the four core motion codes and how to use them safely.</p>
+<p class="lead">G-codes tell the machine what kind of motion to perform. This page covers the four core motion codes — G00, G01, G02, G03 — their syntax, modal behavior, and the safety rules that prevent crashes.</p>
+
 <h2>Concept</h2>
-<p><strong>G00</strong> is rapid positioning: the machine moves as fast as possible to a target position. It is not a cutting move. <strong>G01</strong> is linear interpolation: the machine moves in a straight line at a specified feed rate while cutting. <strong>G02</strong> and <strong>G03</strong> are circular interpolation (clockwise and counterclockwise).</p>
-<p>G00 and G01 are modal: once you set G01, every subsequent motion block stays in G01 until another motion code replaces it.</p>
+<p><strong>G00</strong> is rapid positioning: the machine moves as fast as possible to a target position. It is not a cutting move — no F command is used. <strong>G01</strong> is linear interpolation: the machine moves in a straight line at a specified feed rate while cutting. <strong>G02</strong> and <strong>G03</strong> are circular interpolation — clockwise and counterclockwise arcs, covered in detail on the circular interpolation page.</p>
+<p>G00 and G01 are <strong>modal</strong>: once you set G01, every subsequent motion block stays in G01 until another motion code replaces it. You do not need to write G01 on every line — it persists.</p>
+
 <h2>Why It Matters</h2>
-<p>G00 moves at rapid speed (often 15-30 m/min). If the tool is not above the stock when you rapid, it crashes into the vise or part. The #1 cause of beginner crashes is unsafe G00 moves. Always make sure Z is at clearance before rapid in X/Y.</p>
+<p>G00 moves at rapid speed (often 15–40 m/min). If the tool is not above the stock when you rapid in X/Y, it crashes into the vise or part. The #1 cause of beginner crashes is unsafe G00 motion. Always make sure Z is at a clearance height before rapid in X/Y.</p>
+
 <h2>How It Works</h2>
-<h3>G00 — Rapid</h3>
+
+<h3>G00 — Rapid Positioning</h3>
 <pre class="cp-code"><code>G00 X50. Y30.</code></pre>
-<p>Moves at maximum speed. No F word needed. Used for positioning, not cutting.</p>
+<p>Moves the tool to X50 Y30 at maximum rapid speed. No F command. Used only for positioning between cuts — never for cutting. On many machines, axes move independently rather than in a straight diagonal, so visualize the actual path.</p>
+
 <h3>G01 — Linear Feed</h3>
 <pre class="cp-code"><code>G01 X50. Y30. F200.</code></pre>
-<p>Straight-line motion at feed rate. F stays modal.</p>
-<h3>G02/G03 — Circular</h3>
-<p>See <a href="../15-circular-interpolation/">Circular Interpolation</a> for full detail.</p>
-<h2>Example</h2>
-<p>Safe approach pattern:</p>
-<pre class="cp-code"><code>G00 X0 Y0        (rapid XY to above target)
-G00 Z5.          (rapid Z to 5mm above stock)
+<p>Moves in a straight line at feed rate 200 mm/min. The F is modal — once set, subsequent G01 lines inherit it. The first G01 after a G00 must specify F.</p>
+
+<h3>G02 / G03 — Circular Interpolation</h3>
+<p>Cut arcs: G02 clockwise, G03 counterclockwise. Requires I/J or R to define the arc. See <a href="/cnc-manufacturing-engineering/cnc-programming/15-circular-interpolation/">Circular Interpolation</a> for full detail.</p>
+
+<h3>Safe Approach Pattern</h3>
+<pre class="cp-code"><code>G00 X0 Y0        (rapid XY to above target, at safe Z)
+G00 Z5.          (rapid Z to 5 mm clearance)
 G01 Z-2. F100.   (feed down to cut depth)
 G01 X50. F300.   (feed cut)
-G00 Z50.         (retract up before XY move)</code></pre>
+G00 Z50.         (retract up BEFORE next XY)</code></pre>
+<p>The critical rule: Z goes up before XY moves. Never rapid sideways at cut depth.</p>
+
 <h2>Common Mistakes</h2>
 <ul>
-<li><strong>Rapid XY at cut height</strong> — always retract Z to clearance before moving in XY.</li>
-<li><strong>Forgetting F on first G01</strong> — the feed rate may default to a dangerous value.</li>
-<li><strong>Using G00 for cutting</strong> — G00 is positioning only; it does not cut.</li>
+<li><strong>Rapid XY at cut height</strong> — always retract Z to clearance before moving in X/Y. This is the #1 crash cause.</li>
+<li><strong>Forgetting F on the first G01</strong> — the feed may default to a dangerous value. Always specify F on the first feed move.</li>
+<li><strong>Using G00 for cutting</strong> — G00 is positioning only; it moves too fast and does not maintain a controlled cut.</li>
+<li><strong>Assuming G00 is straight-line</strong> — axes move independently; the path may be a dog-leg that hits obstacles.</li>
 </ul>
+
 <h2>Practice</h2>
 <p><strong>1.</strong> When is G00 safe vs unsafe?</p>
-<details><summary>Show answer</summary><p>Safe: tool is above clearance plane. Unsafe: tool is at cut depth or near stock/fixture. Always retract Z before rapid XY.</p></details>
-<p><strong>2.</strong> Distance 40 mm at F200. Time?</p>
-<details><summary>Show answer</summary><p>40/200 = 0.2 min = 12 seconds.</p></details>
-<p><strong>3.</strong> Why is G00 not straight-line between axes?</p>
-<details><summary>Show answer</summary><p>On many controllers, G00 moves each axis at its own maximum speed independently, not interpolated at a programmed feed. The cornering path may be diagonal first, then straight.</p></details>
+<details><summary>Show answer</summary><p>Safe: tool is above the clearance plane, clear of all fixtures. Unsafe: tool is at cut depth or near the stock. Always retract Z before rapid XY.</p></details>
+<p><strong>2.</strong> Distance 40 mm at F200. Cutting time?</p>
+<details><summary>Show answer</summary><p>40/200 = 0.2 minutes = 12 seconds.</p></details>
+<p><strong>3.</strong> Why is G01 modal important?</p>
+<details><summary>Show answer</summary><p>Once G01 is set, you do not need to repeat it on every line. It persists until G00, G02, or G03 replaces it. This keeps programs shorter.</p></details>
 
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/04-program-structure/">&larr; Program Structure</a><a href="/cnc-manufacturing-engineering/cnc-programming/06-modal-codes/">Modal Codes &rarr;</a></nav>
 </main>
