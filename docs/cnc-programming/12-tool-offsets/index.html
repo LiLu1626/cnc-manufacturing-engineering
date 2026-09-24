@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Tool Length & Geometry Offsets — CNC Programming</title>
-<meta name="description" content="Tool length offsets G43/G49, geometry vs wear offsets, tool radius compensation, and how the machine knows where the tool tip is.">
+<meta name="description" content="Tool length offsets G43/G49, geometry vs wear offsets, tool radius compensation, lathe tool nose radius, and how the machine knows where the tool tip is.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/12-tool-offsets/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
@@ -27,45 +27,54 @@
 <main class="article">
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Tool Length &amp; Geometry Offsets</h1>
-<p class="lead">The machine knows where the spindle is, but it does not automatically know where the tool tip is. Tool offsets bridge that gap. This page covers G43 length compensation, geometry vs wear, and tool radius.</p>
+<p class="lead">The machine knows where the spindle is, but it does not automatically know where the tool tip is. Tool offsets bridge that gap. This page covers G43 length compensation, geometry vs wear offsets, tool radius, and lathe tool nose radius.</p>
+
+<div class="callout"><strong>The core idea:</strong> Machine position &ne; tool tip position. The machine measures the spindle nose. Every tool has a different length and radius. Tool offsets tell the controller where the tip actually is.</div>
 
 <h2>Concept</h2>
-<p>Every tool has a different length and radius. The machine's Z axis position measures the spindle nose, not the cutting tip. <strong>Tool length offset</strong> tells the controller how much longer (or shorter) this tool is than a reference. <strong>G43 H01</strong> activates length compensation using offset register 1. <strong>G49</strong> cancels it.</p>
-<p>On a lathe, each tool has a <strong>geometry offset</strong> (the base position) and a <strong>wear offset</strong> (small corrections). The actual tool tip position = machine position + geometry offset + wear offset. The machine knows machine position; the offset table tells it where the tip is.</p>
+<p>Every tool has a different length and radius. The machine's Z axis position measures the spindle nose, not the cutting tip. <strong>Tool length offset</strong> tells the controller how much longer (or shorter) this tool is than a reference. On a mill, <strong>G43 H01</strong> activates length compensation using offset register 1. <strong>G49</strong> cancels it.</p>
+<p>On a lathe, each tool has a <strong>geometry offset</strong> (the base position of the virtual tip) and a <strong>wear offset</strong> (small corrections as the tool wears). The actual tool tip position = machine position + geometry offset + wear offset.</p>
 
 <h2>Why It Matters</h2>
-<p>If tool length offset is wrong, the Z depth is wrong. A tool that is 5 mm shorter than the offset thinks it is at Z-5 when it is actually at Z0 — it will not cut. If it is 5 mm longer, it cuts 5 mm too deep. On a lathe, wrong X offset means wrong diameter — directly on the part tolerance.</p>
+<p>If tool length offset is wrong, the Z depth is wrong. A tool that is 5 mm shorter than the offset thinks it is at Z&minus;5 when it is actually at Z0 — it will not cut. If it is 5 mm longer, it cuts 5 mm too deep. On a lathe, wrong X offset means wrong diameter — directly on the part tolerance. Tool offset errors are the #1 cause of dimensional scrap.</p>
 
-<h2>How It Works</h2>
-<h3>Mill: G43 Length Compensation</h3>
+<h2>Mill: G43 Length Compensation</h2>
 <pre class="cp-code"><code>G00 G43 H01 Z50.  (activate length comp with offset 1, go to Z50)</code></pre>
-<p>The controller adds the H offset to the commanded Z. If H01 = -120.0 (tool is 120 mm shorter than reference), the actual spindle position becomes Z170.0, and the tip is at Z50. G49 cancels length comp — but G49 does <strong>not</strong> switch to machine coordinates (that is G53). It simply removes the length offset from the current position.</p>
-<h3>Geometry vs Wear</h3>
-<ul>
-<li><strong>Geometry offset</strong> — the measured base offset for this tool (set during setup).</li>
-<li><strong>Wear offset</strong> — small corrections as the tool wears (e.g., -0.02 mm when diameter is oversized).</li>
-</ul>
-<h3>Lathe: Tool Nose Radius</h3>
-<p>Turning tools have a nose radius (e.g., r0.4). The virtual tip (intersection of X and Z extensions) is what the geometry offset references. The actual nose leaves a small fillet at sharp corners.</p>
+<p>The controller adds the H offset to the commanded Z. If H01 = &minus;120.0 (tool is 120 mm shorter than reference), the actual spindle position becomes Z170.0, and the tip is at Z50. Without G43, the spindle would go to Z50.0 and the tip would be at Z&minus;70.0 — 120 mm too low. G49 cancels length comp — but G49 does <strong>not</strong> switch to machine coordinates (that is G53). It simply removes the length offset.</p>
+
+<h2>Geometry vs Wear Offsets</h2>
+<table class="data-table">
+<tr><th>Type</th><th>Set When</th><th>Used For</th></tr>
+<tr><td>Geometry offset</td><td>During setup</td><td>Base measured position of the tool</td></tr>
+<tr><td>Wear offset</td><td>During production</td><td>Small corrections as tool wears</td></tr>
+</table>
+<p>If a turned diameter measures 30.05 mm but should be 30.00, you adjust the X wear offset by &minus;0.025 mm (radius, so &minus;0.05 diameter). You do not change the geometry offset — that would corrupt the setup. Wear offsets are for small, in-process corrections; geometry offsets are for initial setup.</p>
+
+<h2>Lathe: Tool Nose Radius</h2>
+<p>Turning tools have a nose radius (e.g., r0.4 or r0.8). The virtual tip (the intersection of the X and Z extensions) is what the geometry offset references. The actual rounded nose leaves a small fillet at sharp corners. For accurate tapers and radii, the controller uses tool nose radius compensation (G41/G42 on lathes) with the nose radius and tool orientation (T-number) set in the offset table.</p>
 
 <h2>Example</h2>
-<p>Tool 1 length = 150 mm. Reference tool length = 150 mm (H01 = 0). Tool 2 length = 145 mm. H02 = -5.0 mm.</p>
-<p>Program: G00 G43 H02 Z50. The spindle goes to Z55.0 (50 + 5), and the tool tip reaches Z50.0. Without G43, the spindle would go to Z50.0 and the tip would be at Z45.0 — 5 mm too low.</p>
+<p>Tool 1 length = 150 mm. Reference tool length = 150 mm (H01 = 0). Tool 2 length = 145 mm. H02 = &minus;5.0 mm.</p>
+<p>Program: <code>G00 G43 H02 Z50.</code> The spindle goes to Z55.0 (50 &minus; (&minus;5)), and the tool tip reaches Z50.0. Without G43, the spindle would go to Z50.0 and the tip would be at Z45.0 — 5 mm too low, likely crashing into the part.</p>
 
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Thinking G49 returns to machine coordinates</strong> — G49 cancels length offset only. G53 is machine coordinates.</li>
 <li><strong>Using H number as tool number</strong> — H01 is offset register 1, not necessarily tool 1. They usually match but are independent.</li>
-<li><strong>Confusing geometry and wear offsets</strong> — geometry is for setup; wear is for in-process correction.</li>
+<li><strong>Confusing geometry and wear offsets</strong> — geometry is for setup; wear is for in-process correction. Don't fix a wear problem by changing geometry.</li>
+<li><strong>Forgetting H after T06 M06</strong> — T06 selects tool 6, but G43 H06 must still be programmed to load the correct length offset.</li>
+<li><strong>Wrong sign on H offset</strong> — shorter tools need negative H values. Getting the sign wrong doubles the error.</li>
 </ul>
 
 <h2>Practice</h2>
-<p><strong>1.</strong> H01 = -80.0. You command G43 H01 Z30. Where does the spindle actually stop?</p>
-<details><summary>Show answer</summary><p>Spindle at Z = 30 - (-80) = Z110. The tip is at Z30.</p></details>
+<p><strong>1.</strong> H01 = &minus;80.0. You command G43 H01 Z30. Where does the spindle actually stop?</p>
+<details><summary>Show answer</summary><p>Spindle at Z = 30 &minus; (&minus;80) = Z110. The tip is at Z30.</p></details>
 <p><strong>2.</strong> What is the difference between G49 and G53?</p>
-<details><summary>Show answer</summary><p>G49 cancels tool length compensation. G53 switches to machine coordinate system for one block. They are unrelated.</p></details>
+<details><summary>Show answer</summary><p>G49 cancels tool length compensation. G53 switches to machine coordinate system for one block. They are unrelated commands.</p></details>
 <p><strong>3.</strong> You measure a turned diameter at 30.05 mm. Target is 30.00. What wear offset do you apply?</p>
-<details><summary>Show answer</summary><p>The cut is 0.05 mm too large (diameter). Adjust X wear by -0.05 mm.</p></details>
+<details><summary>Show answer</summary><p>The cut is 0.05 mm too large in diameter. Adjust X wear by &minus;0.025 mm in radius (which equals &minus;0.05 in diameter on the controller).</p></details>
+<p><strong>4.</strong> Why does T02 M06 not automatically load H02?</p>
+<details><summary>Show answer</summary><p>T selects the tool pocket; H selects the length offset register. They are independent. You must program G43 H02 explicitly after the tool change.</p></details>
 
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/13-work-offsets/">&larr; Work Offsets</a><a href="/cnc-manufacturing-engineering/cnc-programming/14-linear-interpolation/">Linear Motion &rarr;</a></nav>
 </main>
