@@ -56,6 +56,19 @@
 </ul>
 <p>Both machines have a reference position (machine zero) that they return to on power-up. The work offset (G54) shifts the coordinate system from machine zero to the part. For machine architecture details beyond programming, see <a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a>.</p>
 
+<h3>Mill vs Lathe at a Glance</h3>
+<table class="data-table">
+<tr><th></th><th>Mill / Machining Center</th><th>CNC Lathe</th></tr>
+<tr><td>What rotates</td><td>Tool (spindle)</td><td>Workpiece (chuck)</td></tr>
+<tr><td>Linear axes</td><td>X, Y, Z</td><td>X, Z</td></tr>
+<tr><td>X meaning</td><td>Linear position (mm)</td><td>Diameter (mm)</td></tr>
+<tr><td>Tool holding</td><td>Tool changer + magazine</td><td>Turret</td></tr>
+<tr><td>Coolant</td><td>Flood through spindle</td><td>Flood through turret</td></tr>
+</table>
+
+<h3>Machine Zero vs Work Zero</h3>
+<p><strong>Machine zero</strong> is the fixed reference point the machine establishes on power-up by moving each axis to a home switch. It never changes. <strong>Work zero</strong> is where you define the part origin using a work offset (G54). You set G54 by touching the part edge with an edge finder or probe. The controller computes: <em>machine position = machine zero + work offset + programmed coordinate</em>. This three-layer relationship is the core mental model of CNC.</p>
+
 <h2>Example</h2>
 <p><strong>Mill:</strong> Tool moves from X10 to X30. Actual travel = 20 mm.</p>
 <p><strong>Lathe (diameter mode):</strong> Tool moves from X40 to X30. Actual radial travel = (40 &minus; 30) / 2 = 5 mm, because X is programmed as diameter.</p>
