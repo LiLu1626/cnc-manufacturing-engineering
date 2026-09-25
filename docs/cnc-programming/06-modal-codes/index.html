@@ -151,6 +151,21 @@ N130 M30</code></pre>
 <h2>Reading State Back on the Controller</h2>
 <p>Modern controllers have a "current commands" or "modal display" page that shows every active G-code group. When you are debugging a program that is not doing what you expect, this page is the first place to look. It tells you whether the controller thinks it is in G90 or G91, G20 or G21, G81 or G80, G94 or G95. If the program looks correct but the machine moves oddly, the modal display almost always reveals the problem &mdash; usually a leftover mode you did not know was active.</p>
 
+
+<h2>Modal Groups in Detail</h2>
+<p>Each modal group represents a single machine setting. The motion group (G00/G01/G02/G03) determines how the next axis move is interpolated. The plane group (G17/G18/G19) determines which two axes define the plane for circular interpolation and cutter compensation. The distance group (G90/G91) determines whether coordinates are absolute or incremental. The units group (G20/G21) determines inch vs millimeter. Each group is independent: setting G90 does not change the plane, the units, or the feed mode.</p>
+<p>When a new code from a group appears, it replaces the previous code in that group. For example, G02 replaces G01 in the motion group. It does not affect G17, G90, or G21. This independence is what lets you write a line like <code>G90 G01 X50 F200</code> and know that G90 sets distance mode, G01 sets motion, and F200 sets feed &mdash; each from a different group, all active together.</p>
+
+<h3>Non-Modal (One-Shot) Codes</h3>
+<p>Not every G-code is modal. Non-modal codes act on the block they appear in and then stop. <strong>G04</strong> (dwell) is the classic example: <code>G04 P1000</code> pauses for one second and then the program continues. The dwell does not persist. <strong>G53</strong> (machine coordinate selection) is also one-shot: it applies only to the block it is written in. If you need machine coordinates again, you must write G53 again. Recognizing whether a code is modal or one-shot prevents the mistake of expecting a one-shot code to persist.</p>
+
+<h3>Feed and Spindle as Modal Values</h3>
+<p>Feed F and spindle S are modal numeric values, not G-code group replacements. Once you write F300, every subsequent G01/G02/G03 block inherits 300 until you write a new F. The same is true for S. You do not need to repeat F on every cutting line &mdash; you write it once at the start of a cutting section and change it only when the feed changes. This is why the first G01 after a G00 must specify F: otherwise the controller inherits whatever F was left over from the previous program.</p>
+
+<h2>Modal Errors in Practice</h2>
+<p>The most common modal error in production is leaving a drilling cycle active. You finish drilling four holes, write G00 Z50, and then move to a different XY position for milling. On Haas, G00 cancels the cycle, so this works. But if you forget G80 and the next block is a bare X/Y move (not G00), the controller may treat it as another hole position. Writing G80 explicitly after the last hole is the habit that prevents this class of error.</p>
+<p>The second most common error is leaving cutter compensation active. G41/G42 must be cancelled on a proper lead-out path &mdash; a straight move away from the part before switching to another operation. Cancelling compensation at an arbitrary position can cause the tool to shift sideways unexpectedly. The lead-out and lead-in moves are part of the compensation logic, not optional cleanup.</p>
+<p>The third common error is a leftover G91 subprogram. A subprogram that uses incremental moves for a bolt pattern must restore G90 before returning. If it does not, the main program resumes in incremental mode and every subsequent coordinate line moves by the stated amount rather than to the stated position. This produces parts whose features drift further and further from the drawing.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Forgetting G80</strong> after drilling &mdash; the cycle continues on the next bare X/Y block, drilling an unexpected hole.</li>
