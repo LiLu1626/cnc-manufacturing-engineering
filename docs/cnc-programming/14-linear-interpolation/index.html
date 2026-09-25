@@ -153,7 +153,7 @@ G00 Z50.</code></pre>
 <p>A straight vertical wall on a mill is a G01 in Z at constant XY. A straight horizontal floor is a G01 in XY at constant Z. Pocket walls, step shoulders, and raised pads are all linear cuts. The skill is choosing the right lead-in so the tool approaches the wall without a plunge at the corner, and the right retract so it leaves without a scratch.</p>
 
 <h3>Feed Override and First-Piece</h3>
-<p>On the first run of a linear program, run feed override at 50% or lower. The actual cut then proceeds half as fast, giving time to hit feed hold if the tool path looks wrong. Once the first part is measured and the offsets are confirmed, ramp to 100%. This applies equally to G00 rapid override: keep rapid slow until you know the Z heights on every block.</p>
+<p>On the first run of a linear program, run feed override at 50% or lower. The actual cut then proceeds half as fast, giving time to hit feed hold if the tool path looks wrong. Once the first part is measured and the offsets are confirmed, ramp to 100%. This applies equally to G00 rapid override: keep rapid slow until you know the Z heights on every block. A proven program at 100% rapid is fast; an unproven program at 100% rapid is a crash waiting to happen.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Using G00 to cut</strong> &mdash; the tool moves at traverse speed into the part. Always G01 with an F for any plunge or cut.</li>
