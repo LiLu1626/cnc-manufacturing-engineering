@@ -151,6 +151,9 @@ G00 Z50.</code></pre>
 <p>On a lathe, X values are diameters, not radii. A G01 X40. moves the tool so the turned diameter is 40 mm, which means the saddle travels only 20 mm in X. When calculating taper angles or feeds, remember the physical saddle movement is half the diameter difference. Mixing diameter and radius thinking in one block is a common beginner error that cuts the OD 50% off target.</p>
 <h3>Programming Straight Walls</h3>
 <p>A straight vertical wall on a mill is a G01 in Z at constant XY. A straight horizontal floor is a G01 in XY at constant Z. Pocket walls, step shoulders, and raised pads are all linear cuts. The skill is choosing the right lead-in so the tool approaches the wall without a plunge at the corner, and the right retract so it leaves without a scratch.</p>
+
+<h3>Feed Override and First-Piece</h3>
+<p>On the first run of a linear program, run feed override at 50% or lower. The actual cut then proceeds half as fast, giving time to hit feed hold if the tool path looks wrong. Once the first part is measured and the offsets are confirmed, ramp to 100%. This applies equally to G00 rapid override: keep rapid slow until you know the Z heights on every block.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Using G00 to cut</strong> &mdash; the tool moves at traverse speed into the part. Always G01 with an F for any plunge or cut.</li>
