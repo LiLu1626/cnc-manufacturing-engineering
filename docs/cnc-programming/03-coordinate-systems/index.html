@@ -162,10 +162,7 @@ M30</code></pre>
 
 <p>Most manual programs are written entirely in G90 because it matches how a drawing dimensions features &mdash; every hole has an absolute location from the datum. G91 is useful inside subprograms where you repeat a pattern by stepping a fixed distance, and in G28 return moves. Mixing G90 and G91 within one program is legal but must be deliberate: every mode switch is a potential place to forget to switch back.</p>
 
-<h2>Why It Matters</h2>
-<p>If the work offset is wrong by 2 mm in X, every hole and edge on the part shifts 2 mm. The program may look perfect on screen but the part is scrap. Coordinate errors are <strong>systematic</strong> &mdash; they affect every feature, not just one. This is why verifying G54 before the first cut is the most important safety step.</p>
-
-<p>A probe or edge finder only measures where the tool touched; it does not know whether you touched the left edge or the right edge, or whether you added the tip radius on the correct side. Always read back the offset values and sanity-check them against the machine position before closing the setup. A work offset that puts the part center 200 mm away from where it should be will happily run at rapid speed into a fixture.</p>
+<p>If the work offset is wrong by 2 mm in X, every hole and edge on the part shifts 2 mm. The program may look perfect on screen but the part is scrap. Coordinate errors are <strong>systematic</strong> &mdash; they affect every feature, not just one. A probe or edge finder only measures where the tool touched; it does not know whether you touched the left edge or the right edge, or whether you added the tip radius on the correct side. Always read back the offset values and sanity-check them against the machine position before closing the setup.</p>
 
 <h2>Example: Touching Off G54 on a Mill</h2>
 <p>Walk through a simple setup: an edge finder, a &Oslash;6 probe tip, and a rectangular block. Jog to the left edge, note the machine X when the edge finder trips, add +3 mm, and write that into G54 X. Repeat for the right edge and Y, then set Z using a calibrated tool and the H offset. The result is a work origin at the drawing datum, and every programmed coordinate comes straight from the print.</p>
