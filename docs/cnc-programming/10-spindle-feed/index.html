@@ -142,6 +142,33 @@ F0.2</code></pre>
 <h3>Feed Hold and Single Block</h3>
 <p>Feed hold pauses axis motion; single block executes one block per cycle start. Behavior inside a canned cycle or threading depends on the control and cycle &mdash; consult your manual. Use these during first-piece setup, not in production.</p>
 
+
+<h3>Reading the Tool Catalog</h3>
+<p>A carbide end mill catalog lists cutting speed Vc for each workpiece material group (P steel, M stainless, K cast iron, N aluminum, S superalloy) and feed per tooth fz for that tool. It also gives maximum axial depth ap and radial engagement ae as fractions of tool diameter. For example, a &Oslash;10 4-flute end mill might list Vc = 120 m/min and fz = 0.05 mm/tooth for P-steel at full slotting (ae = 1&times;D). For side milling at ae = 0.2&times;D, the catalog may allow a higher Vc or fz. Read the catalog chart for your exact tool and material, not a generic table.</p>
+
+<h3>Calculator Worked Example</h3>
+<p>Choose: &Oslash;12 carbide end mill, 4 flutes, material AISI 1045 steel, Vc = 100 m/min, fz = 0.04 mm/tooth, full slot (ae = 12 mm), ap = 6 mm.</p>
+<ul>
+<li>RPM = 100 &times; 1000 / (3.1416 &times; 12) = 2653, round to 2500.</li>
+<li>Feed = 2500 &times; 0.04 &times; 4 = 400 mm/min.</li>
+<li>MRR = ae &times; ap &times; feed = 12 &times; 6 &times; 400 = 28.8 cm&sup3;/min.</li>
+</ul>
+<p>Check the machine: a typical 7.5 kW mill at 2500 RPM delivers about 5&ndash;6 kW at the tool. Specific cutting energy for steel is roughly 4&ndash;5 W/(cm&sup3;/min). Required power = 28.8 &times; 4.5 = 1296 W &asymp; 1.3 kW, well within limit. If the same cut were attempted at ap = 12 mm full depth, MRR doubles and power demand rises; reduce ap or feed.</p>
+
+<h3>Plunge vs Cut Feed</h3>
+<p>On a mill, the plunge feed (Z direction into the part) is usually lower than the horizontal cut feed. A standard end mill has a center-cutting geometry that can plunge, but the chip evacuation in the Z direction is poor. Program a separate lower F for the Z plunge line (e.g. F100) and a higher F for the XY cut (e.g. F400). This is why the example shows F100 on Z-2. and F300 on X50. The machine holds the modal F until a new F is given.</p>
+
+<h3>Spindle Direction on a Lathe</h3>
+<p>On a horizontal lathe, M03 is the normal forward direction for OD turning with a right-hand insert, viewed from the headstock end facing the chuck. Confirm the direction on your specific machine: sub-spindle and live-tooling arrangements can change the convention. Never assume M03 on every lathe.</p>
+
+<h3>Feed Units with G20/G21</h3>
+<p>F units depend on both G20/G21 and G94/G95/G99. With G21 (metric): G94 F300 = 300 mm/min; G95/G99 F0.2 = 0.2 mm/rev. With G20 (inch): G94 F12 = 12 in/min; G95 F0.008 = 0.008 in/rev. Mixing inch and metric by forgetting G20/G21 is a classic source of a 25.4&times; feed error.</p>
+
+<h3>Surface Speed Reference for Common Materials</h3>
+<p>Classroom starting ranges (always confirm against the tool catalog): high-speed steel in steel, 20&ndash;40 m/min; carbide in steel, 100&ndash;250 m/min; carbide in aluminum, 200&ndash;500 m/min; carbide in stainless, 80&ndash;150 m/min; carbide in titanium, 40&ndash;80 m/min. These ranges depend on coating, coolant, engagement, and machine rigidity. They are not tooling recommendations.</p>
+
+<h3>Why Spindle Override Matters in Production</h3>
+<p>A tool that chatters at full catalog speed can sometimes be cured by dropping spindle speed 10&ndash;20% rather than reducing feed. Chatter is a stability problem, not a power problem. Use the override knob during first piece to find a stable speed window, then write that S value into the program for repeatability.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Using mm/min feed on a lathe in per-rev mode</strong> &mdash; F200 on a G95/G99 lathe means 200 mm per revolution. Check the active feed mode.</li>

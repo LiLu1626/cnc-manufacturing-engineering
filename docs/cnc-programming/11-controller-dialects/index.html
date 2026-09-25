@@ -92,6 +92,12 @@ G98 G81 R2. Z-15. F100.
 G80</code></pre>
 <p>For Siemens, select the equivalent cycle (CYCLE81 for no-dwell drilling, or CYCLE82 if a dwell is needed) and fill its parameter list from the Siemens programming manual for your software version. For Heidenhain, enter the drilling block on the control. Do not copy the FANUC G81 line directly.</p>
 
+
+<h3>Post-Processors Hide the Dialect</h3>
+<p>In a modern shop, most programs come from CAM software. The post-processor translates the generic toolpath into the syntax of the target machine. A CAM post configured for a Haas mill outputs G81; the same CAM post for a Siemens machine outputs the named cycle. This is why CAM programs usually do not need hand porting. When you write G-code manually, you are doing the post-processor's job by hand.</p>
+
+<h3>Reading Alarm Messages</h3>
+<p>When a program alarms, read the alarm number and text from your control manual. Alarms are control-specific: a FANUC alarm, a Siemens alarm, and a Heidenhain alarm use different numbering. Many alarms are setup errors (wrong offset, tool not clamped, door open) rather than program errors. The alarm manual for your exact control is the first diagnostic reference.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Assuming G81 means the same thing on every control</strong> &mdash; R plane, retract, and dwell behavior can differ; verify the cycle definition.</li>
