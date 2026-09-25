@@ -45,7 +45,7 @@
 <table class="data-table">
 <tr><th>Code</th><th>Meaning</th><th>F Unit</th><th>Used On</th></tr>
 <tr><td>G94</td><td>Feed per minute</td><td>mm/min (with G21)</td><td>Mills</td></tr>
-<tr><td>G95</td><td>Feed per revolution</td><td>mm/rev</td><td>Lathes (FANUC-style)</td></tr>
+<tr><td>G95 (ISO / FANUC lathe, where configured)</td><td>Feed per revolution</td><td>mm/rev</td><td>Lathes per their G-code system</td></tr>
 <tr><td>G99 (Haas lathe)</td><td>Feed per revolution</td><td>mm/rev</td><td>Haas lathes</td></tr>
 </table>
 <p>F units also depend on G20/G21. On a mill, F300 means 300 mm/min. On a lathe in G95/G99, F0.2 means 0.2 mm per revolution. At 1000 RPM that is 200 mm/min. If you accidentally program F0.2 on a mill in G94, the tool feeds 0.2 mm/min; F200 on a lathe in per-rev mode means 200 mm per revolution.</p>
@@ -75,21 +75,32 @@
 <h3>Constant Surface Speed (G96) on Lathes</h3>
 <p>On a lathe, cutting at fixed RPM (G97) means surface speed changes as the tool moves across different diameters. <strong>G96</strong> keeps the surface speed (Vc) constant by raising RPM as the cutting diameter gets smaller. Always pair G96 with a maximum RPM limit (G50 Sxxxx); once RPM reaches that limit, it stays there and Vc drops as the diameter shrinks further. Threading uses G97 fixed RPM.</p>
 
-<svg viewBox="0 0 360 200" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
-  <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">G96: RPM rises as D shrinks, then caps</text>
-  <line x1="50" y1="160" x2="330" y2="160" stroke="#333" stroke-width="1.5"/>
-  <text x="190" y="180" font-size="9" text-anchor="middle" fill="#666">Cutting diameter D (mm): 50 &rarr; 25 &rarr; 20 &rarr; 10</text>
-  <line x1="50" y1="30" x2="50" y2="160" stroke="#999" stroke-width="1"/>
-  <text x="30" y="100" font-size="9" text-anchor="middle" fill="#666" transform="rotate(-90 30 100)">RPM</text>
-  <line x1="50" y1="50" x2="330" y2="50" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,3"/>
-  <text x="300" y="45" font-size="9" fill="#dc2626">G50 cap 2500 RPM</text>
-  <path d="M 60 120 L 150 80 L 210 50 L 320 50" fill="none" stroke="#2563eb" stroke-width="2"/>
-  <text x="60" y="135" font-size="8" text-anchor="middle" fill="#2563eb">D50: 1146</text>
-  <text x="150" y="75" font-size="8" text-anchor="middle" fill="#2563eb">D25: 2292</text>
-  <text x="210" y="45" font-size="8" text-anchor="middle" fill="#2563eb">D20: 2500 (capped)</text>
-  <text x="320" y="45" font-size="8" text-anchor="middle" fill="#2563eb">D10: 2500</text>
-  <text x="190" y="195" font-size="8" text-anchor="middle" fill="#666">Vc=180 m/min; below D~22.9 mm RPM caps and Vc drops (at D10, Vc~78.5)</text>
+<svg viewBox="0 0 360 220" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">G96 CSS: RPM vs diameter (Vc=180 m/min, cap 2500)</text>
+  <line x1="50" y1="170" x2="330" y2="170" stroke="#333" stroke-width="1.5"/>
+  <line x1="50" y1="30" x2="50" y2="170" stroke="#333" stroke-width="1.5"/>
+  <text x="190" y="200" font-size="9" text-anchor="middle" fill="#666">Cutting diameter D (mm): 50 at left &rarr; 10 at right</text>
+  <text x="20" y="100" font-size="9" text-anchor="middle" fill="#666" transform="rotate(-90 20 100)">RPM</text>
+  <line x1="50" y1="60" x2="330" y2="60" stroke="#dc2626" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="325" y="56" font-size="8" text-anchor="end" fill="#dc2626">G50 cap 2500 RPM</text>
+  <path d="M 60.0 109.6 L 92.5 104.0 L 125.0 97.0 L 157.5 88.0 L 190.0 76.0 L 222.5 59.2 L 236.0 50.0 L 255.0 50.0 L 287.5 50.0 L 320.0 50.0" fill="none" stroke="#2563eb" stroke-width="2"/>
+  <circle cx="60" cy="109.6" r="2.5" fill="#2563eb"/>
+  <text x="60" y="125" font-size="8" text-anchor="middle" fill="#2563eb">D50: 1146</text>
+  <circle cx="222.5" cy="59.2" r="2.5" fill="#2563eb"/>
+  <text x="222.5" y="52" font-size="8" text-anchor="middle" fill="#2563eb">D25: 2292</text>
+  <circle cx="236" cy="60" r="2.5" fill="#dc2626"/>
+  <text x="248" y="75" font-size="8" text-anchor="start" fill="#dc2626">D~22.9: cap</text>
+  <circle cx="320" cy="60" r="2.5" fill="#2563eb"/>
+  <text x="320" y="52" font-size="8" text-anchor="middle" fill="#2563eb">D10: 2500</text>
 </svg>
+<table class="data-table" style="margin-top:0.5em">
+<tr><th>D (mm)</th><th>Computed RPM (no cap)</th><th>Actual RPM</th><th>Actual Vc (m/min)</th></tr>
+<tr><td>50</td><td>1146</td><td>1146</td><td>180</td></tr>
+<tr><td>25</td><td>2292</td><td>2292</td><td>180</td></tr>
+<tr><td>22.9</td><td>2500</td><td>2500</td><td>180 (cap point)</td></tr>
+<tr><td>20</td><td>2865</td><td>2500</td><td>157</td></tr>
+<tr><td>10</td><td>5730</td><td>2500</td><td>78.5</td></tr>
+</table>
 
 <h3>Chip Load and Why It Matters</h3>
 <p>Feed per tooth (fz) is how thick each flute cuts per revolution. Too light and the tool rubs; too heavy and the edge chips. The catalog gives the range for your material and tool; start at a middle value and adjust for finish and tool life. Feed rate = RPM &times; fz &times; number of flutes. Radial engagement (ae) affects chip thinning: at light ae, the chip is thinner than fz and you may increase feed to maintain a reasonable chip thickness.</p>
@@ -101,10 +112,10 @@
 <p>Vc (m/min) is the speed of the cutting edge relative to the work surface; RPM is spindle speed. They relate by Vc = &pi; &times; D &times; RPM / 1000. On a mill the tool diameter is fixed, so RPM is fixed at a chosen Vc. On a lathe the part diameter changes, so G96 varies RPM to hold Vc.</p>
 
 <h3>Spindle Direction: M03 vs M04</h3>
-<p>Drills, end mills, face mills, and inserts expect M03 (clockwise viewed from the tool-change end). M04 is for left-hand tooling. Running a standard right-hand tool in M04 makes it rub and overheat.</p>
+<p>Drills, end mills, and face mills run in M03 (forward, Haas terminology); M04 is for left-hand tooling. Running a right-hand tool in reverse makes it rub and overheat. On a lathe, confirm forward direction against your machine and tool holder.</p>
 
 <h3>Feed in Threading</h3>
-<p>Threading feed equals the thread lead. For a single-start M10&times;1.5 thread, lead = pitch = 1.5 mm, so F1.5 mm/rev. Multi-start threads: lead = starts &times; pitch. Threading uses G97 fixed RPM so each pass starts at the same spindle angle (the thread cycle follows spindle position). The exact pass count and infeed are defined by the cycle (G76 or G92); consult your cycle manual.</p>
+<p>Threading feed equals the thread lead. For a single-start M10&times;1.5 thread, lead = pitch = 1.5 mm, so F1.5 mm/rev. Multi-start threads: lead = starts &times; pitch. Phase synchronization between successive passes is handled by the threading cycle and spindle position feedback; this example uses G97 stable RPM as required by the selected cycle. The exact pass count and infeed depend on the specific cycle (e.g. G76 or G92); consult that cycle’s manual.</p>
 
 <h3>Spindle Warm-Up</h3>
 <p>A cold spindle run at full RPM can grow thermally. Many shops run a short warm-up program that ramps spindle speed over 10&ndash;15 minutes before production. This is not a cutting program; it just spins the spindle with no tool in the cut.</p>
@@ -113,9 +124,10 @@
 <p><strong>Mill snippet (Haas, G21, G94):</strong></p>
 <pre class="cp-code"><code>G21 G17 G90 G94 G40 G49 G80
 T01 M06
-G54 G90 S2000 M03
-G00 X0 Y0
-G43 H01 Z50.
+G54 G90
+G00 G43 H01 Z50.
+S2000 M03
+G00 X0. Y0.
 M08
 G00 Z5.
 G01 Z-2. F100.
@@ -153,10 +165,16 @@ F0.2</code></pre>
 <li>Feed = 2500 &times; 0.04 &times; 4 = 400 mm/min.</li>
 <li>MRR = ae &times; ap &times; feed = 12 &times; 6 &times; 400 = 28.8 cm&sup3;/min.</li>
 </ul>
-<p>Check the machine: a typical 7.5 kW mill at 2500 RPM delivers about 5&ndash;6 kW at the tool. Specific cutting energy for steel is roughly 4&ndash;5 W/(cm&sup3;/min). Required power = 28.8 &times; 4.5 = 1296 W &asymp; 1.3 kW, well within limit. If the same cut were attempted at ap = 12 mm full depth, MRR doubles and power demand rises; reduce ap or feed.</p>
+<p>Estimate net cutting power using a specific cutting force kc (classroom assumption only; look up the real value for your material):</p>
+<ul>
+<li>MRR = 12 &times; 6 &times; 400 = 28,800 mm&sup3;/min = 28.8 cm&sup3;/min.</li>
+<li>Assume kc = 2700 N/mm&sup2; for this classroom example. Net cutting power Pc = ae &times; ap &times; vf &times; kc / (60 &times; 10<sup>6</sup>) = 12 &times; 6 &times; 400 &times; 2700 / (60 &times; 10<sup>6</sup>) = 1.296 kW.</li>
+<li>Assume drive efficiency &eta; = 0.8, input power &asymp; 1.296 / 0.8 = 1.62 kW. Compare this against the machine’s continuous available power at 2500 RPM from its power curve; a 7.5 kW nameplate alone does not prove the headroom.</li>
+<li>If ap doubles to 12 mm with other assumptions unchanged, Pc doubles to about 2.592 kW; whether that exceeds the machine’s limit still requires reading the actual power curve.</li>
+</ul>
 
 <h3>Plunge vs Cut Feed</h3>
-<p>On a mill, the plunge feed (Z direction into the part) is usually lower than the horizontal cut feed. A standard end mill has a center-cutting geometry that can plunge, but the chip evacuation in the Z direction is poor. Program a separate lower F for the Z plunge line (e.g. F100) and a higher F for the XY cut (e.g. F400). This is why the example shows F100 on Z-2. and F300 on X50. The machine holds the modal F until a new F is given.</p>
+<p>On a mill, the plunge feed (Z direction into the part) is usually lower than the horizontal cut feed. This example uses a tool confirmed by the manufacturer to be capable of center plunging, and follows the manufacturer’s allowed plunge strategy. Do not assume every end mill can plunge axially; many peripheral end mills cannot. Program a separate lower F for the Z plunge line (e.g. F100) and a higher F for the XY cut (e.g. F400). The machine holds the modal F until a new F is given.</p>
 
 <h3>Spindle Direction on a Lathe</h3>
 <p>On a horizontal lathe, M03 is the normal forward direction for OD turning with a right-hand insert, viewed from the headstock end facing the chuck. Confirm the direction on your specific machine: sub-spindle and live-tooling arrangements can change the convention. Never assume M03 on every lathe.</p>
@@ -170,7 +188,7 @@ F0.2</code></pre>
 <h3>Why Spindle Override Matters in Production</h3>
 <p>A tool that chatters at full catalog speed can sometimes be cured by dropping spindle speed 10&ndash;20% rather than reducing feed. Chatter is a stability problem, not a power problem. Use the override knob during first piece to find a stable speed window, then write that S value into the program for repeatability.</p>
 <h3>When to Change Speed or Feed Mid-Job</h3>
-<p>If the tool wears early, increase feed slightly before reducing speed &mdash; a too-light feed rubs the edge and accelerates crater wear. If the surface finish is poor, check tool runout, spindle speed, and tool nose radius before changing feed. If the spindle bogs, reduce axial depth or feed rather than pushing the machine. These adjustments are made on the first piece, not during production, and then written back into the program for repeatability.</p>
+<p>If the tool wears early, first identify the wear mode (flank, crater, notch, built-up edge), check the material/tool match and the catalog-recommended parameters, and verify setup rigidity. Only after confirming the feed is too light and the manufacturer permits it should you adjust feed. If the surface finish is poor, check tool runout, spindle speed, and tool nose radius before changing feed. If the spindle bogs, reduce axial depth or feed rather than pushing the machine. These adjustments are made on the first piece, not during production, and then written back into the program for repeatability.</p>
 <h3>Recording the Working Values</h3>
 <p>After the first piece is proven, write the final S and F values into the program and note them on the setup sheet. If a future batch runs the same part, the operator should not have to rediscover the cut from scratch. This documentation is part of process control: the program, the setup sheet, and the tool list should all agree on the spindle speed and feed used.</p>
 <h2>Common Mistakes</h2>
@@ -193,7 +211,7 @@ F0.2</code></pre>
 <p><strong>4.</strong> Why is G50 S2500 written before G96?</p>
 <details><summary>Show answer</summary><p>It caps maximum RPM so facing to a small diameter does not command unsafe speed. Below the cap, RPM rises as diameter shrinks; at the cap, RPM holds and Vc drops.</p></details>
 <p><strong>5.</strong> Why use G97 for threading on a lathe?</p>
-<details><summary>Show answer</summary><p>The threading cycle follows spindle angle and requires a fixed RPM so each pass starts in the same angular position; the feed equals the thread lead. Consult the specific cycle manual for pass count and infeed.</p></details>
+<details><summary>Show answer</summary><p>Phase synchronization is handled by the threading cycle and spindle position feedback; this example uses G97 stable RPM as required by the selected cycle. The feed equals the thread lead. Consult the specific cycle manual for pass count and infeed.</p></details>
 </section>
 
 <section class="cp-sources">

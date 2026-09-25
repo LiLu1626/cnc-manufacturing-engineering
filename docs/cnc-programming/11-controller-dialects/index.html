@@ -82,15 +82,16 @@
 <p>Heidenhain controls (TNC 640, iTNC 530) use Klartext conversational programming: the operator enters plain-language blocks on the screen rather than writing raw G-code. Q parameters are used. The control can also read G-code programs, but native TNC programs are conversational text blocks, not touch-probe cycles.</p>
 
 <h3>What Transfers and What Does Not</h3>
-<p>The right-hand coordinate system, plane selection G17/G18/G19, work-offset concept, tool-length/radius offset concept, and the geometry of drilling/milling cycles are universal. What does not transfer without checking: cycle numbers and parameter order, subprogram call syntax, variable symbols, M-codes for chuck/tailstock/pallet, and exact retract behavior. CAM post-processors handle this translation automatically; hand-written programs must be ported line by line.</p>
+<p>The right-hand coordinate system, the geometric idea of a working plane, the work-offset concept, and tool-length/radius offset concepts transfer across controls. The specific plane G-codes G17/G18/G19, cycle numbers, and parameter order must still be checked for your dialect. What does not transfer without checking: cycle numbers and parameter order, subprogram call syntax, variable symbols, M-codes for chuck/tailstock/pallet, and exact retract behavior. CAM post-processors handle this translation automatically; hand-written programs must be ported line by line.</p>
 
 <h2>Example: Porting a Drilling Hole</h2>
-<p>Drill at X10 Y10, top Z0, depth Z-15, approach Z2, retract Z50, F100, no dwell.</p>
+<p>Entry conditions for this snippet: startup block G21/G17/G90/G94/G40/G49/G80 already executed, tool length offset established, spindle and fixture clearances verified, and the tool starts at a safe Z above the work. The example retracts to the initial plane (G98); because the initial plane here is Z50, the first safe Z move must be established explicitly before any XY positioning.</p>
 <p><strong>FANUC/Haas reference:</strong></p>
-<pre class="cp-code"><code>G90 G54 G00 X10 Y10
+<pre class="cp-code"><code>G90 G54 G00 Z50.
+G00 X10. Y10.
 G98 G81 R2. Z-15. F100.
 G80</code></pre>
-<p>For Siemens, select the equivalent cycle (CYCLE81 for no-dwell drilling, or CYCLE82 if a dwell is needed) and fill its parameter list from the Siemens programming manual for your software version. For Heidenhain, enter the drilling block on the control. Do not copy the FANUC G81 line directly.</p>
+<p>For Siemens, select the equivalent named cycle (e.g. CYCLE81 for drilling without dwell, or CYCLE82 with dwell) and fill its parameter list from the SINUMERIK programming manual for your exact software version. For Heidenhain, enter the drilling block as a Klartext conversational line on the control. Do not copy the FANUC G81 line directly.</p>
 
 
 <h3>Post-Processors Hide the Dialect</h3>
@@ -122,8 +123,9 @@ G80</code></pre>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.html">Haas G-code list (mill)</a> &mdash; reference dialect used on this site.</li>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G99.html">Haas G99 (lathe feed/rev)</a>.</li>
-<li>Siemens cycle and program syntax: consult the SINUMERIK programming manual for your exact software version (e.g. 828D / 840D / ONE) before writing cycle calls.</li>
-<li>Heidenhain: consult the TNC conversational programming manual (e.g. TNC 640) for Klartext block syntax.</li>
+<li><a href="https://support.industry.siemens.com/cs/products/mc/109748864/">Siemens SINUMERIK 828D / 840D Programming Manual</a> &mdash; cycle naming (CYCLE81/82), R parameters, and frame/offset syntax; match the exact software version.</li>
+<li><a href="https://content.heidenhain.de/doku/tnc_manual/en/">Heidenhain TNC 640 / iTNC 530 Conversational Programming</a> &mdash; Klartext block structure and Q parameters.</li>
+<li><a href="https://www.haascnc.com/video/tipoftheday/ybbzj7h0nuw.html">Haas G98 vs G99 retract behavior</a> &mdash; G98 returns to the cycle initial plane.</li>
 </ul>
 </section>
 
