@@ -136,6 +136,9 @@ G01 Z-2. F100.</code></pre>
 </ul>
 
 <section class="cp-practice">
+
+<h3>Offset Numbers and Safety</h3>
+<p>Offset screens are editable by the operator. Treat them like any other machine setting: do not change offsets while the spindle is running; record corrections on the setup sheet; and never enter a correction based on a part that was measured with a loose tool or a worn indicator. A 0.05 mm correction entered from a part that was actually off by 0.1 mm makes the next part wrong in the other direction. Always measure with a calibrated instrument and enter the signed correction deliberately.</p>
 <h2>Practice</h2>
 <p><strong>1.</strong> H01 = &minus;80.0. You command G43 H01 Z30. Where does the spindle nose actually stop?</p>
 <details><summary>Show answer</summary><p>Spindle nose at Z = 30 &minus; (&minus;80) = Z110.0. The tip is at Z30.0.</p></details>

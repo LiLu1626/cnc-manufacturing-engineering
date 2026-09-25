@@ -149,6 +149,19 @@ G00 Z50.</code></pre>
 </ul>
 
 <section class="cp-practice">
+
+<h3>Worked Tool-Path Trace</h3>
+<p>Read this short mill snippet and trace the tool tip:</p>
+<pre class="cp-code"><code>G54 G90 G00 G43 H01 Z50.
+S2000 M03
+G00 X0 Y0
+G00 Z5.
+G01 Z-1. F100.
+G01 X40. F250.
+G01 Y20.
+G01 X0
+G00 Z50.</code></pre>
+<p>The tip starts at safe Z50 over the origin, plunges to Z&minus;1, cuts a rectangle three sides long (X0&rarr;40 at Y0, then Y0&rarr;20 at X40, then X40&rarr;0 at Y20), and retracts. The side at Y0 is left open on purpose so the tool exits without climbing over the wall. This is a classic open-pocket wall cut; the missing side is where the tool enters and leaves.</p>
 <h2>Practice</h2>
 <p><strong>1.</strong> What is the difference between G00 and G01?</p>
 <details><summary>Show answer</summary><p>G00 is rapid positioning in air, no feed required. G01 is linear cutting motion at a programmed feed F.</p></details>

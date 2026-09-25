@@ -140,6 +140,9 @@ G01 Z-2. F100.</code></pre>
 </ul>
 
 <section class="cp-practice">
+
+<h3>Common Setup: Vice Stop and Part Pads</h3>
+<p>A roughing vice has soft jaws machined to accept the blank, with a back stop that locates the part. The operator pushes each blank against the stop, so the part's back face is consistent within a few tenths. The G54 Y offset is set once against that back stop; X is set against a machined side or an edge finder. This is why the stop matters: without it, each blank sits at a slightly different Y and the offset no longer represents the part.</p>
 <h2>Practice</h2>
 <p><strong>1.</strong> You touch the left X edge with a &Oslash;10 edge finder at machine X = &minus;120.0. What G54 X value do you enter?</p>
 <details><summary>Show answer</summary><p>&minus;120.0 + 5.0 = &minus;115.0 (the part left edge is 5 mm to the right of the finder center).</p></details>
