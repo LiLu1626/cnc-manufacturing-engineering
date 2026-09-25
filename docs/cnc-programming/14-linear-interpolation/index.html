@@ -37,18 +37,17 @@
 
 <svg viewBox="0 0 360 200" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
   <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">G00 vs G01 from (0,0) to (60,40)</text>
+  <text x="180" y="30" font-size="8" text-anchor="middle" fill="#666">4 px/mm. Start (50,170), end (290,90).</text>
   <line x1="50" y1="170" x2="320" y2="170" stroke="#333" stroke-width="1.2"/>
-  <line x1="50" y1="30" x2="50" y2="170" stroke="#333" stroke-width="1.2"/>
-  <text x="55" y="185" font-size="8" fill="#666">X</text>
-  <text x="35" y="35" font-size="8" fill="#666">Y</text>
+  <line x1="50" y1="40" x2="50" y2="170" stroke="#333" stroke-width="1.2"/>
+  <text x="325" y="180" font-size="8" fill="#666">X</text>
+  <text x="35" y="45" font-size="8" fill="#666">Y</text>
   <circle cx="50" cy="170" r="3" fill="#333"/>
-  <text x="55" y="165" font-size="8" fill="#333">start</text>
-  <!-- G01 straight diagonal -->
+  <text x="55" y="165" font-size="8" fill="#333">start (0,0)</text>
   <line x1="50" y1="170" x2="290" y2="90" stroke="#166534" stroke-width="2"/>
-  <text x="180" y="120" font-size="9" fill="#166534">G01: true straight line, feed F</text>
-  <!-- G00 two-segment shape -->
+  <text x="150" y="120" font-size="9" fill="#166534">G01 X60 Y40: straight diagonal at F</text>
   <polyline points="50,170 290,170 290,90" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,3"/>
-  <text x="180" y="160" font-size="9" fill="#dc2626">G00: axis-by-axis traverse (path per control)</text>
+  <text x="150" y="160" font-size="9" fill="#dc2626">G00 X60. then Y40. (two-block rapid)</text>
   <circle cx="290" cy="90" r="3" fill="#333"/>
   <text x="295" y="88" font-size="8" fill="#333">(60,40)</text>
 </svg>
@@ -78,36 +77,40 @@
 </table>
 
 <h3>Reading a Block as a Tool Path</h3>
-<p>Take this snippet and trace it by hand:</p>
-<pre class="cp-code"><code>G90 G54 G00 X0 Y0
-G43 H01 Z50.
+<p>Take this snippet and trace it by hand (units mm/min, G21/G17/G90/G94 in force; H01 and G54 already verified; the tool is a center-cutting end mill):</p>
+<pre class="cp-code"><code>G21 G17 G90 G94 G40 G49 G80
+T01 M06
+G54
+G00 G43 H01 Z50.
 S2000 M03
+G00 X0 Y0
 G00 Z5.
 G01 Z-2. F100.
-G01 X50. F300.
+G01 X40. F300.
 G01 Y20.
 G01 X0
 G00 Z50.</code></pre>
-<p>Trace: start at G54 origin, XY to (0,0) at safe Z50, spindle on; rapid down to Z5; plunge to Z&minus;2 at F100; cut to X50 at F300; cut to Y20; cut back to X0; rapid retract to Z50. The three G01 blocks after the plunge form three sides of a rectangle pocket wall. No F after the first cut means F300 carries forward.</p>
+<p>Trace: after the tool change, G43 H01 establishes length comp at verified safe Z50 before any XY move; spindle on; XY to (0,0) at Z50; rapid down to Z5; plunge to Z&minus;2 at F100; cut to X40 at F300; cut to Y20; cut back to X0; rapid retract to Z50. The three G01 blocks after the plunge form three sides of a rectangle wall. No F after the first cut means F300 carries forward.</p>
 
 
 <h3>Single-Axis vs Multi-Axis Linear Moves</h3>
-<p>A G01 block can move one axis or several. <code>G01 X50.</code> moves only X; <code>G01 X50. Y30.</code> moves diagonally. The controller always treats the commanded point as the target and interpolates a straight line from the current position. On a lathe, <code>G01 X40. Z-20.</code> cuts a taper: X goes from 30 to 40 while Z goes from 0 to &minus;20, producing a straight angled surface. The feed F applies to the vector along that line, not to either axis alone.</p>
+<p>A G01 block can move one axis or several. <code>G01 X50.</code> moves only X; <code>G01 X50. Y30.</code> moves diagonally. The controller always treats the commanded point as the target and interpolates a straight line from the current position. On a lathe, <code>G01 X40. Z-20.</code> cuts a taper: if the current diameter is 30, X goes from 30 to 40 (5 mm radial) while Z goes from 0 to &minus;20, producing a straight angled surface. The feed F applies to the vector along that line, not to either axis alone.</p>
 
 <h3>Feed on a Diagonal Cut</h3>
-<p>When X and Y move together, the table feed is the rate along the diagonal. If you program F300 on a 45&deg; move, the tool travels 300 mm along the hypotenuse per minute; each axis moves at 300/&radic;2 &asymp; 212 mm/min. The chip load per tooth stays correct because the tool speed relative to the part is the vector feed. Do not double the feed on diagonal cuts expecting a faster cycle &mdash; the controller already handles the vector.</p>
+<p>When X and Y move together, the table feed is the rate along the diagonal. If you program F300 on a 45&deg; move, the tool travels 300 mm along the hypotenuse per minute; each axis moves at 300/&radic;2 &asymp; 212 mm/min. The nominal feed per tooth fz = F/(n&times;z) stays as programmed; actual undeformed chip thickness also depends on cutter engagement and radial immersion, which vary along angled cuts. Do not double the feed on diagonal cuts expecting a faster cycle &mdash; the controller already handles the vector.</p>
 
 <h3>Chamfers and Corner Breaks</h3>
-<p>A chamfer is a short 45&deg; linear move. For a 1 mm chamfer on a corner, program <code>G01 X+1. Z-1.</code> (lathe) or <code>G01 X+1. Y+1.</code> (mill). The controller cuts the diagonal directly. Corner breaks on a mill are often done with a small lead-in move followed by the chamfer line, so the tool enters the corner smoothly rather than plunging in.</p>
+<p>A chamfer is a short 45&deg; linear move between two explicitly defined endpoints. On a lathe, a C1 chamfer on a turned corner goes from (X38, Z0) to (X40, Z&minus;1): diameter changes by 2 mm (1 mm radial) while Z moves 1 mm axial, forming a 45&deg; break. The code is <code>G01 X40. Z-1. F0.2</code> in G90 diameter programming &mdash; both values are absolute endpoints, not increments. On a mill, a C0.5 chamfer on an external corner defined by edges X=10 and Y=10 cuts from (9.5, 10) to (10, 9.5). In both cases the tool path is on the part profile; the actual cut edge depends on the insert nose radius and is best finished with cutter compensation.</p>
 
 <h3>Lathe Facing and OD Turning</h3>
 <p>On a lathe, facing is a linear move in X at constant Z: <code>G01 X0. F0.2</code> feeds the tool from the outer diameter to the center. OD turning is a linear move in Z at constant X: <code>G01 Z-50. F0.2</code>. Taper turning changes both X and Z in one block. The feed on a lathe is per revolution (G99 on Haas), so F0.2 means 0.2 mm per spindle revolution &mdash; the actual table speed depends on RPM.</p>
 
 <h3>Rapid Overrides and Safe Z</h3>
-<p>Most machines have a rapid override switch (100/50/25/F). On the first run of a new program, set rapid to 25% or 50% so any unexpected XY move at cutting Z is slow enough to hit feed hold. Once the tool path is proven, run at 100%. This is why programs retract to a verified safe Z before XY: at 100% rapid, a side move into a clamp is over in a fraction of a second.</p>
+<p>Most machines have a rapid override switch (100/50/25/F). On the first run of a new program, operators commonly set rapid to 25% or 50% to give more time to react. A slower override is an aid to verification, not a substitute for checking the tool path and clearances in advance &mdash; it does not prevent a crash. Once the tool path is proven, run at 100%. This is why programs retract to a verified safe Z before XY: at 100% rapid, a side move into a clamp is over in a fraction of a second.</p>
 <h2>Example</h2>
-<p>A facing cut on a rectangular blank: the tool starts at safe Z above the left edge, feeds across to the right at the facing feed, then retracts. Classroom assumptions: tool clears Z50, part top at Z0, depth of cut 0.5 mm.</p>
-<pre class="cp-code"><code>G54 G90
+<p>A facing cut on a rectangular blank: part spans X0&hellip;50, Y&minus;5&hellip;5 (10 mm wide in Y). Tool 1 is a &Oslash;16 flat end mill (r = 8 mm). Classroom assumptions: tool clears Z50, part top at Z0, depth of cut 0.5 mm, fixture clear above Z50, the tool can plunge at the center (center-cutting):</p>
+<pre class="cp-code"><code>G21 G17 G90 G94
+G54
 G00 G43 H01 Z50.
 S1800 M03
 G00 X-10. Y0
@@ -115,23 +118,27 @@ G00 Z0.5
 G01 Z-0.5 F100.
 G01 X60. F250.
 G00 Z50.</code></pre>
-<p>The tool approaches 10 mm outside the left edge, plunges 0.5 mm below the top, then feeds across to X60 (10 mm past the right edge) at F250. The overhang on both sides ensures a clean face across the whole width. Without the overhang, the cut starts and stops inside the edge and leaves a step.</p>
+<p>The tool centers at Y0. At X&minus;10 the center is 10 mm left of the part edge, which is more than the 8 mm radius, so the full cut enters outside the material. At X60 the center is 10 mm past the right edge. The single pass covers the 10 mm Y width because the 16 mm cutter overlaps &plusmn;8 mm around Y0, i.e. Y&minus;8&hellip;+8, which covers Y&minus;5&hellip;+5. The overhang on both X sides ensures a clean face across the whole length. Without the overhang, the cut starts and stops inside the edge and leaves a step.</p>
 
-<svg viewBox="0 0 360 160" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
-  <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Facing cut with overhang</text>
-  <rect x="80" y="60" width="200" height="50" fill="#e5e7eb" stroke="#374151"/>
-  <text x="180" y="88" font-size="9" text-anchor="middle" fill="#374151">part top</text>
-  <line x1="50" y1="85" x2="310" y2="85" stroke="#166534" stroke-width="2"/>
-  <circle cx="50" cy="85" r="3" fill="#166534"/>
-  <text x="50" y="75" font-size="8" text-anchor="middle" fill="#166534">X-10</text>
-  <circle cx="310" cy="85" r="3" fill="#166534"/>
-  <text x="310" y="75" font-size="8" text-anchor="middle" fill="#166534">X60</text>
-  <text x="180" y="135" font-size="9" text-anchor="middle" fill="#666">Feed across, 10 mm overhang each side</text>
+<svg viewBox="0 0 360 170" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Facing cut, &Oslash;16 cutter on 10 mm wide part</text>
+  <text x="180" y="30" font-size="8" text-anchor="middle" fill="#666">4 px/mm. Part X0&hellip;50, Y&minus;5&hellip;5. Cutter center at Y0.</text>
+  <!-- part: X=0 at 80px, X=50 at 280px; Y span drawn as rectangle -->
+  <rect x="80" y="70" width="200" height="40" fill="#e5e7eb" stroke="#374151"/>
+  <text x="180" y="93" font-size="9" text-anchor="middle" fill="#374151">part (X0&hellip;50)</text>
+  <!-- cutter circle at start X=-10 => x=40, center Y=90; radius 8mm=32px -->
+  <circle cx="40" cy="90" r="32" fill="none" stroke="#166534" stroke-width="1.5"/>
+  <text x="40" y="55" font-size="8" text-anchor="middle" fill="#166534">start X=-10</text>
+  <!-- end X=60 => x=320 -->
+  <circle cx="320" cy="90" r="32" fill="none" stroke="#166534" stroke-width="1.5"/>
+  <text x="320" y="55" font-size="8" text-anchor="middle" fill="#166534">end X=60</text>
+  <line x1="40" y1="90" x2="320" y2="90" stroke="#166534" stroke-width="2"/>
+  <text x="180" y="140" font-size="9" text-anchor="middle" fill="#666">Center clears part edge by 10 mm (&gt; r=8). Cutter covers Y&plusmn;8 &gt; Y&plusmn;5.</text>
 </svg>
 
 
 <h3>Feed Hold, Block Skip, and Single Block</h3>
-<p>When first running a linear program, the operator uses feed hold to pause motion, single block to execute one line at a time, and the block skip (/) to trial-run the first half of the program. After each G01 block, confirm the tool is where expected before pressing cycle start again. This is slow on purpose: catching a coordinate error after one block is much cheaper than after a full pocket.</p>
+<p>When first running a linear program, the operator uses feed hold to pause motion and single block to execute one line at a time. The block skip (/) skips the blocks that carry a slash &mdash; only those blocks, not "the first half of the program". Because skipping also skips state-establishing blocks (offsets, spindle on, coolant), it is not a general way to trial-run a program. After each G01 block, confirm the tool is where expected before pressing cycle start again. This is slow on purpose: catching a coordinate error after one block is much cheaper than after a full pocket.</p>
 
 <h3>Programming Chamfers with Linear Moves</h3>
 <p>A 45&deg; chamfer is two equal axis increments. To break a sharp external corner on a mill, approach the corner, then move X and Y by the chamfer size simultaneously. For a 0.5 mm chamfer: from (10, 10) cut to (10.5, 10.5). The controller cuts the diagonal. Larger chamfers use the same idea with larger increments; verify the dimension on the first part, because the insert nose radius changes the actual chamfer geometry.</p>
@@ -142,7 +149,7 @@ G00 Z50.</code></pre>
 <h3>Why G01 Is the Default Cutting Mode</h3>
 <p>Once G01 is modal, every subsequent block cuts linearly until another motion G-code takes over. This is why the startup block includes G90 and the first cutting block sets F: the controller carries both forward. It also means a missing G01 on a later line is not usually an error &mdash; the controller stays in linear mode. The danger is assuming it has left G01; if you intended rapid but forgot G00, the tool feeds at F across air.</p>
 <h3>Linear Cuts on a 5-Axis Machine</h3>
-<p>On a 3-axis mill, G01 moves X, Y, and Z. On a 5-axis machine, linear interpolation can also include rotary axes (A, B, C) in the same block, producing a simultaneous straight-line cut with the tool tilted. The principle is identical: the controller computes the vector from current point to target and distributes feed across all participating axes. Rotary axes are in degrees per minute, so the feed units differ; confirm the convention on your machine.</p>
+<p>On a 3-axis mill, G01 moves X, Y, and Z. On a 5-axis machine, a block can also include rotary axes (A, B, C). The controller interpolates them, but whether the tool tip follows a straight line on the part depends on machine kinematics, tool-center-point control, and feed mode; degrees/minute and mm/min do not combine the way X/Y/Z lengths do. This page stays on 3-axis linear motion; multi-axis feed is covered later.</p>
 
 <h3>What Happens if You Forget G01</h3>
 <p>If the program starts cutting without G01, the controller is still in whatever motion mode was left by the startup block. Many startup blocks set G80 and G40 but do not set G01 explicitly; the first motion block should state G01 with an F. If you omit it and the controller happens to be in G00 from a previous operation, the tool races to the first cut position at rapid speed. Always state the motion mode and feed on the first cutting block.</p>
@@ -153,7 +160,7 @@ G00 Z50.</code></pre>
 <p>A straight vertical wall on a mill is a G01 in Z at constant XY. A straight horizontal floor is a G01 in XY at constant Z. Pocket walls, step shoulders, and raised pads are all linear cuts. The skill is choosing the right lead-in so the tool approaches the wall without a plunge at the corner, and the right retract so it leaves without a scratch.</p>
 
 <h3>Feed Override and First-Piece</h3>
-<p>On the first run of a linear program, run feed override at 50% or lower. The actual cut then proceeds half as fast, giving time to hit feed hold if the tool path looks wrong. Once the first part is measured and the offsets are confirmed, ramp to 100%. This applies equally to G00 rapid override: keep rapid slow until you know the Z heights on every block. A proven program at 100% rapid is fast; an unproven program at 100% rapid is a crash waiting to happen.</p>
+<p>On the first run of a linear program, operators often run feed override at 50% or lower. Slower feed gives more time to react if the path looks wrong; it is a verification aid, not a guarantee against a crash. Once the first part is measured and the offsets are confirmed, ramp to 100%. The same caution applies to rapid override: keep rapid slow until you have checked the Z height on every block.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Using G00 to cut</strong> &mdash; the tool moves at traverse speed into the part. Always G01 with an F for any plunge or cut.</li>
@@ -177,7 +184,7 @@ G01 X40. F250.
 G01 Y20.
 G01 X0
 G00 Z50.</code></pre>
-<p>The tip starts at safe Z50 over the origin, plunges to Z&minus;1, cuts a rectangle three sides long (X0&rarr;40 at Y0, then Y0&rarr;20 at X40, then X40&rarr;0 at Y20), and retracts. The side at Y0 is left open on purpose so the tool exits without climbing over the wall. This is a classic open-pocket wall cut; the missing side is where the tool enters and leaves.</p>
+<p>The tip starts at safe Z50 over the origin, plunges to Z&minus;1, then cuts: along the bottom edge Y=0 from X0 to X40, up the right edge X=40 from Y0 to Y20, then back along the top edge Y=20 from X40 to X0. The missing side is the left edge at X=0. This is a three-side wall trace; it is not a complete pocket cut &mdash; the tool diameter, stock, and lead-in are not defined here.</p>
 <h2>Practice</h2>
 <p><strong>1.</strong> What is the difference between G00 and G01?</p>
 <details><summary>Show answer</summary><p>G00 is rapid positioning in air, no feed required. G01 is linear cutting motion at a programmed feed F.</p></details>
