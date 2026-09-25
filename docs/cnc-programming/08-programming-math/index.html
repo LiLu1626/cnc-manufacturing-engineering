@@ -47,7 +47,7 @@
 <h2>Why It Matters</h2>
 <p>A bolt circle with six holes at 60&deg; spacing: if you use radians instead of degrees, or forget that Y is negative below the X axis, every hole is wrong. CNC math is unforgiving &mdash; there is no "close enough." A 0.1 mm error at each coordinate compounds through the part. Always double-check signs and quadrants.</p>
 
-<p>The controller does not check your arithmetic. It will happily move to X = -50 when you meant +50, and it will happily cut a 5 mm chamfer when you programmed 0.5 mm. The only check between drawing and machine is your own calculation and a careful dry run. Treat every coordinate as a number you would trust with a &Oslash;50 finish-mill.</p>
+<p>The controller follows the programmed coordinates; it does not verify that your arithmetic matches the drawing. It will move to X = -50 when you meant +50. Verify coordinates against the drawing and a dry run or simulation before the first cut. Treat every coordinate as a number you would trust with a &Oslash;50 finish-mill.</p>
 
 <h2>Right Triangle Trigonometry</h2>
 <p>For a right triangle with angle &theta;, adjacent side <em>a</em>, opposite side <em>b</em>, hypotenuse <em>c</em>:</p>
@@ -63,12 +63,13 @@
   <line x1="40" y1="160" x2="300" y2="160" stroke="#333" stroke-width="2"/>
   <line x1="40" y1="160" x2="40" y2="40" stroke="#333" stroke-width="2"/>
   <line x1="40" y1="40" x2="300" y2="160" stroke="#2563eb" stroke-width="2"/>
+  <rect x="40" y="150" width="10" height="10" fill="none" stroke="#666" stroke-width="1"/>
   <text x="160" y="180" font-size="11" fill="#333">a (adjacent)</text>
   <text x="10" y="100" font-size="11" fill="#333">b (opp.)</text>
   <text x="150" y="90" font-size="11" fill="#2563eb">c (hypotenuse)</text>
-  <path d="M 70 160 A 30 30 0 0 0 55 134" fill="none" stroke="#e67e22" stroke-width="1.5"/>
-  <text x="65" y="150" font-size="11" fill="#e67e22">&theta;</text>
-  <text x="30" y="175" font-size="9" fill="#666">Right angle</text>
+  <path d="M 270 160 A 30 30 0 0 1 275 134" fill="none" stroke="#e67e22" stroke-width="1.5"/>
+  <text x="258" y="150" font-size="11" fill="#e67e22">&theta;</text>
+  <text x="20" y="175" font-size="9" fill="#666">Right angle</text>
 </svg>
 
 <h2>Coordinates on a Circle</h2>
@@ -122,17 +123,18 @@ Y = Yc + R &times; sin(&theta;)</code></pre>
 </ul>
 <p>The straight-line distance between (10,10) and (50,30): &Delta;X = 40, &Delta;Y = 20, distance = &radic;(40&sup2; + 20&sup2;) = &radic;2000 = 44.721 mm.</p>
 
-<p>To find the angle between two points: &theta; = atan2(&Delta;Y, &Delta;X). For the same points, atan2(20, 40) = 26.565&deg;. The atan2 function (not atan) is important because it picks the correct quadrant automatically &mdash; atan alone cannot tell the difference between (+,+) and (-,+).</p>
+<p>To find the angle between two points: &theta; = atan2(&Delta;Y, &Delta;X). For the same points (&Delta;X=40, &Delta;Y=20), atan2(20, 40) = 26.565&deg;. The atan2 function (not atan) is important because it picks the correct quadrant automatically. Example: for &Delta;=(-40,-20), atan(20/40) = 26.565&deg; but atan2(-20,-40) = -153.435&deg; (or 206.565&deg;) &mdash; the correct third-quadrant angle.</p>
 
 <h2>Example 4: Chamfer Calculation</h2>
-<p>A 1&times;45&deg; chamfer on a corner: the tool moves 1 mm in X and 1 mm in Z. On a drawing, a chamfer labeled C1 means 1 mm at 45&deg;. The endpoint coordinates are shifted by 1 mm from the corner on both axes. For a non-45&deg; chamfer, use trigonometry: if the chamfer is 2 mm along the face at 30&deg;, the depth = 2&times;sin(30&deg;) = 1 mm and the face length = 2&times;cos(30&deg;) = 1.732 mm.</p>
+<p>On a mill, a C1 (1&times;45&deg;) chamfer means the tool moves 1 mm in X and 1 mm in Z from the corner. The endpoint coordinates are shifted by 1 mm from the corner on both linear axes. On a lathe in diameter mode, the same C1 chamfer means 1 mm radial depth, which is a 2 mm change in X (diameter) for every 1 mm of Z. Always check whether the drawing dimension refers to the linear axis (mill) or the diameter (lathe).</p>
+<p>For a non-45&deg; chamfer, be explicit about which length is given. If the chamfer length along the angled face is 2 mm at 30&deg; from horizontal: vertical depth = 2&times;sin(30&deg;) = 1.000 mm, horizontal projection = 2&times;cos(30&deg;) = 1.732 mm. If instead the horizontal projection is 2 mm at 30&deg;: vertical depth = 2&times;tan(30&deg;) = 1.155 mm. These are different problems; the drawing must say which.</p>
 
 <h2>Arc, Chord, and Sagitta</h2>
 <p>When a drawing calls out an arc, you need three numbers: the radius R, the start point, and the end point. The chord length (straight line between start and end) is:</p>
 <pre class="cp-code"><code>chord = 2 &times; R &times; sin(&theta;/2)</code></pre>
 <p>where &theta; is the included angle. The sagitta (height of the arc above the chord) is:</p>
 <pre class="cp-code"><code>sagitta = R &minus; R &times; cos(&theta;/2)</code></pre>
-<p>Example: R = 25 mm, included angle 90&deg;. Chord = 2&times;25&times;sin45 = 35.355 mm. Sagitta = 25 &minus; 25&times;cos45 = 7.322 mm. These are the numbers you need to program the arc and to verify it against a CMM measurement.</p>
+<p>Example: R = 25 mm, included angle 90&deg;. Chord = 2&times;25&times;sin45 = 35.355 mm. Sagitta = 25 &minus; 25&times;cos45 = 7.322 mm. Arc length L = R&times;&theta;(radians) = 25 &times; (90&times;&pi;/180) = 39.270 mm. These are the numbers you need to program the arc and to verify it against a CMM measurement.</p>
 
 <h2>Taper and Included Angle</h2>
 <p>On a lathe, a taper is specified either as an included angle (e.g., 30&deg; included) or as a taper per foot/meter. If the large diameter is D, the small diameter is d, and the length is L, the included angle &alpha; satisfies:</p>
@@ -140,22 +142,22 @@ Y = Yc + R &times; sin(&theta;)</code></pre>
 <p>Example: D = 40, d = 30, L = 50. tan(&alpha;/2) = 10/100 = 0.1, so &alpha;/2 = 5.71&deg;, included angle = 11.42&deg;. The half-angle is what the tool feeds along &mdash; the tool moves radially 5 mm over 50 mm of Z. This is also the angle G01 interpolation follows when programming a taper straight between two diameters.</p>
 
 <h2>Cutting Time and Feed Arithmetic</h2>
-<p>Cutting time in minutes = length of cut &divide; feed rate. For a straight cut of 60 mm at F300 mm/min: time = 60/300 = 0.2 minutes = 12 seconds. For turning at F0.2 mm/rev and S800 RPM: feed rate = 0.2 &times; 800 = 160 mm/min, so 60 mm takes 60/160 = 0.375 min = 22.5 seconds.</p>
+<p>Cutting time in minutes = length of cut &divide; feed rate (when F is length per minute, G94). For a straight cut of 60 mm at F300 mm/min: time = 60/300 = 0.2 minutes = 12 seconds. This ignores acceleration/deceleration. For turning at F0.2 mm/rev and S800 RPM: feed rate = 0.2 &times; 800 = 160 mm/min, so 60 mm takes 60/160 = 0.375 min = 22.5 seconds. In constant surface speed (G96) turning, RPM changes with diameter, so the per-minute feed is not constant.</p>
 
 <p>These calculations let you estimate cycle time before running the machine, and spot when a feed override is set wrong. If a cut that should take 12 seconds is taking a minute, the feed override is likely at 20% or the program feed is wrong.</p>
 
 <h2>Rounding and Precision</h2>
-<p>Controllers typically accept coordinates to 0.001 mm (or 0.0001 inch). Keep full calculator precision through intermediate steps and round only the final coordinate. For example, 50&times;cos60.000&deg; = exactly 25.000, but 50&times;sin60.000&deg; = 43.301270... &mdash; write 43.301, not 43.3. Rounding early to 43.3 accumulates 0.0013 mm per hole, which on a six-hole pattern is not catastrophic but is unnecessary error.</p>
+<p>Controllers typically accept coordinates to 0.001 mm (or 0.0001 inch). Keep full calculator precision through intermediate steps and round only the final coordinate. For example, 50&times;cos60.000&deg; = exactly 25.000, but 50&times;sin60.000&deg; = 43.301270... &mdash; write 43.301, not 43.3. Rounding 43.30127 to 43.3 introduces a 0.00127 mm error at that coordinate. Each G90 hole position is independent, so the error does not add up across holes in a bolt circle; in an incremental chain it would accumulate. Compare the final rounded value against the part tolerance before releasing the program.</p>
 
 
 <h2>Coordinate Conversion: Millimeters to Inches</h2>
-<p>Shops that mix metric and imperial drawings need quick conversion. 1 inch = 25.4 mm exactly. A 3-inch hole is 76.2 mm. A 50 mm coordinate is 1.9685 inches. When a program uses G21 (mm), every F, X, Y, Z value is in mm; when it uses G20 (inch), every value is in inches. The controller does not convert for you &mdash; the numbers mean whatever units the active G-code declares. This is why a unit mismatch scales every coordinate by 25.4.</p>
+<p>Shops that mix metric and imperial drawings need quick conversion. 1 inch = 25.4 mm exactly. A 3-inch hole is 76.2 mm. A 50 mm coordinate is 1.9685 inches. When a program uses G21 (mm), coordinates and distances are in mm; when it uses G20 (inch), they are in inches. Feed F depends on both the unit mode (G20/G21) and the feed mode (G94 per minute vs G95 per revolution). The controller does not convert for you &mdash; the numbers mean whatever the active G-codes declare. This is why a unit mismatch scales every coordinate by 25.4.</p>
 
 <h2>Interpolation: How the Controller Moves</h2>
 <p>When you program G01 X50 Y30, the controller computes the straight line from the current point to (50,30) and moves the tool along it at the programmed feed. The feed rate applies to the tool center along that line &mdash; not to X or Y individually. If the move is at 30&deg;, the X component of motion is F&times;cos30 and the Y component is F&times;sin30, but the tool center still moves at F along the diagonal. You do not need to split F yourself; the controller does it.</p>
 
 <h2>Arc Endpoint and Radius: I/J vs R</h2>
-<p>When programming G02/G03, you can define the arc either by the center offset (I, J, K) or by radius R. With I/J, the values are the distance from the arc start point to the arc center. With R, you give the radius and the controller computes the center. R is simpler for arcs less than 180&deg;; for arcs greater than 180&deg;, R must be negative to select the long way around. I/J is unambiguous and preferred for critical geometry.</p>
+<p>When programming G02/G03, you can define the arc either by the center offset (I, J, K) or by radius R. With I/J, the values are the distance from the arc start point to the arc center. With R, you give the radius and the controller computes the center. R is simpler for arcs less than 180&deg;; for arcs greater than 180&deg;, R must be negative to select the long way around. These rules apply to the controller and plane used in this page; verify on your specific control before relying on them.</p>
 
 <h2>Worked Example: Hole Pattern on a Plate</h2>
 <p>A rectangular plate 100&times;60 mm has four mounting holes, each 10 mm in from the edges. Work zero at the bottom-left corner. Hole coordinates: (10,10), (90,10), (90,50), (10,50). These come straight from the drawing dimensions &mdash; no trigonometry needed because the holes are on a rectangular grid. If the holes were instead on a 60 mm PCD centered at (50,30), you would use the bolt-circle formula: X = 50 + 30&times;cos(&theta;), Y = 30 + 30&times;sin(&theta;).</p>
@@ -193,6 +195,14 @@ Y = Yc + R &times; sin(&theta;)</code></pre>
 <p><strong>5.</strong> R = 25 mm, included angle 90&deg;. What is the chord length?</p>
 <details><summary>Show answer</summary><p>Chord = 2&times;25&times;sin(45&deg;) = 50&times;0.7071 = 35.355 mm.</p></details>
 
+
+<section class="cp-sources">
+<h2>Sources</h2>
+<ul>
+<li>Trigonometric and geometric formulas follow standard engineering mathematics; verify controller-specific I/J and R rules in your machine manual.</li>
+<li>RPM and feed calculations use standard cutting-speed formulas; actual values come from tooling catalogs.</li>
+</ul>
+</section>
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/23-program-safety/">&larr; Program Safety</a><a href="/cnc-manufacturing-engineering/cnc-programming/32-drawings-process-planning/">Drawings &amp; Process &rarr;</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>

@@ -34,11 +34,11 @@
 <h2>1. Cartesian Coordinate System</h2>
 <p>A point in space is defined by its X, Y, Z coordinates relative to an origin. The <strong>Cartesian coordinate system</strong> uses three mutually perpendicular axes. On a vertical mill:</p>
 <ul>
-<li><strong>X axis</strong> &mdash; left/right movement of the table</li>
-<li><strong>Y axis</strong> &mdash; in/out movement of the table</li>
-<li><strong>Z axis</strong> &mdash; up/down movement of the spindle</li>
+<li><strong>X axis</strong> &mdash; tool motion relative to the workpiece in the left/right direction</li>
+<li><strong>Y axis</strong> &mdash; tool motion relative to the workpiece in the in/out direction</li>
+<li><strong>Z axis</strong> &mdash; tool motion relative to the workpiece in the up/down direction</li>
 </ul>
-<p>Positive and negative directions follow the <strong>right-hand rule</strong>: point your right thumb in +X, your index finger in +Y, and your middle finger in +Z. On a standard vertical mill, +Z is up (away from the table), +X moves the table right, and +Y moves the table away from the operator. On a lathe, Z is along the spindle (away from the chuck = +Z) and X is radial (larger diameter = +X).</p>
+<p>Positive and negative directions follow the <strong>right-hand rule</strong>: point your right thumb in +X, your index finger in +Y, and your middle finger in +Z. This fixes the <em>relative</em> directions of the three axes, but it does not by itself tell you which physical direction on a specific machine is +X &mdash; that is defined by the machine builder. On a standard vertical mill, +Z is up (away from the table). On a lathe, Z is along the spindle and +Z points away from the chuck.</p>
 
 <svg viewBox="0 0 400 280" style="width:100%;max-width:400px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
   <line x1="200" y1="140" x2="350" y2="140" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"/>
@@ -66,7 +66,7 @@
 <h3>CNC Lathe</h3>
 <ul>
 <li><strong>Z</strong>: along the spindle bore. +Z moves the tool away from the chuck.</li>
-<li><strong>X</strong>: radial. Unlike the mill, X is programmed as a <strong>diameter</strong>, not a radius. X40 means the tool tip is on a 40 mm diameter, 20 mm from center. Moving from X40 to X30 is a radial depth of cut of 5 mm.</li>
+<li><strong>X</strong>: radial. In this page’s lathe examples, X is programmed as a <strong>diameter</strong>, not a radius. X40 means the tool tip is on a 40 mm diameter, 20 mm from center. Moving from X40 to X30 is a radial depth of cut of 5 mm. Some controls and operations use radius programming or cross-center facing; this page uses diameter mode throughout.</li>
 <li><strong>C axis</strong> (optional): spindle rotation indexed as a position. Used for milling flats, drilling cross-holes, and driven tooling.</li>
 </ul>
 
@@ -82,8 +82,8 @@
 <p>Positive A/B/C is the direction your right thumb points when your fingers curl in the positive rotation direction. On a 5-axis machine, these let the spindle tilt or the table rotate so the tool can approach angled surfaces.</p>
 
 <h3>Positive vs Negative Direction on a Real Machine</h3>
-<p>A common confusion: when the table moves +X, does the tool move left or right? It depends on whether you watch the table or the spindle. The programmed coordinate is defined relative to the work coordinate system, not relative to your eye. If the table moves to +X, the workpiece moves right; the tool, which is fixed to the spindle, appears to move left relative to the workpiece. But the controller has already accounted for this &mdash; when you program X50, the controller commands the table to the position where the tool ends up at X50 in work coordinates. You do not need to reverse signs in the program; the machine builder has already done that.</p>
-<p>On a lathe, +X is always away from the spindle centerline (larger diameter). This means the tool moves toward the front of the machine for positive X on most machines. If you touch off the OD and enter the measured diameter into the X geometry offset, the controller computes the centerline automatically &mdash; you never enter a negative X for "toward center."</p>
+<p>The programmed coordinate is defined relative to the workpiece, not relative to your eye. On a fixed-spindle, moving-table machine, to make the tool relative to the workpiece move +X, the table actually moves in the opposite physical direction. The controller and machine builder have already accounted for this: when you program X50, the controller commands the physical axis position that places the tool at X50 in work coordinates. You do not need to reverse signs in the program. Always read +X as "tool moves to more positive X relative to the part," not as "table moves right."</p>
+<p>On a lathe in diameter mode, +X means larger diameter (away from spindle centerline). If you touch off the OD and enter the measured diameter into the X geometry offset, the controller computes the centerline automatically. Cross-center facing and rear-turret configurations are exceptions and must be checked against the machine manual.</p>
 
 <h3>Datum Strategy and Work Zero Placement</h3>
 <p>Where you place work zero is a process decision, not a given. On a milled rectangular block, the convention is the top-left corner (or top-right depending on shop standards), with Z0 on the top face. This matches how the drawing dimensions features. On a turned part, work zero is almost always the front finished face, with X0 on centerline. Placing work zero at the drawing datum minimizes arithmetic: every programmed coordinate comes straight from the print without offset calculations.</p>
@@ -92,14 +92,14 @@
 <h2>3. Machine Coordinate System</h2>
 <p>The <strong>machine coordinate system</strong> has its origin at <strong>machine zero</strong> (also called machine home or reference position). This is a fixed physical position established when the machine is turned on and homed &mdash; each axis moves to a home switch or reference marker. The machine always knows its current position relative to machine zero through encoders or scales.</p>
 
-<p><strong>G53</strong> switches to machine coordinates for one block only. It is non-modal and used for machine-specific positions like tool change or pallet change, never for part programming. Example: <code>G90 G53 Z0</code> moves Z to machine home for one block. G53 is useful when you need the tool to go to a fixed physical location &mdash; the tool-change position, a chip-pan drain, or a pallet &mdash; regardless of which work offset is active.</p>
+<p><strong>G53</strong> switches to machine coordinates for one block only. It is non-modal and used for machine-specific positions like tool change or pallet change, never for part programming. Example: <code>G90 G00 G53 Z0</code> moves Z rapidly to machine home for one block (the G00 motion code and clearance conditions must be explicit). G53 is useful when you need the tool to go to a fixed physical location &mdash; the tool-change position, a chip-pan drain, or a pallet &mdash; regardless of which work offset is active. Machine zero, the reference position, and the tool-change position are not all the same physical point; check the machine documentation.</p>
 
 <h3>Reference Return: G28 and G30</h3>
-<p>After a program finishes, you often want the tool to return to a known safe position. <strong>G28</strong> returns the specified axes to machine reference (home) via an intermediate point. <strong>G30</strong> returns to a secondary reference position, often the tool-change position on a machining center. Typical ending:</p>
+<p>After a program finishes, you often want the tool to return to a known safe position. <strong>G28</strong> returns the specified axes to machine reference (home) via an intermediate point. The intermediate point is interpreted according to the current G90/G91 mode. Typical ending:</p>
 <pre class="cp-code"><code>G91 G28 Z0       (retract Z to home, incremental from current)
 G28 X0 Y0        (then X/Y to home)
 M30</code></pre>
-<p>The G91 in front of G28 tells the controller "move by 0 in the intermediate point, then go home." Without G91, the intermediate point would be interpreted as an absolute coordinate and the machine might take an unexpected path.</p>
+<p>The G91 in front of G28 Z0 tells the controller "the intermediate point is zero relative to current Z, then go home." After this block, G91 remains active, so you must restore G90 before any subsequent absolute coordinate. G30 (secondary reference) support and target position depend on the controller; this page does not prescribe a universal return sequence.</p>
 
 <h2>4. Work Coordinate System (G54&ndash;G59)</h2>
 <p>The <strong>work coordinate system</strong> (WCS) has its origin at the workpiece datum &mdash; typically a corner or center of the part. You set this origin using a <strong>work offset</strong>. The machine stores multiple work offsets:</p>
@@ -119,7 +119,7 @@ M30</code></pre>
   <rect x="60" y="90" width="300" height="40" fill="#bfdbfe" rx="4"/>
   <text x="75" y="115" font-size="11" fill="#1e40af">Work Offset G54 (translated from machine zero)</text>
   <rect x="100" y="145" width="220" height="40" fill="#bbf7d0" rx="4"/>
-  <text x="115" y="170" font-size="11" fill="#166534">Programmed Coordinates (X50 Y20 = work zero)</text>
+  <text x="115" y="170" font-size="11" fill="#166534">Programmed Coordinates (X50 Y20 from work zero)</text>
   <text x="130" y="210" font-size="10" fill="#666">Machine sees: machine_zero + G54 + (X50,Y20)</text>
 </svg>
 
@@ -133,7 +133,7 @@ M30</code></pre>
 <li>Repeat for Y on the front edge.</li>
 <li>For Z, touch the spindle nose or a dial indicator to the top of the part and enter that machine Z into G54 Z.</li>
 </ol>
-<p>When using a probe, the probe automatically touches the edges and writes the offset values. The math is identical; the machine just does it faster and more consistently.</p>
+<p>Example: a &Oslash;6 edge finder. After calibration, when the spindle center touches the left edge and the machine reads X = -203, the edge itself is at X = -200. You enter -200 into G54 X, not -203 &mdash; omitting the +3 mm correction shifts the offset by 3 mm. Entering -206 (using the wrong sign) would shift it by 6 mm. When using a probe, the machine touches the edges and writes the offset values automatically.</p>
 
 <h3>Multiple Workpieces</h3>
 <p>When you machine four identical parts on one tombstone, you do not need four programs. Set G54 at part 1, G55 at part 2, G56 at part 3, G57 at part 4. The same program runs four times, switching work offsets. This is the most common use of G55&ndash;G59 in production.</p>
@@ -179,13 +179,22 @@ M30</code></pre>
 <details><summary>Show answer</summary><p>&Delta;X = -5 - 5 = -10 mm. &Delta;Y = 18 - 8 = +10 mm.</p></details>
 <p><strong>2.</strong> In G91 mode from X20, you write X30. Where do you end up? Where would G90 put you?</p>
 <details><summary>Show answer</summary><p>G91: X20 + 30 = X50. G90: X30. The same number means a different target depending on mode.</p></details>
-<p><strong>3.</strong> Machine zero is at (-300, -200). A hole is at (20,10) in work coordinates. What is its machine position?</p>
-<details><summary>Show answer</summary><p>(-300+20, -200+10) = (-280, -190).</p></details>
+<p><strong>3.</strong> The G54 origin is at machine position (-300, -200). A hole is at (20,10) in work coordinates. What is its machine position? (No rotation, scaling, or local offset.)</p>
+<details><summary>Show answer</summary><p>Machine position = G54 origin + work coordinate = (-300+20, -200+10) = (-280, -190). Machine zero itself is (0,0) in machine coordinates.</p></details>
 <p><strong>4.</strong> Why must you always return to G90 after a G91 subprogram?</p>
-<details><summary>Show answer</summary><p>G91 is modal. If you leave it active, the next G90 program line that assumes absolute positioning will instead move incrementally, accumulating position errors.</p></details>
+<details><summary>Show answer</summary><p>G91 is modal. If you leave it active, the next coordinate line that omits G90 (and whose author assumes absolute positioning) will instead move incrementally, accumulating position errors.</p></details>
 <p><strong>5.</strong> On a lathe you program X40 to X30. What is the radial depth of cut?</p>
 <details><summary>Show answer</summary><p>X is diameter, so radial depth = (40 - 30)/2 = 5 mm. Not 10 mm.</p></details>
 
+
+<section class="cp-sources">
+<h2>Sources</h2>
+<ul>
+<li><a href="https://www.haascnc.com/service/online-operator-s-manuals/mill-operator-s-manual/mill---part-setup.html">Haas Mill Part Setup</a> &mdash; work offset setup procedure.</li>
+<li>Coordinate conventions follow ISO 841 machine axis standard; verify on your specific machine documentation.</li>
+<li>All setup values and example coordinates are classroom teaching assumptions.</li>
+</ul>
+</section>
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/32-drawings-process-planning/">&larr; Drawings &amp; Process</a><a href="/cnc-manufacturing-engineering/cnc-programming/07-plane-units/">Plane &amp; Units &rarr;</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
