@@ -125,6 +125,11 @@ G01 Z-2. F100.</code></pre>
 
 <h3>Probing Tool Length</h3>
 <p>On a machine with a tool length probe, the spindle moves the tool to the probe, the probe touches the tip, and the control writes the H value automatically. This is faster than a manual touch and reduces human error, but the probe must itself be calibrated and the stylus must be clean. After a tool change or a probe crash, re-run the probe calibration before trusting automatic offsets.</p>
+
+<h3>Offset Verification Checklist</h3>
+<p>Before running the first part, walk the offset table: confirm H numbers match tool numbers, confirm the length offset signs are negative for shorter tools, and confirm the wear columns have not been accidentally edited during setup. On a lathe, confirm X is entered as diameter and the nose radius / orientation fields match the insert. A quick screen check takes 30 seconds and catches the most common first-piece errors.</p>
+<h3>Why Offsets Are Not Program Data</h3>
+<p>The program and the offset table are two layers. The program says where the tool should go; the offset says how the machine reaches there. This separation is what lets one program run on a part clamped anywhere on the table, and lets a worn insert be corrected without editing the program. Keep that separation clean: do not bake fixture positions into coordinates, and do not bake setup corrections into the program.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Thinking G49 returns to machine coordinates</strong> &mdash; G49 cancels length offset only. G53 switches to machine coordinates for one block. They are unrelated.</li>

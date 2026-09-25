@@ -138,6 +138,11 @@ G00 Z50.</code></pre>
 
 <h3>Canned Cycles Use Linear Moves Inside</h3>
 <p>Even when you use a drilling or boring canned cycle (G81, G83, G76), the cycle itself is built from linear moves: rapid to R plane, linear feed to depth, dwell, rapid retract. Understanding G00/G01 inside out makes the canned cycle parameters &mdash; R plane, Z depth, feed &mdash; predictable rather than magic numbers.</p>
+
+<h3>Why G01 Is the Default Cutting Mode</h3>
+<p>Once G01 is modal, every subsequent block cuts linearly until another motion G-code takes over. This is why the startup block includes G90 and the first cutting block sets F: the controller carries both forward. It also means a missing G01 on a later line is not usually an error &mdash; the controller stays in linear mode. The danger is assuming it has left G01; if you intended rapid but forgot G00, the tool feeds at F across air.</p>
+<h3>Linear Cuts on a 5-Axis Machine</h3>
+<p>On a 3-axis mill, G01 moves X, Y, and Z. On a 5-axis machine, linear interpolation can also include rotary axes (A, B, C) in the same block, producing a simultaneous straight-line cut with the tool tilted. The principle is identical: the controller computes the vector from current point to target and distributes feed across all participating axes. Rotary axes are in degrees per minute, so the feed units differ; confirm the convention on your machine.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Using G00 to cut</strong> &mdash; the tool moves at traverse speed into the part. Always G01 with an F for any plunge or cut.</li>

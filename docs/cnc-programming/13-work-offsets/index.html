@@ -129,6 +129,11 @@ G01 Z-2. F100.</code></pre>
 
 <h3>Work Offsets and Thermal Growth</h3>
 <p>A machine that has warmed up shifts its spindle position by hundredths of a millimeter compared with a cold start. Production shops that hold tight tolerances often warm the spindle and axes before touching off, or re-check the offset after the machine reaches thermal equilibrium. A work offset set on a cold machine may drift by the end of the shift. For first-piece work this is usually negligible; for precision work it is part of the process.</p>
+
+<h3>Offset Values Are Not Magic</h3>
+<p>The numbers in G54 come from physical measurements: the machine reads where the touch happened, the operator adds the known finder radius, and the result is entered. There is no hidden compensation. If the touch is off by 0.1, the offset is off by 0.1, and the first cut will be off by 0.1. This is good news &mdash; it means the offset is fully traceable, and a measured error can be corrected in one place.</p>
+<h3>Switching Between G54 and G55 Mid-Program</h3>
+<p>You can switch work offsets inside a program. For example, after machining the front of the part in G54, a second operation on a separate fixture can call G55. The tool length offset H remains valid; only the XY origin shifts. This is how one program runs two setups on two fixtures without two separate files. Always retract to safe Z before switching, because the new origin may put a fixture under the tool.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Touching one edge and guessing the other</strong> &mdash; touch both X edges (or both Y edges) and use the midpoint, especially on round stock.</li>
