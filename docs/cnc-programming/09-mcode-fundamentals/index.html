@@ -76,6 +76,22 @@
 <h3>Other Common M-Codes</h3>
 <p><strong>M07</strong> turns on mist coolant (some machines), <strong>M09</strong> turns off all coolant. <strong>M19</strong> orients the spindle (used for some tool setups). <strong>M08/M09</strong> are the flood coolant pair. Chuck clamp/unclamp and tailstock functions use machine-specific M-codes (often M10/M11 or similar). These vary by builder &mdash; do not assume.</p>
 
+
+<h3>M-Code Timing: Before or After Motion</h3>
+<p>On most FANUC/Haas controls, an M-code on the same line as motion executes <strong>after</strong> the motion completes. This matters: writing <code>G00 Z50. M05</code> means Z retracts first, then the spindle stops. Writing <code>M05 G00 Z50.</code> on some controls may stop the spindle before the move. The safe habit is to put M05 and M09 on their own lines after the retract, so the order is explicit. Tool change M06 always waits for the spindle to stop and the tool to be in the correct position; the machine interlocks this, but writing the sequence out explicitly is clearer.</p>
+
+<h3>Program Stop, Optional Stop, and Program End</h3>
+<p>M00 is an unconditional stop: the program pauses, the operator can clear chips, measure the part, or change inspection tools, and presses cycle start to continue. M01 is an optional stop: it pauses only when the optional-stop toggle on the control panel is on. In production, the toggle is off and M01 is skipped; in first-article or setup runs, the toggle is on and M01 pauses for inspection. This is how the same program works for both production and setup without editing.</p>
+<p>M02 and M30 both end the program. M02 stops without rewinding; M30 stops and rewinds the pointer to the program top so the next cycle starts from Oxxxx. On modern controls M30 also stops spindle and coolant as part of program end. Always use M30 at the end of a mill or lathe program.</p>
+
+<h3>Chuck, Tailstock, and Workholding M-Codes</h3>
+<p>On a lathe, chuck clamp/unclamp and tailstock extend/retract use machine-specific M-codes (often M10/M11 or similar). These are not standardized: a Haas lathe and a Mazak lathe may use different numbers for the same action. Never type a chuck M-code from memory &mdash; look it up. On a machining center, pallet change, fourth-axis clamp, and probe M-codes are also builder-specific.</p>
+
+<h3>Program Number and Block Structure</h3>
+<p>A FANUC/Haas mill program starts with <code>O0001</code> (or O1001) and ends with <code>M30</code>. Each line is a block. Blocks can be numbered N10, N20, but numbers are optional. The program number Oxxxx is the file name on the machine. Comments in parentheses after a block are ignored by the controller but read by the operator: <code>(DRILL 4 HOLES)</code>. Write comments that explain why, not what &mdash; the code already says what it does.</p>
+
+<h3>Safety: Why the Start Block Matters</h3>
+<p>The startup block <code>G21 G17 G90 G40 G49 G80</code> establishes a known state. Without it, the program inherits whatever mode the previous program left: inch units, incremental coordinates, cutter compensation, or an active drilling cycle. The startup block does not set spindle, coolant, or work offset &mdash; those are set by later lines. It only resets the modes that cause silent motion errors. This is why every program on a shop floor begins the same way, and why copying a program without the startup block is dangerous.</p>
 <h2>Example: Full Program Start and End</h2>
 <p>A complete program on a Haas mill, classroom example (not a production cycle):</p>
 <pre class="cp-code"><code>O0001 (DEMO PROGRAM)
@@ -110,6 +126,20 @@ M30                        (end, rewind)</code></pre>
   <text x="180" y="185" font-size="9" text-anchor="middle" fill="#666">Never M30 with spindle or coolant still on.</text>
 </svg>
 
+
+<h3>Spindle Orientation and M19</h3>
+<p><strong>M19</strong> orients the spindle to a fixed position (used for some tool setups, boring bar orientation, or probe alignment). On a Haas, M19 with an R word can orient to a specific angle. This is not a cutting function; it is a setup function. You rarely see M19 in a production program, but it appears in probing and boring macros. After M19, the spindle stays oriented until M03/M04 or another motion command releases it.</p>
+
+<h3>Coolant: Flood, Mist, and Through-Spindle</h3>
+<p><strong>M08</strong> turns on coolant, but which coolant depends on machine configuration. Most mills have flood coolant; some have through-spindle coolant (TSC) for deep holes. <strong>M07</strong> may turn on mist coolant on some machines. <strong>M09</strong> turns off all coolant. TSC is especially useful for deep-hole drilling because it pushes chips out through the flutes and cools the drill tip. When using TSC, ensure the tool is rated for through-spindle pressure; a standard end mill may leak or fail under high pressure.</p>
+
+<h3>Tool Change Sequence on a Machining Center</h3>
+<p>A typical tool change block looks like <code>T02 M06</code>. The machine first moves Z to the tool-change position (if configured), stops the spindle, unclamps the current tool, indexes the magazine to tool 02, clamps the new tool, and returns. After M06, you must establish the tool length offset with <code>G43 H02</code> on a safe Z move. The tool number T02 and the offset number H02 are independent: you can call T02 with H05 if needed, though the common practice is to match them. On a lathe, the turret indexes directly: <code>T0202</code> selects station 2 and offset 2 in one block.</p>
+
+<h3>Why M-Codes Are Not G-Codes</h3>
+<p>A common beginner confusion is treating M-codes as if they were modal G-codes. M03 starts the spindle and it keeps spinning until M05, but that physical persistence is not the same as a modal G-code group. You do not need to re-write M03 on every cutting line, but you also cannot cancel M03 with another M-code the way G01 cancels G00. Spindle and coolant are physical actuators; G-codes are modes. Mixing the two mental models causes errors like expecting M08 to cancel a drilling cycle.</p>
+<h3>Checking M-Code Effects Before Running</h3>
+<p>When a program uses an unfamiliar M-code, look it up in the machine manual before cycle-start. A wrong M-code can unclamp the chuck, flood coolant unexpectedly, or move the pallet. Most modern machines show the M-code function on the screen when you single-block through it; use that as a checklist on the first run.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Forgetting M05 before tool change</strong> &mdash; changing tools with the spindle running is dangerous. Write M05 explicitly.</li>

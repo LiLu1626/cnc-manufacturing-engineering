@@ -89,10 +89,43 @@
   <text x="300" y="145" font-size="9" text-anchor="middle" fill="#666">center</text>
 </svg>
 
+
+<h3>Chip Load and Why It Matters</h3>
+<p>Feed per tooth (fz) is the chip load: how thick each flute cuts on one revolution. Too light and the tool rubs instead of cutting, generating heat and work-hardening. Too heavy and the edge chips or breaks. Chip load is set per material and per tool: a carbide end mill in aluminum may take 0.05&ndash;0.15 mm/tooth; in steel, 0.02&ndash;0.05 mm/tooth. The catalog gives the range; start at the middle and adjust for finish and tool life.</p>
+<p>Feed rate = RPM &times; fz &times; number of flutes. A 4-flute end mill at 3000 RPM and fz 0.05 gives 600 mm/min. If the machine cannot hold that feed under load, reduce it rather than pushing the machine. Also note that radial engagement (ae) and axial engagement (ap) affect chip thinning: at light radial engagement, the chip is thinner than fz, and you may need to increase feed to keep a reasonable chip thickness.</p>
+
+<h3>Power and Torque Limits</h3>
+<p>Even if the math says 6000 RPM at 600 mm/min, the machine may not have enough spindle power. MRR (material removal rate) = width &times; depth &times; feed. If MRR exceeds what the spindle can drive, the spindle bogs down and the tool rubs. A small 7.5 kW mill cannot take a full 10 mm depth on a 20 mm carbide end mill in steel at 600 mm/min. Start conservatively: take a light cut, listen to the spindle, watch the load meter, and increase feed or depth until the load is reasonable. The tool catalog gives the maximum MRR for the tool; the machine's power curve gives the upper limit.</p>
+
+<h3>Surface Speed vs Spindle Speed</h3>
+<p>Cutting speed (Vc, m/min) is the speed of the tool edge relative to the workpiece surface. Spindle speed (RPM) is how fast the spindle turns. They are related by diameter: Vc = &pi; &times; D &times; RPM / 1000. For a fixed Vc, a smaller tool needs higher RPM. This is why a &Oslash;3 drill runs at much higher RPM than a &Oslash;20 face mill for the same material. On a lathe, Vc is constant under G96 because the part diameter changes; on a mill, the tool diameter is fixed, so RPM is fixed under G97.</p>
+
+<h3>Spindle Direction: M03 vs M04</h3>
+<p>Almost all milling and turning tools cut in M03 (clockwise when viewed from the spindle side). Drills, end mills, face mills, and inserts all expect M03. M04 is counter-clockwise and is rarely used &mdash; it appears in special operations like left-handed tools or certain tapping cycles. A common mistake is running a standard end mill in M04: the tool cuts backwards, rubs instead of shears, and overheats quickly. If a program suddenly uses M04, check why before running it.</p>
+
+<h3>Feed in Threading</h3>
+<p>Threading on a lathe is different: the feed must exactly match the thread pitch. For M10&times;1.5, the feed is F1.5 mm/rev. The spindle must be in G97 fixed RPM (not G96), because the thread lead is fixed by the feed and any RPM change would cause the tool to chase the wrong helix. Threading also uses a dedicated cycle (G76 or G92) that controls the number of passes and infeed. Never use CSS for threading.</p>
+
+<h3>Spindle Warm-Up</h3>
+<p>On a cold machine, running at full RPM immediately can cause thermal growth in the spindle bearings. Many shops have a short warm-up program that ramps spindle speed from low to high over 10&ndash;15 minutes before the first production part. This stabilizes spindle temperature and improves accuracy. The warm-up program is not a cutting program; it just spins the spindle at increasing speeds with no tool in the cut.</p>
 <h2>Example: Milling and Turning</h2>
 <p><strong>Milling (G94):</strong> <code>G54 G90 S2000 M03 G00 X0 Y0 G43 H01 Z50. M08 G00 Z5. G01 Z-2. F100. G01 X50. F300.</code> Spindle at 2000 RPM, plunge feed 100 mm/min, feed cut 300 mm/min.</p>
 <p><strong>Turning (G96/G95):</strong> <code>G50 S2500 G96 S180 M03 G95 F0.2</code>. Caps RPM at 2500, holds 180 m/min surface speed, feed 0.2 mm/rev. At &Oslash;50 the RPM is about 1146; at &Oslash;25 the controller raises it to about 2292, capped at 2500. The surface speed at the tool tip stays near 180 m/min across the cut.</p>
 
+
+<h3>Starting Conservatively</h3>
+<p>Tool catalog speeds are maximum recommended values under ideal conditions. In a real shop with a worn machine, less-than-perfect setup, and mixed materials, start at 70% of catalog speed and 80% of catalog feed. Listen to the spindle: a high-pitch whine or a chattering sound means the speed is too high or the setup is not rigid. A humming, steady sound with smooth chips is good. If chips are long and stringy, the feed may be too low; if chips are blue or burnt, the speed is too high or coolant is insufficient.</p>
+
+<h3>Feed Rate Override</h3>
+<p>Nearly all CNC machines have a feed rate override knob (0&ndash;150%) and a spindle speed override knob. These are for setup and debugging, not for production. During the first cut, set feed override to 50% and watch the cut; if it looks good, ramp to 100%. In production, run at 100% and let the catalog values do their job. Leaving the feed override at 50% on a production machine halves the cycle time and wastes money.</p>
+
+<h3>Spindle Speed Override and CSS</h3>
+<p>Under G97 fixed RPM, the spindle override knob scales the S command: S2000 at 80% override runs at 1600 RPM. Under G96 constant surface speed, the spindle override still works, but the controller adjusts RPM to maintain the surface speed &mdash; the override changes the target surface speed rather than directly scaling RPM. This is a subtle but important difference: on a lathe in CSS, the override knob effectively scales the cutting speed, not the spindle RPM directly.</p>
+
+<h3>Feeds and Speeds Are a Starting Point</h3>
+<p>The calculated RPM and feed are a starting point, not a command. The real answer depends on tool condition, workpiece material batch variation, machine rigidity, coolant pressure, and how deep and wide the cut is. Experienced machinists listen to the cut, look at the chips, and adjust. The program sets a reasonable starting point; the operator fine-tunes on the first piece.</p>
+<h3>Feed Hold and Single Block</h3>
+<p>The feed-hold button pauses the axis motion without stopping the spindle. Single-block mode executes one block at a time, so you can step through a new program line by line. These are setup tools: use them on the first part, not in production. When single-block is on, the machine pauses after each line, which is tedious for a long production run but essential for catching unexpected motion. Always use single block and 50% feed override on the first piece of a new program.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Using mm/min feed on a lathe defaulting to mm/rev</strong> &mdash; F200 on a G95 lathe means 200 mm per revolution, which is a crash. Check the active feed mode.</li>

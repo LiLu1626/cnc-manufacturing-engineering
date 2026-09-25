@@ -81,6 +81,33 @@
 <h3>M-Codes Are Machine-Specific</h3>
 <p>Even on FANUC-compatible controls, M-codes vary by machine builder. M03/M04/M05 and M08/M09 are near-universal, but tool change, chuck clamp, tailstock, and pallet M-codes differ. A Mazak lathe may use different M-codes than a Haas lathe for the same physical action. Never assume an M-code from one machine works on another.</p>
 
+
+<h3>FANUC in Detail</h3>
+<p>FANUC controls are found on machines worldwide, from Tsugami to Makino. The program starts with Oxxxx and uses G80&ndash;G89 cycles. Subprograms are called with M98 Pnnnn (call O nnnn) and returned with M99. Macro variables are #1&ndash;#33 (local) and #100&ndash;#199 (common). Threading uses the two-line G76 with P and Q words. FANUC is the baseline that most other controls are compared against.</p>
+
+<h3>Haas in Detail</h3>
+<p>Haas controls are FANUC-compatible but simplified. On lathes, G99 (instead of G95) sets feed per revolution. The thread cycle is one-line G76 with K (thread height) and D (first pass depth). Canned cycles use the same G80&ndash;G83 family. Haas uses M98 P calls for subprograms. The main difference from FANUC is simplification: fewer parameters, more defaults, and a touchscreen interface. Programs written for a Haas mill usually run on a FANUC mill, but always check.</p>
+
+<h3>Siemens Sinumerik in Detail</h3>
+<p>Siemens controls (840D, 828D) are common on European and high-end machines. They use named cycles instead of G-codes: CYCLE82 for spot drilling, CYCLE83 for peck, CYCLE84 for tapping. Variables are R1, R2. Work offsets use a frame system. The program structure includes channel definitions and syntax blocks. A program that runs on a FANUC machine will not run directly on a Siemens machine; it must be rewritten using the Siemens cycle calls and parameter list.</p>
+
+<h3>Heidenhain in Detail</h3>
+<p>Heidenhain controls (TNC 640, iTNC 530) are common on mold and die machines. They use conversational programming: the operator fills in a dialog on the screen for each cut, rather than writing text G-code. Q parameters replace # variables. Straight-line and circular blocks are entered as HEIDENHAIN touch points. Heidenhain can also read and run G-code programs, but the native programming style is conversational.</p>
+
+<h3>Why This Site Uses Haas</h3>
+<p>This site uses Haas (FANUC-compatible) syntax as the reference because it is widely taught, well documented, and the programs are portable to most FANUC-compatible mills and lathes. When you move to a Siemens or Heidenhain machine, the concepts &mdash; coordinates, offsets, cycles, work planes &mdash; are the same; only the words change. Learn the concepts first, then learn the dialect of the machine you are running.</p>
+
+<h3>Coordinate System and Direction Conventions</h3>
+<p>Across controllers, the right-hand coordinate system is the same: X, Y, Z follow the right-hand rule, and rotary axes A, B, C follow the curled-finger direction. Work offset numbers differ (G54 vs frame vs datum table), but the concept &mdash; an origin offset from machine zero &mdash; is universal. Plane selection G17/G18/G19 is also consistent across FANUC/Haas. On Siemens, plane selection uses a different word but the geometry is the same.</p>
+
+<h3>Program Transfer and Post-Processors</h3>
+<p>In a modern shop, most programs come from CAM software. The post-processor converts the CAM's generic toolpath into the specific dialect of the target machine. A CAM post for a Haas mill outputs G81 cycles; the same CAM post for a Siemens machine outputs CYCLE82. This is why a CAM program does not usually need manual porting &mdash; the post handles the dialect. If you write G-code by hand, you must do what the post does automatically: translate geometry into the correct cycle syntax.</p>
+
+<h3>Alarm Messages and Diagnosis</h3>
+<p>When a program alarms, the alarm number and text point to the control dialect. A FANUC alarm like "020 OVER TRAVEL" means something different from a Siemens alarm. Reading the alarm manual for your specific control is the first diagnostic step. Many alarms are not program errors at all: they are setup errors (wrong offset, tool not clamped, door open). The alarm message is the control telling you what it sees, not what you intended.</p>
+
+<h3>Learning a New Control</h3>
+<p>If you already know FANUC/Haas, moving to Siemens or Heidenhain is not learning CNC from scratch. The concepts &mdash; coordinates, offsets, cycles, work planes, subprograms &mdash; transfer directly. What changes is the vocabulary and the cycle parameter format. Spend a day with the manual for the new control, write a simple test part in air, and run it in single block. Within a week you will be productive; within a month you will be fluent.</p>
 <h2>Example: Same Hole, Three Dialects</h2>
 <p>Drill a &Oslash;8 hole 15 mm deep at X10 Y10, R plane 2 mm, feed 100 mm/min.</p>
 <p><strong>FANUC/Haas:</strong></p>
@@ -90,6 +117,26 @@ G80</code></pre>
 <p><strong>Siemens (Sinumerik):</strong> the same operation is programmed as a CYCLE82 call with parameters for depth, retract plane, and dwell. The syntax is completely different; the geometry concept (rapid to R plane, feed to depth, retract) is the same.</p>
 <p><strong>Heidenhain:</strong> entered as a conversational drilling block on the control, with depth and feed filled in on the screen.</p>
 
+
+<h3>Work Offset and Tool Offset Differences</h3>
+<p>On FANUC/Haas, work offsets are G54&ndash;G59 in a table. On Siemens, work offsets are set in a frame (ROT, TRANS) and activated differently. On Heidenhain, the datum table stores work zero. Tool length and radius offsets are stored in offset tables on all controls, but the offset numbering and how they are called (H vs D vs T) differ. The concept &mdash; a stored correction between machine position and tool-tip position &mdash; is universal; the access method is not.</p>
+
+<h3>Canned Cycle Differences</h3>
+<p>G81 drilling on FANUC/Haas uses R plane, Z depth, F, and G98/G99 retract. On Siemens, CYCLE82 takes parameters for depth, retract plane, dwell, and feed in a single block. The geometry (rapid to R, feed to depth, dwell, retract) is the same, but the parameter order and names are different. A programmer moving between controls must look up the cycle parameter list every time &mdash; guessing leads to wrong Z depths or wrong R planes.</p>
+
+<h3>Subprogram and Macro Differences</h3>
+<p>FANUC/Haas subprograms use M98 P calls and M99 returns. Siemens uses procedure calls with parameter passing. Heidenhain uses labels and CALL LBL. Variables: FANUC #1, Siemens R1, Heidenhain Q1. Conditional logic: FANUC uses IF[#1 EQ#2] GOTO, Siemens uses IF, Heidenhain uses FN. The programming concept &mdash; parameterized repeated logic &mdash; is the same, but the syntax differs enough that a macro written for one control must be ported, not copied.</p>
+
+<h3>Practical Porting Checklist</h3>
+<p>When moving a program from one control to another: (1) check units (G20/G21), (2) check work offset numbering, (3) check tool offset call (H vs D), (4) rewrite canned cycles using the target control's syntax, (5) convert subprogram calls and variables, (6) verify M-codes for chuck, coolant, and tool change, (7) run the program in dry run and single-block before cutting. Never assume a program transfers without changes.</p>
+
+<h3>Controller Version Matters</h3>
+<p>Even within one brand, different versions differ. A FANUC 0i-MF and a FANUC 31i may have slightly different cycle behaviors. A Haas NextGen control and a older Haas have some parameter differences. The manual for the specific control version, not the brand, is the authority. When in doubt, run a simple test move in air before cutting.</p>
+<h3>Machine Builder Add-Ons</h3>
+<p>Beyond the control dialect, the machine builder adds its own M-codes and macros for things like chip conveyor, coolant tank level, tool probe, and pallet changer. These are documented in the machine builder manual, not the control manufacturer manual. A Haas VF and a Mazak VMC may both run FANUC controls, but their chip-conveyor M-codes differ. When you move to a new machine, ask the programmer on shift for the "magic M-codes" sheet &mdash; it usually has the builder-specific functions written down.</p>
+
+<h3>Documentation and Version Control</h3>
+<p>Because dialects differ by machine and version, keep a paper or digital cheat sheet at each machine with the exact cycle format, M-codes, and offset numbering for that control. When a program is transferred between machines, note the target machine on the program printout. This avoids the common shop-floor problem of running a program on the wrong machine because the paper printout did not say which control it was written for.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Assuming G81 means the same thing on every controller</strong> &mdash; R plane and retract behavior can differ; verify the cycle definition.</li>
@@ -116,7 +163,7 @@ G80</code></pre>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.html">Haas G-code list</a> &mdash; reference dialect used on this site.</li>
 <li>FANUC G-code and cycle conventions follow standard FANUC programming manuals; Siemens and Heidenhain differences are summarized for orientation only.</li>
-<li>Always verify cycle format and parameter meanings against your specific control and machine builder.</li>
+<li>Always verify cycle format and parameter meanings against your specific control and machine builder. When you are learning a new control, keep a notebook of the differences you encounter: which G-code does what, how retract works, where the offset table lives. After two or three programs on the new machine, the dialect will feel familiar, and the underlying CNC concepts will carry over from the control you already know.</li>
 </ul>
 </section>
 
