@@ -80,6 +80,7 @@ G00 Z50.         (retract up BEFORE next XY)</code></pre>
 <p>The critical rule: Z goes up before XY moves. Never rapid sideways at cut depth.</p>
 
 <h2>Example: Safe Approach and Cut</h2>
+<p>This is a motion fragment, not a complete setup program. Assume G21, G17, G90 and G94 are active; the intended work offset and tool-length compensation are verified; and the spindle and required coolant are already running. The selected &Oslash;10 mm center-cutting end mill is suitable for the illustrated axial entry. Z0 is the stock top. Z50 clears the stock, clamps and holder envelope along the transfer route; the approach and cutting locations are clear of clamps. The speeds and feeds are teaching assumptions, not tooling recommendations.</p>
 <p>On a Haas mill with a &Oslash;10 end mill, cutting a straight groove 2 mm deep into aluminum. Starting position is X0 Y0 Z50 (above the part corner):</p>
 <pre class="cp-code"><code>G00 X20. Y15.        (1: rapid XY to above cut start, at Z50 safe)
 G00 Z2.              (2: rapid down to 2mm clearance above surface)

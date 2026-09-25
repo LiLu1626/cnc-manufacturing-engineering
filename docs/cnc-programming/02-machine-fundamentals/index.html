@@ -35,7 +35,7 @@
 
 <h2>Why It Matters</h2>
 <p>The same X20 means different things on different machines. On a mill, X20 moves the tool 20 mm in the X direction. On a lathe in diameter mode, X20 means the tool is at a 20 mm diameter — the actual radial movement from X40 to X20 is only 10 mm. If you treat lathe X as a linear coordinate like a mill, you will cut diameters wrong by a factor of two.</p>
-<p>Coordinates being legal does not mean they are safe. A vise jaw at Y40 and a &Oslash;10 tool means the tool center can only approach Y35 without hitting the jaw — even though Y40 is within the machine's travel. The machine envelope tells you where it <em>can</em> go; the fixture envelope tells you where it <em>may</em> go. Always visualize the fixture, tool, and spindle before commanding a move.</p>
+<p>Coordinates being legal does not mean they are safe. Assume the jaw occupies Y &ge; 40 mm and overlaps the cutter in X and Z. A &Oslash;10 mm cutter has a 5 mm radius. At center Y35, its outer edge reaches Y40: this is tangency with zero clearance, not a safe stand-off. For an illustrative 1 mm geometric gap, keep the center at Y34 or less when approaching from smaller Y. Check the holder envelope and positioning uncertainty separately. The machine envelope tells you where it <em>can</em> go; the fixture envelope tells you where it <em>may</em> go. Always visualize the fixture, tool, and spindle before commanding a move.</p>
 
 <h2>How It Works</h2>
 <h3>Mill Axes</h3>
