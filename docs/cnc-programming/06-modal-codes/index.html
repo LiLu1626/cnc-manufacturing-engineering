@@ -83,7 +83,8 @@ G00 X0 Y0  (now rapid — G01 cancelled by G00)</code></pre>
 <h3>The Startup Block Establishes Known State</h3>
 <p>This is why every program starts with: <code>G21 G17 G90 G40 G49 G80</code>. This block <strong>explicitly establishes</strong> the listed modes &mdash; metric units, XY plane, absolute coordinates, cutter compensation off, tool length compensation off, and drilling cycles off. It does not set feed mode, work offset, spindle speed, or coolant; those are set by later lines. The point is that before any tool moves, the programmer has declared the state they care about, rather than inheriting whatever the previous program left behind.</p>
 
-<h2>Example: Forgotten G80 on Haas</h2>
+<h2>Example</h2>
+<h3>Forgotten G80 on Haas</h3>
 <p>On a Haas mill, G00 and G01 cancel an active drilling cycle. The dangerous case is not a G00 line &mdash; it is a <strong>bare X/Y block</strong> while G81 is still active. Here is the intentional-error teaching fragment (entry state: G21 G17 G90 G94 active; tool, work offset, spindle, and clearance verified):</p>
 <pre class="cp-code"><code>G00 Z50.
 G00 X10. Y10.
@@ -109,7 +110,7 @@ G00 Z50.</code></pre>
   <text x="60" y="215" font-size="9" fill="#666">Y increases upward; X increases rightward</text>
 </svg>
 
-<h2>Example: Full Program State Trace</h2>
+<h3>Full Program State Trace</h3>
 <p>Trace this short program and track the active modes. Entry state: G21 G17 G90 G94 already active; tool, work offset, spindle, and clearance verified.</p>
 <pre class="cp-code"><code>N10 G54
 N20 T01 M06
@@ -140,30 +141,30 @@ N130 M30</code></pre>
 <tr><td>N120</td><td>Spindle stop</td><td>M05</td></tr>
 <tr><td>N130</td><td>Program end and rewind</td><td>&mdash;</td></tr>
 </table>
-<p>Four drill events occur: at (10,10), (50,10), (50,50), and (10,50). G81 is in a different group from G00/G01, so it is not cancelled by switching motion mode; it is cancelled only by G80 (or by G00/G01 on Haas, but G80 is explicit).</p>
+<p>Four drill events occur: at (10,10), (50,10), (50,50), and (10,50). On the Haas mill used here, G81 belongs to Group 09 and G00/G01 to Group 01. Despite belonging to different groups, G00 and G01 cancel the canned cycle. G80 explicitly cancels it.</p>
 
-<h2>Modal State Across Program Boundaries</h2>
+<h3>Modal State Across Program Boundaries</h3>
 <p>When the program ends with M30, the controller stops the program and rewinds. Whether spindle, coolant, and modal G-codes reset depends on the controller and its settings; consult the machine documentation. On Haas, M30 ends the program and the spindle and coolant are stopped as part of program end. Writing M09 and M05 explicitly before M30 is good practice for readability and process clarity, not because the next program would otherwise continue cutting.</p>
 
-<h2>Subprograms and Modal State</h2>
+<h3>Subprograms and Modal State</h3>
 <p>When you call a subprogram with M98, modal state does not reset. G-codes set inside the subprogram persist after M99 returns to the main program. This is why the rule "always return to G90 after G91 in a subprogram" matters: if the subprogram uses G91 for incremental moves and does not restore G90, the main program resumes in incremental mode. The same applies to cutter compensation, cycles, and feed mode. A well-written subprogram restores the modes it changed, or the main program re-establishes them after the call.</p>
 
-<h2>Reading State Back on the Controller</h2>
+<h3>Reading State Back on the Controller</h3>
 <p>Modern controllers have a "current commands" or "modal display" page that shows every active G-code group. When you are debugging a program that is not doing what you expect, this page is the first place to look. It tells you whether the controller thinks it is in G90 or G91, G20 or G21, G81 or G80, G94 or G95. If the program looks correct but the machine moves oddly, the modal display almost always reveals the problem &mdash; usually a leftover mode you did not know was active.</p>
 
 
-<h2>Modal Groups in Detail</h2>
+<h3>Modal Groups in Detail</h3>
 <p>Each modal group represents a single machine setting. The motion group (G00/G01/G02/G03) determines how the next axis move is interpolated. The plane group (G17/G18/G19) determines which two axes define the plane for circular interpolation and cutter compensation. The distance group (G90/G91) determines whether coordinates are absolute or incremental. The units group (G20/G21) determines inch vs millimeter. Each group is independent: setting G90 does not change the plane, the units, or the feed mode.</p>
-<p>When a new code from a group appears, it replaces the previous code in that group. For example, G02 replaces G01 in the motion group. It does not affect G17, G90, or G21. This independence is what lets you write a line like <code>G90 G01 X50 F200</code> and know that G90 sets distance mode, G01 sets motion, and F200 sets feed &mdash; each from a different group, all active together.</p>
+<p>When a new code from a group appears, it replaces the previous code in that group. For example, G02 replaces G01 in the motion group. It does not affect G17, G90, or G21. This independence is what lets you write a line like <code>G90 G01 X50 F200</code>: G90 and G01 come from different G-code groups, and F200 is a held numeric feed value, not a third G-code group. All three are active together.</p>
 
 <h3>Non-Modal (One-Shot) Codes</h3>
 <p>Not every G-code is modal. Non-modal codes act on the block they appear in and then stop. <strong>G04</strong> (dwell) is the classic example: <code>G04 P1000</code> pauses for one second and then the program continues. The dwell does not persist. <strong>G53</strong> (machine coordinate selection) is also one-shot: it applies only to the block it is written in. If you need machine coordinates again, you must write G53 again. Recognizing whether a code is modal or one-shot prevents the mistake of expecting a one-shot code to persist.</p>
 
 <h3>Feed and Spindle as Modal Values</h3>
-<p>Feed F and spindle S are modal numeric values, not G-code group replacements. Once you write F300, every subsequent G01/G02/G03 block inherits 300 until you write a new F. The same is true for S. You do not need to repeat F on every cutting line &mdash; you write it once at the start of a cutting section and change it only when the feed changes. This is why the first G01 after a G00 must specify F: otherwise the controller inherits whatever F was left over from the previous program.</p>
+<p>Feed F and spindle S are modal numeric values, not G-code group replacements. Once you write F300, every subsequent G01/G02/G03 block inherits 300 until you write a new F. The same is true for S. You do not need to repeat F on every cutting line &mdash; you write it once at the start of a cutting section and change it only when the feed changes. If the program has already set F (e.g. G94 F200) and the feed mode has not changed, later G01 blocks may use that F. Before the first cut, confirm the feed value and mode rather than relying on unknown entry state. Example trace: G94 F200 (set feed mode and value) &rarr; G00 X0 Y0 (rapid, no feed used) &rarr; G01 Z-2. F200 (cut at 200 mm/min; F200 restated for clarity).</p>
 
-<h2>Modal Errors in Practice</h2>
-<p>The most common modal error in production is leaving a drilling cycle active. You finish drilling four holes, write G00 Z50, and then move to a different XY position for milling. On Haas, G00 cancels the cycle, so this works. But if you forget G80 and the next block is a bare X/Y move (not G00), the controller may treat it as another hole position. Writing G80 explicitly after the last hole is the habit that prevents this class of error.</p>
+<h3>Modal Errors in Practice</h3>
+<p>The most common modal error in production is leaving a drilling cycle active. Two branches: (A) after G81 you write G00 Z50 &mdash; on Haas this cancels the cycle, so a following bare X/Y block is a rapid move. (B) after G81 you write a bare X/Y block directly &mdash; G81 repeats the drill at that new position. Writing G80 explicitly after the last hole removes this ambiguity and makes intent clear regardless of which controller is used.</p>
 <p>The second most common error is leaving cutter compensation active. G41/G42 must be cancelled on a proper lead-out path &mdash; a straight move away from the part before switching to another operation. Cancelling compensation at an arbitrary position can cause the tool to shift sideways unexpectedly. The lead-out and lead-in moves are part of the compensation logic, not optional cleanup.</p>
 <p>The third common error is a leftover G91 subprogram. A subprogram that uses incremental moves for a bolt pattern must restore G90 before returning. If it does not, the main program resumes in incremental mode and every subsequent coordinate line moves by the stated amount rather than to the stated position. This produces parts whose features drift further and further from the drawing.</p>
 <h2>Common Mistakes</h2>
@@ -186,7 +187,7 @@ N130 M30</code></pre>
 <p><strong>4.</strong> After G01 X50 F200, you write Y30. What mode and feed are active?</p>
 <details><summary>Show answer</summary><p>G01 at F200 &mdash; both are modal and inherited. Y30 moves to Y30 in a straight line at 200 mm/min.</p></details>
 <p><strong>5.</strong> You see G90 G54 G00 X0 Y0 on one line. Which modal groups are explicitly set on this line?</p>
-<details><summary>Show answer</summary><p>Distance mode (G90), work offset (G54), and motion (G00). Units, plane, compensation, and cycles are inherited from earlier in the program &mdash; you must read earlier lines to know them.</p></details>
+<details><summary>Show answer</summary><p>Distance mode (G90), work offset (G54), and motion (G00) are explicitly selected on that line. Because G00 is executed, any active drilling cycle is cancelled on this Haas mill. Units, plane, and compensation are inherited from earlier lines and must be checked.</p></details>
 
 <section class="cp-sources">
 <h2>Sources</h2>
