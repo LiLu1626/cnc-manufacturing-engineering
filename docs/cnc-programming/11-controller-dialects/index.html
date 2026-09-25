@@ -44,7 +44,7 @@
 <tr><td>Subprogram call</td><td>M98 Pnnnn / M99</td><td>Procedure/label call per Siemens programming manual</td><td>Label call per Heidenhain Klartext manual</td></tr>
 <tr><td>Program variables</td><td>#1, #2</td><td>R parameters (R1, R2)</td><td>Q parameters in Heidenhain dialect</td></tr>
 <tr><td>Work offsets</td><td>G54&ndash;G59</td><td>Work offset frames; G54-style offsets also used in Siemens examples</td><td>Datum table on the control</td></tr>
-<tr><td>Feed per rev (lathe)</td><td>G95 (FANUC) / G99 (Haas lathe)</td><td>Per Siemens lathe programming</td><td>Per Heidenhain manual</td></tr>
+<tr><td>Feed per rev (lathe)</td><td>FANUC: verify the selected G-code system; Haas lathe: G99</td><td>Per Siemens lathe programming</td><td>Per Heidenhain manual</td></tr>
 </table>
 
 <svg viewBox="0 0 360 180" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
@@ -73,7 +73,7 @@
 </svg>
 
 <h3>FANUC / Haas</h3>
-<p>FANUC-style controls use Oxxxx program numbers, G80&ndash;G89 cycles, and M98 P subprogram calls. Haas controls are FANUC-compatible with simplifications: on Haas lathes G99 selects feed-per-rev (instead of G95), and the thread cycle is the one-line G76 with K/D words. The exact G-code set depends on the control model and option board; verify on your machine.</p>
+<p>FANUC-style controls use Oxxxx program numbers, G80&ndash;G89 cycles, and M98 P subprogram calls. On Haas lathes G99 selects feed-per-rev; on a FANUC-style lathe the feed-per-rev G-code depends on the configured G-code system and must be checked in the relevant manual — do not assume G95 or G99 from the brand name. Haas thread cycles use the one-line G76 with K/D words. The exact G-code set depends on the control model and option board; verify on your machine.</p>
 
 <h3>Siemens Sinumerik</h3>
 <p>Siemens controls (828D, 840D, Sinumerik ONE) use named cycle calls rather than G81 numbers. Variables are R parameters. Siemens programs can still use G17, G54, and M30 in standard ways; the difference is in cycle calls and offset frame syntax. Do not assume a FANUC G81 program runs unchanged &mdash; the drilling sequence must be rewritten as the corresponding Siemens cycle call with the correct parameter list for your exact software version.</p>
@@ -85,7 +85,7 @@
 <p>The right-hand coordinate system, the geometric idea of a working plane, the work-offset concept, and tool-length/radius offset concepts transfer across controls. The specific plane G-codes G17/G18/G19, cycle numbers, and parameter order must still be checked for your dialect. What does not transfer without checking: cycle numbers and parameter order, subprogram call syntax, variable symbols, M-codes for chuck/tailstock/pallet, and exact retract behavior. CAM post-processors handle this translation automatically; hand-written programs must be ported line by line.</p>
 
 <h2>Example: Porting a Drilling Hole</h2>
-<p>Entry conditions for this snippet: startup block G21/G17/G90/G94/G40/G49/G80 already executed, tool length offset established, spindle and fixture clearances verified, and the tool starts at a safe Z above the work. The example retracts to the initial plane (G98); because the initial plane here is Z50, the first safe Z move must be established explicitly before any XY positioning.</p>
+<p>Entry conditions for this snippet: after the startup block (G21/G17/G90/G94/G40/G49/G80), a valid tool length offset has been re-established with G43 H; the spindle is running in the drilling direction and speed, required coolant is available, and fixture clearances are verified. The tool starts at a safe Z above the work. The example retracts to the initial plane (G98); because the initial plane here is Z50, the first safe Z move must be established explicitly before any XY positioning.</p>
 <p><strong>FANUC/Haas reference:</strong></p>
 <pre class="cp-code"><code>G90 G54 G00 Z50.
 G00 X10. Y10.
@@ -123,8 +123,8 @@ G80</code></pre>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.html">Haas G-code list (mill)</a> &mdash; reference dialect used on this site.</li>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G99.html">Haas G99 (lathe feed/rev)</a>.</li>
-<li><a href="https://support.industry.siemens.com/cs/products/mc/109748864/">Siemens SINUMERIK 828D / 840D Programming Manual</a> &mdash; cycle naming (CYCLE81/82), R parameters, and frame/offset syntax; match the exact software version.</li>
-<li><a href="https://content.heidenhain.de/doku/tnc_manual/en/">Heidenhain TNC 640 / iTNC 530 Conversational Programming</a> &mdash; Klartext block structure and Q parameters.</li>
+<li><a href="https://support.industry.siemens.com/cs/products/mc/109748864/">Siemens SINUMERIK documentation portal</a> &mdash; manual search entry; select the exact 828D / 840D / ONE software version and read the Programming Manual (cycles, R parameters, frame/offset syntax). Version and section not yet cited line-by-line.</li>
+<li><a href="https://content.heidenhain.de/doku/tnc_manual/en/">Heidenhain TNC documentation portal</a> &mdash; manual search entry; select TNC 640 or iTNC 530 and read the Conversational Programming section for Klartext block fields and Q parameters. Version and section not yet cited line-by-line.</li>
 <li><a href="https://www.haascnc.com/video/tipoftheday/ybbzj7h0nuw.html">Haas G98 vs G99 retract behavior</a> &mdash; G98 returns to the cycle initial plane.</li>
 </ul>
 </section>

@@ -103,7 +103,7 @@ M09                           (coolant off)
 M05                           (spindle stop)
 G91 G28 Z0                    (optional Z home return)
 M30                           (end, rewind)</code></pre>
-<p>Note the order: G43 H01 Z50 is established at a verified safe Z <em>before</em> XY moves; M08 is on its own block at clearance; the end block retracts, then M09, M05, then M30. Assumptions: after tool change the current position allows a Z move to Z50, H01 and G54 are calibrated, Z50 clears all fixtures on XY traverse, and Z5 at X0 Y0 clears the work face.</p>
+<p>Note the order: G43 H01 Z50 is established at a verified safe Z <em>before</em> XY moves; M08 is on its own block at clearance; the end block retracts, then M09, M05, then M30. Assumptions: after tool change the current position allows a Z move to Z50, H01 and G54 are calibrated, Z50 clears all fixtures on XY traverse, Z5 at X0 Y0 clears the work face, and the selected tool is confirmed by the manufacturer to plunge axially at the programmed feed.</p>
 
 <svg viewBox="0 0 360 200" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
   <text x="180" y="18" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Program End Sequence</text>

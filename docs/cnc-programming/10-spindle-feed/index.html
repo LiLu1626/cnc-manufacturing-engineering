@@ -75,29 +75,32 @@
 <h3>Constant Surface Speed (G96) on Lathes</h3>
 <p>On a lathe, cutting at fixed RPM (G97) means surface speed changes as the tool moves across different diameters. <strong>G96</strong> keeps the surface speed (Vc) constant by raising RPM as the cutting diameter gets smaller. Always pair G96 with a maximum RPM limit (G50 Sxxxx); once RPM reaches that limit, it stays there and Vc drops as the diameter shrinks further. Threading uses G97 fixed RPM.</p>
 
-<svg viewBox="0 0 360 220" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+<svg viewBox="0 0 360 200" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
   <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">G96 CSS: RPM vs diameter (Vc=180 m/min, cap 2500)</text>
-  <line x1="50" y1="170" x2="330" y2="170" stroke="#333" stroke-width="1.5"/>
-  <line x1="50" y1="30" x2="50" y2="170" stroke="#333" stroke-width="1.5"/>
-  <text x="190" y="200" font-size="9" text-anchor="middle" fill="#666">Cutting diameter D (mm): 50 at left &rarr; 10 at right</text>
-  <text x="20" y="100" font-size="9" text-anchor="middle" fill="#666" transform="rotate(-90 20 100)">RPM</text>
-  <line x1="50" y1="60" x2="330" y2="60" stroke="#dc2626" stroke-width="1.2" stroke-dasharray="4,3"/>
-  <text x="325" y="56" font-size="8" text-anchor="end" fill="#dc2626">G50 cap 2500 RPM</text>
+  <!-- axes: x-axis at y=160 = 0 RPM; y-axis bottom at y=160 -->
+  <line x1="50" y1="160" x2="330" y2="160" stroke="#333" stroke-width="1.5"/>
+  <line x1="50" y1="30" x2="50" y2="160" stroke="#333" stroke-width="1.5"/>
+  <text x="46" y="163" font-size="8" text-anchor="end" fill="#666">0</text>
+  <text x="46" y="53" font-size="8" text-anchor="end" fill="#dc2626">2500</text>
+  <!-- cap line at y=50 = 2500 RPM -->
+  <line x1="50" y1="50" x2="330" y2="50" stroke="#dc2626" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="328" y="44" font-size="8" text-anchor="end" fill="#dc2626">G50 cap 2500 RPM</text>
+  <!-- x ticks: D=50, 25, 10 -->
+  <text x="60" y="175" font-size="8" text-anchor="middle" fill="#666">D50</text>
+  <text x="222.5" y="175" font-size="8" text-anchor="middle" fill="#666">D25</text>
+  <text x="320" y="175" font-size="8" text-anchor="middle" fill="#666">D10</text>
+  <text x="190" y="192" font-size="9" text-anchor="middle" fill="#666">Cutting diameter D (mm)</text>
   <path d="M 60.0 109.6 L 92.5 104.0 L 125.0 97.0 L 157.5 88.0 L 190.0 76.0 L 222.5 59.2 L 236.0 50.0 L 255.0 50.0 L 287.5 50.0 L 320.0 50.0" fill="none" stroke="#2563eb" stroke-width="2"/>
   <circle cx="60" cy="109.6" r="2.5" fill="#2563eb"/>
-  <text x="60" y="125" font-size="8" text-anchor="middle" fill="#2563eb">D50: 1146</text>
   <circle cx="222.5" cy="59.2" r="2.5" fill="#2563eb"/>
-  <text x="222.5" y="52" font-size="8" text-anchor="middle" fill="#2563eb">D25: 2292</text>
-  <circle cx="236" cy="60" r="2.5" fill="#dc2626"/>
-  <text x="248" y="75" font-size="8" text-anchor="start" fill="#dc2626">D~22.9: cap</text>
-  <circle cx="320" cy="60" r="2.5" fill="#2563eb"/>
-  <text x="320" y="52" font-size="8" text-anchor="middle" fill="#2563eb">D10: 2500</text>
+  <circle cx="236" cy="50" r="2.5" fill="#dc2626"/>
+  <circle cx="320" cy="50" r="2.5" fill="#2563eb"/>
 </svg>
 <table class="data-table" style="margin-top:0.5em">
-<tr><th>D (mm)</th><th>Computed RPM (no cap)</th><th>Actual RPM</th><th>Actual Vc (m/min)</th></tr>
+<tr><th>D (mm)</th><th>Unconstrained RPM</th><th>Actual RPM</th><th>Actual Vc (m/min)</th></tr>
 <tr><td>50</td><td>1146</td><td>1146</td><td>180</td></tr>
 <tr><td>25</td><td>2292</td><td>2292</td><td>180</td></tr>
-<tr><td>22.9</td><td>2500</td><td>2500</td><td>180 (cap point)</td></tr>
+<tr><td>&asymp;22.918 (crossover)</td><td>2502</td><td>2500</td><td>180 (cap point)</td></tr>
 <tr><td>20</td><td>2865</td><td>2500</td><td>157</td></tr>
 <tr><td>10</td><td>5730</td><td>2500</td><td>78.5</td></tr>
 </table>
@@ -121,7 +124,7 @@
 <p>A cold spindle run at full RPM can grow thermally. Many shops run a short warm-up program that ramps spindle speed over 10&ndash;15 minutes before production. This is not a cutting program; it just spins the spindle with no tool in the cut.</p>
 
 <h2>Example: Milling and Turning</h2>
-<p><strong>Mill snippet (Haas, G21, G94):</strong></p>
+<p><strong>Mill snippet (Haas, G21, G94):</strong> Entry assumptions: after T01 M06 the current position allows a Z move to Z50, H01 and G54 are calibrated, Z50 clears all fixtures on XY traverse, and Z5 at X0 Y0 clears the work face. The tool used in the plunge line is the manufacturer-confirmed center-plunging tool described below.</p>
 <pre class="cp-code"><code>G21 G17 G90 G94 G40 G49 G80
 T01 M06
 G54 G90
