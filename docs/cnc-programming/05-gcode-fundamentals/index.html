@@ -94,7 +94,8 @@ G00 Z50.             (5: retract up to safe Z BEFORE any XY move)</code></pre>
 <li><strong>Rapid XY at cut height</strong> — always retract Z to clearance before moving in X/Y. This is the #1 crash cause.</li>
 <li><strong>Forgetting F on the first G01</strong> — the feed may default to a dangerous value. Always specify F on the first feed move.</li>
 <li><strong>Using G00 for cutting</strong> — G00 is positioning only; it moves too fast and does not maintain a controlled cut.</li>
-<li><strong>Assuming G00 is straight-line</strong> — axes move independently; the path may be a dog-leg that hits obstacles.</li>
+<li><strong>Assuming G00 is straight-line</strong> — axes move independently; the path may not be a straight diagonal and can hit obstacles.</li>
+<li><strong>Forgetting that G01 persists</strong> — once G01 is active, every motion block stays in feed mode until G00, G02, or G03 replaces it. You do not need to repeat G01 on every line.</li>
 </ul>
 
 <h2>Practice</h2>
