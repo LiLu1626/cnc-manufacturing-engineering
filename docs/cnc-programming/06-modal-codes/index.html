@@ -159,7 +159,7 @@ M30</code></pre>
 
 <h2>Practical Habits for Modal Safety</h2>
 <p>Three habits prevent almost every modal-related crash. First, write the startup block in every program without exception. Second, explicitly cancel cycles and compensation (G80, G40, G49) at the end of each section, even if you think they are already off. Third, read back the modal display before pressing cycle start on a new program &mdash; the controller shows exactly which modes are active, and a quick glance catches a leftover G91 or G20 before the machine moves. These habits take seconds and are the difference between a controlled setup and a surprise at rapid speed.</p>
-<p>When you inherit a program someone else wrote, do not assume the modal state is what it appears to be. Trace it from the startup block downward, and pay special attention to blocks that omit a G-code on a line where you expected one &mdash; that omission is usually intentional modal inheritance, but it can also be a bug.</p>
+<p>When you inherit a program someone else wrote, do not assume the modal state is what it appears to be. Trace it from the startup block downward, and pay special attention to blocks that omit a G-code on a line where you expected one &mdash; that omission is usually intentional modal inheritance, but it can also be a bug.</p> When in doubt, add the G-code explicitly; the controller does not penalize redundant but clear commands.
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Forgetting G80</strong> after drilling &mdash; the cycle continues on the next X/Y move, drilling an unexpected hole.</li>
