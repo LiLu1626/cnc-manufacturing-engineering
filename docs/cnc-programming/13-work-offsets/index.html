@@ -134,6 +134,9 @@ G01 Z-2. F100.</code></pre>
 <p>The numbers in G54 come from physical measurements: the machine reads where the touch happened, the operator adds the known finder radius, and the result is entered. There is no hidden compensation. If the touch is off by 0.1, the offset is off by 0.1, and the first cut will be off by 0.1. This is good news &mdash; it means the offset is fully traceable, and a measured error can be corrected in one place.</p>
 <h3>Switching Between G54 and G55 Mid-Program</h3>
 <p>You can switch work offsets inside a program. For example, after machining the front of the part in G54, a second operation on a separate fixture can call G55. The tool length offset H remains valid; only the XY origin shifts. This is how one program runs two setups on two fixtures without two separate files. Always retract to safe Z before switching, because the new origin may put a fixture under the tool.</p>
+
+<h3>What Happens if You Forget G54</h3>
+<p>Without a work offset, the controller uses whatever coordinate system was active &mdash; often machine coordinates from the previous job. The program's X0 Y0 then means machine X0 Y0, which may be at the spindle home or a vise from another setup. The tool moves to an unexpected XY and crashes. The startup block does not usually call G54; it is the programmer's responsibility to call it after the tool change. Make G54 the first non-startup block in every program.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Touching one edge and guessing the other</strong> &mdash; touch both X edges (or both Y edges) and use the midpoint, especially on round stock.</li>

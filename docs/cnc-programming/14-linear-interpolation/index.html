@@ -143,6 +143,9 @@ G00 Z50.</code></pre>
 <p>Once G01 is modal, every subsequent block cuts linearly until another motion G-code takes over. This is why the startup block includes G90 and the first cutting block sets F: the controller carries both forward. It also means a missing G01 on a later line is not usually an error &mdash; the controller stays in linear mode. The danger is assuming it has left G01; if you intended rapid but forgot G00, the tool feeds at F across air.</p>
 <h3>Linear Cuts on a 5-Axis Machine</h3>
 <p>On a 3-axis mill, G01 moves X, Y, and Z. On a 5-axis machine, linear interpolation can also include rotary axes (A, B, C) in the same block, producing a simultaneous straight-line cut with the tool tilted. The principle is identical: the controller computes the vector from current point to target and distributes feed across all participating axes. Rotary axes are in degrees per minute, so the feed units differ; confirm the convention on your machine.</p>
+
+<h3>What Happens if You Forget G01</h3>
+<p>If the program starts cutting without G01, the controller is still in whatever motion mode was left by the startup block. Many startup blocks set G80 and G40 but do not set G01 explicitly; the first motion block should state G01 with an F. If you omit it and the controller happens to be in G00 from a previous operation, the tool races to the first cut position at rapid speed. Always state the motion mode and feed on the first cutting block.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Using G00 to cut</strong> &mdash; the tool moves at traverse speed into the part. Always G01 with an F for any plunge or cut.</li>
