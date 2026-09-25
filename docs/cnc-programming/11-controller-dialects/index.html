@@ -1,59 +1,127 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Controller Dialects — CNC &amp; Manufacturing Engineering</title>
-<meta name="description" content="FANUC, Siemens, Heidenhain, and Haas: same concepts, different syntax. Know your machine.">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Controller Dialects — CNC & Manufacturing Engineering</title>
+<meta name="description" content="FANUC, Siemens, Heidenhain, and Haas: same CNC concepts, different syntax. Program structure, cycles, subprogram calls, variables, and why copying code between machines is risky.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/11-controller-dialects/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
-</head><body class="cnc-programming">
-<nav class="site-nav"><div class="site-nav-inner">
-<div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
-<ul class="site-nav-links">
-<li><a href="/cnc-manufacturing-engineering/">Home</a></li>
-<li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
-<li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
-<li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
-<li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
-<li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
-</ul></div></nav>
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
 <main class="article">
-<a class="back-link" href="/cnc-manufacturing-engineering/cnc-programming/">&larr; Back to CNC Programming</a>
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Controller Dialects</h1>
-<p class="lead">G-code is not universal. FANUC, Siemens, Heidenhain, and Haas share concepts but differ in syntax, cycles, and parameters. Always program for your actual controller.</p>
-<div class="callout"><strong>What you will learn:</strong><ul>
-<li>Why the same G-code means different things on different machines</li>
-<li>Key differences: cycle format, subprogram calls, feed modes</li>
-<li>Why copying code from the internet is dangerous</li>
-</ul></div>
-<h2>Major Controllers</h2>
-<ul>
-<li><strong>FANUC</strong>: most common globally. Two-line G76, G94/G95 feed modes, M98 P subprogram calls.</li>
-<li><strong>Haas</strong>: simplified one-line G76 with K/D, G99 for feed/rev on lathes, M98 P calls.</li>
-<li><strong>Siemens (Sinumerik)</strong>: uses CYCLE calls instead of G81/G83, different offset system.</li>
-<li><strong>Heidenhain</strong>: conversational-style programming, Q parameters instead of # variables.</li>
-</ul>
-<h2>Key Differences</h2>
-<table style="width:100%;border-collapse:collapse;margin:1em 0">
-<tr style="border-bottom:1px solid #cfdbd8"><th style="text-align:left;padding:6px">Feature</th><th style="text-align:left;padding:6px">FANUC/Haas</th><th style="text-align:left;padding:6px">Siemens</th></tr>
-<tr><td style="padding:6px">Drilling cycle</td><td style="padding:6px">G81</td><td style="padding:6px">CYCLE82</td></tr>
-<tr><td style="padding:6px">Subprogram call</td><td style="padding:6px">M98 P1234</td><td style="padding:6px">CALL LBL</td></tr>
-<tr><td style="padding:6px">Variables</td><td style="padding:6px">#1, #2</td><td style="padding:6px">R1, R2 / Q parameters</td></tr>
-</table>
+<p class="lead">G-code is not universal. FANUC, Siemens, Heidenhain, and Haas share the same concepts &mdash; coordinates, motion, cycles, offsets &mdash; but differ in syntax, cycle format, parameter meaning, and even which G-code number does what. Always program for your actual controller.</p>
+
+<h2>Concept</h2>
+<p>CNC programming has a common core: Cartesian coordinates, G00/G01 motion, work offsets, tool offsets, and canned cycles. But the words and numbers used to express that core vary by controller &mdash; just like two natural languages both express the same idea but use different vocabulary. A program written for a Haas mill may alarm on a Siemens machine, and vice versa. This page uses Haas (FANUC-compatible) syntax as the reference dialect and points out where other controllers differ.</p>
+
 <h2>Why It Matters</h2>
-<p>A program written for a Haas mill may alarm on a FANUC machine, and vice versa. This course uses Haas syntax as the reference dialect. Before transferring a program, check the controller's manual for the exact cycle format and parameter meanings.</p>
+<p>A programmer who knows one controller can usually read another, but writing directly for an unfamiliar one without checking the manual causes alarms, broken tools, and scrapped parts. The differences are not cosmetic: the same G81 drilling cycle on one control retracts to a different plane, and the same G76 thread cycle uses completely different parameter words. Copying code from the internet or a textbook without checking the dialect is a leading cause of first-part crashes.</p>
+
+<h2>How It Works</h2>
+
+<h3>The Major Controllers</h3>
+<ul>
+<li><strong>FANUC</strong>: the most common global control. Standard G81/G83 drilling cycles, G94/G95 feed modes, M98 P calls for subprograms, two-line G76 thread cycle, #1/#2 macro variables.</li>
+<li><strong>Haas</strong>: simplified and FANUC-compatible. One-line G76 with K/D, G99 for feed-per-rev on lathes, M98 P calls. Uses the same G80/G81/G83 cycle family.</li>
+<li><strong>Siemens (Sinumerik)</strong>: uses named cycle calls (CYCLE82, CYCLE83) instead of G81/G83, R parameters, and a different offset system. Program structure uses channel and syntax blocks.</li>
+<li><strong>Heidenhain</strong>: conversational-style programming with Q parameters, straight-line and circular touch-screen blocks, and its own cycle vocabulary.</li>
+</ul>
+
+<h3>Where They Diverge</h3>
+<table class="data-table">
+<tr><th>Feature</th><th>FANUC / Haas</th><th>Siemens</th><th>Heidenhain</th></tr>
+<tr><td>Drilling cycle</td><td>G81 R2. Z-15.</td><td>CYCLE82</td><td>Conversational drill block</td></tr>
+<tr><td>Deep-hole peck</td><td>G83 Q3.</td><td>CYCLE83</td><td>Peck drilling block</td></tr>
+<tr><td>Subprogram call</td><td>M98 P1234</td><td>UP 1.0 / CALL LBL</td><td>CALL LBL</td></tr>
+<tr><td>Variables</td><td>#1, #2</td><td>R1, R2</td><td>Q1, Q2</td></tr>
+<tr><td>Feed per rev</td><td>G95 (G99 on Haas lathe)</td><td>G95</td><td>Feed block</td></tr>
+<tr><td>Thread cycle</td><td>G76 (one- or two-line)</td><td>CYCLE97</td><td>Threading block</td></tr>
+</table>
+
+<svg viewBox="0 0 360 170" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Same Concept, Different Syntax</text>
+  <rect x="20" y="30" width="320" height="30" fill="#dbeafe" stroke="#1e40af" rx="3"/>
+  <text x="180" y="50" font-size="10" text-anchor="middle" fill="#1e40af">Concept: drill a hole 15 mm deep at (X10 Y10)</text>
+  <rect x="20" y="70" width="100" height="80" fill="#fef9c3" stroke="#854d0e" rx="3"/>
+  <text x="70" y="90" font-size="9" text-anchor="middle" fill="#854d0e">FANUC/Haas</text>
+  <text x="70" y="108" font-size="8" text-anchor="middle" fill="#333">G81 X10 Y10</text>
+  <text x="70" y="122" font-size="8" text-anchor="middle" fill="#333">R2. Z-15.</text>
+  <text x="70" y="136" font-size="8" text-anchor="middle" fill="#333">F100</text>
+  <rect x="130" y="70" width="100" height="80" fill="#dcfce7" stroke="#166534" rx="3"/>
+  <text x="180" y="90" font-size="9" text-anchor="middle" fill="#166534">Siemens</text>
+  <text x="180" y="108" font-size="8" text-anchor="middle" fill="#333">CYCLE82(15,</text>
+  <text x="180" y="122" font-size="8" text-anchor="middle" fill="#333">2, , , ,1)</text>
+  <rect x="240" y="70" width="100" height="80" fill="#fee2e2" stroke="#991b1b" rx="3"/>
+  <text x="290" y="90" font-size="9" text-anchor="middle" fill="#991b1b">Heidenhain</text>
+  <text x="290" y="108" font-size="8" text-anchor="middle" fill="#333">DRILLING block</text>
+  <text x="290" y="122" font-size="8" text-anchor="middle" fill="#333">depth 15, dwell 1</text>
+</svg>
+
+<h3>Program Structure Differences</h3>
+<p>A FANUC/Haas program starts with <code>O0001</code> and ends with <code>M30</code>. A Siemens program uses a program name and a different end marker. Heidenhain programs are often entered conversationally on the control rather than transferred as text. Work offsets: FANUC/Haas uses G54&ndash;G59; Siemens uses a different offset frame; Heidenhain uses a datum table. The concept is the same &mdash; a work origin offset from machine zero &mdash; but the number and method differ.</p>
+
+<h3>M-Codes Are Machine-Specific</h3>
+<p>Even on FANUC-compatible controls, M-codes vary by machine builder. M03/M04/M05 and M08/M09 are near-universal, but tool change, chuck clamp, tailstock, and pallet M-codes differ. A Mazak lathe may use different M-codes than a Haas lathe for the same physical action. Never assume an M-code from one machine works on another.</p>
+
+<h2>Example: Same Hole, Three Dialects</h2>
+<p>Drill a &Oslash;8 hole 15 mm deep at X10 Y10, R plane 2 mm, feed 100 mm/min.</p>
+<p><strong>FANUC/Haas:</strong></p>
+<pre class="cp-code"><code>G90 G54 G00 X10 Y10
+G98 G81 R2. Z-15. F100.
+G80</code></pre>
+<p><strong>Siemens (Sinumerik):</strong> the same operation is programmed as a CYCLE82 call with parameters for depth, retract plane, and dwell. The syntax is completely different; the geometry concept (rapid to R plane, feed to depth, retract) is the same.</p>
+<p><strong>Heidenhain:</strong> entered as a conversational drilling block on the control, with depth and feed filled in on the screen.</p>
+
 <h2>Common Mistakes</h2>
-<ul><li>Assuming G81 means the same thing on every controller — it often does, but R plane and retract behavior can differ.</li>
-<li>Copying G-code from a textbook without checking the dialect.</li>
-<li>Assuming M-codes are universal — many M-codes are machine-specific.</li></ul>
-<section class="cp-practice"><h2>Practice</h2>
+<ul>
+<li><strong>Assuming G81 means the same thing on every controller</strong> &mdash; R plane and retract behavior can differ; verify the cycle definition.</li>
+<li><strong>Copying G-code from a textbook or the internet without checking the dialect</strong> &mdash; a program written for a different control may alarm or move unexpectedly.</li>
+<li><strong>Assuming M-codes are universal</strong> &mdash; many M-codes are machine-builder-specific, especially chuck, tailstock, and pallet functions.</li>
+<li><strong>Using # variables on a Siemens machine</strong> &mdash; Siemens uses R parameters, not # variables.</li>
+<li><strong>Expecting G76 thread parameters to match across machines</strong> &mdash; FANUC two-line G76, Haas one-line G76, and Siemens CYCLE97 all use different words.</li>
+</ul>
+
+<section class="cp-practice">
+<h2>Practice</h2>
 <p><strong>1.</strong> What does M98 P2000 do on a Haas?</p>
 <details><summary>Show answer</summary><p>Calls subprogram O2000 once. The P-address specifies the program number.</p></details>
 <p><strong>2.</strong> Why should you not assume G-code from one machine works on another?</p>
 <details><summary>Show answer</summary><p>Cycle formats, parameter meanings, and even G-code assignments vary by controller and manufacturer. Always verify against the machine's manual.</p></details>
+<p><strong>3.</strong> Which controller uses CYCLE82 instead of G81?</p>
+<details><summary>Show answer</summary><p>Siemens Sinumerik. The drilling concept is the same; the syntax is a named cycle call.</p></details>
+<p><strong>4.</strong> What variable symbol does Heidenhain use instead of FANUC #1?</p>
+<details><summary>Show answer</summary><p>Q parameters (Q1, Q2). Siemens uses R parameters.</p></details>
 </section>
-<section class="cp-sources"><h2>Sources</h2><ul>
-<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.html">Haas G-code list</a></li>
-</ul></section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/09-mcode-fundamentals/">&larr; M-Code Basics</a><a href="/cnc-manufacturing-engineering/cnc-programming/10-spindle-feed/">Spindle & Feed &rarr;</a></nav>
-</main><footer class="site-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer></body></html>
+
+<section class="cp-sources">
+<h2>Sources</h2>
+<ul>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.html">Haas G-code list</a> &mdash; reference dialect used on this site.</li>
+<li>FANUC G-code and cycle conventions follow standard FANUC programming manuals; Siemens and Heidenhain differences are summarized for orientation only.</li>
+<li>Always verify cycle format and parameter meanings against your specific control and machine builder.</li>
+</ul>
+</section>
+
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/10-spindle-feed/">&larr; Spindle &amp; Feed</a><a href="/cnc-manufacturing-engineering/cnc-programming/12-tool-offsets/">Tool Offsets &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

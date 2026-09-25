@@ -27,21 +27,20 @@
 <main class="article">
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Spindle and Feed Programming</h1>
-<p class="lead">Spindle speed (S) and feed rate (F) are the two cut-rate commands. Getting them right is the difference between a good surface finish and a broken tool. This page covers S, M03/M04/M05, feed modes, and how to choose values from tooling data.</p>
+<p class="lead">Spindle speed (S) and feed rate (F) are the two cut-rate commands. Getting them right is the difference between a good surface finish and a broken tool. This page covers S, M03/M04/M05, feed modes G94/G95, G96 constant surface speed, and how to choose values from tooling data.</p>
 
-<div class="callout"><strong>What you will learn:</strong>
-<ul>
-<li>S command sets RPM; M03/M04/M05 control start/stop/direction</li>
-<li>G94 = feed per minute (mm/min); G95/G99 = feed per revolution (mm/rev)</li>
-<li>Speed and feed come from tooling supplier data, not guesswork</li>
-<li>G96 constant surface speed on lathes</li>
-</ul></div>
+<h2>Concept</h2>
+<p>Two numbers control how fast the cutting happens: <strong>S</strong> (spindle speed) and <strong>F</strong> (feed rate). S tells the spindle how fast to turn; F tells the tool how fast to move through the material. On a mill, S is nearly always fixed. On a lathe, S can be fixed RPM or constant surface speed (G96), where the controller automatically changes RPM as the tool moves across changing diameters. Feed can be per minute (G94) or per revolution (G95). These are the two cut-rate words, and they are modal once set.</p>
 
-<h2>Spindle Control</h2>
-<p><strong>S</strong> sets the spindle speed in revolutions per minute (RPM). <strong>M03</strong> starts the spindle clockwise (forward), <strong>M04</strong> counterclockwise (reverse), and <strong>M05</strong> stops it. Most milling and turning tools cut clockwise when viewed from the spindle side. Drill, end mill, and face mill all use M03. You rarely use M04 except for specific tooling.</p>
-<p>Typical sequence: <code>S2000 M03</code> on one line starts the spindle at 2000 RPM forward. The spindle must be started before the tool engages the material. Coolant (M08) typically starts after the spindle is at speed.</p>
+<h2>Why It Matters</h2>
+<p>Set S too high and the tool overheats, wears fast, or chatters. Set S too low and you waste time and rub the tool. Set F too high and the tool breaks or deflects; too low and you rub and work-harden the part. On a lathe, cutting at fixed RPM while facing from the outside diameter to the center means the surface speed drops to near zero at the center &mdash; that is why G96 exists. Getting these two words right is not optional: a broken tool or a scrapped batch usually traces back to a wrong S or F.</p>
 
-<h2>Feed Modes</h2>
+<h2>How It Works</h2>
+
+<h3>Spindle Control: S, M03, M04, M05</h3>
+<p><strong>S</strong> sets the spindle speed in revolutions per minute (RPM). <strong>M03</strong> starts the spindle clockwise (forward), <strong>M04</strong> counterclockwise (reverse), and <strong>M05</strong> stops it. Most milling and turning tools cut clockwise when viewed from the spindle side. Drill, end mill, and face mill all use M03. You rarely use M04 except for specific tooling. Typical sequence: <code>S2000 M03</code> on one line starts the spindle at 2000 RPM forward. The spindle must be started before the tool engages the material. Coolant (M08) typically starts after the spindle is at speed.</p>
+
+<h3>Feed Modes: G94 vs G95</h3>
 <p>The F command means different things depending on the active feed mode:</p>
 <table class="data-table">
 <tr><th>Code</th><th>Meaning</th><th>F Unit</th><th>Used On</th></tr>
@@ -49,25 +48,59 @@
 <tr><td>G95</td><td>Feed per revolution</td><td>mm/rev</td><td>Lathes, threading</td></tr>
 <tr><td>G99 (Haas lathe)</td><td>Feed per revolution</td><td>mm/rev</td><td>Haas lathes</td></tr>
 </table>
-<p><strong>Why the difference matters:</strong> On a mill, the tool spins and the table feeds. F300 means 300 mm per minute. On a lathe, the part spins and the tool feeds. F0.2 means 0.2 mm per revolution. At 1000 RPM, that is 200 mm/min. If you accidentally program F0.2 on a mill in G94 mode, the tool feeds 0.2 mm/min — almost stopped. If you program F200 on a lathe in G95 mode, the tool feeds 200 mm per revolution — it crashes. Always know which feed mode is active.</p>
+<p><strong>Why the difference matters:</strong> On a mill, the tool spins and the table feeds. F300 means 300 mm per minute. On a lathe, the part spins and the tool feeds. F0.2 means 0.2 mm per revolution. At 1000 RPM, that is 200 mm/min. If you accidentally program F0.2 on a mill in G94 mode, the tool feeds 0.2 mm/min &mdash; almost stopped. If you program F200 on a lathe in G95 mode, the tool feeds 200 mm per revolution &mdash; it crashes. Always know which feed mode is active.</p>
 
-<h2>How to Choose Speed and Feed</h2>
+<svg viewBox="0 0 360 150" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Feed Modes</text>
+  <rect x="30" y="35" width="140" height="90" fill="#dbeafe" stroke="#1e40af" rx="4"/>
+  <text x="100" y="55" font-size="11" text-anchor="middle" fill="#1e40af">G94 (mm/min)</text>
+  <text x="100" y="75" font-size="10" text-anchor="middle" fill="#333">F300</text>
+  <text x="100" y="95" font-size="9" text-anchor="middle" fill="#666">tool moves 300 mm</text>
+  <text x="100" y="110" font-size="9" text-anchor="middle" fill="#666">every minute</text>
+  <rect x="190" y="35" width="140" height="90" fill="#dcfce7" stroke="#166534" rx="4"/>
+  <text x="260" y="55" font-size="11" text-anchor="middle" fill="#166534">G95 (mm/rev)</text>
+  <text x="260" y="75" font-size="10" text-anchor="middle" fill="#333">F0.2</text>
+  <text x="260" y="95" font-size="9" text-anchor="middle" fill="#666">tool advances 0.2 mm</text>
+  <text x="260" y="110" font-size="9" text-anchor="middle" fill="#666">per spindle revolution</text>
+</svg>
+
+<h3>How to Choose Speed and Feed</h3>
 <p>Speed and feed are not guesses. They come from the tool manufacturer's catalog: <strong>cutting speed</strong> (Vc in m/min) and <strong>feed per tooth</strong> (fz in mm/tooth). Convert them:</p>
 <ul>
 <li><strong>RPM = Vc &times; 1000 / (&pi; &times; D)</strong> where D is tool diameter in mm.</li>
 <li><strong>Feed rate = RPM &times; fz &times; number of teeth (Z)</strong>.</li>
 </ul>
-<p>For a &Oslash;10 carbide end mill cutting aluminum at Vc = 200 m/min, 2 teeth, fz = 0.05 mm/tooth: RPM = 200&times;1000/(3.14&times;10) = 6366 RPM, round to 6000. Feed = 6000&times;0.05&times;2 = 600 mm/min. Use the <a href="/cnc-manufacturing-engineering/engineering-tools/cutting-speed-calculator/">Cutting Speed Calculator</a> and <a href="/cnc-manufacturing-engineering/engineering-tools/feed-rate-calculator/">Feed Rate Calculator</a> for these conversions.</p>
+<p>For a &Oslash;10 carbide end mill cutting aluminum at Vc = 200 m/min, 2 teeth, fz = 0.05 mm/tooth: RPM = 200&times;1000/(3.14&times;10) = 6366 RPM, round to 6000. Feed = 6000&times;0.05&times;2 = 600 mm/min. Use the <a href="/cnc-manufacturing-engineering/engineering-tools/cutting-speed-calculator/">Cutting Speed Calculator</a> and <a href="/cnc-manufacturing-engineering/engineering-tools/feed-rate-calculator/">Feed Rate Calculator</a> for these conversions. These are classroom assumptions; real values come from the tooling catalog and the machine's power curve.</p>
 
-<h2>Constant Surface Speed (G96) on Lathes</h2>
-<p>On a lathe, cutting at fixed RPM (G97) means the surface speed changes as the tool moves across different diameters: facing from &Oslash;50 to center at S1000 starts at 157 m/min but drops to near 0 at center. <strong>G96</strong> (constant surface speed) keeps the cutting speed constant: the spindle automatically slows down as the tool approaches center. Always pair G96 with a maximum RPM limit (G50 S2000) to prevent the spindle from overspeeding on small diameters. Threading always uses G97.</p>
+<h3>Constant Surface Speed (G96) on Lathes</h3>
+<p>On a lathe, cutting at fixed RPM (G97) means the surface speed changes as the tool moves across different diameters: facing from &Oslash;50 to center at S1000 starts at 157 m/min but drops to near 0 at center. <strong>G96</strong> (constant surface speed) keeps the cutting speed constant: the spindle automatically slows down as the tool approaches center. Always pair G96 with a maximum RPM limit (G50 S2000) to prevent the spindle from overspeeding on small diameters. Threading always uses G97 fixed RPM.</p>
+
+<svg viewBox="0 0 360 180" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">G97 vs G96 on a Lathe Facing Cut</text>
+  <line x1="40" y1="150" x2="320" y2="150" stroke="#333" stroke-width="1.5"/>
+  <text x="180" y="168" font-size="9" text-anchor="middle" fill="#666">Diameter (larger &rarr; smaller)</text>
+  <line x1="60" y1="40" x2="300" y2="40" stroke="#dc2626" stroke-width="2"/>
+  <text x="180" y="35" font-size="10" text-anchor="middle" fill="#dc2626">G97: RPM constant</text>
+  <path d="M 60 60 Q 180 90 300 130" fill="none" stroke="#2563eb" stroke-width="2"/>
+  <text x="180" y="100" font-size="10" text-anchor="middle" fill="#2563eb">G96: RPM rises as diameter shrinks</text>
+  <line x1="60" y1="40" x2="60" y2="150" stroke="#999" stroke-width="1" stroke-dasharray="2,2"/>
+  <text x="60" y="145" font-size="9" text-anchor="middle" fill="#666">OD</text>
+  <line x1="300" y1="40" x2="300" y2="150" stroke="#999" stroke-width="1" stroke-dasharray="2,2"/>
+  <text x="300" y="145" font-size="9" text-anchor="middle" fill="#666">center</text>
+</svg>
+
+<h2>Example: Milling and Turning</h2>
+<p><strong>Milling (G94):</strong> <code>G54 G90 S2000 M03 G00 X0 Y0 G43 H01 Z50. M08 G00 Z5. G01 Z-2. F100. G01 X50. F300.</code> Spindle at 2000 RPM, plunge feed 100 mm/min, feed cut 300 mm/min.</p>
+<p><strong>Turning (G96/G95):</strong> <code>G50 S2500 G96 S180 M03 G95 F0.2</code>. Caps RPM at 2500, holds 180 m/min surface speed, feed 0.2 mm/rev. At &Oslash;50 the RPM is about 1146; at &Oslash;25 the controller raises it to about 2292, capped at 2500. The surface speed at the tool tip stays near 180 m/min across the cut.</p>
 
 <h2>Common Mistakes</h2>
 <ul>
-<li><strong>Using mm/min feed on a lathe defaulting to mm/rev</strong> — F200 on a G95 lathe means 200 mm per revolution, which is a crash. Check the active feed mode.</li>
-<li><strong>Starting spindle before the tool is clear of the part</strong> — start spindle while the tool is at safe Z, not at cut depth.</li>
-<li><strong>Fixed RPM for all diameters on a lathe</strong> — use G96 CSS for facing and OD turning; G97 only for threading.</li>
-<li><strong>Running at catalog speed in poor conditions</strong> — catalog speeds assume sharp tool, rigid setup, good coolant. Start conservatively.</li>
+<li><strong>Using mm/min feed on a lathe defaulting to mm/rev</strong> &mdash; F200 on a G95 lathe means 200 mm per revolution, which is a crash. Check the active feed mode.</li>
+<li><strong>Starting spindle before the tool is clear of the part</strong> &mdash; start spindle while the tool is at safe Z, not at cut depth.</li>
+<li><strong>Fixed RPM for all diameters on a lathe</strong> &mdash; use G96 CSS for facing and OD turning; G97 only for threading.</li>
+<li><strong>Running at catalog speed in poor conditions</strong> &mdash; catalog speeds assume sharp tool, rigid setup, good coolant. Start conservatively.</li>
+<li><strong>Forgetting G50 before G96</strong> &mdash; without an RPM cap, facing near center commands excessive speed.</li>
+<li><strong>Setting S without M03</strong> &mdash; S2000 alone does not start the spindle; M03 is required to rotate.</li>
 </ul>
 
 <section class="cp-practice">
@@ -78,9 +111,22 @@
 <details><summary>Show answer</summary><p>As the tool moves across the face, the cutting diameter changes. Constant surface speed keeps the chip load and tool wear consistent across the entire cut.</p></details>
 <p><strong>3.</strong> &Oslash;10 end mill, 2 teeth, Vc=100 m/min, fz=0.05. What RPM and feed?</p>
 <details><summary>Show answer</summary><p>RPM = 100&times;1000/(3.14&times;10) = 3183, use 3000. Feed = 3000&times;0.05&times;2 = 300 mm/min.</p></details>
+<p><strong>4.</strong> Why is G50 S2500 written before G96?</p>
+<details><summary>Show answer</summary><p>It caps maximum RPM so facing to a small diameter does not command unsafe speed.</p></details>
+<p><strong>5.</strong> Why switch back to G97 before threading on a lathe?</p>
+<details><summary>Show answer</summary><p>Threading requires a fixed RPM so each pass starts at the same spindle angle; CSS would change RPM mid-thread.</p></details>
 </section>
 
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/11-controller-dialects/">&larr; Controller Dialects</a><a href="/cnc-manufacturing-engineering/cnc-programming/13-work-offsets/">Work Offsets &rarr;</a></nav>
+<section class="cp-sources">
+<h2>Sources</h2>
+<ul>
+<li><a href="/cnc-manufacturing-engineering/engineering-tools/cutting-speed-calculator/">Cutting Speed Calculator</a> and <a href="/cnc-manufacturing-engineering/engineering-tools/feed-rate-calculator/">Feed Rate Calculator</a> &mdash; companion engineering tools.</li>
+<li>RPM and feed formulas follow standard cutting-speed equations; actual values come from tooling catalogs.</li>
+<li>G96/G97/G94/G95/G99 conventions follow FANUC/Haas lathe programming; verify on your control.</li>
+</ul>
+</section>
+
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/09-mcode-fundamentals/">&larr; M-Codes</a><a href="/cnc-manufacturing-engineering/cnc-programming/11-controller-dialects/">Controller Dialects &rarr;</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>
