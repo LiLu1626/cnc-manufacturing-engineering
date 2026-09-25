@@ -32,29 +32,27 @@
 <div class="callout"><strong>The core idea:</strong> The program never says "the corner of the vice". It says X0 Y0. The work offset tells the controller where X0 Y0 is in machine coordinates. Move the part, change only the offset &mdash; the program stays the same.</div>
 
 <h2>Concept</h2>
-<p>A CNC machine has a fixed <strong>machine zero</strong> (machine home), set by the reference switch when the control powers up. The machine moves axes in machine coordinates, but a part arrives in a vice or fixture at some arbitrary position on the table. A <strong>work coordinate offset</strong> is a signed shift (X, Y, Z, and sometimes rotation) stored in a register. When you call <strong>G54</strong>, the controller adds that shift to every commanded X/Y/Z, so the program's X0 Y0 maps to the chosen part datum.</p>
-<p>Most controls provide several work offset registers: G54, G55, G56, G57, G58, G59 on FANUC/Haas-style mills. Additional extended offsets (G54.1 P1, P2, &hellip;) exist on modern controls. The program switches between them with a single G-code block. This is how one setup runs multiple parts or multiple operations without rewriting coordinates.</p>
+<p>A CNC machine has a fixed <strong>reference return position</strong> the control moves to on startup; this defines the machine coordinate frame. The machine moves axes in machine coordinates, but a part arrives in a vice or fixture at some arbitrary position on the table. A <strong>work coordinate offset</strong> is the machine position of the chosen part origin (X, Y, Z, and sometimes rotation) stored in a register. When you call <strong>G54</strong>, every commanded program point P maps to machine position G54_origin + P (no rotation). The program's X0 Y0 then maps to the chosen part datum.</p>
+<p>Most controls provide several work offset registers: G54, G55, G56, G57, G58, G59 on FANUC/Haas-style mills. Additional extended offsets exist on modern controls (Haas uses G154 P1&ndash;P99; FANUC-style controls use G54.1 Pn). The program switches between them with a single G-code block. This is how one setup runs multiple parts or multiple operations without rewriting coordinates.</p>
 
 <svg viewBox="0 0 360 200" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
-  <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Three coordinate systems</text>
-  <rect x="30" y="35" width="130" height="60" fill="#fee2e2" stroke="#991b1b" rx="3"/>
-  <text x="95" y="55" font-size="10" text-anchor="middle" fill="#991b1b">Machine coordinates</text>
-  <text x="95" y="72" font-size="9" text-anchor="middle" fill="#991b1b">machine zero (home)</text>
-  <text x="95" y="86" font-size="8" text-anchor="middle" fill="#666">fixed by reference switch</text>
-  <text x="180" y="70" font-size="14" text-anchor="middle" fill="#333">+</text>
-  <rect x="195" y="35" width="130" height="60" fill="#fef9c3" stroke="#854d0e" rx="3"/>
-  <text x="260" y="55" font-size="10" text-anchor="middle" fill="#854d0e">G54 work offset</text>
-  <text x="260" y="72" font-size="9" text-anchor="middle" fill="#854d0e">set during setup</text>
-  <text x="260" y="86" font-size="8" text-anchor="middle" fill="#666">where the part sits</text>
+  <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Machine point = G54 origin + program point</text>
+  <rect x="30" y="40" width="120" height="60" fill="#fef9c3" stroke="#854d0e" rx="3"/>
+  <text x="90" y="60" font-size="10" text-anchor="middle" fill="#854d0e">G54 origin (machine)</text>
+  <text x="90" y="78" font-size="9" text-anchor="middle" fill="#854d0e">(-145, -115)</text>
+  <text x="165" y="72" font-size="14" text-anchor="middle" fill="#333">+</text>
+  <rect x="180" y="40" width="120" height="60" fill="#dbeafe" stroke="#1e40af" rx="3"/>
+  <text x="240" y="60" font-size="10" text-anchor="middle" fill="#1e40af">program point</text>
+  <text x="240" y="78" font-size="9" text-anchor="middle" fill="#1e40af">(10, 20)</text>
   <text x="180" y="125" font-size="14" text-anchor="middle" fill="#333">=</text>
-  <rect x="95" y="135" width="170" height="50" fill="#dcfce7" stroke="#166534" rx="3"/>
-  <text x="180" y="155" font-size="10" text-anchor="middle" fill="#166534">Work coordinates used by the program</text>
-  <text x="180" y="172" font-size="9" text-anchor="middle" fill="#166534">X0 Y0 = part datum</text>
+  <rect x="80" y="135" width="200" height="50" fill="#dcfce7" stroke="#166534" rx="3"/>
+  <text x="180" y="155" font-size="10" text-anchor="middle" fill="#166534">machine point of tool tip</text>
+  <text x="180" y="172" font-size="9" text-anchor="middle" fill="#166534">(-135, -95)</text>
 </svg>
 
 <h2>Why It Matters</h2>
 <p>Work offsets decouple the program from the fixture position. You can run the same program while clamping the part anywhere on the table, as long as the G54 offset reflects the new position. They also let one fixture hold four identical parts: G54 over part 1, G55 over part 2, and so on, with the same toolpath subprogram called four times. Without work offsets, every fixture shift would require editing every coordinate in the program &mdash; slow and error-prone.</p>
-<p>Get the offset wrong and the tool cuts at the wrong XY position, often into the vice or into a neighboring part. Work-offset errors are the second most common cause of scrap after tool offsets, and the most common cause of crashes on first-piece runs.</p>
+<p>Get the offset wrong and the tool cuts at the wrong XY position, often into the vice or into a neighboring part. Work-offset errors are a common cause of scrap and crashes on first-piece runs.</p>
 
 <h2>How It Works</h2>
 
@@ -68,7 +66,7 @@
 <tr><td>Rear Y edge (tool approaches from +Y)</td><td>Enter machine Y &minus; r</td><td>Touch at Y=+100.0: enter +95.0</td></tr>
 <tr><td>Z part top (tool 1, L = 120)</td><td>Enter W = gauge_machine_Z &minus; L</td><td>Gauge touches top at &minus;180: W = &minus;300</td></tr>
 </table>
-<p>The exact sign depends on the control's touch-off routine; always verify by moving to X0 Y0 at safe Z and confirming the tip sits over the part corner. +X on the table moves the tool to the right as the operator faces the spindle; +Y moves away from the operator (toward the back of the table) on a standard mill.</p>
+<p>The exact sign depends on the control's touch-off routine; always verify by moving to X0 Y0 at safe Z and confirming the tip sits over the part corner. In the work frame, +X moves the tool tip to the right relative to the part and +Y moves it away from the operator on a standard mill, as defined by the machine's axis convention.</p>
 
 <h3>Multiple Work Offsets for One Fixture</h3>
 <p>A common setup holds four identical blocks in a single vise, arranged in a row. G54 is set to the first block corner, G55 to the second, G56 to the third, G57 to the fourth. The main program calls G54, runs the machining subprogram, then G55, runs it again, and so on. The subprogram coordinates never change. This is faster than changing fixtures and keeps tool wear consistent across parts.</p>
@@ -93,12 +91,12 @@
 <p>Some controls support <strong>fixture offsets</strong> or <strong>coordinate rotation</strong> (G68 on FANUC-style controls) that add a secondary rotation/translation on top of G54. This is useful when a fixture is not perfectly square to the table: measure the rotation with an indicator and enter a small angle correction. It is a setup correction for measured misalignment, not a way to compensate for a mis-clamped part. Note that a rotary-axis zero offset (C-axis position) is not the same as rotating the XYZ work frame; they are separate functions on most controls.</p>
 
 <h3>Verifying the Offset Before Cutting</h3>
-<p>After entering G54, always verify at safe Z: move to X0 Y0 and confirm the tip sits over the expected corner; move to Z0.5 and jog down to Z0 slowly to confirm the part top. Do this before the first automatic cycle. A 30-second verification prevents a crash that costs hours. On a lathe, verify X0 by touching a known diameter and reading the offset, and Z0 by facing a test cut and measuring the part length.</p>
+<p>After entering G54, verify the offset against the calibrated setup: re-read the touch-off numbers on the offset screen, compare them with the setup sheet, and confirm the active register. Move to X0 Y0 only at a verified safe Z where the envelope of the part, vice, and clamps is already known clear &mdash; do not jog down to Z0 using an unverified offset as a way to "check" it. On a lathe, verify X by touching a known diameter and reading the offset, and Z by facing a test cut and measuring the part length, following the machine's approved touch-off procedure.</p>
 <h2>Example</h2>
-<p>Setup: a rectangular block clamped in a vise. The operator touches the left edge with a &Oslash;10 edge finder at machine X = &minus;150.0, the front edge at machine Y = &minus;120.0. With tool 1 (L = 120 mm) the gauge line touches the part top at machine Z = &minus;180.0, so the work top W = &minus;180 &minus; 120 = &minus;300. The G54 X value becomes &minus;150.0 + 5.0 = &minus;145.0; Y becomes &minus;120.0 + 5.0 = &minus;115.0; Z (W) becomes &minus;300.0. The program starts (G21/G17/G90/G94 establish units, plane, absolute mode, and feed-per-minute; the tool is center-cutting and the plunge depth is within its capability; fixture clearance above Z50 is verified):</p>
-<pre class="cp-code"><code>G21 G17 G90 G40 G49 G80
+<p>Setup: a rectangular block clamped in a vise. The operator touches the left edge with a &Oslash;10 edge finder at machine X = &minus;150.0, the front edge at machine Y = &minus;120.0. With tool 1 (L = 120 mm), the tool tip touches the part top and the gauge-line machine Z reads &minus;180.0, so the work top W = &minus;180 &minus; 120 = &minus;300. The G54 X value becomes &minus;150.0 + 5.0 = &minus;145.0; Y becomes &minus;120.0 + 5.0 = &minus;115.0; Z (W) becomes &minus;300.0. The program starts (G21/G17/G90/G94 establish units, plane, absolute mode, and feed-per-minute; the tool is center-cutting and the plunge depth is within its capability; Z50 and the XY path are clear of the fixture):</p>
+<pre class="cp-code"><code>G21 G17 G90 G94 G40 G49 G80
 T01 M06
-G54 G90
+G54
 G00 G43 H01 Z50.
 S2500 M03
 G00 X0. Y0.
@@ -138,8 +136,8 @@ G01 Z-2. F100.</code></pre>
 <h3>What Happens if You Forget G54</h3>
 <p>Without an explicit work offset call, the controller stays in whatever coordinate system was active &mdash; possibly G55 from a previous operation, or another register left over from the last job. The program's X0 Y0 then maps to whatever origin that register holds, which may be on a different fixture or at a different Z. G53 is non-modal and is not the "default" fallback. The result is an unexpected tool position, not guaranteed to crash but not safe either. The startup block does not usually select G54; it is the programmer's responsibility to call it after the tool change. Make G54 the first non-startup block in every program, and confirm the active register on the screen before cycle start.</p>
 
-<h3>Work Offset on a Rotary Table</h3>
-<p>When an indexer or rotary axis is part of the setup, the work offset also includes the rotary zero. The part may be clamped at some angle on the table; the C-axis offset (or the rotation in the work frame) tells the controller where the part's X0 direction points. Get this wrong and every feature off the rotated axis is angularly off by the same error. Modern controls store the rotation as part of the work frame rather than as a separate offset.</p>
+<h3>Rotary Axes, Coordinate Rotation, and Dynamic Offsets</h3>
+<p>These are three separate functions. A <strong>rotary-axis zero offset</strong> tells the controller where the C (or A/B) axis angle reads zero &mdash; it locates the rotary axis, not the XYZ frame. <strong>Coordinate rotation</strong> (G68 on FANUC-style controls) rotates the XYZ work frame by an angle. <strong>Dynamic work offset</strong> (some probing routines) updates the offset during a run. A normal G54 entry for a rotary table does not automatically rotate the XYZ frame; if the part is clamped at an angle, you must either program the rotation or use the control's coordinate-rotation function explicitly.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Touching one edge and guessing the other</strong> &mdash; touch both X edges (or both Y edges) and use the midpoint, especially on round stock.</li>
@@ -169,7 +167,8 @@ G01 Z-2. F100.</code></pre>
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G54.html">Haas G54 Work Offset</a> &mdash; work offset register behavior on Haas mills.</li>
-<li><a href="https://www.haascnc.com/service/online-operator-s-manuals/mill-operator-s-manual/mill---work-offsets.html">Haas Mill Work Offsets manual</a> &mdash; setting G54&ndash;G59, edge finder and probing entry.</li>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G154.html">Haas G154 Extended Work Offsets</a> &mdash; P1&ndash;P99 extended offset addressing.</li>
+<li><a href="https://www.haascnc.com/service/online-operator-s-manuals/mill-operator-s-manual/mill---part-setup.html">Haas Mill Part Setup</a> &mdash; setting work offsets, edge finder and probing entry (operator manual).</li>
 <li>All classroom numbers are teaching assumptions; verify signs and routines against your control.</li>
 </ul>
 </section>

@@ -35,21 +35,21 @@
 <p><strong>G00</strong> (rapid positioning) moves the tool to the commanded coordinate at the machine's fastest traverse rate. It does not cut. On most machines all axes move simultaneously at their own maximum speed, so the actual path is not a straight diagonal; it is shaped by whichever axis reaches its target first. The exact rapid path depends on the control and machine geometry, so do not assume a straight L or diagonal.</p>
 <p><strong>G01</strong> (linear interpolation) moves the tool in a straight line from the current point to the commanded point at the programmed feed F. The controller computes the straight-line vector and distributes motion across the participating axes so the tip follows a true diagonal at the correct feed. G01 is used for every straight cut: facing, turning OD, pocket walls, chamfers, and plunging.</p>
 
-<svg viewBox="0 0 360 200" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
-  <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">G00 vs G01 from (0,0) to (60,40)</text>
-  <text x="180" y="30" font-size="8" text-anchor="middle" fill="#666">4 px/mm. Start (50,170), end (290,90).</text>
-  <line x1="50" y1="170" x2="320" y2="170" stroke="#333" stroke-width="1.2"/>
-  <line x1="50" y1="40" x2="50" y2="170" stroke="#333" stroke-width="1.2"/>
-  <text x="325" y="180" font-size="8" fill="#666">X</text>
+<svg viewBox="0 0 360 230" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Two-block G00 vs one-block G01 to (60,40)</text>
+  <text x="180" y="30" font-size="8" text-anchor="middle" fill="#666">4 px/mm. Start (50,200), end (290,40).</text>
+  <line x1="50" y1="200" x2="320" y2="200" stroke="#333" stroke-width="1.2"/>
+  <line x1="50" y1="40" x2="50" y2="200" stroke="#333" stroke-width="1.2"/>
+  <text x="325" y="210" font-size="8" fill="#666">X</text>
   <text x="35" y="45" font-size="8" fill="#666">Y</text>
-  <circle cx="50" cy="170" r="3" fill="#333"/>
-  <text x="55" y="165" font-size="8" fill="#333">start (0,0)</text>
-  <line x1="50" y1="170" x2="290" y2="90" stroke="#166534" stroke-width="2"/>
-  <text x="150" y="120" font-size="9" fill="#166534">G01 X60 Y40: straight diagonal at F</text>
-  <polyline points="50,170 290,170 290,90" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,3"/>
-  <text x="150" y="160" font-size="9" fill="#dc2626">G00 X60. then Y40. (two-block rapid)</text>
-  <circle cx="290" cy="90" r="3" fill="#333"/>
-  <text x="295" y="88" font-size="8" fill="#333">(60,40)</text>
+  <circle cx="50" cy="200" r="3" fill="#333"/>
+  <text x="55" y="195" font-size="8" fill="#333">start (0,0)</text>
+  <line x1="50" y1="200" x2="290" y2="40" stroke="#166534" stroke-width="2"/>
+  <text x="140" y="110" font-size="9" fill="#166534">G01 X60 Y40: straight diagonal at F</text>
+  <polyline points="50,200 290,200 290,40" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="140" y="190" font-size="9" fill="#dc2626">G00 X60. then Y40. (two-block rapid)</text>
+  <circle cx="290" cy="40" r="3" fill="#333"/>
+  <text x="295" y="38" font-size="8" fill="#333">(60,40)</text>
 </svg>
 
 <h2>Why It Matters</h2>
@@ -63,7 +63,7 @@
 
 <h3>G01: Linear Feed</h3>
 <pre class="cp-code"><code>G01 X100. Y50. F300.   (cut a straight line to (100,50) at 300 mm/min)</code></pre>
-<p>G01 is also modal. The F word is remembered across subsequent G01 blocks, so you only repeat F when it changes. The straight line can move on one axis (a pure X move) or on several axes at once (a diagonal chamfer). The controller interpolates the feed across the vector length, so the chip load stays consistent even on angled cuts.</p>
+<p>G01 is also modal. The F word is remembered across subsequent G01 blocks, so you only repeat F when it changes. The straight line can move on one axis (a pure X move) or on several axes at once (a diagonal chamfer). The controller interpolates the feed along the vector length; the nominal feed per tooth is fz = F/(n&times;z), and actual undeformed chip thickness also depends on cutter engagement.</p>
 
 <h3>Safe Approach and Retract</h3>
 <p>A standard milling approach is: rapid XY to position at safe Z, rapid down to a short clearance above the part (e.g. Z5), then linear plunge to depth at a lower feed, then linear cut at feed. At the end of the cut, rapid Z up to clearance, then rapid XY to the next position. This sequence keeps every sideways move at a Z where the tool cannot hit the part.</p>
@@ -141,7 +141,7 @@ G00 Z50.</code></pre>
 <p>When first running a linear program, the operator uses feed hold to pause motion and single block to execute one line at a time. The block skip (/) skips the blocks that carry a slash &mdash; only those blocks, not "the first half of the program". Because skipping also skips state-establishing blocks (offsets, spindle on, coolant), it is not a general way to trial-run a program. After each G01 block, confirm the tool is where expected before pressing cycle start again. This is slow on purpose: catching a coordinate error after one block is much cheaper than after a full pocket.</p>
 
 <h3>Programming Chamfers with Linear Moves</h3>
-<p>A 45&deg; chamfer is two equal axis increments. To break a sharp external corner on a mill, approach the corner, then move X and Y by the chamfer size simultaneously. For a 0.5 mm chamfer: from (10, 10) cut to (10.5, 10.5). The controller cuts the diagonal. Larger chamfers use the same idea with larger increments; verify the dimension on the first part, because the insert nose radius changes the actual chamfer geometry.</p>
+<p>On a mill, a C0.5 external corner chamfer on edges X=10 and Y=10 cuts the part profile from (9.5, 10) to (10, 9.5). These are part-profile endpoints, not tool-center endpoints; with cutter compensation the tool center is offset by the tool radius. Verify the dimension on the first part, because the insert nose radius changes the actual chamfer geometry.</p>
 
 <h3>Canned Cycles Use Linear Moves Inside</h3>
 <p>Even when you use a drilling or boring canned cycle (G81, G83, G76), the cycle itself is built from linear moves: rapid to R plane, linear feed to depth, dwell, rapid retract. Understanding G00/G01 inside out makes the canned cycle parameters &mdash; R plane, Z depth, feed &mdash; predictable rather than magic numbers.</p>
@@ -155,7 +155,7 @@ G00 Z50.</code></pre>
 <p>If the program starts cutting without G01, the controller is still in whatever motion mode was left by the startup block. Many startup blocks set G80 and G40 but do not set G01 explicitly; the first motion block should state G01 with an F. If you omit it and the controller happens to be in G00 from a previous operation, the tool races to the first cut position at rapid speed. Always state the motion mode and feed on the first cutting block.</p>
 
 <h3>Linear Motion on a Lathe: Diameter Programming</h3>
-<p>On a lathe, X values are diameters, not radii. A G01 X40. moves the tool so the turned diameter is 40 mm, which means the saddle travels only 20 mm in X. When calculating taper angles or feeds, remember the physical saddle movement is half the diameter difference. Mixing diameter and radius thinking in one block is a common beginner error that cuts the OD 50% off target.</p>
+<p>On a lathe, X values are diameters, not radii. The radial saddle movement for a G01 block is &Delta;r = (Xend &minus; Xstart) / 2. Starting from X30 and commanding X40, the saddle moves radially by 5 mm and the turned diameter grows from 30 to 40. Do not infer travel from the absolute target alone; always subtract the starting X. Mixing diameter and radius thinking in one block is a common beginner error.</p>
 <h3>Programming Straight Walls</h3>
 <p>A straight vertical wall on a mill is a G01 in Z at constant XY. A straight horizontal floor is a G01 in XY at constant Z. Pocket walls, step shoulders, and raised pads are all linear cuts. The skill is choosing the right lead-in so the tool approaches the wall without a plunge at the corner, and the right retract so it leaves without a scratch.</p>
 
