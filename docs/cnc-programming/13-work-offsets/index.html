@@ -137,6 +137,9 @@ G01 Z-2. F100.</code></pre>
 
 <h3>What Happens if You Forget G54</h3>
 <p>Without a work offset, the controller uses whatever coordinate system was active &mdash; often machine coordinates from the previous job. The program's X0 Y0 then means machine X0 Y0, which may be at the spindle home or a vise from another setup. The tool moves to an unexpected XY and crashes. The startup block does not usually call G54; it is the programmer's responsibility to call it after the tool change. Make G54 the first non-startup block in every program.</p>
+
+<h3>Work Offset on a Rotary Table</h3>
+<p>When an indexer or rotary axis is part of the setup, the work offset also includes the rotary zero. The part may be clamped at some angle on the table; the C-axis offset (or the rotation in the work frame) tells the controller where the part's X0 direction points. Get this wrong and every feature off the rotated axis is angularly off by the same error. Modern controls store the rotation as part of the work frame rather than as a separate offset.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Touching one edge and guessing the other</strong> &mdash; touch both X edges (or both Y edges) and use the midpoint, especially on round stock.</li>

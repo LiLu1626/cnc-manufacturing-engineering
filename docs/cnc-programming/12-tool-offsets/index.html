@@ -133,6 +133,9 @@ G01 Z-2. F100.</code></pre>
 
 <h3>What Happens if You Forget G43</h3>
 <p>If the program calls G00 Z50. without G43 H, the spindle nose goes to machine Z50, and the tool tip goes to Z50 minus the tool length. On a 150 mm tool, the tip is at Z&minus;100 &mdash; deep inside the table. The machine has no idea a tool is loaded. This is the most dangerous missing-block error in mill programming, which is why the startup block often includes G49 to cancel any previous length offset, and why every tool change should be followed by an explicit G43 H move at safe Z.</p>
+
+<h3>Offset Tables on a Mill: H and D Columns</h3>
+<p>On a typical mill control, the tool offset table has columns for H (length), D (radius), and wear for each. The H value is set by tool length; the D value is set by the tool radius. They are independent: a 12 mm end mill has H = its length difference and D = 6.0 mm radius. Cutter compensation (G41/G42) uses D, not H. Mixing them up &mdash; putting the radius in H &mdash; produces a Z error that looks like a depth problem, not a radius problem.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Thinking G49 returns to machine coordinates</strong> &mdash; G49 cancels length offset only. G53 switches to machine coordinates for one block. They are unrelated.</li>

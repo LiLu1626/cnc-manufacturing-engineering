@@ -146,6 +146,11 @@ G00 Z50.</code></pre>
 
 <h3>What Happens if You Forget G01</h3>
 <p>If the program starts cutting without G01, the controller is still in whatever motion mode was left by the startup block. Many startup blocks set G80 and G40 but do not set G01 explicitly; the first motion block should state G01 with an F. If you omit it and the controller happens to be in G00 from a previous operation, the tool races to the first cut position at rapid speed. Always state the motion mode and feed on the first cutting block.</p>
+
+<h3>Linear Motion on a Lathe: Diameter Programming</h3>
+<p>On a lathe, X values are diameters, not radii. A G01 X40. moves the tool so the turned diameter is 40 mm, which means the saddle travels only 20 mm in X. When calculating taper angles or feeds, remember the physical saddle movement is half the diameter difference. Mixing diameter and radius thinking in one block is a common beginner error that cuts the OD 50% off target.</p>
+<h3>Programming Straight Walls</h3>
+<p>A straight vertical wall on a mill is a G01 in Z at constant XY. A straight horizontal floor is a G01 in XY at constant Z. Pocket walls, step shoulders, and raised pads are all linear cuts. The skill is choosing the right lead-in so the tool approaches the wall without a plunge at the corner, and the right retract so it leaves without a scratch.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Using G00 to cut</strong> &mdash; the tool moves at traverse speed into the part. Always G01 with an F for any plunge or cut.</li>
