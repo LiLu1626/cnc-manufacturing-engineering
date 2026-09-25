@@ -147,6 +147,29 @@ Y = Yc + R &times; sin(&theta;)</code></pre>
 <h2>Rounding and Precision</h2>
 <p>Controllers typically accept coordinates to 0.001 mm (or 0.0001 inch). Keep full calculator precision through intermediate steps and round only the final coordinate. For example, 50&times;cos60.000&deg; = exactly 25.000, but 50&times;sin60.000&deg; = 43.301270... &mdash; write 43.301, not 43.3. Rounding early to 43.3 accumulates 0.0013 mm per hole, which on a six-hole pattern is not catastrophic but is unnecessary error.</p>
 
+
+<h2>Coordinate Conversion: Millimeters to Inches</h2>
+<p>Shops that mix metric and imperial drawings need quick conversion. 1 inch = 25.4 mm exactly. A 3-inch hole is 76.2 mm. A 50 mm coordinate is 1.9685 inches. When a program uses G21 (mm), every F, X, Y, Z value is in mm; when it uses G20 (inch), every value is in inches. The controller does not convert for you &mdash; the numbers mean whatever units the active G-code declares. This is why a unit mismatch scales every coordinate by 25.4.</p>
+
+<h2>Interpolation: How the Controller Moves</h2>
+<p>When you program G01 X50 Y30, the controller computes the straight line from the current point to (50,30) and moves the tool along it at the programmed feed. The feed rate applies to the tool center along that line &mdash; not to X or Y individually. If the move is at 30&deg;, the X component of motion is F&times;cos30 and the Y component is F&times;sin30, but the tool center still moves at F along the diagonal. You do not need to split F yourself; the controller does it.</p>
+
+<h2>Arc Endpoint and Radius: I/J vs R</h2>
+<p>When programming G02/G03, you can define the arc either by the center offset (I, J, K) or by radius R. With I/J, the values are the distance from the arc start point to the arc center. With R, you give the radius and the controller computes the center. R is simpler for arcs less than 180&deg;; for arcs greater than 180&deg;, R must be negative to select the long way around. I/J is unambiguous and preferred for critical geometry.</p>
+
+<h2>Worked Example: Hole Pattern on a Plate</h2>
+<p>A rectangular plate 100&times;60 mm has four mounting holes, each 10 mm in from the edges. Work zero at the bottom-left corner. Hole coordinates: (10,10), (90,10), (90,50), (10,50). These come straight from the drawing dimensions &mdash; no trigonometry needed because the holes are on a rectangular grid. If the holes were instead on a 60 mm PCD centered at (50,30), you would use the bolt-circle formula: X = 50 + 30&times;cos(&theta;), Y = 30 + 30&times;sin(&theta;).</p>
+
+<h2>Center Distance and Pitch</h2>
+<p>When a drawing calls for holes on a linear pitch (for example, 5 holes at 20 mm spacing), the coordinates are simple arithmetic: hole 1 at X = start, hole 2 at X = start + 20, hole 3 at start + 40, and so on. This is the G91 incremental pattern &mdash; each hole is 20 mm from the previous one. If the holes are dimensioned from the left edge, use G90 absolute coordinates directly from the drawing. Both methods produce the same physical positions; choose the one that matches how the drawing is dimensioned.</p>
+
+<h2>Feeds and Speeds: The Most Common Calculation</h2>
+<p>The daily calculation at the machine: given cutting speed Vc (m/min) and tool diameter D (mm), spindle RPM is N = 1000 &times; Vc / (&pi; &times; D). For a &Oslash;10 end mill at 100 m/min: N = 1000 &times; 100 / (3.1416 &times; 10) = 3183 RPM. Feed rate is F = N &times; fz &times; z, where fz is feed per tooth (mm/tooth) and z is the number of flutes. For a 4-flute end mill at fz = 0.05 mm/tooth: F = 3183 &times; 0.05 &times; 4 = 637 mm/min. These are classroom assumptions; real values come from tooling catalogs.</p>
+
+<h2>Lathe-Specific Math</h2>
+<p>On a lathe, X is diameter. A cut from &Oslash;50 to &Oslash;46 over 2 mm of Z: the radial depth of cut is (50 &minus; 46)/2 = 2 mm, not 4 mm. The taper angle over that cut: tan(&theta;) = 2/2 = 1, so &theta; = 45&deg; on one side. When programming a chamfer on a lathe, remember that the X coordinate is the diameter &mdash; a 1&times;45&deg; chamfer means X changes by 2 mm (from &Oslash;40 to &Oslash;38) for every 1 mm of Z.</p>
+
+<p>Always double-check whether a drawing dimension calls out diameter or radius before converting to coordinates. On a lathe, the answer is almost always diameter; on a mill, circle dimensions are usually diameter but bolt-circle references can be either.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Treating PCD as radius</strong> &mdash; PCD 100 means diameter 100, radius is 50.</li>

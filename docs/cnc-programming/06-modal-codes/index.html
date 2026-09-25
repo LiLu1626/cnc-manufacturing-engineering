@@ -120,6 +120,46 @@ G80        (explicitly cancels the drilling cycle)</code></pre>
 <h2>Tracking State While Reading</h2>
 <p>A practical habit: when reading an unfamiliar program, keep a mental (or written) table of the current mode after each block. After the startup block, you know G21/G17/G90/G40/G49/G80 are active. After <code>T01 M06</code>, tool 1 is in the spindle. After <code>S2000 M03</code>, the spindle is at 2000 RPM CW. After <code>G43 H01 Z50</code>, tool length offset H01 is active. Every time the program touches a modal group, update the table. When you hit an unexpected move, the table tells you which mode you actually inherited.</p>
 
+
+<h2>Modal State Across Program Boundaries</h2>
+<p>A question new programmers often ask: when the program ends with M30, does the modal state reset? On most controls, the answer is no. The G-codes that were active when M30 ran remain active in the controller. When you load and run the next program, it starts with that leftover state. This is exactly why the startup block exists &mdash; it does not rely on the controller being in a clean state; it forces the state you want.</p>
+<p>Some machines have a "safe startup" or "power-up default" setting that restores G20/G21, G17, G90, G40, G49, G80 at cycle start, but this is a machine parameter, not a given. Do not assume it. Write the startup block in every program, every time. The four seconds it takes to type it is far cheaper than a crash.</p>
+
+<h2>Modal M-Codes</h2>
+<p>Not just G-codes are modal. Spindle and coolant M-codes also persist until cancelled: M03 (spindle CW) stays on until M05 or M04. M08 (coolant on) stays on until M09. This is why the program ending typically writes M09 and M05 explicitly &mdash; without them, the next tool change or the next program could start with coolant spraying and the spindle spinning unexpectedly.</p>
+<p>Feed F and spindle S are also modal. Once you set F300, subsequent cutting moves inherit it until you change F. This is why you only need to write F on the first cutting move after a rapid, and why you should be deliberate about setting a new feed when the cut type changes.</p>
+
+<h2>Reading State Back on the Controller</h2>
+<p>Modern controllers have a "current commands" or "modal display" page that shows every active G-code group. When you are debugging a program that is not doing what you expect, this page is the first place to look. It tells you whether the controller thinks it is in G90 or G91, G20 or G21, G81 or G80, G94 or G95. If the program looks correct but the machine moves oddly, the modal display almost always reveals the problem &mdash; usually a leftover mode you did not know was active.</p>
+
+<h2>Modal Groups in Practice: A Full Program Trace</h2>
+<p>To see how modal state accumulates, trace this short program and track the active modes at each step:</p>
+<pre class="cp-code"><code>O0001
+G21 G17 G90 G40 G49 G80     (startup: known state)
+G54                          (work offset 54)
+T01 M06                      (tool 1)
+S1500 M03                    (spindle CW 1500)
+G00 G43 H01 Z50. M08         (tool length offset H01, coolant on)
+G00 X10 Y10                  (rapid to hole position)
+G81 R2. Z-10. F120.          (drilling cycle)
+X50 Y10                      (hole 2: G81 still active)
+X50 Y50                      (hole 3)
+X10 Y50                      (hole 4)
+G80                          (cancel cycle)
+G00 Z50. M09                 (up, coolant off)
+M05                          (spindle stop)
+M30</code></pre>
+<p>After line 5, active modes are: G21, G17, G90, G40, G49, G54, G43 H01, M08, S1500, M03. Line 6 adds G00. Line 7 switches to G81 (replacing G00 in the motion/cycle group). Lines 8&ndash;10 inherit G81 and drill. Line 11 explicitly writes G80 &mdash; this is the line that turns off the drilling cycle. Without it, line 12 <code>G00 Z50</code> might or might not cancel the cycle depending on the controller. Writing G80 is the safe choice.</p>
+
+<h2>Why Modal Exists: History and Practical Effect</h2>
+<p>Modal programming originated when program memory was expensive and punch tapes were long. Repeating G01 on every line would double the tape length. Modern memory is cheap, but the modal convention survives because it is how the code is read: the motion mode and feed are usually constant across a section, and writing them once at the section start is clearer than repeating them forty times. Good programs use modal deliberately &mdash; they set the mode at the start of a section and change it only when the section changes.</p>
+
+<h2>Subprograms and Modal State</h2>
+<p>When you call a subprogram with M98, modal state does not reset. G-codes set inside the subprogram persist after M99 returns to the main program. This is why the rule "always return to G90 after G91 in a subprogram" matters: if the subprogram uses G91 for incremental moves and does not restore G90, the main program resumes in incremental mode. The same applies to cutter compensation, cycles, and feed mode. A well-written subprogram restores the modes it changed, or the main program re-establishes them after the call.</p>
+
+<h2>Practical Habits for Modal Safety</h2>
+<p>Three habits prevent almost every modal-related crash. First, write the startup block in every program without exception. Second, explicitly cancel cycles and compensation (G80, G40, G49) at the end of each section, even if you think they are already off. Third, read back the modal display before pressing cycle start on a new program &mdash; the controller shows exactly which modes are active, and a quick glance catches a leftover G91 or G20 before the machine moves. These habits take seconds and are the difference between a controlled setup and a surprise at rapid speed.</p>
+<p>When you inherit a program someone else wrote, do not assume the modal state is what it appears to be. Trace it from the startup block downward, and pay special attention to blocks that omit a G-code on a line where you expected one &mdash; that omission is usually intentional modal inheritance, but it can also be a bug.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Forgetting G80</strong> after drilling &mdash; the cycle continues on the next X/Y move, drilling an unexpected hole.</li>
