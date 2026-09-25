@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Practical Mathematics for CNC Programming — CNC & Manufacturing Engineering</title>
-<meta name="description" content="Right triangle trigonometry, Pythagorean theorem, bolt circle coordinates, chamfer calculations, and the math you use every day at the CNC machine.">
+<meta name="description" content="Right triangle trigonometry, Pythagorean theorem, bolt circle coordinates, chamfer calculations, arc chord, taper, feed time, and the math you use every day at the CNC machine.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/08-programming-math/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
@@ -27,7 +27,7 @@
 <main class="article">
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Practical Mathematics for CNC Programming</h1>
-<p class="lead">You do not need advanced calculus. You need right triangles, circles, and consistent arithmetic — done carefully. This page covers the trigonometry and coordinate math you use every day at the machine.</p>
+<p class="lead">You do not need advanced calculus. You need right triangles, circles, and consistent arithmetic &mdash; done carefully. This page covers the trigonometry and coordinate math you use every day at the machine.</p>
 
 <div class="callout"><strong>What you will learn:</strong>
 <ul>
@@ -35,6 +35,9 @@
 <li>Coordinates on a bolt circle</li>
 <li>Pythagorean theorem for distances</li>
 <li>Chamfer and chamfer width calculations</li>
+<li>Arc, chord, and sagitta geometry</li>
+<li>Taper and included-angle conversion</li>
+<li>Cutting time and feed-rate arithmetic</li>
 <li>Rounding and precision rules</li>
 </ul></div>
 
@@ -42,7 +45,9 @@
 <p>Every CNC coordinate comes from a dimension on a drawing. The math converts that dimension into X and Y values you type into the machine. The three tools you use constantly are: (1) the Pythagorean theorem for distances, (2) sin/cos for coordinates around a circle, and (3) careful sign handling for negative quadrants.</p>
 
 <h2>Why It Matters</h2>
-<p>A bolt circle with six holes at 60° spacing: if you use radians instead of degrees, or forget that Y is negative below the X axis, every hole is wrong. CNC math is unforgiving — there is no "close enough." A 0.1 mm error at each coordinate compounds through the part. Always double-check signs and quadrants.</p>
+<p>A bolt circle with six holes at 60&deg; spacing: if you use radians instead of degrees, or forget that Y is negative below the X axis, every hole is wrong. CNC math is unforgiving &mdash; there is no "close enough." A 0.1 mm error at each coordinate compounds through the part. Always double-check signs and quadrants.</p>
+
+<p>The controller does not check your arithmetic. It will happily move to X = -50 when you meant +50, and it will happily cut a 5 mm chamfer when you programmed 0.5 mm. The only check between drawing and machine is your own calculation and a careful dry run. Treat every coordinate as a number you would trust with a &Oslash;50 finish-mill.</p>
 
 <h2>Right Triangle Trigonometry</h2>
 <p>For a right triangle with angle &theta;, adjacent side <em>a</em>, opposite side <em>b</em>, hypotenuse <em>c</em>:</p>
@@ -52,16 +57,43 @@
 <li>tan(&theta;) = b/a</li>
 <li>c = &radic;(a&sup2; + b&sup2;)</li>
 </ul>
-<p><strong>Mnemonic:</strong> SOH-CAH-TOA — Sine = Opposite/Hypotenuse, Cosine = Adjacent/Hypotenuse, Tangent = Opposite/Adjacent.</p>
+<p><strong>Mnemonic:</strong> SOH-CAH-TOA &mdash; Sine = Opposite/Hypotenuse, Cosine = Adjacent/Hypotenuse, Tangent = Opposite/Adjacent.</p>
+
+<svg viewBox="0 0 360 200" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <line x1="40" y1="160" x2="300" y2="160" stroke="#333" stroke-width="2"/>
+  <line x1="40" y1="160" x2="40" y2="40" stroke="#333" stroke-width="2"/>
+  <line x1="40" y1="40" x2="300" y2="160" stroke="#2563eb" stroke-width="2"/>
+  <text x="160" y="180" font-size="11" fill="#333">a (adjacent)</text>
+  <text x="10" y="100" font-size="11" fill="#333">b (opp.)</text>
+  <text x="150" y="90" font-size="11" fill="#2563eb">c (hypotenuse)</text>
+  <path d="M 70 160 A 30 30 0 0 0 55 134" fill="none" stroke="#e67e22" stroke-width="1.5"/>
+  <text x="65" y="150" font-size="11" fill="#e67e22">&theta;</text>
+  <text x="30" y="175" font-size="9" fill="#666">Right angle</text>
+</svg>
 
 <h2>Coordinates on a Circle</h2>
 <p>Given center (Xc, Yc), radius R, angle &theta; measured counterclockwise from the +X axis:</p>
 <pre class="cp-code"><code>X = Xc + R &times; cos(&theta;)
 Y = Yc + R &times; sin(&theta;)</code></pre>
-<p>Angles in the four quadrants: 0° = +X, 90° = +Y, 180° = &minus;X, 270° = &minus;Y. Negative angles or angles &gt;360° are handled by the calculator's sin/cos functions automatically — but always check the sign makes sense.</p>
+<p>Angles in the four quadrants: 0&deg; = +X, 90&deg; = +Y, 180&deg; = &minus;X, 270&deg; = &minus;Y. Negative angles or angles &gt;360&deg; are handled by the calculator's sin/cos functions automatically &mdash; but always check the sign makes sense.</p>
+
+<svg viewBox="0 0 360 280" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <line x1="30" y1="140" x2="330" y2="140" stroke="#999" stroke-width="1"/>
+  <line x1="180" y1="20" x2="180" y2="260" stroke="#999" stroke-width="1"/>
+  <circle cx="180" cy="140" r="100" fill="none" stroke="#2563eb" stroke-width="1.5"/>
+  <circle cx="280" cy="140" r="4" fill="#16a34a"/>
+  <text x="285" y="135" font-size="10" fill="#16a34a">0&deg; (+X)</text>
+  <circle cx="180" cy="40" r="4" fill="#16a34a"/>
+  <text x="185" y="35" font-size="10" fill="#16a34a">90&deg; (+Y)</text>
+  <circle cx="80" cy="140" r="4" fill="#dc2626"/>
+  <text x="20" y="135" font-size="10" fill="#dc2626">180&deg; (&minus;X)</text>
+  <circle cx="180" cy="240" r="4" fill="#dc2626"/>
+  <text x="185" y="255" font-size="10" fill="#dc2626">270&deg; (&minus;Y)</text>
+  <text x="160" y="155" font-size="10" fill="#666">center</text>
+</svg>
 
 <h2>Example 1: Bolt Circle (4 Holes)</h2>
-<p>Four holes on a pitch circle diameter (PCD) of 100 mm, center at (0,0), first hole at 0°:</p>
+<p>Four holes on a pitch circle diameter (PCD) of 100 mm, center at (0,0), first hole at 0&deg;:</p>
 <table class="data-table">
 <tr><th>Hole</th><th>Angle</th><th>X = R&times;cos(&theta;)</th><th>Y = R&times;sin(&theta;)</th></tr>
 <tr><td>1</td><td>0&deg;</td><td>50.000</td><td>0.000</td></tr>
@@ -72,45 +104,71 @@ Y = Yc + R &times; sin(&theta;)</code></pre>
 <p>PCD = 100 means diameter 100, so R = 50. Do not confuse PCD with radius.</p>
 
 <h2>Example 2: Bolt Circle (6 Holes)</h2>
-<p>Six holes at 60° spacing, R = 50, starting at 0°:</p>
+<p>Six holes at 60&deg; spacing, R = 50, starting at 0&deg;:</p>
 <ul>
-<li>Hole 1 at 0°: (50.000, 0.000)</li>
-<li>Hole 2 at 60°: X = 50&times;cos60 = 25.000, Y = 50&times;sin60 = 43.301</li>
-<li>Hole 3 at 120°: X = &minus;25.000, Y = 43.301</li>
-<li>Hole 4 at 180°: (&minus;50.000, 0.000)</li>
-<li>Hole 5 at 240°: (&minus;25.000, &minus;43.301)</li>
-<li>Hole 6 at 300°: (25.000, &minus;43.301)</li>
+<li>Hole 1 at 0&deg;: (50.000, 0.000)</li>
+<li>Hole 2 at 60&deg;: X = 50&times;cos60 = 25.000, Y = 50&times;sin60 = 43.301</li>
+<li>Hole 3 at 120&deg;: X = &minus;25.000, Y = 43.301</li>
+<li>Hole 4 at 180&deg;: (&minus;50.000, 0.000)</li>
+<li>Hole 5 at 240&deg;: (&minus;25.000, &minus;43.301)</li>
+<li>Hole 6 at 300&deg;: (25.000, &minus;43.301)</li>
 </ul>
 
 <h2>Example 3: Distance and Angle</h2>
-<p>Move from (0,0) to a point 20 mm away at 30°:</p>
+<p>Move from (0,0) to a point 20 mm away at 30&deg;:</p>
 <ul>
 <li>X = 20&times;cos(30&deg;) = 20&times;0.8660 = 17.321 mm</li>
 <li>Y = 20&times;sin(30&deg;) = 20&times;0.5000 = 10.000 mm</li>
 </ul>
 <p>The straight-line distance between (10,10) and (50,30): &Delta;X = 40, &Delta;Y = 20, distance = &radic;(40&sup2; + 20&sup2;) = &radic;2000 = 44.721 mm.</p>
 
+<p>To find the angle between two points: &theta; = atan2(&Delta;Y, &Delta;X). For the same points, atan2(20, 40) = 26.565&deg;. The atan2 function (not atan) is important because it picks the correct quadrant automatically &mdash; atan alone cannot tell the difference between (+,+) and (-,+).</p>
+
 <h2>Example 4: Chamfer Calculation</h2>
-<p>A 1&times;45° chamfer on a corner: the tool moves 1 mm in X and 1 mm in Z. On a drawing, a chamfer labeled C1 means 1 mm at 45°. The endpoint coordinates are shifted by 1 mm from the corner on both axes. For a non-45° chamfer, use trigonometry: if the chamfer is 2 mm along the face at 30°, the depth = 2&times;sin(30&deg;) = 1 mm and the face length = 2&times;cos(30&deg;) = 1.732 mm.</p>
+<p>A 1&times;45&deg; chamfer on a corner: the tool moves 1 mm in X and 1 mm in Z. On a drawing, a chamfer labeled C1 means 1 mm at 45&deg;. The endpoint coordinates are shifted by 1 mm from the corner on both axes. For a non-45&deg; chamfer, use trigonometry: if the chamfer is 2 mm along the face at 30&deg;, the depth = 2&times;sin(30&deg;) = 1 mm and the face length = 2&times;cos(30&deg;) = 1.732 mm.</p>
+
+<h2>Arc, Chord, and Sagitta</h2>
+<p>When a drawing calls out an arc, you need three numbers: the radius R, the start point, and the end point. The chord length (straight line between start and end) is:</p>
+<pre class="cp-code"><code>chord = 2 &times; R &times; sin(&theta;/2)</code></pre>
+<p>where &theta; is the included angle. The sagitta (height of the arc above the chord) is:</p>
+<pre class="cp-code"><code>sagitta = R &minus; R &times; cos(&theta;/2)</code></pre>
+<p>Example: R = 25 mm, included angle 90&deg;. Chord = 2&times;25&times;sin45 = 35.355 mm. Sagitta = 25 &minus; 25&times;cos45 = 7.322 mm. These are the numbers you need to program the arc and to verify it against a CMM measurement.</p>
+
+<h2>Taper and Included Angle</h2>
+<p>On a lathe, a taper is specified either as an included angle (e.g., 30&deg; included) or as a taper per foot/meter. If the large diameter is D, the small diameter is d, and the length is L, the included angle &alpha; satisfies:</p>
+<pre class="cp-code"><code>tan(&alpha;/2) = (D &minus; d) / (2 &times; L)</code></pre>
+<p>Example: D = 40, d = 30, L = 50. tan(&alpha;/2) = 10/100 = 0.1, so &alpha;/2 = 5.71&deg;, included angle = 11.42&deg;. The half-angle is what the tool feeds along &mdash; the tool moves radially 5 mm over 50 mm of Z. This is also the angle G01 interpolation follows when programming a taper straight between two diameters.</p>
+
+<h2>Cutting Time and Feed Arithmetic</h2>
+<p>Cutting time in minutes = length of cut &divide; feed rate. For a straight cut of 60 mm at F300 mm/min: time = 60/300 = 0.2 minutes = 12 seconds. For turning at F0.2 mm/rev and S800 RPM: feed rate = 0.2 &times; 800 = 160 mm/min, so 60 mm takes 60/160 = 0.375 min = 22.5 seconds.</p>
+
+<p>These calculations let you estimate cycle time before running the machine, and spot when a feed override is set wrong. If a cut that should take 12 seconds is taking a minute, the feed override is likely at 20% or the program feed is wrong.</p>
+
+<h2>Rounding and Precision</h2>
+<p>Controllers typically accept coordinates to 0.001 mm (or 0.0001 inch). Keep full calculator precision through intermediate steps and round only the final coordinate. For example, 50&times;cos60.000&deg; = exactly 25.000, but 50&times;sin60.000&deg; = 43.301270... &mdash; write 43.301, not 43.3. Rounding early to 43.3 accumulates 0.0013 mm per hole, which on a six-hole pattern is not catastrophic but is unnecessary error.</p>
 
 <h2>Common Mistakes</h2>
 <ul>
-<li><strong>Treating PCD as radius</strong> — PCD 100 means diameter 100, radius is 50.</li>
-<li><strong>Using radians when the calculator is in degrees</strong> — most controllers use degrees. Check your calculator mode.</li>
-<li><strong>Forgetting signs in negative quadrants</strong> — &theta; = 225° gives both X and Y negative.</li>
-<li><strong>Rounding too early</strong> — keep full precision through calculations; round only the final coordinate to 0.001 mm.</li>
-<li><strong>Confusing diameter and radius on a lathe</strong> — lathe X is always diameter.</li>
+<li><strong>Treating PCD as radius</strong> &mdash; PCD 100 means diameter 100, radius is 50.</li>
+<li><strong>Using radians when the calculator is in degrees</strong> &mdash; most controllers use degrees. Check your calculator mode.</li>
+<li><strong>Forgetting signs in negative quadrants</strong> &mdash; &theta; = 225&deg; gives both X and Y negative.</li>
+<li><strong>Rounding too early</strong> &mdash; keep full precision through calculations; round only the final coordinate to 0.001 mm.</li>
+<li><strong>Confusing diameter and radius on a lathe</strong> &mdash; lathe X is always diameter.</li>
+<li><strong>Using atan instead of atan2</strong> &mdash; atan cannot distinguish quadrants and will give the wrong angle for points in the lower half.</li>
+<li><strong>Forgetting that included angle is twice the half-angle</strong> &mdash; a 30&deg; included taper is 15&deg; per side; the tool feeds at 15&deg;, not 30&deg;.</li>
 </ul>
 
 <h2>Practice</h2>
-<p><strong>1.</strong> Center at (10,20), radius 20, point at 90°. What are the coordinates?</p>
+<p><strong>1.</strong> Center at (10,20), radius 20, point at 90&deg;. What are the coordinates?</p>
 <details><summary>Show answer</summary><p>X = 10 + 20&times;cos90 = 10. Y = 20 + 20&times;sin90 = 40. Answer: (10, 40).</p></details>
 <p><strong>2.</strong> Two points at (5,8) and (&minus;5,18). What is &Delta;X and &Delta;Y?</p>
 <details><summary>Show answer</summary><p>&Delta;X = &minus;5 &minus; 5 = &minus;10. &Delta;Y = 18 &minus; 8 = +10. The displacement is (&minus;10, +10).</p></details>
 <p><strong>3.</strong> Why not round intermediate results to 0.1 mm?</p>
 <details><summary>Show answer</summary><p>Rounding accumulates error. Keep full calculator precision and round only the final output.</p></details>
-<p><strong>4.</strong> Six-hole bolt circle, PCD = 80, center at (0,0). Hole 3 is at 120°. What are its coordinates?</p>
+<p><strong>4.</strong> Six-hole bolt circle, PCD = 80, center at (0,0). Hole 3 is at 120&deg;. What are its coordinates?</p>
 <details><summary>Show answer</summary><p>R = 40. X = 40&times;cos120 = &minus;20.000. Y = 40&times;sin120 = 34.641. Answer: (&minus;20, 34.641).</p></details>
+<p><strong>5.</strong> R = 25 mm, included angle 90&deg;. What is the chord length?</p>
+<details><summary>Show answer</summary><p>Chord = 2&times;25&times;sin(45&deg;) = 50&times;0.7071 = 35.355 mm.</p></details>
 
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/23-program-safety/">&larr; Program Safety</a><a href="/cnc-manufacturing-engineering/cnc-programming/32-drawings-process-planning/">Drawings &amp; Process &rarr;</a></nav>
 </main>
