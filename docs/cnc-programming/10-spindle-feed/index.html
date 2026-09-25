@@ -171,6 +171,8 @@ F0.2</code></pre>
 <p>A tool that chatters at full catalog speed can sometimes be cured by dropping spindle speed 10&ndash;20% rather than reducing feed. Chatter is a stability problem, not a power problem. Use the override knob during first piece to find a stable speed window, then write that S value into the program for repeatability.</p>
 <h3>When to Change Speed or Feed Mid-Job</h3>
 <p>If the tool wears early, increase feed slightly before reducing speed &mdash; a too-light feed rubs the edge and accelerates crater wear. If the surface finish is poor, check tool runout, spindle speed, and tool nose radius before changing feed. If the spindle bogs, reduce axial depth or feed rather than pushing the machine. These adjustments are made on the first piece, not during production, and then written back into the program for repeatability.</p>
+<h3>Recording the Working Values</h3>
+<p>After the first piece is proven, write the final S and F values into the program and note them on the setup sheet. If a future batch runs the same part, the operator should not have to rediscover the cut from scratch. This documentation is part of process control: the program, the setup sheet, and the tool list should all agree on the spindle speed and feed used.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Using mm/min feed on a lathe in per-rev mode</strong> &mdash; F200 on a G95/G99 lathe means 200 mm per revolution. Check the active feed mode.</li>
