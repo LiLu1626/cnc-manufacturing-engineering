@@ -107,7 +107,7 @@ G80</code></pre>
 <p>This means you can mix depths in one pattern: drill three holes at Z-15, then change to Z-25 for the next two, all within the same active cycle. Just remember to G80 when done.</p>
 
 <h3>G80: Canceling the Cycle</h3>
-<p><strong>G80</strong> cancels all canned cycle modes. It must be programmed after the hole pattern before any non-drilling motion — otherwise the next X/Y move will be interpreted as another hole. A critical detail: <strong>G80 cancels the cycle mode but does not move Z</strong>. After G80, the tool is still at whatever Z height the last retract left it at. Always write an explicit G00 Z50. after G80 to guarantee a safe Z position.</p>
+<p><strong>G80</strong> cancels the active canned cycle without moving the axes. On Haas mills, a bare X/Y block repeats an active cycle, while an explicit G00 or G01 also cancels it. We still use G80 to make the end of the pattern clear. After the completed G99 example, the tool is at R2. The following G00 Z50 retracts to this example's verified clearance height; Z50 is not a universal safe position.</p>
 
 <h2>Example</h2>
 <p><strong>Worked example:</strong> Four &Oslash;6 mm holes on a 50 mm square, centered at (0,0). Holes at (&minus;25,&minus;25), (25,&minus;25), (25,25), (&minus;25,25). Through-holes in 8 mm plate: Z depth = 8 + 0.3&times;6 = 9.8 mm, use Z-10. R plane Z2. No obstructions, so G99. Feed 100 mm/min at S2000.</p>
@@ -178,7 +178,7 @@ M30</code></pre>
 <p><strong>1.</strong> After writing <code>G99 G81 R2. Z-15. F120.</code>, you write <code>X10. Y20.</code>. What happens?</p>
 <details><summary>Ans</summary><p>The machine rapidly positions to (10,20), rapid to R2, feeds to Z-15 at 120 mm/min, and retracts to R2 (G99). The R, Z, and F are inherited from the G81 line.</p></details>
 <p><strong>2.</strong> Why write G00 Z50 after G80?</p>
-<details><summary>Ans</summary><p>G80 cancels the cycle mode but does not move Z. The tool may still be at R2 or Z depth. An explicit G00 Z50 guarantees a safe height before the next operation.</p></details>
+<details><summary>Ans</summary><p>In this example G80 leaves the tool at R2, where the last hole completed. G80 does not move Z. The program then writes G00 Z50, a height verified for this setup; that is not a universal safe position.</p></details>
 <p><strong>3.</strong> Eight holes on a bolt circle at the same depth. How many G81 lines and how many X/Y lines?</p>
 <details><summary>Ans</summary><p>One G81 call line that includes the first hole coordinates, then 7 more X/Y lines for holes 2&ndash;8, then G80. The call itself drills hole 1; do not list hole 1 twice.</p></details>
 <p><strong>4.</strong> You need hole 1 at Z-10 and holes 2–4 at Z-20 in the same pattern. How do you do it?</p>
@@ -212,6 +212,12 @@ M30</code></pre>
 
 <h3>Common Setup Checks Before Running a Cycle</h3>
 <p>Confirm: H offset and G54 are calibrated; R plane clears the hole opening; the retract plane (R for G99, initial Z for G98) clears fixtures between holes; Z depth includes the 118&deg; drill tip and breakthrough; F matches G94 mm/min; spindle direction and RPM suit the tool. Dry-run the first hole at low feed override.</p>
+
+<h3>Normal Completion vs Interrupted Cycle</h3>
+<p>When the pattern finishes normally, every hole has completed its feed and retract, and the tool ends at R2 under G99. If the feed hold or an alarm stops the machine mid-hole, the tool may be at the bottom or mid-peck; do not assume the cycle is "done". Resume from a known state: confirm Z position, reset mode, and only then continue. The trace table above describes a clean run, not an interrupted one.</p>
+
+<h3>Why G98 Is Set on the Hole Before the Obstacle</h3>
+<p>If a clamp sits between hole 1 and hole 2, writing G98 on the hole 1 line means hole 1 finishes by retracting to the initial plane before any XY move toward hole 2. Setting G98 on hole 2 itself would be too late: the tool would already have to cross the obstacle at R2 height. The mode change applies from that block onward.</p>
 
 <h2>Sources</h2>
 <ul>

@@ -80,7 +80,8 @@
 <h2>Example</h2>
 <p><strong>Worked example:</strong> Stepped shaft. Start at &Oslash;50 raw. Finished: &Oslash;30 from Z0 to Z-20, then &Oslash;36 from Z-20 to Z-40. Rough at D1.0 (1 mm radial per pass), U0.4 diameter finish allowance, W0.1 Z allowance. Rough S1000 F0.2; finish S1500 F0.1.</p>
 <pre class="cp-code"><code>O0020 (G71/G70 EXAMPLE)
-G21 G97 G99
+G21 G18 G97 G99 G40
+G54
 T0101                    (OD turning tool)
 S1000 M03
 G00 X52. Z2.             (approach: above stock, off face)
@@ -109,10 +110,12 @@ M30</code></pre>
   <line x1="60" y1="140" x2="300" y2="140" stroke="#c0392b" stroke-width="2"/>
   <line x1="60" y1="132" x2="300" y2="132" stroke="#166534" stroke-width="2" stroke-dasharray="4,2"/>
   <line x1="200" y1="60" x2="200" y2="140" stroke="#c0392b" stroke-width="2"/>
-  <line x1="196" y1="60" x2="196" y2="140" stroke="#166534" stroke-width="2" stroke-dasharray="4,2"/>
+  <line x1="204" y1="60" x2="204" y2="140" stroke="#166534" stroke-width="2" stroke-dasharray="4,2"/>
+  <text x="210" y="70" font-size="9" fill="#166534">after-rough shoulder (Z-19.9)</text>
+  <text x="170" y="70" font-size="9" fill="#c0392b">finished shoulder (Z-20.0)</text>
   <text x="220" y="128" font-size="10" fill="#166534">after rough</text>
   <text x="220" y="148" font-size="10" fill="#c0392b">finished</text>
-  <text x="60" y="50" font-size="10" fill="#333">Zoom at shoulder: 0.2 mm radial, 0.1 mm axial (not to scale)</text>
+  <text x="60" y="50" font-size="10" fill="#333">Zoom at shoulder: +Z to the right; 0.2 radial, 0.1 axial (not to scale)</text>
 </svg>
 <figcaption>Magnified shoulder: red = finished contour, green dashed = after roughing. G70 removes the 0.2 mm radial and 0.1 mm axial stock.</figcaption>
 </figure>
@@ -183,6 +186,12 @@ M30</code></pre>
 
 <h3>Roughing vs Finishing Feed and Speed</h3>
 <p>Roughing favors depth over surface finish; finishing favors light cuts at higher speed. The same tool may run at S1000 F0.2 rough and S1500 F0.1 finish. These are classroom starting points; the insert manufacturer's data and the machine's rigidity determine the real values.</p>
+
+<h3>Why U0.4 Means 0.2 mm Radial</h3>
+<p>U is on diameter. On a turned part, diameter is twice the radius, so leaving 0.4 mm on diameter leaves 0.2 mm on each side radially. G70 takes that 0.2 mm radial light finish cut. W0.1 is axial: the shoulder at Z&minus;20 is left at Z&minus;19.9 after roughing, and the finish pass steps it to &minus;20.0. The allowance table shows these final positions; the internal step-down path is computed by the control.</p>
+
+<h3>Roughing Feed vs Finishing Feed</h3>
+<p>G71 uses the F on its own line for roughing (F0.2). G70 reads the feed from the contour blocks, where the example sets F0.1 on the G01 Z0 line. That is why the same contour can be rough-fed fast and finish-fed light without rewriting the geometry.</p>
 
 <h2>Sources</h2>
 <ul>

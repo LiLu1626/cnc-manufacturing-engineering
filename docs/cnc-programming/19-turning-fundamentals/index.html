@@ -59,7 +59,7 @@
 
 <h2>Why It Matters</h2>
 <p>Programming X as if it were radius is the #1 beginner mistake on lathes. If you write X20 thinking you want a 20 mm radius (40 mm diameter), the machine actually moves to a 20 mm diameter — cutting the part in half. Every X value is a diameter, and every radial depth of cut is half the X difference between two positions.</p>
-<p>Z direction is the second trap. On a mill, Z negative goes down into the part. On a lathe, Z negative goes along the part toward the chuck. Writing Z50 instead of Z&minus;50 moves the tool away from the part — no cut, or worse, a crash into the chuck.</p>
+<p>Z direction is the second trap. On a mill, Z negative goes down into the part. On a lathe, Z negative goes along the part toward the chuck. Writing Z50 instead of Z&minus;50 moves the tool away from the part — no cut, and the tool does not reach the expected position; verify the path before running.</p>
 
 <h2>How It Works</h2>
 
@@ -85,7 +85,7 @@
 
 <h3>Turret and Tool Selection</h3>
 <p>On a CNC lathe, tools are mounted on a turret that indexes directly to the next tool station. There is no automatic tool changer (M06) like on a mill. Instead, a <strong>T code</strong> both selects the tool and activates its offset. <code>T0101</code> means tool station 1, offset register 1. The first two digits select the turret position; the last two digits select the tool offset (geometry and wear).</p>
-<p>Common practice: T0101 = OD turning tool, T0202 = facing tool, T0303 = drill, T0404 = boring bar, T0505 = grooving/parting tool, T0606 = threading tool. The offset numbers must match the tool being used; T0102 would select tool 1 but apply offset 2, which is wrong.</p>
+<p>Common practice: T0101 = OD turning tool, T0202 = facing tool, T0303 = drill, T0404 = boring bar, T0505 = grooving/parting tool, T0606 = threading tool. The offset numbers must match the tool being used; T0102 selects tool 1 with offset register 2, which is correct only when that register has been calibrated and chosen intentionally.</p>
 
 <h3>Spindle Control on Lathes</h3>
 <p>Lathe spindles use <strong>G97 S</strong> (constant RPM) or <strong>G96 S</strong> (constant surface speed, CSS). Under G96, n = 1000 v<sub>c</sub> / (&pi;D): as diameter D shrinks, RPM rises. Example at v<sub>c</sub> = 100 m/min: at D = 50 mm, n = 636.6 RPM; at D = 25 mm, n = 1273.2 RPM. A G50 max-RPM clamp caps the spindle at a classroom limit (say 2000) so it does not over-speed near center. G97 holds a fixed RPM regardless of diameter; threading always uses G97. The main example on this page uses G97 for simplicity.</p>
@@ -114,7 +114,7 @@ G00 X47.                 (X clear first, outside stock)
 G00 Z2.                  (then Z back)
 (FINISH TURN TO O39.5)
 S1500
-G00 X40. Z2.
+G00 X39.5 Z2.
 G01 Z0 F0.1
 Z-50.                    (finish pass, 0.75 mm radial)
 G00 X50.                 (X out first)
@@ -186,7 +186,7 @@ M30</code></pre>
 <tr><td>G00 Z1 / X47</td><td>47</td><td>1</td><td>+Z off face, then X out</td></tr>
 <tr><td>G01 Z0 / X41 / Z-50</td><td>41</td><td>&minus;50</td><td>rough OD, 2 mm radial</td></tr>
 <tr><td>G00 X47 / Z2</td><td>47</td><td>2</td><td>X clear first, then Z back</td></tr>
-<tr><td>S1500 / G00 X40 Z2 / G01 Z0 / Z-50</td><td>39.5</td><td>&minus;50</td><td>finish OD, 0.75 mm radial</td></tr>
+<tr><td>S1500 / G00 X39.5 Z2 / G01 Z0 / Z-50</td><td>39.5</td><td>&minus;50</td><td>finish OD, 0.75 mm radial</td></tr>
 </table>
 
 <h3>Why X Is Diameter on a Lathe</h3>
@@ -194,6 +194,9 @@ M30</code></pre>
 
 <h3>Work Offset and Tool Offset Together</h3>
 <p>The machine only knows its own X/Z positions. G54 tells it where the part origin is; each T offset tells it where that tool's tip is. Both must be set, or coordinates land in the wrong place. When you change a tool, call the T that carries its geometry; when you change a setup, check G54 is the right one. The startup block sets known units and plane so neither offsets nor coordinates drift.</p>
+
+<h3>Axial Reach Is Not Tool Clearance</h3>
+<p>The jaw sits near Z&minus;65 and the cut ends at Z&minus;50, leaving about 15 mm axial distance. That number does not by itself prove the turret, tool holder, and tool post clear the chuck; the tool envelope must be checked on the machine. A 15 mm reach can still bind if the holder is long or the tool post is wide.</p>
 
 <h2>Sources</h2>
 <ul>
