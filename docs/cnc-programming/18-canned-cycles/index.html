@@ -210,6 +210,9 @@ M30</code></pre>
 <h3>When a New Tool Reuses the Same Holes</h3>
 <p>Drill, then tap, then countersink on the same X/Y positions. Each tool calls G80 at the end and re-establishes its own cycle with its own R, Z, F, and S. The coordinates can be kept in a subprogram and called three times, once per tool. Never carry a drill cycle's R2 into a tap cycle without restating it; the tap needs a different R clearance and feed.</p>
 
+<h3>Common Setup Checks Before Running a Cycle</h3>
+<p>Confirm: the tool length H is loaded; G54 XY origin matches the drawing; R is above any fixture by at least 1&ndash;2 mm; Z depth includes the drill tip; F matches G94 mm/min; spindle direction and RPM are correct for the tool. After G80, dry-run the first hole with feed override low before enabling full feed.</p>
+
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G80.html">Haas G80 Cancel Cycle</a>.</li>

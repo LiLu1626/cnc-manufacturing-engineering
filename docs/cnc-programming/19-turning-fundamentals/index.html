@@ -187,6 +187,9 @@ M30</code></pre>
 <h3>Why X Is Diameter on a Lathe</h3>
 <p>Programming X in diameter matches how a machinist measures a turned part with a caliper. If you move the tool 5 mm radially, the diameter changes by 10 mm, so writing X46 from X50 means a 2 mm depth of cut. This is a convention, not a physical law; some controls can switch to radius programming, but diameter is the default on Haas.</p>
 
+<h3>Work Offset and Tool Offset Together</h3>
+<p>The machine only knows its own X/Z positions. G54 tells it where the part origin is; each T offset tells it where that tool's tip is. Both must be set, or coordinates land in the wrong place. When you change a tool, call the T that carries its geometry; when you change a setup, check G54 is the right one. The startup block sets known units and plane so neither offsets nor coordinates drift.</p>
+
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G97.html">Haas G97 Constant RPM</a>.</li>

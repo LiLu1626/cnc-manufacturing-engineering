@@ -167,6 +167,26 @@ M30</code></pre>
 <h3>Reading the First-Part Result</h3>
 <p>After G70, measure with calipers or micrometer. If the diameter is 39.6 instead of 39.5, the tool's X wear offset increases by 0.1 on diameter for the next part. If the shoulder is at Z&minus;19.8 instead of &minus;20.0, adjust Z wear by &minus;0.2. Material already removed cannot be put back; corrections apply to subsequent parts and are held only while the error is stable.</p>
 
+<h3>Reading a G71 Alarm on the First Block</h3>
+<p>Common causes: the P block starts with a move that reverses X inside Type I, the Z direction changes along the contour, or the tool starts inside the finished profile instead of above the stock. Walk through N10&rarr;N20 block by block and compare against the part. Do not increase D to "force" the cycle through; that hides a geometry error.</p>
+
+<h3>Roughing vs Finishing Feed and Speed</h3>
+<p>Roughing favors depth over surface finish; finishing favors light cuts at higher speed. The same tool may run at S1000 F0.2 rough and S1500 F0.1 finish. These are classroom starting points; the insert manufacturer's data and the machine's rigidity determine the real values.</p>
+
+<h3>Program Template</h3>
+<pre class="cp-code"><code>G21 G18 G97 G99 G40
+T0101 M03 S1000
+G00 X52. Z2.
+G71 P10 Q20 D1.0 U0.4 W0.1 F0.2
+N10 G00 X30.
+G01 Z0 F0.1
+X36. Z-20.
+Z-40.
+N20 X52.
+G70 P10 Q20
+G00 X100. Z100.
+M30</code></pre>
+
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G71.html">Haas G71 Stock Removal in Turning</a>.</li>
