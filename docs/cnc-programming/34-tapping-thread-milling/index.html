@@ -116,7 +116,7 @@ T02 M06                 (O8.5 DRILL)
 S1500 M03
 G00 X10. Y10.
 G43 H02 Z50. M08
-G83 R2. Z-23.55. Q3. F120. (G98 retract to initial plane)
+G98 G83 R2. Z-23.55 Q3. F120.
 G80
 G00 Z50. M09
 T03 M06                 (M10x1.5 TAP)
