@@ -188,7 +188,7 @@ M30</code></pre>
 <p>A standard hand tap set has taper, plug, and bottoming chamfers. A machine spiral-flute or spiral-point tap is designed for the through or blind hole type. Match the tap style to the hole, not just the thread size.</p>
 
 <h3>Left-Hand Threads</h3>
-<p>A left-hand thread uses M04 on the way in and M03 on the way out. The cycle reversal direction flips, but F = pitch &times; S still holds. Confirm spindle orientation with the drawing before running the batch of parts carefully.</p>
+<p>On a Haas mill, left-hand rigid tapping uses G74 reverse tapping, not swapping M03/M04 in front of G84. G84 and G74 manage their own spindle direction. F = pitch &times; S under G94 still holds; for a left-hand hole, program G74 at the same XY with the same F. Confirm direction against the drawing.</p>
 
 <h3>When to Use a Tap Chuck with Tension and Compression</h3>
 <p>Even rigid tapping benefits from a floating holder on small or deep holes. It absorbs minor length mismatch between programmed Z and actual spindle position. The holder does not remove the need for correct F.</p>
