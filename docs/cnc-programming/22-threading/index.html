@@ -161,6 +161,15 @@ Z3.
 <h3>Multi-Start Phase Shift</h3>
 <p>For a double-start thread, F becomes the lead (3.0 mm/rev for P1.5). The second helix starts one pitch around the circumference, which means an axial or angular shift. How the controller sets that starting phase depends on the control; consult the manual rather than assuming the cycle shifts automatically.</p>
 
+<h3>G76 Parameters in Detail</h3>
+<p>X is the final minor diameter in diameter mode. Z is the thread end. K is the radial thread height from the crest to the root of the truncated profile. D is the first-pass radial depth, chosen as a classroom assumption. F is the lead. The controller computes successive passes with decreasing engagement until X is reached. Do not confuse K (total depth) with D (first pass); they are separate numbers.</p>
+
+<h3>Why G97 and Not G96</h3>
+<p>Threading needs predictable spindle angle. Constant surface speed changes RPM as the tool moves in X, which would change the lead during the cut. G97 holds a fixed RPM so the synchronous Z feed stays locked to pitch. On this Haas teaching example, G97 S500 is set before G76.</p>
+
+<h3>Thread Inspection beyond the Minor Diameter</h3>
+<p>A thread gauge checks functional fit. The GO ring should assemble under hand force; NO-GO acceptance follows the drawing's gauge rule. Measuring the minor diameter with a caliper or micrometer does not replace the gauge, because pitch diameter and flank condition matter. Once a thread is overcut, material cannot be restored.</p>
+
 <h2>Sources</h2>
 <ul>
 <li>Hexagon Infoletter No. 37, "SR1 – Thread up to M160": h3 = 0.61343 P for metric DIN external thread design geometry. <a href="https://www.hexagon.de/info37_e.htm" target="_blank" rel="noopener">hexagon.de/info37_e.htm</a>, retrieved 2026-09-24.</li>

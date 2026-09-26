@@ -128,6 +128,18 @@ G00 X42.</code></pre>
 <p><strong>4.</strong> At S800 F0.05, material cutting distance on O40&rarr;O1 is 19.5 mm radius. What is the cutting time?</p>
 <details><summary>Ans</summary><p>Feed = 40 mm/min; 19.5/40 = 0.49 min = 29.25 s. Air travel above O40 is counted separately.</p></details>
 
+<h3>Tool Reference Edge and the Two Z Sides of a Groove</h3>
+<p>A 2 mm blade has two side edges. When you touch off on the front edge, that edge sits at the programmed Z. The back edge is 2 mm away in Z. If the drawing calls for a groove centered at Z&minus;20 with width 2 mm, the front edge goes to Z&minus;19 and the back edge lands at Z&minus;21; if instead the groove starts at Z&minus;20, the front edge goes there. State which edge is referenced so the groove lands on the drawing, not half a tool-width off.</p>
+
+<h3>Multiple Passes for Wide Grooves</h3>
+<p>A 6 mm wide groove cut with a 2 mm blade needs three Z positions. At each position, feed to the groove depth, retract radially to a verified clearance above the bar, then index Z by about the blade width minus a small overlap. Sliding sideways at full depth is a side-turning operation that requires a capable insert and holder; do not assume every groove tool can do it.</p>
+
+<h3>Constant Surface Speed on Grooving and Parting</h3>
+<p>As the tool approaches center on a parting cut, diameter shrinks. Under constant surface speed the spindle would rise toward the center, which is unsafe and unnecessary; parting and grooving usually use G97 with a capped RPM. The exact speed follows the insert manufacturer's data for the material.</p>
+
+<h3>Boring Bar Envelope and Retract</h3>
+<p>When the boring bar reaches the bore bottom, the tool tip must retract inward enough that the holder and shank clear the bore wall as Z withdraws. That inward amount is not the same as the roughing infeed; it is set by bar shank size and hole diameter. Program it explicitly, then verify on the machine.</p>
+
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G04.html">Haas G04 Dwell</a>.</li>
