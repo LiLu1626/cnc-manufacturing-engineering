@@ -152,6 +152,12 @@ G00 X42.</code></pre>
 <h3>Boring Boring Cycles</h3>
 <p>On lathes with boring canned cycles, the cycle handles approach, cut, inward retract, and withdraw automatically. The programmer must still supply the bore depth, the final diameter, and the inward retract amount. Hand-coded G01 boring is fine for one or two passes; cycles help when the bore has multiple steps.</p>
 
+<h3>Why Boring Deflects More Than OD Turning</h3>
+<p>The boring bar reaches from one side of the hole; the overhang is inside the part, and chips must travel back along the bar. Deflection grows as the bar reaches deeper. That is why finishing passes use light infeed and short bar extension, and why surface finish often worsens as bore depth grows.</p>
+
+<h3>Program a First-Part Dry Run</h3>
+<p>For a new groove or parting Z, dry-run the X and Z moves at machine lock or at low feed before the first cut. Watch that the blade clears the chuck and that the finished part drops clear. A parted part that jams against the chuck can be worse than a tool break.</p>
+
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G04.html">Haas G04 Dwell</a>.</li>

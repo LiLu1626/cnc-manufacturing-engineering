@@ -172,6 +172,15 @@ M30</code></pre>
 <h3>Program Safety Around Tapping</h3>
 <p>Do not start the next XY move while the tap is still in the hole. G80 cancels the cycle; after cancellation, retract Z explicitly to a safe plane before tool change. Coolant and spindle stop follow the same order.</p>
 
+<h3>Thread Depth and Engagement</h3>
+<p>Engagement length in steel threads is often 1 to 1.5 times the nominal diameter for steel, longer for aluminum. The example's 15 mm full thread is chosen as a classroom value; real depth follows the drawing and material.</p>
+
+<h3>Why Rigid Tapping Needs a Tuned Spindle</h3>
+<p>G84 assumes the spindle accelerates, reverses, and decelerates in sync with Z. On an older or uncalibrated machine, a tension-compression tap holder absorbs small error. The F = pitch &times; S rule still applies; the holder only cushions mis-sync.</p>
+
+<h3>Coolant in Tapping</h3>
+<p>Tapping in blind holes traps chips and heat. Use tapping fluid or through-coolant when possible. Dry tapping in stainless or titanium quickly wears the tap.</p>
+
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G84.html">Haas G84 Rigid Tapping</a>.</li>
