@@ -148,6 +148,18 @@ M30</code></pre>
 <p><strong>4.</strong> Why is R5 used for tapping instead of R2?</p>
 <details><summary>Ans</summary><p>The tap needs a longer approach and retract distance because it must reach synchronized RPM before engaging the work, and it needs room to reverse and back out. R5 provides that clearance.</p></details>
 
+<h3>Pre-Drill and Spot Drill</h3>
+<p>Before the O8.5 drill, a spot drill or center drill starts the hole on surface so the drill does not walk. That start hole is separate from the tap drill and not counted in the thread depth chain.</p>
+
+<h3>When to Ream Before Tapping</h3>
+<p>High-precision tapped holes sometimes ream the tap drill first to control diameter and finish. The reamed diameter feeds back into the thread-engagement calculation; do not assume the rough drill diameter governs.</p>
+
+<h3>Tapping Torque and Machine Limits</h3>
+<p>Large taps need spindle torque; small machines may stall. Rigid tapping depends on encoder feedback and a tuned spindle. A tapping head or tension-compression holder can absorb minor sync error but does not change the F = pitch &times; S rule.</p>
+
+<h3>Inspection After Tapping</h3>
+<p>GO plug gauge should enter by hand; NO-GO acceptance follows the drawing. Chips left in the hole can falsely reject a good thread, so clean the hole before gauging. Do not force the plug gauge.</p>
+
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G84.html">Haas G84 Rigid Tapping</a>.</li>

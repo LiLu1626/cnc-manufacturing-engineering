@@ -140,6 +140,12 @@ G00 X42.</code></pre>
 <h3>Boring Bar Envelope and Retract</h3>
 <p>When the boring bar reaches the bore bottom, the tool tip must retract inward enough that the holder and shank clear the bore wall as Z withdraws. That inward amount is not the same as the roughing infeed; it is set by bar shank size and hole diameter. Program it explicitly, then verify on the machine.</p>
 
+<h3>Coolant and Chip Evacuation in Grooving</h3>
+<p>Groove chips are short and congested. A steady, directed coolant wash helps break and flush them. Dry grooving or weak coolant invites built-up edge and a rubbing floor. Use the holder's coolant feed near the insert when available.</p>
+
+<h3>Setup Checks Before First Groove</h3>
+<p>Touch off the correct reference edge; confirm the tool does not hit the chuck or jaw when Z moves; set the parting position so the finished part clears the catcher; dry-run at low feed around the groove and parting Z. First groove should be a slow pass so any clearance issue shows before full depth.</p>
+
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G04.html">Haas G04 Dwell</a>.</li>
