@@ -190,6 +190,12 @@ M30</code></pre>
 <h3>When to Use a Tap Chuck with Tension and Compression</h3>
 <p>Even rigid tapping benefits from a floating holder on small or deep holes. It absorbs minor length mismatch between programmed Z and actual spindle position. The holder does not remove the need for correct F.</p>
 
+<h3>Program Order for Drill then Tap</h3>
+<p>Drilling first removes bulk chips; tapping follows with the same XY position. Work coordinate, tool length offsets, and R plane are set per tool. Use G80 and retract Z between tools.</p>
+
+<h3>When a Tap Breaks</h3>
+<p>A broken tap in a blind hole is costly. EDM tap extraction, careful manual removal, and part scrap are the options. Prevention: correct starting hole, correct F, correct speed, good chips, and good coolant.</p>
+
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G84.html">Haas G84 Rigid Tapping</a>.</li>
