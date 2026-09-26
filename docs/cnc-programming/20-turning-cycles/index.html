@@ -193,6 +193,9 @@ M30</code></pre>
 <h3>Roughing Feed vs Finishing Feed</h3>
 <p>G71 uses the F on its own line for roughing (F0.2). G70 reads the feed from the contour blocks, where the example sets F0.1 on the G01 Z0 line. That is why the same contour can be rough-fed fast and finish-fed light without rewriting the geometry.</p>
 
+<h3>Checking Diameter Allowance and Shoulder Allowance Separately</h3>
+<p>After roughing, the two diameters are O30.4 and O36.4 (each 0.2 mm radial over finished), and the shoulder sits at Z&minus;19.9 instead of &minus;20.0. Measure each independently: a diameter error belongs in X wear, a shoulder error in Z wear. P/Q describes the finished contour that G70 follows; it is not a record of every rough pass the control took.</p>
+
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G71.html">Haas G71 Stock Removal in Turning</a>.</li>

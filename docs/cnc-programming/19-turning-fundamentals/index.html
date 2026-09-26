@@ -93,16 +93,13 @@
 <h2>Example</h2>
 <p><strong>Worked example (classroom assumptions):</strong> &Oslash;45 raw bar in a chuck, front jaw face at roughly Z&minus;65, projecting past the tool clearance needed to reach Z&minus;50. Operations: (1) face the front, (2) rough turn OD &Oslash;45&rarr;&Oslash;41 over Z0&rarr;Z&minus;50, (3) finish to &Oslash;39.5. Z0 on the front face after facing. Rough S1000 F0.2 mm/rev (2 mm radial); finish S1500 F0.1 (0.75 mm radial). This is a teaching program, not a full setup sheet; confirm jaw position, bar projection, and tool envelope on the machine.</p>
 <pre class="cp-code"><code>O0019 (TURNING FUNDAMENTALS EXAMPLE)
-G21 G97 G99
-T0101                    (OD turning tool)
-S1000 M03
 G21 G18 G97 G99 G40      (known state: mm, XZ plane, RPM, feed/rev, no comp)
 G54                       (work offset already calibrated)
 T0101 M03 S1000           (OD tool, forward rotation confirmed)
 G00 X47. Z2.             (approach: X outside stock, Z off face)
 (FACE)
 G01 Z0 F0.2
-X-1.0 F0.15              (feed past center; assumes calibrated tool height)
+X-1.0 F0.15              (feed past center; endpoint assumes insert geometry, center height, and allowed travel are confirmed)
 G00 Z1.                  (+Z off face first, one axis)
 G00 X47.                 (then X outward to verified clearance)
 (ROUGH TURN O45 TO O41, Z-50)
@@ -197,6 +194,12 @@ M30</code></pre>
 
 <h3>Axial Reach Is Not Tool Clearance</h3>
 <p>The jaw sits near Z&minus;65 and the cut ends at Z&minus;50, leaving about 15 mm axial distance. That number does not by itself prove the turret, tool holder, and tool post clear the chuck; the tool envelope must be checked on the machine. A 15 mm reach can still bind if the holder is long or the tool post is wide.</p>
+
+<h3>First-Part Check and Offset Correlation</h3>
+<p>After the first rough and finish passes, stop and measure the turned diameter and shoulder length with calipers or a micrometer. If the rough cut is closer to O41 than expected, check the program and the bar size; the rough pass itself should be 2 mm radial. If the finish diameter lands at 39.4 rather than 39.5, the next part's X wear offset takes up the 0.1. If the shoulder length is off, adjust Z wear. These corrections belong to the tool offset and work offset, not to the geometry numbers in the program.</p>
+
+<h3>Two Radial Depths, Two Feeds</h3>
+<p>The rough step removes 2 mm radial from O45 to O41 at F0.2; the finish step removes 0.75 mm radial to O39.5 at F0.1. The smaller finish depth pairs with higher spindle speed and lighter feed for surface finish. The tool tip coordinates describe the programmed path; the holder, turret, and chuck envelope are separate clearance checks that must be made on the machine.</p>
 
 <h2>Sources</h2>
 <ul>

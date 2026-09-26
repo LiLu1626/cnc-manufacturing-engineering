@@ -171,7 +171,7 @@ M30</code></pre>
 <li><strong>Thinking G80 retracts to Z50</strong> — G80 only cancels the cycle mode. The tool stays at its current Z. Write G00 Z50 explicitly.</li>
 <li><strong>Changing R or Z without re-commanding</strong> — R and Z are stored from the cycle line. If you forget to re-specify Z for a deeper hole, it drills to the old depth.</li>
 <li><strong>G99 around a boss or clamp</strong> — retracting only to R2 between holes can hit a raised feature. Use G98 when there is any obstacle.</li>
-<li><strong>No G80 between tools</strong> — if the cycle is still active when you call the next tool, the first move of the new tool becomes a drill.</li>
+<li><strong>Leaving cycle state implicit between tools</strong> — explicitly cancel the drilling cycle with G80 before changing tools. On the Haas mill used here, bare X/Y blocks can repeat an active drilling cycle, while an explicit G00 or G01 cancels it. Do not assume that every first move after a tool change must drill; establish the intended state and verify the next tool's approach.</li>
 </ul>
 
 <h2>Practice</h2>
