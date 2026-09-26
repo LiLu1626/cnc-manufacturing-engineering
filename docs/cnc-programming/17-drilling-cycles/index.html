@@ -35,7 +35,7 @@
 
 <h2>Why It Matters</h2>
 <p>Without canned cycles, drilling a 16-hole pattern means writing 80+ blocks of code. With G83, you write one cycle line and 16 X/Y positions. More importantly, canned cycles enforce a consistent, repeatable motion: the R plane, feed rate, and retract height are the same for every hole, which prevents human error on repeated operations.</p>
-<p>Choosing the wrong cycle has real consequences. Drilling a deep hole with G81 (no pecking) packs chips into the flutes, overheats the drill, and can snap it. Drilling around a fixture boss with G99 (retract to R plane) crashes the tool into the boss. Forgetting G80 turns the next G00 XY move into an unintended drill. Each parameter exists for a reason.</p>
+<p>Choosing the wrong cycle has real consequences. Drilling a deep hole with G81 (no pecking) packs chips into the flutes, overheats the drill, and can snap it. Drilling around a fixture boss with G99 (retract to R plane) risks a collision with the boss. Always end a hole pattern with G80 to make the cycle stop explicitly.</p>
 
 <h2>How It Works</h2>
 
@@ -86,14 +86,14 @@
 <p>G81 is the basic drill cycle: rapid to R, feed to Z, rapid retract. No dwell at the bottom. Use it for through-holes in thin-to-medium plate, spot centering, and any hole where the drill does not need time at the bottom. It is the fastest drilling cycle but does not clean up the hole bottom.</p>
 
 <h3>G82 — Drilling with Dwell</h3>
-<p>G82 adds a dwell (pause) at the bottom of the hole before retracting. The dwell time is set with P (in milliseconds on Haas). The dwell lets the drill finish cutting a flat bottom, which matters for spot facing, counterboring, and holes that will accept a bolt head or washer. Without dwell, the drill point leaves a slight cone at the bottom. Typical dwell: P200–P500 (0.2–0.5 seconds).</p>
+<p>G82 adds a dwell (pause) at the bottom of the hole before retracting. The dwell time is set with P. A dwell does not change the drill geometry: a pointed twist drill still leaves a conical bottom. The dwell improves surface finish and size consistency at the bottom and helps on counterboring, but a flat bottom requires a flat-bottom drill or a spot-facing/ counterboring tool. Typical dwell: P0.2&ndash;P0.5 seconds (decimal seconds on Haas; confirm the control's P convention).</p>
 
 <h3>G83 — Peck Drilling (Chip Breaking)</h3>
 <p>G83 is for deep holes (depth &gt; 3&times; drill diameter). Instead of feeding all the way to depth in one motion, the drill feeds in increments of Q, retracts fully to break and clear chips, then re-approaches and feeds the next Q increment. Each peck lifts chips out of the hole so they do not pack in the flutes. Q is typically 1–3 mm per peck for steel, larger for aluminum.</p>
 <p><strong>Example:</strong> G83 R2. Z-30. Q3. F100. means: feed 3 mm, retract to R, feed 3 mm deeper, retract, repeat until reaching Z-30. This keeps chips clear and prevents drill breakage in deep holes.</p>
 
 <h3>G85 — Boring</h3>
-<p>G85 bores a hole: feed in to Z depth, then feed back out at the same feed rate. Unlike drilling (which retracts at rapid), G85's controlled feed-out produces a smoother bore surface. Use it with a boring bar or reamer. The bore diameter is controlled by the boring bar's offset, not by the tool size.</p>
+<p>G85 bores or reams a hole: feed in to Z depth, then feed back out at the same feed rate. Unlike drilling (which retracts at rapid), G85's controlled feed-out produces a smoother bore surface. For a boring bar, the bore diameter is set by the bar's radial screw adjustment; for a reamer, by the reamer's effective diameter and the cutting conditions.</p>
 
 <h3>Drill Point Compensation</h3>
 <p>A standard twist drill has a conical tip. The full cutting edge reaches diameter D only at the outer corners; the center point extends beyond by approximately 0.3&times;D. For a through-hole, the drill must break through the back surface by this tip length or the hole will have an uncut nub in the center. For a 10 mm drill, add about 3 mm of breakthrough. For a 12 mm plate: Z depth = 12 + 3 = 15 mm (Z-15).</p>
@@ -116,23 +116,25 @@
 </figure>
 
 <h2>Example</h2>
-<p><strong>Worked example:</strong> Two &Oslash;8 mm through-holes in a 10 mm aluminum plate. Hole 1 at X10 Y10, Hole 2 at X50 Y30. R plane = Z2. Through-hole depth = 10 + 0.3&times;8 = 12.4 mm, round to Z-12.5. Peck drilling Q2. No obstructions between holes, so G99 retract to R plane saves time.</p>
+<p><strong>Worked example:</strong> Two &Oslash;8 mm through-holes in a 10 mm aluminum plate. Hole 1 at X10 Y10, Hole 2 at X50 Y30. R plane = Z2. With a 118&deg; drill, tip length h &asymp; 0.3004 &times; 8 = 2.4 mm; program Z depth to break through by at least this, plus a small allowance, e.g. Z-12.5. Peck drilling Q2. No obstructions between holes, so G99 retract to R plane saves time.</p>
 <pre class="cp-code"><code>O0017 (DRILLING CYCLE EXAMPLE)
-G21 G17 G90 G40 G80
+G21 G17 G90 G94 G40 G80
 G54
 T01 M06                 (&Oslash;8 HSS DRILL)
 S1500 M03
-G00 X10. Y10.
-G43 H01 Z50. M08
+G00 G43 H01 Z50. M08   (safe Z first, with tool length)
+X10. Y10.               (then XY to hole 1)
 G99 G83 R2. Z-12.5 Q2. F120.   (first hole, retract to R)
 X50. Y30.                      (second hole, same cycle)
 G80
-G00 Z50. M09
+G00 Z50.
+M09
+M05
 M30</code></pre>
-<p><strong>What happens line by line:</strong> After G83, the machine moves to (10,10), rapid to Z2, feeds down in 2 mm pecks to Z-12.5, retracts to R2 (G99). Then it moves XY to (50,30) — staying at R2 — and repeats the peck cycle. G80 cancels the cycle. G00 Z50 lifts to safe height. The program uses G99 because there are no clamps between the two holes; if a boss sat between them, G98 would be required.</p>
+<p><strong>What happens line by line:</strong> after tool change, the machine goes to safe Z50 with H01 before XY moves. Then it moves to (10,10), rapid to Z2, feeds down in 2 mm pecks to Z-12.5, retracts to R2 (G99). Then XY to (50,30) at R2 and repeats. G80 cancels. Z50 retract, then coolant off and spindle off. The program uses G99 because there are no clamps between the holes; if a boss sat between them, G98 would be required. R2 and the initial plane Z50 are validated against the actual setup before running.</p>
 
 <h3>G84 — Tapping</h3>
-<p>G84 is the tapping cycle: the spindle feeds down at the tapped RPM, reverses at the bottom, and feeds back up at the same speed. The feed is determined by spindle speed &times; pitch, so the controller synchronizes spindle rotation and Z motion. On Haas mills, G94 mm/min feed is set automatically by the cycle for G84. Never override feed or speed mid-tap. Use G84 only with a floating tap holder or a rigid tapping-capable spindle.</p>
+<p>G84 is the tapping cycle: the spindle feeds down at the tapped RPM, reverses at the bottom, and feeds back up. Feed in mm/min equals spindle speed &times; pitch. For a classroom example: S500 RPM, pitch 1.25 mm, F = 500 &times; 1.25 = 625 mm/min. The return feed may be governed by a control setting and is not always identical to the down-feed. Use G84 only with a rigid-tapping spindle or a compensated tap holder. This program explicitly sets G21/G94; do not assume the cycle sets feed mode for you.</p>
 
 <h3>G73 vs G83: Chip Break vs Full Retract</h3>
 <p>G73 is a high-speed peck cycle: it feeds in Q increments but retracts only a small amount (a few mm) between pecks, not all the way to R. This saves time for chips that break easily (short-chipping materials like cast iron). G83 retracts fully to R after every peck, clearing chips completely. For long-chipping steel, use G83; for cast iron or aluminum, G73 may be faster. When in doubt, G83 is the safe choice.</p>
@@ -147,40 +149,46 @@ M30</code></pre>
 <p>Drilling generates heat and chips. Flood coolant through the spindle (or through the tool for deep holes) pushes chips out the flutes. In deep-hole pecking, the retract lets chips fall into the flutes and coolant flush them out. Without coolant, the drill tip temperature climbs rapidly and wear accelerates. M08 must be on before the cycle; M09 after G80.</p>
 
 <h3>Through-Hole vs Blind-Hole Depth</h3>
-<p>For a through-hole, add 0.3&times;D for drill breakthrough. For a blind hole, program Z depth to the full-diameter point, not including the conical tip &mdash; unless the print requires the full depth to the tip. Measure depth from the top surface Z0; remember work offset Z is set at the part top.</p>
+<p>A twist drill's conical tip extends past the full-diameter cutting edge by h = (D/2) / tan(&alpha;/2), where &alpha; is the included point angle. For a 118&deg; general-purpose drill, h &asymp; 0.3004 D; for a 135&deg; drill, h &asymp; 0.2071 D. The 0.3D rule is a 118&deg; approximation, not a universal constant. For a through-hole, the tip must break through the back by at least h plus a deliberate breakthrough allowance, and the area below the part must clear chips. For a blind hole, if the wear offsets are set from the drill point, Z is the tip position; if the drawing requires a specified full-diameter depth, subtract h from that depth to find the Z the tip reaches. A through-hole that is too shallow leaves the uncut cone protruding; the common exit problem is that the full-diameter edge never breaks through, not that the center nubs out.</p>
 
 <h3>Spot Drilling vs Center Drilling</h3>
-<p>Before drilling, a spot drill or center drill creates a small cone that guides the twist drill and prevents it from wandering. Use G82 with a dwell for spot facing: the dwell flattens the bottom. A spot drill has a 90&deg; or 120&deg; included angle; match it to the drill point angle so the guide cone supports the drill corners. Skipping spot drilling on precision holes causes drift and mislocation.</p>
+<p>Before drilling, a spot drill or center drill creates a small cone that guides the twist drill and reduces wander. A spot drill has a set included angle (90&deg; or 120&deg;); match it to the drill point angle so the guide cone supports the drill corners. A dwell in G82 does not turn a pointed drill into a flat-bottom tool &mdash; flat bottom comes from a spot-facing or counterboring cutter. Whether to spot-drill before a precision hole depends on the drill manufacturer's recommendation, not a universal rule.</p>
 
 <h3>Cycle Modal State and G80</h3>
-<p>Once a cycle is called, it stays modal until G80. Any XY move (even one not intended as a hole) will trigger the cycle. This is why the startup block includes G80, and why every hole pattern ends with G80. If you need to move the tool between holes without drilling, cancel the cycle first.</p>
+<p>Once a cycle is called, it stays modal. A bare position block like <code>X50. Y30.</code> repeats the cycle at the new X/Y. On Haas, an explicit <code>G00 X50. Y30.</code> cancels the cycle and moves at rapid. The safest practice is still to write <code>G80</code> explicitly after the hole pattern, so the cycle stop does not depend on which G-code happens to appear on the next line.</p>
 
 <h3>Drill Size and Surface Speed</h3>
 <p>Drilling RPM follows the same surface speed rule as milling: n = 1000&times;vc / (&pi;&times;D). A &Oslash;10 drill in aluminum at vc = 100 m/min runs at about 3180 RPM. Feed per revolution fz = 0.1–0.2 mm/rev in steel, higher in aluminum. The cycle's F is mm/min = n &times; fz. These are classroom assumptions; match your tooling chart.</p>
 
 <h3>Verification Before Running the Cycle</h3>
-<p>After writing the hole pattern, dry-run in single block with Z at a safe height: confirm each X/Y position, confirm R plane clearance, confirm G80 at the end. On the first hole, use feed hold at R and visually check position before letting the drill go down. Never assume the pattern is correct just because the numbers look neat.</p>
+<p>After writing the hole pattern, verify on the controller's graphics or single-block run: confirm each X/Y position, confirm R plane clearance, confirm G80 at the end. The exact single-block behavior at R depends on the control; check it on your machine rather than assuming a universal pause. Never assume the pattern is correct just because the numbers look neat.</p>
 
-<p>After writing the hole pattern, dry-run in single block with Z at a safe height: confirm each X/Y position, confirm R plane clearance, confirm G80 at the end. On the first hole, use feed hold at R and visually check position before letting the drill go down. Never assume the pattern is correct just because the numbers look neat.</p>
-
+<h2>Common Mistakes</h2>
 <ul>
-<li><strong>Forgetting G80</strong> — the cycle stays modal. The next G00 X move will drill at that position. Always write G80 after the hole pattern.</li>
-<li><strong>Setting R too low</strong> — R0.5 leaves no clearance for chips or clamps. Use R2–3 mm minimum.</li>
-<li><strong>G99 around a fixture</strong> — retracting only to R2 between holes crashes into clamps. Use G98 when there is any obstacle between holes.</li>
-<li><strong>Ignoring drill point geometry</strong> — through-holes that are too shallow leave a nub. Add 0.3&times;D.</li>
-<li><strong>Using G81 for deep holes</strong> — chips pack and the drill snaps. Use G83 for depth &gt; 3&times;D.</li>
+<li><strong>Forgetting G80</strong> — the cycle stays modal; a bare X/Y repeats the drill. Write G80 explicitly after the hole pattern even though G00 also cancels on Haas.</li>
+<li><strong>Setting R too low</strong> — R0.5 leaves no clearance for chips or clamps. Use R2–3 mm above the top surface and verify XY clearance.</li>
+<li><strong>G99 around a fixture</strong> — retracting only to R2 between holes may hit clamps. Use G98 when there is any obstacle between holes.</li>
+<li><strong>Ignoring drill point geometry</strong> — through-holes must let the full-diameter edge break through; use h = (D/2)/tan(&alpha;/2) for the actual point angle.</li>
+<li><strong>Using G81 for deep holes</strong> — chips pack and the drill snaps. Use G83 for depth &gt; 3&times;D; match Q to the tool maker's chip-clearance guidance.</li>
 <li><strong>No coolant</strong> — M08 should be on before the cycle; drilling without coolant in steel overheats the tip.</li>
 </ul>
 
 <h2>Practice</h2>
-<p><strong>1.</strong> Through-hole in 15 mm plate, &Oslash;12 drill. What Z depth?</p>
-<details><summary>Ans</summary><p>15 + 0.3&times;12 = 15 + 3.6 = 18.6 mm. Program Z-18.6 from top surface. Round to Z-18.5 or Z-19 depending on tolerance.</p></details>
+<p><strong>1.</strong> Through-hole in 15 mm plate, &Oslash;12 drill, 118&deg; point. What Z depth?</p>
+<details><summary>Ans</summary><p>Tip length h = (12/2)/tan(59&deg;) = 6/1.664 = 3.61 mm. Program tip to at least Z-(15+3.61)=Z-18.61, plus a deliberate breakthrough allowance and check the clearance below the part. Do not round shallower.</p></details>
 <p><strong>2.</strong> When do you use G83 instead of G81?</p>
 <details><summary>Ans</summary><p>For holes deeper than about 3&times;D, where chips pack in the flutes. G83 pecks in Q increments and retracts to clear chips, preventing drill breakage and overheating.</p></details>
 <p><strong>3.</strong> What is the difference between G98 and G99?</p>
 <details><summary>Ans</summary><p>G98 retracts to the initial Z plane (the height before the cycle was called). G99 retracts only to the R plane. G99 is faster for flat patterns; G98 is safer around fixtures.</p></details>
 <p><strong>4.</strong> Write a G82 line for a spot face that dwells 0.5 seconds at Z-2, R2, F100.</p>
-<details><summary>Ans</summary><p>G82 R2. Z-2. P500 F100. (P500 = 500 ms = 0.5 seconds on Haas.)</p></details>
+<details><summary>Ans</summary><p>G82 R2. Z-2. P0.5 F100. (P0.5 = 0.5 seconds; confirm the control's P decimal convention. A dwell does not flatten a pointed drill bottom.)</p></details>
+
+<h2>Sources</h2>
+<ul>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G80.html">Haas G80 Canned Cycle Cancel</a>.</li>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G82.html">Haas G82 Drilling Cycle with Dwell</a>.</li>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G84.html">Haas G84 Tapping Cycle</a>.</li>
+</ul>
 
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/33-milling-strategies/">&larr; Milling Strategies</a><a href="/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/">Canned Cycles &rarr;</a></nav>
 </main>
