@@ -124,6 +124,13 @@ G01 G40 X-10. Y-10.        (lead-out, comp off)</code></pre>
 <h3>First-Article Compensation Check</h3>
 <p>On the first part, leave 0.1 mm finish stock by setting D 0.1 mm smaller than nominal. Cut the profile, measure, then adjust D to bring the dimension on size. This avoids cutting oversize on the first try. Once size is dialed in, leave D at the wear value for the run.</p>
 
+<h3>Compensation and Tool Nose Radius on Lathes</h3>
+<p>On a CNC lathe, the tool has a rounded insert corner. Cutter compensation uses the nose radius plus an orientation number that tells the controller where the virtual tip sits. Without orientation, the controller cannot offset the tool correctly on tapered or radiused turns. This is why turning programs specify T offsets with nose radius and geometry; the same G41/G42 principle applies but with an extra parameter.</p>
+
+<h3>Common Overcut Failure</h3>
+<p>The most common compensation error is a 0.5 mm step at the first contour edge: the tool did not have enough straight lead-in to ramp the offset. The fix is to extend the lead-in line until the tool reaches full offset before touching the part. If the part is too small for a long lead-in, use a diagonal lead-in or accept a witness mark and polish it out. Never engage compensation directly on a corner.</p>
+
+
 
 
 
