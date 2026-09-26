@@ -190,7 +190,10 @@ G03 I-25. J0 Z-5.   (helical: circle in XY while descending Z from 0 to -5)</cod
 <p>When verifying arcs on the controller's graphics, compare the displayed center, start point, and end point against your hand sketch before running feed.</p>
 
 <h3>Center-Distance Check Before Cutting</h3>
-<p>A quick way to catch a wrong I/J on paper is to check that the computed center is the same distance from both the start point and the end point. For S=(0,0), E=(50,0), C=(25,0): both distances are 25 mm, so a semicircle of radius 25 is geometrically possible. If you typed I=-25 by mistake, C=(25,0) still happens to match; if you typed I=20 instead, C=(20,0) gives distances 20 and 30, which cannot lie on one circle, and the control alarms. Running this arithmetic once on paper catches the most common I/J sign and magnitude errors before the controller does.</p>
+<p>A quick way to catch a wrong I/J on paper is to check that the computed center is the same distance from both the start point and the end point. For S=(0,0), E=(50,0), correct C=(25,0) gives distances 25 mm and 25 mm, so a semicircle of radius 25 is geometrically possible. If you typed I=&minus;25 by mistake instead of I=+25, C=(&minus;25,0): distance to S is 25 mm but distance to E is 75 mm, which cannot be one radius, so the control alarms. Running this arithmetic once on paper catches the most common I/J sign and magnitude errors before the controller does.</p>
+
+<h3>Reading a Cycle Time Estimate on an Arc</h3>
+<p>When you estimate cycle time by hand, use the arc length L, not the chord. For a 90&deg; corner round of radius 10 mm the arc length is 2&pi;&times;10&times;90/360 = 15.71 mm, while the chord between tangent points is 14.14 mm. The difference is about 10 percent; on a long contour with many radii this accumulates. At F = 300 mm/min the corner takes 15.71/300 = 0.052 min, not 14.14/300. This does not change the program, but it does change how well you predict how long the part will run.</p>
 
 <h2>Sources</h2>
 <ul>
