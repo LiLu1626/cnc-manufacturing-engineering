@@ -45,15 +45,15 @@
 <tr><td>X / Y</td><td>Hole position in work coordinates</td><td>e.g. X10. Y10.</td></tr>
 <tr><td>R</td><td>R plane: height where feed starts, above the stock</td><td>1–3 mm above top surface</td></tr>
 <tr><td>Z</td><td>Final hole depth (negative into the part)</td><td>e.g. Z-15.</td></tr>
-<tr><td>F</td><td>Feed rate in mm/min</td><td>per tooling chart</td></tr>
-<tr><td>Q</td><td>Peck depth (G83 only)</td><td>1–3 mm per peck</td></tr>
-<tr><td>P</td><td>Dwell time at bottom (G82 only)</td><td>e.g. P500 = 0.5 s</td></tr>
+<tr><td>F</td><td>Feed rate under G21/G94, mm/min</td><td>per tooling chart; mm/rev uses fn notation</td></tr>
+<tr><td>Q</td><td>Peck increment (used by G73/G83 in this page)</td><td>1–3 mm per peck, per tool maker</td></tr>
+<tr><td>P</td><td>Dwell time at bottom (cycles that support it, e.g. G82)</td><td>e.g. P0.5 = 0.5 s; confirm decimal convention</td></tr>
 <tr><td>G98</td><td>Retract to initial Z plane after each hole</td><td>use around fixtures/bosses</td></tr>
 <tr><td>G99</td><td>Retract only to R plane after each hole</td><td>use for flat patterns</td></tr>
 </table>
 
 <h3>The R Plane: Your Safety Buffer</h3>
-<p>The R plane is the Z height where rapid motion switches to feed motion. It must be high enough above the stock that rapid XY moves between holes do not hit clamps, bosses, or chips. A common mistake is setting R too low (e.g. R0.5) to save a fraction of a second; this leaves almost no clearance and risks collision. For most work, R = 2–3 mm above the top surface is safe. If there are clamps or raised features between holes, use G98 to retract all the way to Z50 between holes instead of G99.</p>
+<p>The R plane is the Z height where rapid motion switches to feed motion. It must be high enough above the stock that rapid XY moves between holes clear clamps, bosses, and chips. Set R based on the actual setup, not a default number; R = 2–3 mm above the top surface is a starting point, verified against the real obstructions. G98 retracts to the initial plane established before the cycle call (not automatically Z50); use it when a boss or clamp sits between holes.</p>
 
 <figure class="cp-figure">
 <svg viewBox="0 0 420 280" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
@@ -79,7 +79,7 @@
   <text x="215" y="60" font-size="10" fill="#333">G00 rapid</text>
   <text x="215" y="160" font-size="10" fill="#333">G01 feed</text>
 </svg>
-<figcaption>Drilling cycle motion: rapid from initial plane to R plane, then feed to Z depth. G98 retracts to initial plane; G99 retracts only to R plane.</figcaption>
+<figcaption>Drilling cycle motion (schematic, not to scale): rapid from initial plane to R plane, then feed to Z depth. The final Z line is the commanded tip position. G98 retracts to the established initial plane; G99 retracts only to R.</figcaption>
 </figure>
 
 <h3>G81 — Simple Drilling</h3>
@@ -96,23 +96,21 @@
 <p>G85 bores or reams a hole: feed in to Z depth, then feed back out at the same feed rate. Unlike drilling (which retracts at rapid), G85's controlled feed-out produces a smoother bore surface. For a boring bar, the bore diameter is set by the bar's radial screw adjustment; for a reamer, by the reamer's effective diameter and the cutting conditions.</p>
 
 <h3>Drill Point Compensation</h3>
-<p>A standard twist drill has a conical tip. The full cutting edge reaches diameter D only at the outer corners; the center point extends beyond by approximately 0.3&times;D. For a through-hole, the drill must break through the back surface by this tip length or the hole will have an uncut nub in the center. For a 10 mm drill, add about 3 mm of breakthrough. For a 12 mm plate: Z depth = 12 + 3 = 15 mm (Z-15).</p>
+<p>A standard twist drill has a conical tip. The full-diameter cutting edge reaches the corners first; the center point extends beyond by h = (D/2)/tan(&alpha;/2). For a 118&deg; drill this is about 0.300D. For a through-hole, the tip must pass the back face by at least h plus a deliberate breakthrough allowance; the failure mode is that the full-diameter edge has not yet broken through, not a center nub. For a 10 mm, 118&deg; drill, h &asymp; 3.0 mm.</p>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
-  <rect x="60" y="30" width="240" height="80" fill="#d4c5a9" stroke="#999"/>
-  <text x="310" y="75" font-size="11" fill="#666">12 mm plate</text>
-  <!-- drill above -->
-  <rect x="165" y="5" width="10" height="120" fill="#7f8c8d"/>
-  <polygon points="165,125 175,125 170,145" fill="#7f8c8d"/>
-  <!-- dimension lines -->
-  <line x1="50" y1="30" x2="50" y2="110" stroke="#c0392b" stroke-width="1"/>
-  <text x="20" y="75" font-size="10" fill="#c0392b">12 mm</text>
-  <line x1="50" y1="110" x2="50" y2="145" stroke="#e67e22" stroke-width="1"/>
-  <text x="10" y="132" font-size="10" fill="#e67e22">0.3D = 3 mm</text>
-  <text x="100" y="175" font-size="11" fill="#333">Total Z depth = 12 + 3 = 15 mm</text>
+<svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <rect x="60" y="30" width="240" height="60" fill="#d4c5a9" stroke="#999"/>
+  <text x="310" y="65" font-size="11" fill="#666">12 mm plate</text>
+  <rect x="155" y="10" width="10" height="80" fill="#7f8c8d"/>
+  <polygon points="155,90 165,90 160,105" fill="#7f8c8d"/>
+  <line x1="50" y1="30" x2="50" y2="90" stroke="#c0392b" stroke-width="1"/>
+  <text x="20" y="65" font-size="10" fill="#c0392b">12 mm</text>
+  <line x1="50" y1="90" x2="50" y2="105" stroke="#e67e22" stroke-width="1"/>
+  <text x="10" y="102" font-size="10" fill="#e67e22">h=3 mm</text>
+  <text x="90" y="140" font-size="11" fill="#333">tip Z = -(12 + 3.004) &asymp; -15.004 (118&deg;)</text>
 </svg>
-<figcaption>Drill point geometry: the conical tip adds ~0.3&times;D beyond the full-diameter cutting edge. Through-holes must account for this breakthrough distance.</figcaption>
+<figcaption>Drill point geometry at 5 px/mm: shoulder at plate bottom y90, tip h&asymp;3 mm below. Through-holes add a deliberate breakthrough allowance; blind holes set tip Z per the drawing's depth convention.</figcaption>
 </figure>
 
 <h2>Example</h2>
@@ -137,7 +135,7 @@ M30</code></pre>
 <p>G84 is the tapping cycle: the spindle feeds down at the tapped RPM, reverses at the bottom, and feeds back up. Feed in mm/min equals spindle speed &times; pitch. For a classroom example: S500 RPM, pitch 1.25 mm, F = 500 &times; 1.25 = 625 mm/min. The return feed may be governed by a control setting and is not always identical to the down-feed. Use G84 only with a rigid-tapping spindle or a compensated tap holder. This program explicitly sets G21/G94; do not assume the cycle sets feed mode for you.</p>
 
 <h3>G73 vs G83: Chip Break vs Full Retract</h3>
-<p>G73 is a high-speed peck cycle: it feeds in Q increments but retracts only a small amount (a few mm) between pecks, not all the way to R. This saves time for chips that break easily (short-chipping materials like cast iron). G83 retracts fully to R after every peck, clearing chips completely. For long-chipping steel, use G83; for cast iron or aluminum, G73 may be faster. When in doubt, G83 is the safe choice.</p>
+<p>G73 is a high-speed peck cycle: it feeds in Q increments but retracts only a small amount (a few mm) between pecks, not all the way to R. This saves time for chips that break easily (short-chipping materials like cast iron). G83 retracts fully to R after every peck, clearing chips completely. For long-chipping steel, use G83; for cast iron or aluminum, G73 may be faster. Choose between G73 and G83 based on the drill design, depth-to-diameter ratio, through-spindle coolant, and material chip characteristics; match the tool maker's recommendation rather than assuming one cycle is always safer.</p>
 
 <h3>Multiple Tools and Hole Patterns</h3>
 <p>After a tool change, re-establish safe Z, G43 Hxx, and coolant before calling the next cycle. The cycle parameters (R, Z, Q, F) reset or carry over depending on the control; safest practice is to re-specify them on the first hole of each new tool. For a bolt circle or rectangular pattern, list the X/Y positions as consecutive lines after the cycle call; do not repeat G83 on each line.</p>
@@ -149,16 +147,16 @@ M30</code></pre>
 <p>Drilling generates heat and chips. Flood coolant through the spindle (or through the tool for deep holes) pushes chips out the flutes. In deep-hole pecking, the retract lets chips fall into the flutes and coolant flush them out. Without coolant, the drill tip temperature climbs rapidly and wear accelerates. M08 must be on before the cycle; M09 after G80.</p>
 
 <h3>Through-Hole vs Blind-Hole Depth</h3>
-<p>A twist drill's conical tip extends past the full-diameter cutting edge by h = (D/2) / tan(&alpha;/2), where &alpha; is the included point angle. For a 118&deg; general-purpose drill, h &asymp; 0.3004 D; for a 135&deg; drill, h &asymp; 0.2071 D. The 0.3D rule is a 118&deg; approximation, not a universal constant. For a through-hole, the tip must break through the back by at least h plus a deliberate breakthrough allowance, and the area below the part must clear chips. For a blind hole, if the wear offsets are set from the drill point, Z is the tip position; if the drawing requires a specified full-diameter depth, subtract h from that depth to find the Z the tip reaches. A through-hole that is too shallow leaves the uncut cone protruding; the common exit problem is that the full-diameter edge never breaks through, not that the center nubs out.</p>
+<p>A twist drill's conical tip extends past the full-diameter cutting edge by h = (D/2) / tan(&alpha;/2), where &alpha; is the included point angle. For a 118&deg; general-purpose drill, h &asymp; 0.3004 D; for a 135&deg; drill, h &asymp; 0.2071 D. The 0.3D rule is a 118&deg; approximation, not a universal constant. For a through-hole, the tip must pass the back face by at least h plus a deliberate breakthrough allowance, and the area below the part must clear chips. For a blind hole, if tool length is set from the drill tip, Z is the tip position. If the drawing calls for a full-diameter depth D_full (positive into the part, Z0 at top surface, +Z up), program the tip at Z = &minus;(D_full + h). Example: &Oslash;10, 118&deg;, D_full = 12 mm, h &asymp; 3.004 mm, tip Z &asymp; &minus;15.004. If the drawing instead specifies tip depth 12, program Z = &minus;12. Check remaining wall thickness for blind holes and clearance below through-holes.</p>
 
 <h3>Spot Drilling vs Center Drilling</h3>
-<p>Before drilling, a spot drill or center drill creates a small cone that guides the twist drill and reduces wander. A spot drill has a set included angle (90&deg; or 120&deg;); match it to the drill point angle so the guide cone supports the drill corners. A dwell in G82 does not turn a pointed drill into a flat-bottom tool &mdash; flat bottom comes from a spot-facing or counterboring cutter. Whether to spot-drill before a precision hole depends on the drill manufacturer's recommendation, not a universal rule.</p>
+<p>Center drills primarily produce the 60&deg; center hole used for lathe centers. Spot drills are used to start a hole accurately and reduce wander on the drill that follows. Whether to spot-drill, and what included angle to use, depends on the twist drill's point geometry and the tool maker's recommendation; angle matching is not a universal rule. A dwell in G82 does not turn a pointed drill into a flat-bottom tool &mdash; flat bottom comes from a spot-facing or counterboring cutter.</p>
 
 <h3>Cycle Modal State and G80</h3>
 <p>Once a cycle is called, it stays modal. A bare position block like <code>X50. Y30.</code> repeats the cycle at the new X/Y. On Haas, an explicit <code>G00 X50. Y30.</code> cancels the cycle and moves at rapid. The safest practice is still to write <code>G80</code> explicitly after the hole pattern, so the cycle stop does not depend on which G-code happens to appear on the next line.</p>
 
 <h3>Drill Size and Surface Speed</h3>
-<p>Drilling RPM follows the same surface speed rule as milling: n = 1000&times;vc / (&pi;&times;D). A &Oslash;10 drill in aluminum at vc = 100 m/min runs at about 3180 RPM. Feed per revolution fz = 0.1–0.2 mm/rev in steel, higher in aluminum. The cycle's F is mm/min = n &times; fz. These are classroom assumptions; match your tooling chart.</p>
+<p>Drilling RPM follows the same surface speed rule as milling: n = 1000&times;vc / (&pi;&times;D). A &Oslash;10 drill in aluminum at vc = 100 m/min runs at about 3180 RPM. Feed per revolution fn = 0.1–0.2 mm/rev in steel, higher in aluminum. The cycle's F under G94 is mm/min = n &times; fn. These are classroom assumptions; match your tooling chart.</p>
 
 <h3>Verification Before Running the Cycle</h3>
 <p>After writing the hole pattern, verify on the controller's graphics or single-block run: confirm each X/Y position, confirm R plane clearance, confirm G80 at the end. The exact single-block behavior at R depends on the control; check it on your machine rather than assuming a universal pause. Never assume the pattern is correct just because the numbers look neat.</p>
@@ -169,7 +167,7 @@ M30</code></pre>
 <li><strong>Setting R too low</strong> — R0.5 leaves no clearance for chips or clamps. Use R2–3 mm above the top surface and verify XY clearance.</li>
 <li><strong>G99 around a fixture</strong> — retracting only to R2 between holes may hit clamps. Use G98 when there is any obstacle between holes.</li>
 <li><strong>Ignoring drill point geometry</strong> — through-holes must let the full-diameter edge break through; use h = (D/2)/tan(&alpha;/2) for the actual point angle.</li>
-<li><strong>Using G81 for deep holes</strong> — chips pack and the drill snaps. Use G83 for depth &gt; 3&times;D; match Q to the tool maker's chip-clearance guidance.</li>
+<li><strong>Using a non-peck cycle for deep holes</strong> — chips can pack in the flutes. Peck cycles help when the drill design, depth-to-diameter ratio, coolant, and material call for it; follow the tool maker's chip-clearance guidance.</li>
 <li><strong>No coolant</strong> — M08 should be on before the cycle; drilling without coolant in steel overheats the tip.</li>
 </ul>
 

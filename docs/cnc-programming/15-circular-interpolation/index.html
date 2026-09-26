@@ -119,14 +119,14 @@ G03 I-25. J0  (full circle, ends back at start)</code></pre>
 <figcaption>Short 90&deg; arc S(0,0) &rarr; E(20,20) around C(0,20), r=20. G03 counterclockwise. Length = 2&pi;&times;20&times;90/360 = 31.416 mm.</figcaption>
 </figure>
 
-<h2>Helical Interpolation</h2>
+<h3>Helical Interpolation</h3>
 <p>By adding a Z (or other axis) word to a G02/G03 block, the machine interpolates a helix — an arc that simultaneously moves in Z. This is used for helical interpolation milling of circular pockets and oil grooves:</p>
 <pre class="cp-code"><code>G01 X25. Y0 F300.
 G03 I-25. J0 Z-5.   (helical: circle in XY while descending Z from 0 to -5)</code></pre>
 <p>The Z coordinate in the arc block is the end Z. Assume an independent fragment with G21/G17/G90/G94/G40 active, tool center at (25,0), Z0 established, H offset, spindle, coolant and entry clearance already set. Each turn descends 5 mm on a 25 mm tool-center radius; the helix angle is atan(5/(2&pi;&times;25)) &asymp; 1.82&deg;, which must fit the tool's recommended ramp and the hole/tool diameter relation. This is how many CAM routines rough circular pockets; a center-cutting tool is required, and the tool does not start from a point-sized hole center.</p>
 
 <h3>Plane Selection: G17 / G18 / G19</h3>
-<p>G02/G03 direction and the center addresses depend on the active plane. G17 is the XY plane (milling); I is X center offset, J is Y center offset. G18 is the XZ plane (lathe radii); I is X center offset, K is Z center offset. G19 is the YZ plane; J is Y, K is Z. Direction is viewed looking from the positive axis of the omitted plane. The startup block normally sets G17 on a mill. On a lathe, X is programmed as diameter; the radial half of the X change is not by itself the arc radius &mdash; you still need the center or sweep angle. Verify direction against your specific control's convention.</p>
+<p>G02/G03 direction and the center addresses depend on the active plane. G17 is the XY plane (milling); I is X center offset, J is Y center offset, direction viewed from +Z toward the origin. G18 is the XZ plane (lathe radii); I is X center offset, K is Z center offset, direction viewed from +Y. G19 is the YZ plane; J is Y, K is Z, direction viewed from +X. The startup block normally sets G17 on a mill. On this page's lathe assumption, X is programmed as diameter; the radial half of the X change is not by itself the arc radius &mdash; you still need the center or sweep angle. Confirm direction labels against your control's documentation.</p>
 
 <h3>Arc Feed and Surface Speed</h3>
 <p>In a G94/G40 tool-center-path example, the programmed F applies along the tool center path. Surface cutting speed vc is set by spindle RPM and tool diameter (vc = &pi;DN/1000), not by F; F is feed rate. With cutter compensation on, whether the controller adjusts feed automatically is control-specific and must be checked in the manual. For an inside pocket radius of 20 mm cut with a 10 mm tool, the tool center path is radius 15 mm; an effective profile feed of 300 mm/min corresponds to a tool-center feed of about 225 mm/min, giving one revolution in 2&pi;&times;15/225 = 0.419 min, ignoring acceleration/deceleration.</p>
@@ -150,16 +150,16 @@ G03 I-25. J0 Z-5.   (helical: circle in XY while descending Z from 0 to -5)</cod
 <p>Before running an arc cut, simulate or dry-run and watch: does the tool enter on the correct side of the material? Does the bulge go inward or outward? Is the center where you intended? A 30-second visual check of the geometry catches the most common arc errors. If the screen shows the tool going the long way around, the direction or center sign is wrong.</p>
 
 <h3>Why I/J Is Preferred Over R</h3>
-<p>R is compact but ambiguous for arcs over 180&deg; (hence the negative R convention) and impossible for full circles. I/J always defines the center unambiguously and is what CAM posts output. For hand programming, compute I and J on paper from the start point; do not estimate them. When the start point changes between blocks, I/J must be recomputed &mdash; they are relative to the current start, not to the part origin.</p>
+<p>R is compact but ambiguous for arcs over 180&deg; (hence the negative R convention) and impossible for full circles. I/J defines the center unambiguously. For hand programming, compute I and J on paper from the current start point; do not estimate them. When the start point changes between blocks, I/J must be recomputed.</p>
 
 <h3>Arc Blending and Tangency</h3>
 <p>For a smooth contour, adjacent linear and arc blocks must be tangent. A line that ends at an arc start should meet the arc at 90&deg; to its radius, i.e. tangent. A corner where a line meets an arc at an angle leaves a visible step even if the geometry looks close. On a finish pass, tangency is what makes the edge look continuous. CAM posts compute this; hand programmers draw the tangent lines.</p>
 
 <h3>What Happens if G02/G03 Is Backwards</h3>
-<p>The tool cuts the other arc between the same two points. On a pocket corner, this means a bulge on the wrong side of the part, often removing material it should leave. The fix is swapping G02 for G03 (or vice versa) for that block, not changing coordinates. Re-simulate after the swap; other blocks on the same contour are unaffected because each block has its own direction word.</p>
+<p>The tool cuts the other arc between the same two points. On a pocket corner, this means a bulge on the wrong side of the part, often removing material it should leave. The fix is swapping G02 for G03 (or vice versa) for that block, not changing coordinates. Because G02/G03 are modal, after changing one direction word you must check every following block that omits a motion G-code &mdash; it inherits the new direction &mdash; until another explicit G00/G01/G02/G03 re-establishes the mode. Blocks that explicitly state their own direction are not affected.</p>
 
 <h3>Arc Feed Rate on Inside vs Outside</h3>
-<p>On an external radius, the tool center path is longer than the part arc (the tool rides outside). On an internal radius, the tool center path is shorter. The programmed F applies to tool center motion. For a finish pass where surface speed matters, this small difference is usually ignored; for tight tolerance work, account for it when estimating cycle time and surface finish.</p>
+<p>On an external radius the tool center path is longer than the part arc; on an internal radius it is shorter. In the G94/G40 example above (inside radius 20 mm, tool radius 5 mm), the tool center path is 15 mm and F = 225 mm/min corresponds to an effective profile feed of about 300 mm/min. This is tool-center feed, not spindle surface speed; the latter is set by RPM and tool diameter.</p>
 
 <h3>Full Circles and R Limitation</h3>
 <p>A full circle has identical start and end coordinates. R alone cannot determine the center; I/J specifies it directly. Use start at (25,0), center (0,0), I = &minus;25, J = 0. For pocket finishing, a full circle followed by a small outward step and another circle is standard.</p>
@@ -176,7 +176,7 @@ G03 I-25. J0 Z-5.   (helical: circle in XY while descending Z from 0 to -5)</cod
 <ul>
 <li><strong>Confusing G02/G03 direction</strong> — view from positive Z. CW = G02, CCW = G03. Use angles: if the start-to-end angle decreases, it's G02.</li>
 <li><strong>Using R for full circle</strong> — R cannot express a 360&deg; circle; use I/J.</li>
-<li><strong>I/J as absolute center</strong> — I/J are offsets from the start point, not absolute coordinates. I = Cx &minus; Sx.</li>
+<li><strong>I/J as absolute center</strong> — in this Haas convention, I/J are offsets from the start point, not absolute coordinates: I = Cx &minus; Sx. Confirm the convention on your control.</li>
 <li><strong>Running two arc blocks as consecutive code without repositioning</strong> — after an arc the start point has moved; the next I/J refers to the new start.</li>
 <li><strong>Forgetting plane selection</strong> — G02/G03 direction and center addresses depend on G17/G18/G19 (I/J, I/K, J/K). On a lathe (G18 XZ), direction convention is control-specific.</li>
 </ul>
@@ -187,7 +187,7 @@ G03 I-25. J0 Z-5.   (helical: circle in XY while descending Z from 0 to -5)</cod
 <p><strong>2.</strong> Start (25,0), center (0,0). What is I?</p><details><summary>Ans</summary><p>I = Cx &minus; Sx = 0 &minus; 25 = &minus;25.</p></details>
 <p><strong>3.</strong> R positive vs negative?</p><details><summary>Ans</summary><p>R+ = arc &le; 180&deg; (short arc, including semicircle). R&minus; = arc &gt; 180&deg; (long arc).</p></details>
 
-<p>When verifying arcs on the controller's graphics, compare the displayed center and end point against your hand sketch before running feed. A ten-second visual check catches the majority of G02/G03 and I/J errors before they reach the part.</p>
+<p>When verifying arcs on the controller's graphics, compare the displayed center, start point, and end point against your hand sketch before running feed.</p>
 
 <h2>Sources</h2>
 <ul>

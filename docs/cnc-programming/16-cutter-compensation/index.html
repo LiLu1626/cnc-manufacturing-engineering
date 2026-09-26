@@ -42,12 +42,12 @@
 <p>D selects the cutter-size compensation register. Its size entries use radius or diameter according to the control configuration; this page's numerical examples assume Haas Setting 40 = RADIUS, so a &Oslash;10 end mill uses D = 5.000. The program calls D01 on the G41/G42 line. The offset value is a correction that lets the controller offset the tool center path; it is not necessarily the worn physical tool radius. One program can work for different tool radii by changing D, but only when the new tool still fits the internal corners, entry, and reach.</p>
 
 <h3>How D Changes the Pocket Size</h3>
-<p>For a programmed pocket width of 50 mm with actual tool radius r = 5 mm and compensation radius d, the resulting pocket width is <strong>50 &minus; 2d + 2r</strong>. When d = r = 5 the pocket is exactly 50. If the measured pocket is 50.04 (too large by 0.04), increase d to 5.02: the tool center moves 0.02 mm toward each wall, removing more material and shrinking the pocket to 49.96. If the pocket is 49.96 (too small), decrease d to 4.98 and the pocket opens to 50.04. A cut that has already removed extra material cannot be undone by compensation; the correction applies to the next part.</p>
+<p>For a programmed pocket width of 50 mm with actual tool radius r = 5 mm and compensation radius d, the resulting pocket width is <strong>50 &minus; 2d + 2r</strong>. In the ideal no-error model: when d = r = 5 the pocket is exactly 50. When d = 4.98 (the controller thinks the tool is smaller than it is), the tool center rides closer to each programmed wall, the larger physical tool cuts more material, and the pocket measures 50.04. When d = 5.02, the tool center rides farther from each wall, less material is removed, and the pocket measures 49.96. A cut that has already removed extra material cannot be undone by compensation; the correction applies to the next part.</p>
 <table class="data-table">
 <tr><th>Compensation d</th><th>Resulting pocket width</th><th>Effect</th></tr>
-<tr><td>4.980</td><td>50.04</td><td>tool center farther from wall, pocket larger</td></tr>
+<tr><td>4.980</td><td>50.04</td><td>tool center nearer programmed wall, cuts more, pocket larger</td></tr>
 <tr><td>5.000</td><td>50.00</td><td>nominal</td></tr>
-<tr><td>5.020</td><td>49.96</td><td>tool center nearer wall, pocket smaller</td></tr>
+<tr><td>5.020</td><td>49.96</td><td>tool center farther from wall, cuts less, pocket smaller</td></tr>
 </table>
 <p>On the first article, leave 0.1 mm finish stock on each wall by setting d = 5.10 (radius field; diameter field = 10.20). The outer profile will be oversize and the inner pocket undersize. Measure, then adjust d to target before the finish pass. Before diagnosing a size error as tool wear, check runout, deflection, and measurement error.</p>
 
@@ -65,17 +65,27 @@
 </table>
 <p>In every row the tool center falls <strong>outside</strong> the rectangle [0,50]&times;[0,50]. That is correct outer profiling. If you instead used G42 on this same CW path, the tool would shift inside and cut the part too small.</p>
 
-<p>Assume G21/G17/G90/G94, G54 and H offset established, spindle and coolant on, safe Z set, and the entry area clear. The program builds compensation on an extension line away from the part, then follows the first edge tangentially:</p>
-<pre class="cp-code"><code>G00 X-15. Y-5.            (outside, below-left of part)
-G01 G41 X-5. Y-5. D01 F300.  (build comp on extension; tool center at (-5,-5))
-G01 X0. Y0.               (tangent lead into corner, comp active)
+<p>Assume G21/G17/G90/G94, G54 and H offset established, spindle and coolant on, safe Z set, and the entry/exit extensions are clear of material and clamps. The example below builds compensation on the extension of the first edge (a straight line collinear with it), keeps compensation while touching the contour, then extends past the corner before canceling. It is a teaching fragment; verify the exact lead-in/turn-in rules on your control.</p>
+<table class="data-table">
+<tr><th>Block</th><th>Programmed point</th><th>Stable offset side</th><th>Material side / clearance</th></tr>
+<tr><td>G40 start</td><td>(0,&minus;20)</td><td>none</td><td>clear below part</td></tr>
+<tr><td>G41 D01</td><td>(0,&minus;10)</td><td>left of +Y = &minus;X, center X=&minus;5</td><td>still in clear air</td></tr>
+<tr><td>keep G41</td><td>(0,0)</td><td>center X=&minus;5, touches left wall</td><td>tangent to first edge</td></tr>
+<tr><td>contour</td><td>(0,50)&rarr;(50,50)&rarr;(50,0)&rarr;(0,0)</td><td>G41 outer</td><td>cut CW outer profile</td></tr>
+<tr><td>keep G41</td><td>(&minus;10,0)</td><td>center Y=&minus;5, extends past corner</td><td>clear left of part</td></tr>
+<tr><td>G40</td><td>(&minus;20,0)</td><td>none</td><td>cancel in clear air</td></tr>
+</table>
+<pre class="cp-code"><code>G00 X0. Y-20.             (G40, clear air below part, at cut Z)
+G01 G41 X0. Y-10. D01 F300.  (build comp on +Y extension; center X=-5)
+G01 Y0.                   (approach corner, comp already stable)
 G01 Y50.                  (left edge up)
 G01 X50.                  (top edge right)
 G01 Y0.                   (right edge down)
 G01 X0.                   (bottom edge left)
-G01 G40 X-5. Y-5.         (lead out on extension, comp off)</code></pre>
+G01 X-10.                 (extend past corner, comp held)
+G01 G40 X-20.             (cancel in clear air)</code></pre>
 
-<h2>Inner vs Outer Profiles</h2>
+<h3>Inner vs Outer Profiles</h3>
 <p>The left/right rule depends on whether you are cutting an outer profile or an inner pocket. For an inner pocket (e.g., a rectangular cavity), the "air" is inside the pocket. If you cut the pocket CW, the tool needs to be on the inside wall — which means G42, not G41. The safe way: trace the directed edge and ask "which side of the edge is the open air where the tool should be?" That side determines G41 (left) or G42 (right).</p>
 
 <h3>D Offset Units: Radius or Diameter</h3>
@@ -100,24 +110,29 @@ G01 G40 X-5. Y-5.         (lead out on extension, comp off)</code></pre>
 <p>After the first part, measure the critical XY dimensions. If the whole contour is uniformly oversized or undersized, the D offset is off. If only one wall is off, the geometry or fixture is off. If the tool gouged into a corner, the lead-in was too short or the direction was wrong. Diagnose by wall, not by overall size.</p>
 
 <svg viewBox="0 0 360 220" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
-  <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Lead-in: build comp on extension, then touch edge tangent</text>
+  <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Lead-in on +Y extension (5 px/mm)</text>
   <line x1="60" y1="180" x2="300" y2="180" stroke="#333" stroke-width="1.5"/>
-  <text x="305" y="184" font-size="9" fill="#333">part edge (programmed line)</text>
-  <line x1="60" y1="150" x2="200" y2="150" stroke="#166534" stroke-width="1.5" stroke-dasharray="4,2"/>
-  <text x="70" y="145" font-size="9" fill="#166534">tool center path, r=30 px off edge</text>
-  <circle cx="200" cy="150" r="14" fill="none" stroke="#166534" stroke-width="1.5"/>
-  <text x="180" y="205" font-size="9" fill="#166534">tool center at y=150; edge touched at y=180 (gap = r)</text>
+  <text x="250" y="195" font-size="9" fill="#333">programmed edge</text>
+  <line x1="60" y1="155" x2="300" y2="155" stroke="#166534" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="70" y="150" font-size="9" fill="#166534">tool center path, 25 px = r = 5 mm</text>
+  <circle cx="200" cy="155" r="25" fill="none" stroke="#166534" stroke-width="1.5"/>
+  <line x1="200" y1="155" x2="200" y2="180" stroke="#c0392b" stroke-width="1"/>
+  <text x="210" y="172" font-size="9" fill="#c0392b">r = 5 mm</text>
 </svg>
 
 <h3>Compensation on a Lathe</h3>
 <p>On a lathe, G41/G42 also offsets the tool, but the virtual tip, nose radius, and orientation field are separate entries in the T offset, not a mill D value. Lathe compensation is covered in the turning section; the lead-in/lead-out principle and the G40 cancellation rule are identical, but X is diameter programming and G18 is the active plane.</p>
 
-<svg viewBox="0 0 360 200" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
-  <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Inner pocket CW: G42 keeps tool inside</text>
+<svg viewBox="0 0 360 210" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Inner pocket CW (0,0)&rarr;(0,50)&rarr;(50,50)&rarr;(50,0)&rarr;(0,0)</text>
   <rect x="90" y="50" width="180" height="110" fill="#e5e7eb" stroke="#333" stroke-width="1.5"/>
   <text x="180" y="110" font-size="9" text-anchor="middle" fill="#666">pocket cavity (air)</text>
-  <rect x="100" y="60" width="160" height="90" fill="none" stroke="#166534" stroke-width="1.5" stroke-dasharray="4,2"/>
-  <text x="180" y="180" font-size="9" text-anchor="middle" fill="#166534">tool center path, offset inward by r</text>
+  <rect x="105" y="65" width="150" height="80" fill="none" stroke="#166534" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <polygon points="90,105 100,100 100,110" fill="#333"/>
+  <polygon points="180,50 175,60 185,60" fill="#333"/>
+  <polygon points="270,105 260,100 260,110" fill="#333"/>
+  <polygon points="180,160 175,150 185,150" fill="#333"/>
+  <text x="180" y="195" font-size="9" text-anchor="middle" fill="#166534">G42 (right of cut) keeps tool in cavity</text>
 </svg>
 
 <h3>When Not to Use Compensation</h3>
@@ -150,6 +165,9 @@ G01 G40 X-5. Y-5.         (lead out on extension, comp off)</code></pre>
 
 
 
+
+<h2>Example: Outer CW Profile with Lead-In and Lead-Out</h2>
+<p>Putting the rules together: G21/G17/G90/G94, G54, H offset, spindle and coolant on, entry/exit extensions clear. The program starts with G40 at (0,&minus;20), builds G41 D01 on the +Y extension, runs the CW outer rectangle, extends past the bottom-left corner on &minus;X, then cancels G40 at (&minus;20,0). The trace table above lists each block's programmed point, stable offset side, and clearance. This is a teaching fragment; verify lead-in and corner behavior on your control before running on real material.</p>
 
 <h2>Common Mistakes</h2>
 <ul>
