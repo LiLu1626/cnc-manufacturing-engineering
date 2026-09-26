@@ -100,14 +100,14 @@ G00 X42.</code></pre>
 <p>At S800 F0.05, feed = 40 mm/min. Total X travel from 42 to 1 is 20.5 mm radius. Of that, the bar material spans O40 to O1 = 19.5 mm radius; air travel above O40 is 1 mm. Cutting time on material is 19.5/40 = 0.49 min = 29.25 s; air travel adds about 1.5 s. Do not count the whole 20.5 mm as cutting.</p>
 
 <p><strong>Boring position table.</strong> Bore a pre-drilled O20 hole to O24 over Z0 to Z&minus;30. The bar is sized so that its shank clears the O20 bore; the infeed table uses X diameter.</p>
+<p>The pre-drilled hole is O20 over Z0 to Z&minus;30. Each pass: approach outside the mouth at Z2, set X to the target diameter, feed Z into the hole to Z&minus;30, retract radially inward to a value that clears the bar envelope (set per holder/bar data, not assumed), then withdraw Z to Z2. The actual radial infeed from the O20 starting bore is 1.00, 0.75, 0.25 mm.</p>
 <table class="data-table">
-<tr><th>Pass</th><th>X diameter</th><th>Radial infeed</th><th>Z action</th></tr>
-<tr><td>start</td><td>20.5</td><td>approach</td><td>rapid to Z&minus;30 near bottom</td></tr>
-<tr><td>rough 1</td><td>22.0</td><td>0.75 mm</td><td>feed Z&minus;30&rarr;0</td></tr>
-<tr><td>rough 2</td><td>23.5</td><td>0.75 mm</td><td>feed Z&minus;30&rarr;0</td></tr>
-<tr><td>finish</td><td>24.0</td><td>0.25 mm</td><td>light finish pass</td></tr>
+<tr><th>Pass</th><th>Target X diameter</th><th>Radial infeed from O20 bore</th><th>Z action</th></tr>
+<tr><td>rough 1</td><td>22.0</td><td>1.00 mm</td><td>Z2 &rarr; Z&minus;30 cut</td></tr>
+<tr><td>rough 2</td><td>23.5</td><td>0.75 mm</td><td>Z2 &rarr; Z&minus;30 cut</td></tr>
+<tr><td>finish</td><td>24.0</td><td>0.25 mm</td><td>Z2 &rarr; Z&minus;30 light cut</td></tr>
 </table>
-<p>At the bottom, retract X inward to a value that clears the bar, then retract Z out; the bar envelope must be verified against the hole.</p>
+<p>After each pass, retract X inward to a value verified against the selected boring bar and shank envelope, then withdraw Z. Without that envelope data, the table is a teaching skeleton, not a runnable program.</p>
 
 <h2>Common Mistakes</h2>
 <ul>
@@ -132,10 +132,10 @@ G00 X42.</code></pre>
 <p>A 2 mm blade has two side edges. When you touch off on the front edge, that edge sits at the programmed Z. The back edge is 2 mm away in Z. If the drawing calls for a groove centered at Z&minus;20 with width 2 mm, the front edge goes to Z&minus;19 and the back edge lands at Z&minus;21; if instead the groove starts at Z&minus;20, the front edge goes there. State which edge is referenced so the groove lands on the drawing, not half a tool-width off.</p>
 
 <h3>Multiple Passes for Wide Grooves</h3>
-<p>A 6 mm wide groove cut with a 2 mm blade needs three Z positions. At each position, feed to the groove depth, retract radially to a verified clearance above the bar, then index Z by about the blade width minus a small overlap. Sliding sideways at full depth is a side-turning operation that requires a capable insert and holder; do not assume every groove tool can do it.</p>
+<p>A 6 mm wide groove cut with a 2 mm blade needs three Z positions at Z&minus;18, Z&minus;20, Z&minus;22 (2 mm spacing, no overlap) to cover Z&minus;17 to Z&minus;23. If overlap is required, add positions and lock both boundaries. Sliding sideways at full depth is a side-turning operation that requires a capable insert and holder; do not assume every groove tool can do it.</p>
 
 <h3>Constant Surface Speed on Grooving and Parting</h3>
-<p>As the tool approaches center on a parting cut, diameter shrinks. Under constant surface speed the spindle would rise toward the center, which is unsafe and unnecessary; parting and grooving usually use G97 with a capped RPM. The exact speed follows the insert manufacturer's data for the material.</p>
+<p>As the tool approaches center on a parting cut, diameter shrinks. Constant surface speed can be used when capped and when the setup permits; many parting setups choose G97 at a fixed RPM. The exact mode and speed follow the insert manufacturer's data for the material.</p>
 
 <h3>Boring Bar Envelope and Retract</h3>
 <p>When the boring bar reaches the bore bottom, the tool tip must retract inward enough that the holder and shank clear the bore wall as Z withdraws. That inward amount is not the same as the roughing infeed; it is set by bar shank size and hole diameter. Program it explicitly, then verify on the machine.</p>
@@ -156,10 +156,10 @@ G00 X42.</code></pre>
 <p>The boring bar reaches from one side of the hole; the overhang is inside the part, and chips must travel back along the bar. Deflection grows as the bar reaches deeper. That is why finishing passes use light infeed and short bar extension, and why surface finish often worsens as bore depth grows.</p>
 
 <h3>Program a First-Part Dry Run</h3>
-<p>For a new groove or parting Z, dry-run the X and Z moves at machine lock or at low feed before the first cut. Watch that the blade clears the chuck and that the finished part drops clear. A parted part that jams against the chuck can be worse than a tool break.</p>
+<p>For a new groove or parting Z, dry-run at low feed before the first cut. Machine lock checks program motion but not physical clearance; verify the blade-to-chuck and part-to-catcher envelope by observation and hand setup before running.</p>
 
 <h3>Groove Width Tolerance</h3>
-<p>A 2 mm blade cuts a 2 mm groove, but tool wear and deflection widen it. On a tight width tolerance, finish the groove floor and walls with a light second pass and measure the width. The Z position of the reference edge must be rechecked after a blade change.</p>
+<p>A 2 mm blade cuts a 2 mm groove, but wear and deflection can change the width or floor condition. On a tight tolerance, finish the groove floor and walls with a light second pass and measure with a groove micrometer or caliper suited to external grooves.</p>
 
 <h3>Why a Groove Tool Has Two Feed Directions</h3>
 <p>The same blade can feed in Z for side finishing after the radial groove depth is reached. Side feed is slower and lighter than radial feed; it is not a normal turning pass. Use it only when the insert is rated for it.</p>
