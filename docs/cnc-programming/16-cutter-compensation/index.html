@@ -130,6 +130,13 @@ G01 G40 X-10. Y-10.        (lead-out, comp off)</code></pre>
 <h3>Common Overcut Failure</h3>
 <p>The most common compensation error is a 0.5 mm step at the first contour edge: the tool did not have enough straight lead-in to ramp the offset. The fix is to extend the lead-in line until the tool reaches full offset before touching the part. If the part is too small for a long lead-in, use a diagonal lead-in or accept a witness mark and polish it out. Never engage compensation directly on a corner.</p>
 
+<h3>Compensation and Multiple Tools</h3>
+<p>Each tool has its own D register. When the program calls T02 M06 and then G41 D02, the controller loads D02's radius value. The startup block G40 cancels any leftover compensation from the previous tool. Do not assume D01 carries over to T02; always specify the D number on the compensation line.</p>
+
+<h3>Why Program the Part Outline, Not the Tool Path</h3>
+<p>Without compensation, every coordinate you type is a tool-center coordinate. A 50 mm square part cut with a &Oslash;10 tool means the tool center path is a 60 mm square offset outward. If you change to a &Oslash;8 tool, every coordinate changes. With compensation, you type the 50 mm square exactly as drawn; only D changes. This is why drawings and programs match &mdash; fewer transcription errors, easier verification against the print.</p>
+
+
 
 
 
