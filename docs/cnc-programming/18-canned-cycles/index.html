@@ -127,6 +127,31 @@ G00 Z50. M09               (explicit safe retract)
 M30</code></pre>
 <p><strong>Trace:</strong> The G81 line drills hole 1 at (&minus;25,&minus;25) and retracts to R2 (G99). Then X25. Y&minus;25. moves XY to hole 2 at R2 height and immediately repeats the drill cycle. After hole 4, G80 cancels the cycle. G00 Z50 lifts to safe height. Total: 4 holes drilled with one cycle line.</p>
 
+
+<h3>G98 vs G99 Retract, Side by Side</h3>
+<p>G98 and G99 only differ in how high the tool lifts between holes. G99 retracts to the R plane and stays there, saving the vertical move up and down. G98 retracts to the initial Z plane established before the cycle was called (for example Z50). On a flat plate with no obstructions, G99 is faster. If a raised boss, clamp, or the next hole sits on a higher step, G98 clears it. You can switch mid-pattern: write G98 on the line for the hole that needs the higher retract, then return to G99 afterward. The mode change applies from that block on.</p>
+
+<h3>Hole Patterns: Rectangular Array and Bolt Circle</h3>
+<p>For a rectangular array, list X/Y rows. For a bolt circle, compute each point: (Cx + R&times;cos&theta;, Cy + R&times;sin&theta;). Example: 6 holes on a pitch circle radius 30 mm, starting at 0&deg;, every 60&deg;: (30,0), (15,25.98), (&minus;15,25.98), (&minus;30,0), (&minus;15,&minus;25.98), (15,&minus;25.98). Each is one X/Y line under the active cycle. Coordinates are exact to two decimals; round consistently. The Engineering Tools bolt-circle calculator automates this table.</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 360 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <rect x="60" y="30" width="240" height="160" fill="#d4c5a9" stroke="#999"/>
+  <circle cx="180" cy="110" r="60" fill="none" stroke="#888" stroke-dasharray="3,2"/>
+  <circle cx="240" cy="110" r="5" fill="#c0392b"/><text x="248" y="114" font-size="9">0&deg;</text>
+  <circle cx="210" cy="58" r="5" fill="#c0392b"/><text x="216" y="54" font-size="9">60&deg;</text>
+  <circle cx="150" cy="58" r="5" fill="#c0392b"/><text x="120" y="54" font-size="9">120&deg;</text>
+  <circle cx="120" cy="110" r="5" fill="#c0392b"/><text x="90" y="114" font-size="9">180&deg;</text>
+  <circle cx="150" cy="162" r="5" fill="#c0392b"/><text x="120" y="176" font-size="9">240&deg;</text>
+  <circle cx="210" cy="162" r="5" fill="#c0392b"/><text x="216" y="176" font-size="9">300&deg;</text>
+  <text x="180" y="205" font-size="10" text-anchor="middle" fill="#333">6-hole bolt circle, R=30 mm, drilled under one G81</text>
+</svg>
+<figcaption>Bolt-circle coordinates are calculated once, then listed as X/Y lines under the active cycle.</figcaption>
+</figure>
+
+<h3>Modality Traps: What Stays Active</h3>
+<p>Beyond the cycle itself, the G98/G99 choice, the R and Z values, and the feed F are all modal. If you switch from G81 to G83 halfway, the new Q applies, but R and Z are inherited unless restated. If you switch tools and forget G80, the new tool's first positioning move can drill. The startup block G21 G17 G90 G40 G49 G80 exists partly to clear these modes so each program begins from a known state.</p>
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Forgetting G80</strong> — the cycle stays active. The next G00 X10 Y10 (intended as a positioning move) will drill a hole there. Always write G80 after the pattern.</li>
@@ -145,6 +170,12 @@ M30</code></pre>
 <details><summary>Ans</summary><p>One G81 line (with R, Z, F), followed by 8 X/Y coordinate lines, then G80. The cycle repeats automatically at each position.</p></details>
 <p><strong>4.</strong> You need hole 1 at Z-10 and holes 2–4 at Z-20 in the same pattern. How do you do it?</p>
 <details><summary>Ans</summary><p>Write G81 with Z-10 for hole 1. On the hole 2 line, write <code>X... Y... Z-20.</code> The new Z overrides the stored depth. Holes 3 and 4 inherit Z-20. Then G80.</p></details>
+
+<h2>Sources</h2>
+<ul>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G80.html">Haas G80 Cancel Cycle</a>.</li>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G83.html">Haas G83 Peck Drilling</a>.</li>
+</ul>
 
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/">&larr; Drilling Cycles</a><a href="/cnc-manufacturing-engineering/cnc-programming/34-tapping-thread-milling/">Tapping &rarr;</a></nav>
 </main>

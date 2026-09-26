@@ -65,6 +65,9 @@
 </table>
 <p>In every row the tool center falls <strong>outside</strong> the rectangle [0,50]&times;[0,50]. That is correct outer profiling. If you instead used G42 on this same CW path, the tool would shift inside and cut the part too small.</p>
 
+<h2>Example: Outer CW Profile with Lead-In and Lead-Out</h2>
+<p>Putting the rules together: G21/G17/G90/G94, G54, H offset, spindle and coolant on, entry/exit extensions clear. The program starts with G40 at (0,&minus;20), builds G41 D01 on the +Y extension, runs the CW outer rectangle, extends past the bottom-left corner on &minus;X, then cancels G40 at (&minus;20,0). This is a teaching fragment; verify lead-in and corner behavior on your control before running on real material.</p>
+
 <p>Assume G21/G17/G90/G94, G54 and H offset established, spindle and coolant on, safe Z set, and the entry/exit extensions are clear of material and clamps. The example below builds compensation on the extension of the first edge (a straight line collinear with it), keeps compensation while touching the contour, then extends past the corner before canceling. It is a teaching fragment; verify the exact lead-in/turn-in rules on your control.</p>
 <table class="data-table">
 <tr><th>Block</th><th>Programmed point</th><th>Stable offset side</th><th>Material side / clearance</th></tr>

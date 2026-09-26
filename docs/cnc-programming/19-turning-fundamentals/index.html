@@ -115,6 +115,28 @@ G00 X50. Z100.           (retract clear)
 M30</code></pre>
 <p><strong>Feed rate calculation:</strong> At S1000 and F0.2 mm/rev, the actual feed in mm/min is 1000 &times; 0.2 = 200 mm/min. The Z-50 roughing pass takes 50/200 = 0.25 minutes = 15 seconds. The finish pass at F0.1 gives 100 mm/min, taking 30 seconds.</p>
 
+
+<h3>Approach and Retract Sequence on a Lathe</h3>
+<p>A safe lathe approach has three stages: rapid X to a diameter larger than the stock, rapid Z to 1&ndash;2 mm off the face, then feed into the cut. The order matters: approach in X first (away from the part radially), then in Z. After a turning pass, retract X away from the part before retracting Z, otherwise the tool rubs backward across the freshly turned surface. The example program above follows this: X46 Z2 before the cut, X47 Z2 after.</p>
+
+<h3>ID Boring vs OD Turning</h3>
+<p>On an OD turn, X decreases as the part gets smaller. On ID boring, X increases as the bore gets larger, and the tool enters the hole at a smaller X, then bores out. The radial depth formula is the same: (X_end &minus; X_start)/2. Boring bar deflection and chatter are the limit, not the machine power; keep boring bar overhang as short as the part allows.</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <rect x="80" y="70" width="220" height="50" fill="#d4c5a9" stroke="#999"/>
+  <text x="190" y="100" font-size="10" text-anchor="middle" fill="#666">OD turn: X 50&rarr;44, Z 0&rarr;-50</text>
+  <line x1="100" y1="60" x2="280" y2="60" stroke="#c0392b" stroke-width="2"/>
+  <polygon points="280,60 270,56 270,64" fill="#c0392b"/>
+  <text x="100" y="55" font-size="9" fill="#c0392b">tool feed direction &rarr;</text>
+  <text x="80" y="150" font-size="10" fill="#333">Radial depth = (50&minus;44)/2 = 3 mm; diameter change = 6 mm.</text>
+</svg>
+<figcaption>OD turning: the tool moves along Z at a programmed diameter. The X step between passes equals twice the radial depth.</figcaption>
+</figure>
+
+<h3>Work Offsets on a Lathe</h3>
+<p>On a Haas lathe, the work offset and the tool geometry offset are set on the control's offset screen. Z0 is set by touching the front face and recording the measured Z; X0 is the spindle centerline, set by touching an OD and entering the measured diameter. There is no separate G54 work origin to jog to in the same way as a mill; each tool's geometry offset carries its tip position relative to the part. This is why T0101 matters: without the offset number, the control does not know where the tip is.</p>
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Treating X as radius</strong> — X40 means 40 mm diameter. Radial depth = (X_start &minus; X_end)/2.</li>
@@ -133,6 +155,11 @@ M30</code></pre>
 <details><summary>Ans</summary><p>The turret indexes tools directly. T0202 rotates the turret to tool station 2 and activates offset register 2 in one command.</p></details>
 <p><strong>4.</strong> You want a 2 mm deep roughing pass on &Oslash;50 stock. What X do you program?</p>
 <details><summary>Ans</summary><p>2 mm radial depth = 4 mm diameter reduction. X goes from 50 to 46. Program X46. for the pass.</p></details>
+
+<h2>Sources</h2>
+<ul>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G97.html">Haas G97 Constant RPM</a>.</li>
+</ul>
 
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/29-subprograms/">&larr; Subprograms</a><a href="/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/">Turning Cycles &rarr;</a></nav>
 </main>

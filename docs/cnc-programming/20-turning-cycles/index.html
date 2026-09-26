@@ -99,6 +99,25 @@ G00 X100. Z100.
 M30</code></pre>
 <p><strong>Trace:</strong> G71 reads N10–N20 and generates roughing passes from &Oslash;52 down to near &Oslash;30/&Oslash;36, leaving 0.4 mm on diameter and 0.1 mm on Z. Then G70 at S1500 takes one clean pass along the same contour to the exact finished dimensions. The N10 block is X30 only (no Z), which satisfies the first-block rule.</p>
 
+
+<h3>Choosing D, U, and W</h3>
+<p>D is the radial depth per roughing pass. It is limited by insert grade, machine rigidity, and chip load; typical steel roughing takes 1&ndash;3 mm radial. U and W are the finish allowances left on diameter and Z. U0.4 means 0.4 mm on diameter (0.2 mm radial); a finish pass of 0.2 mm radial is light enough for a clean surface but not so light that the tool rubs. W0.1 leaves a small face step for the finish pass to clean up. Too small a U risks rubbing and poor finish; too large wastes finish-pass time.</p>
+
+<h3>G72, G73, and G70 in Context</h3>
+<p>G72 is the face-turning cycle for parts where Z is short but the diameter changes a lot. G73 (pattern repeating) cuts the same contour repeatedly for parts with already near-net shape or irregular profiles, including grooves. G70 always runs after G71/G72/G73 to clean up. Do not put grooving, threading, or part-off inside the G71 contour; those are separate operations with their own tools and cycles.</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <rect x="40" y="60" width="280" height="60" fill="#d4c5a9" stroke="#999"/>
+  <path d="M 40 60 L 40 90 L 200 90 L 200 105 L 320 105" fill="none" stroke="#c0392b" stroke-width="2"/>
+  <text x="180" y="150" font-size="10" text-anchor="middle" fill="#333">G71 rough leaves U0.4 diameter; G70 cuts red contour to size</text>
+</svg>
+<figcaption>Finish allowance is visible on the drawing as a thin shell around the finished contour. G70 removes it in one pass.</figcaption>
+</figure>
+
+<h3>Verifying the Cycle Before Running</h3>
+<p>After writing G71, dry-run with feed override low and watch: does the first block move X only? Do the rough passes stay on the stock side? Does the tool pull away from the part before indexing to the next pass? A G71 that alarms on the first block usually means the N10 block has Z, or the contour reverses X. Fix those before raising feed.</p>
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Grooves in the G71 contour</strong> — Type I G71 alarms or cuts wrong. Use G73 for parts with grooves or undercuts.</li>
@@ -117,6 +136,11 @@ M30</code></pre>
 <details><summary>Ans</summary><p>Finishing cycle: takes one clean pass along the P–Q contour at the finishing S and F, cutting to exact dimensions.</p></details>
 <p><strong>4.</strong> Raw stock &Oslash;60, finish to &Oslash;40, D1.0 per pass. How many roughing passes?</p>
 <details><summary>Ans</summary><p>Radial stock = (60&minus;40)/2 = 10 mm. At D1.0 per pass = 10 passes. The last pass leaves U0.4 diameter (0.2 mm) for G70.</p></details>
+
+<h2>Sources</h2>
+<ul>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G71.html">Haas G71 Stock Removal in Turning</a>.</li>
+</ul>
 
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/">&larr; Turning Basics</a><a href="/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring/">Grooving &amp; Boring &rarr;</a></nav>
 </main>
