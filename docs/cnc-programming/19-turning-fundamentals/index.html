@@ -149,7 +149,7 @@ M30</code></pre>
 <li><strong>Z direction reversed</strong> — cutting into the part (along the spindle) is negative Z, not positive.</li>
 <li><strong>Forgetting the second offset number</strong> — T01 selects the tool but T0101 also activates the offset. T01 alone may not load geometry.</li>
 <li><strong>Not retracting X before Z retract</strong> — after turning to Z-50, retract X away from the part before moving Z, or the tool rubs along the finished surface.</li>
-<li><strong>Facing past center with a nose-radius tool</strong> — facing to X0 leaves a small nub unless you feed to X&minus;1 or X&minus;2.</li>
+<li><strong>Using an arbitrary negative X endpoint when facing</strong> — the required endpoint depends on insert geometry, tool orientation, center height, and the machine's permitted travel. Verify the toolmaker's guidance and the actual setup. X&minus;1 in this classroom example is an assumed endpoint, not a universal rule for removing a center nub.</li>
 </ul>
 
 <h2>Practice</h2>
@@ -196,7 +196,7 @@ M30</code></pre>
 <p>The jaw sits near Z&minus;65 and the cut ends at Z&minus;50, leaving about 15 mm axial distance. That number does not by itself prove the turret, tool holder, and tool post clear the chuck; the tool envelope must be checked on the machine. A 15 mm reach can still bind if the holder is long or the tool post is wide.</p>
 
 <h3>First-Part Check and Offset Correlation</h3>
-<p>After the first rough and finish passes, stop and measure the turned diameter and shoulder length with calipers or a micrometer. If the rough cut is closer to O41 than expected, check the program and the bar size; the rough pass itself should be 2 mm radial. If the finish diameter lands at 39.4 rather than 39.5, the next part's X wear offset takes up the 0.1. If the shoulder length is off, adjust Z wear. These corrections belong to the tool offset and work offset, not to the geometry numbers in the program.</p>
+<p>After the first rough and finish passes, stop and measure the turned diameter and shoulder length. Compare the rough diameter against the planned O41, not against a vague expectation. Before changing any wear offset, check the program target, the U/W allowance, the G54 datum, the tool geometry offset, the measurement itself, and tool deflection. If the finish diameter is 39.4 rather than 39.5, that part is already undersize and cannot be restored; for the next part, adjust X wear by 0.1 in the appropriate field and confirm the sign convention on the control.</p>
 
 <h3>Two Radial Depths, Two Feeds</h3>
 <p>The rough step removes 2 mm radial from O45 to O41 at F0.2; the finish step removes 0.75 mm radial to O39.5 at F0.1. The smaller finish depth pairs with higher spindle speed and lighter feed for surface finish. The tool tip coordinates describe the programmed path; the holder, turret, and chuck envelope are separate clearance checks that must be made on the machine.</p>

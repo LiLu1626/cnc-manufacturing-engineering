@@ -71,8 +71,34 @@ G76 X8.16 Z-20. K0.92 D0.2 F1.5</code></pre>
 </ul>
 <p>The controller automatically takes successive passes with decreasing radial depth until reaching X8.16. D0.2 is a teaching value — real first-pass depth depends on insert grade, material, coolant, and machine rigidity; follow the tool manufacturer's charts.</p>
 
+<figure class="cp-figure">
+<svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <line x1="40" y1="140" x2="380" y2="140" stroke="#333" stroke-width="1.5"/>
+  <path d="M 60 140 L 120 90 L 180 140 L 240 90 L 300 140" fill="none" stroke="#c0392b" stroke-width="2"/>
+  <text x="60" y="170" font-size="10" fill="#333">H = 0.866P sharp triangle (dashed outline)</text>
+  <path d="M 80 130 L 130 100 L 180 130" fill="none" stroke="#166534" stroke-width="2"/>
+  <text x="200" y="120" font-size="10" fill="#166534">h3 = 0.613P working depth</text>
+</svg>
+<figcaption>60&deg; external thread design: H is the sharp triangle, h3 the truncated working depth used for K. Not to scale.</figcaption>
+</figure>
+
 <h3>Lead-In and Lead-Out</h3>
 <p>The Z3. approach position provides lead-in distance so the spindle speed reaches sync before the tool cuts the first thread. A lead-out (or thread relief groove) at Z-20+ allows the tool to retract cleanly. Without lead-in, the first few threads may be off-pitch.</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <rect x="60" y="80" width="300" height="40" fill="#d4c5a9" stroke="#999"/>
+  <line x1="90" y1="60" x2="90" y2="140" stroke="#e67e22" stroke-dasharray="3,2"/>
+  <text x="60" y="55" font-size="10" fill="#e67e22">Z3 lead-in</text>
+  <line x1="120" y1="60" x2="120" y2="140" stroke="#333" stroke-width="1.5"/>
+  <text x="110" y="155" font-size="10" fill="#333">Z0 face</text>
+  <line x1="300" y1="60" x2="300" y2="140" stroke="#c0392b" stroke-dasharray="3,2"/>
+  <text x="270" y="55" font-size="10" fill="#c0392b">Z-20 thread end</text>
+  <line x1="330" y1="60" x2="330" y2="140" stroke="#166534" stroke-dasharray="3,2"/>
+  <text x="300" y="170" font-size="10" fill="#166534">relief / retract zone</text>
+</svg>
+<figcaption>Axial zones: lead-in before the face, effective thread from Z0 to Z&minus;20, then relief/retract space. Z3 here is the example value, not a universal sync distance.</figcaption>
+</figure>
 
 <h3>Pitch vs Lead on Multi-Start Threads</h3>
 <p>For a double-start thread with P=1.5, the lead is 3.0 mm/rev, so F=3.0. The controller cuts one groove per pass sequence, then shifts Z by one pitch to cut the second start. This is why F in G76 is always the <em>lead</em>, not the pitch — the programmer must account for multiple starts.</p>
@@ -82,7 +108,7 @@ G76 X8.16 Z-20. K0.92 D0.2 F1.5</code></pre>
 <p><strong>Example 2 — Double-start M10&times;1.5 (pitch 1.5, lead 3.0):</strong> F=3.0 mm/rev. At S500, axial feed = 1500 mm/min. The program cuts the first helix, then shifts Z by 1.5 and repeats for the second start.</p>
 <p><strong>Tolerance and inspection:</strong> In this teaching example we assume a 6g external thread, checked with a thread ring gauge (go/no-go). The mating internal thread would use 6H and a thread plug gauge — but always follow the tolerance class specified on your drawing. The ring gauge confirms functional acceptance; it does not verify every dimension on the drawing.</p>
 
-<h2>G32 — Single-Pass Threading (Manual)</h2>
+<h3>G32 — Single-Pass Threading (Manual)</h3>
 <p>Before G76 canned cycles, programmers cut threads pass by pass using <strong>G32</strong> (constant lead threading). Each pass is a separate block. For an external M10&times;1.5 thread on &Oslash;10 stock, the first cut starts just below the major diameter and takes a small radial bite:</p>
 <pre class="cp-code"><code>G97 S500 M03
 G00 X9.8 Z3.           (first pass: 0.1mm radial below Ø10)
@@ -96,16 +122,16 @@ Z3.
 ... (repeat passes until target minor dia)</code></pre>
 <p>X9.8 means the tool cuts 0.1 mm radially below the &Oslash;10 surface. X9.6 cuts another 0.1 mm deeper. The number of passes and depth per pass depend on tool material, insert grade, and material — follow the tooling catalog. G32 gives full control but is tedious; G76 automates the multi-pass strategy.</p>
 
-<h2>Threading on a Mill: Tapping vs Thread Milling</h2>
+<h3>Threading on a Mill: Tapping vs Thread Milling</h3>
 <p><strong>Tapping (G84 rigid tap cycle):</strong> A tap rotates and feeds synchronously. In G94 mode, F = pitch &times; RPM. For M10&times;1.5 at S500, F = 750 mm/min. The tap cuts the full thread form in one operation.</p>
 <p><strong>Thread milling:</strong> A threaded tool follows a helical interpolation path — one circular orbit around the hole, with one pitch of axial travel per orbit. The feed rate is based on feed per tooth, number of flutes, and the tool-center path speed, not simply F = lead &times; RPM. The 1.5 mm axial rise per orbit defines the pitch, but the programmed F is the tool-center feed around the circle. Thread milling is flexible for large holes and hard materials but requires CAM or careful helical math.</p>
 
-<h2>Common Threading Problems</h2>
+<h3>Common Threading Problems</h3>
 <table class="data-table">
 <tr><th>Problem</th><th>Check</th><th>Corrective direction</th></tr>
 <tr><td>Ring gauge GO won't enter</td><td>Check pitch, setup, burrs, major diameter, then measure pitch diameter</td><td>If pitch diameter is too large, take one more light pass per tooling data; material already cut cannot be restored</td></tr>
-<tr><td>NO-GO gauge enters</td><td>Pitch diameter too small (cut too deep)</td><td>Thread is overcut; material already removed cannot be recovered — verify before the last pass</td></tr>
-<tr><td>Off-pitch at start</td><td>No lead-in distance</td><td>Increase Z start position to 3&ndash;5 mm before part face</td></tr>
+<tr><td>NO-GO gauge enters</td><td>Pitch diameter may be over-cut</td><td>Check against the drawing's gauge acceptance rule; material already removed cannot be recovered</td></tr>
+<tr><td>Off-pitch at start</td><td>No lead-in distance</td><td>Provide enough lead-in for the control to sync; set it from acceleration/RPM data</td></tr>
 <tr><td>Chatter / poor finish</td><td>Spindle speed too high or tool worn</td><td>Reduce RPM, check insert condition</td></tr>
 <tr><td>Tool breaks</td><td>Pass depth too aggressive</td><td>Reduce first-pass depth per tooling catalog</td></tr>
 </table>
@@ -115,7 +141,7 @@ Z3.
 <li><strong>Confusing pitch with lead on multi-start threads</strong> — F must be the lead, not the pitch.</li>
 <li><strong>Using a spindle mode not verified for this threading cycle</strong> — follow the chosen controller's documented setup; this example uses G97.</li>
 <li><strong>Changing spindle RPM mid-thread</strong> — the controller syncs to a fixed spindle speed during the cut. Do not change S during threading.</li>
-<li><strong>No lead-in distance</strong> — the first threads are off-pitch before sync is achieved. Start at Z3&ndash;Z5 before the part face.</li>
+<li><strong>No lead-in distance</strong> — the first threads are off-pitch before spindle sync. Choose lead-in based on acceleration, RPM, and controller; Z3 in this example is a classroom value, not a universal fix.</li>
 <li><strong>Treating 8.16 mm as a finished tolerance dimension</strong> — it is a theoretical minor diameter estimate used as the G76 X endpoint; actual acceptance is by gauge per drawing.</li>
 <li><strong>Forgetting G97 before G76 on this Haas example</strong> — this teaching example follows the manufacturer's G97 setup. On other controllers, verify the recommended spindle mode for threading.</li>
 </ul>
@@ -129,6 +155,12 @@ Z3.
 <details><summary>Show answer</summary><p>F = 3.0 mm/rev (lead = 2 &times; pitch). G76 feed is always the lead, so on a multi-start thread it is larger than the pitch. At S500, axial feed = 1500 mm/min.</p></details>
 
 <section class="cp-sources">
+<h3>Inspection Is by Gauge, Not by Minor Diameter Alone</h3>
+<p>The X8.16 endpoint is a design minor diameter for programming. Whether the thread accepts a mating part is decided by the ring or plug gauge specified on the drawing, which checks pitch diameter, flank condition, and fit. A measured minor diameter that looks right does not prove the thread is good, and a NO-GO entry must be interpreted under the drawing's gauge acceptance rule rather than assumed scrap on first contact.</p>
+
+<h3>Multi-Start Phase Shift</h3>
+<p>For a double-start thread, F becomes the lead (3.0 mm/rev for P1.5). The second helix starts one pitch around the circumference, which means an axial or angular shift. How the controller sets that starting phase depends on the control; consult the manual rather than assuming the cycle shifts automatically.</p>
+
 <h2>Sources</h2>
 <ul>
 <li>Hexagon Infoletter No. 37, "SR1 – Thread up to M160": h3 = 0.61343 P for metric DIN external thread design geometry. <a href="https://www.hexagon.de/info37_e.htm" target="_blank" rel="noopener">hexagon.de/info37_e.htm</a>, retrieved 2026-09-24.</li>

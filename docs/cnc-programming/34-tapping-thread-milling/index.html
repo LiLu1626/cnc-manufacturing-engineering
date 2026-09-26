@@ -68,22 +68,32 @@
 <p><strong>Through holes</strong> are simpler: the tap goes through the part, so you only need to program the thread depth. <strong>Blind holes</strong> (holes that do not go through) require planning: the tap cannot reach the bottom, and the chip evacuation space matters. Use a <strong>bottoming tap</strong> (short chamfer) for near-full depth in blind holes. A taper/starting tap has a long chamfer and leaves several incomplete threads at the bottom. Program the tap Z depth slightly shallower than the drill depth to avoid bottoming out.</p>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
-  <!-- plate -->
-  <rect x="80" y="40" width="240" height="160" fill="#d4c5a9" stroke="#999"/>
-  <!-- drill hole -->
-  <rect x="185" y="40" width="10" height="140" fill="#fff" stroke="#999"/>
-  <!-- tap -->
-  <rect x="183" y="20" width="14" height="100" fill="#7f8c8d"/>
-  <!-- tap depth line -->
-  <line x1="170" y1="120" x2="210" y2="120" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4,2"/>
-  <text x="215" y="124" font-size="11" fill="#c0392b">Tap depth Z-15</text>
-  <!-- drill depth -->
-  <line x1="170" y1="180" x2="210" y2="180" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="4,2"/>
-  <text x="215" y="184" font-size="11" fill="#e67e22">Drill depth Z-16.5</text>
-  <text x="90" y="35" font-size="11" fill="#666">Blind hole: tap does not reach bottom</text>
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <rect x="80" y="30" width="240" height="200" fill="#d4c5a9" stroke="#999"/>
+  <rect x="185" y="30" width="10" height="180" fill="#fff" stroke="#999"/>
+  <polygon points="185,210 195,210 190,230" fill="#fff" stroke="#999"/>
+  <line x1="160" y1="105" x2="220" y2="105" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="225" y="109" font-size="10" fill="#c0392b">full thread 15 (to Z-15)</text>
+  <line x1="160" y1="120" x2="220" y2="120" stroke="#8e44ad" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="225" y="124" font-size="10" fill="#8e44ad">tap tip Z-18 (c=3 assumption)</text>
+  <line x1="160" y1="210" x2="220" y2="210" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="225" y="214" font-size="10" fill="#e67e22">full-dia bore bottom Z-21</text>
+  <line x1="160" y1="230" x2="220" y2="230" stroke="#2c3e50" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="225" y="234" font-size="10" fill="#2c3e50">drill tip Z-23.55 (118 deg)</text>
 </svg>
-<figcaption>Blind hole tapping: the drill goes deeper than the tap. The extra drill depth provides chip clearance at the bottom.</figcaption>
+<figcaption>Blind-hole depth chain (classroom assumptions): full thread 15, tap tip at 18, full-diameter bore bottom at 21, 118&deg; drill tip at 23.55.</figcaption>
+</figure>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <circle cx="200" cy="110" r="60" fill="none" stroke="#999" stroke-dasharray="3,2"/>
+  <path d="M 140 150 A 60 60 0 0 1 260 70" fill="none" stroke="#c0392b" stroke-width="2"/>
+  <text x="120" y="170" font-size="10" fill="#c0392b">start</text>
+  <text x="270" y="60" font-size="10" fill="#c0392b">end (one lead up)</text>
+  <line x1="200" y1="50" x2="200" y2="170" stroke="#333" stroke-width="1"/>
+  <text x="210" y="110" font-size="10" fill="#333">one orbit = one lead in Z</text>
+</svg>
+<figcaption>Thread milling: tool orbits the bore in XY while rising one lead per turn. Tool-center radius is set by the tool and part geometry, not the tap-drill radius.</figcaption>
 </figure>
 
 <h3>Thread Milling vs Tapping</h3>
@@ -98,7 +108,7 @@
 </table>
 
 <h2>Example</h2>
-<p><strong>Worked example:</strong> One M10&times;1.5 blind tapped hole, 15 mm deep, in aluminum. Step 1: drill &Oslash;8.5 pilot hole to Z-16.5 (15 thread depth + 1.5 tap chamfer). Step 2: tap with G84 at S500, F750, to Z-15.</p>
+<p><strong>Worked example:</strong> One M10&times;1.5 blind tapped hole, 15 mm deep, in aluminum. Step 1: drill &Oslash;8.5 pilot hole to a full-diameter bottom at Z-21, with the 118&deg; drill tip ending at Z-23.55. Step 2: tap to Z-18 so the tap tip reaches the bottom of the 15 mm full thread (assumes c=3 mm from tip to full teeth).</p>
 <pre class="cp-code"><code>O0034 (TAPPING EXAMPLE)
 G21 G17 G90 G40 G80
 G54
@@ -106,18 +116,18 @@ T02 M06                 (O8.5 DRILL)
 S1500 M03
 G00 X10. Y10.
 G43 H02 Z50. M08
-G83 R2. Z-16.5 Q3. F120.
+G83 R2. Z-21. Q3. F120.
 G80
 G00 Z50. M09
 T03 M06                 (M10x1.5 TAP)
 S500 M03
 G00 X10. Y10.
 G43 H03 Z50. M08
-G84 R5. Z-15. F750.     (rigid tap: F = 1.5 x 500 = 750)
+G84 R5. Z-18. F750.       (rigid tap: F = 1.5 x 500 = 750; tip to Z-18)
 G80
 G00 Z50. M09
 M30</code></pre>
-<p><strong>Key points:</strong> Drill depth Z-16.5 is deeper than tap depth Z-15. The R plane for tapping is R5 (higher than drilling's R2) to give the tap room to start and stop synchronized rotation. F750 = 1.5 pitch &times; 500 RPM.</p>
+<p><strong>Key points:</strong> Drill full-diameter bottom Z-21 is deeper than tap tip Z-18; the 118&deg; drill tip extends to Z-23.55. The R plane for tapping is R5 (higher than drilling's R2) to give the tap room to start and stop synchronized rotation. F750 = 1.5 pitch &times; 500 RPM.</p>
 
 <h2>Common Mistakes</h2>
 <ul>
