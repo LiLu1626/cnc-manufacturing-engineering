@@ -84,6 +84,10 @@ G01 Y0.                   (right edge down)
 G01 X0.                   (bottom edge left)
 G01 X-10.                 (extend past corner, comp held)
 G01 G40 X-20.             (cancel in clear air)</code></pre>
+<h2>Example: Outer CW Profile with Lead-In and Lead-Out</h2>
+<p>Putting the rules together: G21/G17/G90/G94, G54, H offset, spindle and coolant on, entry/exit extensions clear. The program starts with G40 at (0,&minus;20), builds G41 D01 on the +Y extension, runs the CW outer rectangle, extends past the bottom-left corner on &minus;X, then cancels G40 at (&minus;20,0). The trace table above lists each block's programmed point, stable offset side, and clearance. This is a teaching fragment; verify lead-in and corner behavior on your control before running on real material.</p>
+
+
 
 <h3>Inner vs Outer Profiles</h3>
 <p>The left/right rule depends on whether you are cutting an outer profile or an inner pocket. For an inner pocket (e.g., a rectangular cavity), the "air" is inside the pocket. If you cut the pocket CW, the tool needs to be on the inside wall — which means G42, not G41. The safe way: trace the directed edge and ask "which side of the edge is the open air where the tool should be?" That side determines G41 (left) or G42 (right).</p>
@@ -118,6 +122,9 @@ G01 G40 X-20.             (cancel in clear air)</code></pre>
   <circle cx="200" cy="155" r="25" fill="none" stroke="#166534" stroke-width="1.5"/>
   <line x1="200" y1="155" x2="200" y2="180" stroke="#c0392b" stroke-width="1"/>
   <text x="210" y="172" font-size="9" fill="#c0392b">r = 5 mm</text>
+  <line x1="240" y1="140" x2="280" y2="140" stroke="#166534" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="245" y="135" font-size="9" fill="#166534">tool center moves +Y</text>
+  <text x="60" y="210" font-size="9" fill="#666">Material below edge (y&gt;180). Schematic, not to scale.</text>
 </svg>
 
 <h3>Compensation on a Lathe</h3>
@@ -165,9 +172,6 @@ G01 G40 X-20.             (cancel in clear air)</code></pre>
 
 
 
-
-<h2>Example: Outer CW Profile with Lead-In and Lead-Out</h2>
-<p>Putting the rules together: G21/G17/G90/G94, G54, H offset, spindle and coolant on, entry/exit extensions clear. The program starts with G40 at (0,&minus;20), builds G41 D01 on the +Y extension, runs the CW outer rectangle, extends past the bottom-left corner on &minus;X, then cancels G40 at (&minus;20,0). The trace table above lists each block's programmed point, stable offset side, and clearance. This is a teaching fragment; verify lead-in and corner behavior on your control before running on real material.</p>
 
 <h2>Common Mistakes</h2>
 <ul>

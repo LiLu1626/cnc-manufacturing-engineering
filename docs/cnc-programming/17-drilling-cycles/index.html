@@ -89,7 +89,7 @@
 <p>G82 adds a dwell (pause) at the bottom of the hole before retracting. The dwell time is set with P. A dwell does not change the drill geometry: a pointed twist drill still leaves a conical bottom. The dwell improves surface finish and size consistency at the bottom and helps on counterboring, but a flat bottom requires a flat-bottom drill or a spot-facing/ counterboring tool. Typical dwell: P0.2&ndash;P0.5 seconds (decimal seconds on Haas; confirm the control's P convention).</p>
 
 <h3>G83 — Peck Drilling (Chip Breaking)</h3>
-<p>G83 is for deep holes (depth &gt; 3&times; drill diameter). Instead of feeding all the way to depth in one motion, the drill feeds in increments of Q, retracts fully to break and clear chips, then re-approaches and feeds the next Q increment. Each peck lifts chips out of the hole so they do not pack in the flutes. Q is typically 1–3 mm per peck for steel, larger for aluminum.</p>
+<p>G83 is used when chip evacuation is difficult, for example in deep holes or long-chipping materials. Instead of feeding all the way to depth in one motion, the drill feeds in increments of Q, retracts fully to break and clear chips, then re-approaches and feeds the next Q increment. Each peck lifts chips out of the hole so they do not pack in the flutes. Q is chosen from the drill manufacturer's guidance based on diameter, coolant, and material rather than a fixed depth-to-diameter threshold.</p>
 <p><strong>Example:</strong> G83 R2. Z-30. Q3. F100. means: feed 3 mm, retract to R, feed 3 mm deeper, retract, repeat until reaching Z-30. This keeps chips clear and prevents drill breakage in deep holes.</p>
 
 <h3>G85 — Boring</h3>
