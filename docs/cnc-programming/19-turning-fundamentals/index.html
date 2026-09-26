@@ -156,6 +156,12 @@ M30</code></pre>
 <p><strong>4.</strong> You want a 2 mm deep roughing pass on &Oslash;50 stock. What X do you program?</p>
 <details><summary>Ans</summary><p>2 mm radial depth = 4 mm diameter reduction. X goes from 50 to 46. Program X46. for the pass.</p></details>
 
+<h3>Contour and Nose Radius on a Lathe</h3>
+<p>Lathe tools have a corner nose radius (commonly 0.4 or 0.8 mm). Programmed coordinates refer to the theoretical sharp corner, and the nose radius compensation register (T offset R value) lets the control round corners automatically. Without it, a 90&deg; shoulder leaves a small radius. This is separate from mill cutter compensation; the D register on a lathe is not the same as the mill D offset.</p>
+
+<h3>Chuck Clearance and Part-off</h3>
+<p>Program Z travel so the tool never reaches the chuck jaws. Leave at least the jaw height plus a margin. For part-off, the parting tool stops at X around 0.5; do not cut to X0 in one feed or the part flies off. Always feed past center by a small amount on facing to leave no nub.</p>
+
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G97.html">Haas G97 Constant RPM</a>.</li>

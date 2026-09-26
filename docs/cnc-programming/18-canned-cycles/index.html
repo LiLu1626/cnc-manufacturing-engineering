@@ -171,6 +171,12 @@ M30</code></pre>
 <p><strong>4.</strong> You need hole 1 at Z-10 and holes 2–4 at Z-20 in the same pattern. How do you do it?</p>
 <details><summary>Ans</summary><p>Write G81 with Z-10 for hole 1. On the hole 2 line, write <code>X... Y... Z-20.</code> The new Z overrides the stored depth. Holes 3 and 4 inherit Z-20. Then G80.</p></details>
 
+<h3>Repeating Holes with L and Subprograms</h3>
+<p>Many controls support a repeat address after a hole line, and all support calling a subprogram for a repeating pattern. On a rectangular array, write one row as a subprogram of X offsets, then call it once per Y row. This keeps the cycle active while XY steps repeat. For a bolt circle, compute the coordinates once and list them; a subprogram is overkill for six holes but saves typing for 24.</p>
+
+<h3>Cycle Parameters Across Tools</h3>
+<p>Each tool has its own spindle speed and feed, but R plane and Z depth are usually similar across tools on the same part. After the drill, the tap uses the same X/Y pattern but a different Z, R, and F. Call the pattern again with the new tool, restating R, Z, and F; do not assume the old values are safe for the new tool. G80 between tools prevents the new tool's first move from inheriting the drill cycle.</p>
+
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G80.html">Haas G80 Cancel Cycle</a>.</li>

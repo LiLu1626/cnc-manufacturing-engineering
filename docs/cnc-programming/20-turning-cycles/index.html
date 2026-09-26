@@ -137,6 +137,12 @@ M30</code></pre>
 <p><strong>4.</strong> Raw stock &Oslash;60, finish to &Oslash;40, D1.0 per pass. How many roughing passes?</p>
 <details><summary>Ans</summary><p>Radial stock = (60&minus;40)/2 = 10 mm. At D1.0 per pass = 10 passes. The last pass leaves U0.4 diameter (0.2 mm) for G70.</p></details>
 
+<h3>ID Boring with G71</h3>
+<p>The same G71 works for ID boring, but the sign of U flips: material is inside the bore, so the finish allowance is negative U (the bore grows toward the finished size). The first P block starts at the small bore diameter and X increases monotonically toward the finished ID. Boring bar deflection usually limits depth-of-cut more than the OD case.</p>
+
+<h3>Cycle Time Estimate</h3>
+<p>For the example: radial stock 10 mm, D1.0 = 10 passes. Each pass covers about 40 mm at F0.2 mm/rev and S1000 = 200 mm/min, so each pass takes 40/200 = 0.2 min = 12 s; roughing alone is about 2 min. The finish pass at S1500 F0.1 = 150 mm/min covers 40 mm in 0.27 min. Rapid moves and approach time add roughly 20&ndash;30%. Use this order-of-magnitude estimate, then refine on the first article.</p>
+
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G71.html">Haas G71 Stock Removal in Turning</a>.</li>
