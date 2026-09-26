@@ -27,12 +27,12 @@
 <main class="article">
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Work Coordinate Offsets (G54&ndash;G59)</h1>
-<p class="lead">The program is written around the part's datums. The machine homes to a fixed point called machine zero. Work offsets tell the controller where the part sits relative to that home. This page covers G54&ndash;G59, datum strategy, multiple workpieces, and how machine coordinates, work offset, tool offset, and the commanded program point combine.</p>
+<p class="lead">The program is written around the part's datums. Work offsets locate those datums in the machine coordinate system. The reference-return position is defined by the machine and need not coincide with the machine coordinate origin. This page covers G54&ndash;G59, datum strategy, multiple workpieces, and how machine coordinates, work offset, tool offset, and the commanded program point combine.</p>
 
 <div class="callout"><strong>The core idea:</strong> The program never says "the corner of the vice". It says X0 Y0. The work offset tells the controller where X0 Y0 is in machine coordinates. Move the part, change only the offset &mdash; the program stays the same.</div>
 
 <h2>Concept</h2>
-<p>A CNC machine has a fixed <strong>reference return position</strong> the control moves to on startup; this defines the machine coordinate frame. The machine moves axes in machine coordinates, but a part arrives in a vice or fixture at some arbitrary position on the table. A <strong>work coordinate offset</strong> is the machine position of the chosen part origin (X, Y, Z, and sometimes rotation) stored in a register. When you call <strong>G54</strong>, every commanded program point P maps to machine position G54_origin + P (no rotation). The program's X0 Y0 then maps to the chosen part datum.</p>
+<p>The machine coordinate system provides the reference for axis positions. Follow the machine's specified referencing procedure; do not assume that reference return and machine-coordinate zero are identical. The machine moves axes in machine coordinates, but a part arrives in a vice or fixture at some arbitrary position on the table. A <strong>work coordinate offset</strong> is the machine position of the chosen part origin (X, Y, Z, and sometimes rotation) stored in a register. When you call <strong>G54</strong>, every commanded program point P in the unrotated XY plane maps to machine position G54_origin + P. Z uses the separate tool-length chain described on the tool-offsets page.</p>
 <p>Most controls provide several work offset registers: G54, G55, G56, G57, G58, G59 on FANUC/Haas-style mills. Additional extended offsets exist on modern controls (Haas uses G154 P1&ndash;P99; FANUC-style controls use G54.1 Pn). The program switches between them with a single G-code block. This is how one setup runs multiple parts or multiple operations without rewriting coordinates.</p>
 
 <svg viewBox="0 0 360 200" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
@@ -64,7 +64,7 @@
 <tr><td>Right X edge (tool approaches from +X)</td><td>Enter machine X &minus; r</td><td>Touch at X=+100.0: enter +95.0</td></tr>
 <tr><td>Front Y edge (tool approaches from &minus;Y)</td><td>Enter machine Y + r</td><td>Touch at Y=&minus;120.0: enter &minus;115.0</td></tr>
 <tr><td>Rear Y edge (tool approaches from +Y)</td><td>Enter machine Y &minus; r</td><td>Touch at Y=+100.0: enter +95.0</td></tr>
-<tr><td>Z part top (tool 1, L = 120)</td><td>Enter W = gauge_machine_Z &minus; L</td><td>Gauge touches top at &minus;180: W = &minus;300</td></tr>
+<tr><td>Z part top (tool 1, L = 120)</td><td>Tool tip touches part top; gauge-line machine Z reads -180. With L=120: W = -300</td><td>Enter W = -300 into G54 Z</td></tr>
 </table>
 <p>The exact sign depends on the control's touch-off routine; always verify by moving to X0 Y0 at safe Z and confirming the tip sits over the part corner. In the work frame, +X moves the tool tip to the right relative to the part and +Y moves it away from the operator on a standard mill, as defined by the machine's axis convention.</p>
 
@@ -137,7 +137,7 @@ G01 Z-2. F100.</code></pre>
 <p>Without an explicit work offset call, the controller stays in whatever coordinate system was active &mdash; possibly G55 from a previous operation, or another register left over from the last job. The program's X0 Y0 then maps to whatever origin that register holds, which may be on a different fixture or at a different Z. G53 is non-modal and is not the "default" fallback. The result is an unexpected tool position, not guaranteed to crash but not safe either. The startup block does not usually select G54; it is the programmer's responsibility to call it after the tool change. Make G54 the first non-startup block in every program, and confirm the active register on the screen before cycle start.</p>
 
 <h3>Rotary Axes, Coordinate Rotation, and Dynamic Offsets</h3>
-<p>These are three separate functions. A <strong>rotary-axis zero offset</strong> tells the controller where the C (or A/B) axis angle reads zero &mdash; it locates the rotary axis, not the XYZ frame. <strong>Coordinate rotation</strong> (G68 on FANUC-style controls) rotates the XYZ work frame by an angle. <strong>Dynamic work offset</strong> (some probing routines) updates the offset during a run. A normal G54 entry for a rotary table does not automatically rotate the XYZ frame; if the part is clamped at an angle, you must either program the rotation or use the control's coordinate-rotation function explicitly.</p>
+<p>These are three separate functions. A <strong>rotary-axis zero offset</strong> tells the controller where the C (or A/B) axis angle reads zero &mdash; it sets the angular datum; it does not define the physical rotary-center location. <strong>Coordinate rotation</strong> (G68 on FANUC-style controls) rotates the XYZ work frame by an angle. <strong>Dynamic work offset</strong> is a separate controller function: for example, Haas G254 uses calibrated rotary-center data (MRZP) and the active work offset to account for workpiece location in indexed 3+1 or 3+2 machining. A probing routine that writes a new G54 value is not, by itself, this DWO function. A normal G54 entry for a rotary table does not automatically rotate the XYZ frame; if the part is clamped at an angle, you must either program the rotation or use the control's coordinate-rotation function explicitly.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Touching one edge and guessing the other</strong> &mdash; touch both X edges (or both Y edges) and use the midpoint, especially on round stock.</li>
@@ -168,6 +168,7 @@ G01 Z-2. F100.</code></pre>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G54.html">Haas G54 Work Offset</a> &mdash; work offset register behavior on Haas mills.</li>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G154.html">Haas G154 Extended Work Offsets</a> &mdash; P1&ndash;P99 extended offset addressing.</li>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G254.html">Haas G254 Dynamic Work Offset</a> &mdash; MRZP-based workpiece location in indexed machining.</li>
 <li><a href="https://www.haascnc.com/service/online-operator-s-manuals/mill-operator-s-manual/mill---part-setup.html">Haas Mill Part Setup</a> &mdash; setting work offsets, edge finder and probing entry (operator manual).</li>
 <li>All classroom numbers are teaching assumptions; verify signs and routines against your control.</li>
 </ul>
