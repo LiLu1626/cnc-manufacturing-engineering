@@ -32,7 +32,7 @@
 <h2>Concept</h2>
 <p>A CNC lathe has two linear axes: <strong>X</strong> (radial, in and out from the spindle centerline) and <strong>Z</strong> (axial, along the spindle). Unlike a milling machine where the workpiece stays still and the tool moves in X/Y/Z, on a lathe the <strong>workpiece rotates</strong> and the cutting tool moves in X and Z. The spindle chuck holds and rotates the part; the turret holds the tools.</p>
 <p>The most important concept in lathe programming: <strong>X is programmed in diameter, not radius</strong>. When you write X40, the tool tip is positioned so it cuts a 40 mm diameter, not 40 mm from center. This means the actual radial travel from X50 to X40 is only 5 mm (the radius changes by 5 mm, but the diameter changes by 10 mm).</p>
-<p><strong>Z0</strong> is typically set on the front finished face of the part. Positive Z moves the tool away from the chuck (toward the operator); negative Z moves the tool toward the chuck (into the part). Cutting along the part length happens in the negative Z direction.</p>
+<p><strong>Z0</strong> is typically set on the front finished face of the part. Positive Z moves the tool along the spindle axis away from the chuck; negative Z moves it toward the chuck into the part. Cutting along the part length happens in the negative Z direction.</p>
 
 <figure class="cp-figure">
 <svg viewBox="0 0 440 260" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
@@ -88,10 +88,10 @@
 <p>Common practice: T0101 = OD turning tool, T0202 = facing tool, T0303 = drill, T0404 = boring bar, T0505 = grooving/parting tool, T0606 = threading tool. The offset numbers must match the tool being used; T0102 would select tool 1 but apply offset 2, which is wrong.</p>
 
 <h3>Spindle Control on Lathes</h3>
-<p>Lathe spindles use <strong>G97 S</strong> (constant RPM) or <strong>G96 S</strong> (constant surface speed). G96 keeps the cutting speed constant as the tool moves across different diameters — the spindle automatically slows down as the tool moves toward center (facing) and speeds up for larger diameters. G97 holds a fixed RPM regardless of diameter. Threading always uses G97. See page 10 for details.</p>
+<p>Lathe spindles use <strong>G97 S</strong> (constant RPM) or <strong>G96 S</strong> (constant surface speed, CSS). Under G96, n = 1000 v<sub>c</sub> / (&pi;D): as diameter D shrinks, RPM rises. Example at v<sub>c</sub> = 100 m/min: at D = 50 mm, n = 636.6 RPM; at D = 25 mm, n = 1273.2 RPM. A G50 max-RPM clamp caps the spindle at a classroom limit (say 2000) so it does not over-speed near center. G97 holds a fixed RPM regardless of diameter; threading always uses G97. The main example on this page uses G97 for simplicity.</p>
 
 <h2>Example</h2>
-<p><strong>Worked example:</strong> Raw stock &Oslash;45 &times; 80 mm in a chuck. Operations: (1) face the front, (2) rough turn OD from &Oslash;45 to &Oslash;40 over 50 mm length, (3) finish turn to &Oslash;39.5. Z0 on the front face after facing. S1000 RPM, F0.2 mm/rev for rough, F0.1 for finish.</p>
+<p><strong>Worked example (classroom assumptions):</strong> &Oslash;45 raw bar gripped in a chuck, projecting far enough to face and turn to Z&minus;50 plus tool clearance. Operations: (1) face the front, (2) rough turn OD from &Oslash;45 to &Oslash;41 over 50 mm length, (3) finish turn to &Oslash;39.5. Z0 on the front face after facing. Rough S1000 F0.2 mm/rev (radial depth 2 mm); finish S1500 F0.1 (radial 0.75 mm). These are classroom starting values, not a tooling recommendation.</p>
 <pre class="cp-code"><code>O0019 (TURNING FUNDAMENTALS EXAMPLE)
 G21 G97 G99
 T0101                    (OD turning tool)
@@ -100,24 +100,26 @@ G00 X47. Z2.             (approach: above stock, 2 mm off face)
 (FACE)
 G01 Z0 F0.2
 X-1.0 F0.15              (feed past center to clean face)
-G00 X47. Z2.
+G00 X45. Z1.             (+Z off face first, then X outward)
 (ROUGH TURN O45 TO O41, Z-50)
 G00 X46. Z2.
 G01 Z0 F0.2
 X41.0                    (rough to O41, 2 mm radial depth)
 Z-50.                    (turn along Z to -50 mm)
-G00 X47. Z2.
+G00 X45.                 (retract X clear first)
+Z2.                      (then Z back)
 (FINISH TURN TO O39.5)
-G00 X39.5 Z2.
+G00 X40. Z2.
 G01 Z0 F0.1
 Z-50.                    (finish pass, 0.75 mm radial)
-G00 X50. Z100.           (retract clear)
+G00 X50.                 (X out first)
+Z100.                    (then Z to clear)
 M30</code></pre>
-<p><strong>Feed rate calculation:</strong> At S1000 and F0.2 mm/rev, the actual feed in mm/min is 1000 &times; 0.2 = 200 mm/min. The Z-50 roughing pass takes 50/200 = 0.25 minutes = 15 seconds. The finish pass at F0.1 gives 100 mm/min, taking 30 seconds.</p>
+<p><strong>Feed rate calculation:</strong> At S1000 and F0.2 mm/rev, feed = 1000 &times; 0.2 = 200 mm/min. The Z-50 roughing pass covers 50 mm at 200 mm/min = 0.25 min = 15 s. The finish pass at S1500 F0.1 = 150 mm/min covers 50 mm in 20 s. Rapid moves are not included.</p>
 
 
 <h3>Approach and Retract Sequence on a Lathe</h3>
-<p>A safe lathe approach has three stages: rapid X to a diameter larger than the stock, rapid Z to 1&ndash;2 mm off the face, then feed into the cut. The order matters: approach in X first (away from the part radially), then in Z. After a turning pass, retract X away from the part before retracting Z, otherwise the tool rubs backward across the freshly turned surface. The example program above follows this: X46 Z2 before the cut, X47 Z2 after.</p>
+<p>A safe lathe approach on OD work: rapid to a position above and clear of the stock (X larger than stock, Z off the face), then feed toward the cut. After an OD pass at Z&minus;50, retract X out past the shoulder first, then retract Z back to the start plane; this avoids rubbing the finished surface on the Z return. On ID boring, the retract order reverses: move X inward to clear the bore, then Z out. On facing, move +Z away from the face before returning X outward.</p>
 
 <h3>ID Boring vs OD Turning</h3>
 <p>On an OD turn, X decreases as the part gets smaller. On ID boring, X increases as the bore gets larger, and the tool enters the hole at a smaller X, then bores out. The radial depth formula is the same: (X_end &minus; X_start)/2. Boring bar deflection and chatter are the limit, not the machine power; keep boring bar overhang as short as the part allows.</p>
@@ -125,17 +127,19 @@ M30</code></pre>
 <figure class="cp-figure">
 <svg viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
   <rect x="80" y="70" width="220" height="50" fill="#d4c5a9" stroke="#999"/>
-  <text x="190" y="100" font-size="10" text-anchor="middle" fill="#666">OD turn: X 50&rarr;44, Z 0&rarr;-50</text>
+  <line x1="300" y1="50" x2="300" y2="140" stroke="#e67e22" stroke-dasharray="3,2"/>
+  <text x="305" y="55" font-size="9" fill="#e67e22">Z0 (front face)</text>
   <line x1="100" y1="60" x2="280" y2="60" stroke="#c0392b" stroke-width="2"/>
-  <polygon points="280,60 270,56 270,64" fill="#c0392b"/>
-  <text x="100" y="55" font-size="9" fill="#c0392b">tool feed direction &rarr;</text>
+  <polygon points="110,60 120,56 120,64" fill="#c0392b"/>
+  <text x="130" y="55" font-size="9" fill="#c0392b">feed &rarr; Z-50 (toward chuck)</text>
   <text x="80" y="150" font-size="10" fill="#333">Radial depth = (50&minus;44)/2 = 3 mm; diameter change = 6 mm.</text>
+  <text x="80" y="165" font-size="9" fill="#666">Chuck on left, front face on right.</text>
 </svg>
 <figcaption>OD turning: the tool moves along Z at a programmed diameter. The X step between passes equals twice the radial depth.</figcaption>
 </figure>
 
 <h3>Work Offsets on a Lathe</h3>
-<p>On a Haas lathe, the work offset and the tool geometry offset are set on the control's offset screen. Z0 is set by touching the front face and recording the measured Z; X0 is the spindle centerline, set by touching an OD and entering the measured diameter. There is no separate G54 work origin to jog to in the same way as a mill; each tool's geometry offset carries its tip position relative to the part. This is why T0101 matters: without the offset number, the control does not know where the tip is.</p>
+<p>On a Haas lathe, a common G54 work offset selects the part datum, and each T code also carries a tool geometry and wear offset. Z0 is set by touching the front face; X0 is the spindle centerline, set by touching an OD and entering the measured diameter. The program selects which offset set it uses; that set must be calibrated. T0101 means tool station 1 plus offset register 1; using a different register (T0102) is intentional when a second setup needs its own values, not always an error.</p>
 
 <h2>Common Mistakes</h2>
 <ul>
@@ -157,20 +161,37 @@ M30</code></pre>
 <details><summary>Ans</summary><p>2 mm radial depth = 4 mm diameter reduction. X goes from 50 to 46. Program X46. for the pass.</p></details>
 
 <h3>Contour and Nose Radius on a Lathe</h3>
-<p>Lathe tools have a corner nose radius (commonly 0.4 or 0.8 mm). Programmed coordinates refer to the theoretical sharp corner, and the nose radius compensation register (T offset R value) lets the control round corners automatically. Without it, a 90&deg; shoulder leaves a small radius. This is separate from mill cutter compensation; the D register on a lathe is not the same as the mill D offset.</p>
+<p>Lathe tools have a corner nose radius (commonly 0.4 or 0.8 mm). Programmed coordinates refer to the theoretical sharp corner, but the cutting edge contacts the part on the radius. Nose-radius compensation in the T offset corrects the contour error that this radius would otherwise cause on tapers and radii; it is not a command that rounds corners automatically. This is separate from mill cutter compensation.</p>
 
 <h3>Chuck Clearance and Part-off</h3>
-<p>Program Z travel so the tool never reaches the chuck jaws. Leave at least the jaw height plus a margin. For part-off, the parting tool stops at X around 0.5; do not cut to X0 in one feed or the part flies off. Always feed past center by a small amount on facing to leave no nub.</p>
+<p>Program Z travel so the tool never reaches the chuck jaws: leave at least the jaw height plus a margin based on the actual setup. Part-off depth, feed, and catcher arrangement depend on the blade, tool height, and fixture; see page 21. On facing, feed slightly past center to clean the face; the exact past-center amount depends on the nose radius and tool height.</p>
 
 <h3>Spindle Direction and Tool Orientation</h3>
-<p>M03 is forward (clockwise looking from the spindle nose). For an OD tool held on the front turret, this cuts correctly. A tool mounted upside down or on a back-post turret may need M04. When in doubt, watch the insert: the cutting edge should engage, not rub. Do not run a lathe at high speed with an unknown orientation.</p>
+<p>M03 is forward and M04 reverse on a Haas lathe. Which one cuts correctly depends on the machine, main/sub-spindle configuration, and tool mounting. This page's example assumes a forward-rotation setup already verified on the machine; confirm the cutting edge engages rather than rubs before running.</p>
 
 <h3>Metric vs Inch on a Lathe</h3>
 <p>G21 selects mm, G20 selects inches. On a lathe, X in inch is diameter in inch. Mixing G20 and G21 mid-program scales every move by 25.4 and is a common crash cause. The startup block always sets G21 explicitly.</p>
 
+<h3>Block Trace for the Worked Program</h3>
+<table class="data-table">
+<tr><th>Block</th><th>X (diameter)</th><th>Z</th><th>Action</th></tr>
+<tr><td>G00 X47 Z2</td><td>47</td><td>2</td><td>above stock, off face</td></tr>
+<tr><td>G01 Z0 F0.2</td><td>47</td><td>0</td><td>approach face</td></tr>
+<tr><td>X-1 F0.15</td><td>&minus;1</td><td>0</td><td>face past center</td></tr>
+<tr><td>G00 X45 Z1</td><td>45</td><td>1</td><td>clear face, then X out</td></tr>
+<tr><td>G01 Z0 / X41 / Z-50</td><td>41</td><td>&minus;50</td><td>rough OD, 2 mm radial</td></tr>
+<tr><td>G00 X45 / Z2</td><td>45</td><td>2</td><td>X out first, then Z back</td></tr>
+<tr><td>G01 Z0 / Z-50</td><td>39.5</td><td>&minus;50</td><td>finish OD, 0.75 mm radial</td></tr>
+</table>
+
+<h3>Why X Is Diameter on a Lathe</h3>
+<p>Programming X in diameter matches how a machinist measures a turned part with a caliper. If you move the tool 5 mm radially, the diameter changes by 10 mm, so writing X46 from X50 means a 2 mm depth of cut. This is a convention, not a physical law; some controls can switch to radius programming, but diameter is the default on Haas.</p>
+
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G97.html">Haas G97 Constant RPM</a>.</li>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G96.html">Haas G96 Constant Surface Speed</a>.</li>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G54.html">Haas Lathe G54 Work Offset</a>.</li>
 </ul>
 
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/29-subprograms/">&larr; Subprograms</a><a href="/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/">Turning Cycles &rarr;</a></nav>

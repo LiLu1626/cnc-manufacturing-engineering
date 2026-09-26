@@ -34,7 +34,7 @@
 <p>The P and Q block numbers define the finished shape. You write the contour geometry between N10 and N20 just as you would machine it in one pass — G01 lines with X and Z coordinates. G71 reads those blocks and automatically generates all the roughing passes needed to reach them. This separates <em>geometry</em> (what the part looks like) from <em>process</em> (how many passes, how deep each one is).</p>
 
 <h2>Why It Matters</h2>
-<p>Consider a stepped shaft starting at &Oslash;50 and finishing to &Oslash;30 over 50 mm. If you rough by hand at 2 mm radial depth per pass, that is (50&minus;30)/2 = 10 roughing passes. Writing each pass as separate G01 blocks means 20+ lines of code, and changing the depth per pass means rewriting all of them. G71 does it in one line plus the contour definition. Changing the depth from D1.0 to D1.5 changes one number — the controller recalculates all passes.</p>
+<p>Consider a straight cylindrical part starting at &Oslash;50 and finishing to &Oslash;30 over 40 mm. At 2 mm radial depth per pass, that is (50&minus;30)/2 = 10 mm radial stock / 2 mm = about 5 roughing passes. Writing each pass as separate G01 blocks means 10+ motion blocks, and changing the depth per pass means rewriting all of them. G71 does it in one line plus the contour definition. Changing the depth from D1.0 to D1.5 changes one number — the controller recalculates the passes. The stepped example below does not cut 40 mm on every pass; see the trace note.</p>
 
 <h2>How It Works</h2>
 
@@ -51,32 +51,30 @@
 </table>
 <p>After G71 finishes roughing, the part is U0.4 oversize in X and W0.1 oversize in Z. Then <code>G70 P10 Q20</code> takes one clean pass at the finishing speed and feed (set with S and F before G70).</p>
 
-<h3>P/Q Contour Rules (Type I G71)</h3>
+<h3>P/Q Contour Rules (Type I vs Type II)</h3>
 <ul>
-<li><strong>First block after P must be X-only</strong> — no Z movement in the first contour block. The controller needs to know the starting diameter before it can plan radial passes.</li>
-<li><strong>X must move monotonically</strong> — for OD turning, X must decrease steadily from the start to the end of the contour. If X reverses direction (a groove or undercut), Type I G71 alarms. Use G73 (pattern repeating) for grooved parts.</li>
-<li><strong>No grooving or threading in the G71 contour</strong> — G71 is for straight OD/ID turning only.</li>
-<li><strong>The contour blocks use G01/G00</strong> — describe the finished shape with linear moves.</li>
+<li><strong>First block after P</strong> — if it contains X only, this is Type I; if it contains X and Z (Z may equal the current position), it is Type II. Type II does not alarm just because Z is present.</li>
+<li><strong>X monotonic in Type I</strong> — the contour X must move in one direction; it does not have to be decreasing for OD (the example below goes X30&rarr;X36, increasing). Type II allows X reversal for certain profiles.</li>
+<li><strong>Z monotonic</strong> — for either type, the Z direction along the contour must not reverse.</li>
+<li><strong>No grooving or threading in the G71 contour</strong> — G71 is for turning contours; grooves and threads are separate operations. G73 pattern-repeating suits near-net-shape stock, not every grooved part.</li>
+<li><strong>Use G18</strong> — turning works in the XZ plane.</li>
 </ul>
 
 <figure class="cp-figure">
 <svg viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
-  <!-- raw stock -->
-  <rect x="60" y="50" width="300" height="80" fill="#d4c5a9" stroke="#999" stroke-width="1"/>
-  <text x="210" y="95" font-size="11" fill="#666" text-anchor="middle">Raw stock O50</text>
-  <!-- finished contour: step down to O30 at Z-20, then O36 at Z-40 -->
-  <path d="M 60 50 L 60 90 L 160 90 L 160 110 L 360 110" fill="none" stroke="#c0392b" stroke-width="2"/>
-  <text x="100" y="80" font-size="10" fill="#c0392b">O30 step</text>
-  <text x="250" y="105" font-size="10" fill="#c0392b">O36 step</text>
-  <!-- Z0 line -->
-  <line x1="60" y1="30" x2="60" y2="150" stroke="#e67e22" stroke-width="1" stroke-dasharray="3,2"/>
-  <text x="40" y="28" font-size="10" fill="#e67e22">Z0</text>
-  <!-- roughing passes shown as dashed lines -->
-  <path d="M 60 60 L 360 60" fill="none" stroke="#999" stroke-width="0.8" stroke-dasharray="4,3"/>
-  <path d="M 60 70 L 200 70" fill="none" stroke="#999" stroke-width="0.8" stroke-dasharray="4,3"/>
-  <text x="310" y="55" font-size="9" fill="#999">rough passes</text>
+  <line x1="40" y1="180" x2="380" y2="180" stroke="#333" stroke-width="1"/>
+  <text x="385" y="184" font-size="10" fill="#333">Z+</text>
+  <text x="385" y="196" font-size="9" fill="#e67e22">Z0</text>
+  <line x1="360" y1="180" x2="360" y2="20" stroke="#e67e22" stroke-dasharray="3,2"/>
+  <!-- finished profile: radius r=15 (Ø30) Z0..-20, r=18 (Ø36) Z-20..-40. Scale: Z 4px/mm, r 4px/mm, centerline y=180 -->
+  <path d="M 360 120 L 280 120 L 280 108 L 200 108" fill="none" stroke="#c0392b" stroke-width="2"/>
+  <text x="300" y="115" font-size="9" fill="#c0392b">finished r=15 (O30)</text>
+  <text x="220" y="103" font-size="9" fill="#c0392b">finished r=18 (O36)</text>
+  <!-- after-rough: r=15.2 and 18.2 (0.2 radial), shoulder at Z-19.9 -->
+  <path d="M 360 119.2 L 280.4 119.2 L 280.4 106.8 L 200 106.8" fill="none" stroke="#166534" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="120" y="150" font-size="9" fill="#166534">dashed = after roughing (+0.2 radial, +W0.1 Z)</text>
 </svg>
-<figcaption>G71 roughing repeatedly steps down from the raw stock to the red finished contour, leaving U0.4 finish allowance. G70 then takes one clean pass.</figcaption>
+<figcaption>Half-section (radius, not diameter): finished in red, after-rough in green dashed. U0.4 diameter = 0.2 mm radial; W0.1 leaves the shoulder at Z&minus;19.9. Schematic, not a controller trace.</figcaption>
 </figure>
 
 <h2>Example</h2>
@@ -120,18 +118,18 @@ M30</code></pre>
 
 <h2>Common Mistakes</h2>
 <ul>
-<li><strong>Grooves in the G71 contour</strong> — Type I G71 alarms or cuts wrong. Use G73 for parts with grooves or undercuts.</li>
-<li><strong>First P block includes Z</strong> — the block after P must be X-only. If you write <code>N10 G00 X30. Z2.</code>, the cycle alarms.</li>
+<li><strong>Grooves in the G71 contour</strong> — reversing X in Type I alarms or cuts wrong. Evaluate the part and tool access; G73 is for near-net-shape stock, not a universal groove solution.</li>
+<li><strong>Mixing Type I/II assumptions</strong> — an X-only P block is Type I; adding Z selects Type II. Know which one you programmed; Z does not by itself cause an alarm.</li>
 <li><strong>Forgetting G70</strong> — G71 leaves U0.4 stock. Without G70, the part is 0.4 mm oversize on diameter.</li>
 <li><strong>Wrong sign on U</strong> — for OD turning, U is positive (leaving material outside). For ID boring, U is negative.</li>
-<li><strong>Rough and finish F on same line</strong> — the F in G71 is the roughing feed. G70 inherits the F from the contour blocks (F0.1 in N10), or set F before G70.</li>
+<li><strong>Rough and finish F on same line</strong> — the F in G71 is the roughing feed. In this example the finish feed F0.1 is set on the <code>G01 Z0</code> line inside the contour, which G70 reads; confirm on your control.</li>
 </ul>
 
 <h2>Practice</h2>
 <p><strong>1.</strong> U0.4 on diameter. What is the radial finish allowance?</p>
 <details><summary>Ans</summary><p>0.4 mm on diameter = 0.2 mm radial. The finish pass removes 0.2 mm from the radius.</p></details>
 <p><strong>2.</strong> Why can't Type I G71 machine grooves?</p>
-<details><summary>Ans</summary><p>Type I G71 assumes X moves monotonically in one direction. A groove reverses X direction, which the cycle cannot handle. Use G73 (pattern repeating) or program grooves manually after G70.</p></details>
+<details><summary>Ans</summary><p>Type I assumes X moves monotonically in one direction. A groove reverses X, which the cycle cannot plan. Type II or a separate groove operation may be needed; G73 is suited to near-net-shape stock, not every groove.</p></details>
 <p><strong>3.</strong> What does G70 do?</p>
 <details><summary>Ans</summary><p>Finishing cycle: takes one clean pass along the P–Q contour at the finishing S and F, cutting to exact dimensions.</p></details>
 <p><strong>4.</strong> Raw stock &Oslash;60, finish to &Oslash;40, D1.0 per pass. How many roughing passes?</p>
@@ -141,7 +139,7 @@ M30</code></pre>
 <p>The same G71 works for ID boring, but the sign of U flips: material is inside the bore, so the finish allowance is negative U (the bore grows toward the finished size). The first P block starts at the small bore diameter and X increases monotonically toward the finished ID. Boring bar deflection usually limits depth-of-cut more than the OD case.</p>
 
 <h3>Cycle Time Estimate</h3>
-<p>For the example: radial stock 10 mm, D1.0 = 10 passes. Each pass covers about 40 mm at F0.2 mm/rev and S1000 = 200 mm/min, so each pass takes 40/200 = 0.2 min = 12 s; roughing alone is about 2 min. The finish pass at S1500 F0.1 = 150 mm/min covers 40 mm in 0.27 min. Rapid moves and approach time add roughly 20&ndash;30%. Use this order-of-magnitude estimate, then refine on the first article.</p>
+<p>For an ideal straight cylinder with D1.0 radial depth and 10 mm total radial stock, expect about 10 roughing passes (the last leaves U0.4 diameter = 0.2 mm for finish). At F0.2 mm/rev and S1000 = 200 mm/min, a 40 mm effective cut length takes 0.2 min = 12 s. This is a classroom approximation for a straight part; on the stepped example below, passes below &Oslash;36 only travel the first length, so not every pass cuts 40 mm. Ignore rapid and acceleration until you have a cycle-time study.</p>
 
 <h3>When Not to Use G71</h3>
 <p>Very short parts, chamfers only, or a single finishing pass do not need G71. Hand-code those directly. Parts with cross-holes, interrupted cuts, or hard scale benefit from a deliberate first pass rather than the automatic cycle. G71 shines when there is a long profile to rough repeatedly.</p>
@@ -149,9 +147,30 @@ M30</code></pre>
 <h3>Verifying the First Article</h3>
 <p>After G70, stop and measure: diameter at the step, length to the shoulder, and surface finish. If the diameter is small, adjust the wear offset on that tool, not the program. If the step is off in Z, adjust the Z wear. The geometry offset stays; wear absorbs the small corrections.</p>
 
+<h3>Step-by-Step Plan for the Example</h3>
+<table class="data-table">
+<tr><th>Pass</th><th>X diameter</th><th>Effective Z length</th><th>Notes</th></tr>
+<tr><td>1</td><td>52.0</td><td>0 (air)</td><td>approach</td></tr>
+<tr><td>2</td><td>50.0</td><td>40 mm</td><td>rough to first step</td></tr>
+<tr><td>3</td><td>48.0</td><td>40 mm</td><td></td></tr>
+<tr><td>4</td><td>46.0</td><td>40 mm</td><td></td></tr>
+<tr><td>5</td><td>44.0</td><td>40 mm</td><td></td></tr>
+<tr><td>6</td><td>42.0</td><td>40 mm</td><td></td></tr>
+<tr><td>7</td><td>40.4</td><td>40 mm</td><td>last rough, leaves U0.4</td></tr>
+<tr><td>G70</td><td>39.5 / 36.0</td><td>0&ndash;40 mm</td><td>one finish pass along P&ndash;Q</td></tr>
+</table>
+<p>The actual controller interleaves step-downs and pull-offs; this table shows only the resulting diameters and lengths for planning.</p>
+
+<h3>U and W Sign by Cutting Side</h3>
+<p>On OD roughing, U leaves material on the outside, positive in diameter. On ID boring, the finish allowance sign flips because material is inside the bore. Always state which side you are cutting; do not infer the sign from the word "bore" alone. W leaves axial material on the shoulder that the finish pass will clean up.</p>
+
+<h3>Reading the First-Part Result</h3>
+<p>After G70, measure with calipers or micrometer. If the diameter is 39.6 instead of 39.5, the tool's X wear offset increases by 0.1 on diameter for the next part. If the shoulder is at Z&minus;19.8 instead of &minus;20.0, adjust Z wear by &minus;0.2. Material already removed cannot be put back; corrections apply to subsequent parts and are held only while the error is stable.</p>
+
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G71.html">Haas G71 Stock Removal in Turning</a>.</li>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G70.html">Haas G70 Finishing Cycle</a>.</li>
 </ul>
 
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/">&larr; Turning Basics</a><a href="/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring/">Grooving &amp; Boring &rarr;</a></nav>

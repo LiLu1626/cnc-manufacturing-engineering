@@ -31,7 +31,7 @@
 
 <h2>Concept</h2>
 <p>A <strong>canned cycle</strong> is a pre-programmed motion sequence stored in the CNC controller. When you write a single line like <code>G83 R2. Z-15. Q3. F120.</code>, the controller remembers a whole recipe: rapid to the hole X/Y, rapid down to R2, feed in 3 mm pecks to Z-15, retract to clear chips, and return to the R plane. You only need to give new X/Y positions for each subsequent hole.</p>
-<p>Canned cycles are <strong>modal</strong>. Once activated by a G81, G82, G83, G84, G85, or similar code, the cycle stays active until G80 cancels it. Every subsequent X/Y line triggers the full cycle at the new position. This is powerful — a 20-hole pattern needs only one cycle line and 20 position lines — but also dangerous: forget G80 and the next G00 move becomes an unexpected hole.</p>
+<p>Canned cycles are <strong>modal</strong>. Once activated, the stored R/Z/F/Q/P recipe stays active until canceled. On a Haas mill, a bare X/Y block (no motion G-code) repeats the cycle at the new position; an explicit G00/G01 block also exits cycle mode, but G80 is still written explicitly so the intent is unambiguous. If you forget to end the pattern, an unexpected X/Y move can become an unwanted hole.</p>
 
 <h2>Why It Matters</h2>
 <p>Before canned cycles existed, a drilling program looked like this for each hole:</p>
@@ -42,14 +42,13 @@ G00 Z2.              (rapid back up)
 G00 X50. Y30.        (rapid to next hole)
 G01 Z-15. F120.      (feed down again)
 G00 Z2.              (back up)</code></pre>
-<p>That is 7 lines per hole. For a 16-hole pattern, over 100 lines. With canned cycles, the same job is:</p>
-<pre class="cp-code"><code>G99 G81 R2. Z-15. F120.
-X10. Y10.
-X50. Y30.
-X50. Y70.
-X10. Y70.
+<p>For two holes that is already 14 motion blocks. With canned cycles, the same four-hole pattern is:</p>
+<pre class="cp-code"><code>G99 G81 R2. Z-10. F100. X-25. Y-25.
+X25. Y-25.
+X25. Y25.
+X-25. Y25.
 G80</code></pre>
-<p>5 lines total. The controller handles the rapid-feed-retract sequence for every hole. Beyond saving typing, canned cycles ensure every hole uses identical R plane, depth, and feed — no variation between hole 1 and hole 16.</p>
+<p>The first hole coordinates are on the G81 call line, so the call itself drills hole 1; the next three lines drill holes 2&ndash;4. The controller handles the rapid-feed-retract sequence for every hole, and every hole uses the same R plane, depth, and feed.</p>
 
 <h2>How It Works</h2>
 
@@ -61,6 +60,7 @@ G80</code></pre>
 <li><strong>Feed to Z depth</strong> — switches to feed rate F and cuts to the programmed Z depth. Peck cycles (G83) do this in Q increments with retracts between.</li>
 <li><strong>Dwell or special motion</strong> — G82 dwells at the bottom; G84 reverses spindle for tapping; G85 feeds back out.</li>
 <li><strong>Retract</strong> — G98 retracts to the initial Z plane (the height before the cycle was called); G99 retracts only to the R plane.</li>
+<li><strong>Repeat or cancel</strong> — XY moves to the next hole and the recipe repeats; G80 ends it.</li>
 </ol>
 
 <figure class="cp-figure">
@@ -97,7 +97,7 @@ G80</code></pre>
 <tr><td>G81</td><td>Simple drill</td><td>Feed in, rapid out</td><td>Through holes, centering</td></tr>
 <tr><td>G82</td><td>Drill with dwell</td><td>Feed in, dwell P, rapid out</td><td>Spot faces, counterbores</td></tr>
 <tr><td>G83</td><td>Peck drill</td><td>Feed Q, retract, repeat</td><td>Deep holes, chip clearing</td></tr>
-<tr><td>G84</td><td>Tapping</td><td>Feed in reverse, feed out</td><td>Tapped holes (see page 34)</td></tr>
+<tr><td>G84</td><td>Tapping</td><td>Synchronous feed in, spindle reverses at bottom, feed out</td><td>Tapped holes (see page 34)</td></tr>
 <tr><td>G85</td><td>Bore</td><td>Feed in, feed out</td><td>Reaming, boring</td></tr>
 <tr><td>G80</td><td>Cancel cycle</td><td>—</td><td>End of hole pattern</td></tr>
 </table>
@@ -116,23 +116,36 @@ G21 G17 G90 G40 G80
 G54
 T01 M06                 (&Oslash;6 DRILL)
 S2000 M03
-G00 X-25. Y-25.
-G43 H01 Z50. M08
-G99 G81 R2. Z-10. F100.   (hole 1, cycle activates)
+G43 H01 Z50. M08           (tool length, at verified Z50 clearance)
+G94
+G00 X-25. Y-25.            (rapid above hole 1 at Z50)
+G99 G81 R2. Z-10. F100.   (drill hole 1, retract to R2)
 X25. Y-25.                 (hole 2)
 X25. Y25.                  (hole 3)
 X-25. Y25.                 (hole 4)
 G80                        (cancel cycle)
-G00 Z50. M09               (explicit safe retract)
+G00 Z50.                   (retract to verified clearance)
+M09
+M05
 M30</code></pre>
-<p><strong>Trace:</strong> The G81 line drills hole 1 at (&minus;25,&minus;25) and retracts to R2 (G99). Then X25. Y&minus;25. moves XY to hole 2 at R2 height and immediately repeats the drill cycle. After hole 4, G80 cancels the cycle. G00 Z50 lifts to safe height. Total: 4 holes drilled with one cycle line.</p>
+<p><strong>Block trace (4 holes, exactly):</strong></p>
+<table class="data-table">
+<tr><th>Block</th><th>Drills?</th><th>Cumulative holes</th><th>End Z</th></tr>
+<tr><td>G43 Z50 / G00 XY to hole 1</td><td>no</td><td>0</td><td>50</td></tr>
+<tr><td>G99 G81 R2 Z-10 F100 X-25 Y-25</td><td>hole 1</td><td>1</td><td>R2</td></tr>
+<tr><td>X25 Y-25</td><td>hole 2</td><td>2</td><td>R2</td></tr>
+<tr><td>X25 Y25</td><td>hole 3</td><td>3</td><td>R2</td></tr>
+<tr><td>X-25 Y25</td><td>hole 4</td><td>4</td><td>R2</td></tr>
+<tr><td>G80</td><td>no</td><td>4</td><td>R2 (mode off)</td></tr>
+<tr><td>G00 Z50</td><td>no</td><td>4</td><td>50</td></tr>
+</table>
 
 
 <h3>G98 vs G99 Retract, Side by Side</h3>
-<p>G98 and G99 only differ in how high the tool lifts between holes. G99 retracts to the R plane and stays there, saving the vertical move up and down. G98 retracts to the initial Z plane established before the cycle was called (for example Z50). On a flat plate with no obstructions, G99 is faster. If a raised boss, clamp, or the next hole sits on a higher step, G98 clears it. You can switch mid-pattern: write G98 on the line for the hole that needs the higher retract, then return to G99 afterward. The mode change applies from that block on.</p>
+<p>G98 and G99 only differ in how high the tool lifts <em>after each hole</em>. G99 retracts to R; G98 retracts to the initial plane established before the cycle. If a clamp sits between hole 1 and hole 2, call G98 on the hole 1 line so that after hole 1 the tool is already above the obstacle before XY moves to hole 2. If the tool is already sitting low on R and an obstacle appears, do not rely on G98 retroactively: G80, move Z to a verified height, then re-establish the cycle. G98 is not itself a safety guarantee; the initial plane must be above the obstacle and the XY envelope must be clear.</p>
 
 <h3>Hole Patterns: Rectangular Array and Bolt Circle</h3>
-<p>For a rectangular array, list X/Y rows. For a bolt circle, compute each point: (Cx + R&times;cos&theta;, Cy + R&times;sin&theta;). Example: 6 holes on a pitch circle radius 30 mm, starting at 0&deg;, every 60&deg;: (30,0), (15,25.98), (&minus;15,25.98), (&minus;30,0), (&minus;15,&minus;25.98), (15,&minus;25.98). Each is one X/Y line under the active cycle. Coordinates are exact to two decimals; round consistently. The Engineering Tools bolt-circle calculator automates this table.</p>
+<p>For a rectangular array, list X/Y rows. For a bolt circle, compute each point: (Cx + R&times;cos&theta;, Cy + R&times;sin&theta;). Example: 6 holes on a pitch circle radius 30 mm, starting at 0&deg;, every 60&deg;: (30,0), (15,25.98), (&minus;15,25.98), (&minus;30,0), (&minus;15,&minus;25.98), (15,&minus;25.98). Each is one X/Y line under the active cycle. Coordinates are rounded to two decimals consistently. The Engineering Tools bolt-circle calculator automates this table.</p>
 
 <figure class="cp-figure">
 <svg viewBox="0 0 360 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
@@ -154,7 +167,7 @@ M30</code></pre>
 
 <h2>Common Mistakes</h2>
 <ul>
-<li><strong>Forgetting G80</strong> — the cycle stays active. The next G00 X10 Y10 (intended as a positioning move) will drill a hole there. Always write G80 after the pattern.</li>
+<li><strong>Forgetting G80</strong> — on a Haas, a bare X/Y block repeats the cycle. A positioning X/Y written without an explicit motion code can become an unwanted hole. Always write G80 after the pattern.</li>
 <li><strong>Thinking G80 retracts to Z50</strong> — G80 only cancels the cycle mode. The tool stays at its current Z. Write G00 Z50 explicitly.</li>
 <li><strong>Changing R or Z without re-commanding</strong> — R and Z are stored from the cycle line. If you forget to re-specify Z for a deeper hole, it drills to the old depth.</li>
 <li><strong>G99 around a boss or clamp</strong> — retracting only to R2 between holes can hit a raised feature. Use G98 when there is any obstacle.</li>
@@ -166,8 +179,8 @@ M30</code></pre>
 <details><summary>Ans</summary><p>The machine rapidly positions to (10,20), rapid to R2, feeds to Z-15 at 120 mm/min, and retracts to R2 (G99). The R, Z, and F are inherited from the G81 line.</p></details>
 <p><strong>2.</strong> Why write G00 Z50 after G80?</p>
 <details><summary>Ans</summary><p>G80 cancels the cycle mode but does not move Z. The tool may still be at R2 or Z depth. An explicit G00 Z50 guarantees a safe height before the next operation.</p></details>
-<p><strong>3.</strong> Eight holes on a bolt circle at the same depth. How many G81 lines do you write?</p>
-<details><summary>Ans</summary><p>One G81 line (with R, Z, F), followed by 8 X/Y coordinate lines, then G80. The cycle repeats automatically at each position.</p></details>
+<p><strong>3.</strong> Eight holes on a bolt circle at the same depth. How many G81 lines and how many X/Y lines?</p>
+<details><summary>Ans</summary><p>One G81 call line that includes the first hole coordinates, then 7 more X/Y lines for holes 2&ndash;8, then G80. The call itself drills hole 1; do not list hole 1 twice.</p></details>
 <p><strong>4.</strong> You need hole 1 at Z-10 and holes 2–4 at Z-20 in the same pattern. How do you do it?</p>
 <details><summary>Ans</summary><p>Write G81 with Z-10 for hole 1. On the hole 2 line, write <code>X... Y... Z-20.</code> The new Z overrides the stored depth. Holes 3 and 4 inherit Z-20. Then G80.</p></details>
 
@@ -182,6 +195,20 @@ M30</code></pre>
 
 <h3>Programming a Tapped Hole with the Same Cycle</h3>
 <p>For M8&times;1.25 at S500, F = S&times;pitch = 625 mm/min. G84 R2. Z-15. F625. The control reverses spindle at the bottom. The tap must clear chips and have adequate entry clearance; G98 is usually chosen for tapping to retract fully between holes.</p>
+
+<h3>Cycle Parameter Dialect Table</h3>
+<table class="data-table">
+<tr><th>Parameter</th><th>Haas mill example</th><th>Note</th></tr>
+<tr><td>R</td><td>R2.</td><td>distance above Z0, mm under G21/G94</td></tr>
+<tr><td>Z</td><td>Z-10.</td><td>tip position, negative into part</td></tr>
+<tr><td>Q</td><td>Q3.</td><td>peck increment, mm (G73/G83 family)</td></tr>
+<tr><td>P</td><td>P0.5</td><td>dwell seconds, decimal on Haas</td></tr>
+<tr><td>F</td><td>F100.</td><td>mm/min under G94</td></tr>
+<tr><td>G98/G99</td><td>modal</td><td>initial plane vs R retract</td></tr>
+</table>
+
+<h3>When a New Tool Reuses the Same Holes</h3>
+<p>Drill, then tap, then countersink on the same X/Y positions. Each tool calls G80 at the end and re-establishes its own cycle with its own R, Z, F, and S. The coordinates can be kept in a subprogram and called three times, once per tool. Never carry a drill cycle's R2 into a tap cycle without restating it; the tap needs a different R clearance and feed.</p>
 
 <h2>Sources</h2>
 <ul>
