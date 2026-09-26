@@ -91,31 +91,36 @@
 <p>Lathe spindles use <strong>G97 S</strong> (constant RPM) or <strong>G96 S</strong> (constant surface speed, CSS). Under G96, n = 1000 v<sub>c</sub> / (&pi;D): as diameter D shrinks, RPM rises. Example at v<sub>c</sub> = 100 m/min: at D = 50 mm, n = 636.6 RPM; at D = 25 mm, n = 1273.2 RPM. A G50 max-RPM clamp caps the spindle at a classroom limit (say 2000) so it does not over-speed near center. G97 holds a fixed RPM regardless of diameter; threading always uses G97. The main example on this page uses G97 for simplicity.</p>
 
 <h2>Example</h2>
-<p><strong>Worked example (classroom assumptions):</strong> &Oslash;45 raw bar gripped in a chuck, projecting far enough to face and turn to Z&minus;50 plus tool clearance. Operations: (1) face the front, (2) rough turn OD from &Oslash;45 to &Oslash;41 over 50 mm length, (3) finish turn to &Oslash;39.5. Z0 on the front face after facing. Rough S1000 F0.2 mm/rev (radial depth 2 mm); finish S1500 F0.1 (radial 0.75 mm). These are classroom starting values, not a tooling recommendation.</p>
+<p><strong>Worked example (classroom assumptions):</strong> &Oslash;45 raw bar in a chuck, front jaw face at roughly Z&minus;65, projecting past the tool clearance needed to reach Z&minus;50. Operations: (1) face the front, (2) rough turn OD &Oslash;45&rarr;&Oslash;41 over Z0&rarr;Z&minus;50, (3) finish to &Oslash;39.5. Z0 on the front face after facing. Rough S1000 F0.2 mm/rev (2 mm radial); finish S1500 F0.1 (0.75 mm radial). This is a teaching program, not a full setup sheet; confirm jaw position, bar projection, and tool envelope on the machine.</p>
 <pre class="cp-code"><code>O0019 (TURNING FUNDAMENTALS EXAMPLE)
 G21 G97 G99
 T0101                    (OD turning tool)
 S1000 M03
-G00 X47. Z2.             (approach: above stock, 2 mm off face)
+G21 G18 G97 G99 G40      (known state: mm, XZ plane, RPM, feed/rev, no comp)
+G54                       (work offset already calibrated)
+T0101 M03 S1000           (OD tool, forward rotation confirmed)
+G00 X47. Z2.             (approach: X outside stock, Z off face)
 (FACE)
 G01 Z0 F0.2
-X-1.0 F0.15              (feed past center to clean face)
-G00 X45. Z1.             (+Z off face first, then X outward)
+X-1.0 F0.15              (feed past center; assumes calibrated tool height)
+G00 Z1.                  (+Z off face first, one axis)
+G00 X47.                 (then X outward to verified clearance)
 (ROUGH TURN O45 TO O41, Z-50)
 G00 X46. Z2.
 G01 Z0 F0.2
 X41.0                    (rough to O41, 2 mm radial depth)
 Z-50.                    (turn along Z to -50 mm)
-G00 X45.                 (retract X clear first)
-Z2.                      (then Z back)
+G00 X47.                 (X clear first, outside stock)
+G00 Z2.                  (then Z back)
 (FINISH TURN TO O39.5)
+S1500
 G00 X40. Z2.
 G01 Z0 F0.1
 Z-50.                    (finish pass, 0.75 mm radial)
 G00 X50.                 (X out first)
-Z100.                    (then Z to clear)
+G00 Z100.                (then Z to clear)
 M30</code></pre>
-<p><strong>Feed rate calculation:</strong> At S1000 and F0.2 mm/rev, feed = 1000 &times; 0.2 = 200 mm/min. The Z-50 roughing pass covers 50 mm at 200 mm/min = 0.25 min = 15 s. The finish pass at S1500 F0.1 = 150 mm/min covers 50 mm in 20 s. Rapid moves are not included.</p>
+<p><strong>Feed rate calculation:</strong> Rough: S1000 F0.2 = 200 mm/min, 50 mm = 15 s. Finish: S1500 F0.1 = 150 mm/min, 50 mm = 20 s. Times cover the 50 mm cut only; approach, retract, and acceleration are excluded.</p>
 
 
 <h3>Approach and Retract Sequence on a Lathe</h3>
@@ -131,7 +136,7 @@ M30</code></pre>
   <text x="305" y="55" font-size="9" fill="#e67e22">Z0 (front face)</text>
   <line x1="100" y1="60" x2="280" y2="60" stroke="#c0392b" stroke-width="2"/>
   <polygon points="110,60 120,56 120,64" fill="#c0392b"/>
-  <text x="130" y="55" font-size="9" fill="#c0392b">feed &rarr; Z-50 (toward chuck)</text>
+  <text x="130" y="55" font-size="9" fill="#c0392b">feed toward Z-50 (chuck side)</text>
   <text x="80" y="150" font-size="10" fill="#333">Radial depth = (50&minus;44)/2 = 3 mm; diameter change = 6 mm.</text>
   <text x="80" y="165" font-size="9" fill="#666">Chuck on left, front face on right.</text>
 </svg>
@@ -175,13 +180,13 @@ M30</code></pre>
 <h3>Block Trace for the Worked Program</h3>
 <table class="data-table">
 <tr><th>Block</th><th>X (diameter)</th><th>Z</th><th>Action</th></tr>
-<tr><td>G00 X47 Z2</td><td>47</td><td>2</td><td>above stock, off face</td></tr>
+<tr><td>G00 X47 Z2</td><td>47</td><td>2</td><td>outside stock, off face</td></tr>
 <tr><td>G01 Z0 F0.2</td><td>47</td><td>0</td><td>approach face</td></tr>
 <tr><td>X-1 F0.15</td><td>&minus;1</td><td>0</td><td>face past center</td></tr>
-<tr><td>G00 X45 Z1</td><td>45</td><td>1</td><td>clear face, then X out</td></tr>
+<tr><td>G00 Z1 / X47</td><td>47</td><td>1</td><td>+Z off face, then X out</td></tr>
 <tr><td>G01 Z0 / X41 / Z-50</td><td>41</td><td>&minus;50</td><td>rough OD, 2 mm radial</td></tr>
-<tr><td>G00 X45 / Z2</td><td>45</td><td>2</td><td>X out first, then Z back</td></tr>
-<tr><td>G01 Z0 / Z-50</td><td>39.5</td><td>&minus;50</td><td>finish OD, 0.75 mm radial</td></tr>
+<tr><td>G00 X47 / Z2</td><td>47</td><td>2</td><td>X clear first, then Z back</td></tr>
+<tr><td>S1500 / G00 X40 Z2 / G01 Z0 / Z-50</td><td>39.5</td><td>&minus;50</td><td>finish OD, 0.75 mm radial</td></tr>
 </table>
 
 <h3>Why X Is Diameter on a Lathe</h3>

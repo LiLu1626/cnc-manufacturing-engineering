@@ -64,14 +64,14 @@
 <svg viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
   <line x1="40" y1="180" x2="380" y2="180" stroke="#333" stroke-width="1"/>
   <text x="385" y="184" font-size="10" fill="#333">Z+</text>
-  <text x="385" y="196" font-size="9" fill="#e67e22">Z0</text>
+  <text x="355" y="196" font-size="9" fill="#e67e22">Z0</text>
   <line x1="360" y1="180" x2="360" y2="20" stroke="#e67e22" stroke-dasharray="3,2"/>
   <!-- finished profile: radius r=15 (Ø30) Z0..-20, r=18 (Ø36) Z-20..-40. Scale: Z 4px/mm, r 4px/mm, centerline y=180 -->
   <path d="M 360 120 L 280 120 L 280 108 L 200 108" fill="none" stroke="#c0392b" stroke-width="2"/>
   <text x="300" y="115" font-size="9" fill="#c0392b">finished r=15 (O30)</text>
   <text x="220" y="103" font-size="9" fill="#c0392b">finished r=18 (O36)</text>
   <!-- after-rough: r=15.2 and 18.2 (0.2 radial), shoulder at Z-19.9 -->
-  <path d="M 360 119.2 L 280.4 119.2 L 280.4 106.8 L 200 106.8" fill="none" stroke="#166534" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <path d="M 360 119.2 L 280.4 119.2 L 280.4 107.2 L 200 107.2" fill="none" stroke="#166534" stroke-width="1.5" stroke-dasharray="4,2"/>
   <text x="120" y="150" font-size="9" fill="#166534">dashed = after roughing (+0.2 radial, +W0.1 Z)</text>
 </svg>
 <figcaption>Half-section (radius, not diameter): finished in red, after-rough in green dashed. U0.4 diameter = 0.2 mm radial; W0.1 leaves the shoulder at Z&minus;19.9. Schematic, not a controller trace.</figcaption>
@@ -106,15 +106,19 @@ M30</code></pre>
 
 <figure class="cp-figure">
 <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
-  <rect x="40" y="60" width="280" height="60" fill="#d4c5a9" stroke="#999"/>
-  <path d="M 40 60 L 40 90 L 200 90 L 200 105 L 320 105" fill="none" stroke="#c0392b" stroke-width="2"/>
-  <text x="180" y="150" font-size="10" text-anchor="middle" fill="#333">G71 rough leaves U0.4 diameter; G70 cuts red contour to size</text>
+  <line x1="60" y1="140" x2="300" y2="140" stroke="#c0392b" stroke-width="2"/>
+  <line x1="60" y1="132" x2="300" y2="132" stroke="#166534" stroke-width="2" stroke-dasharray="4,2"/>
+  <line x1="200" y1="60" x2="200" y2="140" stroke="#c0392b" stroke-width="2"/>
+  <line x1="196" y1="60" x2="196" y2="140" stroke="#166534" stroke-width="2" stroke-dasharray="4,2"/>
+  <text x="220" y="128" font-size="10" fill="#166534">after rough</text>
+  <text x="220" y="148" font-size="10" fill="#c0392b">finished</text>
+  <text x="60" y="50" font-size="10" fill="#333">Zoom at shoulder: 0.2 mm radial, 0.1 mm axial (not to scale)</text>
 </svg>
-<figcaption>Finish allowance is visible on the drawing as a thin shell around the finished contour. G70 removes it in one pass.</figcaption>
+<figcaption>Magnified shoulder: red = finished contour, green dashed = after roughing. G70 removes the 0.2 mm radial and 0.1 mm axial stock.</figcaption>
 </figure>
 
 <h3>Verifying the Cycle Before Running</h3>
-<p>After writing G71, dry-run with feed override low and watch: does the first block move X only? Do the rough passes stay on the stock side? Does the tool pull away from the part before indexing to the next pass? A G71 that alarms on the first block usually means the N10 block has Z, or the contour reverses X. Fix those before raising feed.</p>
+<p>After writing G71, dry-run with feed override low and watch: is the first P block Type I (X only) or Type II (X plus Z)? Do rough passes stay on the stock side? Does the tool pull away before indexing? An alarm usually means X reverses in Type I, Z reverses, or the tool starts inside the finished profile. Identify the type first, then check the matching rule.</p>
 
 <h2>Common Mistakes</h2>
 <ul>
@@ -147,45 +151,38 @@ M30</code></pre>
 <h3>Verifying the First Article</h3>
 <p>After G70, stop and measure: diameter at the step, length to the shoulder, and surface finish. If the diameter is small, adjust the wear offset on that tool, not the program. If the step is off in Z, adjust the Z wear. The geometry offset stays; wear absorbs the small corrections.</p>
 
-<h3>Step-by-Step Plan for the Example</h3>
+<h3>Contour Block Trace (P&ndash;Q)</h3>
 <table class="data-table">
-<tr><th>Pass</th><th>X diameter</th><th>Effective Z length</th><th>Notes</th></tr>
-<tr><td>1</td><td>52.0</td><td>0 (air)</td><td>approach</td></tr>
-<tr><td>2</td><td>50.0</td><td>40 mm</td><td>rough to first step</td></tr>
-<tr><td>3</td><td>48.0</td><td>40 mm</td><td></td></tr>
-<tr><td>4</td><td>46.0</td><td>40 mm</td><td></td></tr>
-<tr><td>5</td><td>44.0</td><td>40 mm</td><td></td></tr>
-<tr><td>6</td><td>42.0</td><td>40 mm</td><td></td></tr>
-<tr><td>7</td><td>40.4</td><td>40 mm</td><td>last rough, leaves U0.4</td></tr>
-<tr><td>G70</td><td>39.5 / 36.0</td><td>0&ndash;40 mm</td><td>one finish pass along P&ndash;Q</td></tr>
+<tr><th>Block</th><th>X (diameter)</th><th>Z</th><th>Motion</th></tr>
+<tr><td>N10 start</td><td>30</td><td>2</td><td>P-block positioning above part</td></tr>
+<tr><td>G01 Z0 F0.1</td><td>30</td><td>0</td><td>feed to face</td></tr>
+<tr><td>Z-20.</td><td>30</td><td>&minus;20</td><td>turn O30 straight, then shoulder</td></tr>
+<tr><td>X36.</td><td>36</td><td>&minus;20</td><td>radial move across shoulder (cutting)</td></tr>
+<tr><td>Z-40.</td><td>36</td><td>&minus;40</td><td>turn O36</td></tr>
+<tr><td>N20 X52.</td><td>52</td><td>&minus;40</td><td>pull off, leave contour</td></tr>
 </table>
-<p>The actual controller interleaves step-downs and pull-offs; this table shows only the resulting diameters and lengths for planning.</p>
+<p>First move is Z on the O30 diameter, then X steps out to O36 at the shoulder — a stepped part, not a taper.</p>
+
+<h3>Target Allowance Table</h3>
+<table class="data-table">
+<tr><th>Feature</th><th>Finished</th><th>After rough</th></tr>
+<tr><td>Front diameter</td><td>O30</td><td>O30.4</td></tr>
+<tr><td>Rear diameter</td><td>O36</td><td>O36.4</td></tr>
+<tr><td>Shoulder Z</td><td>&minus;20.0</td><td>&minus;19.9</td></tr>
+</table>
+<p>U0.4 is on diameter (0.2 mm radial); W0.1 leaves axial stock on the shoulder. The exact rough pass sequence is computed by the control, not listed here.</p>
 
 <h3>U and W Sign by Cutting Side</h3>
 <p>On OD roughing, U leaves material on the outside, positive in diameter. On ID boring, the finish allowance sign flips because material is inside the bore. Always state which side you are cutting; do not infer the sign from the word "bore" alone. W leaves axial material on the shoulder that the finish pass will clean up.</p>
 
 <h3>Reading the First-Part Result</h3>
-<p>After G70, measure with calipers or micrometer. If the diameter is 39.6 instead of 39.5, the tool's X wear offset increases by 0.1 on diameter for the next part. If the shoulder is at Z&minus;19.8 instead of &minus;20.0, adjust Z wear by &minus;0.2. Material already removed cannot be put back; corrections apply to subsequent parts and are held only while the error is stable.</p>
+<p>After G70, measure. If the front diameter is 30.10 instead of 30.00, and positive X wear moves the tool outward (larger diameter), reduce X wear by 0.10 in a diameter field (0.05 in a radius field) for the next part; confirm the sign convention on your control. If the shoulder lands at Z&minus;19.8 instead of &minus;20.0, adjust Z wear accordingly. Material already removed cannot be restored; corrections apply to subsequent parts only.</p>
 
 <h3>Reading a G71 Alarm on the First Block</h3>
 <p>Common causes: the P block starts with a move that reverses X inside Type I, the Z direction changes along the contour, or the tool starts inside the finished profile instead of above the stock. Walk through N10&rarr;N20 block by block and compare against the part. Do not increase D to "force" the cycle through; that hides a geometry error.</p>
 
 <h3>Roughing vs Finishing Feed and Speed</h3>
 <p>Roughing favors depth over surface finish; finishing favors light cuts at higher speed. The same tool may run at S1000 F0.2 rough and S1500 F0.1 finish. These are classroom starting points; the insert manufacturer's data and the machine's rigidity determine the real values.</p>
-
-<h3>Program Template</h3>
-<pre class="cp-code"><code>G21 G18 G97 G99 G40
-T0101 M03 S1000
-G00 X52. Z2.
-G71 P10 Q20 D1.0 U0.4 W0.1 F0.2
-N10 G00 X30.
-G01 Z0 F0.1
-X36. Z-20.
-Z-40.
-N20 X52.
-G70 P10 Q20
-G00 X100. Z100.
-M30</code></pre>
 
 <h2>Sources</h2>
 <ul>

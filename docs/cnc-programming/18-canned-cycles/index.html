@@ -42,7 +42,7 @@ G00 Z2.              (rapid back up)
 G00 X50. Y30.        (rapid to next hole)
 G01 Z-15. F120.      (feed down again)
 G00 Z2.              (back up)</code></pre>
-<p>For two holes that is already 14 motion blocks. With canned cycles, the same four-hole pattern is:</p>
+<p>The hand-written snippet above is a two-hole fragment. The independent four-hole cycle example below shows the pattern:</p>
 <pre class="cp-code"><code>G99 G81 R2. Z-10. F100. X-25. Y-25.
 X25. Y-25.
 X25. Y25.
@@ -116,7 +116,7 @@ G21 G17 G90 G40 G80
 G54
 T01 M06                 (&Oslash;6 DRILL)
 S2000 M03
-G43 H01 Z50. M08           (tool length, at verified Z50 clearance)
+G00 G43 H01 Z50. M08       (tool length move, at verified Z50 clearance)
 G94
 G00 X-25. Y-25.            (rapid above hole 1 at Z50)
 G99 G81 R2. Z-10. F100.   (drill hole 1, retract to R2)
@@ -132,7 +132,7 @@ M30</code></pre>
 <table class="data-table">
 <tr><th>Block</th><th>Drills?</th><th>Cumulative holes</th><th>End Z</th></tr>
 <tr><td>G43 Z50 / G00 XY to hole 1</td><td>no</td><td>0</td><td>50</td></tr>
-<tr><td>G99 G81 R2 Z-10 F100 X-25 Y-25</td><td>hole 1</td><td>1</td><td>R2</td></tr>
+<tr><td>G99 G81 R2 Z-10 F100 (already at X-25 Y-25)</td><td>hole 1</td><td>1</td><td>R2</td></tr>
 <tr><td>X25 Y-25</td><td>hole 2</td><td>2</td><td>R2</td></tr>
 <tr><td>X25 Y25</td><td>hole 3</td><td>3</td><td>R2</td></tr>
 <tr><td>X-25 Y25</td><td>hole 4</td><td>4</td><td>R2</td></tr>
@@ -194,7 +194,7 @@ M30</code></pre>
 <p>The XY/R/Z/F framework is identical; only the bottom-of-hole motion changes. G81 feeds in and rapids out. G82 adds a dwell P. G83 feeds in Q pecks and retracts fully between. G84 reverses the spindle and feeds out. G85 feeds in and feeds out. This means once you have drilled G81, switching to G83 only adds Q and changes the code letter; the hole positions stay the same.</p>
 
 <h3>Programming a Tapped Hole with the Same Cycle</h3>
-<p>For M8&times;1.25 at S500, F = S&times;pitch = 625 mm/min. G84 R2. Z-15. F625. The control reverses spindle at the bottom. The tap must clear chips and have adequate entry clearance; G98 is usually chosen for tapping to retract fully between holes.</p>
+<p>Assume G21/G94, a prepared tap drill, and S500. For M8&times;1.25, F = S&times;pitch = 625 mm/min. G84 R2. Z-15. F625. The control reverses spindle at the bottom. G98 is usually chosen for tapping so the tool retracts above the fixture between holes.</p>
 
 <h3>Cycle Parameter Dialect Table</h3>
 <table class="data-table">
@@ -211,7 +211,7 @@ M30</code></pre>
 <p>Drill, then tap, then countersink on the same X/Y positions. Each tool calls G80 at the end and re-establishes its own cycle with its own R, Z, F, and S. The coordinates can be kept in a subprogram and called three times, once per tool. Never carry a drill cycle's R2 into a tap cycle without restating it; the tap needs a different R clearance and feed.</p>
 
 <h3>Common Setup Checks Before Running a Cycle</h3>
-<p>Confirm: the tool length H is loaded; G54 XY origin matches the drawing; R is above any fixture by at least 1&ndash;2 mm; Z depth includes the drill tip; F matches G94 mm/min; spindle direction and RPM are correct for the tool. After G80, dry-run the first hole with feed override low before enabling full feed.</p>
+<p>Confirm: H offset and G54 are calibrated; R plane clears the hole opening; the retract plane (R for G99, initial Z for G98) clears fixtures between holes; Z depth includes the 118&deg; drill tip and breakthrough; F matches G94 mm/min; spindle direction and RPM suit the tool. Dry-run the first hole at low feed override.</p>
 
 <h2>Sources</h2>
 <ul>
