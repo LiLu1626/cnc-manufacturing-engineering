@@ -131,7 +131,38 @@ G00 Z50. M09
 M30</code></pre>
 <p><strong>What happens line by line:</strong> After G83, the machine moves to (10,10), rapid to Z2, feeds down in 2 mm pecks to Z-12.5, retracts to R2 (G99). Then it moves XY to (50,30) — staying at R2 — and repeats the peck cycle. G80 cancels the cycle. G00 Z50 lifts to safe height. The program uses G99 because there are no clamps between the two holes; if a boss sat between them, G98 would be required.</p>
 
-<h2>Common Mistakes</h2>
+<h3>G84 — Tapping</h3>
+<p>G84 is the tapping cycle: the spindle feeds down at the tapped RPM, reverses at the bottom, and feeds back up at the same speed. The feed is determined by spindle speed &times; pitch, so the controller synchronizes spindle rotation and Z motion. On Haas mills, G94 mm/min feed is set automatically by the cycle for G84. Never override feed or speed mid-tap. Use G84 only with a floating tap holder or a rigid tapping-capable spindle.</p>
+
+<h3>G73 vs G83: Chip Break vs Full Retract</h3>
+<p>G73 is a high-speed peck cycle: it feeds in Q increments but retracts only a small amount (a few mm) between pecks, not all the way to R. This saves time for chips that break easily (short-chipping materials like cast iron). G83 retracts fully to R after every peck, clearing chips completely. For long-chipping steel, use G83; for cast iron or aluminum, G73 may be faster. When in doubt, G83 is the safe choice.</p>
+
+<h3>Multiple Tools and Hole Patterns</h3>
+<p>After a tool change, re-establish safe Z, G43 Hxx, and coolant before calling the next cycle. The cycle parameters (R, Z, Q, F) reset or carry over depending on the control; safest practice is to re-specify them on the first hole of each new tool. For a bolt circle or rectangular pattern, list the X/Y positions as consecutive lines after the cycle call; do not repeat G83 on each line.</p>
+
+<h3>When to Use G98 vs G99</h3>
+<p>G99 retracts to R plane and is faster, but only safe when the tool can stay at R between holes without hitting anything. If there is a clamp, a raised boss, a vise jaw, or a previously drilled tall part between holes, use G98 to retract to initial Z50. It is common to mix: start a pattern with G99, switch to G98 for the row that crosses a fixture, then back to G99.</p>
+
+<h3>Coolant and Chip Evacuation</h3>
+<p>Drilling generates heat and chips. Flood coolant through the spindle (or through the tool for deep holes) pushes chips out the flutes. In deep-hole pecking, the retract lets chips fall into the flutes and coolant flush them out. Without coolant, the drill tip temperature climbs rapidly and wear accelerates. M08 must be on before the cycle; M09 after G80.</p>
+
+<h3>Through-Hole vs Blind-Hole Depth</h3>
+<p>For a through-hole, add 0.3&times;D for drill breakthrough. For a blind hole, program Z depth to the full-diameter point, not including the conical tip &mdash; unless the print requires the full depth to the tip. Measure depth from the top surface Z0; remember work offset Z is set at the part top.</p>
+
+<h3>Spot Drilling vs Center Drilling</h3>
+<p>Before drilling, a spot drill or center drill creates a small cone that guides the twist drill and prevents it from wandering. Use G82 with a dwell for spot facing: the dwell flattens the bottom. A spot drill has a 90&deg; or 120&deg; included angle; match it to the drill point angle so the guide cone supports the drill corners. Skipping spot drilling on precision holes causes drift and mislocation.</p>
+
+<h3>Cycle Modal State and G80</h3>
+<p>Once a cycle is called, it stays modal until G80. Any XY move (even one not intended as a hole) will trigger the cycle. This is why the startup block includes G80, and why every hole pattern ends with G80. If you need to move the tool between holes without drilling, cancel the cycle first.</p>
+
+<h3>Drill Size and Surface Speed</h3>
+<p>Drilling RPM follows the same surface speed rule as milling: n = 1000&times;vc / (&pi;&times;D). A &Oslash;10 drill in aluminum at vc = 100 m/min runs at about 3180 RPM. Feed per revolution fz = 0.1–0.2 mm/rev in steel, higher in aluminum. The cycle's F is mm/min = n &times; fz. These are classroom assumptions; match your tooling chart.</p>
+
+<h3>Verification Before Running the Cycle</h3>
+<p>After writing the hole pattern, dry-run in single block with Z at a safe height: confirm each X/Y position, confirm R plane clearance, confirm G80 at the end. On the first hole, use feed hold at R and visually check position before letting the drill go down. Never assume the pattern is correct just because the numbers look neat.</p>
+
+<p>After writing the hole pattern, dry-run in single block with Z at a safe height: confirm each X/Y position, confirm R plane clearance, confirm G80 at the end. On the first hole, use feed hold at R and visually check position before letting the drill go down. Never assume the pattern is correct just because the numbers look neat.</p>
+
 <ul>
 <li><strong>Forgetting G80</strong> — the cycle stays modal. The next G00 X move will drill at that position. Always write G80 after the hole pattern.</li>
 <li><strong>Setting R too low</strong> — R0.5 leaves no clearance for chips or clamps. Use R2–3 mm minimum.</li>

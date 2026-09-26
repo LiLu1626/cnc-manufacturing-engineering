@@ -66,6 +66,67 @@ G01 G40 X-10. Y-10.        (lead-out, comp off)</code></pre>
 <h2>Inner vs Outer Profiles</h2>
 <p>The left/right rule depends on whether you are cutting an outer profile or an inner pocket. For an inner pocket (e.g., a rectangular cavity), the "air" is inside the pocket. If you cut the pocket CW, the tool needs to be on the inside wall — which means G42, not G41. The safe way: trace the directed edge and ask "which side of the edge is the open air where the tool should be?" That side determines G41 (left) or G42 (right).</p>
 
+<h3>D Offset Units: Radius or Diameter</h3>
+<p>The D register holds a cutter-size value. On Haas mills, Setting 40 selects whether D entries are read as radius or diameter. With Setting 40 = RADIUS, a &Oslash;10 tool uses D = 5.000; with Setting 40 = DIAMETER, D = 10.000. The program never changes; only the offset value and the setting do. Confirm the setting on the screen before entering numbers. Getting this wrong doubles the offset and cuts the part twice as far off as intended.</p>
+
+<h3>Wear Adjustment Through D</h3>
+<p>After the first part, if the finished pocket is 0.04 mm too large in XY, the tool has worn or deflects. Adjust D by half the diameter error: a &Oslash;10 tool that leaves a 50.04 mm pocket should have D reduced from 5.000 to 4.980, moving the center 0.02 mm outward on each wall and closing the pocket by 0.04 mm. This is in-process correction; the program stays untouched. Do not chase a size error by editing coordinates &mdash; that defeats the purpose of compensation.</p>
+
+<h3>Lead-In and Lead-Out Geometry</h3>
+<p>The lead-in should be a straight move at least one tool radius long, approaching from outside the part, ending tangent to the first contour edge. Tangent lead-in (along the direction of the first wall) leaves no witness mark. A radial lead-in that points straight at the corner leaves a small step; it is acceptable for roughing but not for finish. Lead-out mirrors lead-in: straight, tangent, away from the contour, then G40.</p>
+
+<h3>Compensation and Arcs</h3>
+<p>G41/G42 works on arcs too: the controller offsets the arc center path by the tool radius, producing a parallel concentric arc. Internal arcs and external arcs offset in opposite directions. The controller handles this automatically, but lead-in must still be straight. Never engage or cancel compensation on an arc block.</p>
+
+<h3>What Happens If You Forget G40</h3>
+<p>Compensation stays active into the next move. If the next block is a rapid XY move away from the part, the tool center is still offset by D &mdash; it may drift into a clamp or leave a tool mark. Always cancel compensation on a deliberate straight lead-out. The startup block includes G40 to clear any leftover compensation from the previous program.</p>
+
+<h3>Compensation and Tool Changes</h3>
+<p>When the tool changes, the D register for that tool is loaded with the next G41/G42 block. The old compensation must be cancelled (G40) before the tool change, otherwise the machine tries to ramp the offset during a move that has no part to reference. Standard sequence: G40 lead-out, retract Z, Txx M06, then G41/G42 on the next lead-in with the new D.</p>
+
+<h3>Limitations of Cutter Compensation</h3>
+<p>Compensation offsets the tool center by a constant radius. It does not know about variable geometry, insert nose radius on a lathe, or multi-flute radial runout. On a lathe, cutter compensation also needs the nose radius and orientation values (covered on the tool-offsets page). Compensation is a 2D XY offset; it does not correct Z depth &mdash; that is the tool length offset's job.</p>
+
+<h3>Verifying Compensation on the First Part</h3>
+<p>After the first part, measure the critical XY dimensions. If the whole contour is uniformly oversized or undersized, the D offset is off. If only one wall is off, the geometry or fixture is off. If the tool gouged into a corner, the lead-in was too short or the direction was wrong. Diagnose by wall, not by overall size.</p>
+
+<svg viewBox="0 0 360 220" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Lead-in ramp: outside to contour</text>
+  <line x1="60" y1="180" x2="300" y2="180" stroke="#333" stroke-width="1.5"/>
+  <text x="305" y="184" font-size="9" fill="#333">part edge</text>
+  <circle cx="80" cy="150" r="8" fill="none" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="50" y="145" font-size="9" fill="#2563eb">start, comp off</text>
+  <line x1="80" y1="150" x2="200" y2="180" stroke="#166534" stroke-width="2" stroke-dasharray="4,2"/>
+  <circle cx="200" cy="180" r="8" fill="none" stroke="#166534" stroke-width="1.5"/>
+  <text x="180" y="205" font-size="9" fill="#166534">lead-in ramp: comp reaches full r</text>
+</svg>
+
+<h3>Compensation on a Lathe</h3>
+<p>On a lathe, G41/G42 also offsets the tool, but the virtual tip and nose radius matter. The D value is the nose radius, and the orientation field tells the controller which way the rounded corner points. Lathe compensation is covered in the turning section; the lead-in/lead-out principle and the G40 cancellation rule are identical.</p>
+
+<svg viewBox="0 0 360 200" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Inner pocket CW: G42 keeps tool inside</text>
+  <rect x="90" y="50" width="180" height="110" fill="#e5e7eb" stroke="#333" stroke-width="1.5"/>
+  <text x="180" y="110" font-size="9" text-anchor="middle" fill="#666">pocket cavity (air)</text>
+  <rect x="100" y="60" width="160" height="90" fill="none" stroke="#166534" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="180" y="180" font-size="9" text-anchor="middle" fill="#166534">tool center path, offset inward by r</text>
+</svg>
+
+<h3>When Not to Use Compensation</h3>
+<p>Cutter compensation is for contours where the tool radius changes or where hand-calculating the tool center path is error-prone. For simple rectangular pockets where the tool center path is easy to compute, compensation adds a layer of indirection without benefit. For 3D surfaces or 5-axis work, CAM computes the tool center path directly and G41/G42 is not used. Compensation is a 2D finishing aid, not a universal solution.</p>
+
+<h3>Compensation and Program Zero</h3>
+<p>Cutter compensation offsets in the XY plane; it does not know about Z. A tool radius error does not change the drilled hole depth &mdash; that is handled by tool length offset. Do not use D to correct a Z-depth error; that is an H problem. Keep the two offset systems mentally separate.</p>
+
+<h3>Inner Pocket Direction Rule Worked</h3>
+<p>For an inner rectangular pocket cut clockwise, the air is inside the pocket. On the bottom edge going right (+X), the tool must be on the pocket side (up, +Y) to leave the wall on the outside. Right of +X is &minus;Y (outside the part), left of +X is +Y (inside the pocket). To keep the tool inside the pocket on the bottom edge, use G42. This is why the rule flips for inner pockets: CW outer = G41, CW inner = G42. Always trace the edge and ask which side is open air.</p>
+
+<h3>First-Article Compensation Check</h3>
+<p>On the first part, leave 0.1 mm finish stock by setting D 0.1 mm smaller than nominal. Cut the profile, measure, then adjust D to bring the dimension on size. This avoids cutting oversize on the first try. Once size is dialed in, leave D at the wear value for the run.</p>
+
+
+
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>G42 on a CW outer profile</strong> — pushes tool inside, overcuts. Match: CW outer = G41, CCW outer = G42.</li>

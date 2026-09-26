@@ -123,7 +123,57 @@ G03 I-25. J0  (full circle, ends back at start)</code></pre>
 <p>By adding a Z (or other axis) word to a G02/G03 block, the machine interpolates a helix — an arc that simultaneously moves in Z. This is used for helical interpolation milling of circular pockets and oil grooves:</p>
 <pre class="cp-code"><code>G01 X25. Y0 F300.
 G03 I-25. J0 Z-5.   (helical: circle in XY while descending Z from 0 to -5)</code></pre>
-<p>The Z coordinate in the arc block is the end Z. The machine spirals down while completing the circle. This is how many CAM routines rough circular pockets: plunge helically rather than drilling straight down.</p>
+<p>The Z coordinate in the arc block is the end Z. The machine spirals down while completing the circle. This is how many CAM routines rough circular pockets: plunge helically rather than drilling straight down. Helical entry requires a center-cutting end mill; a non-center-cutting tool cannot start at the center and must enter from outside the pocket or after a pilot hole.</p>
+
+<h3>Plane Selection: G17 / G18 / G19</h3>
+<p>G02/G03 direction and the meaning of I/J depend on the active plane. G17 selects the XY plane (milling contours, circles); G18 selects the XZ plane (lathe turning, radii on OD/ID); G19 selects the YZ plane. The startup block normally sets G17 on a mill. On a lathe, the control defaults to G18, and clockwise as viewed from +Y may be the opposite of what you expect on a drawing. Always state the plane in the program and verify direction against the machine's view convention.</p>
+
+<h3>Arc Feed and Surface Speed</h3>
+<p>The programmed F applies along the arc tangent. On an outside radius cut, the tool center travels a slightly longer or shorter path than the part profile depending on cutter compensation, but the programmed feed is the tool-path feed. On a full circle, the surface speed relative to the part is roughly constant; on a small-radius arc with a large cutter, engagement changes around the arc and chip load can spike at entry. Keep radial engagement moderate on small internal radii to avoid chatter.</p>
+
+<h3>Quarter Circles and Corner Rounds</h3>
+<p>The most common arcs in practice are 90&deg; corner rounds. For a convex external corner around (10,10), tool approaches from (0,10), rounds to (10,0), center at (10,10), radius 10: G03 X10. Y0 R10. (the exact direction depends on whether the corner is convex or concave and the material side). For a concave internal corner, the arc direction reverses. Draw the center and start/end vectors before coding; do not guess G02/G03 from habit.</p>
+
+<h3>What Happens if I/J Is Wrong</h3>
+<p>If I/J puts the center on the wrong side, the machine still cuts an arc from start to end, but it is the wrong arc &mdash; either the long way around, or the short arc on the opposite side. The tool may leave the material on one side and gouge on the other. Always compute I = Cx &minus; Sx and J = Cy &minus; Sy from the current start point, not from the last program coordinate you remember.</p>
+
+<h3>Arc Length and Cycle Time</h3>
+<p>Arc length is L = 2&pi;r&times;&theta;/360. A 180&deg; semicircle of radius 25 is 78.54 mm; a 90&deg; quarter circle of radius 20 is 31.42 mm. Cycle time on an arc cut is L/F, same as a linear cut. When estimating, remember the tool travels the arc, not the chord &mdash; programming two straight lines to approximate a radius leaves a facet and underestimates the path.</p>
+
+<h3>Lead-In and Lead-Out on Arcs</h3>
+<p>When cutter compensation is used on a contoured part, do not engage G41/G42 directly into an arc. Lead in on a straight line tangent to the arc, cut the arc, then lead out on a tangent straight line. This avoids a sudden tool-side offset at the arc start that leaves a witness mark. Lead-out mirrors lead-in. This is why CAM posts insert small straight moves before and after radius cuts.</p>
+
+<h3>Arcs on a Lathe (G18 XZ)</h3>
+<p>On a lathe, G02/G03 cut radii in the XZ plane. The direction convention is viewed from +Y. A common external radius on a turned part (convex, as seen from the operator) may be G03 on one control and G02 on another depending on the sign convention for X diameter programming. Verify on a dry run, and remember that X is programmed as diameter &mdash; the radius of the arc is half the X difference.</p>
+
+<h3>Verifying an Arc Before Cutting</h3>
+<p>Before running an arc cut, simulate or dry-run and watch: does the tool enter on the correct side of the material? Does the bulge go inward or outward? Is the center where you intended? A 30-second visual check of the geometry catches the most common arc errors. If the screen shows the tool going the long way around, the direction or center sign is wrong.</p>
+
+<h3>Why I/J Is Preferred Over R</h3>
+<p>R is compact but ambiguous for arcs over 180&deg; (hence the negative R convention) and impossible for full circles. I/J always defines the center unambiguously and is what CAM posts output. For hand programming, compute I and J on paper from the start point; do not estimate them. When the start point changes between blocks, I/J must be recomputed &mdash; they are relative to the current start, not to the part origin.</p>
+
+<h3>Arc Blending and Tangency</h3>
+<p>For a smooth contour, adjacent linear and arc blocks must be tangent. A line that ends at an arc start should meet the arc at 90&deg; to its radius, i.e. tangent. A corner where a line meets an arc at an angle leaves a visible step even if the geometry looks close. On a finish pass, tangency is what makes the edge look continuous. CAM posts compute this; hand programmers draw the tangent lines.</p>
+
+<h3>What Happens if G02/G03 Is Backwards</h3>
+<p>The tool cuts the other arc between the same two points. On a pocket corner, this means a convex bulge where the drawing wants a concave radius &mdash; the tool removes material on the wrong side, often gouging a wall that should remain. The fix is usually swapping G02 for G03 (or vice versa), not changing coordinates. Always re-simulate after the swap, because the other blocks may also flip.</p>
+
+<h3>Arc Feed Rate on Inside vs Outside</h3>
+<p>On an external radius, the tool center path is longer than the part arc (the tool rides outside). On an internal radius, the tool center path is shorter. The programmed F applies to tool center motion. For a finish pass where surface speed matters, this small difference is usually ignored; for tight tolerance work, account for it when estimating cycle time and surface finish.</p>
+
+<h3>Why Full Circles Need I/J</h3>
+<p>A full circle has identical start and end coordinates. R alone cannot determine which of the two possible centers is correct (the center could be anywhere on a circle around the start). I/J removes the ambiguity by specifying the center directly. This is why CAM posts always use I/J for circular pocket finishing: the controller needs the center to close the loop.</p>
+
+<h3>Feed on a Small Radius</h3>
+<p>On a very small internal radius with a large cutter, the tool can rub or chatter because engagement geometry changes sharply. Reduce feed or use a smaller cutter for tight internal radii. The programmed surface speed still applies, but chip thinning on small radii means the actual chip is thinner than fz; consult the cutter manufacturer's guidelines rather than running the full feed.</p>
+
+<p>On a very small internal radius with a large cutter, the tool can rub or chatter because engagement geometry changes sharply. Reduce feed or use a smaller cutter for tight internal radii. The programmed surface speed still applies, but chip thinning on small radii means the actual chip is thinner than fz; consult the cutter manufacturer's guidelines rather than running the full feed.</p>
+
+<h3>Full Circles and R Limitation</h3>
+<p>A full 360&deg; circle cannot be programmed with R because start and end are identical; the radius alone does not tell the controller where the center is. Use I/J: start at (25,0), center (0,0), I = &minus;25, J = 0. The circle closes back to the start. For pocket milling, a full circle followed by a small outward step and another circle is the standard finish pattern.</p>
+
+
+
 
 <h2>Common Mistakes</h2>
 <ul>
