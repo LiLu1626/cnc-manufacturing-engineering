@@ -86,39 +86,6 @@ G03 X50. Y0 I25. J0.        (counterclockwise through (25,-25), 78.54 mm)</code>
 <pre class="cp-code"><code>G17 G03 X50. Y0 R25.</code></pre>
 <p>R25 = 25 mm radius. R positive for arcs &le; 180&deg; (the short arc, including a semicircle); R negative for arcs &gt; 180&deg;.</p>
 
-<h2>Example</h2>
-<p><strong>Full circle:</strong> start at (25,0), center at (0,0). I = 0 &minus; 25 = &minus;25. J = 0. G03 counterclockwise. R cannot do a full circle (start = end); you must use I/J.</p>
-<pre class="cp-code"><code>G01 X25. Y0 F300.
-G03 I-25. J0  (full circle, ends back at start)</code></pre>
-
-<p><strong>Short 90&deg; arc example:</strong> start S=(0,0), center C=(0,20), end E=(20,20). Start vector from C = (0,&minus;20) at 270&deg;. End vector = (20,0) at 0&deg;. Going 270&deg; &rarr; 360&deg;/0&deg; counterclockwise (increasing angle) is a 90&deg; arc = <strong>G03</strong>. Arc length L = 2&pi;r&times;&theta;/360 = 2&pi;&times;20&times;90/360 = <strong>31.416 mm</strong>. G02 would take the long 270&deg; way around: 2&pi;&times;20&times;270/360 = 94.248 mm.</p>
-
-<figure class="cp-figure">
-<svg viewBox="0 0 320 260" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
-  <line x1="30" y1="220" x2="300" y2="220" stroke="#999" stroke-width="1"/>
-  <line x1="60" y1="240" x2="60" y2="20" stroke="#999" stroke-width="1"/>
-  <text x="302" y="224" font-size="11" fill="#666">X</text>
-  <text x="64" y="22" font-size="11" fill="#666">Y</text>
-  <!-- center C(0,20) pixel (60, 60) -->
-  <circle cx="60" cy="60" r="2.5" fill="#333"/>
-  <text x="66" y="56" font-size="11" fill="#333">C(0,20)</text>
-  <!-- S(0,0) pixel (60,220) -->
-  <circle cx="60" cy="220" r="3.5" fill="#c0392b"/>
-  <text x="38" y="238" font-size="11" fill="#c0392b">S(0,0)</text>
-  <!-- E(20,20) pixel (220,60) -->
-  <circle cx="220" cy="60" r="3.5" fill="#2980b9"/>
-  <text x="226" y="56" font-size="11" fill="#2980b9">E(20,20)</text>
-  <!-- radius 20 -> 160px. G03 CCW short arc from S(60,220) to E(220,60), center (60,60) -->
-  <path d="M 60 220 A 160 160 0 0 0 220 60" fill="none" stroke="#2980b9" stroke-width="2"/>
-  <!-- radius lines from center to start and end -->
-  <line x1="60" y1="60" x2="60" y2="220" stroke="#aaa" stroke-width="1" stroke-dasharray="3,2"/>
-  <line x1="60" y1="60" x2="220" y2="60" stroke="#aaa" stroke-width="1" stroke-dasharray="3,2"/>
-  <text x="110" y="130" font-size="12" fill="#2980b9" font-weight="bold">G03 90&deg;</text>
-  <text x="110" y="146" font-size="11" fill="#2980b9">L = 31.416 mm</text>
-</svg>
-<figcaption>Short 90&deg; arc S(0,0) &rarr; E(20,20) around C(0,20), r=20. G03 counterclockwise. Length = 2&pi;&times;20&times;90/360 = 31.416 mm.</figcaption>
-</figure>
-
 <h3>Helical Interpolation</h3>
 <p>By adding a Z (or other axis) word to a G02/G03 block, the machine interpolates a helix — an arc that simultaneously moves in Z. This is used for helical interpolation milling of circular pockets and oil grooves:</p>
 <pre class="cp-code"><code>G01 X25. Y0 F300.
@@ -177,6 +144,39 @@ G03 I-25. J0 Z-5.   (helical: circle in XY while descending Z from 0 to -5)</cod
 
 <h3>Reading a Cycle Time Estimate on an Arc</h3>
 <p>When you estimate cycle time by hand, use the arc length L, not the chord. For a 90&deg; corner round of radius 10 mm the arc length is 2&pi;&times;10&times;90/360 = 15.71 mm, while the chord between tangent points is 14.14 mm. The difference is about 10 percent; on a long contour with many radii this accumulates. At F = 300 mm/min the corner takes 15.71/300 = 0.052 min, not 14.14/300. This does not change the program, but it does change how well you predict how long the part will run.</p>
+
+<h2>Example</h2>
+<p><strong>Full circle:</strong> start at (25,0), center at (0,0). I = 0 &minus; 25 = &minus;25. J = 0. G03 counterclockwise. R cannot do a full circle (start = end); you must use I/J.</p>
+<pre class="cp-code"><code>G01 X25. Y0 F300.
+G03 I-25. J0  (full circle, ends back at start)</code></pre>
+
+<p><strong>Short 90&deg; arc example:</strong> start S=(0,0), center C=(0,20), end E=(20,20). Start vector from C = (0,&minus;20) at 270&deg;. End vector = (20,0) at 0&deg;. Going 270&deg; &rarr; 360&deg;/0&deg; counterclockwise (increasing angle) is a 90&deg; arc = <strong>G03</strong>. Arc length L = 2&pi;r&times;&theta;/360 = 2&pi;&times;20&times;90/360 = <strong>31.416 mm</strong>. G02 would take the long 270&deg; way around: 2&pi;&times;20&times;270/360 = 94.248 mm.</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 320 260" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <line x1="30" y1="220" x2="300" y2="220" stroke="#999" stroke-width="1"/>
+  <line x1="60" y1="240" x2="60" y2="20" stroke="#999" stroke-width="1"/>
+  <text x="302" y="224" font-size="11" fill="#666">X</text>
+  <text x="64" y="22" font-size="11" fill="#666">Y</text>
+  <!-- center C(0,20) pixel (60, 60) -->
+  <circle cx="60" cy="60" r="2.5" fill="#333"/>
+  <text x="66" y="56" font-size="11" fill="#333">C(0,20)</text>
+  <!-- S(0,0) pixel (60,220) -->
+  <circle cx="60" cy="220" r="3.5" fill="#c0392b"/>
+  <text x="38" y="238" font-size="11" fill="#c0392b">S(0,0)</text>
+  <!-- E(20,20) pixel (220,60) -->
+  <circle cx="220" cy="60" r="3.5" fill="#2980b9"/>
+  <text x="226" y="56" font-size="11" fill="#2980b9">E(20,20)</text>
+  <!-- radius 20 -> 160px. G03 CCW short arc from S(60,220) to E(220,60), center (60,60) -->
+  <path d="M 60 220 A 160 160 0 0 0 220 60" fill="none" stroke="#2980b9" stroke-width="2"/>
+  <!-- radius lines from center to start and end -->
+  <line x1="60" y1="60" x2="60" y2="220" stroke="#aaa" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="60" y1="60" x2="220" y2="60" stroke="#aaa" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="110" y="130" font-size="12" fill="#2980b9" font-weight="bold">G03 90&deg;</text>
+  <text x="110" y="146" font-size="11" fill="#2980b9">L = 31.416 mm</text>
+</svg>
+<figcaption>Short 90&deg; arc S(0,0) &rarr; E(20,20) around C(0,20), r=20. G03 counterclockwise. Length = 2&pi;&times;20&times;90/360 = 31.416 mm.</figcaption>
+</figure>
 
 <h2>Common Mistakes</h2>
 <ul>

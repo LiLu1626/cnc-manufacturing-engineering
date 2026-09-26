@@ -90,7 +90,7 @@
 
 <h3>G83 — Peck Drilling (Chip Breaking)</h3>
 <p>G83 is used when chip evacuation is difficult, for example in deep holes or long-chipping materials. Instead of feeding all the way to depth in one motion, the drill feeds in increments of Q, retracts fully to break and clear chips, then re-approaches and feeds the next Q increment. Each peck lifts chips out of the hole so they do not pack in the flutes. Q is chosen from the drill manufacturer's guidance based on diameter, coolant, and material rather than a fixed depth-to-diameter threshold.</p>
-<p><strong>Example:</strong> G83 R2. Z-30. Q3. F100. means: feed 3 mm, retract to R, feed 3 mm deeper, retract, repeat until reaching Z-30. This keeps chips clear and prevents drill breakage in deep holes.</p>
+<p><strong>Example:</strong> G83 R2. Z-30. Q3. F100. means: feed 3 mm, retract to R, feed 3 mm deeper, retract, repeat until reaching Z-30. This keeps chips clear by bringing them out of the hole between pecks.</p>
 
 <h3>G85 — Boring</h3>
 <p>G85 bores or reams a hole: feed in to Z depth, then feed back out at the same feed rate. Unlike drilling (which retracts at rapid), G85's controlled feed-out produces a smoother bore surface. For a boring bar, the bore diameter is set by the bar's radial screw adjustment; for a reamer, by the reamer's effective diameter and the cutting conditions.</p>
@@ -175,7 +175,7 @@ M30</code></pre>
 <p><strong>1.</strong> Through-hole in 15 mm plate, &Oslash;12 drill, 118&deg; point. What Z depth?</p>
 <details><summary>Ans</summary><p>Tip length h = (12/2)/tan(59&deg;) = 6/1.664 = 3.61 mm. Program tip to at least Z-(15+3.61)=Z-18.61, plus a deliberate breakthrough allowance and check the clearance below the part. Do not round shallower.</p></details>
 <p><strong>2.</strong> When do you use G83 instead of G81?</p>
-<details><summary>Ans</summary><p>For holes deeper than about 3&times;D, where chips pack in the flutes. G83 pecks in Q increments and retracts to clear chips, preventing drill breakage and overheating.</p></details>
+<details><summary>Ans</summary><p>When chips pack in the flutes and evacuation becomes difficult. G83 pecks in Q increments and retracts fully between pecks so chips leave the hole.</p></details>
 <p><strong>3.</strong> What is the difference between G98 and G99?</p>
 <details><summary>Ans</summary><p>G98 retracts to the initial Z plane (the height before the cycle was called). G99 retracts only to the R plane. G99 is faster for flat patterns; G98 is safer around fixtures.</p></details>
 <p><strong>4.</strong> Write a G82 line for a spot face that dwells 0.5 seconds at Z-2, R2, F100.</p>
