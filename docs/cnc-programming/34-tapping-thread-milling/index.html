@@ -46,7 +46,7 @@
 
 <table class="data-table">
 <tr><th>Parameter</th><th>Meaning</th><th>Example (M10&times;1.5)</th></tr>
-<tr><td>R</td><td>Start plane above stock</td><td>R5. (generous for tapping)</td></tr>
+<tr><td>R</td><td>Start plane above stock</td><td>R5. (classroom value; verify per machine)</td></tr>
 <tr><td>Z</td><td>Tap-tip endpoint (this example uses tip as tool-length reference)</td><td>Z-18. (full thread 15 is separate)</td></tr>
 <tr><td>S</td><td>Spindle speed</td><td>S500</td></tr>
 <tr><td>F</td><td>Feed = pitch &times; S</td><td>F750</td></tr>
@@ -65,35 +65,36 @@
 <p>This is a rough starting estimate for cutting taps; actual tap-drill size depends on tool data, material, and required thread engagement. Consult the tap manufacturer's chart.</p>
 
 <h3>Blind Hole vs Through Hole</h3>
-<p><strong>Through holes</strong> are simpler: the tap goes through the part, so you only need to program the thread depth. <strong>Blind holes</strong> (holes that do not go through) require planning: the tap cannot reach the bottom, and the chip evacuation space matters. Use a <strong>bottoming tap</strong> (short chamfer) for near-full depth in blind holes. A taper/starting tap has a long chamfer and leaves several incomplete threads at the bottom. Program the tap Z depth slightly shallower than the drill depth to avoid bottoming out.</p>
+<p><strong>Through holes</strong> are simpler: the tap exits the part, but you still need lead/chamfer runout space below the exit and clearance below the hole. <strong>Blind holes</strong> (holes that do not go through) require planning: the tap cannot reach the bottom, and the chip evacuation space matters. Use a <strong>bottoming tap</strong> (short chamfer) for near-full depth in blind holes. A taper/starting tap has a long chamfer and leaves several incomplete threads at the bottom. Program the tap Z depth slightly shallower than the drill depth to avoid bottoming out.</p>
 
 <figure class="cp-figure">
 <svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
-  <rect x="80" y="30" width="240" height="200" fill="#d4c5a9" stroke="#999"/>
-  <rect x="185" y="30" width="10" height="180" fill="#fff" stroke="#999"/>
-  <polygon points="185,210 195,210 190,230" fill="#fff" stroke="#999"/>
-  <line x1="160" y1="105" x2="220" y2="105" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4,2"/>
-  <text x="225" y="109" font-size="10" fill="#c0392b">full thread 15 (to Z-15)</text>
-  <line x1="160" y1="120" x2="220" y2="120" stroke="#8e44ad" stroke-width="1.5" stroke-dasharray="4,2"/>
-  <text x="225" y="124" font-size="10" fill="#8e44ad">tap tip Z-18 (c=3 assumption)</text>
-  <line x1="160" y1="210" x2="220" y2="210" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="4,2"/>
-  <text x="225" y="214" font-size="10" fill="#e67e22">full-dia bore bottom Z-21</text>
-  <line x1="160" y1="230" x2="220" y2="230" stroke="#2c3e50" stroke-width="1.5" stroke-dasharray="4,2"/>
-  <text x="225" y="234" font-size="10" fill="#2c3e50">drill tip Z-23.55 (118 deg)</text>
+  <rect x="100" y="30" width="200" height="170" fill="#d4c5a9" stroke="#999"/>
+  <rect x="168.75" y="30" width="42.5" height="105" fill="#fff" stroke="#999"/>
+  <polygon points="168.75,135 211.25,135 190,147.75" fill="#fff" stroke="#999"/>
+  <line x1="150" y1="105" x2="230" y2="105" stroke="#c0392b" stroke-dasharray="4,2"/>
+  <text x="235" y="109" font-size="10" fill="#c0392b">full thread 15</text>
+  <line x1="150" y1="120" x2="230" y2="120" stroke="#8e44ad" stroke-dasharray="4,2"/>
+  <text x="235" y="124" font-size="10" fill="#8e44ad">tap tip 18</text>
+  <line x1="150" y1="135" x2="230" y2="135" stroke="#e67e22" stroke-dasharray="4,2"/>
+  <text x="235" y="139" font-size="10" fill="#e67e22">bore bottom 21</text>
+  <line x1="150" y1="147.75" x2="230" y2="147.75" stroke="#2c3e50" stroke-dasharray="4,2"/>
+  <text x="235" y="152" font-size="10" fill="#2c3e50">drill tip 23.55</text>
 </svg>
-<figcaption>Blind-hole depth chain (classroom assumptions): full thread 15, tap tip at 18, full-diameter bore bottom at 21, 118&deg; drill tip at 23.55.</figcaption>
+<figcaption>5 px/mm scale, Z0 at y30. Bottom thickness below drill tip assumed.</figcaption>
 </figure>
 
 <figure class="cp-figure">
 <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
-  <circle cx="200" cy="110" r="60" fill="none" stroke="#999" stroke-dasharray="3,2"/>
-  <path d="M 140 150 A 60 60 0 0 1 260 70" fill="none" stroke="#c0392b" stroke-width="2"/>
-  <text x="120" y="170" font-size="10" fill="#c0392b">start</text>
-  <text x="270" y="60" font-size="10" fill="#c0392b">end (one lead up)</text>
-  <line x1="200" y1="50" x2="200" y2="170" stroke="#333" stroke-width="1"/>
-  <text x="210" y="110" font-size="10" fill="#333">one orbit = one lead in Z</text>
+  <circle cx="200" cy="100" r="60" fill="none" stroke="#999" stroke-width="1"/>
+  <path d="M 260,100 A 60,60 0 1,1 200,40" fill="none" stroke="#c0392b" stroke-width="2"/>
+  <circle cx="260" cy="100" r="3" fill="#c0392b"/>
+  <text x="270" y="104" font-size="10" fill="#c0392b">start</text>
+  <circle cx="200" cy="40" r="3" fill="#166534"/>
+  <text x="210" y="35" font-size="10" fill="#166534">end (XY same, Z +lead)</text>
+  <text x="100" y="200" font-size="10" fill="#333">one full circle in XY; axial rise = one lead.</text>
 </svg>
-<figcaption>Thread milling: tool orbits the bore in XY while rising one lead per turn. Tool-center radius is set by the tool and part geometry, not the tap-drill radius.</figcaption>
+<figcaption>Thread milling: one full orbit in XY returns to the same XY while Z rises one lead.</figcaption>
 </figure>
 
 <h3>Thread Milling vs Tapping</h3>
@@ -108,26 +109,31 @@
 </table>
 
 <h2>Example</h2>
+<p><strong>Entry preconditions (teaching model):</strong> tool length H02/H03 calibrated, initial Z50 path and XY traverse clearance verified, G54 selected, coolant available. The program below follows that order.</p>
 <p><strong>Worked example:</strong> One M10&times;1.5 blind tapped hole, 15 mm deep, in aluminum. Step 1: drill &Oslash;8.5 pilot hole to Z-23.55 (drill-tip reference); the full-diameter cylinder ends at Z-21 and the 118&deg; tip extends to Z-23.55. Step 2: tap to Z-18 so the tap tip reaches the bottom of the 15 mm full thread (assumes c=3 mm from tip to full teeth).</p>
 <pre class="cp-code"><code>O0034 (TAPPING EXAMPLE)
 G21 G17 G90 G94 G40 G80
 G54
 T02 M06                 (O8.5 DRILL)
 S1500 M03
+G00 G43 H02 Z50. M08
 G00 X10. Y10.
-G43 H02 Z50. M08
 G98 G83 R2. Z-23.55 Q3. F120.
 G80
-G00 Z50. M09
+G00 Z50.
+M09
+M05
 T03 M06                 (M10x1.5 TAP)
 S500 M03
+G00 G43 H03 Z50. M08
 G00 X10. Y10.
-G43 H03 Z50. M08
-G84 R5. Z-18. F750.       (G94 mm/min; F = 1.5 x 500 = 750; tip to Z-18)
+G98 G84 R5. Z-18. F750.
 G80
-G00 Z50. M09
+G00 Z50.
+M09
+M05
 M30</code></pre>
-<p><strong>Key points:</strong> Programmed drill depth Z-23.55 places the drill tip; full-diameter cylinder reaches Z-21, tap tip stops at Z-18. The R plane for tapping is R5 (higher than drilling's R2) to give the tap room to start and stop synchronized rotation. F750 = 1.5 pitch &times; 500 RPM.</p>
+<p><strong>Key points:</strong> Programmed drill depth Z-23.55 places the drill tip; full-diameter cylinder reaches Z-21, tap tip stops at Z-18. R5 is a classroom choice for approach/retract; confirm it against the machine's sync and clearance. F750 = 1.5 pitch &times; 500 RPM under G94.</p>
 
 <h2>Common Mistakes</h2>
 <ul>
@@ -146,7 +152,7 @@ M30</code></pre>
 <p><strong>3.</strong> When would you choose thread milling over rigid tapping?</p>
 <details><summary>Ans</summary><p>For large threads, blind holes where tap breakage risk is high, non-ferrous materials (aluminum, plastic), or when one tool must cut multiple thread sizes on the same machine.</p></details>
 <p><strong>4.</strong> Why is R5 used for tapping instead of R2?</p>
-<details><summary>Ans</summary><p>The tap needs a longer approach and retract distance because it must reach synchronized RPM before engaging the work, and it needs room to reverse and back out. R5 provides that clearance.</p></details>
+<details><summary>Ans</summary><p>R5 in this example is a classroom choice; the actual R depends on the machine's synchronized approach and the setup clearance, not a universal rule.</p></details>
 
 <h3>Pre-Drill and Spot Drill</h3>
 <p>Before the O8.5 drill, a spot drill or center drill starts the hole on surface so the drill does not walk. That start hole is separate from the tap drill and not counted in the thread depth chain.</p>
@@ -204,6 +210,9 @@ M30</code></pre>
 
 <h3>Thread Milling Advantages Recap</h3>
 <p>Thread milling leaves no broken-tap risk, handles large holes, and can cut both internal and external threads. The tradeoff is CAM or helical math.</p>
+
+<h3>Depth Chain Summary Table</h3>
+<p>Full thread 15 mm; tap tip to Z&minus;18 (c=3 classroom); full-diameter bore to Z&minus;21; O8.5 118&deg; drill tip to Z&minus;23.55. These are geometry assumptions; chip space and bottom thickness follow the part.</p>
 
 <h2>Sources</h2>
 <ul>

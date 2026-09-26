@@ -73,13 +73,14 @@ G76 X8.16 Z-20. K0.92 D0.2 F1.5</code></pre>
 
 <figure class="cp-figure">
 <svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
-  <line x1="40" y1="140" x2="380" y2="140" stroke="#333" stroke-width="1.5"/>
-  <path d="M 60 140 L 120 90 L 180 140 L 240 90 L 300 140" fill="none" stroke="#c0392b" stroke-width="2"/>
-  <text x="60" y="170" font-size="10" fill="#333">H = 0.866P sharp triangle (dashed outline)</text>
-  <path d="M 80 130 L 130 100 L 180 130" fill="none" stroke="#166534" stroke-width="2"/>
-  <text x="200" y="120" font-size="10" fill="#166534">h3 = 0.613P working depth</text>
+  <line x1="40" y1="160" x2="380" y2="160" stroke="#333" stroke-width="1.5"/>
+  <polygon points="80,160 130,70 180,160" fill="none" stroke="#7f8c8d" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="90" y="60" font-size="10" fill="#7f8c8d">H = 0.866P sharp triangle</text>
+  <polygon points="95,160 130,105 165,160" fill="none" stroke="#166534" stroke-width="2"/>
+  <text x="180" y="130" font-size="10" fill="#166534">h3 = 0.613P truncated working depth</text>
+  <text x="200" y="180" font-size="10" fill="#333">60 degree included angle; same pitch.</text>
 </svg>
-<figcaption>60&deg; external thread design: H is the sharp triangle, h3 the truncated working depth used for K. Not to scale.</figcaption>
+<figcaption>60&deg; external thread design: dashed sharp triangle H, solid truncated profile h3. Same pitch and axial position.</figcaption>
 </figure>
 
 <h3>Lead-In and Lead-Out</h3>
@@ -187,6 +188,9 @@ Z3.
 <h3>When to Use a Threading Insert Holder with a Built-In Blade</h3>
 <p>Parting and threading share some holder geometry but the insert angles differ. Do not substitute a parting blade for a threading insert; the flank angles are wrong and the thread form will be off.</p>
 <section class="cp-sources">
+<h3>Threading Program Snippet Entry State</h3>
+<p>The G76 blocks in this page assume G54 selected, tool geometry and wear offsets established, nose radius and orientation set, and lead-in/retract space verified on the part. They are fragments, not complete programs.</p>
+
 <h2>Sources</h2>
 <ul>
 <li>Hexagon Infoletter No. 37, "SR1 – Thread up to M160": h3 = 0.61343 P for metric DIN external thread design geometry. <a href="https://www.hexagon.de/info37_e.htm" target="_blank" rel="noopener">hexagon.de/info37_e.htm</a>, retrieved 2026-09-24.</li>
