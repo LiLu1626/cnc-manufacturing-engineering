@@ -110,7 +110,7 @@ G01 G40 X-20.             (cancel in clear air)</code></pre>
 <p>After the first part, measure the critical XY dimensions. If the whole contour is uniformly oversized or undersized, the D offset is off. If only one wall is off, the geometry or fixture is off. If the tool gouged into a corner, the lead-in was too short or the direction was wrong. Diagnose by wall, not by overall size.</p>
 
 <svg viewBox="0 0 360 220" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
-  <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Lead-in on +Y extension (5 px/mm)</text>
+  <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Lead-in on +Y extension: tool tangent to edge</text>
   <line x1="60" y1="180" x2="300" y2="180" stroke="#333" stroke-width="1.5"/>
   <text x="250" y="195" font-size="9" fill="#333">programmed edge</text>
   <line x1="60" y1="155" x2="300" y2="155" stroke="#166534" stroke-width="1.5" stroke-dasharray="4,2"/>
@@ -128,10 +128,10 @@ G01 G40 X-20.             (cancel in clear air)</code></pre>
   <rect x="90" y="50" width="180" height="110" fill="#e5e7eb" stroke="#333" stroke-width="1.5"/>
   <text x="180" y="110" font-size="9" text-anchor="middle" fill="#666">pocket cavity (air)</text>
   <rect x="105" y="65" width="150" height="80" fill="none" stroke="#166534" stroke-width="1.5" stroke-dasharray="4,2"/>
-  <polygon points="90,105 100,100 100,110" fill="#333"/>
-  <polygon points="180,50 175,60 185,60" fill="#333"/>
-  <polygon points="270,105 260,100 260,110" fill="#333"/>
-  <polygon points="180,160 175,150 185,150" fill="#333"/>
+  <polygon points="90,105 85,115 95,115" fill="#333"/>
+  <polygon points="180,50 170,45 170,55" fill="#333"/>
+  <polygon points="270,105 265,95 275,95" fill="#333"/>
+  <polygon points="180,160 190,155 190,165" fill="#333"/>
   <text x="180" y="195" font-size="9" text-anchor="middle" fill="#166534">G42 (right of cut) keeps tool in cavity</text>
 </svg>
 
