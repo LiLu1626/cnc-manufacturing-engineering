@@ -176,6 +176,18 @@ Z3.
 <h3>Why the Major Diameter Slightly Below Nominal</h3>
 <p>External threads are typically turned a few hundredths below nominal major diameter to leave crest room and match tolerance classes. The example treats major as O10 for geometry teaching; on a real part, follow the drawing.</p>
 
+<h3>Thread Relief Groove</h3>
+<p>When a thread runs up to a shoulder, a relief groove under the thread lets the tool retract without rubbing the shoulder. Its width and diameter are specified on the drawing; program Z to that relief rather than guessing.</p>
+
+<h3>External vs Internal Thread Programming</h3>
+<p>Internal boring bar threading follows the same pitch and lead rules, but X grows inward and tool rigidity is limited by bar overhang. The G76 parameter signs and retract direction must match the controller; verify before running.</p>
+
+<h3>Checking Pitch on the First Part</h3>
+<p>Before trusting the cycle, measure pitch with a screw pitch gauge or compare with a known mating part. A wrong F produces threads that look shaped but do not assemble; pitch check catches it early.</p>
+
+<h3>When to Use a Threading Insert Holder with a Built-In Blade</h3>
+<p>Parting and threading share some holder geometry but the insert angles differ. Do not substitute a parting blade for a threading insert; the flank angles are wrong and the thread form will be off.</p>
+
 <h2>Sources</h2>
 <ul>
 <li>Hexagon Infoletter No. 37, "SR1 – Thread up to M160": h3 = 0.61343 P for metric DIN external thread design geometry. <a href="https://www.hexagon.de/info37_e.htm" target="_blank" rel="noopener">hexagon.de/info37_e.htm</a>, retrieved 2026-09-24.</li>

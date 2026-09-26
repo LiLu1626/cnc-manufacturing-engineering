@@ -146,6 +146,12 @@ G00 X42.</code></pre>
 <h3>Setup Checks Before First Groove</h3>
 <p>Touch off the correct reference edge; confirm the tool does not hit the chuck or jaw when Z moves; set the parting position so the finished part clears the catcher; dry-run at low feed around the groove and parting Z. First groove should be a slow pass so any clearance issue shows before full depth.</p>
 
+<h3>Parting Through a Cold Saw vs Lathe Cutoff</h3>
+<p>Some shops cut parts off the bar on a bandsaw after the lathe, instead of parting in the machine. That frees the lathe from the cutoff operation but adds a second setup. The choice depends on batch size, material thickness, and catcher capability; the programming on the lathe side still needs to leave enough material for the second operation.</p>
+
+<h3>Boring Boring Cycles</h3>
+<p>On lathes with boring canned cycles, the cycle handles approach, cut, inward retract, and withdraw automatically. The programmer must still supply the bore depth, the final diameter, and the inward retract amount. Hand-coded G01 boring is fine for one or two passes; cycles help when the bore has multiple steps.</p>
+
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G04.html">Haas G04 Dwell</a>.</li>

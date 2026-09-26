@@ -160,6 +160,18 @@ M30</code></pre>
 <h3>Inspection After Tapping</h3>
 <p>GO plug gauge should enter by hand; NO-GO acceptance follows the drawing. Chips left in the hole can falsely reject a good thread, so clean the hole before gauging. Do not force the plug gauge.</p>
 
+<h3>Through Hole vs Blind Hole Setup</h3>
+<p>A through hole lets chips fall out the back. A blind hole traps chips; peck drilling before tapping, through-coolant where possible, and controlled depth all matter. Blind holes also need bottom thickness so the tap or drill does not break through into a cavity.</p>
+
+<h3>Tap Chamfer Types</h3>
+<p>A set tap (bottoming) has a short chamfer and reaches near the bottom but needs several turns to start cutting. A plug tap has a longer chamfer but leaves incomplete threads. Choose by the hole and thread length; do not assume one tap fits all blind holes.</p>
+
+<h3>Thread Milling Direction</h3>
+<p>Climb vs conventional for the helical orbit changes tool wear and finish. Pick the direction per tooling guidance; reversing the orbit by accident can produce a left-hand thread on a right-hand part.</p>
+
+<h3>Program Safety Around Tapping</h3>
+<p>Do not start the next XY move while the tap is still in the hole. G80 cancels the cycle; after cancellation, retract Z explicitly to a safe plane before tool change. Coolant and spindle stop follow the same order.</p>
+
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G84.html">Haas G84 Rigid Tapping</a>.</li>
