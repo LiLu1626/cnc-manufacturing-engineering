@@ -162,6 +162,12 @@ M30</code></pre>
 <h3>Chuck Clearance and Part-off</h3>
 <p>Program Z travel so the tool never reaches the chuck jaws. Leave at least the jaw height plus a margin. For part-off, the parting tool stops at X around 0.5; do not cut to X0 in one feed or the part flies off. Always feed past center by a small amount on facing to leave no nub.</p>
 
+<h3>Spindle Direction and Tool Orientation</h3>
+<p>M03 is forward (clockwise looking from the spindle nose). For an OD tool held on the front turret, this cuts correctly. A tool mounted upside down or on a back-post turret may need M04. When in doubt, watch the insert: the cutting edge should engage, not rub. Do not run a lathe at high speed with an unknown orientation.</p>
+
+<h3>Metric vs Inch on a Lathe</h3>
+<p>G21 selects mm, G20 selects inches. On a lathe, X in inch is diameter in inch. Mixing G20 and G21 mid-program scales every move by 25.4 and is a common crash cause. The startup block always sets G21 explicitly.</p>
+
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G97.html">Haas G97 Constant RPM</a>.</li>

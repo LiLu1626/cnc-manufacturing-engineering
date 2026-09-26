@@ -143,6 +143,12 @@ M30</code></pre>
 <h3>Cycle Time Estimate</h3>
 <p>For the example: radial stock 10 mm, D1.0 = 10 passes. Each pass covers about 40 mm at F0.2 mm/rev and S1000 = 200 mm/min, so each pass takes 40/200 = 0.2 min = 12 s; roughing alone is about 2 min. The finish pass at S1500 F0.1 = 150 mm/min covers 40 mm in 0.27 min. Rapid moves and approach time add roughly 20&ndash;30%. Use this order-of-magnitude estimate, then refine on the first article.</p>
 
+<h3>When Not to Use G71</h3>
+<p>Very short parts, chamfers only, or a single finishing pass do not need G71. Hand-code those directly. Parts with cross-holes, interrupted cuts, or hard scale benefit from a deliberate first pass rather than the automatic cycle. G71 shines when there is a long profile to rough repeatedly.</p>
+
+<h3>Verifying the First Article</h3>
+<p>After G70, stop and measure: diameter at the step, length to the shoulder, and surface finish. If the diameter is small, adjust the wear offset on that tool, not the program. If the step is off in Z, adjust the Z wear. The geometry offset stays; wear absorbs the small corrections.</p>
+
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G71.html">Haas G71 Stock Removal in Turning</a>.</li>

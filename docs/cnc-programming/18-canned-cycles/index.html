@@ -177,6 +177,12 @@ M30</code></pre>
 <h3>Cycle Parameters Across Tools</h3>
 <p>Each tool has its own spindle speed and feed, but R plane and Z depth are usually similar across tools on the same part. After the drill, the tap uses the same X/Y pattern but a different Z, R, and F. Call the pattern again with the new tool, restating R, Z, and F; do not assume the old values are safe for the new tool. G80 between tools prevents the new tool's first move from inheriting the drill cycle.</p>
 
+<h3>What Changes Between G81, G82, G83, G84, G85</h3>
+<p>The XY/R/Z/F framework is identical; only the bottom-of-hole motion changes. G81 feeds in and rapids out. G82 adds a dwell P. G83 feeds in Q pecks and retracts fully between. G84 reverses the spindle and feeds out. G85 feeds in and feeds out. This means once you have drilled G81, switching to G83 only adds Q and changes the code letter; the hole positions stay the same.</p>
+
+<h3>Programming a Tapped Hole with the Same Cycle</h3>
+<p>For M8&times;1.25 at S500, F = S&times;pitch = 625 mm/min. G84 R2. Z-15. F625. The control reverses spindle at the bottom. The tap must clear chips and have adequate entry clearance; G98 is usually chosen for tapping to retract fully between holes.</p>
+
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G80.html">Haas G80 Cancel Cycle</a>.</li>
