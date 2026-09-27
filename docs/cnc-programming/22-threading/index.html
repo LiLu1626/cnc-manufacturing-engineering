@@ -107,6 +107,22 @@ G76 X8.16 Z-20. K0.92 D0.2 F1.5</code></pre>
 
 <p><strong>Entry state for the G76 example:</strong> G54 selected, tool geometry and wear offsets established, nose radius and orientation set, lead-in/retract space verified. The blocks below are fragments.</p>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <h2>Example</h2>
 <p><strong>Example 1 — Single-start M10&times;1.5:</strong> At S500 RPM, the ideal synchronous axial feed is 500 &times; 1.5 = 750 mm/min. The tool must not change feed override during the cut.</p>
 <p><strong>Example 2 — Double-start M10&times;1.5 (pitch 1.5, lead 3.0):</strong> F=3.0 mm/rev. At S500, axial feed = 1500 mm/min. The programmer arranges the second start by the controller's specified phase or axial offset; do not assume the cycle shifts automatically.</p>
@@ -158,50 +174,35 @@ Z3.
 <p><strong>3.</strong> A double-start thread has pitch 1.5. What is F in G76, and why?</p>
 <details><summary>Show answer</summary><p>F = 3.0 mm/rev (lead = 2 &times; pitch). G76 feed is always the lead, so on a multi-start thread it is larger than the pitch. At S500, axial feed = 1500 mm/min.</p></details>
 
-<h3>Inspection Is by Gauge, Not by Minor Diameter Alone</h3>
-<p>The X8.16 endpoint is a design minor diameter for programming. Whether the thread accepts a mating part is decided by the ring or plug gauge specified on the drawing, which checks pitch diameter, flank condition, and fit. A measured minor diameter that looks right does not prove the thread is good, and a NO-GO entry must be interpreted under the drawing's gauge acceptance rule rather than assumed scrap on first contact.</p>
 
-<h3>Multi-Start Phase Shift</h3>
-<p>For a double-start thread, F becomes the lead (3.0 mm/rev for P1.5). The second helix is 180&deg; out of phase with the first. How the programmer or controller sets that starting phase depends on the control; Haas G76 has a Q thread-start angle whose unit and range must be checked before use.</p>
 
-<h3>G76 Parameters in Detail</h3>
-<p>X is the final minor diameter in diameter mode. Z is the thread end. K is the radial thread height from the crest to the root of the truncated profile. D is the first-pass radial depth, chosen as a classroom assumption. F is the lead. The controller computes successive passes with decreasing engagement until X is reached. Do not confuse K (total depth) with D (first pass); they are separate numbers.</p>
 
-<h3>Why G97 and Not G96</h3>
-<p>Under synchronous feed, lead is the axial distance per spindle revolution and is set by F. Changing RPM changes the required axial speed and synchronization demand, not the programmed lead. This Haas teaching example uses G97 S500 before G76 per the manufacturer setup; verify the recommended spindle mode on the specific control.</p>
 
-<h3>Thread Inspection beyond the Minor Diameter</h3>
-<p>A thread gauge checks functional fit. The GO ring should assemble under hand force; NO-GO acceptance follows the drawing's gauge rule. Measuring the minor diameter with a caliper or micrometer does not replace the gauge, because pitch diameter and flank condition matter. Once a thread is overcut, material cannot be restored.</p>
 
-<h3>Insert Grades and Thread Pass Count</h3>
-<p>Number of passes depends on insert grade, material, and machine rigidity; this example does not prescribe it. Start from the tool catalog, then watch the first part for chatter, flank wear, and ring gauge fit.</p>
 
-<h3>Why the Major Diameter Slightly Below Nominal</h3>
-<p>External threads are typically turned a few hundredths below nominal major diameter to leave crest room and match tolerance classes. The example treats major as O10 for geometry teaching; on a real part, follow the drawing.</p>
 
-<h3>Thread Relief Groove</h3>
-<p>When a thread runs up to a shoulder, a relief groove under the thread lets the tool retract without rubbing the shoulder. Its width and diameter are specified on the drawing; program Z to that relief rather than guessing.</p>
 
-<h3>External vs Internal Thread Programming</h3>
-<p>In this diameter-mode programming, internal threading toward the bore wall uses a target X that increases (away from spindle axis); retract direction is verified against the controller. The G76 parameter signs and retract direction must match the controller; verify before running.</p>
 
-<h3>Checking Pitch on the First Part</h3>
-<p>Before trusting the cycle, measure pitch with a screw pitch gauge or compare with a known mating part. A wrong F produces threads that look shaped but do not assemble; pitch check catches it early.</p>
 
-<h3>When to Use a Threading Insert Holder with a Built-In Blade</h3>
-<p>Parting and threading share some holder geometry but the insert angles differ. Do not substitute a parting blade for a threading insert; the flank angles are wrong and the thread form will be off.</p>
-<h3>Why the First Pass Matters</h3>
-<p>The first threading pass sets how the insert bites. Too heavy a first pass overloads the corner; too light a pass rubs and work-hardens the surface. Start from the tooling catalog and watch the first chip form.</p>
 
-<h3>Thread Relief and Retract</h3>
-<p>A thread runout or relief groove lets the tool leave cleanly. Without one, the insert may drag on the shoulder at thread end.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <section class="cp-sources">
-<h3>When to Rework a Thread vs Scrape</h3>
-<p>If GO will not enter, the thread may be oversize or have burrs. Clean and re-measure before adding a pass. If NO-GO enters, material is already removed; that part is usually beyond correction. Check with the drawing's gauge rule before deciding.</p>
 
-<h3>Threading Insert and Grade Selection</h3>
-<p>Use the insert grade matched to the workpiece. Tool wear shows as flank wear, built-up edge, or poor finish. Replace the insert on a schedule, not after every thread.</p>
+
+
 
 <h2>Sources</h2>
 <ul>
