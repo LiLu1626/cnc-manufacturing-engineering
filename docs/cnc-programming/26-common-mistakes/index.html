@@ -103,6 +103,9 @@
 <p>The most expensive beginner mistake is not a wrong coordinate &mdash; it is forgetting to set H nonzero. An H of 0 with G43 means the machine thinks the tool tip is at the gauge line. On a 120 mm tool, that puts the tip 120 mm below where you think it is. The result is not a small error; it is a crash into the table. Always verify H is nonzero before the first Z move.</p>
 <p>The second most expensive mistake is confusing G54 shift with size error. A slot that measures 20.30 against a 20.00 target is 0.30 too wide. Shifting G54 X moves the whole slot left and right; it does not change the width. The width is set by the D offset (or by the tool center path when running G40). Diagnose by which dimension is off before you change any offset.</p>
 <p>Read this page once before every first-article run for the first month. After that, the habit becomes automatic: startup block, offsets nonzero, safe Z, single block, 25% rapid. The point is not to memorize the list; it is to make the checks unconscious.</p>
+
+<h3>Why These Mistakes Happen</h3>
+<p>Almost every beginner mistake traces back to one of three root causes: forgetting that the machine remembers state (modal codes, work offsets, tool offsets), confusing programmed coordinates with machine coordinates, or rushing the first part. The startup block exists to erase remembered state. G54 is the translation between program and machine. Dry run and single-block are how you prove the program before you trust it. If you internalize those three ideas, most mistakes stop happening on their own.</p>
 <h2>Practice</h2>
 <p><strong>1.</strong> A hole appears 20 mm in +X from where expected. What do you check first?</p>
 <details><summary>Ans</summary><p>Measure relative to the part datum, then check whether G54 X was entered with a 20 mm error. Do not edit program coordinates.</p></details>
