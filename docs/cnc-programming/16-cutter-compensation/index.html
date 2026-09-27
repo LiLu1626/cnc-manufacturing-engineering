@@ -78,7 +78,8 @@
 <tr><td>keep G41</td><td>(&minus;10,0)</td><td>center Y=&minus;5, extends past corner</td><td>clear left of part</td></tr>
 <tr><td>G40</td><td>(&minus;20,0)</td><td>none</td><td>cancel in clear air</td></tr>
 </table>
-<pre class="cp-code"><code>G00 X0. Y-20.             (G40, clear air below part, at cut Z)
+<pre class="cp-code"><code>G00 X0. Y-20.             (G40, clear air below part, at safe Z50)
+G01 Z-5. F100.            (plunge to cut depth, comp already G40)
 G01 G41 X0. Y-10. D01 F300.  (build comp on +Y extension; center X=-5)
 G01 Y0.                   (approach corner, comp already stable)
 G01 Y50.                  (left edge up)
