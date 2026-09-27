@@ -97,6 +97,12 @@
 </ul>
 
 <section class="cp-practice">
+
+<h3>Why This List Is Not Just a Warning</h3>
+<p>Every mistake on this page comes from a real crash or a real scrapped part. The reason they recur is that they all share the same root: the programmer assumed the machine knew what they meant, instead of writing it explicitly. "The tool knows it is at safe Z" &mdash; no, it does not. "G40 was already on" &mdash; no, you must cancel it explicitly. "G81 was canceled by the next XY" &mdash; on Haas, a bare XY repeats the cycle. The fix for every one of these mistakes is the same: write the startup block, write G80, write G40, write G49, and never assume state.</p>
+<p>The most expensive beginner mistake is not a wrong coordinate &mdash; it is forgetting to set H nonzero. An H of 0 with G43 means the machine thinks the tool tip is at the gauge line. On a 120 mm tool, that puts the tip 120 mm below where you think it is. The result is not a small error; it is a crash into the table. Always verify H is nonzero before the first Z move.</p>
+<p>The second most expensive mistake is confusing G54 shift with size error. A slot that measures 20.30 against a 20.00 target is 0.30 too wide. Shifting G54 X moves the whole slot left and right; it does not change the width. The width is set by the D offset (or by the tool center path when running G40). Diagnose by which dimension is off before you change any offset.</p>
+<p>Read this page once before every first-article run for the first month. After that, the habit becomes automatic: startup block, offsets nonzero, safe Z, single block, 25% rapid. The point is not to memorize the list; it is to make the checks unconscious.</p>
 <h2>Practice</h2>
 <p><strong>1.</strong> A hole appears 20 mm in +X from where expected. What do you check first?</p>
 <details><summary>Ans</summary><p>Measure relative to the part datum, then check whether G54 X was entered with a 20 mm error. Do not edit program coordinates.</p></details>
