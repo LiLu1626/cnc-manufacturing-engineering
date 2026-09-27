@@ -100,6 +100,11 @@
 <p>Optimization 1: increase S to 3000 and F to 160 (within carbide rating). Cutting time halves to 5.85 s, total &asymp; 9 s, saving 6 s per hole. Tool life on carbide in aluminum is thousands of holes, so tool-change cost is negligible. Net saving: 6 s/hole.</p>
 <p>Optimization 2: use G83 peck Q3 instead of G81. Peck adds retract time on each step: 5 pecks &times; 1 s = 5 s extra. But peck clears chips, which prevents drill walking in deep holes. For through holes in 12 mm plate, G81 is fine; peck is for deep holes (3&times; diameter or more). Do not add peck to shallow holes &mdash; it only adds time.</p>
 <p>Optimization 3: order the holes so the machine does not zig-zag. Holes at (10,10), (90,10), (90,70), (10,70): drill in that order and the rapid between holes is ~80 mm each way. Ordering them (10,10), (10,70), (90,70), (90,10) is the same distance. The point is to avoid backtracking across the table: sort holes by X, then Y, so each move is in the same direction. Over 1,000 parts, even 0.5 s saved per hole is 33 minutes of machine time.</p>
+
+<h3>When to Leave the Machine Alone</h3>
+<p>Optimization has a floor: once the cycle time is dominated by load/unload (15&ndash;20%), further cutting-time optimization buys little. If a part takes 60 seconds to machine and 20 seconds to load/unload, shaving 5 seconds off the cut is an 8% improvement, but automating the load/unload is a 33% improvement. Know where the time goes before optimizing.</p>
+<p>Also know when to stop. A program that cuts 10 seconds faster but needs a new insert every 50 parts is not faster in total cost. Track tool life as you optimize: if a new feed strategy drops tool life from 300 parts to 80, the tool-change cost can exceed the time saving. Run the numbers for your actual tool cost and cycle time before declaring a win.</p>
+<p>Finally, document the optimized program. Write in the comment block: "Feed increased from F200 to F280 on 2026-09-28, tool life verified at 250 parts, surface finish within spec." The next person who touches the program needs to know why the numbers are what they are &mdash; otherwise they will "optimize" them back.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Increasing feed beyond tool rating</strong> — breaks tools, causes chatter, scraps parts. Stay within the tool catalog's recommended feed per tooth.</li>
