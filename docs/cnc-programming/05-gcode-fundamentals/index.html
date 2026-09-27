@@ -89,6 +89,11 @@ G01 X60. F300.       (4: feed cut along X at 300 mm/min)
 G00 Z50.             (5: retract up to safe Z BEFORE any XY move)</code></pre>
 <p>Step 1 is rapid — the tool is at Z50, well above the stock, so XY motion is safe. Step 2 drops to Z2. Step 3 switches to feed (G01) and enters the cut. Step 4 does the cutting. Step 5 retracts in Z first — only after Z is at 50 is it safe to rapid in XY again. This order (up, over, down, cut, up) prevents the #1 crash.</p>
 
+
+<h3>Reading G-Code Is Like Reading a Recipe</h3>
+<p>Each block is one instruction. G00 says "go fast here"; G01 says "go slow, cut"; G02/G03 say "cut an arc." The letters X/Y/Z are destinations. F is the feed. You do not need to memorize every G-code &mdash; you need to recognize the motion group and look up the rest. A working programmer keeps a one-page G-code cheat sheet taped to the machine. This page is that cheat sheet, with explanations.</p>
+<p>The most important G-codes are G00, G01, G02, G03. Everything else cancels or sets state. If you can read those four and G40/G41/G42, you can read 80% of any program. The canned cycles (G81&ndash;G89) are shortcuts for drilling patterns; the turning cycles (G70/G71/G72/G76) are shortcuts for stock removal. Learn the shortcuts after the basics, not before.</p>
+<p>Modal codes stick. G01 stays on until G00 or G02. F stays on until the next F. S stays on until the next S. This is why a program can have 50 blocks of G01 without writing G01 on every line &mdash; and also why a missing G00 at the end of a cut feeds the tool across air instead of rapid-retracting.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Rapid XY at cut height</strong> — always retract Z to clearance before moving in X/Y. This is the #1 crash cause.</li>
