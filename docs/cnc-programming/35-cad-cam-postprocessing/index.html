@@ -96,6 +96,12 @@
 </ul>
 <p>Only after these checks should you run a dry run at 50% feed and 100% rapid, then a single-block first cut.</p>
 
+
+<h3>Why CAM Output Still Needs a Human Review</h3>
+<p>CAM software is excellent at generating hundreds of cutter-location points. It is not excellent at understanding that your machine has a 12-inch Z travel, that your vise jaws stick up 18 mm, or that your coolant line hangs 30 mm above the spindle. The post-processor only knows the machine geometry you told it; if you did not model the toolholder, the CAM sees a naked tool tip and happily crashes the holder into the fixture. This is the #1 reason "CAM programs look fine on screen" still crash the real machine.</p>
+<p>The work offset in the CAM setup must match the G54 on the controller. If the CAM setup uses the lower-left corner of the stock and the operator set G54 at the center of the plate, the program faithfully cuts 50 mm to the left of where it should. Always open the .nc file and read the first motion: does the first G00 XY go to a position that, given your G54, is actually in clear air above the part?</p>
+<p>The post-processor is machine-specific. A Haas mill post emits G83 with R plane and Q peck syntax that Haas understands; a FANUC post uses the same letters but may format them differently; a Siemens post uses cycles like CYCLE82. Running a Haas post on a FANUC machine (or vice versa) produces code that either alarms immediately or, worse, runs the wrong motion. If you change machines, re-post &mdash; do not hand-edit the G-code to fit.</p>
+<p>Finally, the CAM simulation shows the tool tip, not the toolholder, the fixture, or the coolant. Before running a CAM program on real stock, walk through the first 100 lines on the controller in single block at 25% rapid override. Watch the holder clear the vise on the first XY move. Watch the Z go down only after the XY is over the pocket. The on-machine dry run catches what the screen simulation cannot.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Not modeling the toolholder</strong> — CAM sees the tool tip, not the holder. Collisions happen with holders, not tips.</li>
