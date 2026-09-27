@@ -171,6 +171,11 @@ M30</code></pre>
 <p>Do not write a macro for a one-off part. Macros are for patterns that repeat: bolt circles, hole grids, pockets at varying sizes, probing cycles, parameterized programs. If you will only drill this one hole pattern once, hand-coding the coordinates is faster and safer. If you will drill 20 variants of the same pattern next month, the macro pays for itself the second time.</p>
 <p>Macros also let you build in safety. A macro can check that radius is positive, that depth is within travel, that the tool number matches. A hand-coded program has none of that. In a production cell where an operator loads parts and presses cycle start, the macro is the engineer's representative at the machine &mdash; it catches mistakes the operator cannot.</p>
 <p>Start with the bolt-circle macro. Add one feature at a time: start angle, hole count, radius, depth. Test each on a dry run. Do not write a 50-line macro blind. The best macro is the one you can read and debug at the machine in 30 seconds.</p>
+
+<h3>Macro Safety and Testing</h3>
+<p>A macro that loops forever can move the machine forever. Before running a macro on a real part, test it in single-block with the tool above the part, feed override at 0, and your finger on the feed-hold button. Watch the first iteration: does it compute the right X/Y? Does the loop increment correctly? Does it exit at the right angle? If the first iteration is wrong, stop and fix the macro.</p>
+<p>Use #3000 to alarm on bad input. If the radius variable is zero or negative, alarm immediately. If the hole count is not an integer, alarm. If the depth exceeds travel, alarm. A macro that stops with a clear message is better than a macro that drills 12 holes in the wrong place.</p>
+<p>Document the macro. Put a comment block at the top: what it does, what variables mean, what the expected inputs are, and what the safe values are. The next person (possibly you, six months later) needs to know what #4 means without reverse-engineering the loop.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Learning macros before mastering basic G-code</strong> — you must understand coordinates, offsets, and canned cycles first. Macros build on top of them.</li>
