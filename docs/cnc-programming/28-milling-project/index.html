@@ -74,7 +74,7 @@
 
 <h3>Pocket Roughing: Two Layers</h3>
 <p>We take two axial cuts: Z&minus;2 and Z&minus;4. Entry is a 30 mm long ramp that drops 1 mm per segment (slope 1/30 &asymp; 1.9&deg;). This requires a center-cutting end mill capable of slotting at this ramp angle — a classroom assumption, not a manufacturer endorsement.</p>
-<p><strong>Layer 1 (Z&minus;2):</strong> rapid to (35,40,Z2), feed to Z0, ramp to (65,40,Z&minus;1), reverse ramp to (35,40,Z&minus;2). Then run the 17-point raster at F200.</p>
+<p><strong>Layer 1 (Z&minus;2):</strong> rapid to (35,40,Z5) with H02 active, then G00 to Z2 over the pocket center; feed to Z0, ramp to (65,40,Z&minus;1), reverse ramp to (35,40,Z&minus;2). Then run the 17-point raster at F200. The ramp starts at Z0 on already-clean air, not at the pocket floor.</p>
 <p><strong>Layer 2 (Z&minus;4):</strong> G00 Z5, reposition to (35,40), feed down to Z&minus;2 (already cleared), ramp to (65,40,Z&minus;3), reverse ramp to (35,40,Z&minus;4). Repeat the same 17-point raster.</p>
 
 <p>The 17-point center path (stepover 4 mm, tool diameter 10 mm &rarr; 6 mm overlap between rows):</p>
