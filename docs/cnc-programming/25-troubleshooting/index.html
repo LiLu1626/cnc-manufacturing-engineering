@@ -229,7 +229,7 @@
 <p><strong>3.</strong> How do you verify which program is loaded on the controller?</p>
 <details><summary>Ans</summary><p>Check the O number on the controller display. Machine shops have many programs with similar names; always confirm the O number before running.</p></details>
 <p><strong>4.</strong> Arc from S(0,0) to E(50,0) with center C(20,0). Why does the controller alarm?</p>
-<details><summary>Ans</summary><p>I/J center offset error. I/J are incremental from the arc start point, not absolute from G54. Check that I and J are the vector from start to center.</p></details>
+<details><summary>Ans</summary><p>Start radius from C(20,0) to S(0,0) is 20 mm; end radius to E(50,0) is 30 mm. The two endpoints are not on the same circle, so the controller alarms.</p></details>
 
 
 <h2>Sources</h2>
