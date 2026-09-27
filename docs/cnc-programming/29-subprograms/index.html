@@ -87,6 +87,33 @@ M99</code></pre>
 <p>The classic bolt-circle example: 12 holes at 30&deg; spacing on a 50 mm radius. Without a subprogram, you list every (X,Y) pair. With M98 P2000 L12, the main program feeds a starting angle and the subprogram computes one hole. Even better, the angle increments inside the subprogram so the next call starts where the last one ended &mdash; but this only works if the subprogram restores G90 on return. The #1 subprogram bug is leaked incremental mode: the main program is in G90, the subprogram switches to G91 for the pattern, and forgets to switch back. The next main-program block then moves by an increment instead of to an absolute position, and the tool appears to "jump."</p>
 <p>Subprograms also have a stack depth limit on every controller &mdash; typically four or eight levels of M98 calls. Nesting a subprogram inside a subprogram is allowed, but going too deep triggers an alarm. Keep nesting shallow: one level for patterns, two at most, and never rely on undocumented depth limits in production.</p>
 <p>On the shop floor, a subprogram is also a testing unit. You can run O2000 alone with a dry-run block to check the hole position before running the full main program. Isolating one hole in its own O-number means you can fix the geometry in one place, and every call inherits the fix. This is the same reason functions exist in programming &mdash; single source of truth, repeated calls, isolated debugging.</p>
+
+<h3>A Complete Subprogram Example</h3>
+<p>Suppose you need to drill a 4-hole pattern on each of 4 parts on a tombstone &mdash; 16 holes total. The main program sets up G54, G81, and then calls the pattern subprogram once per fixture offset. The subprogram itself drills the 4 relative holes and returns. To move to the next fixture, the main program switches G55, G56, G57 and calls again.</p>
+<pre class="cp-code"><code>O0001 (MAIN)
+G21 G17 G90 G94 G54 G80 G40
+G00 G43 H01 Z50. M08
+S1500 M03
+G81 R2. Z-15. F120.
+M98 P2000.           (drill pattern on G54)
+G55
+M98 P2000.           (drill pattern on G55)
+G56
+M98 P2000.
+G57
+M98 P2000.
+G80 G00 Z50. M09
+M30
+
+O2000 (4-HOLE PATTERN, INCREMENTAL)
+G91
+X0 Y0
+X20. Y0
+X20. Y20
+X-20. Y0
+G90
+M99</code></pre>
+<p>The subprogram uses G91 for the pattern (relative moves) and restores G90 before M99. This is the leaked-modal bug fixed: if O2000 forgot G90, the next main-program block would move by distance, not to position. On a tombstone, this is the difference between 16 correct holes and 16 holes scattered across the fixture.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Confusing P and O</strong> — Haas uses M98 P2000 (call), not O2000. The subprogram itself is labeled O2000.</li>
