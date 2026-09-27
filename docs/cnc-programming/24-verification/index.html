@@ -182,6 +182,15 @@
 
 <h3>When to Re-Verify After a Tool Change</h3>
 <p>Any tool change, even an insert index, changes the effective tool. Re-touch the offset and run a test cut before resuming production.</p>
+
+<h3>Simulation and Offsets Are Separate</h3>
+<p>A perfect simulation with the wrong H offset still crashes. Simulation verifies the tool path in the abstract; offsets are verified on the machine. Never substitute one for the other.</p>
+
+<h3>Measuring Critical Features First</h3>
+<p>On the first part, measure tight-tolerance features first. If they are off, stop and correct before running more. Cosmetic features can be checked later; critical ones cannot be fixed later.</p>
+
+<h3>Documenting Edge Cases</h3>
+<p>If this part has a tricky fixture, a thin wall, or a tool that barely clears, write a note in the program. Next setup will thank you.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Running full feed on first part</strong> — use 25–50% feed override until the first part passes inspection.</li>
