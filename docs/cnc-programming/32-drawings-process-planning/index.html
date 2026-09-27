@@ -96,6 +96,11 @@
 </ol>
 <p>Why this order? Facing first gives a clean Z0. Outer profile before holes so the holes are located from finished edges. Drilling before boring leaves a clean hole for the boring bar. Chamfering last so the chamfer tool does not knock the work loose. Each step protects the previous one.</p>
 <p>If the &Oslash;10 H7 bore is a datum for a later setup, machine it first and flip the part on a soft jaw bored to that bore. This is datum transfer: one extra setup, but every dimension referenced to the bore is now from the bore, not from the raw stock.</p>
+
+<h3>Roughing vs Finishing Allowances</h3>
+<p>Roughing removes bulk stock. It does not need to hold tolerance; it needs to remove material fast. Leave 0.4&ndash;0.8 mm on diameter (lathe) or 0.2&ndash;0.5 mm on wall (mill) for the finishing pass. Rough at high feed, moderate speed. Finishing cuts the final size: lower feed, higher speed, shallow depth. The finishing tool is often a different insert (sharper, polished) than the roughing tool.</p>
+<p>On a lathe, G71 leaves U0.4 diameter and W0.1 axial as finish stock; G70 cuts it. On a mill, the CAM leaves a finish pass of 0.3 mm on walls and floor. If you rough to size, you have no room to correct tool wear; if you leave too much finish stock, the finish pass chatters. 0.4 mm on diameter is a standard classroom compromise.</p>
+<p>Tolerance stack-up: if the drawing calls for &Oslash;20 &plusmn;0.02, your process must hold better than that. Roughing &plusmn;0.1, finishing &plusmn;0.02, inspection at &plusmn;0.01. If your machine cannot hold &plusmn;0.02 on that diameter, the tolerance is not achievable &mdash; state that before the part starts, not after the first scrap.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Drilling before milling the flat surface</strong> — holes start on uneven stock and wander.</li>
