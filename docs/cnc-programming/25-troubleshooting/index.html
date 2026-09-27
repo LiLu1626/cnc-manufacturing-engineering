@@ -210,6 +210,8 @@
 
 <h3>Closing the Loop</h3>
 <p>After a fix, run a few parts and confirm the symptom is gone. Do not declare victory after one good part; verify the fix is repeatable.</p>
+<h3>Arc Radius Consistency Check</h3>
+<p>For an arc from S(0,0) to E(50,0) with center C(25,0), both radii are 25 mm. If C(20,0), the two radii are 20 and 30 — inconsistent, and the controller will alarm before cutting a "lopsided" arc.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Guessing and re-running</strong> — change one thing at a time. Multiple changes at once make it impossible to know what fixed it.</li>
@@ -229,6 +231,12 @@
 <p><strong>4.</strong> An arc comes out lopsided. What is the most likely cause?</p>
 <details><summary>Ans</summary><p>I/J center offset error. I/J are incremental from the arc start point, not absolute from G54. Check that I and J are the vector from start to center.</p></details>
 
+
+<h2>Sources</h2>
+<ul>
+<li>Haas Automation, G49 Tool Length Cancel. <a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G49.html" target="_blank" rel="noopener">haascnc.com</a>.</li>
+<li>Haas Automation, G80 Canned Cycle Cancel. <a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G80.html" target="_blank" rel="noopener">haascnc.com</a>.</li>
+</ul>
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/24-verification/">&larr; Verification</a><a href="/cnc-manufacturing-engineering/cnc-programming/26-common-mistakes/">Common Mistakes &rarr;</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>

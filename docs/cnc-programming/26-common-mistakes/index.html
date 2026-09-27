@@ -76,6 +76,11 @@
 <h2>Example</h2>
 <p>A beginner program starts with G21 G90 G54, calls T01, and immediately rapid-moves to X50 Y50. The operator should have checked: T01 is the physical tool in the spindle, H01 matches, G54 is on the correct datum, and the Z height at that XY move is above the fixture. If any of these is wrong, the crash happens before the first cut.</p>
 
+<h3>Why Modal Codes Bite Beginners</h3>
+<p>G01, G90, G41, and G80+ all persist until changed. A code from ten blocks ago still controls motion. Reading the current line alone is not enough; track modal state.</p>
+
+<h3>Run the Checklist Every Time</h3>
+<p>The checklist is not a one-time lesson. Run it on every new program and every new setup. It is cheap insurance.</p>
 <h2>Common Mistakes About the Mistakes</h2>
 <ul>
 <li><strong>Thinking experience replaces the checklist</strong> — even experienced programmers verify offsets and units.</li>
@@ -94,6 +99,12 @@
 <details><summary>Ans</summary><p>Values are interpreted as inches, so every linear dimension is 25.4&times; too large.</p></details>
 </section>
 
+
+<h2>Sources</h2>
+<ul>
+<li>Haas Automation, G49 Tool Length Cancel. <a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G49.html" target="_blank" rel="noopener">haascnc.com</a>.</li>
+<li>Haas Automation, G80 Canned Cycle Cancel. <a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G80.html" target="_blank" rel="noopener">haascnc.com</a>.</li>
+</ul>
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting/">&larr; Troubleshooting</a><a href="/cnc-manufacturing-engineering/cnc-programming/28-milling-project/">Milling Project &rarr;</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
