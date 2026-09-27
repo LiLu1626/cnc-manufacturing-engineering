@@ -63,10 +63,10 @@
 <figure class="cp-figure">
 <svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
   <line x1="50" y1="90" x2="350" y2="90" stroke="#333"/>
-  <circle cx="100" cy="90" r="5" fill="#333"/>
-  <text x="90" y="80" font-size="10" fill="#333">start X20</text>
+  <circle cx="150" cy="90" r="5" fill="#333"/>
+  <text x="140" y="80" font-size="10" fill="#333">start X20</text>
   <circle cx="200" cy="90" r="5" fill="#27ae60"/>
-  <text x="185" y="75" font-size="10" fill="#27ae60">G90 X30 = end X30</text>
+  <text x="180" y="75" font-size="10" fill="#27ae60">G90 X30 = end X30</text>
   <circle cx="300" cy="90" r="5" fill="#c0392b"/>
   <text x="280" y="115" font-size="10" fill="#c0392b">G91 X30 = end X50</text>
 </svg>
@@ -77,7 +77,7 @@
 <p>A beginner program starts with G21 G90 G54, calls T01, and immediately rapid-moves to X50 Y50. The operator should have checked: T01 is the physical tool in the spindle, H01 matches, G54 is on the correct datum, and the Z height at that XY move is above the fixture. If any of these is wrong, the crash happens before the first cut.</p>
 
 <h3>Why Modal Codes Bite Beginners</h3>
-<p>G01, G90, G41, and G80+ all persist until changed. A code from ten blocks ago still controls motion. Reading the current line alone is not enough; track modal state.</p>
+<p>G01, G90, G41, and canned cycles all persist until changed. A code from ten blocks ago still controls motion. Reading the current line alone is not enough; track modal state.</p>
 
 <h3>Run the Checklist Every Time</h3>
 <p>The checklist is not a one-time lesson. Run it on every new program and every new setup. It is cheap insurance.</p>

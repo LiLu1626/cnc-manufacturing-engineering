@@ -27,7 +27,7 @@
 <main class="article">
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Safe Program Start, Retraction, and Restart</h1>
-<p class="lead">Running from the top restores a known start state, but it is not a guarantee of safety by itself. When you must restart mid-program after a tool break or alarm, you must rebuild the modal state the controller has already forgotten. This page covers startup blocks, safe approach/retract, and the mid-program restart procedure.</p>
+<p class="lead">Running from the top restores a known start state, but it is not a guarantee of safety by itself. When you must restart mid-program after a tool break or alarm, you must verify the actual modal state — feed hold, reset, alarm, and power loss retain different information. This page covers startup blocks, safe approach/retract, and the mid-program restart procedure.</p>
 
 <div class="callout"><strong>What you will learn:</strong>
 <ul>
@@ -40,7 +40,7 @@
 
 <h2>Concept</h2>
 <p>Safe programming means the machine always starts from a known state: correct tool, correct offsets, correct work zero, correct spindle direction, and a clear path from tool change position to the first cut. The startup block sets these conditions explicitly rather than relying on whatever the previous program left behind. Because G codes are modal, the controller remembers settings from the last program that ran — which may be completely different from what your new program expects.</p>
-<p><strong>Restart</strong> after a tool break, dimension stop, or alarm is different. You cannot simply position the tool near the last cut line and press cycle start. The controller has lost (or never had) the tool length offset, cutter compensation, work offset, feed mode, and cycle state that earlier lines established. Jumping to N80 without rebuilding that state means the controller moves in X/Y correctly but with the wrong Z height and wrong offsets.</p>
+<p><strong>Restart</strong> after a tool break, dimension stop, or alarm is different. You cannot simply position the tool near the last cut line and press cycle start. The controller may or may not retain tool length offset, cutter compensation, work offset, feed mode, and cycle state depending on how it was interrupted. Read the modal display rather than assume. Jumping to N80 without rebuilding that state means the controller moves in X/Y correctly but with the wrong Z height and wrong offsets.</p>
 
 <h2>Why It Matters</h2>
 <p>Every crash that happened on a CNC machine started as an assumed state. "The previous program was fine, so this one should be too" is how tools break into the fixture. The startup block exists precisely because the controller's modal state is unpredictable between programs. Similarly, mid-program restart errors — leftover G91, wrong H offset, active G81 — are among the most common causes of second crashes (after the first tool break already stopped the machine).</p>
@@ -49,7 +49,7 @@
 
 <h3>The Startup Block, Line by Line</h3>
 <pre class="cp-code"><code>O1001
-G21 G17 G90 G40 G49 G80</code></pre>
+G21 G17 G90 G94 G40 G49 G80</code></pre>
 <table class="data-table">
 <tr><th>Code</th><th>What It Does</th><th>Why It Matters</th></tr>
 <tr><td>G21</td><td>Metric units (mm)</td><td>Prevents inch/mm mismatch — 25.4&times; errors</td></tr>
@@ -71,7 +71,7 @@ G21 G17 G90 G40 G49 G80</code></pre>
 </ol>
 
 <h3>Mill vs Lathe Startup</h3>
-<p>A mill startup uses <code>G21 G17 G90 G40 G49 G80</code>. A lathe uses different codes: <code>G21 G97 G99</code> (constant RPM, feed per revolution). Lathes do not use G17 (plane) or G49 (length offset) the same way. Do not copy a mill startup block into a lathe program — the G codes mean different things or do not exist.</p>
+<p>A mill startup uses <code>G21 G17 G90 G94 G40 G49 G80</code>. A lathe uses different codes: <code>G21 G97 G99</code> (constant RPM, feed per revolution). Lathes do not use G17 (plane) or G49 (length offset) the same way. Do not copy a mill startup block into a lathe program — the G codes mean different things or do not exist.</p>
 
 <h3>Safe Approach and Retraction</h3>
 <p>The rule for open milling with a clear Z channel: <strong>move Z first when approaching, and Z first when retracting</strong>. When approaching the part: rapid XY to the position at a safe Z height, THEN feed down to cut depth. When retracting from a cut: rapid Z up to safe height, THEN move XY. This prevents the tool from traveling sideways at cut depth and crashing into the fixture or part.</p>
@@ -80,7 +80,7 @@ G21 G17 G90 G40 G49 G80</code></pre>
 <h3>Mid-Program Restart Procedure</h3>
 <ol>
 <li>Note where the program stopped: block number, tool, operation, current modal state.</li>
-<li>Identify every modal state that the restart block depends on: G90/G91, G54 offset, H tool length, G41/G42, G94/G95 feed mode, any active G80+ cycle.</li>
+<li>Identify every modal state that the restart block depends on: G90/G91, G54 offset, H tool length, G41/G42, G94/G95 feed mode, any active canned cycle.</li>
 <li>Jog the tool to a <strong>known safe position</strong> away from the part.</li>
 <li>Manually establish the missing state: call the correct tool with its H offset, select G54, set G90, cancel any cycles.</li>
 <li>Move the tool to a safe approach point above the restart location.</li>
@@ -184,7 +184,7 @@ G21 G17 G90 G40 G49 G80</code></pre>
 <li>Instead: manually position above hole 4, call the tool with H offset, re-issue G81 with correct R/Z/F, then drill remaining holes.</li>
 <li>After drilling, G80 before moving away.</li>
 </ul>
-<p><strong>Three failure modes to recognize:</strong> (1) leftover G91 means coordinates are interpreted as distances, not positions; (2) wrong H number means Z depth is off by the tool length difference; (3) an active G81 means any X/Y move drills a hole even if you think you are just repositioning.</p>
+<p><strong>Three failure modes to recognize:</strong> (1) leftover G91 means coordinates are interpreted as distances, not positions; (2) wrong H number means Z depth is off by the tool length difference; (3) on Haas mills, with a canned cycle active, a bare X/Y move repeats the cycle; an explicit G00/G01 cancels it. Use G80 to make intent clear.</p>
 
 <h2>Common Mistakes</h2>
 <ul>
@@ -192,7 +192,7 @@ G21 G17 G90 G40 G49 G80</code></pre>
 <li><strong>Assuming "from the top" is always safe</strong> — it is the safest option, but not always practical for long programs or after a tool change.</li>
 <li><strong>Copying a mill startup block into a lathe</strong> — check the lathe manual; G17/G49 and feed modes are not the same.</li>
 <li><strong>Assuming single-block or feed override prevents collisions</strong> — they slow the motion but do not prevent the crash.</li>
-<li><strong>Forgetting G80 before repositioning</strong> — an active drilling cycle makes every X/Y move a hole.</li>
+<li><strong>Forgetting G80 before repositioning</strong> — a bare X/Y move repeats the active cycle; use G80 to cancel explicitly.</li>
 </ul>
 
 <section class="cp-practice">
@@ -200,7 +200,7 @@ G21 G17 G90 G40 G49 G80</code></pre>
 <p><strong>1.</strong> A program restart leaves G91 active. What happens when the next block says X50?</p>
 <details><summary>Show answer</summary><p>The tool moves 50 mm in X from its current position (incremental), not to absolute X50. You must issue G90 first.</p></details>
 <p><strong>2.</strong> Why is G80 needed after a restart at a drilling block?</p>
-<details><summary>Show answer</summary><p>If a canned cycle is still modal, any subsequent X/Y move executes a drill. You must explicitly G80 before repositioning.</p></details>
+<details><summary>Show answer</summary><p>On Haas mills, a bare X/Y repeats the active cycle; an explicit G00/G01 cancels it. Use G80 to make intent clear before repositioning.</p></details>
 <p><strong>3.</strong> You broke a drill and replaced it with one 3 mm longer. What offset must change?</p>
 <details><summary>Show answer</summary><p>The H (tool length) offset. Without updating it, the Z depth will be off by 3 mm, potentially drilling too deep or not deep enough.</p></details>
 <p><strong>4.</strong> What does G49 cancel? Does it also cancel G54?</p>

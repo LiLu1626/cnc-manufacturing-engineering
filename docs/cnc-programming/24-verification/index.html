@@ -42,7 +42,7 @@
 <li><strong>Units</strong> — G21 (metric) or G20 (inch)? Confirm both in the program and on the controller.</li>
 <li><strong>Work offset</strong> — G54 set to the correct datum on the part? Check X, Y, and Z origin.</li>
 <li><strong>Tool length offsets</strong> — H01, H02... measured and loaded? Not zero?</li>
-<li><strong>Tool radius offsets</strong> — D values match the actual tool radii?</li>
+<li><strong>Tool radius offsets</strong> — D register set per this controller's radius/diameter and wear/geometry convention?</li>
 <li><strong>Spindle direction and speed</strong> — M03 forward, S in the correct range?</li>
 <li><strong>Z clearance</strong> — is the tool at a safe Z above the stock, not at cut depth?</li>
 <li><strong>Tool number</strong> — does T01 in the program match what is physically in the spindle?</li>
@@ -58,7 +58,7 @@
 <tr><td>4. CAM simulation</td><td>Watch material removal in CAM</td><td>Obvious collisions, wrong tool path</td></tr>
 <tr><td>5. Planned air run</td><td>Per machine procedure, verify path</td><td>Gross coordinate errors, limit switches</td></tr>
 <tr><td>6. Single block</td><td>Block-by-block at reduced feed</td><td>Per-motion errors you would miss at speed</td></tr>
-<tr><td>7. Reduced feed cut</td><td>First cut at 25–50% feed override</td><td>Tool deflection, chatter, chip issues</td></tr>
+<tr><td>7. Planned first cut</td><td>Feed/rapid overrides per machine first-article procedure</td><td>Tool deflection, chatter, chip issues</td></tr>
 <tr><td>8. First article</td><td>Measure every dimension</td><td>Offset errors, tool wear, dimensional drift</td></tr>
 </table>
 
@@ -103,7 +103,7 @@
 <p>CAM/NC verification against a stock model can catch tool gouging, overtravel, missed moves, and unit errors if the NC and model inputs are checked together. It cannot prove on-machine offsets or unmodeled fixture clearance.</p>
 
 <h3>Dry Run and Single Block</h3>
-<p>Dry run moves the tool at rapid regardless of programmed feed, usually without cutting. Use it to confirm the XY path. Single block executes one block at a time; step through the first few cuts to confirm Z depth and compensation engage as expected.</p>
+<p>Controller graphics, CAM verification, and machine dry-run each behave differently. Use them per the machine procedure to confirm the XY path. Single block executes one block at a time; step through the first few cuts to confirm Z depth and compensation engage as expected.</p>
 
 <h3>First Part Inspection</h3>
 <p>After the first cut, stop and measure. Check critical dimensions against the drawing before continuing. If an offset is wrong, you want to find it on the first part, not the tenth.</p>
@@ -157,10 +157,10 @@
 <p>G54 vs G55 on a tombstone with multiple parts. Confirm which fixture the program expects. Running G54 when the part is on G55 is an instant crash.</p>
 
 <h3>Check the Units</h3>
-<p>G20 vs G21. A 25.4 mm mistake is the classic first-program error. Look at the first block before cycle start.</p>
+<p>G20 vs G21. Mixed units scale dimensions by 25.4 or 1/25.4. Look at the first block before cycle start.</p>
 
 <h3>Check Feed Override Position</h3>
-<p>For the first part, override should be at 100%, not left at 10% from the last setup. A slow first cut is safer than a fast crash, but confirm before assuming.</p>
+<p>Set rapid and feed overrides per the machine first-article procedure; lowering override slows motion but is not a collision guarantee.</p>
 
 <h3>Document the First Part Result</h3>
 <p>Record actual measured dimensions and any offset tweaks. The next setup repeats the tweaks rather than re-discovering them.</p>
@@ -207,11 +207,11 @@
 <p>If multiple features translate together, the work offset is suspect. If one feature size is wrong, the tool or compensation is suspect. These are different problems with different fixes.</p>
 <h2>Common Mistakes</h2>
 <ul>
-<li><strong>Running full feed on first part</strong> — use 25–50% feed override until the first part passes inspection.</li>
+<li><strong>Running full feed on first part</strong> — set overrides per the machine procedure until the first part passes.</li>
 <li><strong>Skipping dry run</strong> — dry run at rapid with tool above stock catches gross coordinate errors before any cutting.</li>
 <li><strong>Trusting CAM simulation</strong> — CAM does not know if your G54 is wrong or if H01 is unloaded.</li>
 <li><strong>Not measuring the first part</strong> — "it looks right" is not inspection. Measure every critical dimension.</li>
-<li><strong>Adjusting the program to compensate for offset errors</strong> — if the hole is 0.2 mm off in X, fix G54 X, not the X coordinates in the program.</li>
+<li><strong>Adjusting the program to compensate for measured errors</strong> — confirm the cause (work offset vs size error) before changing offsets or coordinates.</li>
 </ul>
 
 <h2>Practice</h2>
@@ -222,7 +222,7 @@
 <p><strong>3.</strong> CAM simulation looks perfect. What might still be wrong?</p>
 <details><summary>Ans</summary><p>Work offset, tool length, tool number, units, spindle direction — anything in the physical setup that the CAM model does not know about. Only the machine dry run reveals setup errors.</p></details>
 <p><strong>4.</strong> The first part comes out 0.3 mm too large in X. Do you change the program X coordinates?</p>
-<details><summary>Ans</summary><p>No. Fix G54 X offset by the measured error (add or subtract 0.3 mm). Changing the program makes it wrong for the next setup.</p></details>
+<details><summary>Ans</summary><p>No. A slot width of 20.30 vs 20.00 is a size error. Shifting G54 moves the slot; the width stays 20.30. Check contour, cutter compensation, tool size, wear, and measurement.</p></details>
 
 
 <h2>Sources</h2>

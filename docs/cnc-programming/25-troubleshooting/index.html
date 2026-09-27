@@ -91,7 +91,7 @@
 <li>Check G54 display: if X origin was entered as -280 instead of -300, the hole shifts +20 mm.</li>
 <li>Are you running the correct program? Check the O number on the controller display. Machine shops have dozens of similar programs.</li>
 </ol>
-<p>If measurement confirms a constant +20 mm X shift across multiple features, correct G54 X by -20 mm. Do not edit program coordinates.</p>
+<p>Under the no-rotation/no-scale/no-additional-offset assumption, if measurement confirms a constant +20 mm X shift and the controller G54 X is indeed -280, correct it to -300. Multiple shifted holes alone do not prove this; verify the actual datum.</p>
 
 
 <h3>Unexpected Tool Motion</h3>
@@ -137,7 +137,7 @@
 <p>If a bore cuts too small on the inside or too deep on the outside, the offset sign may be reversed relative to the controller. Re-check the H/D value against the touch-off procedure on this specific machine.</p>
 
 <h3>Wrong Cutter Compensation Side</h3>
-<p>G41 on the wrong side gouges the part. Look at the tool relative to the programmed contour: are you climbing or conventional? Re-read the lead-in move and reverse G41/G42 if needed.</p>
+<p>Decide G41/G42 by looking along the programmed tool path: which side is the material? Left side = G41, right side = G42. Do not infer from climb/conventional labels alone.</p>
 
 <h3>Feed or Speed Alarm</h3>
 <p>A spindle overload alarm means the cut is too heavy for the tool or machine. Reduce depth of cut, feed, or speed; do not reset and run the same cut again.</p>
@@ -173,16 +173,16 @@
 <p>If parts drift gradually, suspect tool wear or thermal growth. Record dimensions over a batch and re-offset when drift crosses a threshold.</p>
 
 <h3>Surface Integrity Issues</h3>
-<p>Burn marks, white layer, or work hardening indicate the cut was too slow or too heavy. Adjust speed and feed rather than forcing the tool to rub.</p>
+<p>Burn marks, white layer, or work hardening are hypotheses to verify — speed, feed, grade, and coolant all play a role. Do not assume a single cause.</p>
 
 <h3>Machine-Related Issues</h3>
 <p>Not every issue is a program bug. Loose belts, worn ballscrews, or faulty encoders cause real machine errors. If symptoms repeat across programs on the same machine, investigate the machine, not the code.</p>
 
 <h3>When to Escalate</h3>
-<p>If a symptom repeats despite three plausible fixes, stop and ask for help. Continuing to tweak without a theory wastes material and tooling. Bring the symptom history to a more experienced operator or the maintenance department.</p>
+<p>If the cause is not identified after structured diagnosis, escalate to a more experienced operator or maintenance. Bring the symptom history, not just the latest part.</p>
 
 <h3>Using Data to Troubleshoot</h3>
-<p>Record dimensions across parts. A trend line tells you wear; a sudden outlier tells you a setup error. Numbers beat intuition on the shop floor.</p>
+<p>Record dimensions across parts. Trends suggest wear, thermal growth, or workholding; outliers suggest setup or tool events. Numbers beat intuition.</p>
 
 <h3>When to Stop the Batch</h3>
 <p>If one part is out of spec, stop and find the cause before running more. Do not hope the next one will be fine. Scrap piles grow from ignored outliers.</p>
@@ -216,7 +216,7 @@
 <ul>
 <li><strong>Guessing and re-running</strong> — change one thing at a time. Multiple changes at once make it impossible to know what fixed it.</li>
 <li><strong>Ignoring the alarm text</strong> — the alarm number usually points directly to the problem. Read it before clearing.</li>
-<li><strong>Changing the program instead of the offset</strong> — if the program says X30 and the hole is at X50, fix G54, not the program.</li>
+<li><strong>Changing the program before diagnosing</strong> — first check G90/G91, actual datum, active offset, and program version. Only edit code after the cause is confirmed.</li>
 <li><strong>Running full speed for diagnosis</strong> — use single-block and a feed override set per the machine's first-article procedure.</li>
 <li><strong>Forgetting to check which program is loaded</strong> — O1001 and O1011 can be confused at a glance.</li>
 </ul>
