@@ -190,7 +190,7 @@ Z-40.
 G00 X52.
 Z100.
 M30</code></pre>
-<p>Note: 1.0 mm radial per pass is a teaching assumption. Real depth-of-cut limits depend on insert grade, material hardness, machine rigidity, and chip evacuation.</p>
+<p>Note: the five manual OD passes above illustrate layered roughing. On a Haas lathe, G71 Type I would generate these passes automatically from the finished profile; the manual listing here is for teaching. Real depth-of-cut limits depend on insert grade, material hardness, machine rigidity, and chip evacuation.</p>
 <p><strong>Clearance model (classroom geometry):</strong> final face at Z0, original face at Z+1, chuck jaw front at Z&minus;60, raw stock projection 61 mm. Toolholder extends 8 mm behind the tip, so at Z&minus;40 the tool body reaches Z&minus;48, leaving 12 mm axial clearance to the jaw. The X52 retract position must also clear the toolholder body radially outside the chuck and workholding. These values are teaching assumptions, not production recommendations.</p></details>
 
 <p><strong>19.</strong> Four &Oslash;6 holes on a 40 mm square centered at (0,0), at (&minus;20,&minus;20), (20,&minus;20), (20,20), (&minus;20,20). Through holes in 6 mm plate: Z&minus;8. S2000, F120. Write the program.</p>
