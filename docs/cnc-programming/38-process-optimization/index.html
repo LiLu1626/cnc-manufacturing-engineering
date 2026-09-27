@@ -85,7 +85,7 @@
 <h2>Example</h2>
 <p><strong>Worked example:</strong> A rectangular pocket requires 3 raster passes of 120 mm each. Current feed F300. Each pass = 120/300 = 0.4 min = 24 s. Total cutting = 72 s.</p>
 <p>Increase feed to F360 (20% higher). Each pass = 120/360 = 0.333 min = 20 s. Total cutting = 60 s. Saving = 12 s per part.</p>
-<p>On a 1,000-part run: 12 s &times; 1000 = 12,000 s = 3.3 hours saved. But check tool life: at F360, does the tool still last the expected 30 parts? If tool life drops from 30 parts to 15 parts, you change the tool twice as often. Each tool change adds 20 s to cycle time. Extra tool change cost: 1 change per part &times; 20 s = 20 s added. Net saving: 12 s saved &minus; 20 s extra = &minus;8 s. The faster feed costs more time than it saves.</p>
+<p>On a 1,000-part run: 12 s &times; 1000 = 12,000 s = 3.3 hours saved. But check tool life: at F360, does the tool still last the expected 30 parts? If tool life drops from 30 parts to 15 parts, you change the tool twice as often. Each tool change adds 20 s to cycle time. Extra tool change cost per part: 20 s &times; (1/15 &minus; 1/30) = 0.667 s per part. Net saving: 12 s saved &minus; 0.667 s extra = 11.333 s per part. The faster feed still saves time.</p>
 <p><strong>Lesson:</strong> always verify the tool-life impact before increasing feed. The optimum is where the time saved exceeds the added tool-change cost.</p>
 
 <h2>Common Mistakes</h2>
