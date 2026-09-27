@@ -180,10 +180,11 @@ G21 G17 G90 G94 G40 G49 G80</code></pre>
 <h2>Example</h2>
 <p>A drilling program stops at hole 4 of 6 because the drill broke. The program used G81 with G99 (retract to R plane). To restart:</p>
 <ul>
-<li>Replace the broken drill. If the new drill differs in length, update the H offset.</li>
-<li>The program was in G90, G54, G81 modal. You cannot just jump to the hole-4 line.</li>
-<li>Instead: manually position above hole 4, call the tool with H offset, re-issue G81 with correct R/Z/F, then drill remaining holes.</li>
-<li>After drilling, G80 before moving away.</li>
+<li>Clear the broken edge, inspect hole 4 and the part, and confirm the hole may continue.</li>
+<li>Replace the drill per OEM procedure; measure H02.</li>
+<li>Re-establish G21 G17 G90 G94 G54, G40, G80, spindle and coolant.</li>
+<li>First build G43 H02 to the verified Z50 clearance, then move XY to hole 4, then re-issue G81 with R/Z/F.</li>
+<li>After drilling, G80 and retract to Z50 before moving away.</li>
 </ul>
 <p><strong>Three failure modes to recognize:</strong> (1) leftover G91 means coordinates are interpreted as distances, not positions; (2) wrong H number means Z depth is off by the tool length difference; (3) on Haas mills, with a canned cycle active, a bare X/Y move repeats the cycle; an explicit G00/G01 cancels it. Use G80 to make intent clear.</p>
 
