@@ -40,6 +40,12 @@
 <tr><td>C</td><td>Z axis</td><td>Rotate table for 4th-axis milling, bolt circles</td></tr>
 </table>
 
+
+<h3>What a Probe Actually Does</h3>
+<p>A touch probe is a precision switch mounted in the spindle or turret. When the stylus touches the part, the switch triggers, and the controller records the current machine coordinate. By touching two opposite faces, the controller computes the center and writes it into a work offset. This replaces manual edge-finding and dramatically reduces setup time on repetitive parts. The probe itself is a precision instrument &mdash; it must be calibrated, the stylus must be clean, and the touch speed must be slow enough to avoid bending the stylus.</p>
+<p>Probing is not limited to setting G54. In production, a probe can: (1) find the part on a tombstone and write G54, G55, G56, G57 automatically; (2) measure a bore after boring and compare it to the nominal, adjusting the boring bar offset if needed; (3) detect a missing or misloaded blank before the program crashes; (4) measure tool length after a tool change and update H automatically. Each of these uses the same physical device but a different macro routine.</p>
+<p>Multi-axis (rotary) probing is a separate topic. On a 4- or 5-axis machine, the probe can touch a bore on a tilted face, or measure a part after a C-axis rotation. The math is more complex because the probe point is in a rotated coordinate system, but the principle &mdash; record machine position at trigger, compute part position &mdash; is the same. Start with 3-axis probing before attempting rotary probing.</p>
+<p>A probe crash is expensive: a bent stylus is a $100 part, and a damaged probe body is $5,000+. Always run probing routines at reduced feed override first, and keep a clear air approach distance of at least 5 mm before the slow touch move.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Treating probe reading as G54 directly</strong> — the probe touches an edge, not the center. Convert: center = (edge1 + edge2)/2.</li>
