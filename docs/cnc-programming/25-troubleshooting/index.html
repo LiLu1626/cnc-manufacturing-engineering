@@ -137,7 +137,7 @@
 <p>If a bore cuts too small on the inside or too deep on the outside, the offset sign may be reversed relative to the controller. Re-check the H/D value against the touch-off procedure on this specific machine.</p>
 
 <h3>Wrong Cutter Compensation Side</h3>
-<p>Decide G41/G42 by looking along the programmed tool path: which side is the material? Left side = G41, right side = G42. Do not infer from climb/conventional labels alone.</p>
+<p>For positive cutter compensation, G41 places the tool center to the left of the programmed path, and G42 places it to the right, viewed along the direction of travel. First identify the finished boundary and the side of material to retain, then choose the required tool-center side. For example, moving along +X on Y0 with retained material at Y<0 requires the center on Y>0, the left side, so use G41. Verify the lead-in and the controller's compensation convention.</p>
 
 <h3>Feed or Speed Alarm</h3>
 <p>A spindle overload alarm means the cut is too heavy for the tool or machine. Reduce depth of cut, feed, or speed; do not reset and run the same cut again.</p>
