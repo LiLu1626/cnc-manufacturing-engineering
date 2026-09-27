@@ -33,13 +33,13 @@
 <p>A <strong>subprogram</strong> is a separate O-numbered program called from the main program. On a Haas control, <strong>M98 P2000 L3</strong> calls O2000 three times. <strong>M99</strong> returns to the line after M98. Subprograms reduce repetition, make programs shorter, and centralize changes — if the hole depth changes, you edit one line instead of sixteen.</p>
 
 <h2>Why It Matters</h2>
-<p>Without subprograms, drilling 16 holes in a pattern means 16 blocks of G81 code. With a subprogram, you write the hole once and call it 16 times. But subprograms inherit modal state — if the subprogram uses G91, the main program must restore G90 after. This is the #1 cause of subprogram bugs: leaked modal state.</p>
+<p>Without subprograms, drilling 16 holes in a pattern can use one G81 block followed by 15 XY moves; a subprogram is useful when the pattern itself repeats. With a subprogram, you write the hole once and call it 16 times. But subprograms inherit modal state — if the subprogram uses G91, the main program must restore G90 after. This is the #1 cause of subprogram bugs: leaked modal state.</p>
 
 <h2>How It Works</h2>
 
 <h3>Haas Syntax</h3>
 <pre class="cp-code"><code>M98 P2000 L3   (call O2000, repeat 3 times)</code></pre>
-<p>Inside O2000, M99 returns to the line after M98. The subprogram has its own O-number and lives as a separate program on the machine. On FANUC, the format is similar: M98 P00032000 (repeat 3 times, call O2000). On Haas, L3 means repeat 3 times.</p>
+<p>Inside O2000, M99 returns to the line after M98. The subprogram has its own O-number and lives as a separate program on the machine. On Haas mills, M98 P2000 L3 calls O2000 three times. Other controllers use different call syntax; check the manual.</p>
 
 <h3>Nested Subprograms</h3>
 <p>A subprogram can itself call another subprogram (up to 4 levels deep on most controllers). This is how you build reusable building blocks: the main program calls a pattern routine, which calls a single-hole routine. Nested calls return in reverse order: inner M99 returns to the outer M98 line.</p>
