@@ -208,7 +208,7 @@
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Running full feed on first part</strong> — set overrides per the machine procedure until the first part passes.</li>
-<li><strong>Skipping dry run</strong> — dry run at rapid with tool above stock catches gross coordinate errors before any cutting.</li>
+<li><strong>Skipping the planned air run</strong> — follow the machine procedure to confirm the XY path before cutting.</li>
 <li><strong>Trusting CAM simulation</strong> — CAM does not know if your G54 is wrong or if H01 is unloaded.</li>
 <li><strong>Not measuring the first part</strong> — "it looks right" is not inspection. Measure every critical dimension.</li>
 <li><strong>Adjusting the program to compensate for measured errors</strong> — confirm the cause (work offset vs size error) before changing offsets or coordinates.</li>
@@ -220,7 +220,7 @@
 <p><strong>2.</strong> What three offsets must be verified before running?</p>
 <details><summary>Ans</summary><p>Work offset (G54 X/Y/Z), tool length offset (H), and tool radius offset (D).</p></details>
 <p><strong>3.</strong> CAM simulation looks perfect. What might still be wrong?</p>
-<details><summary>Ans</summary><p>Work offset, tool length, tool number, units, spindle direction — anything in the physical setup that the CAM model does not know about. Only the machine dry run reveals setup errors.</p></details>
+<details><summary>Ans</summary><p>Work offset, tool length, tool number, units, spindle direction — anything in the physical setup that the CAM model does not know about. On-machine verification confirms setup values the CAM model does not carry.</p></details>
 <p><strong>4.</strong> The first part comes out 0.3 mm too large in X. Do you change the program X coordinates?</p>
 <details><summary>Ans</summary><p>No. A slot width of 20.30 vs 20.00 is a size error. Shifting G54 moves the slot; the width stays 20.30. Check contour, cutter compensation, tool size, wear, and measurement.</p></details>
 
