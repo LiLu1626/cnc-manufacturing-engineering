@@ -189,14 +189,24 @@ G21 G17 G90 G94 G40 G49 G80</code></pre>
 
 <h3>Restart State Table (Illustrative)</h3>
 <table>
-<tr><th>Item</th><th>Before restart</th><th>Action</th></tr>
-<tr><td>Tool</td><td>T02 broken in spindle</td><td>Replace, seat, confirm H02</td></tr>
-<tr><td>G54</td><td>Verified at setup</td><td>Re-check display</td></tr>
-<tr><td>Units / plane</td><td>G21 / G17</td><td>Confirm modal display</td></tr>
-<tr><td>Cycle</td><td>G81 active</td><td>G80 before reposition</td></tr>
-<tr><td>Clearance</td><td>Z50 verified</td><td>Re-confirm before XY</td></tr>
+<tr><th>Item</th><th>Known before restart</th><th>How to establish</th><th>First-cut state</th></tr>
+<tr><td>Tool / H02</td><td>T02 broken</td><td>Replace per OEM procedure; measure H02</td><td>H02 loaded</td></tr>
+<tr><td>G54</td><td>Verified at setup</td><td>Check display</td><td>G54 active</td></tr>
+<tr><td>Units / plane / mode</td><td>G21 / G17</td><td>Program G21 G17 G90 G94</td><td>Absolute, mm/min</td></tr>
+<tr><td>Cycle / compensation</td><td>Unknown after interruption</td><td>G80 G40</td><td>No cycle, no comp</td></tr>
+<tr><td>Spindle / coolant</td><td>Unknown</td><td>S600 M03 M08</td><td>Direction verified</td></tr>
+<tr><td>Broken edge / hole</td><td>Inspected</td><td>Deburr; confirm part usable</td><td>Hole 4 may proceed</td></tr>
+<tr><td>Clearance path</td><td>Z50 path verified</td><td>Move to Z50 before XY</td><td>Z50 above fixture</td></tr>
 </table>
-<p>Example fragment (after hole 3, restart at hole 4 X60 Y20, Z-15): G80 G00 X60 Y20; R2; G81 Z-15 R2 F100. Verify entry conditions before running.</p>
+<p>Fragment (hole 4, X60 Y20, Z-15; S/F are classroom values for this example):</p>
+<pre>G21 G17 G90 G94 G54 G80 G40
+G00 G43 H02 Z50.
+S600 M03 M08
+G00 X60. Y20.
+G98 G81 Z-15. R2. F100.
+G80
+G00 Z50.
+M09 M05</pre>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Jogging near the break point and pressing cycle start</strong> — without rebuilding modal state.</li>
