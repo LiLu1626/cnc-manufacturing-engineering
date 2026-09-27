@@ -227,6 +227,11 @@ M30</code></pre>
 <h3>Why a Complete Project Teaches More Than Isolated Codes</h3>
 <p>A single G71 example shows one code. A complete project shows how drawing, datum, tooling, offsets, program, and inspection fit together. You will make mistakes in all five areas; catching them on a simple shaft is the point. Once you have run a real program on a real machine from drawing to inspected part, the abstract G-codes become physical. You will remember G71 not as a table entry but as "the code that rough-turned my stepped shaft."</p>
 <p>The project below uses a simple &Oslash;60 raw bar, faced, turned to &Oslash;30 and &Oslash;36 with a 20 mm shoulder, and part off. It is deliberately small: you can hold the finished part in your hand and see every feature. Do not skip the inspection step &mdash; measuring your own part against the drawing is where the engineering actually happens.</p>
+
+<h3>Part-Off and Facing Setup</h3>
+<p>The raw bar is &Oslash;60 mild steel, gripped in a 3-jaw chuck with 80 mm projection. Facing the end establishes Z0. The facing pass runs from X70 (past center) to X0 at F0.1 mm/rev, S1000. Do not run the tool past X0 on a lathe &mdash; at center, the surface speed drops to zero and the tool rubs. Feed to X0.5, then retract. The small center nub is removed by the part-off tool on the next operation.</p>
+<p>Roughing with G71: U0.4 (depth per pass), U0.4 (finish stock on diameter), W0.1 (finish stock on Z), F0.2. The contour program describes the finished part: X30 Z&minus;10, X36 Z&minus;20, X36 Z&minus;35. G71 roughs away all the stock outside that contour in one call. Finishing with G70 runs the same contour at F0.1, S1500. The 0.4 mm finish stock is what the finishing pass cleans up.</p>
+<p>Part-off with a 3 mm wide parting tool: position at X40, Z&minus;37, feed to X0.5, then feed fast to X0. The parting tool is narrow and fragile &mdash; use low feed (F0.05) and flood coolant. The finished part drops off at the end; catch it with a parts catcher or your hand after the spindle stops.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Saying "face it" without writing the facing code</strong> — the 1 mm face stock must be actually removed to establish Z0.</li>
