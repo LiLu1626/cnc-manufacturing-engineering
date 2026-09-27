@@ -83,6 +83,19 @@
 <p>Sequence operations in this order: face the raw stock (establishes Z0), rough the profile (removes bulk stock, leaves 0.4&ndash;0.8 mm), finish the profile (cuts to size), then drill holes, then bore/ream to tolerance, then tap if needed. Roughing before finishing protects the finished surfaces from the heat and deflection of the roughing cuts. Drilling before boring leaves a clean hole for the boring bar. Tapping last &mdash; a broken tap in a finished part scraps everything before it.</p>
 <p>Tool selection follows the operation, not the other way around. A &Oslash;10 H7 hole needs a spotting drill, a &Oslash;9.8 twist drill, and a boring bar or reamer &mdash; not a &Oslash;10 drill. A shoulder with a 3 mm radius needs an insert whose nose radius is 0.8 mm or smaller; a 1.2 mm insert leaves a blend. List the tools, the speeds, and the feeds on paper before opening the CAM file. The program is the last step, not the first.</p>
 <p>Inspection planning is also part of the process. For each critical dimension, decide how you will measure it after the first part: calipers for &plusmn;0.1, micrometer for &plusmn;0.02, bore gauge for holes, height gauge for positions. If you cannot measure a tolerance on the tools you have, the tolerance is not achievable on your shop floor &mdash; and that decision belongs in the process plan, not after the first scrapped part.</p>
+
+<h3>Sample Process Plan: A Bracket</h3>
+<p>Take a simple 100&times;60&times;10 mm aluminum bracket with two &Oslash;8 holes, one &Oslash;10 H7 bore, and a 2 mm chamfer. The raw stock is a saw-cut plate. Process plan:</p>
+<ol>
+<li>Face the top and one side (establishes Z0 and X datum). Mill to 100&times;60 finished size.</li>
+<li>Mill the outer profile to finished dimensions in one setup (G54 at lower-left corner).</li>
+<li>Spot-drill, drill &Oslash;7.8 the two &Oslash;8 holes, then ream to &Oslash;8 H7 if required.</li>
+<li>Spot-drill, drill &Oslash;9.8 the &Oslash;10 bore, then bore to &Oslash;10 H7 with a boring bar.</li>
+<li>Chamfer all edges 0.5&times;45&deg; with a chamfer mill or manual deburr.</li>
+<li>Inspect: hole positions, bore diameter, overall dimensions, surface finish.</li>
+</ol>
+<p>Why this order? Facing first gives a clean Z0. Outer profile before holes so the holes are located from finished edges. Drilling before boring leaves a clean hole for the boring bar. Chamfering last so the chamfer tool does not knock the work loose. Each step protects the previous one.</p>
+<p>If the &Oslash;10 H7 bore is a datum for a later setup, machine it first and flip the part on a soft jaw bored to that bore. This is datum transfer: one extra setup, but every dimension referenced to the bore is now from the bore, not from the raw stock.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Drilling before milling the flat surface</strong> — holes start on uneven stock and wander.</li>
