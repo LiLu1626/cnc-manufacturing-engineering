@@ -126,6 +126,11 @@
 <p>The pipeline is: CAD (draw the part) &rarr; CAM (assign tools, feeds, and toolpaths) &rarr; Post (convert the toolpath to G-code for your specific machine) &rarr; Machine. Each step is separate and each can be wrong. A correct CAD model posted with the wrong post gives a program that looks right but crashes on your machine. A correct post fed by a wrong toolpath gives a program that runs but cuts the wrong shape.</p>
 <p>The CAD model must have the correct dimensions, datum, and stock allowance. The CAM setup must use the correct tool definitions (diameter, corner radius, length) and the correct feeds/speeds for your material. The post must match your controller (Haas, FANUC, Siemens). If any of these three is wrong, the output G-code is wrong. Inspect each step before moving on &mdash; do not let errors compound.</p>
 <p>For a beginner, hand-code simple parts and use CAM only for complex geometry. Hand-coding teaches you what the machine actually does; CAM hides it. Once you can read G-code, CAM is a speed tool, not a crutch. If you cannot read the G-code your CAM produced, you cannot debug it on the machine.</p>
+
+<h3>Post-Processor Basics</h3>
+<p>A post-processor converts CAM's generic toolpath into the G-code your machine understands. It knows: your controller (Haas, FANUC, Siemens), your machine's travel limits, your tool change sequence, your cycle syntax (G81 vs CYCLE82), and your program format (O-number, percent signs, block numbers). A wrong post produces a program that looks correct but uses codes your machine does not understand.</p>
+<p>Common post errors: wrong G-code dialect (Siemens cycles on a Haas machine), wrong tool change (T01 M06 vs T0101), wrong feed units (mm/min vs mm/rev), wrong retract height, missing startup block. After posting, always open the .nc file and read the first 20 lines. If the post is wrong, fix the post &mdash; do not hand-edit the .nc.</p>
+<p>For a beginner, use the post that came with your machine (Haas post for a Haas VF, FANUC post for a FANUC control). Do not download a random post from the internet. If you need a custom post, the CAM vendor or a post-processor specialist writes it; it is not a weekend project.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Not modeling the toolholder</strong> — CAM sees the tool tip, not the holder. Collisions happen with holders, not tips.</li>
