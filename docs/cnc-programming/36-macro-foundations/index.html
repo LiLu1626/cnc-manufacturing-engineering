@@ -161,6 +161,11 @@ G80 G00 Z50. M09
 M30</code></pre>
 <p>The loop runs while #1 is less than 360. On each iteration, it computes X and Y on the circle, drills the hole (the G81 stays modal), and increments the angle. Change #4 to 60 for a larger circle; change 30.0 to 45.0 for 8 holes. One number edits the whole pattern. This is the payoff: no hand-calculated coordinates, no drift between holes, no typo in an X/Y pair.</p>
 <p>Macros can also alarm on bad input: IF [#4 LT 0] THEN #3000 = 1 (BAD RADIUS). This stops the machine before it drills a circle of radius 0 at the origin. In production, self-diagnosing macros are what let a programmer leave a machine running overnight &mdash; the macro catches the mistake at the first hole instead of after 12 scrap parts.</p>
+
+<h3>Variables, Arithmetic, and Logic</h3>
+<p>FANUC-style macros use #1&ndash;#33 as local variables (for the current call), #100&ndash;#199 as common variables (saved across calls), and system variables like #5021 (current machine position). Arithmetic is straightforward: #2 = #1 * 2, #3 = #1 + #2. Trig functions use degrees: COS[#1], SIN[#1], TAN[#1]. Logic: IF[#1 LT 360] GOTO 10, or WHILE[#1 LT 360] DO 1&hellip;END 1. The comparison operators are EQ, NE, GT, LT, GE, LE.</p>
+<p>Macros read and write offsets: you can measure a bore with a probe, compute the center, and write G54 X automatically. This is how automated setup works. A macro can also stop the machine with #3000 = 1 (message text) if a measured value is out of range. Self-diagnosing macros are the bridge between CNC programming and automated inspection.</p>
+<p>Start simple: a WHILE loop over an angle. Do not start with nested IF/WHILE or subprogram calls. The bolt-circle macro above is the first real program most people write. Once it works, you can parameterize radius, hole count, start angle, depth, and feed &mdash; but each parameter is one more thing that can be wrong, so add them one at a time and test each.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Learning macros before mastering basic G-code</strong> — you must understand coordinates, offsets, and canned cycles first. Macros build on top of them.</li>
