@@ -93,6 +93,90 @@
 </ol>
 <p>Most likely: G54 X offset is off by 20 mm. Fix the offset — do not change the program. If you changed X30 to X10 to compensate, the program is now wrong for the next setup.</p>
 
+
+<h3>Unexpected Tool Motion</h3>
+<p>If the tool moves where you did not expect, suspect modal state: leftover G91, active G81, wrong plane G18/G19, or inherited G41/G42. Check the modal display on the controller, not just the current line.</p>
+
+<h3>Wrong Direction or Wrong Coordinates</h3>
+<p>A part cut on the wrong side usually means G90/G91 confusion, wrong work offset (G54 vs G55), or mirrored axes. Re-measure, re-check offsets, and verify the part zero matches the drawing datum.</p>
+
+<h3>Tool Wear and Surface Finish</h3>
+<p>Poor finish, chatter marks, or dimensional drift all point to tool wear or rigidity. Replace the insert, check overhang, and confirm the workholding before blaming the program.</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <rect x="60" y="80" width="80" height="50" fill="#c0392b"/>
+  <text x="70" y="110" font-size="11" fill="#fff">Symptom</text>
+  <text x="160" y="110" font-size="11" fill="#333">&rarr;</text>
+  <rect x="180" y="80" width="80" height="50" fill="#e67e22"/>
+  <text x="190" y="110" font-size="11" fill="#fff">Possible cause</text>
+  <text x="280" y="110" font-size="11" fill="#333">&rarr;</text>
+  <rect x="300" y="80" width="80" height="50" fill="#27ae60"/>
+  <text x="310" y="110" font-size="11" fill="#fff">Check &amp; fix</text>
+</svg>
+<figcaption>Troubleshooting loop: symptom, cause, verify, corrective action.</figcaption>
+</figure>
+
+
+<h3>Chatter and Vibration</h3>
+<p>Chatter leaves a wave pattern on the surface. Causes include tool overhang, weak workholding, spindle speed near resonance, or worn inserts. Reduce overhang, increase rigidity, and change speed before changing feed.</p>
+
+<h3>Dimensional Drift</h3>
+<p>If parts start on-size and drift over a shift, suspect thermal growth, tool wear, or workholding loosening. Warm up the spindle, re-check offsets, and monitor temperature.</p>
+
+<h3>Chip Control Problems</h3>
+<p>Long birds' nests wrap around the tool or part. Adjust feed and speed, use a chip breaker geometry, or add pecking. Chips that do not evacuate scratch the finish and can break the tool.</p>
+
+<h3>Alarm Codes</h3>
+<p>Treat alarm codes as clues, not as instructions. Look up the code in the machine manual, understand the condition, and clear it. Resetting repeatedly without understanding damages the machine and the part.</p>
+
+<h3>Separating Program Errors from Setup Errors</h3>
+<p>A part dimension that is consistently off by the same amount points to an offset error. A dimension that varies between parts points to workholding, tool wear, or thermal growth. A move that goes the wrong way points to a program or modal error. Diagnose the pattern before changing code.</p>
+
+<h3>Wrong Tool Offset Sign</h3>
+<p>If a bore cuts too small on the inside or too deep on the outside, the offset sign may be reversed relative to the controller. Re-check the H/D value against the touch-off procedure on this specific machine.</p>
+
+<h3>Wrong Cutter Compensation Side</h3>
+<p>G41 on the wrong side gouges the part. Look at the tool relative to the programmed contour: are you climbing or conventional? Re-read the lead-in move and reverse G41/G42 if needed.</p>
+
+<h3>Feed or Speed Alarm</h3>
+<p>A spindle overload alarm means the cut is too heavy for the tool or machine. Reduce depth of cut, feed, or speed; do not reset and run the same cut again.</p>
+
+<h3>Overtravel Alarm</h3>
+<p>Overtravel usually means the program moves beyond the machine envelope, or G54 is set wrong. Home the machine, re-check work offset, and verify the program does not expect coordinates outside travel.</p>
+
+<h3>Surface Finish Worse Than Expected</h3>
+<p>Compare to tool condition, nose radius, feed per rev, and buildup. A worn insert or built-up edge leaves a smeared surface, not a dimensional error.</p>
+
+<h3>Part Not Where the Drawing Says</h3>
+<p>If the finished part is offset in X or Y, the work zero is wrong, not the program. Re-touch the datum. Do not "fix" it by editing every coordinate in the program.</p>
+
+<h3>Bolt Hole Circle Out of Position</h3>
+<p>If a bolt circle is rotated or shifted, the center coordinate or work zero is off. Re-measure the center from the datums. Do not rotate individual holes.</p>
+
+<h3>Bore Size Wrong</h3>
+<p>A bore that is too small means the boring bar offset needs a radial tweak; too large means it already cut past target. Confirm the target diameter before touching the offset.</p>
+
+<h3>Thread Not Accepting the Gauge</h3>
+<p>If the GO does not enter, check depth, pitch, and spindle/feed sync. If NO-GO enters, material is already removed and the part is likely scrap.</p>
+
+<h3>Program Crashes on a Move That Was Fine Before</h3>
+<p>Something in the setup changed: a clamp moved, a tool got longer, or a different stock was loaded. Re-verify the changed variable, not the whole program.</p>
+
+<h3>Establishing a Diagnostic Habit</h3>
+<p>Write down the symptom, the suspected cause, and the actual fix after every issue. Over time this becomes the shop's troubleshooting knowledge base. Same symptom next month is no longer a mystery.</p>
+
+<h3>Tool Breakage</h3>
+<p>When a tool breaks, stop, inspect, and replace. Do not try to continue with a broken tool — it will wreck the part and possibly the spindle. Note the cut conditions that caused it and reduce them on the next run.</p>
+
+<h3>Dimensional Error That Changes Over Time</h3>
+<p>If parts drift gradually, suspect tool wear or thermal growth. Record dimensions over a batch and re-offset when drift crosses a threshold.</p>
+
+<h3>Surface Integrity Issues</h3>
+<p>Burn marks, white layer, or work hardening indicate the cut was too slow or too heavy. Adjust speed and feed rather than forcing the tool to rub.</p>
+
+<h3>Machine-Related Issues</h3>
+<p>Not every issue is a program bug. Loose belts, worn ballscrews, or faulty encoders cause real machine errors. If symptoms repeat across programs on the same machine, investigate the machine, not the code.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Guessing and re-running</strong> — change one thing at a time. Multiple changes at once make it impossible to know what fixed it.</li>

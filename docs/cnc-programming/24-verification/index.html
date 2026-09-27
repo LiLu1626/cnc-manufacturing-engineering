@@ -98,6 +98,84 @@
 </ul>
 <p>Run dry run with the tool at Z50 (no cutting), watching the XY positions. Then single-block the first hole down to Z-15. Confirm the tool is at the right X/Y before allowing it to feed down.</p>
 
+
+<h3>Simulation Before Metal Cutting</h3>
+<p>Modern controllers and CAM systems simulate tool path against the stock model. Watch for: tool gouging, overtravel, missed moves, and rapid moves through fixtures. Simulation catches geometry errors, not offset or unit errors — a program with wrong G20/G21 still simulates perfectly.</p>
+
+<h3>Dry Run and Single Block</h3>
+<p>Dry run moves the tool at rapid regardless of programmed feed, usually without cutting. Use it to confirm the XY path. Single block executes one block at a time; step through the first few cuts to confirm Z depth and compensation engage as expected.</p>
+
+<h3>First Part Inspection</h3>
+<p>After the first cut, stop and measure. Check critical dimensions against the drawing before continuing. If an offset is wrong, you want to find it on the first part, not the tenth.</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <rect x="60" y="80" width="280" height="60" fill="#d4c5a9" stroke="#999"/>
+  <text x="70" y="115" font-size="11" fill="#333">1. Program syntax</text>
+  <text x="150" y="115" font-size="11" fill="#333">2. Simulation</text>
+  <text x="230" y="115" font-size="11" fill="#333">3. Dry run</text>
+  <text x="310" y="115" font-size="11" fill="#333">4. First part</text>
+</svg>
+<figcaption>Verification gate sequence: each step must pass before the next.</figcaption>
+</figure>
+
+
+<h3>What Simulation Cannot Catch</h3>
+<p>Simulation assumes the part zero, tool length, and units are correct. It will not tell you that you used G20 instead of G21, or that G54 is off by 5 mm. Those are setup errors, not tool-path errors. Always verify offsets on the machine before cutting air or metal.</p>
+
+<h3>Program Structure Review</h3>
+<p>Read the program end to end once before running. Check: units, plane, distance mode, compensation cancel, tool number matches, work offset, spindle direction, feed mode, and program end. Most errors are visible in a single read-through.</p>
+
+<h3>First Article and Inspection Plan</h3>
+<p>Define which dimensions will be measured on the first part, with what instrument, and what the acceptable range is. Do not invent the inspection plan after the part is made. Critical dimensions get measured first; cosmetic features last.</p>
+
+<h3>When to Stop and Re-check</h3>
+<p>Stop if the first cut sounds wrong, if the dimension is off by more than a small tolerance, or if chips look unusual. Continuing a suspect program "just to finish" turns one bad part into a scrap batch and a broken tool.</p>
+
+<h3>Offset Verification on Machine</h3>
+<p>After touching off, verify the offset makes sense: a 10 mm end mill should give a work zero near where you touched. A 50 mm face mill should not show a 20 mm offset. Sanity-check every number before cycling on.</p>
+
+<h3>Z-Height Check with Paper or Dial Indicator</h3>
+<p>Lower the tool slowly toward the part surface until a slip of paper just drags. Note the Z position. Compare it to the programmed zero. This catches gross setup errors before a 500 mm/min plunge.</p>
+
+<h3>Dry Run Without Clamping the Part</h3>
+<p>For a first program, run the tool path in the air above the part. Confirm XY travels match the expected outline. This catches gross coordinate and fixture errors without risking the part.</p>
+
+<h3>Single Block Through Compensation Engage</h3>
+<p>Cutter compensation engages on a lead-in move. Step through that block on single block and confirm the tool moves to the expected offset position, not into the part.</p>
+
+<h3>Measuring After the First Tool</h3>
+<p>Run the first tool only, measure its features, then call the next tool. Do not run all tools before measuring — if offset 1 is wrong, every downstream feature is wrong too.</p>
+
+<h3>Sign-off for Production Run</h3>
+<p>Once the first part is verified, record the offsets, tool list, and fixture number on the setup sheet. Future operators repeat the verified setup rather than re-discovering it.</p>
+
+<h3>Check the Tool Number Actually Called</h3>
+<p>Programs call T01 M06. Confirm the tool physically in the spindle matches. Tools can be put back in the wrong pocket. This is a one-second check that prevents a broken cutter.</p>
+
+<h3>Check the Work Offset Number</h3>
+<p>G54 vs G55 on a tombstone with multiple parts. Confirm which fixture the program expects. Running G54 when the part is on G55 is an instant crash.</p>
+
+<h3>Check the Units</h3>
+<p>G20 vs G21. A 25.4 mm mistake is the classic first-program error. Look at the first block before cycle start.</p>
+
+<h3>Check Feed Override Position</h3>
+<p>For the first part, override should be at 100%, not left at 10% from the last setup. A slow first cut is safer than a fast crash, but confirm before assuming.</p>
+
+<h3>Document the First Part Result</h3>
+<p>Record actual measured dimensions and any offset tweaks. The next setup repeats the tweaks rather than re-discovering them.</p>
+
+<h3>Simulation of Stock, Not Just Tool Path</h3>
+<p>Watch the stock model during simulation. The tool should remove material where expected, leave lugs where expected, and not gouge into the fixture. A path that looks clean on 2D may cut the vise in 3D.</p>
+
+<h3>Check Rapid Moves Above the Part</h3>
+<p>Rapid moves are where crashes happen. Trace every rapid XY move and confirm the Z height at that moment is above the fixture. Do this on paper before running.</p>
+
+<h3>Verify the Program End Is Where You Expect</h3>
+<p>The program should end at a known tool change position, with compensation canceled and spindle off. If the program ends mid-air, the next operator has to figure out where it stopped.</p>
+
+<h3>First Part Cycle</h3>
+<p>Run the first part with your hand near feed hold. Watch the first approach, first cut, and first retract. Be ready to stop if anything looks wrong.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Running full feed on first part</strong> — use 25–50% feed override until the first part passes inspection.</li>

@@ -87,6 +87,30 @@ G21 G17 G90 G40 G49 G80</code></pre>
 <li>Use single-block to step through the first few resumed blocks, verifying motion before continuous run.</li>
 </ol>
 
+<h3>What the Controller Actually Remembers</h3>
+<p>Between programs, the controller retains modal G codes, active work offset, and active H/D numbers. It does not retain your mental intent. If the last program ran G91 incremental and your new program starts with G00 X50 Y50 without G90, the controller moves 50 mm in X from wherever it happens to be. The startup block exists so every program begins from a documented state rather than from the previous operator's last mistake.</p>
+
+<h3>Safe Z Heights and Clearance Planes</h3>
+<p>A clearance plane is a Z height above which XY motion is safe across the whole setup. Choose it from the tallest fixture, clamp, and part protrusion, then add a margin. On a mill, Z50 or Z100 is common; on a lathe, the tool post must clear the chuck and any tailstock center. Program to that clearance plane before any non-cutting XY move. Never rely on "it will be fine" if the setup has changed since the program was written.</p>
+
+<h3>Spindle, Coolant, and Feed Override Safety</h3>
+<p>Spindle must be at the commanded direction and speed before the tool engages the work. Start spindle M03 (or M04) and allow it to reach speed before M08 and the first feed move. Feed override at 100% for the first part; reduce override only after the first cut is confirmed. Do not change feed override mid-thread or mid-rigid-tap — synchronous feed depends on the commanded rate.</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <rect x="60" y="120" width="280" height="40" fill="#d4c5a9" stroke="#999"/>
+  <line x1="40" y1="60" x2="360" y2="60" stroke="#27ae60" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="260" y="55" font-size="10" fill="#27ae60">clearance plane Z50</text>
+  <line x1="100" y1="60" x2="100" y2="120" stroke="#333" stroke-width="2"/>
+  <circle cx="100" cy="120" r="6" fill="#3498db"/>
+  <text x="110" y="115" font-size="10" fill="#333">feed down to cut</text>
+  <line x1="100" y1="120" x2="200" y2="120" stroke="#3498db" stroke-width="2"/>
+  <line x1="200" y1="120" x2="200" y2="60" stroke="#333" stroke-width="2"/>
+  <text x="210" y="80" font-size="10" fill="#c0392b">Z up BEFORE XY</text>
+</svg>
+<figcaption>Approach: XY at clearance Z, feed down. Retract: Z up to clearance before XY moves sideways.</figcaption>
+</figure>
+
 <figure class="cp-figure">
 <svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
   <!-- safe approach -->
@@ -106,6 +130,49 @@ G21 G17 G90 G40 G49 G80</code></pre>
 <figcaption>Safe approach (left): XY first at safe Z, then feed down. Crash pattern (right): XY move while tool is at cut depth.</figcaption>
 </figure>
 
+
+<h3>Why Feed Hold Is Not a Restart Button</h3>
+<p>Pressing feed hold stops motion but leaves the machine in the same modal state. Resuming continues from where it paused. If you need to change something, you must cycle stop, rebuild state, and restart — not assume resume works after a manual jog.</p>
+
+<h3>Program End and Tool Change Position</h3>
+<p>A clean program end returns Z to a safe height, moves XY to the tool change position, cancels compensation, stops spindle and coolant, and ends with M30. This leaves the machine in a known place for the next setup. Ending mid-air at an arbitrary position makes the next operator guess.</p>
+
+<h3>Alarms and What They Mean for Safety</h3>
+<p>An alarm is the controller telling you a condition is unsafe to continue. Do not reset and cycle start without understanding the alarm. Common safety alarms: overtravel, spindle overload, servo following error, tool change fault. Clear the condition, not just the message.</p>
+
+
+<h3>Why the Startup Block Is Not Optional</h3>
+<p>Operators sometimes skip the startup block because the machine "was already on G21 G90." Between jobs, offsets get changed, modes get changed, and another program may have left G91 or G81 active. The startup block costs one line and removes that entire class of error.</p>
+
+<h3>Work Offset and Tool Offset Are Different</h3>
+<p>G54 moves the whole part zero. H01 moves the tool length. Changing one does not change the other. If you touch off Z on a new tool, update H, not G54. If you move the part, update G54, not H. Mixing these up is a classic second-crash cause.</p>
+
+<h3>Restart on a Lathe</h3>
+<p>On a lathe, restart additionally requires confirming spindle direction, chuck clamp, and tailstock. Do not restart a facing or cutoff operation near center without confirming the catcher and spindle condition. Radial moves near center carry more risk than on a mill.</p>
+
+<h3>Safe Tool Change Position</h3>
+<p>The tool change position must be a known XY/Z location where the spindle can reach the magazine or turret without hitting the part, fixture, or tailstock. Program to it explicitly rather than relying on the machine's default. On a pallet-change machine, confirm the pallet is seated and clamped.</p>
+
+<h3>Clamps, Vises, and Fixture Clearance</h3>
+<p>Before running, walk around the setup and identify the tallest point. Program clearance above it. A clamp head that sticks above the part is the most common Z-crash source. If the program was written for a different fixture, re-check clearance before the first cut.</p>
+
+<h3>Personal Safety</h3>
+<p>Do not reach into the machine while spindle is running. Keep doors closed during automatic cycles. Use appropriate eye protection. Long hair, loose clothing, and jewelry must be secured. Safety interlocks are there for a reason; do not defeat them.</p>
+
+<h3>Why You Cannot Trust Previous Programs</h3>
+<p>Even a program that ran perfectly yesterday may be unsafe today if the fixture, tooling, work offset, or stock has changed. Re-verify before every new job, not just the first one. "It ran fine yesterday" is not a setup check.</p>
+
+<h3>Restart After a Power Loss</h3>
+<p>Power loss loses absolute position on many machines. Re-home, re-verify work offset, and restart from a known point. Do not assume the controller remembers where it was.</p>
+
+<h3>Program Comments as Safety Notes</h3>
+<p>Use comments to flag dangerous moves, required tool numbers, and setup-specific notes. Future you (or another operator) reads those comments at the machine. A program without comments is a safety hazard over time.</p>
+
+<h3>Restart on a Multi-Tool Program</h3>
+<p>If you break tool 3 and need to restart at tool 3, call tool 3 with its H/D offsets before resuming. Do not resume the program from N80 and expect the controller to know which tool you installed.</p>
+
+<h3>Feed Hold and Restart Decisions</h3>
+<p>If you feed hold to inspect a cut, resume only if nothing changed. If you jogged, adjusted a tool, or changed a part, restart from a known block rather than resume.</p>
 <h2>Example</h2>
 <p>A drilling program stops at hole 4 of 6 because the drill broke. The program used G81 with G99 (retract to R plane). To restart:</p>
 <ul>
