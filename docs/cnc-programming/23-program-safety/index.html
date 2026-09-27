@@ -59,7 +59,7 @@ G21 G17 G90 G40 G49 G80</code></pre>
 <tr><td>G49</td><td>Cancel tool length offset</td><td>Prevents inherited H offset from another tool</td></tr>
 <tr><td>G80</td><td>Cancel canned cycles</td><td>Prevents drilling cycle from triggering on first XY move</td></tr>
 </table>
-<p>This block does not set the offsets — it cancels old ones so they can be re-established cleanly. After G49, Z moves are at machine position; after G43 H01, Z moves include the tool length. The order matters: cancel first, then set new values.</p>
+<p>This block does not set the offsets — it cancels old ones so they can be re-established cleanly. G49 cancels the active tool length offset; it does not switch to machine coordinates (that is G53). After G43 H01, Z moves include the tool length. The order matters: cancel first, then set new values.</p>
 
 <h3>Before Cycle Start (Mill Example)</h3>
 <ol>
@@ -74,7 +74,7 @@ G21 G17 G90 G40 G49 G80</code></pre>
 <p>A mill startup uses <code>G21 G17 G90 G40 G49 G80</code>. A lathe uses different codes: <code>G21 G97 G99</code> (constant RPM, feed per revolution). Lathes do not use G17 (plane) or G49 (length offset) the same way. Do not copy a mill startup block into a lathe program — the G codes mean different things or do not exist.</p>
 
 <h3>Safe Approach and Retraction</h3>
-<p>The rule: <strong>always move Z first when approaching, and Z first when retracting</strong>. When approaching the part: rapid XY to the position at a safe Z height, THEN feed down to cut depth. When retracting from a cut: rapid Z up to safe height, THEN move XY. This prevents the tool from traveling sideways at cut depth and crashing into the fixture or part.</p>
+<p>The rule for open milling with a clear Z channel: <strong>move Z first when approaching, and Z first when retracting</strong>. When approaching the part: rapid XY to the position at a safe Z height, THEN feed down to cut depth. When retracting from a cut: rapid Z up to safe height, THEN move XY. This prevents the tool from traveling sideways at cut depth and crashing into the fixture or part.</p>
 <p>A common crash pattern: after finishing a cut, the program does G00 X50 Y50 while the tool is still at Z-5. The tool drags sideways through the part, gouging everything in its path. The fix: G00 Z50 before any XY move.</p>
 
 <h3>Mid-Program Restart Procedure</h3>
@@ -94,7 +94,7 @@ G21 G17 G90 G40 G49 G80</code></pre>
 <p>A clearance plane is a Z height above which XY motion is safe across the whole setup. Choose it from the tallest fixture, clamp, and part protrusion, then add a margin. On a mill, Z50 or Z100 is common; on a lathe, the tool post must clear the chuck and any tailstock center. Program to that clearance plane before any non-cutting XY move. Never rely on "it will be fine" if the setup has changed since the program was written.</p>
 
 <h3>Spindle, Coolant, and Feed Override Safety</h3>
-<p>Spindle must be at the commanded direction and speed before the tool engages the work. Start spindle M03 (or M04) and allow it to reach speed before M08 and the first feed move. Feed override at 100% for the first part; reduce override only after the first cut is confirmed. Do not change feed override mid-thread or mid-rigid-tap — synchronous feed depends on the commanded rate.</p>
+<p>Spindle must be at the commanded direction and speed before the tool engages the work. Start spindle M03 (or M04) and allow it to reach speed before M08 and the first feed move. Feed and rapid overrides are set per the machine's first-article procedure; lowering override slows motion but is not a collision guarantee. Do not change feed override mid-thread or mid-rigid-tap — synchronous feed depends on the commanded rate.</p>
 
 <figure class="cp-figure">
 <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
@@ -172,7 +172,7 @@ G21 G17 G90 G40 G49 G80</code></pre>
 <p>If you break tool 3 and need to restart at tool 3, call tool 3 with its H/D offsets before resuming. Do not resume the program from N80 and expect the controller to know which tool you installed.</p>
 
 <h3>Feed Hold and Restart Decisions</h3>
-<p>If you feed hold to inspect a cut, resume only if nothing changed. If you jogged, adjusted a tool, or changed a part, restart from a known block rather than resume.</p>
+<p>If you feed hold to inspect a cut, resume only if nothing changed and the machine's Run-Stop-Jog-Continue feature permits it (Haas). If you jogged, changed a tool, or altered an offset, rebuild state and restart from a known block rather than resume.</p>
 
 <h3>Safety Culture on the Shop Floor</h3>
 <p>Program safety is not a one-person job. Operators should feel comfortable stopping a cycle if something looks wrong, even if they are not sure. A stopped cycle costs minutes; a crash costs hours. Encourage reporting rather than blame.</p>
@@ -190,7 +190,7 @@ G21 G17 G90 G40 G49 G80</code></pre>
 <ul>
 <li><strong>Jogging near the break point and pressing cycle start</strong> — without rebuilding modal state.</li>
 <li><strong>Assuming "from the top" is always safe</strong> — it is the safest option, but not always practical for long programs or after a tool change.</li>
-<li><strong>Using the same startup block for mill and lathe</strong> — G17/G49 do not apply to lathes.</li>
+<li><strong>Copying a mill startup block into a lathe</strong> — check the lathe manual; G17/G49 and feed modes are not the same.</li>
 <li><strong>Assuming single-block or feed override prevents collisions</strong> — they slow the motion but do not prevent the crash.</li>
 <li><strong>Forgetting G80 before repositioning</strong> — an active drilling cycle makes every X/Y move a hole.</li>
 </ul>
@@ -203,8 +203,8 @@ G21 G17 G90 G40 G49 G80</code></pre>
 <details><summary>Show answer</summary><p>If a canned cycle is still modal, any subsequent X/Y move executes a drill. You must explicitly G80 before repositioning.</p></details>
 <p><strong>3.</strong> You broke a drill and replaced it with one 3 mm longer. What offset must change?</p>
 <details><summary>Show answer</summary><p>The H (tool length) offset. Without updating it, the Z depth will be off by 3 mm, potentially drilling too deep or not deep enough.</p></details>
-<p><strong>4.</strong> Why does the startup block cancel G49 before calling G43 H01?</p>
-<details><summary>Show answer</summary><p>G49 cancels any inherited tool length offset from the previous program. If you called G43 H01 while another H was still active, the machine might use the wrong length. Cancel first, then set the new one.</p></details>
+<p><strong>4.</strong> What does G49 cancel? Does it also cancel G54?</p>
+<details><summary>Show answer</summary><p>G49 cancels tool length compensation only. It does not cancel the work offset (G54). Re-establish the correct H at a known clearance, not blindly at an arbitrary position.</p></details>
 </section>
 
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/02-machine-fundamentals/">&larr; Machine Fundamentals</a><a href="/cnc-manufacturing-engineering/cnc-programming/08-programming-math/">Programming Math &rarr;</a></nav>

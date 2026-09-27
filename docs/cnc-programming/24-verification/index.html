@@ -56,7 +56,7 @@
 <tr><td>2. Coordinate review</td><td>Sketch the tool path on paper</td><td>Wrong coordinates, wrong direction</td></tr>
 <tr><td>3. Offset review</td><td>Check G54, H, D on controller</td><td>Missing or wrong offsets</td></tr>
 <tr><td>4. CAM simulation</td><td>Watch material removal in CAM</td><td>Obvious collisions, wrong tool path</td></tr>
-<tr><td>5. Dry run</td><td>Tool at safe Z, run at rapid</td><td>Gross coordinate errors, limit switches</td></tr>
+<tr><td>5. Planned air run</td><td>Per machine procedure, verify path</td><td>Gross coordinate errors, limit switches</td></tr>
 <tr><td>6. Single block</td><td>Block-by-block at reduced feed</td><td>Per-motion errors you would miss at speed</td></tr>
 <tr><td>7. Reduced feed cut</td><td>First cut at 25–50% feed override</td><td>Tool deflection, chatter, chip issues</td></tr>
 <tr><td>8. First article</td><td>Measure every dimension</td><td>Offset errors, tool wear, dimensional drift</td></tr>
@@ -83,7 +83,7 @@
 </figure>
 
 <h3>First Article Inspection</h3>
-<p>After the first part runs through at reduced feed, stop and measure. Check every dimension the drawing calls for: hole positions, depths, diameters, and surface finish. If dimensions are off, the cause is almost always an offset issue, not a program issue. Adjust the G54 or H offset by the measured error and run a second part. Only after the first article passes inspection do you increase feed to production rate.</p>
+<p>After the first part runs through at reduced feed, stop and measure. Check every dimension the drawing calls for: hole positions, depths, diameters, and surface finish. If dimensions are off, first separate position error from width/size error. A translated position suggests work offset; a width error suggests cutter compensation, tool size, or deflection — not G54. Measure before adjusting. Only after the first article passes inspection do you increase feed to production rate.</p>
 
 <h2>Example</h2>
 <p><strong>Before first cut checklist for a drilling program:</strong></p>
@@ -96,11 +96,11 @@
 <li>T01 in the spindle is the &Oslash;6 drill the program expects</li>
 <li>G80 at the end of the hole pattern</li>
 </ul>
-<p>Run dry run with the tool at Z50 (no cutting), watching the XY positions. Then single-block the first hole down to Z-15. Confirm the tool is at the right X/Y before allowing it to feed down.</p>
+<p>Run a planned air run per the machine procedure, watching XY positions. Then single-block the first hole down to Z-15. Confirm the tool is at the right X/Y before allowing it to feed down.</p>
 
 
 <h3>Simulation Before Metal Cutting</h3>
-<p>Modern controllers and CAM systems simulate tool path against the stock model. Watch for: tool gouging, overtravel, missed moves, and rapid moves through fixtures. Simulation catches geometry errors, not offset or unit errors — a program with wrong G20/G21 still simulates perfectly.</p>
+<p>CAM/NC verification against a stock model can catch tool gouging, overtravel, missed moves, and unit errors if the NC and model inputs are checked together. It cannot prove on-machine offsets or unmodeled fixture clearance.</p>
 
 <h3>Dry Run and Single Block</h3>
 <p>Dry run moves the tool at rapid regardless of programmed feed, usually without cutting. Use it to confirm the XY path. Single block executes one block at a time; step through the first few cuts to confirm Z depth and compensation engage as expected.</p>
@@ -121,7 +121,7 @@
 
 
 <h3>What Simulation Cannot Catch</h3>
-<p>Simulation assumes the part zero, tool length, and units are correct. It will not tell you that you used G20 instead of G21, or that G54 is off by 5 mm. Those are setup errors, not tool-path errors. Always verify offsets on the machine before cutting air or metal.</p>
+<p>On-machine setup still must be verified: G54, H, D values are loaded as expected. Simulation does not read the controller.</p>
 
 <h3>Program Structure Review</h3>
 <p>Read the program end to end once before running. Check: units, plane, distance mode, compensation cancel, tool number matches, work offset, spindle direction, feed mode, and program end. Most errors are visible in a single read-through.</p>

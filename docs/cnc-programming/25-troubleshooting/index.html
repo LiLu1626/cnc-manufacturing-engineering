@@ -84,14 +84,14 @@
 </figure>
 
 <h2>Example</h2>
-<p><strong>Scenario:</strong> A hole appears at X50 when the program says X30. Systematic diagnosis:</p>
+<p><strong>Scenario (Case A):</strong> Program hole at X30 Y10. Expected machine position with G54=(-300,-200) is (-270,-190). If measured hole lands 20 mm in +X, check whether G54 X was entered as -280 instead of -300:</p>
 <ol>
 <li>Is G90 (absolute) active? Check the modal display. If G91 (incremental) is active, X30 means "move 30 mm from current position," not "go to X30."</li>
-<li>Is G54 correct? Check the work offset display. If G54 X is set to 20, then X30 in the program lands at physical X50.</li>
-<li>Is the machine accidentally on G55? Check which work offset is active. If G55 has a different X origin, all positions shift.</li>
+<li>Measure the actual hole position relative to the part datum first.</li>
+<li>Check G54 display: if X origin was entered as -280 instead of -300, the hole shifts +20 mm.</li>
 <li>Are you running the correct program? Check the O number on the controller display. Machine shops have dozens of similar programs.</li>
 </ol>
-<p>Most likely: G54 X offset is off by 20 mm. Fix the offset — do not change the program. If you changed X30 to X10 to compensate, the program is now wrong for the next setup.</p>
+<p>If measurement confirms a constant +20 mm X shift across multiple features, correct G54 X by -20 mm. Do not edit program coordinates.</p>
 
 
 <h3>Unexpected Tool Motion</h3>
@@ -143,19 +143,19 @@
 <p>A spindle overload alarm means the cut is too heavy for the tool or machine. Reduce depth of cut, feed, or speed; do not reset and run the same cut again.</p>
 
 <h3>Overtravel Alarm</h3>
-<p>Overtravel usually means the program moves beyond the machine envelope, or G54 is set wrong. Home the machine, re-check work offset, and verify the program does not expect coordinates outside travel.</p>
+<p>Overtravel usually means the program expects coordinates beyond the envelope, or a work offset sends motion into a limit. Follow the machine's recovery procedure, then verify the offset and envelope.</p>
 
 <h3>Surface Finish Worse Than Expected</h3>
-<p>Compare to tool condition, nose radius, feed per rev, and buildup. A worn insert or built-up edge leaves a smeared surface, not a dimensional error.</p>
+<p>Compare to tool condition, nose radius, feed per rev, and buildup. A worn insert or built-up edge also affects dimensions and finish; do not assume finish issues are separate from size.</p>
 
 <h3>Part Not Where the Drawing Says</h3>
-<p>If the finished part is offset in X or Y, the work zero is wrong, not the program. Re-touch the datum. Do not "fix" it by editing every coordinate in the program.</p>
+<p>If features are translated as a group, suspect work zero. If individual features vary, suspect tool wear or deflection. Measure before changing anything.</p>
 
 <h3>Bolt Hole Circle Out of Position</h3>
 <p>If a bolt circle is rotated or shifted, the center coordinate or work zero is off. Re-measure the center from the datums. Do not rotate individual holes.</p>
 
 <h3>Bore Size Wrong</h3>
-<p>A bore that is too small means the boring bar offset needs a radial tweak; too large means it already cut past target. Confirm the target diameter before touching the offset.</p>
+<p>A bore that is off size requires checking target diameter, wear, deflection, and measurement before adjusting the offset.</p>
 
 <h3>Thread Not Accepting the Gauge</h3>
 <p>If the GO does not enter, check depth, pitch, and spindle/feed sync. If NO-GO enters, material is already removed and the part is likely scrap.</p>
@@ -215,7 +215,7 @@
 <li><strong>Guessing and re-running</strong> — change one thing at a time. Multiple changes at once make it impossible to know what fixed it.</li>
 <li><strong>Ignoring the alarm text</strong> — the alarm number usually points directly to the problem. Read it before clearing.</li>
 <li><strong>Changing the program instead of the offset</strong> — if the program says X30 and the hole is at X50, fix G54, not the program.</li>
-<li><strong>Running full speed for diagnosis</strong> — use single-block, dry run, and feed override at 25% when testing.</li>
+<li><strong>Running full speed for diagnosis</strong> — use single-block and a feed override set per the machine's first-article procedure.</li>
 <li><strong>Forgetting to check which program is loaded</strong> — O1001 and O1011 can be confused at a glance.</li>
 </ul>
 

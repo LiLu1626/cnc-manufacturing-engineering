@@ -27,56 +27,72 @@
 <main class="article">
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Common Beginner Mistakes</h1>
-<p class="lead">This is the checklist every new programmer should review before running their first program. These are the errors that cause crashes, scrap, and rework — and almost every new programmer makes them.</p>
+<p class="lead">This page collects the mistakes that cause most beginner crashes and scrap, with concrete numbers and a checklist. It is not a list of scare stories; each item has a verification step you can run before cycle start.</p>
 
 <h2>Concept</h2>
-<p>Beginner CNC programming mistakes cluster around a few predictable areas: offsets, units, modal state, and unsafe motion. Knowing them in advance is the fastest way to avoid them. Almost every crash traces back to one of these ten mistakes.</p>
-
-<h2>The Big Ten Checklist</h2>
-<ol>
-<li><strong>Wrong work offset (G54)</strong> — G54 set on the wrong edge or corner. All coordinates shift by the offset error.</li>
-<li><strong>Wrong tool offset (H)</strong> — H number in the program does not match the tool physically in the spindle. Z depth is off by the tool length difference.</li>
-<li><strong>Wrong units</strong> — G20 (inch) vs G21 (metric). Dimensions off by 25.4&times;.</li>
-<li><strong>Wrong plane</strong> — G18/G19 on a mill, or wrong plane for circular interpolation.</li>
-<li><strong>Wrong G90/G91</strong> — incremental mode active when you think absolute. Coordinates become distances, not positions.</li>
-<li><strong>G41/G42 backwards</strong> — on an outer profile, wrong compensation side pushes the tool into the part, overcutting.</li>
-<li><strong>Missing G40</strong> — cutter compensation stays active after the cut, affecting the next move.</li>
-<li><strong>Missing G80</strong> — drilling cycle stays modal; the next X/Y move becomes an unexpected hole.</li>
-<li><strong>Z direction wrong</strong> — on a lathe, cutting toward the chuck is negative Z; on a mill, down is negative Z.</li>
-<li><strong>Unsafe G00</strong> — rapid XY while the tool is at cut depth, dragging through the part.</li>
-</ol>
+<p>Beginner CNC programming errors cluster in a few predictable areas: offsets, units, modal state, and unsafe motion. Almost every crash traces back to an assumed state rather than a typo. The goal is to make those assumptions explicit before the machine moves.</p>
 
 <h2>Why It Matters</h2>
-<p>Almost every new programmer makes these mistakes — and most make them repeatedly until they build a checklist. This page is that checklist. Running through the Big Ten before every program takes 30 seconds and prevents 90% of crashes.</p>
+<p>A minute of verification prevents hours of cleanup. The cost of a wrong offset or a unit mismatch is a broken tool, a scrapped part, or a crashed spindle. New programmers repeatedly make the same errors until they build a pre-run checklist.</p>
 
-<h2>How to Use This Checklist</h2>
-<p>Before pressing cycle start, read through the Big Ten in order. Each one takes 3 seconds to verify: Is G54 on the correct corner? Does H01 match the tool in the spindle? Is G21 active? This habit separates safe programmers from crashers.</p>
+<h2>How It Works</h2>
+
+<h3>The Pre-Run Checklist</h3>
+<ol>
+<li><strong>Work offset (G54)</strong> — set on the correct datum? Measured and verified?</li>
+<li><strong>Tool offset (H/D)</strong> — matches the physical tool? H for length, D for radius (per controller convention)?</li>
+<li><strong>Units</strong> — G20 vs G21 matches the drawing?</li>
+<li><strong>Distance mode</strong> — G90 absolute vs G91 incremental?</li>
+<li><strong>Compensation</strong> — G40 canceled at the right place? G41/G42 on the correct side?</li>
+<li><strong>Canned cycles</strong> — G80 where appropriate? Cycle parameters correct?</li>
+<li><strong>Spindle and coolant</strong> — direction, speed, M08 timing?</li>
+</ol>
+
+<h3>Case A: Work Offset Translation</h3>
+<p>Drawing origin should be at machine (-300,-200). If G54 is mistakenly entered as (-280,-200), a programmed hole at (30,10) lands at machine (-250,-190) instead of (-270,-190). On the part, the hole appears 20 mm in +X. Both X and Y origins must be checked separately; a +20 error in X does not imply a +20 error in Y. Fix G54, not the program.</p>
+
+<h3>Case B: Width Is Not a Position Error</h3>
+<p>A slot programmed to be 20.00 mm wide measures 20.30 mm. Shifting G54 X by 0.30 moves the whole slot; the width is still 20.30. Width errors point to cutter compensation, actual tool diameter, tool wear, or deflection — not work offset. Measure again before changing any offset.</p>
+
+<h3>Units: Direction Matters</h3>
+<p>If the drawing is in inches but the program runs G21 (mm), the values are interpreted as mm and the part comes out 1/25.4 of the expected size. If the drawing is mm but G20 is active, values are treated as inches and the part comes out 25.4&times; too large. Both directions are possible; check the first block.</p>
+
+<h3>G90 vs G91</h3>
+<p>Starting at X20: G90 X30 moves to X30. G91 X30 moves 30 mm from current, to X50. The block text looks identical; the mode decides where the tool ends. Always confirm distance mode before a rapid move.</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <line x1="50" y1="90" x2="350" y2="90" stroke="#333"/>
+  <circle cx="100" cy="90" r="5" fill="#333"/>
+  <text x="90" y="80" font-size="10" fill="#333">start X20</text>
+  <circle cx="200" cy="90" r="5" fill="#27ae60"/>
+  <text x="185" y="75" font-size="10" fill="#27ae60">G90 X30 = end X30</text>
+  <circle cx="300" cy="90" r="5" fill="#c0392b"/>
+  <text x="280" y="115" font-size="10" fill="#c0392b">G91 X30 = end X50</text>
+</svg>
+<figcaption>Same block text, different endpoint, depending on G90/G91.</figcaption>
+</figure>
 
 <h2>Example</h2>
-<p>A new programmer writes a milling program, loads it, and presses cycle start. The tool moves to X50 Y50 — but the hole appears at X70 Y70. Diagnosis: G54 X offset was set to 20 instead of 0. The programmer skipped the checklist. The fix: correct G54, not the program coordinates.</p>
+<p>A beginner program starts with G21 G90 G54, calls T01, and immediately rapid-moves to X50 Y50. The operator should have checked: T01 is the physical tool in the spindle, H01 matches, G54 is on the correct datum, and the Z height at that XY move is above the fixture. If any of these is wrong, the crash happens before the first cut.</p>
 
 <h2>Common Mistakes About the Mistakes</h2>
 <ul>
-<li><strong>Thinking you're too experienced for the checklist</strong> — even experienced programmers run the checklist. It takes 30 seconds.</li>
-<li><strong>Copying code without understanding</strong> — every line should make sense. If you can't explain what a line does, don't run it.</li>
-<li><strong>Changing the program to compensate for offset errors</strong> — if the hole is 0.2 mm off, fix G54, not the X coordinates.</li>
+<li><strong>Thinking experience replaces the checklist</strong> — even experienced programmers verify offsets and units.</li>
+<li><strong>Editing coordinates to compensate for an offset error</strong> — the next setup inherits the wrong program.</li>
+<li><strong>Using G80 as a "mode" to leave on</strong> — G80 is a cancel command; cycles are turned on by G81+ codes.</li>
+<li><strong>Forcing G40 at the current position</strong> — cancel compensation at the end of the contour on a planned lead-out, not mid-air.</li>
 </ul>
 
-<figure class="cp-figure">
-<svg viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
-  <rect x="60" y="50" width="280" height="60" fill="#fadbd8" stroke="#c0392b"/>
-  <text x="200" y="85" font-size="12" fill="#c0392b" text-anchor="middle">Most crashes come from assumed state, not bad code.</text>
-</svg>
-<figcaption>Common thread: verify before you run.</figcaption>
-</figure>
-
+<section class="cp-practice">
 <h2>Practice</h2>
-<p><strong>1.</strong> On your first run, name the top three checks.</p>
-<details><summary>Ans</summary><p>G54 work offset (correct corner), H tool offset (matches physical tool), G21 units (metric).</p></details>
-<p><strong>2.</strong> Why does G41/G42 direction matter on an outer profile?</p>
-<details><summary>Ans</summary><p>Wrong direction pushes the tool center inside the programmed contour, overcutting the part. G41 on a clockwise outer profile keeps the tool outside.</p></details>
-<p><strong>3.</strong> What two modal modes must always be cancelled before the next operation?</p>
-<details><summary>Ans</summary><p>G80 (cancel drilling cycle) and G40 (cancel cutter compensation). Both are modal and persist until explicitly cancelled.</p></details>
+<p><strong>1.</strong> A hole appears 20 mm in +X from where expected. What do you check first?</p>
+<details><summary>Ans</summary><p>Measure relative to the part datum, then check whether G54 X was entered with a 20 mm error. Do not edit program coordinates.</p></details>
+<p><strong>2.</strong> A slot is 0.3 mm too wide. Is adjusting G54 X the fix?</p>
+<details><summary>Ans</summary><p>No. Shifting G54 moves the slot; width unchanged. Check cutter compensation, actual tool diameter, wear, and deflection.</p></details>
+<p><strong>3.</strong> The drawing is in mm but G20 is active. What happens to the part?</p>
+<details><summary>Ans</summary><p>Values are interpreted as inches, so every linear dimension is 25.4&times; too large.</p></details>
+</section>
 
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting/">&larr; Troubleshooting</a><a href="/cnc-manufacturing-engineering/cnc-programming/28-milling-project/">Milling Project &rarr;</a></nav>
 </main>
