@@ -187,6 +187,16 @@ G21 G17 G90 G94 G40 G49 G80</code></pre>
 </ul>
 <p><strong>Three failure modes to recognize:</strong> (1) leftover G91 means coordinates are interpreted as distances, not positions; (2) wrong H number means Z depth is off by the tool length difference; (3) on Haas mills, with a canned cycle active, a bare X/Y move repeats the cycle; an explicit G00/G01 cancels it. Use G80 to make intent clear.</p>
 
+<h3>Restart State Table (Illustrative)</h3>
+<table>
+<tr><th>Item</th><th>Before restart</th><th>Action</th></tr>
+<tr><td>Tool</td><td>T02 broken in spindle</td><td>Replace, seat, confirm H02</td></tr>
+<tr><td>G54</td><td>Verified at setup</td><td>Re-check display</td></tr>
+<tr><td>Units / plane</td><td>G21 / G17</td><td>Confirm modal display</td></tr>
+<tr><td>Cycle</td><td>G81 active</td><td>G80 before reposition</td></tr>
+<tr><td>Clearance</td><td>Z50 verified</td><td>Re-confirm before XY</td></tr>
+</table>
+<p>Example fragment (after hole 3, restart at hole 4 X60 Y20, Z-15): G80 G00 X60 Y20; R2; G81 Z-15 R2 F100. Verify entry conditions before running.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Jogging near the break point and pressing cycle start</strong> — without rebuilding modal state.</li>
