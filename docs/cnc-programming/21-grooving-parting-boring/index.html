@@ -43,11 +43,24 @@
 <h3>Groove Depth in Diameter</h3>
 <p>X is diameter. Turning a &Oslash;35 bar down to a groove bottom of &Oslash;30 means a radial depth of (35&minus;30)/2 = 2.5 mm. The tool approaches at a diameter above the bar, feeds radially to X30, and retracts. A short bottom dwell can help clean the floor, but it is not a universal chatter cure; too long dwell rubs and wears the insert.</p>
 
+<figure class="cp-figure">
+<svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <rect x="40" y="70" width="320" height="40" fill="#d4c5a9" stroke="#999"/>
+  <rect x="200" y="95" width="20" height="15" fill="#7f8c8d"/>
+  <text x="50" y="65" font-size="10" fill="#333">O35 bar</text>
+  <rect x="200" y="50" width="8" height="45" fill="#c0392b"/>
+  <text x="130" y="45" font-size="10" fill="#c0392b">2 mm blade, front edge Z-17</text>
+  <line x1="200" y1="110" x2="220" y2="110" stroke="#e67e22" stroke-width="2"/>
+  <text x="230" y="114" font-size="10" fill="#e67e22">groove bottom O30, 2.5 mm radial</text>
+</svg>
+<figcaption>Shallow groove cross-section: O35 bar, O30 bottom, 2.5 mm radial, 2 mm blade, front edge at larger Z.</figcaption>
+</figure>
+
 <h3>Parting and Separation</h3>
-<p>Parting positions the insert at the finished part length and feeds radially. The exact feed, spindle speed, and separation method depend on the insert, material, chuck setup, and catcher. Feeding to X0 at normal feed is unsafe; the tool grabs as the cross-section thins. The example on this page stops at X1.0 as a <em>radial in-feed fragment</em> and does not by itself complete separation. A real cutoff cycle follows the machine and tool supplier's procedure, including catcher and spindle handling.</p>
+<p>Parting positions the insert at the finished part length and feeds radially. The exact feed, spindle speed, and separation method depend on the insert, material, chuck setup, and catcher. The example on this page stops at X1.0 as a <em>radial in-feed fragment</em> and does not by itself complete separation. A real cutoff cycle follows the machine and tool supplier's procedure, including catcher and spindle handling.</p>
 
 <h3>Boring: Internal Radial Direction</h3>
-<p>Boring starts at the drilled hole diameter and moves X outward to enlarge the bore. The bar reaches from the chuck side into the hole, so the retract direction at the bottom of a Z cut is inward (X smaller), not the OD outward move. Bar overhang is constrained by bar material and diameter; a 4&times;D rule is a rough starting point for steel bars, not a universal limit, and carbide or damped bars have their own published recommendations.</p>
+<p>Boring starts at the drilled hole diameter and moves X outward to enlarge the bore. The bar reaches from the bore mouth into the hole, so the retract direction at the bottom of a Z cut is inward (X smaller), not the OD outward move. Bar overhang is constrained by bar material and diameter; a 4&times;D rule is a rough starting point for steel bars, not a universal limit, and carbide or damped bars have their own published recommendations.</p>
 
 <figure class="cp-figure">
 <svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
@@ -152,7 +165,7 @@ G00 X42.</code></pre>
 <p>The same blade can feed in Z for side finishing after the radial groove depth is reached. Side feed is slower and lighter than radial feed; it is not a normal turning pass. Use it only when the insert is rated for it.</p>
 
 <h3>Measuring a Groove</h3>
-<p>Groove diameter is hard to reach with a standard micrometer. Use a groove micrometer or measure with a bore gauge and compare. Measure on the floor, not on the chamfer.</p>
+<p>Groove diameter is hard to reach with a standard micrometer. Use a groove micrometer or another instrument designed for external groove diameters. Measure on the floor, not on the chamfer.</p>
 
 <h3>Parting Tool Life</h3>
 <p>Parting sees a wide range of diameters as it approaches center, and heat concentrates at the blade. Inspect the insert after the batch; worn blades leave a rough nub and chatter.</p>

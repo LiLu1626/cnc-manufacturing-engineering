@@ -86,15 +86,12 @@
 
 <figure class="cp-figure">
 <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
-  <circle cx="200" cy="100" r="60" fill="none" stroke="#999" stroke-width="1"/>
-  <path d="M 260,100 A 60,60 0 1,1 200,40" fill="none" stroke="#c0392b" stroke-width="2"/>
+  <path d="M260 100 A60 60 0 0 1 140 100 A60 60 0 0 1 260 100" fill="none" stroke="#c0392b" stroke-width="2"/>
   <circle cx="260" cy="100" r="3" fill="#c0392b"/>
-  <text x="270" y="104" font-size="10" fill="#c0392b">start</text>
-  <circle cx="200" cy="40" r="3" fill="#166534"/>
-  <text x="210" y="35" font-size="10" fill="#166534">end (XY same, Z +lead)</text>
-  <text x="100" y="200" font-size="10" fill="#333">one full circle in XY; axial rise = one lead.</text>
+  <text x="270" y="95" font-size="10" fill="#c0392b">start / end same XY</text>
+  <text x="150" y="200" font-size="10" fill="#333">Top view: one full circle. Side view: Z rises 1.5 mm over the orbit.</text>
 </svg>
-<figcaption>Thread milling: one full orbit in XY returns to the same XY while Z rises one lead.</figcaption>
+<figcaption>Thread milling: one full orbit returns to the same XY while Z rises one lead (1.5 mm).</figcaption>
 </figure>
 
 <h3>Thread Milling vs Tapping</h3>
@@ -148,7 +145,7 @@ M30</code></pre>
 <p><strong>1.</strong> M8&times;1.25 at S600. What is the G84 feed?</p>
 <details><summary>Ans</summary><p>F = 1.25 &times; 600 = 750 mm/min.</p></details>
 <p><strong>2.</strong> What tap drill for M12&times;1.75?</p>
-<details><summary>Ans</summary><p>12 &minus; 1.75 = 10.25 mm. Use a 10.2 mm or 10.5 mm drill depending on available stock.</p></details>
+<details><summary>Ans</summary><p>Rough estimate 12 &minus; 1.75 = 10.25 mm; actual drill diameter follows the chosen tap data, material, and required thread engagement.</p></details>
 <p><strong>3.</strong> When would you choose thread milling over rigid tapping?</p>
 <details><summary>Ans</summary><p>For large threads, blind holes where tap breakage risk is high, non-ferrous materials (aluminum, plastic), or when one tool must cut multiple thread sizes on the same machine.</p></details>
 <p><strong>4.</strong> Why is R5 used for tapping instead of R2?</p>
