@@ -106,6 +106,11 @@
 <p><strong>Lathe (diameter mode):</strong> Tool moves from X40 to X30. Actual radial travel = (40 &minus; 30) / 2 = 5 mm, because X is programmed as diameter.</p>
 <p>This is why lathe programmers think in diameters: X30 means "cut to a 30 mm diameter," not "move 30 mm radially."</p>
 
+
+<h3>Why Programmers Need to Know Axes</h3>
+<p>A CNC program moves axes, not "the tool." On a mill, X and Y move the table under the spindle; Z moves the spindle head up and down. On a lathe, X moves the cross-slide (diameter), Z moves the carriage along the spindle axis, C indexes the spindle. If you do not know which axis does what, you cannot debug a program that moves the wrong axis. The axes are not abstract &mdash; they are the physical screws and ways you watch move.</p>
+<p>Machine zero is a fixed switch the machine homes to on startup. Work zero (G54) is where the part origin is &mdash; it is an offset from machine zero. The program always uses work coordinates. The controller adds G54 to every programmed move to get the machine coordinate. This is why a wrong G54 moves the whole part: every programmed X is off by the same amount.</p>
+<p>The tool magazine (mill) or turret (lathe) holds the tools. T01 M06 on a mill swings the carousel; T0101 on a lathe indexes the turret. The tool number and the offset number are usually the same but not required to be &mdash; T02 can use H05 if you wire the offsets that way. Verify which H goes with which T before running.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Confusing machine zero with work zero</strong> — machine zero is fixed; work zero is where you set the part. They are not the same.</li>
