@@ -207,6 +207,12 @@ G00 Z100.
 M05
 M30</code></pre>
 
+
+<h3>Why a Stepped Shaft Teaches the Whole Machine</h3>
+<p>This single part touches almost every turning concept: diameter programming (X is the finished diameter, twice the radius), G18 XZ plane, G97 constant-RPM roughing, G71 stock removal, G70 finish pass, nose radius compensation, and two-axis retract in the correct order. The two diameters create a 90&deg; shoulder that exposes the most common beginner error: cutting the shoulder with a tool whose nose radius leaves a blend or an undercut. The r0.4 insert does not produce a sharp corner; it leaves a 0.4 mm radius at the shoulder root, which the drawing must either specify or permit as a default break.</p>
+<p>The facing step deserves extra attention. Many beginners treat facing as a quick cleanup pass, but it is the operation that establishes Z0. If the tool touches the rough stock face at Z+1 and the program assumes Z0 at that face, every axial dimension &mdash; the position of the shoulder, the length of the &Oslash;30 section, the total length &mdash; is off by 1 mm. Facing to Z0 and then touching off at that fresh face is the engineering habit that prevents a whole class of axial errors.</p>
+<p>After G71 finishes, the part is not yet done: there is 0.4 mm of diameter stock (U0.4) and 0.1 mm of axial stock (W0.1) left on the profile. G70 at S1200 removes that stock in one clean pass. Running G70 at the roughing speed would tool-wear the finish pass; running G71 at the finish speed would chatter. Speed is chosen per operation, not per machine.</p>
+<p>On the first part, measure the &Oslash;30 and &Oslash;36 diameters with a micrometer, then measure the shoulder position with a height gauge or a DTI on a surface plate. If the diameters are uniformly small by 0.05 mm, enter +0.05 in the X wear field (per your control's sign convention); if the shoulder is off in Z, adjust Z wear. Do not change G54 to correct a diameter size &mdash; G54 shifts the whole part, while a diameter error is a tool-wear or deflection issue.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Saying "face it" without writing the facing code</strong> — the 1 mm face stock must be actually removed to establish Z0.</li>
