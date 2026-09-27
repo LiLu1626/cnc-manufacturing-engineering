@@ -41,7 +41,7 @@
 <ol>
 <li><strong>Units</strong> — G21 (metric) or G20 (inch)? Confirm both in the program and on the controller.</li>
 <li><strong>Work offset</strong> — G54 set to the correct datum on the part? Check X, Y, and Z origin.</li>
-<li><strong>Tool length offsets</strong> — H01, H02... measured and loaded? Not zero?</li>
+<li><strong>Tool length offsets</strong> — H01, H02... measured and loaded? Not zero? Also confirm the sign convention on your control: on a mill with G43 the H value is the gauge-line-to-tip length; an H of 0 or a wrong sign sends the tool to the wrong Z.</li>
 <li><strong>Tool radius offsets</strong> — D register set per this controller's radius/diameter and wear/geometry convention?</li>
 <li><strong>Spindle direction and speed</strong> — M03 forward, S in the correct range?</li>
 <li><strong>Z clearance</strong> — is the tool at a safe Z above the stock, not at cut depth?</li>
