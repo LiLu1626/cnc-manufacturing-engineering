@@ -104,17 +104,16 @@
 <p>Poor finish, chatter marks, or dimensional drift all point to tool wear or rigidity. Replace the insert, check overhang, and confirm the workholding before blaming the program.</p>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
-  <rect x="60" y="80" width="80" height="50" fill="#c0392b"/>
-  <text x="70" y="110" font-size="11" fill="#fff">Symptom</text>
-  <text x="160" y="110" font-size="11" fill="#333">&rarr;</text>
-  <rect x="180" y="80" width="80" height="50" fill="#e67e22"/>
-  <text x="190" y="110" font-size="11" fill="#fff">Possible cause</text>
-  <text x="280" y="110" font-size="11" fill="#333">&rarr;</text>
-  <rect x="300" y="80" width="80" height="50" fill="#27ae60"/>
-  <text x="310" y="110" font-size="11" fill="#fff">Check &amp; fix</text>
+<svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <circle cx="120" cy="90" r="4" fill="#27ae60"/>
+  <text x="120" y="110" font-size="10" fill="#27ae60" text-anchor="middle">correct (-270,-190)</text>
+  <circle cx="220" cy="90" r="4" fill="#c0392b"/>
+  <text x="220" y="110" font-size="10" fill="#c0392b" text-anchor="middle">wrong (-250,-190)</text>
+  <line x1="120" y1="90" x2="220" y2="90" stroke="#333" stroke-dasharray="4,2"/>
+  <text x="170" y="80" font-size="10" fill="#333" text-anchor="middle">+20 mm X</text>
+  <text x="200" y="150" font-size="10" fill="#666" text-anchor="middle">Case A: G54 X off by 20 mm</text>
 </svg>
-<figcaption>Troubleshooting loop: symptom, cause, verify, corrective action.</figcaption>
+<figcaption>Case A: correct vs wrong machine position; hole shifts +20 mm in X.</figcaption>
 </figure>
 
 
