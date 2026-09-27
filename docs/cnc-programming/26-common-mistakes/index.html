@@ -74,7 +74,7 @@
 </figure>
 
 <h3>Code Review Exercise</h3>
-<p>Given: G90 G21 G54 G00 X20 Y20; G81 Z-5 R2 F100; X50 Y20. With a Haas mill, the bare X50 Y20 repeats the drill cycle and cuts a second hole. If you intended to reposition without drilling, write G00 X50 Y20 explicitly (or G80 first).</p>
+<p>Given entry state: G90 G21 G94 G54, H02 and spindle already established, Z at verified R-plane clearance. Fragment: G81 Z-5 R2 F100; X50 Y20. On a Haas mill the bare X50 Y20 repeats the drill cycle. If you meant to reposition, write G00 X50 Y20 (or G80 first), and only then move at clearance.</p>
 <h2>Example</h2>
 <p>A beginner program starts with G21 G90 G54, calls T01, and immediately rapid-moves to X50 Y50. The operator should have checked: T01 is the physical tool in the spindle, H01 matches, G54 is on the correct datum, and the Z height at that XY move is above the fixture. If any of these is wrong, the crash happens before the first cut.</p>
 
