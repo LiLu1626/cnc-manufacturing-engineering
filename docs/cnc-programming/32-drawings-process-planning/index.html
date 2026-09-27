@@ -111,6 +111,11 @@
 <p>The process plan must specify how the part is held. A vise for flat plate; a chuck for round bar; soft jaws for finished diameters; a tombstone for multiple parts. Workholding affects which faces are accessible: if the part is gripped by the &Oslash;20 bore, the OD is accessible but the bore is not. Plan the operations so that each setup accesses the faces it needs.</p>
 <p>Rule of thumb: the first setup should machine the datums. The second setup should reference those datums. If you flip the part without a machined datum to flip on, the second setup is random &mdash; every dimension from the first setup walks. Machine a clean pad or bore in setup 1, then flip on that pad in setup 2.</p>
 <p>Clamping force: enough to hold the part, not so much that it distorts a thin wall. A thin-walled aluminum tube held too hard in a vise springs out of round when you release it. For thin walls, use expanding mandrels or soft jaws that support the wall from inside. Clamp on solid material, not on finished surfaces.</p>
+
+<h3>Tool Selection for the Process</h3>
+<p>The process plan lists every tool: tool number, type, diameter, corner radius, length. A roughing end mill, a finishing end mill, a drill, a chamfer mill. Each tool has a reason. If a tool is on the list but you cannot say what operation it does, remove it &mdash; extra tool changes cost 8 seconds each.</p>
+<p>Tool length: the longest tool that reaches the cut, not the longest tool you have. Long tools deflect. If a 50 mm long tool reaches the pocket, do not use a 100 mm tool. Tool length also affects the H offset: longer tools have longer reach, but they also deflect more under load. Match tool length to the job.</p>
+<p>Insert grade: P for steel, K for aluminum, M for stainless, S for superalloys. Use the right grade for the material. A P-grade insert in aluminum builds up edge (BUE) and leaves a poor finish; a K-grade insert in steel wears fast. The insert manufacturer's catalog has the starting parameters for each grade and material.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Drilling before milling the flat surface</strong> — holes start on uneven stock and wander.</li>
