@@ -176,6 +176,11 @@ M30</code></pre>
 <p>A macro that loops forever can move the machine forever. Before running a macro on a real part, test it in single-block with the tool above the part, feed override at 0, and your finger on the feed-hold button. Watch the first iteration: does it compute the right X/Y? Does the loop increment correctly? Does it exit at the right angle? If the first iteration is wrong, stop and fix the macro.</p>
 <p>Use #3000 to alarm on bad input. If the radius variable is zero or negative, alarm immediately. If the hole count is not an integer, alarm. If the depth exceeds travel, alarm. A macro that stops with a clear message is better than a macro that drills 12 holes in the wrong place.</p>
 <p>Document the macro. Put a comment block at the top: what it does, what variables mean, what the expected inputs are, and what the safe values are. The next person (possibly you, six months later) needs to know what #4 means without reverse-engineering the loop.</p>
+
+<h3>Probing and Offsets</h3>
+<p>A touch probe in the spindle measures the part automatically. The probe touches a surface, records the machine position, and the macro computes the offset. This replaces hand edge-finding. A probing macro can find the center of a bore, set G54 X/Y, and even measure tool length automatically.</p>
+<p>The probe does not write G54 directly &mdash; it computes the offset and writes it to the work offset register. The macro must account for the probe tip radius (the probe touches a sphere, not a point). If the tip is &Oslash;4, the center is 2 mm from the touched surface. Get the sign right: touching the left edge gives a different sign than touching the right edge.</p>
+<p>Probing is faster and more repeatable than hand edge-finding, but it is not magic. The probe must be calibrated (tip diameter, stylus length) on a reference ring. If the calibration is off, every probe-set offset is off. Treat the probe as a measuring instrument, not a setup convenience.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Learning macros before mastering basic G-code</strong> — you must understand coordinates, offsets, and canned cycles first. Macros build on top of them.</li>
