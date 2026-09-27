@@ -110,6 +110,11 @@
 <p>You cannot optimize what you have not measured. Run the program in single-block and time each section: tool change, rapid to position, plunge, cut, retract, rapid to next feature. Write the times down. You will usually find that 80% of the cycle is in 20% of the cuts &mdash; optimize those, not the small ones.</p>
 <p>Common discoveries: tool changes take 8 seconds each and you have 6 tools; rapid moves across the table take 5 seconds and you have 20 rapid moves; the actual cutting is 30 seconds. In that case, reducing tool changes (consolidate tools) and ordering holes (reduce rapid) saves more than increasing feed. Optimize the bottleneck, not the easy number.</p>
 <p>After optimization, re-measure. If the new cycle time is not what you expected, the bottleneck moved elsewhere. Repeat the measure&ndash;optimize&ndash;measure loop. The first optimization rarely gets you to the real limit.</p>
+
+<h3>Tool Life Economics</h3>
+<p>A carbide insert costs $15 and lasts 300 parts at the current feed. At a higher feed, it lasts 150 parts. The time saving per part is 2 seconds. Over 300 parts, the time saving is 10 minutes. The extra insert cost is $15 (one extra insert per 300 parts). If machine time costs $60/hour, 10 minutes is $10. The optimization loses $5. Do not optimize feed blindly &mdash; run the tool-life number.</p>
+<p>The formula: tool change cost per part = (tool cost) / (parts per tool). If tool life drops from 300 to 150 parts, the per-part tool cost doubles. Compare that to the cycle-time saving. If the cycle saving is less than the tool-cost increase, the optimization is not worth it. This is why aggressive feeds that double throughput but halve tool life are often break-even.</p>
+<p>Tool life also affects quality: a worn insert leaves a poor surface finish and drifts dimensionally. If you push feed to the limit, you may be changing inserts more often than you are machining parts. The optimal feed is not the maximum feed &mdash; it is the feed where the combined tool + machine cost is lowest.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Increasing feed beyond tool rating</strong> — breaks tools, causes chatter, scraps parts. Stay within the tool catalog's recommended feed per tooth.</li>
