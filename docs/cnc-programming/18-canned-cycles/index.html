@@ -109,6 +109,42 @@ G80</code></pre>
 <h3>G80: Canceling the Cycle</h3>
 <p><strong>G80</strong> cancels the active canned cycle without moving the axes. On Haas mills, a bare X/Y block repeats an active cycle, while an explicit G00 or G01 also cancels it. We still use G80 to make the end of the pattern clear. After the completed G99 example, the tool is at R2. The following G00 Z50 retracts to this example's verified clearance height; Z50 is not a universal safe position.</p>
 
+<h3>Repeating Holes with L and Subprograms</h3>
+<p>Many controls support a repeat address after a hole line, and all support calling a subprogram for a repeating pattern. On a rectangular array, write one row as a subprogram of X offsets, then call it once per Y row. This keeps the cycle active while XY steps repeat. For a bolt circle, compute the coordinates once and list them; a subprogram is overkill for six holes but saves typing for 24.</p>
+
+<h3>Cycle Parameters Across Tools</h3>
+<p>Each tool has its own spindle speed and feed, but R plane and Z depth are usually similar across tools on the same part. After the drill, the tap uses the same X/Y pattern but a different Z, R, and F. Call the pattern again with the new tool, restating R, Z, and F; do not assume the old values are safe for the new tool. G80 between tools prevents the new tool's first move from inheriting the drill cycle.</p>
+
+<h3>What Changes Between G81, G82, G83, G84, G85</h3>
+<p>The XY/R/Z/F framework is identical; only the bottom-of-hole motion changes. G81 feeds in and rapids out. G82 adds a dwell P. G83 feeds in Q pecks and retracts fully between. G84 reverses the spindle and feeds out. G85 feeds in and feeds out. This means once you have drilled G81, switching to G83 only adds Q and changes the code letter; the hole positions stay the same.</p>
+
+<h3>Programming a Tapped Hole with the Same Cycle</h3>
+<p>Assume G21/G94, a prepared tap drill, and S500. For M8&times;1.25, F = S&times;pitch = 625 mm/min. G84 R2. Z-15. F625. The control reverses spindle at the bottom. G98 is usually chosen for tapping so the tool retracts above the fixture between holes.</p>
+
+<h3>Cycle Parameter Dialect Table</h3>
+<table class="data-table">
+<tr><th>Parameter</th><th>Haas mill example</th><th>Note</th></tr>
+<tr><td>R</td><td>R2.</td><td>distance above Z0, mm under G21/G94</td></tr>
+<tr><td>Z</td><td>Z-10.</td><td>tip position, negative into part</td></tr>
+<tr><td>Q</td><td>Q3.</td><td>peck increment, mm (G73/G83 family)</td></tr>
+<tr><td>P</td><td>P0.5</td><td>dwell seconds, decimal on Haas</td></tr>
+<tr><td>F</td><td>F100.</td><td>mm/min under G94</td></tr>
+<tr><td>G98/G99</td><td>modal</td><td>initial plane vs R retract</td></tr>
+</table>
+
+<h3>When a New Tool Reuses the Same Holes</h3>
+<p>Drill, then tap, then countersink on the same X/Y positions. Each tool calls G80 at the end and re-establishes its own cycle with its own R, Z, F, and S. The coordinates can be kept in a subprogram and called three times, once per tool. Never carry a drill cycle's R2 into a tap cycle without restating it; the tap needs a different R clearance and feed.</p>
+
+<h3>Common Setup Checks Before Running a Cycle</h3>
+<p>Confirm: H offset and G54 are calibrated; R plane clears the hole opening; the retract plane (R for G99, initial Z for G98) clears fixtures between holes; Z depth includes the 118&deg; drill tip and breakthrough; F matches G94 mm/min; spindle direction and RPM suit the tool. Dry-run the first hole at low feed override.</p>
+
+<h3>Normal Completion vs Interrupted Cycle</h3>
+<p>When the pattern finishes normally, every hole has completed its feed and retract, and the tool ends at R2 under G99. If the feed hold or an alarm stops the machine mid-hole, the tool may be at the bottom or mid-peck; do not assume the cycle is "done". Resume from a known state: confirm Z position, reset mode, and only then continue. The trace table above describes a clean run, not an interrupted one.</p>
+
+<h3>Why G98 Is Set on the Hole Before the Obstacle</h3>
+<p>If a clamp sits between hole 1 and hole 2, writing G98 on the hole 1 line means hole 1 finishes by retracting to the initial plane before any XY move toward hole 2. Setting G98 on hole 2 itself would be too late: the tool would already have to cross the obstacle at R2 height. The mode change applies from that block onward.</p>
+
+
 <h2>Example</h2>
 <p><strong>Worked example:</strong> Four &Oslash;6 mm holes on a 50 mm square, centered at (0,0). Holes at (&minus;25,&minus;25), (25,&minus;25), (25,25), (&minus;25,25). Through-holes in 8 mm plate: Z depth = 8 + 0.3&times;6 = 9.8 mm, use Z-10. R plane Z2. No obstructions, so G99. Feed 100 mm/min at S2000.</p>
 <pre class="cp-code"><code>O0018 (4-HOLE PATTERN)
@@ -183,41 +219,6 @@ M30</code></pre>
 <details><summary>Ans</summary><p>One G81 call line that includes the first hole coordinates, then 7 more X/Y lines for holes 2&ndash;8, then G80. The call itself drills hole 1; do not list hole 1 twice.</p></details>
 <p><strong>4.</strong> You need hole 1 at Z-10 and holes 2–4 at Z-20 in the same pattern. How do you do it?</p>
 <details><summary>Ans</summary><p>Write G81 with Z-10 for hole 1. On the hole 2 line, write <code>X... Y... Z-20.</code> The new Z overrides the stored depth. Holes 3 and 4 inherit Z-20. Then G80.</p></details>
-
-<h3>Repeating Holes with L and Subprograms</h3>
-<p>Many controls support a repeat address after a hole line, and all support calling a subprogram for a repeating pattern. On a rectangular array, write one row as a subprogram of X offsets, then call it once per Y row. This keeps the cycle active while XY steps repeat. For a bolt circle, compute the coordinates once and list them; a subprogram is overkill for six holes but saves typing for 24.</p>
-
-<h3>Cycle Parameters Across Tools</h3>
-<p>Each tool has its own spindle speed and feed, but R plane and Z depth are usually similar across tools on the same part. After the drill, the tap uses the same X/Y pattern but a different Z, R, and F. Call the pattern again with the new tool, restating R, Z, and F; do not assume the old values are safe for the new tool. G80 between tools prevents the new tool's first move from inheriting the drill cycle.</p>
-
-<h3>What Changes Between G81, G82, G83, G84, G85</h3>
-<p>The XY/R/Z/F framework is identical; only the bottom-of-hole motion changes. G81 feeds in and rapids out. G82 adds a dwell P. G83 feeds in Q pecks and retracts fully between. G84 reverses the spindle and feeds out. G85 feeds in and feeds out. This means once you have drilled G81, switching to G83 only adds Q and changes the code letter; the hole positions stay the same.</p>
-
-<h3>Programming a Tapped Hole with the Same Cycle</h3>
-<p>Assume G21/G94, a prepared tap drill, and S500. For M8&times;1.25, F = S&times;pitch = 625 mm/min. G84 R2. Z-15. F625. The control reverses spindle at the bottom. G98 is usually chosen for tapping so the tool retracts above the fixture between holes.</p>
-
-<h3>Cycle Parameter Dialect Table</h3>
-<table class="data-table">
-<tr><th>Parameter</th><th>Haas mill example</th><th>Note</th></tr>
-<tr><td>R</td><td>R2.</td><td>distance above Z0, mm under G21/G94</td></tr>
-<tr><td>Z</td><td>Z-10.</td><td>tip position, negative into part</td></tr>
-<tr><td>Q</td><td>Q3.</td><td>peck increment, mm (G73/G83 family)</td></tr>
-<tr><td>P</td><td>P0.5</td><td>dwell seconds, decimal on Haas</td></tr>
-<tr><td>F</td><td>F100.</td><td>mm/min under G94</td></tr>
-<tr><td>G98/G99</td><td>modal</td><td>initial plane vs R retract</td></tr>
-</table>
-
-<h3>When a New Tool Reuses the Same Holes</h3>
-<p>Drill, then tap, then countersink on the same X/Y positions. Each tool calls G80 at the end and re-establishes its own cycle with its own R, Z, F, and S. The coordinates can be kept in a subprogram and called three times, once per tool. Never carry a drill cycle's R2 into a tap cycle without restating it; the tap needs a different R clearance and feed.</p>
-
-<h3>Common Setup Checks Before Running a Cycle</h3>
-<p>Confirm: H offset and G54 are calibrated; R plane clears the hole opening; the retract plane (R for G99, initial Z for G98) clears fixtures between holes; Z depth includes the 118&deg; drill tip and breakthrough; F matches G94 mm/min; spindle direction and RPM suit the tool. Dry-run the first hole at low feed override.</p>
-
-<h3>Normal Completion vs Interrupted Cycle</h3>
-<p>When the pattern finishes normally, every hole has completed its feed and retract, and the tool ends at R2 under G99. If the feed hold or an alarm stops the machine mid-hole, the tool may be at the bottom or mid-peck; do not assume the cycle is "done". Resume from a known state: confirm Z position, reset mode, and only then continue. The trace table above describes a clean run, not an interrupted one.</p>
-
-<h3>Why G98 Is Set on the Hole Before the Obstacle</h3>
-<p>If a clamp sits between hole 1 and hole 2, writing G98 on the hole 1 line means hole 1 finishes by retracting to the initial plane before any XY move toward hole 2. Setting G98 on hole 2 itself would be too late: the tool would already have to cross the obstacle at R2 height. The mode change applies from that block onward.</p>
 
 <h2>Sources</h2>
 <ul>
