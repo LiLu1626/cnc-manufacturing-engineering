@@ -235,6 +235,10 @@ M30</code></pre>
 <p>The 118&deg; drill point means the hole is not through when the tip reaches Z&minus;12. The conical tip extends an additional h = (12/2)&times;tan(31&deg;) &asymp; 3.6 mm below the cylinder, so the drill must reach Z&minus;15.6 to fully break through. Programming Z&minus;12 leaves a conical nibble that the next operation must ream out &mdash; or, worse, leaves a hole that looks through but has a burr on the back side. Always add the drill-point allowance.</p>
 <p>Coolant on through-holes in 12 mm plate: flood through the spindle, aimed at the hole. At breakthrough, the coolant washes chips out the bottom; without it, chips pack in the flutes and snap the drill. Peck (G83 Q3) retracts the chip out on each step, but for a 6 mm drill in 12 mm aluminum, G81 with coolant is usually fine. If chips pack, switch to G83.</p>
 <p>After drilling, inspect: hole positions with height gauge or CMM, hole diameter with a gauge pin, hole depth with a depth micrometer. If hole positions are uniformly shifted by +20 mm in X, G54 X is off. If holes are oversized, the drill walked (spot-drill was too shallow) or the drill is dull. Diagnose before re-drilling.</p>
+
+<h3>Why a Milling Project Is the First Real Mill Program</h3>
+<p>After isolated G01 and G81 examples, the milling project ties them together: face mill, contour, pocket, drill, chamfer. It uses one raw plate and one setup, which is how real mill work flows. You will use G54, H offsets, G41 cutter compensation, G81 drilling, and a chamfer mill &mdash; the same building blocks a production program uses, but small enough to hold in your hand.</p>
+<p>The project uses a 100&times;80&times;12 mm aluminum plate. Operations: face the top, mill the outer profile to 90&times;70, mill a 30&times;20 pocket 5 mm deep, drill four &Oslash;6 holes, and chamfer. Each operation is one tool. After running it, you will have a physical part with every feature you programmed, and you will have measured every dimension.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Only cutting the pocket boundary</strong> — leaves material in the center. You must raster through the interior.</li>
