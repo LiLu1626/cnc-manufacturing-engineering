@@ -82,6 +82,11 @@
 <li><strong>Drill tip height</strong> = (D/2) / tan(point_angle/2)</li>
 </ul>
 
+
+<h3>How to Read These Tables</h3>
+<p>This reference lists the most common G- and M-codes used on a typical Haas-style mill and lathe. The "Modal" column tells you whether the code stays active after one block (Yes) or applies only to the block it is called in (No). Group 00 codes (like G70/G71 on a lathe) are non-modal: they run once and then the machine returns to whatever motion mode was active before. If you expected G71 to stay on and it did not, check the modal group &mdash; it is not a bug, it is how the control is designed.</p>
+<p>When in doubt, look up your exact controller model. FANUC, Siemens, Heidenhain, and Haas all use overlapping but not identical code sets. A code that means one thing on Haas may mean something else on FANUC &mdash; for example, G90 on a Haas lathe is a stock-removal cycle, not absolute mode. The startup block at the top of every program exists precisely to put the machine in a known state, so these differences cannot leak into the cut.</p>
+<p>Use this page as a lookup, not as a tutorial. If a code here is unfamiliar, go back to the lesson that explains it &mdash; the code table alone will not teach you how to use it safely.</p>
 <h2>Common Mistakes</h2>
 <p>This page is intentionally brief. For each code, follow the link to the detailed lesson. M-codes are machine-specific — always verify against your manual.</p>
 
