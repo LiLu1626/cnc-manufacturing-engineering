@@ -214,11 +214,6 @@ M30</code></pre>
 <h3>Why Tap Drill Size Is Not a Single Number</h3>
 <p>Engagement, material, thread class, and tap type all change the starting hole. The major-minus-pitch rule is a starting point; the final size is a tooling and process decision.</p>
 
-<h2>Sources</h2>
-<ul>
-<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G84.html">Haas G84 Rigid Tapping</a>.</li>
-</ul>
-
 <h3>Cutting Tap vs Forming Tap</h3>
 <p>A cutting tap removes chips; a forming tap displaces material, produces no chips, and needs a larger starting hole. This page's example uses a cutting tap. Do not apply the major-minus-pitch starting-hole estimate to a forming tap; use the forming tap manufacturer's data.</p>
 
@@ -227,6 +222,11 @@ M30</code></pre>
 
 <h3>Thread Milling Feed and Path</h3>
 <p>On a thread mill, one circular orbit in XY with one lead of Z makes the thread. The tool center follows a circle set by the tool and part geometry, not the tap drill radius. Programmed F is the feed along that helical path, not S&times;pitch.</p>
+
+<h2>Sources</h2>
+<ul>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G84.html">Haas G84 Rigid Tapping</a>.</li>
+</ul>
 
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/">&larr; Canned Cycles</a><a href="/cnc-manufacturing-engineering/cnc-programming/29-subprograms/">Subprograms &rarr;</a></nav>
 </main>

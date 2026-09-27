@@ -45,15 +45,15 @@
 
 <figure class="cp-figure">
 <svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
-  <rect x="40" y="70" width="320" height="40" fill="#d4c5a9" stroke="#999"/>
-  <rect x="200" y="95" width="20" height="15" fill="#7f8c8d"/>
-  <text x="50" y="65" font-size="10" fill="#333">O35 bar</text>
-  <rect x="200" y="50" width="8" height="45" fill="#c0392b"/>
-  <text x="130" y="45" font-size="10" fill="#c0392b">2 mm blade, front edge Z-17</text>
-  <line x1="200" y1="110" x2="220" y2="110" stroke="#e67e22" stroke-width="2"/>
-  <text x="230" y="114" font-size="10" fill="#e67e22">groove bottom O30, 2.5 mm radial</text>
+  <path d="M 40,110 L 196,110 L 196,120 L 204,120 L 204,110 L 380,110 L 380,180 L 40,180 Z" fill="#d4c5a9" stroke="#999"/>
+  <line x1="40" y1="180" x2="380" y2="180" stroke="#333" stroke-dasharray="3,2"/>
+  <text x="385" y="183" font-size="10" fill="#333">centerline</text>
+  <text x="50" y="105" font-size="10" fill="#333">O35 surface (r17.5, y110)</text>
+  <text x="210" y="135" font-size="10" fill="#e67e22">O30 groove bottom (r15, y120), 2.5 mm radial</text>
+  <rect x="196" y="60" width="8" height="50" fill="#c0392b"/>
+  <text x="150" y="55" font-size="10" fill="#c0392b">2 mm blade, front edge Z-17</text>
 </svg>
-<figcaption>Shallow groove cross-section: O35 bar, O30 bottom, 2.5 mm radial, 2 mm blade, front edge at larger Z.</figcaption>
+<figcaption>Upper half-section: open groove notch in the surface. 4 px/mm; O35 at y110, O30 at y120. Not to scale.</figcaption>
 </figure>
 
 <h3>Parting and Separation</h3>
@@ -71,8 +71,8 @@
   <line x1="320" y1="80" x2="100" y2="80" stroke="#c0392b" stroke-width="2"/>
   <polygon points="100,80 110,76 110,84" fill="#c0392b"/>
   <text x="200" y="70" font-size="10" fill="#c0392b">cut along wall (Z from mouth to bottom)</text>
-  <line x1="100" y1="80" x2="100" y2="100" stroke="#166534" stroke-width="2"/>
-  <text x="110" y="100" font-size="10" fill="#166534">radial inward retract</text>
+  <line x1="100" y1="80" x2="100" y2="90" stroke="#166534" stroke-width="2"/>
+  <text x="110" y="88" font-size="10" fill="#166534">radial inward retract (clearance per bar envelope, not X0)</text>
   <line x1="100" y1="100" x2="320" y2="100" stroke="#2c3e50" stroke-width="2" stroke-dasharray="4,2"/>
   <text x="180" y="118" font-size="10" fill="#2c3e50">Z withdraw to mouth</text>
 </svg>
