@@ -143,6 +143,10 @@
 <p>Work through the levels in order. Level 1 is not optional: a programmer who skips coordinate systems and offsets will crash machines on Level 2. Each lesson should end with you able to explain the concept out loud and trace a small program by hand. If you cannot explain G54 to a coworker, do not move on to canned cycles.</p>
 <p>Level 3 is where the work pays off: you can read a drawing, choose tools, write a complete program, and verify it on the machine. Level 4 (macro programming) is optional and only worth it if your shop runs repetitive parts that benefit from parameterization. Do not start macros until you can hand-write and debug a complete turning or milling program without help.</p>
 <p>Revisit the reference page when you forget a code &mdash; that is what it is for. The exercises page is where you prove you understand, not where you first learn.</p>
+
+<h3>Level 1 Checklist</h3>
+<p>Before moving to Level 2, you should be able to: (1) explain the difference between machine zero and work zero; (2) write a startup block G21 G17 G90 G94 G40 G49 G80; (3) trace a 10-line G01 program and state the tool position at each line; (4) explain why G43 H is needed and what happens if H is 0; (5) state the difference between G90 and G91. If any of these is shaky, revisit that lesson &mdash; do not proceed.</p>
+<p>Level 2 adds canned cycles, cutter compensation, and multi-tool programs. By the end of Level 2 you should be able to write a complete 2-tool milling program that faces a block, mills a pocket, and drills four holes, then verify it on paper. Level 3 is the turning and milling projects on this site; Level 4 is macros.</p>
 <h2>Practice</h2>
 <p><strong>1.</strong> What should you learn first?</p><details><summary>Ans</summary><p>Coordinate systems (Module 1). Everything else depends on them.</p></details>
 <p><strong>2.</strong> When are you ready for subprograms?</p><details><summary>Ans</summary><p>When you can write and verify a basic drilling cycle with G83 and G80.</p></details>
