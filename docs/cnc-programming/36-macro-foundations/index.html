@@ -135,6 +135,12 @@ G00 Z50. M09
 M30</code></pre>
 <p><strong>Trace:</strong> Iteration 1: angle=0, X=50&times;COS(0)=50, Y=50&times;SIN(0)=0 → drill at (50,0). Iteration 2: angle=60, X=25, Y=43.3 → drill at (25,43.3). Continues for angles 120, 180, 240, 300. When angle reaches 360, loop exits. Six holes drilled, one loop. To change to 8 holes, change <code>#1 = #1 + 60</code> to <code>+45</code>. To change radius, edit the 50.</p>
 
+
+<h3>When to Reach for a Macro</h3>
+<p>A macro is a parameterized program: you feed it a few numbers (radius, hole count, start angle), and it computes every coordinate. You should not reach for a macro when a subprogram or a canned cycle already solves the problem. Reach for a macro when the geometry is defined by a formula rather than a list &mdash; a bolt circle, a grid of holes with adjustable pitch, a chamfer that repeats on every corner, a probe routine that measures a bore and writes the offset automatically.</p>
+<p>The simplest macro pattern is a WHILE loop over an angle. Start with #1 = 0, step by 30&deg; up to 360&deg;, compute X = R&middot;cos(#1), Y = R&middot;sin(#1), drill the hole, increment #1. The same loop, with #1 as depth instead of angle, becomes a peck-drill loop that steps down 3 mm at a time until the bottom. The point is not the trigonometry &mdash; it is that the machine recomputes the pattern every run, so changing R or the hole count is a one-number edit.</p>
+<p>Macros read and write system variables: current position, current offset values, probe status, spindle load. This is how probing works: the machine moves the probe toward the wall, reads the machine X at contact, subtracts the known edge position, and writes the result into G54 X. A macro can also alarm itself: IF [#2 LT 0] THEN #3000 = 1 (BAD RADIUS). Self-diagnosing macros stop the machine before it cuts scrap, which is the production advantage over hand-coded coordinates.</p>
+<p>Macros are controller-specific. FANUC uses #1&ndash;#33 local, #100&ndash;#199 common, and system variables like #5021 for current position; Haas uses a similar but not identical scheme; Siemens uses R parameters and Q loops. Do not assume a macro that runs on Haas will run unchanged on FANUC. The trigonometry is universal; the variable numbers and loop syntax are not.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Learning macros before mastering basic G-code</strong> — you must understand coordinates, offsets, and canned cycles first. Macros build on top of them.</li>
