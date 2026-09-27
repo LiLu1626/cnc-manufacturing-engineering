@@ -105,6 +105,11 @@
 <p>Optimization has a floor: once the cycle time is dominated by load/unload (15&ndash;20%), further cutting-time optimization buys little. If a part takes 60 seconds to machine and 20 seconds to load/unload, shaving 5 seconds off the cut is an 8% improvement, but automating the load/unload is a 33% improvement. Know where the time goes before optimizing.</p>
 <p>Also know when to stop. A program that cuts 10 seconds faster but needs a new insert every 50 parts is not faster in total cost. Track tool life as you optimize: if a new feed strategy drops tool life from 300 parts to 80, the tool-change cost can exceed the time saving. Run the numbers for your actual tool cost and cycle time before declaring a win.</p>
 <p>Finally, document the optimized program. Write in the comment block: "Feed increased from F200 to F280 on 2026-09-28, tool life verified at 250 parts, surface finish within spec." The next person who touches the program needs to know why the numbers are what they are &mdash; otherwise they will "optimize" them back.</p>
+
+<h3>Measuring Cycle Time Before You Optimize</h3>
+<p>You cannot optimize what you have not measured. Run the program in single-block and time each section: tool change, rapid to position, plunge, cut, retract, rapid to next feature. Write the times down. You will usually find that 80% of the cycle is in 20% of the cuts &mdash; optimize those, not the small ones.</p>
+<p>Common discoveries: tool changes take 8 seconds each and you have 6 tools; rapid moves across the table take 5 seconds and you have 20 rapid moves; the actual cutting is 30 seconds. In that case, reducing tool changes (consolidate tools) and ordering holes (reduce rapid) saves more than increasing feed. Optimize the bottleneck, not the easy number.</p>
+<p>After optimization, re-measure. If the new cycle time is not what you expected, the bottleneck moved elsewhere. Repeat the measure&ndash;optimize&ndash;measure loop. The first optimization rarely gets you to the real limit.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Increasing feed beyond tool rating</strong> — breaks tools, causes chatter, scraps parts. Stay within the tool catalog's recommended feed per tooth.</li>
