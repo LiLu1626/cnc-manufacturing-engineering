@@ -239,6 +239,11 @@ M30</code></pre>
 <h3>Why a Milling Project Is the First Real Mill Program</h3>
 <p>After isolated G01 and G81 examples, the milling project ties them together: face mill, contour, pocket, drill, chamfer. It uses one raw plate and one setup, which is how real mill work flows. You will use G54, H offsets, G41 cutter compensation, G81 drilling, and a chamfer mill &mdash; the same building blocks a production program uses, but small enough to hold in your hand.</p>
 <p>The project uses a 100&times;80&times;12 mm aluminum plate. Operations: face the top, mill the outer profile to 90&times;70, mill a 30&times;20 pocket 5 mm deep, drill four &Oslash;6 holes, and chamfer. Each operation is one tool. After running it, you will have a physical part with every feature you programmed, and you will have measured every dimension.</p>
+
+<h3>Pocket Milling the 30&times;20 Pocket</h3>
+<p>The pocket is 30&times;20 mm, 5 mm deep, centered on the plate. Use a &Oslash;10 flat end mill. Rough the pocket with zig-zag raster at 5 mm stepover (7 rows across the 30 mm width), 4.5 mm deep, leaving 0.3 mm on walls and floor. Then finish the walls with a contour pass at 0.3 mm radial engagement, 5 mm deep, S3000 F300. The finish pass leaves a clean wall; the raster leaves a scallop that the contour removes.</p>
+<p>Entry into the pocket: ramp in at 2&deg; from Z0 to Z&minus;4.5 over 30 mm of travel, or plunge straight down at Z5 to Z&minus;4.5 if the tool is center-cutting. Do not start the pocket cut at the corner &mdash; start in the middle of the pocket and raster outward. If the tool is not center-cutting, you must drill a start hole first.</p>
+<p>The pocket bottom: 5 mm deep means the tool reaches Z&minus;5. The floor of the pocket is the final 0.3 mm. The raster cuts to Z&minus;4.7, the contour pass cuts to Z&minus;5. The floor finish depends on the stepover; a 5 mm stepover on a &Oslash;10 tool leaves a small scallop. For a better floor finish, reduce stepover to 3 mm or take a final floor pass.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Only cutting the pocket boundary</strong> — leaves material in the center. You must raster through the interior.</li>
