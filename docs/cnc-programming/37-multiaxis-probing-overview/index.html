@@ -53,6 +53,10 @@
 <li><strong>Confusing 3+2 with full 5-axis</strong> — 3+2 positions rotary once; full 5-axis interpolates simultaneously.</li>
 <li><strong>Forgetting probe calibration</strong> — the stylus length and radius must be calibrated on a reference sphere before probing.</li>
 </ul>
+
+<h3>Rotary Axes: A, B, C in One Paragraph</h3>
+<p>A rotary axis rotates the workpiece (or the spindle). On a mill, a trunnion or rotary table adds A (rotation around X) and B (rotation around Y), or C (rotation around Z). On a lathe, the C axis indexes the spindle so you can mill flats or drill cross-holes while the part is held. A 4-axis machine adds one rotary; a 5-axis adds two and can tilt the spindle or the table to reach undercuts. Programming rotary axes is not harder in principle &mdash; the same G01/G02 rules apply &mdash; but the coordinate system rotates, so the tool tip position in space is a function of both linear and rotary position.</p>
+<p>Start with 3-axis. Add a C-axis indexing mill (C rotates between moves, not during cutting) before you try true 5-axis simultaneous. Each step adds complexity and a new class of crashes &mdash; most often the rotary axis carrying the fixture into the spindle.</p>
 <h2>Practice</h2>
 <p><strong>1.</strong> Probe left edge at X-25.3, right edge at X24.8. Center?</p><details><summary>Ans</summary><p>(-25.3 + 24.8)/2 = -0.25 mm. Part center is at X-0.25.</p></details>
 <p><strong>2.</strong> What is 3+2?</p><details><summary>Ans</summary><p>Rotary axes position at an angle, then XYZ linear milling — no simultaneous rotary motion.</p></details>
