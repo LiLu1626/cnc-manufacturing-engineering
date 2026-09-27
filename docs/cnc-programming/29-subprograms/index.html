@@ -81,6 +81,12 @@ M99</code></pre>
 <li><strong>Organization</strong> — break a long program into readable chunks by operation.</li>
 </ul>
 
+
+<h3>When Subprograms Earn Their Keep</h3>
+<p>A subprogram is not automatically better than inline code. A single hole does not need O2000. A subprogram earns its keep when the same motion block repeats several times in one setup &mdash; a hole pattern, a pocket array, a bolt circle, or a series of identical slots on a tombstone. If the pattern appears once, inlining it is shorter and easier to verify. If the pattern appears 4 times on a fixture, or 12 times around a circle, the subprogram removes 12 copies of the same code that could drift apart during editing.</p>
+<p>The classic bolt-circle example: 12 holes at 30&deg; spacing on a 50 mm radius. Without a subprogram, you list every (X,Y) pair. With M98 P2000 L12, the main program feeds a starting angle and the subprogram computes one hole. Even better, the angle increments inside the subprogram so the next call starts where the last one ended &mdash; but this only works if the subprogram restores G90 on return. The #1 subprogram bug is leaked incremental mode: the main program is in G90, the subprogram switches to G91 for the pattern, and forgets to switch back. The next main-program block then moves by an increment instead of to an absolute position, and the tool appears to "jump."</p>
+<p>Subprograms also have a stack depth limit on every controller &mdash; typically four or eight levels of M98 calls. Nesting a subprogram inside a subprogram is allowed, but going too deep triggers an alarm. Keep nesting shallow: one level for patterns, two at most, and never rely on undocumented depth limits in production.</p>
+<p>On the shop floor, a subprogram is also a testing unit. You can run O2000 alone with a dry-run block to check the hole position before running the full main program. Isolating one hole in its own O-number means you can fix the geometry in one place, and every call inherits the fix. This is the same reason functions exist in programming &mdash; single source of truth, repeated calls, isolated debugging.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Confusing P and O</strong> — Haas uses M98 P2000 (call), not O2000. The subprogram itself is labeled O2000.</li>
