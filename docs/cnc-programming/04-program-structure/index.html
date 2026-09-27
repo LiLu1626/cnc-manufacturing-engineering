@@ -111,6 +111,11 @@ M30
 <tr><td>M30</td><td>End program, rewind</td><td>Program stops</td></tr>
 </table>
 
+
+<h3>Why Every Program Has the Same Shape</h3>
+<p>Almost every CNC program, whether a 10-line drill cycle or a 500-line mold program, follows the same skeleton: percent sign, program number, startup block, tool change, work offset, safe approach, cut, retract, M30, percent sign. Once you can recognize that skeleton, reading an unfamiliar program is a matter of finding the cut in the middle &mdash; the top and bottom are boilerplate. Beginners waste time reading every line top to bottom; experienced programmers skip the boilerplate and jump to the G-code that actually moves the tool through material.</p>
+<p>The startup block (G21 G17 G90 G94 G40 G49 G80) exists because the machine remembers state from the previous program. If the last program ended in G91 incremental and you forget G90, your first move is by distance, not to position. If the last program ended in G81 drilling cycle and you forget G80, your first XY move drills a hole. The startup block is cheap insurance: write it every time, even if you "know" the machine is in a clean state.</p>
+<p>Block numbers (N10, N20, &hellip;) are optional on modern controllers but useful for debugging: the alarm says "block 120," and you can search for N120. Word addresses (G, X, Y, Z, F, S, T) are the letters; the numbers after them are the values. A comment in parentheses is for humans; the controller ignores it. A semicolon is a comment on some controls; parentheses are safer.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Treating N numbers as coordinates</strong> — N10 is a label, not a move distance.</li>
