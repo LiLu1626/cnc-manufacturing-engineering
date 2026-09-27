@@ -85,12 +85,14 @@
 
 <h2>Example</h2>
 <p>Two holes on a plate: Hole 1 at (10,10), Hole 2 at (50,30). In plain language, the machine needs to: move above Hole 1, drill, retract, move above Hole 2, drill, retract.</p>
-<pre class="cp-code"><code>G90 G54 G00 X10. Y10.     (rapid to above hole 1)
+<pre class="cp-code"><code>G21 G17 G90 G94 G54 G80 G40
+G00 G43 H01 Z5. M08
 S1500 M03
-G43 H01 Z5. M08
+X10. Y10.
 G81 R2. Z-15. F120.
-G00 X50. Y30.              (rapid to above hole 2, still drilling cycle)
-G80 G00 Z50. M09</code></pre>
+X50. Y30.                  (bare XY repeats cycle, drills hole 2)
+G80
+G00 Z50. M09</code></pre>
 <p>Reading the numbers: X50 Y30 is the absolute target position. S1500 is spindle speed in RPM. F120 is feed rate in mm/min. G81 is the drilling canned cycle. You do not need to memorize every code yet — the point is that each letter-and-number pair controls one specific machine function.</p>
 
 <h2>Common Mistakes</h2>
