@@ -99,6 +99,11 @@ G80</code></pre>
 
 <h3>Reading Alarm Messages</h3>
 <p>When a program alarms, read the alarm number and text from your control manual. Alarms are control-specific: a FANUC alarm, a Siemens alarm, and a Heidenhain alarm use different numbering. Many alarms are setup errors (wrong offset, tool not clamped, door open) rather than program errors. The alarm manual for your exact control is the first diagnostic reference.</p>
+
+<h3>Pick One Dialect and Stick With It</h3>
+<p>This site uses Haas mill conventions as the baseline. FANUC uses similar G-codes but different cycle parameters and M98 call syntax. Siemens uses cycles (CYCLE82, CYCLE83) instead of G81/G83, and R parameters instead of #variables. Heidenhain uses conversational programming (touch-screen plain language) in addition to G-code. If you learn Haas and then switch to FANUC, the concepts carry over; the exact code numbers and cycle formats do not.</p>
+<p>When you inherit a program from another shop, do not assume the dialect. Read the first block: does it start G20 or G21? Is there a % at the top? Are cycles G81 or CYCLE82? If the program uses a dialect your machine does not understand, re-post it from the CAM or rewrite it &mdash; do not hand-translate line by line. Hand-translation is how subtle bugs (like an R plane that means something different) slip in.</p>
+<p>Controller differences also matter for M-codes. M03/M04/M05/M08/M09/M30 are universal. M06, M19, M41/M42 are not. If a program uses an unfamiliar M code, look it up &mdash; do not run it and see.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Assuming G81 means the same thing on every control</strong> &mdash; R plane, retract, and dwell behavior can differ; verify the cycle definition.</li>
