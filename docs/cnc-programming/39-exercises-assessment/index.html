@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Exercises & Assessment — CNC Programming</title>
-<meta name="description" content="20 CNC programming exercises: knowledge checks, code reading, find-the-error, and write-the-program drills to test your understanding.">
+<meta name="description" content="CNC assessment with 20 questions, two code reviews, two projects, worked answers and a 100-point rubric.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/39-exercises-assessment/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
@@ -24,84 +24,68 @@
     </ul>
   </div>
 </nav>
-<main class="article">
+<main class="article cp-article">
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Exercises &amp; Assessment</h1>
-<p class="lead">Reading and understanding code is the skill that prevents crashes. These 20 exercises test coordinate systems, G-code, offsets, cycles, compensation, and program structure. Work through them without looking at the answers first.</p>
-<svg viewBox="0 0 320 100" style="width:100%;max-width:420px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
-<title>Assessment scope</title>
-<text x="20" y="30" font-size="11" fill="#333">20 basic Q (recall + code reading + find-error)</text>
-<text x="20" y="55" font-size="11" fill="#333">2 code reviews (find and fix defects)</text>
-<text x="20" y="80" font-size="11" fill="#333">2 projects (plan + coordinates + program + verify)</text>
-</svg>
+<p class="lead">Complete 20 basic questions, two code reviews, and two projects. This assessment tests how you explain coordinates, establish controller state, check geometry, and document a program before supervised verification. The examples use the stated Haas mill or lathe dialect, not interchangeable generic G-code.</p>
+<figure class="cp-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 190" role="img" aria-labelledby="assessment-scope-title assessment-scope-desc" style="width:100%;max-width:520px;height:auto;display:block;margin:auto;font-family:Inter,system-ui,sans-serif"><title id="assessment-scope-title">Assessment sections</title><desc id="assessment-scope-desc">Twenty basic questions, two code reviews and two projects.</desc><rect x="20" y="15" width="320" height="36" fill="#e6f4f2" stroke="#0b766e"/><text x="30" y="39" font-size="14" fill="#17242f">20 questions: 40 points</text><rect x="20" y="65" width="320" height="36" fill="#e6f4f2" stroke="#0b766e"/><text x="30" y="89" font-size="14" fill="#17242f">2 code reviews: 20 points</text><rect x="20" y="115" width="320" height="36" fill="#e6f4f2" stroke="#0b766e"/><text x="30" y="139" font-size="14" fill="#17242f">2 projects: 40 points</text></svg><figcaption>Answer first, then use the worked solutions and item rubrics.</figcaption></figure>
 
-<svg viewBox="0 0 320 160" style="width:100%;max-width:420px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
-<title>Assessment grading breakdown</title>
-<rect x="20" y="20" width="280" height="24" fill="#54a0ff" rx="3"/>
-<text x="30" y="36" font-size="11" fill="#fff">20 basic questions &times; 2 = 40</text>
-<rect x="20" y="52" width="140" height="24" fill="#2ecc71" rx="3"/>
-<text x="30" y="68" font-size="11" fill="#fff">2 code reviews &times; 10 = 20</text>
-<rect x="160" y="52" width="140" height="24" fill="#e67e22" rx="3"/>
-<text x="170" y="68" font-size="11" fill="#fff">2 projects &times; 20 = 40</text>
-<text x="20" y="100" font-size="11" fill="#333">Pass: total &ge; 80 AND every critical safety/geometry error fixed.</text>
-<text x="20" y="120" font-size="11" fill="#666">98 with an unfixed critical error does NOT pass.</text>
-</svg>
-<h2>Part 1 — Knowledge Check (Questions 1–12)</h2>
+<figure class="cp-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 190" role="img" aria-labelledby="assessment-score-title assessment-score-desc" style="width:100%;max-width:520px;height:auto;display:block;margin:auto;font-family:Inter,system-ui,sans-serif"><title id="assessment-score-title">Point allocation</title><desc id="assessment-score-desc">Bars share a scale of seven pixels per point; widths 280, 140, 280 represent 40, 20, 40 points.</desc><text x="20" y="20" font-size="14" fill="#17242f">Basic questions: 40</text><rect x="20" y="28" width="280" height="20" fill="#e6f4f2" stroke="#0b766e"/><text x="20" y="76" font-size="14" fill="#17242f">Code reviews: 20</text><rect x="20" y="84" width="140" height="20" fill="#e6f4f2" stroke="#0b766e"/><text x="20" y="132" font-size="14" fill="#17242f">Projects: 40</text><rect x="20" y="140" width="280" height="20" fill="#e6f4f2" stroke="#0b766e"/></svg><figcaption>Pass requires at least 80/100 and correction of every critical safety or geometry error. A score of 98 with an unresolved critical error does not pass.</figcaption></figure>
+<h2>Part 1 — Knowledge Check (Q01–Q12)</h2>
+<p>Unless a question explicitly says lathe, use a Haas mill, millimetres, no rotation or scaling, and the named work offset. Answers should state a relevant assumption, not infer missing machine conditions.</p>
 
-<ol>
-<li><strong>What does G01 do, and how is it different from G00?</strong>
-<details><summary>Answer</summary><p>G01 is linear interpolation at a controlled feed rate F — the tool cuts in a straight line at the programmed feed. G00 is rapid positioning at machine maximum speed, used for non-cutting moves, and does not use F for cutting.</p></details></li>
+<ol class="cp-questions" style="list-style:none;padding-left:0">
+<li id="q01"><strong>Q01. What does G01 do, and how is it different from G00?</strong>
+<details><summary>Answer</summary><p>G01 commands a straight path at the programmed feed in the active feed mode. G00 is rapid positioning; its rate and path depend on the control and machine. F does not set its cutting feed. For a 30 mm straight cut at F300 mm/min, ideal feed time is 0.1 min; acceleration is excluded.</p></details></li>
 
-<li><strong>What is G54?</strong>
+<li id="q02"><strong>Q02. What is G54?</strong>
 <details><summary>Answer</summary><p>G54 is the first work coordinate system offset (work zero). It shifts the coordinate origin from machine zero to the workpiece datum, so the programmer can use part coordinates instead of machine coordinates.</p></details></li>
 
-<li><strong>What is the difference between G90 and G91?</strong>
+<li id="q03"><strong>Q03. On the selected mill, what is the difference between G90 and G91?</strong>
 <details><summary>Answer</summary><p>G90 = absolute programming: every coordinate is measured from the work zero. G91 = incremental programming: every coordinate is measured from the current tool position. G90 X50 means "go to X50"; G91 X50 means "move 50 mm in X."</p></details></li>
 
-<li><strong>What does G41 do?</strong>
-<details><summary>Answer</summary><p>G41 activates cutter radius compensation to the left of the programmed direction. The machine offsets the tool center by the radius stored in the D code, so you program the part outline rather than the tool center path.</p></details></li>
+<li id="q04"><strong>Q04. What does G41 do?</strong>
+<details><summary>Answer</summary><p>On the Haas mill, G41 places the compensated tool centre to the left of the programmed direction. D selects a compensation register; Setting 40 determines whether its entry is treated as radius or diameter. For motion along +X, left is +Y. The material side and lead-in must also be checked.</p></details></li>
 
-<li><strong>On a lathe, what does X40 mean?</strong>
-<details><summary>Answer</summary><p>X40 means the tool is positioned at a 40 mm diameter, not 40 mm radius. The actual radial position is 20 mm from center. Radial depth of cut = (X_start &minus; X_end) / 2.</p></details></li>
+<li id="q05"><strong>Q05. In the stated diameter-mode lathe example, what does X40 mean?</strong>
+<details><summary>Answer</summary><p>In this assessment’s diameter-mode lathe examples, X40 means a diameter of 40 mm, so radial position is 20 mm from the axis. Changing X50 to X48 removes 1 mm radially. A radius-mode machine would need a different interpretation; confirm the configured mode.</p></details></li>
 
-<li><strong>What does G80 do?</strong>
+<li id="q06"><strong>Q06. What does G80 do?</strong>
 <details><summary>Answer</summary><p>G80 cancels all canned drilling cycles. It stops the modal cycle mode; after G80, subsequent X/Y/Z motion is explicitly controlled by G00/G01 rather than by an active cycle. Note: G80 does not retract Z — write G00 Z50 explicitly. On Haas, a G00 or G01 motion also cancels the cycle, but writing G80 explicitly makes the intent clear.</p></details></li>
 
-<li><strong>What is the difference between G98 and G99 in a drilling cycle?</strong>
+<li id="q07"><strong>Q07. What is the difference between G98 and G99 in a drilling cycle?</strong>
 <details><summary>Answer</summary><p>G98 retracts to the initial Z plane (the height before the cycle was called). G99 retracts only to the R plane. Use G99 for holes with no obstructions between them; use G98 when there is a boss, clamp, or feature to clear.</p></details></li>
 
-<li><strong>Why program G21 G17 G90 G40 G49 G80 at the start of a program?</strong>
-<details><summary>Answer</summary><p>To establish a known machine state: G21 = metric units, G17 = XY plane, G90 = absolute programming, G40 = cancel compensation, G49 = cancel tool length offset, G80 = cancel cycles. It prevents inherited modal states from a previous program.</p></details></li>
-<li><strong>What is the difference between feed per minute (mm/min) and feed per revolution (mm/rev)?</strong>
+<li id="q08"><strong>Q08. Why program G21 G17 G90 G40 G49 G80 at the start of a program?</strong>
+<details><summary>Answer</summary><p>These commands explicitly select metric units, the XY plane and absolute positioning, and cancel the named compensation and drilling modes on the mill. They do not establish every possible state. G94, G54, the tool, a new length call, spindle speed and actual clearance still require attention. Cancelling length compensation is not a machine-coordinate move.</p></details></li>
+<li id="q09"><strong>Q09. What is the difference between feed per minute (mm/min) and feed per revolution (mm/rev)?</strong>
 <details><summary>Answer</summary><p>mm/min is how far the tool travels each minute. mm/rev is how far the tool advances per spindle revolution. On the Haas lathe examples in this course, G98 selects feed per minute and G99 selects feed per revolution; on other controllers the code may differ &mdash; check the operator manual for the machine in front of you. The conversion is: mm/min = mm/rev &times; rpm. Example: 0.20 mm/rev at 1000 rpm = 200 mm/min.</p></details></li>
 
-<li><strong>What does G43 H01 do?</strong>
-<details><summary>Answer</summary><p>G43 activates tool length compensation using the H01 offset value. The controller adds (or subtracts, depending on sign convention) the measured tool length from the programmed Z position, so different tools reach the same programmed Z without editing the program.</p></details></li>
+<li id="q10"><strong>Q10. What does G43 H01 do?</strong>
+<details><summary>Answer</summary><p>G43 H01 applies the length compensation selected by H01. Tool length, the work offset and the programmed Z position jointly determine machine position. The example assumes a measured, correctly signed length value and a verified setup; H01 is a register selection, not evidence that the stored number is correct.</p></details></li>
 
-<li><strong>What is the difference between climb (down) milling and conventional (up) milling?</strong>
-<details><summary>Answer</summary><p>Climb milling: the cutter rotates in the same direction as table feed; chip starts thick and tapers, usually better finish and longer tool life. Conventional milling: cutter rotates against feed; chip starts thin and rubs, can cause backlash on worn machines.</p></details></li>
+<li id="q11"><strong>Q11. What is the difference between climb (down) milling and conventional (up) milling?</strong>
+<details><summary>Answer</summary><p>In peripheral climb milling, chip thickness begins larger and decreases through the cut; conventional milling begins with a thin chip and increases. Backlash is a machine condition, not something conventional milling creates. Select the strategy using the machine condition and tooling guidance, rather than assuming every CNC machine has zero backlash.</p></details></li>
 
-<li><strong>What is a work offset (fixture offset), and how many are commonly available?</strong>
-<details><summary>Answer</summary><p>A work offset (G54&ndash;G59, plus extended offsets on many controls) stores the X/Y/Z shift from machine zero to a part origin. Multiple offsets let you run several fixtures or setups without changing the program.</p></details></li>
+<li id="q12"><strong>Q12. What is a work offset (fixture offset), and how many are commonly available?</strong>
+<details><summary>Answer</summary><p>G54 through G59 provide six standard work coordinate systems in the selected Haas examples. Further offsets depend on the control. In a simple unrotated XY setup, machine XY equals the selected origin XY plus programmed XY. Z must also be interpreted through the tool-length chain, not copied from that simplified XY equation.</p></details></li>
 </ol>
 
 <h2>Part 2 — Code Reading (Questions 13–16)</h2>
 
-<p><strong>9.</strong> Trace this program. Where does the tool end up at the end?</p>
-<pre class="cp-code"><code>G90 G54 G00 X20. Y20.
-G43 H01 Z50. M03 S2000
+<p id="q13"><strong>Q13.</strong> Read the following mill fragment. G21/G17/G90/G94/G54 are active, T01 is loaded, H01 is verified, and Z50 is clear. The tool is approved for the stated entry and the cutting region is free of clamps. What is the final programmed position?</p><pre class="cp-code"><code>G00 G43 H01 Z50.
+S2000 M03
+G00 X20. Y20.
 G01 Z-2. F100.
 G01 X80. F300.
 G00 Z50.
 G00 X0 Y0
-M30</code></pre>
-<details><summary>Trace</summary><p>1. Rapid to XY (20,20). 2. Spindle on at S2000, rapid to Z50 with tool length offset H01. 3. Feed down to Z&minus;2 at 100 mm/min. 4. Feed to X80 (Y stays at 20) at 300 mm/min. 5. Rapid up to Z50. 6. Rapid to X0 Y0. 7. Program end. Tool ends at X0 Y0 Z50.</p></details>
-
-<p><strong>10.</strong> What does this subprogram call do? How many times does it run?</p>
+M05</code></pre><details><summary>Answer</summary><p>H01 and Z50 are established before XY travel. The tool moves to (20,20), feeds to Z−2, cuts to X80 with Y20 unchanged, retracts to Z50, and returns to X0 Y0. Final programmed position is (0,0,50). F100 applies to the entry and F300 to the horizontal cut. This is a trace under stated conditions, not a complete setup procedure.</p></details>
+<p id="q14"><strong>Q14.</strong> What does this subprogram call do? How many times does it run?</p>
 <pre class="cp-code"><code>M98 P2000 L5</code></pre>
 <details><summary>Answer (Haas)</summary><p>P2000 calls subprogram O2000; L5 repeats it five times. If O2000 drills one hole at the current XY, this line calls O2000 five times at the same XY — repeat count alone does not create five different hole positions. The caller must reposition XY before each call to drill at different locations.</p></details>
 
-<p><strong>11.</strong> Read the turning program. What diameter does it end at?</p>
+<p id="q15"><strong>Q15.</strong> Read this lathe fragment in diameter mode with G21/G18/G40/G54/G97/G99 and the correct tool active. It illustrates coordinates only; the stock has been prepared for this light cut. What diameter is turned?</p>
 <pre class="cp-code"><code>G00 X50. Z2.
 G01 Z0 F0.2
 X45.
@@ -109,13 +93,13 @@ Z-30.
 X52.</code></pre>
 <details><summary>Trace</summary><p>Approach at X50 Z2. Feed to Z0. Step to X45 (now cutting &Oslash;45). Turn along Z to Z&minus;30 at &Oslash;45. Step out to X52. The turned diameter is &Oslash;45 over the length Z0 to Z&minus;30.</p></details>
 
-<p><strong>12.</strong> After this line, what mode is the machine in?</p>
+<p id="q16"><strong>Q16.</strong> After this line, what mode is the machine in?</p>
 <pre class="cp-code"><code>G99 G83 R2. Z-15. Q3. F120.</code></pre>
 <details><summary>Answer</summary><p>Peck drilling cycle (G83) is active, modal. Retract mode is G99 (return to R2 after each hole). The cycle stays active until G80 or another documented cancelling motion command (such as G00/G01 on Haas). The next X/Y line will peck-drill at that position.</p></details>
 
 <h2>Part 3 — Find the Error (Questions 17–20)</h2>
 
-<p><strong>13.</strong> This program has a bug. What happens?</p>
+<p id="q17"><strong>Q17.</strong> This program has a bug. What happens?</p>
 <pre class="cp-code"><code>G90 G54 G00 X0 Y0
 G43 H01 Z50.
 G01 Z-5. F100.
@@ -126,7 +110,7 @@ G00 Z50.
 M30</code></pre>
 <details><summary>Diagnosis</summary><p>G41 is engaged at Z&minus;5 while already inside material, without a lead-in move from outside the part. There is no G40 at the end to cancel compensation. There is also no startup block (G21, G17, G94, G80, G49). G41 must be engaged on a lead-in move from outside the stock, not mid-cut.</p></details>
 
-<p><strong>14.</strong> On a Haas, after the last hole at (50,50), this program uses <code>G00 Z50.</code> without writing <code>G80</code>. Does the machine continue drilling? How can the exit state be made clearer?</p>
+<p id="q18"><strong>Q18.</strong> On a Haas, after the last hole at (50,50), this program uses <code>G00 Z50.</code> without writing <code>G80</code>. Does the machine continue drilling? How can the exit state be made clearer?</p>
 <pre class="cp-code"><code>G90 G54 G00 X10. Y10.
 G43 H01 Z50. M03 S1500
 G81 R2. Z-15. F100.
@@ -136,58 +120,64 @@ G00 Z50.
 M30</code></pre>
 <details><summary>Diagnosis</summary><p>On Haas, the G00 Z50 motion itself cancels the G81 cycle — the machine will not continue drilling. However, writing an explicit G80 before the Z retract makes the program's intent unambiguous and protects against controller differences. Best practice: add G80 before G00 Z50. This is a clarity issue, not a crash bug.</p></details>
 
-<p><strong>15.</strong> This turning program cuts the wrong diameter. Why?</p>
+<p id="q19"><strong>Q19.</strong> This turning program cuts the wrong diameter. Why?</p>
 <pre class="cp-code"><code>G00 X30. Z2.
 G01 Z0 F0.2
 Z-30.
 X40.</code></pre>
-<details><summary>Diagnosis</summary><p>The tool starts at X30 (&Oslash;30 diameter) and turns along Z to Z&minus;30 without changing X — it cuts a &Oslash;30 shaft, not the intended &Oslash;40. If the goal is to turn from &Oslash;50 to &Oslash;40, the X should start at X50 and step to X40 before the Z move.</p></details>
+<details><summary>Diagnosis</summary><p>The tool starts at X30 (&Oslash;30 diameter) and turns along Z to Z&minus;30 without changing X — it cuts a &Oslash;30 shaft, not the intended &Oslash;40. For a Ø40 target, the final axial cutting move must be at X40 in this diameter-mode example. Reaching that size from Ø50 stock requires a separately verified roughing and finishing plan; this fragment does not justify a single 5 mm radial cut.</p></details>
 
-<p><strong>16.</strong> This tapping program will strip the threads. Why? Assume G94 (feed per minute) is active.</p>
+<p id="q20"><strong>Q20.</strong> Why is this tapping feed incorrect for the stated pitch? Assume the selected Haas mill uses G94, S500 is active, and a right-hand M10×1.5 tap is installed.</p>
 <pre class="cp-code"><code>G84 R5. Z-15. F500.
 (S500, M10x1.5 tap)</code></pre>
-<details><summary>Diagnosis</summary><p>In G94 mode, F must = pitch &times; RPM. For M10&times;1.5 at S500, F = 1.5 &times; 500 = 750 mm/min, not 500. The feed is too slow for the spindle speed, so the tap does not follow the thread pitch and strips the threads. If G95 were active instead, F would be in mm/rev and F1.5 would be correct — always know which feed mode is active.</p></details>
+<details><summary>Diagnosis</summary><p>The required feed is 1.5 mm/rev × 500 rev/min = 750 mm/min. F500 instead requests 1.0 mm per revolution under the stated mode. Correct the programmed relationship before running; the result of an incorrect command depends on the control and setup and must not be described as guaranteed thread stripping. Confirm the actual tapping-cycle requirements in the selected manual.</p></details>
 
 <h2>Part 4 — Code Reviews and Projects (CR1, CR2, P1, P2)</h2>
 
-<p><strong>CR1 (10 points).</strong> The code below is supposed to drill one &Oslash;8 hole at X30 Y20 to Z&minus;12 in aluminum, S1500, F100. List every defect and give the corrected block.</p>
-<pre class="cp-code"><code>(SUBMITTED BY STUDENT)<br>G90 G54<br>G00 X30. Y20.<br>G81 R2. Z-12. F100.<br>M30</code></pre>
-<details><summary>Defects and corrected code</summary><p>Defects: missing G21/G17/G94/G40/G80 startup block; no G43 H01 tool-length call before any Z motion; spindle not started; no M08; the submitted code moves XY before the tool is at a verified Z clearance, so R2 has not been proven clear of the fixture; no explicit G80 after the cycle; no Z50 retract before M30. The R2 value itself is present &mdash; the defect is the unverified entry, not a missing parameter. Correct version (assumes T01 = &Oslash;8 drill, H01 length entered, fixture clears Z50 and R2):</p><pre class="cp-code"><code>O0017
+<p><strong>CR1 (10 points).</strong> The code below is supposed to drill one &Oslash;8 hole at X30 Y20 to Z&minus;12 in aluminum, S1500, F100. Assume the entry modes and spindle state are not established. Identify missing setup requirements and write a corrected complete example.</p>
+<pre class="cp-code"><code>(SUBMITTED BY STUDENT)
+G90 G54
+G00 X30. Y20.
+G81 R2. Z-12. F100.
+M30</code></pre>
+<details><summary>Defects and corrected code</summary><p>Defects: missing G21/G17/G94/G40/G80 startup block; no documented tool-length establishment and verified clearance before the approach; spindle not started; no M08; the submitted code moves XY before the tool is at a verified Z clearance, so R2 has not been proven clear of the fixture; no explicit G80 after the cycle; no Z50 retract before M30. The R2 value itself is present &mdash; the defect is the unverified entry, not a missing parameter. Correct version (assumes T01 = &Oslash;8 drill, H01 length entered, fixture clears Z50 and R2):</p><pre class="cp-code"><code>O0017
 G21 G17 G90 G94 G40 G80 G49
 G54
 T01 M06                 (O8 DRILL)
 S1500 M03
-G00 G43 H01 Z50. M08    (tool length and clearance FIRST)
+G00 G43 H01 Z50.        (tool length and clearance FIRST)
+M08
 G00 X30. Y20.           (then move XY)
 G99 G81 R2. Z-12. F100.
 G80
-G00 Z50. M09
+G00 Z50.
+M09
+M05
 M30</code></pre>
 <p>CR1 scoring (10 points): startup/units 2, tool length/order 3, spindle/coolant 1, cycle/exit 2, safety/clearance reasoning 2.</p></details>
 
-<p><strong>CR2 (10 points).</strong> The code below is supposed to rough-turn a raw &Oslash;50 bar to &Oslash;40 over Z&minus;40 in mild steel. List every defect and give the corrected startup.</p>
-<pre class="cp-code"><code>(SUBMITTED BY STUDENT)<br>G00 X45. Z2.<br>G01 Z-40. F0.2<br>X50.<br>M30</code></pre>
-<details><summary>Defects and corrected program</summary><p>Defects: no G18/G40/G54 startup; no G97/G99 feed mode; no spindle; the submitted G01 Z-40 at X45 leaves only 2 mm of stock to &Oslash;40 in one pass &mdash; too heavy for a single rough cut, and no finish stock is planned. Correct startup and layered plan:</p>
-<pre class="cp-code"><code>O0018
-G21 G18 G90 G94 G40 G54
-G97 S1000 M03
-T0101
-G00 X52. Z2.</code></pre>
-<p>Roughing passes remove 1.0 mm radially each; the fifth leaves 0.4 mm on diameter for finishing:</p>
-<table class="data-table">
-<tr><th>Pass</th><th>Diameter X</th><th>Radial depth</th><th>Length</th></tr>
+<p><strong>CR2 (10 points).</strong> The code below is supposed to rough-turn a raw &Oslash;50 bar to &Oslash;40 over Z&minus;40 in mild steel. Use a maximum classroom roughing depth of 1 mm radially per pass. Identify defects and give a complete corrected program, including the finish pass.</p>
+<pre class="cp-code"><code>(SUBMITTED BY STUDENT)
+G00 X45. Z2.
+G01 Z-40. F0.2
+X50.
+M30</code></pre>
+<details><summary>Defects and corrected program</summary><p>With Ø50 stock, the first X45 pass would remove (50−45)/2 = 2.5 mm radially and still leave 5 mm on diameter above the Ø40 target. The exercise permits at most 1 mm radial roughing depth per pass as a classroom constraint; this is not a universal insert limit. The fragment also fails to establish the tool, units, plane, work offset, spindle and feed mode, and does not reach the finished diameter. Use the five rough passes below and a separate finish pass. On the selected Haas lathe, G90 and G94 are turning cycles, not the mill’s absolute and feed-per-minute modes.</p><p>The following is one complete manual-pass solution. T0101 geometry and wear have been verified; the spindle direction suits the mounted tool. Diameter programming is enabled. The face begins at Z+1 and the facing insert can travel to X−1 at the verified centre height. The workholding and tool envelope must satisfy the clearance model below before this classroom example can be considered for a real setup.</p>
+<div class="cp-table-wrap"><table class="data-table"><caption>Part 4 — Code Reviews and Projects (CR1, CR2, P1, P2)</caption>
+<tr><th scope="col">Pass</th><th scope="col">Diameter X</th><th scope="col">Radial depth</th><th scope="col">Length</th></tr>
 <tr><td>Rough 1</td><td>X48</td><td>1.0 mm</td><td>Z2 to Z&minus;40</td></tr>
 <tr><td>Rough 2</td><td>X46</td><td>1.0 mm</td><td>Z2 to Z&minus;40</td></tr>
 <tr><td>Rough 3</td><td>X44</td><td>1.0 mm</td><td>Z2 to Z&minus;40</td></tr>
 <tr><td>Rough 4</td><td>X42</td><td>1.0 mm</td><td>Z2 to Z&minus;40</td></tr>
 <tr><td>Rough 5</td><td>X40.4</td><td>0.8 mm</td><td>Z2 to Z&minus;40 (finish stock)</td></tr>
 <tr><td>Finish</td><td>X40.0</td><td>0.2 mm</td><td>S1200, F0.10</td></tr>
-</table>
+</table></div>
 <p>After each OD pass to Z&minus;40: first retract radially to X52 (clear of the cut), then retract Z to Z2. Never move X and Z simultaneously in a G00 sweep across uncut material.</p>
 <pre class="cp-code"><code>O0018
-G21 G97 G99
+G21 G18 G40 G54 G97 G99
 T0101                    (OD tool, r0.4)
 S1000 M03
+M08
 G00 X52. Z2.
 (FACE - ESTABLISH Z0)
 G01 Z0 F0.2
@@ -226,33 +216,41 @@ G01 Z0 F0.1
 Z-40.
 G00 X52.
 Z100.
+M09
+M05
 M30</code></pre>
 <p>Note: the five manual OD passes above illustrate layered roughing. On a Haas lathe, G71 Type I would generate these passes automatically from the finished profile; the manual listing here is for teaching. Real depth-of-cut limits depend on insert grade, material hardness, machine rigidity, and chip evacuation.</p>
-<p><strong>Clearance model (classroom geometry):</strong> final face at Z0, original face at Z+1, chuck jaw front at Z&minus;60, raw stock projection 61 mm. Toolholder extends 8 mm behind the tip, so at Z&minus;40 the tool body reaches Z&minus;48, leaving 12 mm axial clearance to the jaw. The X52 retract position must also clear the toolholder body radially outside the chuck and workholding. These values are teaching assumptions, not production recommendations.</p></details>
+<p><strong>Clearance model (classroom geometry):</strong> final face at Z0, original face at Z+1, chuck jaw front at Z&minus;60, raw stock projection 61 mm. Toolholder extends 8 mm behind the tip, so at Z&minus;40 the tool body reaches Z&minus;48, leaving 12 mm axial clearance to the jaw. The X52 retract position must also clear the toolholder body radially outside the chuck and workholding. These values are teaching assumptions, not production recommendations. The initial move, radial withdrawal to X52, and final Z100 return are also assumed clear and within travel. This example finishes the front diameter only; it does not prescribe a production shoulder blend or parting operation.</p><p>CR2 scoring: identify the 2.5 mm first radial cut and remaining 5 mm diameter stock, 2 points; establish lathe modes/tool/spindle, 2; five rough targets and finish allowance, 2; consistent complete finish and withdrawal sequence, 2; explain the verified workholding envelope and entry, 2. Total 10.</p></details>
 
 <p><strong>P1 (20 points).</strong> Four &Oslash;6 holes on a 40 mm square centered at (0,0), at (&minus;20,&minus;20), (20,&minus;20), (20,20), (&minus;20,20). Through holes in 6 mm plate: Z&minus;8. S2000, F120. Write the program.</p>
-<details><summary>Example</summary><pre class="cp-code"><code>O0019
-G21 G17 G90 G40 G80
+<p>Use a prepared flat plate with G54 at its top centre, G17 and unrotated XY. T01 is a Ø6 drill with a classroom 118° point; H01 is measured. Z50 clears all positioning paths and R2 clears all four hole-to-hole paths. Support beneath each hole is absent through the verified drill-tip envelope; stock is secured outside that envelope. The programmed depth is the tip depth, not the full-diameter depth.</p>
+<details><summary>Worked solution</summary><p>The point length is about 0.3004×6 = 1.80 mm. At Z−8 the full-diameter shoulder reaches about Z−6.20, 0.20 mm below the 6 mm plate. Confirm the actual drill geometry and backing clearance; this margin is a classroom value. Four cycle triggers occur: the G81 block at the first coordinate and three following XY blocks.</p><pre class="cp-code"><code>O0019
+G21 G17 G90 G94 G40 G80
 G54
 T01 M06                 (O6 DRILL)
 S2000 M03
+G00 G43 H01 Z50.
+M08
 G00 X-20. Y-20.
-G43 H01 Z50. M08
 G99 G81 R2. Z-8. F120.
 X20. Y-20.
 X20. Y20.
 X-20. Y20.
 G80
-G00 Z50. M09
-M30</code></pre></details>
+G00 Z50.
+M09
+M05
+M30</code></pre><p>P1 rubric: four signed coordinates, 4 points; drill-tip depth and backing clearance, 4; correct tool/length/feed/entry state, 4; exactly four cycle triggers and explicit exit, 4; inspection and setup verification plan, 4. Total 20. Check both diagonals (56.57 mm nominal), adjacent spacing (40 mm), hole size and full breakthrough using appropriate inspection methods; these nominal checks do not create a tolerance absent from a drawing.</p></details>
 
 <p><strong>P2 (20 points).</strong> Milling project: face mill a 60&times;40 mm rectangular block (X0&ndash;60, Y0&ndash;40) to Z&minus;2, then drill two &Oslash;5 holes at (15,20) and (45,20) to Z&minus;10. Use &Oslash;10 end mill (T01) and &Oslash;5 drill (T02). S2000 F300 for mill, S1500 F100 for drill. Z0 is the unfinished top surface; after facing, the new top is Z&minus;2.</p>
-<details><summary>Example</summary><pre class="cp-code"><code>O0020
-G21 G17 G90 G40 G80 G49
+<p>For this classroom solution, the block occupies X0–60 and Y0–40; G54 Z0 stays on the original top throughout. T01 is approved for the stated side-entry facing cut, and H01/H02 are measured. The stock and holders clear X−6 and X66, all five rows and Z50 travel. The material extends below the specified drilling depth with verified backing clearance. All speeds and feeds are exercise inputs, not tooling recommendations.</p>
+<details><summary>Worked solution</summary><pre class="cp-code"><code>O0020
+G21 G17 G90 G94 G40 G80 G49
 G54
 T01 M06                 (O10 END MILL)
 S2000 M03
-G43 H01 Z50. M08
+G00 G43 H01 Z50.
+M08
 (FACE: 5 PASSES TO COVER Y0-40, tool radius 5)
 G00 X-6. Y4.
 G01 Z-2. F100.
@@ -273,41 +271,37 @@ G00 Z50.
 G00 X-6. Y36.
 G01 Z-2. F100.
 G01 X66. F300.          (pass 5: covers Y[31,41])
-G00 Z50. M09
+G00 Z50.
+M09
+M05
 T02 M06                 (O5 DRILL)
 S1500 M03
+G00 G43 H02 Z50.
+M08
 G00 X15. Y20.
-G43 H02 Z50. M08
 G99 G81 R2. Z-10. F100.
 X45. Y20.
 G80
-G00 Z50. M09
+G00 Z50.
+M09
+M05
 M30</code></pre>
-<p>The 5 passes at Y=4,12,20,28,36 with a &Oslash;10 tool cover Y0&ndash;40 with overlap. A single pass at Y=-5 would only tangent the bottom edge and leave the entire block unmilled.</p></details>
+<p>The five rows cover Y intervals [−1,9], [7,17], [15,25], [23,33] and [31,41], so their union covers Y0–40. At X−6 the Ø10 cutter is entirely outside the left side before descending; each pass exits at X66. Z−10 remains measured from the original top, giving 8 mm tip depth below the newly faced Z−2 surface. Do not reset G54 Z between tools without recalculating the program. P2 rubric: datum and depth interpretation, 4 points; facing coverage and entry geometry, 4; both tools’ startup and H calls before XY, 4; two hole positions, cycle and exits, 4; fixture/holder and first-part inspection plan, 4. Total 20. Verify surface height, face coverage, both hole locations and depths; simulate the posted commands with the actual tool assemblies before supervised proving.</p></details>
 
 
 
-<h3>What This Assessment Does and Does Not Cover</h3>
-<p>This assessment checks that you can read, write, and debug a basic CNC mill or lathe program on a FANUC/Haas-style control. It covers coordinate systems, G/M codes, tool and work offsets, canned cycles, subprograms, and program verification. It does not cover 5-axis kinematics, macro programming beyond simple variables, probing cycles, or a specific machine's alarm list. Those are separate modules. If you can pass this assessment, you are ready to shadow a real setup and run first articles under supervision.</p>
-<p>Every question has one intended answer, but real CNC work is sometimes ambiguous. If you think a question is ambiguous, write down your reasoning &mdash; partial credit is given for sound reasoning even when the chosen answer differs from the key. The point is not to memorize a number; it is to be able to explain why a program crashes and how to fix it.</p>
-
-<h3>How to Use This Assessment</h3>
-<p>Take the assessment closed-book the first time. Do not look back at the lessons until you have written down a best guess for every question &mdash; even if the guess is "I don't know." Marking a question as "I don't know" is a valid answer and tells you which lesson to reread. After scoring, list every wrong answer by its lesson number and redo that lesson before retrying. A second attempt should score 90 or higher on the items you previously missed; if it does not, the gap is conceptual, not a one-off mistake.</p>
-<p>The code-review exercises are not quizzes: they ask you to read a short, deliberately flawed program and list every defect. Treat this like a real first-article check: work top to bottom, confirm the startup block, confirm tool-length and work-offset establishment, confirm the first cutting motion, and watch for modal leakage. A wrong answer that says "it looks fine" on a program that crashes the table is worth zero points.</p>
-
-<h3>Retake Policy</h3>
-<p>You may retake the assessment as many times as you need. Between attempts, reread the specific lessons your wrong answers point to &mdash; do not reread the whole course from scratch. After two failed attempts on the same question type, stop and write the program out by hand on paper, then compare it to the worked example in that lesson. A third attempt that still misses the same concept means the lesson itself needs revision; flag it so the course can be improved.</p>
-
+<h3>Use and Retake</h3><p>Write your answers before opening the solutions. For each two-point question, award one point for the correct result or code meaning and one for its explanation, units and stated assumptions. Record which lesson addresses each missed concept. Before a retake, explain that concept in your own words and trace a fresh example with an instructor. Accept a different solution only when its geometry, controller assumptions and verification are equally sound.</p><p>This is a classroom assessment, not machine authorization. The examples do not cover five-axis kinematics, probing calibration or every machine alarm. Practical setup training and supervised verification remain necessary. Do not run deliberately flawed review code on a machine.</p>
 <h3>Grading</h3>
 <p>This assessment is worth 100 points, weighted by task type:</p>
 <ul>
 <li><strong>20 basic knowledge questions &times; 2 points = 40 points</strong> (Parts 1&ndash;3: recall, code reading, find-the-error).</li>
-<li><strong>2 code-review exercises &times; 10 points = 20 points</strong> (Part 4, Q17&ndash;Q18: list every defect, then fix; partial credit per defect).</li>
+<li><strong>2 code-review exercises &times; 10 points = 20 points</strong> (Part 4, CR1 and CR2: list every defect, then fix; partial credit per defect).</li>
 <li><strong>2 final projects &times; 20 points = 40 points</strong> (process plan + coordinates + program + verification; scored on completeness, safety, and geometry).</li>
 </ul>
-<p>A passing score requires <strong>both</strong> (a) total score &ge; 80/100 <strong>and</strong> (b) every critical safety or geometry error (wrong work offset direction, missing tool-length call before Z-down, G41/G42 reversed into stock, unsafe retract) has been correctly identified and fixed. A score of 98 with an unfixed critical error does NOT pass; you must identify and fix all critical errors, then resubmit.</p> If you score below 80, identify which lesson the wrong answers cluster around and redo that lesson before retaking. Do not memorize answers; the point is to be able to read and debug code on a real machine.</p>
+<p>A passing score requires <strong>both</strong> (a) total score &ge; 80/100 <strong>and</strong> (b) every critical safety or geometry error (wrong work offset direction, missing tool-length call before Z-down, G41/G42 reversed into stock, unsafe retract) has been correctly identified and fixed. A score of 98 with an unfixed critical error does NOT pass; you must identify and fix all critical errors, then resubmit.</p><p>If you score below 80, identify which lesson the wrong answers cluster around and redo that lesson before retaking. Do not memorize answers; the point is to be able to read and debug code on a real machine.</p>
 <p>Code-review exercises: for each, list every error you can find, then fix it. Projects: write the process plan, the coordinates, the program, and the verification steps. Submit them to a more experienced programmer for review before running them on a real machine.</p>
 <h2>Sources</h2>
+<ul><li><a href="https://www.haascnc.com/service/online-operator-s-manuals/lathe-operator-s-manual/lathe---g-codes.html">Haas lathe G-code table</a>: G90/G94 turning cycles and G98/G99 feed modes.</li><li><a href="https://www.haascnc.com/service/online-operator-s-manuals/mill-operator-s-manual/mill---basic-programming.html">Haas mill programming</a>: tool-length establishment and program structure.</li><li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G81.html">Haas mill G81</a>: first-hole execution and following hole locations.</li></ul>
 <ul>
 <li>Haas Automation, <a href="https://www.haascnc.com/service/online-operator-s-manuals/mill-operator-s-manual.html" target="_blank" rel="noopener">Mill Operator's Manual</a> &mdash; G-code, M-code, and canned cycle reference.</li>
 <li>Haas Automation, <a href="https://www.haascnc.com/service/online-operator-s-manuals/lathe-operator-s-manual.html" target="_blank" rel="noopener">Lathe Operator's Manual</a> &mdash; G70/G71/G76 turning cycles and C-axis live tooling.</li>

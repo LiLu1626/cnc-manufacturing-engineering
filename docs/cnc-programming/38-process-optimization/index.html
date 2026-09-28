@@ -24,17 +24,11 @@
     </ul>
   </div>
 </nav>
-<main class="article">
+<main class="article cp-article">
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Cycle Time &amp; Process Improvement</h1>
 <p class="lead">Once a program runs correctly and safely, the next question is: how fast can it run? This page covers cycle time analysis, where time actually goes, the levers you can pull, and the tool-life tradeoffs that separate smart optimization from reckless speeding.</p>
-<svg viewBox="0 0 320 120" style="width:100%;max-width:420px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
-<title>Where to save time</title>
-<rect x="20" y="30" width="180" height="24" fill="#54a0ff" rx="3"/><text x="30" y="46" font-size="10" fill="#fff">Cut time (hard to shave)</text>
-<rect x="200" y="30" width="100" height="24" fill="#2ecc71" rx="3"/><text x="208" y="46" font-size="10" fill="#fff">Load (easy)</text>
-<text x="20" y="80" font-size="10" fill="#666">Cut 60s, load 20s, total 80s. Cut -10% = 6s; load -50% = 10s. Compare seconds.</text>
-<text x="20" y="100" font-size="10" fill="#666">Measure each element separately before claiming savings.</text>
-</svg>
+<figure class="cp-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 190" role="img" aria-labelledby="time-baseline-title time-baseline-desc" style="width:100%;max-width:520px;height:auto;display:block;margin:auto;font-family:Inter,system-ui,sans-serif"><title id="time-baseline-title">Compare seconds, not percentages</title><desc id="time-baseline-desc">A 60-second cutting element and 20-second non-cutting element share one time scale. Savings of six and ten seconds are compared.</desc><text x="20" y="25" font-size="14" fill="#17242f">Baseline: 80 seconds</text><rect x="20" y="45" width="210" height="34" fill="#e6f4f2" stroke="#0b766e"/><rect x="230" y="45" width="70" height="34" fill="#cfdbd8" stroke="#0b766e"/><text x="35" y="68" font-size="13" fill="#17242f">Cut: 60 s</text><text x="239" y="68" font-size="13" fill="#17242f">20 s</text><text x="20" y="112" font-size="14" fill="#17242f">10% of 60 s = 6 s</text><text x="20" y="145" font-size="14" fill="#17242f">50% of 20 s = 10 s</text></svg><figcaption>Illustrative baseline only. The 210:70 bar widths represent 60:20 seconds; achievable savings require separate verification.</figcaption></figure>
 
 <h2>Concept</h2>
 <p><strong>Cycle time</strong> is the total time from program start (M30 reset) to part complete, including every move: rapid, feed, tool change, spindle start, and dwell. Optimization means reducing that total time — but not by simply cranking feed to maximum. Real optimization is about eliminating waste: shorter rapid paths, fewer tool changes, deeper cuts that stay within tool ratings, and smarter hole ordering.</p>
@@ -45,14 +39,14 @@
 <h2>How It Works</h2>
 
 <h3>Where Time Actually Goes</h3>
-<table class="data-table">
-<tr><th>Category</th><th>Examples</th><th>Typical Share</th></tr>
+<div class="cp-table-wrap"><table class="data-table"><caption>Where Time Actually Goes</caption>
+<tr><th scope="col">Category</th><th scope="col">Examples</th><th scope="col">Typical Share</th></tr>
 <tr><td>Cutting time</td><td>Feed moves engaged with material</td><td>40–60%</td></tr>
 <tr><td>Rapid time</td><td>G00 moves between features</td><td>15–30%</td></tr>
 <tr><td>Tool change</td><td>ATC carousel + spindle orientation</td><td>5–15%</td></tr>
 <tr><td>Spindle/dwell</td><td>Speed changes, dwells, coolant</td><td>5–10%</td></tr>
 <tr><td>Non-cutting setup</td><td>Part probing, chip brush, air blast</td><td>5–10%</td></tr>
-</table>
+</table></div>
 <p>Many beginners only look at cutting time. But on a typical mill program, rapid moves and tool changes can consume as much as the actual cutting. Optimizing only feed rate captures a fraction of the available gain.</p>
 
 <h3>Optimization Levers (in order of impact)</h3>
@@ -70,22 +64,7 @@
 <p>The break-even analysis: if increasing feed saves 4 seconds per pass but causes a tool to wear out twice as fast (adding a 30-second tool change every part instead of every other part), you lose 30 seconds to save 4. Optimize the whole process, not one number.</p>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
-  <!-- axes -->
-  <line x1="50" y1="170" x2="370" y2="170" stroke="#333" stroke-width="1.5"/>
-  <line x1="50" y1="20" x2="50" y2="170" stroke="#333" stroke-width="1.5"/>
-  <text x="200" y="190" font-size="11" fill="#333" text-anchor="middle">Cutting Speed</text>
-  <text x="20" y="100" font-size="11" fill="#333" transform="rotate(-90 20 100)" text-anchor="middle">Time / Cost</text>
-  <!-- cycle time curve (decreasing) -->
-  <path d="M 60 40 Q 150 120 200 140 Q 300 160 360 165" fill="none" stroke="#27ae60" stroke-width="2"/>
-  <text x="300" y="155" font-size="10" fill="#27ae60">Cycle time &darr;</text>
-  <!-- tool cost curve (increasing) -->
-  <path d="M 60 165 Q 150 160 200 140 Q 300 80 360 30" fill="none" stroke="#c0392b" stroke-width="2"/>
-  <text x="300" y="45" font-size="10" fill="#c0392b">Tool cost &uarr;</text>
-  <!-- optimum -->
-  <circle cx="200" cy="140" r="4" fill="#3498db"/>
-  <text x="210" y="130" font-size="10" fill="#3498db">Optimum</text>
-</svg>
+<figure class="cp-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 190" role="img" aria-labelledby="optimization-check-title optimization-check-desc" style="width:100%;max-width:520px;height:auto;display:block;margin:auto;font-family:Inter,system-ui,sans-serif"><title id="optimization-check-title">Verify an improvement</title><desc id="optimization-check-desc">Three steps separate baseline measurement, a controlled change and comparison of time, quality and cost.</desc><rect x="20" y="15" width="320" height="35" fill="#e6f4f2" stroke="#0b766e"/><text x="30" y="38" font-size="13" fill="#17242f">1. Measure a stable baseline</text><rect x="20" y="70" width="320" height="35" fill="#e6f4f2" stroke="#0b766e"/><text x="30" y="93" font-size="13" fill="#17242f">2. Change one documented factor</text><rect x="20" y="125" width="320" height="35" fill="#e6f4f2" stroke="#0b766e"/><text x="30" y="148" font-size="13" fill="#17242f">3. Compare time, quality and cost</text></svg><figcaption>A crossing of unrelated time and cost curves does not establish an optimum. Use measured, consistently defined costs and acceptance criteria.</figcaption></figure>
 <figcaption>As speed increases, cycle time drops but tooling cost rises. The optimum is where total cost (cutting + tooling) is lowest — not at maximum speed.</figcaption>
 </figure>
 
@@ -122,6 +101,7 @@
 <p>A carbide insert costs $15 and lasts 300 parts at the current feed. At a higher feed, it lasts 150 parts. The time saving per part is 2 seconds. Over 300 parts, the time saving is 10 minutes. The extra insert cost is $15 (one extra insert per 300 parts). If machine time costs $60/hour, 10 minutes is $10. The optimization loses $5. Do not optimize feed blindly &mdash; run the tool-life number.</p>
 <p>The formula: tool change cost per part = (tool cost) / (parts per tool). If tool life drops from 300 to 150 parts, the per-part tool cost doubles. Compare that to the cycle-time saving. If the cycle saving is less than the tool-cost increase, the optimization is not worth it. This is why aggressive feeds that double throughput but halve tool life are often break-even.</p>
 <p>Tool life also affects quality: a worn insert leaves a poor surface finish and drifts dimensionally. If you push feed to the limit, you may be changing inserts more often than you are machining parts. The optimal feed is not the maximum feed &mdash; it is the feed where the combined tool + machine cost is lowest.</p>
+<h3>Use a Common Baseline for Competing Changes</h3><p>Suppose the measured cycle contains 60 seconds of cutting and 20 seconds of non-cutting activity, giving 80 seconds total. Reducing cutting time by ten percent saves 6 seconds, so the new total is 74 seconds and the overall reduction is 6/80 = 7.5 percent. Reducing the other element by fifty percent saves 10 seconds, giving 70 seconds total and a 12.5 percent overall reduction. The larger local percentage does not settle the comparison by itself: multiply each percentage by its own original duration first.</p><p>These alternatives are separate proposals, not automatically additive gains. If an improved sequence changes both cutting and tool handling, measure the revised elements again and avoid counting the same saved movement twice. Record a representative baseline, the changed sequence, and repeated cycle measurements under comparable conditions. Confirm that dimensional results, chip removal, tool life and operator access remain acceptable before describing a shorter cycle as an improvement. Neither loading nor cutting should be labelled inherently easy to reduce without examining the actual process.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Increasing feed beyond tool rating</strong> — breaks tools, causes chatter, scraps parts. Stay within the tool catalog's recommended feed per tooth.</li>

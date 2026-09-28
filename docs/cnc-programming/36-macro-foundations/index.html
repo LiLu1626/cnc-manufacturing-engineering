@@ -24,11 +24,11 @@
     </ul>
   </div>
 </nav>
-<main class="article">
+<main class="article cp-article">
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Macro Programming Foundations</h1>
 <p class="lead">Macro programming adds variables, arithmetic, and logic to G-code. Instead of hard-coding every coordinate, the machine calculates it. This page introduces the core concepts — variables, IF/GOTO, WHILE loops, and a bolt-circle example — as the entry point to advanced CNC automation.</p>
-<svg viewBox="0 0 320 130" style="width:100%;max-width:420px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+<svg aria-label="Macro loop variables" role="img" viewBox="0 0 320 130" style="width:100%;max-width:420px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="cp-36-macro-foundations-fig-1">Macro loop variables. Read the accompanying explanation for assumptions and values.</desc>
 <title>Macro loop variables</title>
 <text x="20" y="30" font-size="11" fill="#333">#4 = radius</text>
 <text x="20" y="55" font-size="11" fill="#333">#5 = angle step (30 or 45)</text>
@@ -71,8 +71,8 @@ G01 Z-#3 F100.    (feed to Z-30)</code></pre>
 <p>Variables can hold coordinates, depths, feed rates, angles, or any numeric value. The <code>#</code> prefix tells the controller "look up the value in this variable" instead of treating it as a literal number.</p>
 
 <h3>Arithmetic and Functions</h3>
-<table class="data-table">
-<tr><th>Operation</th><th>Syntax</th><th>Example</th></tr>
+<div class="cp-table-wrap"><table class="data-table"><caption>Arithmetic and Functions</caption>
+<tr><th scope="col">Operation</th><th scope="col">Syntax</th><th scope="col">Example</th></tr>
 <tr><td>Add</td><td>#1 + #2</td><td>#3 = #1 + #2</td></tr>
 <tr><td>Subtract</td><td>#1 - #2</td><td>#3 = #1 - #2</td></tr>
 <tr><td>Multiply</td><td>#1 * #2</td><td>#3 = #1 * #2</td></tr>
@@ -80,7 +80,7 @@ G01 Z-#3 F100.    (feed to Z-30)</code></pre>
 <tr><td>Sine</td><td>SIN[angle]</td><td>#3 = 50 * SIN[#1]</td></tr>
 <tr><td>Cosine</td><td>COS[angle]</td><td>#2 = 50 * COS[#1]</td></tr>
 <tr><td>Square root</td><td>SQRT[#1]</td><td>#4 = SQRT[#1]</td></tr>
-</table>
+</table></div>
 
 <h3>Conditional Logic: IF / GOTO</h3>
 <p><code>IF</code> makes decisions. <code>GOTO n</code> jumps to line number Nn. This is the simplest form of branching:</p>
@@ -100,7 +100,7 @@ END 1</code></pre>
 <p>The loop starts with #1 = 0. Each pass, it runs the body, then adds 30 to #1. When #1 reaches 360, the condition <code>#1 LT 360</code> is false and the loop exits. The DO 1 / END 1 pairs define which block belongs to which loop.</p>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 380 280" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="Diagram accompanying the adjacent worked example" role="img" viewBox="0 0 380 280" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="cp-36-macro-foundations-fig-2">Diagram accompanying the adjacent worked example. Read the accompanying explanation for assumptions and values.</desc><title>Diagram accompanying the adjacent worked example</title>
   <!-- bolt circle -->
   <circle cx="190" cy="140" r="100" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="4,3"/>
   <circle cx="190" cy="140" r="3" fill="#333"/>
@@ -172,15 +172,15 @@ G80 G00 Z50. M09
 M30</code></pre>
 <p>The loop runs while #1 is less than 360. On each iteration, it computes X and Y on the circle and the modal G81 drills at that exact XY. Note: G81 is called once after the first hole's XY is already in position &mdash; not before any XY is set. If you issue G81 with no XY on the same block, the controller drills at whatever the current XY happens to be (often the origin), which is the classic "extra first hole" bug. Change #4 to 60 for a larger circle; change 30.0 to 45.0 for 8 holes. One number edits the whole pattern.</p>
 <h3>Trigger Trace: 12 Holes vs 8 Holes</h3>
-<table><caption>Bolt-circle drill events</caption>
+<div class="cp-table-wrap"><table><caption>Bolt-circle drill events</caption>
 <thead><tr><th scope="col">Event</th><th scope="col">#5 = 30&deg; (12 holes)</th><th scope="col">#5 = 45&deg; (8 holes)</th></tr></thead>
 <tbody>
 <tr><td>Pre-position G00 X#4 Y0</td><td>Rapid only, no drill</td><td>Rapid only, no drill</td></tr>
 <tr><td>First G81 X#4 Y0</td><td>Drill hole #1 at 0&deg;</td><td>Drill hole #1 at 0&deg;</td></tr>
 <tr><td>Loop fires at #1</td><td>30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330 (11 drills)</td><td>45, 90, 135, 180, 225, 270, 315 (7 drills)</td></tr>
 <tr><td>Total G81 drills</td><td>12</td><td>8</td></tr>
-</tbody></table>
-<p>The input checks <code>IF [#4 LE 0]</code> and <code>IF [#5 LE 0]</code> run before any axis motion: a non-positive radius or a zero step alarms immediately instead of drilling a circle at the origin or looping forever. In production, self-diagnosing macros let a programmer leave a machine running overnight &mdash; the macro catches the mistake before the first hole, not after 12 scrap parts.</p>
+</tbody></table></div>
+<p>The input checks <code>IF [#4 LE 0]</code> and <code>IF [#5 LE 0]</code> run before any axis motion: a non-positive radius or a zero step alarms immediately instead of drilling a circle at the origin or looping forever. These checks detect the named invalid inputs before the first movement; they do not validate every program state, clearance or cutting condition.</p>
 
 <h3>Variables, Arithmetic, and Logic</h3>
 <p>FANUC-style macros use #1&ndash;#33 as local variables (for the current call), #100&ndash;#199 as common variables (saved across calls), and system variables like #5021 (current machine position). Arithmetic is straightforward: #2 = #1 * 2, #3 = #1 + #2. Trig functions use degrees: COS[#1], SIN[#1], TAN[#1]. Logic: IF[#1 LT 360] GOTO 10, or WHILE[#1 LT 360] DO 1&hellip;END 1. The comparison operators are EQ, NE, GT, LT, GE, LE.</p>
@@ -201,6 +201,7 @@ M30</code></pre>
 <p>A touch probe in the spindle measures the part automatically. The probe touches a surface, records the machine position, and the macro computes the offset. This replaces hand edge-finding. A probing macro can find the center of a bore, set G54 X/Y, and even measure tool length automatically.</p>
 <p>The probe does not write G54 directly &mdash; it computes the offset and writes it to the work offset register. The macro must account for the probe tip radius (the probe touches a sphere, not a point). If the tip is &Oslash;4, the center is 2 mm from the touched surface. Get the sign right: touching the left edge gives a different sign than touching the right edge.</p>
 <p>Probing is faster and more repeatable than hand edge-finding, but it is not magic. The probe must be calibrated (tip diameter, stylus length) on a reference ring. If the calibration is off, every probe-set offset is off. Treat the probe as a measuring instrument, not a setup convenience.</p>
+<h3>Positive Inputs Are Only the First Check</h3><p>The example demonstrates two intended settings: a 30-degree step for twelve holes and a 45-degree step for eight holes. A positive step alone does not prove that a different value evenly divides a revolution. For example, 100 degrees would trigger at 0, 100, 200 and 300 degrees, leaving a 60-degree closing gap. That is not an equally spaced four-hole pattern. Keep the teaching input to the two demonstrated choices, or add a separately designed validation rule before offering a general-purpose pattern generator.</p><p>Radius validity also differs from travel and clearance validity. A positive 50 mm radius produces X and Y values between −50 and +50 relative to the active work origin; the machine positions additionally depend on that origin. Compare the resulting envelope with actual travel, fixtures, drill length and holder size. The input checks catch the named numerical errors only. They do not certify a setup for unattended operation or replace the first-part verification plan.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Learning macros before mastering basic G-code</strong> — you must understand coordinates, offsets, and canned cycles first. Macros build on top of them.</li>

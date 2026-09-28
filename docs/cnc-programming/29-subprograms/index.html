@@ -24,18 +24,11 @@
     </ul>
   </div>
 </nav>
-<main class="article">
+<main class="article cp-article">
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Subprograms</h1>
 <p class="lead">Subprograms let you repeat a block of code without copying it. This page covers M98/M99, Haas P/L syntax, nested calls, repeating hole patterns, and the safety rules that prevent drift between repetitions.</p>
-<svg viewBox="0 0 320 120" style="width:100%;max-width:420px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
-<title>Repeated four-hole pattern</title>
-<rect x="40" y="30" width="40" height="40" fill="none" stroke="#54a0ff"/>
-<circle cx="40" cy="30" r="3" fill="#c0392b"/><circle cx="80" cy="30" r="3" fill="#54a0ff"/>
-<circle cx="80" cy="70" r="3" fill="#54a0ff"/><circle cx="40" cy="70" r="3" fill="#54a0ff"/>
-<text x="100" y="55" font-size="10" fill="#333">O2000 drills 4 holes</text>
-<text x="100" y="70" font-size="10" fill="#666">3 calls &times; 4 drilling operations = 12 operations (same 4 positions)</text>
-</svg>
+<figure class="cp-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 190" role="img" aria-labelledby="sub-repeat-title sub-repeat-desc" style="width:100%;max-width:520px;height:auto;display:block;margin:auto;font-family:Inter,system-ui,sans-serif"><title id="sub-repeat-title">Four positions, twelve drilling events</title><desc id="sub-repeat-desc">Repeating an unchanged absolute-coordinate subprogram three times repeats four positions; it does not create twelve distinct positions.</desc><rect x="30" y="25" width="90" height="90" fill="#e6f4f2" stroke="#0b766e"/><circle cx="30" cy="25" r="5" fill="#0b766e"/><circle cx="120" cy="25" r="5" fill="#0b766e"/><circle cx="120" cy="115" r="5" fill="#0b766e"/><circle cx="30" cy="115" r="5" fill="#0b766e"/><text x="150" y="50" font-size="14" fill="#17242f">4 positions</text><text x="150" y="80" font-size="14" fill="#17242f">3 calls</text><text x="150" y="110" font-size="14" fill="#17242f">12 events</text></svg><figcaption>If O2000 keeps the same work offset and absolute coordinates, each of four positions is drilled three times. Different fixtures require deliberate repositioning or a documented offset change.</figcaption></figure>
 
 <h2>Concept</h2>
 <p>A <strong>subprogram</strong> is a separate O-numbered program called from the main program. On a Haas control, <strong>M98 P2000 L3</strong> calls O2000 three times. <strong>M99</strong> returns to the line after M98. Subprograms reduce repetition, make programs shorter, and centralize changes — if the hole depth changes, you edit one line instead of sixteen.</p>
@@ -92,8 +85,8 @@ M99</code></pre>
 
 <h3>When Subprograms Earn Their Keep</h3>
 <p>A subprogram is not automatically better than inline code. A single hole does not need O2000. A subprogram earns its keep when the same motion block repeats several times in one setup &mdash; a hole pattern, a pocket array, a bolt circle, or a series of identical slots on a tombstone. If the pattern appears once, inlining it is shorter and easier to verify. If the pattern appears 4 times on a fixture, or 12 times around a circle, the subprogram removes 12 copies of the same code that could drift apart during editing.</p>
-<p>The classic bolt-circle example: 12 holes at 30&deg; spacing on a 50 mm radius. Without a subprogram, you list every (X,Y) pair. With M98 P2000 L12, the main program feeds a starting angle and the subprogram computes one hole. Even better, the angle increments inside the subprogram so the next call starts where the last one ended &mdash; but this only works if the subprogram restores G90 on return. The #1 subprogram bug is leaked incremental mode: the main program is in G90, the subprogram switches to G91 for the pattern, and forgets to switch back. The next main-program block then moves by an increment instead of to an absolute position, and the tool appears to "jump."</p>
-<p>Subprograms also have a stack depth limit on every controller &mdash; typically four or eight levels of M98 calls. Nesting a subprogram inside a subprogram is allowed, but going too deep triggers an alarm. Keep nesting shallow: one level for patterns, two at most, and never rely on undocumented depth limits in production.</p>
+<p>The classic bolt-circle example: 12 holes at 30&deg; spacing on a 50 mm radius. Without a subprogram, you list every (X,Y) pair. With a suitably designed macro-capable O2000 and M98 P2000 L12, the main program supplies a starting angle and the subprogram computes one hole. Even better, the angle increments inside the subprogram so the next call starts where the last one ended &mdash; and the subprogram must satisfy its documented coordinate-mode contract on return. The #1 subprogram bug is leaked incremental mode: the main program is in G90, the subprogram switches to G91 for the pattern, and forgets to switch back. The next main-program block then moves by an increment instead of to an absolute position, and the tool appears to "jump."</p>
+<p>Subprograms also have a stack depth limit on every controller &mdash; as specified in the selected machine manual. Nesting a subprogram inside a subprogram is allowed, but going too deep triggers an alarm. Keep nesting shallow: one level for patterns, two at most, and never rely on undocumented depth limits in production.</p>
 <p>On the shop floor, a subprogram is also a testing unit. You can run O2000 alone with a dry-run block to check the hole position before running the full main program. Isolating one hole in its own O-number means you can fix the geometry in one place, and every call inherits the fix. This is the same reason functions exist in programming &mdash; single source of truth, repeated calls, isolated debugging.</p>
 
 <h3>A Complete Subprogram Example: Four Fixture Offsets</h3>
@@ -131,18 +124,18 @@ M99</code></pre>
 <p>The cost is indirection. A subprogram call hides motion that a reader has to flip to another O-number to see. That is why this page insists on absolute local coordinates inside the subprogram, not incremental: with absolute coordinates, you can read O2000 by itself and understand exactly what XY positions it visits. With incremental, you have to trace the calling context to know where the first move starts.</p>
 
 <h3>Nested Subprograms: When to Go One Level Deeper</h3>
-<p>A main program that calls one subprogram is the easy case. Production setups often need a second level: the main program calls an O2000 that itself calls O3000 for a repeated detail inside each pattern. On a FANUC-style control, subprogram nesting is limited &mdash; typically four to eight levels of M98 calls before the controller alarms. Keep nesting shallow: one level for hole patterns, two at most for reusable detail features, and never rely on an undocumented limit. If you need three or four levels, the program is usually telling you to split the work into multiple main programs instead.</p>
+<p>A main program that calls one subprogram is the easy case. Production setups often need a second level: the main program calls an O2000 that itself calls O3000 for a repeated detail inside each pattern. On a FANUC-style control, subprogram nesting has a controller-specific limit that must be checked in its manual. Keep nesting shallow: one level for hole patterns, two at most for reusable detail features, and never rely on an undocumented limit. If you need three or four levels, the program is usually telling you to split the work into multiple main programs instead.</p>
 <p>The main trap in nested subprograms is leaked modal state. If O2000 switches to G91 and calls O3000, O3000 inherits G91 unless it restores G90. The actual position error depends on the motion blocks each level issues &mdash; mode inheritance alone does not move the tool. The defensive pattern is: every subprogram that changes a modal mode restores that mode before M99, even if you "know" the caller expects it. This costs a line and saves hours of debugging.</p>
 
 <h3>Passing Data to a Subprogram</h3>
 <p>The four-fixture example above hard-codes the rectangle corners (0,0),(20,0),(20,20),(0,20). That is fine for one part, but the same rectangle called at 30 different sizes becomes a maintenance problem. Production subprograms use macro variables (#1&ndash;#33 local, #100&ndash;#199 common) to pass in the corner positions, stepover, and depth. The main program sets #1 = X start, #2 = Y start, #3 = X length, #4 = Y length, then calls O2000; the subprogram computes the four corners itself.</p>
-<p>On a FANUC-style control, M98 does NOT create a new local-variable nesting layer the way G65 does: #1 set in the main program and changed inside M98 P2000 stays changed when control returns. Only G65 (macro call) creates private local variables. In a teaching shop, treat #1&ndash;#33 as shared until you specifically teach G65, and give the main program and subprogram different variable numbers to avoid clobbering. Common variables (#100&ndash;#199) are also shared across the whole program.</p>
+<p>In the referenced Haas macro implementation, M98 does NOT create a new local-variable nesting layer the way G65 does: #1 set in the main program and changed inside M98 P2000 stays changed when control returns. Only G65 (macro call) creates private local variables. In a teaching shop, treat #1&ndash;#33 as shared until you specifically teach G65, and give the main program and subprogram different variable numbers to avoid clobbering. Common variables (#100&ndash;#199) are also shared across the whole program.</p>
 
 <h3>Subprograms and the Controller Call Stack</h3>
 <p>Every M98 pushes a return address onto a small internal stack; every M99 pops one off. The stack is not infinite, and deep or recursive M98 calls (calling O2000 from inside O2000) can exceed the nesting limit on a FANUC-style control. A missing M99 does not by itself imply a stack-overflow alarm. The outcome depends on the controller, program boundaries, and subsequent executable blocks; inspect the actual control flow and alarm message.</p>
 <p>On a FANUC-style control, the call count L word (M98 P2000 L4) repeats the subprogram four times in a row without returning to the main program between calls. This is useful for a bolt circle or a tombstone pattern, but it means the subprogram must position itself for each repeat &mdash; either via incremental motion inside the subprogram (with a G90 restore) or by incrementing a variable. Do not use L4 to call a subprogram that ends at the same XY every time; the controller drills the same hole four times.</p>
 
-<svg viewBox="0 0 320 200" style="width:100%;max-width:400px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+<svg aria-label="Diagram accompanying the adjacent worked example" role="img" viewBox="0 0 320 200" style="width:100%;max-width:400px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="cp-29-subprograms-fig-2">Diagram accompanying the adjacent worked example. Read the accompanying explanation for assumptions and values.</desc><title>Diagram accompanying the adjacent worked example</title>
   <text x="60" y="18" font-size="12" font-weight="bold" fill="#333">Subprogram Call/Return Stack</text>
   <rect x="30" y="40" width="120" height="28" fill="#54a0ff" rx="4"/>
   <text x="45" y="58" font-size="11" fill="#fff">Main O0001</text>
@@ -156,6 +149,7 @@ M99</code></pre>
   <text x="30" y="180" font-size="10" fill="#666">M99 returns to the caller.</text>
 </svg>
 
+<h3>Count Events and Distinct Positions Separately</h3><p>Trace a repeated pattern with two columns: the coordinate reached and the cycle trigger that cuts there. Four coordinates repeated three times give twelve drilling events but only four distinct locations unless the caller or subprogram changes the coordinate mapping. This distinction matters when checking both cycle time and an accidental second cut in a completed hole. If the main program selects G54, G55, G56 and G57 for four fixtures, verify each stored origin and the clearance between fixtures separately. A valid offset number does not prove that its value belongs to the intended fixture.</p><p>For each call, record the entry plane, active offset, feed mode and drilling-cycle state. On return, check that the subprogram has cancelled the cycle and established the caller's documented return height. The main program must not infer clearance from M99 itself: returning control changes the program location, not automatically the physical tool position. Use a call-by-call trace before deciding that repeated code is equivalent to the intended repeated geometry.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Confusing P and O</strong> — Haas uses M98 P2000 (call), not O2000. The subprogram itself is labeled O2000.</li>
@@ -176,6 +170,7 @@ M99</code></pre>
 <p><strong>4.</strong> What is the maximum nesting depth on most controllers?</p>
 <details><summary>Ans</summary><p>Typically 4 levels. A subprogram can call another subprogram, which calls another, up to 4 deep. Beyond that, the controller alarms.</p></details>
 
+<h2>Sources</h2><ul><li><a href="https://www.haascnc.com/service/online-operator-s-manuals/mill-operator-s-manual/mill---macros.html">Haas mill macros</a>: local-variable nesting for G65 versus M97/M98.</li><li><a href="https://www.haascnc.com/service/codes-settings.type=mcode.machine=mill.value=M98.html">Haas M98</a>: P and L subprogram calls.</li></ul>
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/34-tapping-thread-milling/">&larr; Tapping</a><a href="/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/">Turning Basics &rarr;</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>

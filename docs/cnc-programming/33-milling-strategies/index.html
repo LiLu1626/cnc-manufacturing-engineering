@@ -24,7 +24,7 @@
     </ul>
   </div>
 </nav>
-<main class="article">
+<main class="article cp-article">
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Milling Strategies: Facing, Slots &amp; Pockets</h1>
 <p class="lead">Different milling features call for different strategies. This page covers face milling, slot milling, pocket milling, climb vs conventional cutting, stepover, and how to choose the right approach for each feature.</p>
@@ -39,12 +39,12 @@
 
 <h3>Stepover (Radial Engagement)</h3>
 <p>Stepover is the width of each pass relative to the cutter diameter. For a &Oslash;10 tool at 50% stepover, each pass removes 5 mm width.</p>
-<table class="data-table">
-<tr><th>Operation</th><th>Stepover (% of cutter D)</th><th>&Oslash;10 Tool Width/Pass</th></tr>
+<div class="cp-table-wrap"><table class="data-table"><caption>Stepover (Radial Engagement)</caption>
+<tr><th scope="col">Operation</th><th scope="col">Stepover (% of cutter D)</th><th scope="col">&Oslash;10 Tool Width/Pass</th></tr>
 <tr><td>Roughing</td><td>50–75%</td><td>5–7.5 mm</td></tr>
 <tr><td>Semi-finishing</td><td>30–50%</td><td>3–5 mm</td></tr>
 <tr><td>Finishing</td><td>10–25%</td><td>1–2.5 mm</td></tr>
-</table>
+</table></div>
 <p>Wider stepover = fewer passes = faster cycle time, but heavier load on the tool and spindle. Narrower stepover = lighter cut = better finish but more passes.</p>
 
 <h3>Climb vs Conventional Milling</h3>
@@ -55,7 +55,7 @@
 </ul>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="Diagram accompanying the adjacent worked example" role="img" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="cp-33-milling-strategies-fig-1">Diagram accompanying the adjacent worked example. Read the accompanying explanation for assumptions and values.</desc><title>Diagram accompanying the adjacent worked example</title>
   <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker></defs>
   <!-- climb milling -->
   <text x="100" y="20" font-size="12" fill="#27ae60" text-anchor="middle">Climb Milling</text>
@@ -83,6 +83,7 @@
 <p><strong>Pocketing example:</strong> Mill a 40&times;40 mm pocket with a &Oslash;10 end mill at 50% stepover. The pocket width is 40 mm; each pass removes 5 mm width. Cutter centers span X = 5 to X = 35 mm; number of raster passes = (35 &minus; 5)/5 + 1 = 7 passes per depth layer. If the pocket is 10 mm deep, you might rough in 2 axial passes (5 mm each), then finish the walls and floor separately.</p>
 
 
+<figure class="cp-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 250" role="img" aria-labelledby="seven-raster-title seven-raster-desc" style="width:100%;max-width:520px;height:auto;display:block;margin:auto;font-family:Inter,system-ui,sans-serif"><title id="seven-raster-title">Seven tool-centre tracks</title><desc id="seven-raster-desc">In a 40 mm square envelope the seven parallel centre tracks have X coordinates 5 through 35 in steps of 5 mm.</desc><rect x="50" y="25" width="160" height="160" fill="#ffffff" stroke="#0b766e"/><line x1="70" y1="45" x2="70" y2="165" stroke="#0b766e" stroke-width="2"/><text x="65" y="205" font-size="11" fill="#17242f">5</text><line x1="90" y1="45" x2="90" y2="165" stroke="#0b766e" stroke-width="2"/><text x="85" y="205" font-size="11" fill="#17242f">10</text><line x1="110" y1="45" x2="110" y2="165" stroke="#0b766e" stroke-width="2"/><text x="105" y="205" font-size="11" fill="#17242f">15</text><line x1="130" y1="45" x2="130" y2="165" stroke="#0b766e" stroke-width="2"/><text x="125" y="205" font-size="11" fill="#17242f">20</text><line x1="150" y1="45" x2="150" y2="165" stroke="#0b766e" stroke-width="2"/><text x="145" y="205" font-size="11" fill="#17242f">25</text><line x1="170" y1="45" x2="170" y2="165" stroke="#0b766e" stroke-width="2"/><text x="165" y="205" font-size="11" fill="#17242f">30</text><line x1="190" y1="45" x2="190" y2="165" stroke="#0b766e" stroke-width="2"/><text x="185" y="205" font-size="11" fill="#17242f">35</text><text x="45" y="230" font-size="12" fill="#17242f">Tool-centre X (mm)</text><text x="235" y="65" font-size="12" fill="#17242f">40 mm</text><text x="235" y="95" font-size="12" fill="#17242f">Ø10 tool</text><text x="235" y="125" font-size="12" fill="#17242f">5 mm step</text></svg><figcaption>Seven tracks per depth layer. Endpoints are 5 mm inside the envelope. Connections and wall cleanup are omitted; a Ø10 cutter leaves internal corner radii rather than sharp square corners.</figcaption></figure>
 <h3>Choosing a Strategy Is a Compromise</h3>
 <p>No single milling strategy is "best." Face milling is fast for large flats but cannot reach deep pockets. Slotting cuts full-width slots but overloads the tool. Pocketing requires a ramp or plunge. Climb milling gives a better finish but needs a rigid, preloaded ball-screw machine. Conventional milling is safer on old machines with backlash but work-hardens the surface. The right choice depends on the part geometry, the machine, the tool, and the tolerance &mdash; not on a dogma.</p>
 <p>Radial engagement (ae, in mm) is the width of cut; the ratio ae/D (radial engagement as a fraction of tool diameter) is what matters for load. A full-width slot (ae = D) loads both flutes equally and runs hot; a small ae lets the tool cool between cuts. For a &Oslash;10 cutter, stepover 5 mm means ae = 5 mm (ae/D = 0.5). Row positions run from one wall to the other, giving 7 rows for a 40 mm wide cut, not 8.</p>
@@ -115,7 +116,7 @@
 <p>Corner radius: the programmed corner radius must be larger than the tool radius, or the tool cannot reach the corner. A &Oslash;10 tool (5 mm radius) cannot cut a 3 mm inside corner. Either use a smaller tool for corners, or program a corner radius larger than the tool radius. This is a common beginner mistake: programming a sharp inside corner and wondering why the tool leaves a nub.</p>
 <h2>Common Mistakes</h2>
 <ul>
-<li><strong>Full-width slotting in one deep pass</strong> — the tool is 100% engaged and cannot evacuate chips. Use smaller axial depth or peck drilling for deep slots.</li>
+<li><strong>Full-width slotting in one deep pass</strong> — full radial engagement makes chip evacuation and load management more demanding. Choose an axial depth, entry and chip-removal strategy validated for the cutter and material; a drilling peck cycle is not a general slot-milling strategy.</li>
 <li><strong>Conventional milling on a CNC machine</strong> — climb milling usually gives better finish and longer tool life when the ball screws are preloaded and backlash is controlled. Program climb, but confirm the machine condition first.</li>
 <li><strong>Stepover too wide</strong> — exceeds spindle power and torque. Start conservative and increase as you learn the machine.</li>
 <li><strong>No air gap in pocket corners</strong> — if the tool is &Oslash;10 and the pocket corner is &Oslash;6, the tool cannot reach the corner. Program a corner cleanup pass or use a smaller tool.</li>
@@ -130,27 +131,9 @@
 <p><strong>3.</strong> Pocket 40&times;40 mm, &Oslash;10 tool at 50% stepover. How many raster passes?</p>
 <details><summary>Ans</summary><p>Effective cut width = 10 &times; 0.5 = 5 mm. Cutter centers at X = 5, 10, 15, 20, 25, 30, 35 mm = (35 &minus; 5)/5 + 1 = 7 passes across the pocket per layer.</p></details>
 <p><strong>4.</strong> Why is full-width slotting limited to shallow axial depth?</p>
-<details><summary>Ans</summary><p>At 100% radial engagement, chips cannot evacuate. The tool re-cut chips, overheats, and snaps. Use small axial depth (0.2–0.5&times;D) or peck cycles.</p></details>
+<details><summary>Ans</summary><p>Full radial engagement can make chip evacuation and cutting load more difficult. It does not imply inevitable tool breakage or a universal depth limit. Select depth and entry from the cutter guidance, then verify the setup and chip removal. Distinguish a milling toolpath from a drilling peck cycle.</p></details>
 
-<svg viewBox="0 0 240 190" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
-<title>Seven raster rows in a 40x40 pocket</title>
-<rect x="40" y="20" width="120" height="120" fill="none" stroke="#333" stroke-width="1.5"/>
-<line x1="55" y1="35" x2="55" y2="125" stroke="#54a0ff" stroke-width="2"/>
-<line x1="70" y1="35" x2="70" y2="125" stroke="#54a0ff" stroke-width="2"/>
-<line x1="85" y1="35" x2="85" y2="125" stroke="#54a0ff" stroke-width="2"/>
-<line x1="100" y1="35" x2="100" y2="125" stroke="#54a0ff" stroke-width="2"/>
-<line x1="115" y1="35" x2="115" y2="125" stroke="#54a0ff" stroke-width="2"/>
-<line x1="130" y1="35" x2="130" y2="125" stroke="#54a0ff" stroke-width="2"/>
-<line x1="145" y1="35" x2="145" y2="125" stroke="#54a0ff" stroke-width="2"/>
-<text x="52" y="150" font-size="9" fill="#333">X5</text>
-<text x="67" y="150" font-size="9" fill="#333">10</text>
-<text x="82" y="150" font-size="9" fill="#333">15</text>
-<text x="97" y="150" font-size="9" fill="#333">20</text>
-<text x="112" y="150" font-size="9" fill="#333">25</text>
-<text x="127" y="150" font-size="9" fill="#333">30</text>
-<text x="142" y="150" font-size="9" fill="#333">35</text>
-<text x="55" y="170" font-size="9" fill="#666">7 rows, 5 mm spacing; wall/finish counted separately. Non-scale.</text>
-</svg>
+
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/16-cutter-compensation/">&larr; Cutter Comp</a><a href="/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/">Drilling Cycles &rarr;</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>

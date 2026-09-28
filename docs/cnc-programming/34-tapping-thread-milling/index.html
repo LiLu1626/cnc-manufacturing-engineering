@@ -24,7 +24,7 @@
     </ul>
   </div>
 </nav>
-<main class="article">
+<main class="article cp-article">
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Tapping &amp; Thread Milling</h1>
 <p class="lead">Tapping cuts internal threads with a tap. This page covers rigid tapping with G84, how to calculate the feed, choosing the right tap drill size, blind-hole considerations, and when thread milling is the better choice.</p>
@@ -44,31 +44,31 @@
 <p style="text-align:center; font-size:1.1em;"><strong>F = pitch (mm/rev) &times; spindle speed (RPM)</strong></p>
 <p>For M10&times;1.5 at S500: F = 1.5 &times; 500 = 750 mm/min. At S1000: F = 1.5 &times; 1000 = 1500 mm/min. The feed is not arbitrary — it must equal the pitch multiplied by RPM, or the thread pitch is wrong.</p>
 
-<table class="data-table">
-<tr><th>Parameter</th><th>Meaning</th><th>Example (M10&times;1.5)</th></tr>
+<div class="cp-table-wrap"><table class="data-table"><caption>G84 Rigid Tapping Cycle</caption>
+<tr><th scope="col">Parameter</th><th scope="col">Meaning</th><th scope="col">Example (M10&times;1.5)</th></tr>
 <tr><td>R</td><td>Start plane above stock</td><td>R5. (classroom value; verify per machine)</td></tr>
 <tr><td>Z</td><td>Tap-tip endpoint (this example uses tip as tool-length reference)</td><td>Z-18. (full thread 15 is separate)</td></tr>
 <tr><td>S</td><td>Spindle speed</td><td>S500</td></tr>
 <tr><td>F</td><td>Feed = pitch &times; S</td><td>F750</td></tr>
-</table>
+</table></div>
 
 <h3>Tap Drill Size</h3>
 <p>Before tapping, you drill a pilot hole. The tap drill is not the same as the thread major diameter — it is smaller, leaving material for the tap to cut. The general rule for metric threads:</p>
 <p style="text-align:center; font-size:1.1em;"><strong>Tap drill diameter = major diameter &minus; pitch</strong></p>
-<table class="data-table">
-<tr><th>Thread</th><th>Pitch</th><th>Tap Drill</th></tr>
+<div class="cp-table-wrap"><table class="data-table"><caption>Tap Drill Size</caption>
+<tr><th scope="col">Thread</th><th scope="col">Pitch</th><th scope="col">Tap Drill</th></tr>
 <tr><td>M6&times;1.0</td><td>1.0</td><td>5.0 mm</td></tr>
 <tr><td>M8&times;1.25</td><td>1.25</td><td>6.75 mm (use 6.8 mm)</td></tr>
 <tr><td>M10&times;1.5</td><td>1.5</td><td>8.5 mm</td></tr>
 <tr><td>M12&times;1.75</td><td>1.75</td><td>10.25 mm (rough estimate; confirm with tool data)</td></tr>
-</table>
+</table></div>
 <p>This is a rough starting estimate for cutting taps; actual tap-drill size depends on tool data, material, and required thread engagement. Consult the tap manufacturer's chart.</p>
 
 <h3>Blind Hole vs Through Hole</h3>
 <p><strong>Through holes</strong> are simpler: the tap exits the part, but you still need lead/chamfer runout space below the exit and clearance below the hole. <strong>Blind holes</strong> (holes that do not go through) require planning: the tap cannot reach the bottom, and the chip evacuation space matters. Use a <strong>bottoming tap</strong> (short chamfer) for near-full depth in blind holes. A taper/starting tap has a long chamfer and leaves several incomplete threads at the bottom. Program the tap Z depth slightly shallower than the drill depth to avoid bottoming out.</p>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="Diagram accompanying the adjacent worked example" role="img" viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="cp-34-tapping-thread-milling-fig-1">Diagram accompanying the adjacent worked example. Read the accompanying explanation for assumptions and values.</desc><title>Diagram accompanying the adjacent worked example</title>
   <rect x="100" y="30" width="200" height="170" fill="#d4c5a9" stroke="#999"/>
   <rect x="168.75" y="30" width="42.5" height="105" fill="#fff" stroke="#999"/>
   <polygon points="168.75,135 211.25,135 190,147.75" fill="#fff" stroke="#999"/>
@@ -85,7 +85,7 @@
 </figure>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="Diagram accompanying the adjacent worked example" role="img" viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="cp-34-tapping-thread-milling-fig-2">Diagram accompanying the adjacent worked example. Read the accompanying explanation for assumptions and values.</desc><title>Diagram accompanying the adjacent worked example</title>
   <path d="M260 100 A60 60 0 0 1 140 100 A60 60 0 0 1 260 100" fill="none" stroke="#c0392b" stroke-width="2"/>
   <circle cx="260" cy="100" r="3" fill="#c0392b"/>
   <text x="270" y="95" font-size="10" fill="#c0392b">start / end same XY</text>
@@ -95,15 +95,15 @@
 </figure>
 
 <h3>Thread Milling vs Tapping</h3>
-<table class="data-table">
-<tr><th>Factor</th><th>Rigid Tapping</th><th>Thread Milling</th></tr>
+<div class="cp-table-wrap"><table class="data-table"><caption>Thread Milling vs Tapping</caption>
+<tr><th scope="col">Factor</th><th scope="col">Rigid Tapping</th><th scope="col">Thread Milling</th></tr>
 <tr><td>Cost</td><td>Cheap taps</td><td>Expensive tools</td></tr>
 <tr><td>Programming</td><td>One G84 line</td><td>Helical interpolation code</td></tr>
 <tr><td>Large threads</td><td>Large taps, high torque</td><td>Better: smaller tool, less force</td></tr>
 <tr><td>Material flexibility</td><td>One tap per size/pitch</td><td>One tool cuts many sizes</td></tr>
 <tr><td>Blind holes</td><td>Risk of breaking tap</td><td>Safer: less force, controlled depth</td></tr>
 <tr><td>Machine requirement</td><td>Rigid tapping or tension holder</td><td>3-axis interpolated mill</td></tr>
-</table>
+</table></div>
 
 <h3>Pre-Drill and Spot Drill</h3>
 <p>Before the O8.5 drill, a spot drill or center drill starts the hole on surface so the drill does not walk. That start hole is separate from the tap drill and not counted in the thread depth chain.</p>
@@ -205,6 +205,7 @@ M05
 M30</code></pre>
 <p><strong>Key points:</strong> Programmed drill depth Z-23.55 places the drill tip; full-diameter cylinder reaches Z-21, tap tip stops at Z-18. R5 is a classroom choice for approach/retract; confirm it against the machine's sync and clearance. F750 = 1.5 pitch &times; 500 RPM under G94.</p>
 
+<h3>Keep the Datum Fixed Through the Depth Chain</h3><p>Write each depth against a named surface before comparing numbers. If a faced surface is Z−2 relative to the original top, a tool tip at Z−12 is 10 mm below the faced surface. It is not 12 mm below that surface unless the work offset was intentionally reset. A thread requirement refers to usable full-profile engagement, which differs from a drill-tip endpoint and from the tap's physical tip. Record these three quantities separately so a correct subtraction does not hide the wrong physical reference.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Feed not tied to pitch</strong> — F must = P &times; S. A wrong feed strips the thread pitch. Calculate it every time.</li>

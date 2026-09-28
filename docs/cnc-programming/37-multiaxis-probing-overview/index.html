@@ -10,18 +10,8 @@
       <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
     </ul>
   </div>
-</nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Rotary Axes & Probing Overview</h1><p class="lead">Rotary axes and probing extend what a CNC machine can do. This page introduces A/B/C axes, touch probes, and 3+2 machining without going deep into 5-axis programming.</p>
-<svg viewBox="0 0 320 160" style="width:100%;max-width:420px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0 0, 7 3, 0 6" fill="#27ae60"/></marker></defs>
-<title>Work probe touches edge</title>
-<rect x="60" y="80" width="200" height="50" fill="#ddd" stroke="#333"/>
-<line x1="60" y1="80" x2="60" y2="130" stroke="#c0392b" stroke-width="2"/>
-<circle cx="55" cy="105" r="5" fill="#e67e22"/>
-<line x1="55" y1="105" x2="55" y2="60" stroke="#333" stroke-width="2"/>
-<line x1="30" y1="105" x2="48" y2="105" stroke="#27ae60" stroke-width="1.5" marker-end="url(#arr)"/>
-<text x="30" y="98" font-size="10" fill="#27ae60">approach</text>
-<text x="70" y="75" font-size="10" fill="#333">Probe</text>
-<text x="70" y="145" font-size="10" fill="#666">Schematic, not to scale. Ball surface contacts the edge; center stays one effective radius away.</text>
-</svg><h2>Concept</h2>
+</nav><main class="article cp-article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Rotary Axes & Probing Overview</h1><p class="lead">Rotary axes and probing extend what a CNC machine can do. This page introduces A/B/C axes, touch probes, and 3+2 machining without going deep into 5-axis programming.</p>
+<figure class="cp-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 190" role="img" aria-labelledby="probe-contact-title probe-contact-desc" style="width:100%;max-width:520px;height:auto;display:block;margin:auto;font-family:Inter,system-ui,sans-serif"><title id="probe-contact-title">Probe surface contact</title><desc id="probe-contact-desc">The probe ball is outside the workpiece and its rightmost surface contacts the left edge.</desc><rect x="100" y="65" width="220" height="90" fill="#e6f4f2" stroke="#0b766e"/><circle cx="90" cy="105" r="10" fill="#0b766e"/><line x1="90" y1="105" x2="90" y2="30" stroke="#0b766e" stroke-width="2"/><line x1="30" y1="105" x2="70" y2="105" stroke="#0b766e" stroke-width="2"/><polygon points="70,105 62,100 62,110" fill="#0b766e"/><text x="25" y="87" font-size="12" fill="#17242f">Approach</text><text x="100" y="30" font-size="12" fill="#17242f">Probe stem</text><text x="145" y="113" font-size="14" fill="#17242f">Material</text><text x="35" y="180" font-size="12" fill="#17242f">Centre</text><line x1="65" y1="168" x2="90" y2="115" stroke="#0b766e" stroke-width="2"/></svg><figcaption>Schematic, not to scale. The ball surface contacts the edge; the centre remains one calibrated effective radius away. Use the matched probe calibration and measurement cycle to derive the surface location, rather than treating an uncorrected trigger coordinate as the work offset.</figcaption></figure><h2>Concept</h2>
 <p><strong>Rotary axes</strong> (A, B, C) rotate the tool or workpiece around the linear axes. <strong>A</strong> rotates around X, <strong>B</strong> around Y, <strong>C</strong> around Z. A touch probe measures part position and feeds back into work offsets automatically.</p>
 <h2>Why It Matters</h2>
 <p>Without probing, setting work offset on a complex fixture is manual and error-prone. A probe touches the part, calculates the edge/center, and sets G54 automatically. Rotary axes let you machine multiple sides without re-fixturing — reducing setup error and cycle time.</p>
@@ -44,12 +34,12 @@
 </ul>
 
 <h2>Rotary Axis Naming</h2>
-<table class="data-table">
-<tr><th>Axis</th><th>Rotates Around</th><th>Typical Use</th></tr>
+<div class="cp-table-wrap"><table class="data-table"><caption>Rotary Axis Naming</caption>
+<tr><th scope="col">Axis</th><th scope="col">Rotates Around</th><th scope="col">Typical Use</th></tr>
 <tr><td>A</td><td>X axis</td><td>Tilt spindle or table for angled features</td></tr>
 <tr><td>B</td><td>Y axis</td><td>Swivel head on 5-axis machines</td></tr>
 <tr><td>C</td><td>Z axis</td><td>Rotate table for 4th-axis milling, bolt circles</td></tr>
-</table>
+</table></div>
 
 
 <h3>What a Probe Actually Does</h3>
