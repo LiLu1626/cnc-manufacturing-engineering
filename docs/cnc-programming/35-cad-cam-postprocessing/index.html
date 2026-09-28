@@ -94,14 +94,14 @@
 <li><strong>Tool lengths:</strong> H01 in the program — have you measured that tool's length into H01?</li>
 <li><strong>First move:</strong> what is the first G00 X Y Z? Is it safe? Does it clear the fixture?</li>
 </ul>
-<p>Only after these checks should you run a dry run at 50% feed and 100% rapid, then a single-block first cut.</p>
+<p>Only after these checks should you run a dry run at reduced feed and rapid override (the exact percentages depend on your machine shop's procedure), then a single-block first cut.</p>
 
 
 <h3>Why CAM Output Still Needs a Human Review</h3>
 <p>CAM software is excellent at generating hundreds of cutter-location points. It is not excellent at understanding that your machine has a 12-inch Z travel, that your vise jaws stick up 18 mm, or that your coolant line hangs 30 mm above the spindle. The post-processor only knows the machine geometry you told it; if you did not model the toolholder, the CAM sees a naked tool tip and happily crashes the holder into the fixture. This is the #1 reason "CAM programs look fine on screen" still crash the real machine.</p>
 <p>The work offset in the CAM setup must match the G54 on the controller. If the CAM setup uses the lower-left corner of the stock and the operator set G54 at the center of the plate, the program faithfully cuts 50 mm to the left of where it should. Always open the .nc file and read the first motion: does the first G00 XY go to a position that, given your G54, is actually in clear air above the part?</p>
 <p>The post-processor is machine-specific. A Haas mill post emits G83 with R plane and Q peck syntax that Haas understands; a FANUC post uses the same letters but may format them differently; a Siemens post uses cycles like CYCLE82. Running a Haas post on a FANUC machine (or vice versa) produces code that either alarms immediately or, worse, runs the wrong motion. If you change machines, re-post &mdash; do not hand-edit the G-code to fit.</p>
-<p>Finally, the CAM simulation shows the tool tip, not the toolholder, the fixture, or the coolant. Before running a CAM program on real stock, walk through the first 100 lines on the controller in single block at 25% rapid override. Watch the holder clear the vise on the first XY move. Watch the Z go down only after the XY is over the pocket. The on-machine dry run catches what the screen simulation cannot.</p>
+<p>Whether the CAM simulation shows the toolholder and fixture depends on how the setup was configured. If the model includes holder and fixture geometry, the simulation can check interference; if it only models the tool tip, it cannot. Before running on real stock, walk through the first moves on the controller in single block. Watch the holder clear the vise on cross moves. The on-machine dry run catches what the screen simulation cannot.</p>
 
 <h3>What to Check in the Post-Processed .nc File</h3>
 <p>After CAM posts the program, open the .nc file in a text editor and check the first 20 lines before sending it to the machine:</p>
@@ -111,11 +111,11 @@
 <li>Does the first tool change (T01 M06) match the tool the CAM setup says?</li>
 <li>Does the first G43 H01 use the right H for that tool?</li>
 <li>Is the first G00 XY position in clear air above the part, given your G54?</li>
-<li>Does the first Z move come after XY is in position, not before?</li>
+<li>Is tool length compensation and the safe Z plane established before cross-traversing XY, and does the cutting approach happen only after XY is over the target?</li>
 <li>Does the program end with M30 and a closing %?</li>
 </ol>
 <p>If any of these is wrong, the post-processor setup or the CAM setup is wrong &mdash; do not hand-edit the .nc file to fix it. Re-post with the correct post and setup. Hand-edited CAM output is how uncommented magic numbers end up in production programs.</p>
-<p>Also check: does the .nc file use canned cycles (G81/G83) or did it output every hole as a G01 down and G00 up? Both are valid, but the latter is slower and longer. Modern posts use cycles when appropriate. If the program is 500 lines long for a 10-hole part, something is wrong.</p>
+<p>Also check: does the .nc file use canned cycles (G81/G83) or did it output every hole as a G01 down and G00 up? Both are valid; cycles are usually shorter, but the line count alone is not a defect. Compare the actual output against the setup, cycle time, and version history rather than judging length.</p>
 
 <h3>CAM Toolpath Strategies in Practice</h3>
 <p>CAM software offers many toolpath styles: zig-zag, one-way, spiral, trochoidal, raster, contour. Zig-zag is fastest but alternates climb and conventional, which can leave a small step on the surface. One-way always cuts climb (or always conventional), gives a better finish, but has rapid retracts between passes. Spiral cuts around the pocket perimeter outward (or inward), which is good for pockets. Trochoidal cuts a circular path with small radial engagement, used for hard materials or deep pockets.</p>
