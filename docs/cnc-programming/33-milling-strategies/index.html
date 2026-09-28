@@ -50,7 +50,7 @@
 <h3>Climb vs Conventional Milling</h3>
 <p>This is one of the most important strategy decisions:</p>
 <ul>
-<li><strong>Climb milling (down-milling):</strong> the cutter rotates in the same direction as the table feed. The chip starts thick and gets thinner. The tool cuts cleanly, pushes the work down, and produces a better surface finish. <strong>Preferred on CNC machines</strong>, which have preloaded ball screws with no backlash.</li>
+<li><strong>Climb milling (down-milling):</strong> the cutter rotates in the same direction as the table feed. The chip starts thick and gets thinner. The tool cuts cleanly, pushes the work down, and usually produces a better surface finish. It is preferred on machines with preloaded ball screws and controlled backlash; verify with the machine manual and a test cut, because worn or non-preloaded screws can cause chatter.</li>
 <li><strong>Conventional milling (up-milling):</strong> the cutter rotates against the feed direction. The chip starts thin (rubbing) and gets thicker. The tool rubs and work-hardens the surface, and tends to climb the workpiece. Traditional manual machines used conventional because of backlash; CNC machines prefer climb.</li>
 </ul>
 
@@ -116,7 +116,7 @@
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Full-width slotting in one deep pass</strong> — the tool is 100% engaged and cannot evacuate chips. Use smaller axial depth or peck drilling for deep slots.</li>
-<li><strong>Conventional milling on a CNC machine</strong> — CNC machines have no backlash; climb milling gives better finish and longer tool life. Program climb.</li>
+<li><strong>Conventional milling on a CNC machine</strong> — climb milling usually gives better finish and longer tool life when the ball screws are preloaded and backlash is controlled. Program climb, but confirm the machine condition first.</li>
 <li><strong>Stepover too wide</strong> — exceeds spindle power and torque. Start conservative and increase as you learn the machine.</li>
 <li><strong>No air gap in pocket corners</strong> — if the tool is &Oslash;10 and the pocket corner is &Oslash;6, the tool cannot reach the corner. Program a corner cleanup pass or use a smaller tool.</li>
 <li><strong>Plunge feeding too fast</strong> — end mills are not drills. Plunge at 1/3 to 1/2 of the normal feed, or use a center-cutting end mill.</li>
@@ -126,7 +126,7 @@
 <p><strong>1.</strong> &Oslash;12 end mill at 50% stepover. Width per pass?</p>
 <details><summary>Ans</summary><p>12 &times; 0.5 = 6 mm per pass.</p></details>
 <p><strong>2.</strong> Climb or conventional on a CNC machining center?</p>
-<details><summary>Ans</summary><p>Climb. CNC ball screws are preloaded with no backlash, so climb milling is safe and preferred for finish and tool life.</p></details>
+<details><summary>Ans</summary><p>Climb, on a machine with preloaded ball screws and controlled backlash. On worn or non-preloaded screws, test a climb cut and watch for chatter before committing to production; conventional may be the safer choice on such machines.</p></details>
 <p><strong>3.</strong> Pocket 40&times;40 mm, &Oslash;10 tool at 50% stepover. How many raster passes?</p>
 <details><summary>Ans</summary><p>Effective cut width = 10 &times; 0.5 = 5 mm. Cutter centers at X = 5, 10, 15, 20, 25, 30, 35 mm = (35 &minus; 5)/5 + 1 = 7 passes across the pocket per layer.</p></details>
 <p><strong>4.</strong> Why is full-width slotting limited to shallow axial depth?</p>

@@ -28,6 +28,13 @@
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Cycle Time &amp; Process Improvement</h1>
 <p class="lead">Once a program runs correctly and safely, the next question is: how fast can it run? This page covers cycle time analysis, where time actually goes, the levers you can pull, and the tool-life tradeoffs that separate smart optimization from reckless speeding.</p>
+<svg viewBox="0 0 320 120" style="width:100%;max-width:420px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+<title>Where to save time</title>
+<rect x="20" y="30" width="180" height="24" fill="#54a0ff" rx="3"/><text x="30" y="46" font-size="10" fill="#fff">Cut time (hard to shave)</text>
+<rect x="200" y="30" width="100" height="24" fill="#2ecc71" rx="3"/><text x="208" y="46" font-size="10" fill="#fff">Load (easy)</text>
+<text x="20" y="80" font-size="10" fill="#666">Small % on long cut beats large % on short non-cut move.</text>
+<text x="20" y="100" font-size="10" fill="#666">Measure each element separately before claiming savings.</text>
+</svg>
 
 <h2>Concept</h2>
 <p><strong>Cycle time</strong> is the total time from program start (M30 reset) to part complete, including every move: rapid, feed, tool change, spindle start, and dwell. Optimization means reducing that total time — but not by simply cranking feed to maximum. Real optimization is about eliminating waste: shorter rapid paths, fewer tool changes, deeper cuts that stay within tool ratings, and smarter hole ordering.</p>

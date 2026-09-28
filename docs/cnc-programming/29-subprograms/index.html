@@ -28,6 +28,14 @@
 <a href="../" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Subprograms</h1>
 <p class="lead">Subprograms let you repeat a block of code without copying it. This page covers M98/M99, Haas P/L syntax, nested calls, repeating hole patterns, and the safety rules that prevent drift between repetitions.</p>
+<svg viewBox="0 0 320 120" style="width:100%;max-width:420px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+<title>Repeated four-hole pattern</title>
+<rect x="40" y="30" width="40" height="40" fill="none" stroke="#54a0ff"/>
+<circle cx="40" cy="30" r="3" fill="#c0392b"/><circle cx="80" cy="30" r="3" fill="#54a0ff"/>
+<circle cx="80" cy="70" r="3" fill="#54a0ff"/><circle cx="40" cy="70" r="3" fill="#54a0ff"/>
+<text x="100" y="55" font-size="10" fill="#333">O2000 drills 4 holes</text>
+<text x="100" y="70" font-size="10" fill="#666">M98 P2000 L3 repeats 3 times = 12 holes</text>
+</svg>
 
 <h2>Concept</h2>
 <p>A <strong>subprogram</strong> is a separate O-numbered program called from the main program. On a Haas control, <strong>M98 P2000 L3</strong> calls O2000 three times. <strong>M99</strong> returns to the line after M98. Subprograms reduce repetition, make programs shorter, and centralize changes — if the hole depth changes, you edit one line instead of sixteen.</p>
@@ -145,7 +153,7 @@ M99</code></pre>
   <rect x="90" y="130" width="120" height="28" fill="#e67e22" rx="4"/>
   <text x="105" y="148" font-size="11" fill="#fff">O3000</text>
   <text x="220" y="148" font-size="10" fill="#c0392b">&larr; M99</text>
-  <text x="30" y="180" font-size="10" fill="#666">Each M99 returns one level up. A subprogram that ends without M99 falls through to whatever follows; the result depends on the next block, the program organization, and the controller, not a guaranteed stack-overflow alarm.</text>
+  <text x="30" y="180" font-size="10" fill="#666">M99 returns to the caller.</text>
 </svg>
 
 <h2>Common Mistakes</h2>
