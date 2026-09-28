@@ -29,6 +29,17 @@
 <h1>Exercises &amp; Assessment</h1>
 <p class="lead">Reading and understanding code is the skill that prevents crashes. These 20 exercises test coordinate systems, G-code, offsets, cycles, compensation, and program structure. Work through them without looking at the answers first.</p>
 
+<svg viewBox="0 0 320 160" style="width:100%;max-width:420px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+<title>Assessment grading breakdown</title>
+<rect x="20" y="20" width="280" height="24" fill="#54a0ff" rx="3"/>
+<text x="30" y="36" font-size="11" fill="#fff">20 basic questions &times; 2 = 40</text>
+<rect x="20" y="52" width="140" height="24" fill="#2ecc71" rx="3"/>
+<text x="30" y="68" font-size="11" fill="#fff">2 code reviews &times; 10 = 20</text>
+<rect x="160" y="52" width="140" height="24" fill="#e67e22" rx="3"/>
+<text x="170" y="68" font-size="11" fill="#fff">2 projects &times; 20 = 40</text>
+<text x="20" y="100" font-size="11" fill="#333">Pass: total &ge; 80 AND every critical safety/geometry error fixed.</text>
+<text x="20" y="120" font-size="11" fill="#666">98 with an unfixed critical error does NOT pass.</text>
+</svg>
 <h2>Part 1 — Knowledge Check (Questions 1–12)</h2>
 
 <ol>
@@ -131,7 +142,7 @@ X40.</code></pre>
 (S500, M10x1.5 tap)</code></pre>
 <details><summary>Diagnosis</summary><p>In G94 mode, F must = pitch &times; RPM. For M10&times;1.5 at S500, F = 1.5 &times; 500 = 750 mm/min, not 500. The feed is too slow for the spindle speed, so the tap does not follow the thread pitch and strips the threads. If G95 were active instead, F would be in mm/rev and F1.5 would be correct — always know which feed mode is active.</p></details>
 
-<h2>Part 4 — Write the Program (Questions 17–20)</h2>
+<h2>Part 4 — Code Reviews and Projects (CR1, CR2, P1, P2)</h2>
 
 <p><strong>17.</strong> Drill one &Oslash;8 hole at X30 Y20 to depth Z&minus;12 in aluminum. S1500, F100. Write the program.</p>
 <details><summary>Example</summary><pre class="cp-code"><code>O0017
@@ -258,7 +269,6 @@ G80
 G00 Z50. M09
 M30</code></pre>
 <p>The 5 passes at Y=4,12,20,28,36 with a &Oslash;10 tool cover Y0&ndash;40 with overlap. A single pass at Y=-5 would only tangent the bottom edge and leave the entire block unmilled.</p></details>
-</ol>
 
 
 
