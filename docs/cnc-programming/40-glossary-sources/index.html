@@ -28,7 +28,7 @@
 <tr><td>Datum</td><td>Reference point for dimensions</td></tr>
 <tr><td>Feed</td><td>Cutting speed of tool relative to work</td></tr>
 <tr><td>G54</td><td>Work coordinate system offset</td></tr>
-<tr><td>Machine zero</td><td>Fixed home position of the machine</td></tr>
+<tr><td>Machine zero</td><td>Reference position the machine establishes on startup; home switch or scale reference, not always a "fixed physical switch"</td></tr>
 <tr><td>Modal</td><td>Code stays active until changed</td></tr>
 <tr><td>NC file</td><td>G-code program text file</td></tr>
 <tr><td>Rapid (G00)</td><td>Maximum-speed positioning move</td></tr>
@@ -64,7 +64,7 @@
 <p>The Recommended Sources below are the primary manuals and training materials this section draws on. When a term's exact behavior is ambiguous, the manufacturer's manual for your machine model is the final authority &mdash; this glossary summarizes, it does not replace the manual.</p>
 
 <h3>More Terms</h3>
-<p><strong>Backlash</strong> is the lost motion in a ballscrew when the axis reverses direction. On old knee mills it forces conventional milling; on CNC machines with preloaded ballscrews it is measured in microns. <strong>Cutter compensation</strong> (G41/G42) offsets the tool center by the D radius so you program the part outline. <strong>Datum</strong> is the reference feature the drawing dimensions from; set G54 there. <strong>Feed per tooth (f<sub>z</sub>)</strong> is the chip thickness each flute removes: f<sub>z</sub> = F / (n &times; z). <strong>G-code</strong> is the motion word address language; M-code is the machine function. <strong>Nose radius</strong> is the radius on a lathe insert tip; it affects shoulder geometry and surface finish. <strong>Runout</strong> is unwanted spindle or tool wobble; it spreads tool wear and bad finish. <strong>Vibratory chatter</strong> is self-excited oscillation between tool and part; reduce it by slowing down, shortening tool overhang, or stiffening the setup.</p>
+<p><strong>Backlash</strong> is the lost motion in a ballscrew when the axis reverses direction. On old knee mills it forces conventional milling; on CNC machines with preloaded ballscrews it is measured in microns. <strong>Cutter compensation</strong> (G41/G42) offsets the tool center by the D radius so you program the part outline. <strong>Datum</strong> is the reference feature the drawing dimensions from; set G54 there. <strong>Feed per tooth (f<sub>z</sub>)</strong> is the feed advance per flute per revolution (a programmed/allowed value, F / (n&times;z)); the actual uncut chip thickness depends on radial engagement ae/D and is generally smaller than f<sub>z</sub> in side milling. <strong>G-code</strong> is the motion word address language; M-code is the machine function. <strong>Nose radius</strong> is the radius on a lathe insert tip; it affects shoulder geometry and surface finish. <strong>Runout</strong> is unwanted spindle or tool wobble; it spreads tool wear and bad finish. <strong>Vibratory chatter</strong> is self-excited oscillation between tool and part; reduce it by slowing down, shortening tool overhang, or stiffening the setup.</p>
 <h3>Recommended Sources</h3>
 <ul>
 <li><strong>Haas Automation CNC Programming Manual</strong> — free download, covers G/M codes for Haas controls.</li>
