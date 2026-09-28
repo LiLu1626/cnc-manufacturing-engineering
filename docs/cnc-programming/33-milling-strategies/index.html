@@ -80,7 +80,7 @@
 
 <h2>Example</h2>
 <p><strong>Face milling example:</strong> Face mill a 100 mm wide steel plate with a &Oslash;50 face mill. Stepover = 35 mm (70% of &Oslash;50). Number of passes = ceil(100/35) = 3 passes. At feed F300 mm/min, each pass traverses 100 mm. Cutting time &asymp; 3 passes &times; 100 mm / 300 mm/min = 1.0 min = 60 seconds of pure feed; add separate approach, retract, and rapid between passes, which are not part of the 60 seconds.</p>
-<p><strong>Pocketing example:</strong> Mill a 40&times;40 mm pocket with a &Oslash;10 end mill at 50% stepover. The pocket width is 40 mm; each pass removes 5 mm width. Number of raster passes = 40/5 = 8 passes. If the pocket is 10 mm deep, you might rough in 2 axial passes (5 mm each), then finish the walls and floor separately.</p>
+<p><strong>Pocketing example:</strong> Mill a 40&times;40 mm pocket with a &Oslash;10 end mill at 50% stepover. The pocket width is 40 mm; each pass removes 5 mm width. Cutter centers span X = 5 to X = 35 mm; number of raster passes = (35 &minus; 5)/5 + 1 = 7 passes per depth layer. If the pocket is 10 mm deep, you might rough in 2 axial passes (5 mm each), then finish the walls and floor separately.</p>
 
 
 <h3>Choosing a Strategy Is a Compromise</h3>
@@ -128,7 +128,7 @@
 <p><strong>2.</strong> Climb or conventional on a CNC machining center?</p>
 <details><summary>Ans</summary><p>Climb. CNC ball screws are preloaded with no backlash, so climb milling is safe and preferred for finish and tool life.</p></details>
 <p><strong>3.</strong> Pocket 40&times;40 mm, &Oslash;10 tool at 50% stepover. How many raster passes?</p>
-<details><summary>Ans</summary><p>Effective cut width = 10 &times; 0.5 = 5 mm. 40/5 = 8 passes across the pocket.</p></details>
+<details><summary>Ans</summary><p>Effective cut width = 10 &times; 0.5 = 5 mm. Cutter centers at X = 5, 10, 15, 20, 25, 30, 35 mm = (35 &minus; 5)/5 + 1 = 7 passes across the pocket per layer.</p></details>
 <p><strong>4.</strong> Why is full-width slotting limited to shallow axial depth?</p>
 <details><summary>Ans</summary><p>At 100% radial engagement, chips cannot evacuate. The tool re-cut chips, overheats, and snaps. Use small axial depth (0.2–0.5&times;D) or peck cycles.</p></details>
 
