@@ -92,7 +92,7 @@ G00 Z50.             (5: retract up to safe Z BEFORE any XY move)</code></pre>
 
 <h3>Reading G-Code Is Like Reading a Recipe</h3>
 <p>Each block is one instruction. G00 says "go fast here"; G01 says "go slow, cut"; G02/G03 say "cut an arc." The letters X/Y/Z are destinations. F is the feed. You do not need to memorize every G-code &mdash; you need to recognize the motion group and look up the rest. A working programmer keeps a one-page G-code cheat sheet taped to the machine. This page is that cheat sheet, with explanations.</p>
-<p>The most important G-codes are G00, G01, G02, G03. Everything else cancels or sets state. If you can read those four and G40/G41/G42, you can read 80% of any program. The canned cycles (G81&ndash;G89) are shortcuts for drilling patterns; the turning cycles (G70/G71/G72/G76) are shortcuts for stock removal. Learn the shortcuts after the basics, not before.</p>
+<p>The most important G-codes are G00, G01, G02, G03. Alongside them, modal group codes set state (compensation, cycles, units, plane) and motion codes move the tool. Canned cycles (G81&ndash;G89) are shortcuts for drilling patterns; turning cycles (G70/G71/G72/G76) are shortcuts for stock removal. Learn the motion codes first, then the state codes, then the cycles.</p>
 <p>Modal codes stick. G01 stays on until G00 or G02. F stays on until the next F. S stays on until the next S. This is why a program can have 50 blocks of G01 without writing G01 on every line &mdash; and also why a missing G00 at the end of a cut feeds the tool across air instead of rapid-retracting.</p>
 <h2>Common Mistakes</h2>
 <ul>
