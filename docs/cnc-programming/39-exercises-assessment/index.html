@@ -252,13 +252,19 @@ M30</code></pre>
 
 
 <h3>Grading</h3>
-<p>This assessment is worth 100 points. Questions 1&ndash;20 are 4 points each (80 total). The two code-review exercises are 5 points each (10 total). The two final projects are 5 points each (10 total). A passing score is 80/100. If you score below 80, identify which lesson the wrong answers cluster around and redo that lesson before retaking. Do not memorize answers; the point is to be able to read and debug code on a real machine.</p>
+<p>This assessment is worth 100 points, weighted by task type:</p>
+<ul>
+<li><strong>20 basic knowledge questions &times; 2 points = 40 points</strong> (Parts 1&ndash;3: recall, code reading, find-the-error).</li>
+<li><strong>2 code-review exercises &times; 10 points = 20 points</strong> (Part 4, Q17&ndash;Q18: list every defect, then fix; partial credit per defect).</li>
+<li><strong>2 final projects &times; 20 points = 40 points</strong> (process plan + coordinates + program + verification; scored on completeness, safety, and geometry).</li>
+</ul>
+<p>A passing score is 80/100. <strong>Critical safety or geometry errors (wrong work offset direction, missing tool-length call before Z-down, G41/G42 reversed into stock, unsafe retract) score zero for that item regardless of other points.</strong> If you score below 80, identify which lesson the wrong answers cluster around and redo that lesson before retaking. Do not memorize answers; the point is to be able to read and debug code on a real machine.</p>
 <p>Code-review exercises: for each, list every error you can find, then fix it. Projects: write the process plan, the coordinates, the program, and the verification steps. Submit them to a more experienced programmer for review before running them on a real machine.</p>
 <h2>Sources</h2>
 <ul>
-<li>Haas Automation, <em>Mill Operator's Manual</em>, M-codes and G-codes.</li>
-<li>Haas Automation, <em>Lathe Operator's Manual</em>, G71/G70 turning cycles.</li>
-<li>Sandvik Coromant, <em>Turning and Milling Training Materials</em>, cutting parameters.</li>
+<li>Haas Automation, <a href="https://www.haascnc.com/service/online-operator-s-manuals/mill-operator-s-manual.html" target="_blank" rel="noopener">Mill Operator's Manual</a> &mdash; G-code, M-code, and canned cycle reference.</li>
+<li>Haas Automation, <a href="https://www.haascnc.com/service/online-operator-s-manuals/lathe-operator-s-manual.html" target="_blank" rel="noopener">Lathe Operator's Manual</a> &mdash; G70/G71/G76 turning cycles and C-axis live tooling.</li>
+<li>Sandvik Coromant, <a href="https://www.sandvik.coromant.com/en-us/knowledge/machining-engineering/" target="_blank" rel="noopener">Machining Engineering Knowledge Base</a> &mdash; cutting parameters, chip geometry, tool life.</li>
 </ul>
 <nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/38-process-optimization/">&larr; Process Optimization</a><a href="/cnc-manufacturing-engineering/cnc-programming/31-learning-path/">Learning Path &rarr;</a></nav>
 </main>
