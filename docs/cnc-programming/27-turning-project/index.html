@@ -226,6 +226,10 @@ M30</code></pre>
 
 <h3>Why a Complete Project Teaches More Than Isolated Codes</h3>
 <p>A single G71 example shows one code. A complete project shows how drawing, datum, tooling, offsets, program, and inspection fit together. Once you have run a real program from drawing to inspected part, the abstract G-codes become physical. The project on this page uses the &Oslash;40 raw bar, r0.4 insert, and X30/X36 contour described in the figures and code above — do not confuse it with other example diameters used elsewhere on this site.</p>
+<h3>Measuring the First Turn</h3>
+<p>After the first rough-OD pass to &Oslash;36.4 and the finish pass to &Oslash;30.0 (Z0 to Z-20), stop the spindle, let it coast, and measure both diameters with a micrometer. The &Oslash;30.0 section should read on the drawing tolerance; the &Oslash;36.0 section (Z-20 to Z-40) should read about 0.4 mm oversize on the rough pass. If the &Oslash;30.0 reads 29.8 instead of 30.0, you have cut 0.2 mm too deep &mdash; that is a wear-offset correction, not a program edit. Touch the part off, enter the correction in the wear offset, and run the next piece. Do not edit the X30.0 in the program; that moves the drawing dimension.</p>
+<p>Axial position is checked against Z0 (the face). If the shoulder at Z-20 is actually at Z-19.8, the Z wear offset is off by 0.2 mm. On a lathe, diameter and length corrections live in two different offsets; do not mix them up. After correcting, run one more piece and re-measure both diameters and the shoulder before letting the machine run a batch.</p>
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Saying "face it" without writing the facing code</strong> — the 1 mm face stock must be actually removed to establish Z0.</li>
