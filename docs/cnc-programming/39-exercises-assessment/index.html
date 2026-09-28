@@ -152,21 +152,28 @@ X40.</code></pre>
 
 <p><strong>CR1 (10 points).</strong> The code below is supposed to drill one &Oslash;8 hole at X30 Y20 to Z&minus;12 in aluminum, S1500, F100. List every defect and give the corrected block.</p>
 <pre class="cp-code"><code>(SUBMITTED BY STUDENT)<br>G90 G54<br>G00 X30. Y20.<br>G81 R2. Z-12. F100.<br>M30</code></pre>
-<details><summary>Defects and corrected code</summary><p>Defects: no G21/G17/G40/G80 startup; no G43 H01 tool length before Z; spindle not started; no M08; G81 has no R plane clearance and no G80; no Z50 retract. Correct version:</p><pre class="cp-code"><code>O0017
-G21 G17 G90 G40 G80 G49
+<details><summary>Defects and corrected code</summary><p>Defects: missing G21/G17/G94/G40/G80 startup block; no G43 H01 tool-length call before any Z motion; spindle not started; no M08; the submitted code moves XY before the tool is at a verified Z clearance, so R2 has not been proven clear of the fixture; no explicit G80 after the cycle; no Z50 retract before M30. The R2 value itself is present &mdash; the defect is the unverified entry, not a missing parameter. Correct version (assumes T01 = &Oslash;8 drill, H01 length entered, fixture clears Z50 and R2):</p><pre class="cp-code"><code>O0017
+G21 G17 G90 G94 G40 G80 G49
 G54
 T01 M06                 (O8 DRILL)
 S1500 M03
-G00 X30. Y20.
-G43 H01 Z50. M08
+G00 G43 H01 Z50. M08    (tool length and clearance FIRST)
+G00 X30. Y20.           (then move XY)
 G99 G81 R2. Z-12. F100.
 G80
 G00 Z50. M09
-M30</code></pre></details>
+M30</code></pre>
+<p>CR1 scoring (10 points): startup/units 2, tool length/order 3, spindle/coolant 1, cycle/exit 2, safety/clearance reasoning 2.</p></details>
 
 <p><strong>CR2 (10 points).</strong> The code below is supposed to rough-turn a raw &Oslash;50 bar to &Oslash;40 over Z&minus;40 in mild steel. List every defect and give the corrected startup.</p>
 <pre class="cp-code"><code>(SUBMITTED BY STUDENT)<br>G00 X45. Z2.<br>G01 Z-40. F0.2<br>X50.<br>M30</code></pre>
-<details><summary>Example</summary><p>Four roughing passes remove 1.0 mm radially each; the fifth removes 0.8 mm, leaving 0.4 mm on diameter for the finishing pass:</p>
+<details><summary>Defects and corrected program</summary><p>Defects: no G18/G40/G54 startup; no G97/G99 feed mode; no spindle; the submitted G01 Z-40 at X45 leaves only 2 mm of stock to &Oslash;40 in one pass &mdash; too heavy for a single rough cut, and no finish stock is planned. Correct startup and layered plan:</p>
+<pre class="cp-code"><code>O0018
+G21 G18 G90 G94 G40 G54
+G97 S1000 M03
+T0101
+G00 X52. Z2.</code></pre>
+<p>Roughing passes remove 1.0 mm radially each; the fifth leaves 0.4 mm on diameter for finishing:</p>
 <table class="data-table">
 <tr><th>Pass</th><th>Diameter X</th><th>Radial depth</th><th>Length</th></tr>
 <tr><td>Rough 1</td><td>X48</td><td>1.0 mm</td><td>Z2 to Z&minus;40</td></tr>
