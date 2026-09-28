@@ -251,8 +251,16 @@ M30</code></pre>
 <details><summary>Show answer</summary><p>Tool body reaches Z = &minus;40 &minus; 8 = &minus;48. Gap to jaw at Z&minus;55 is 7 mm. This is a geometric model; verify the actual toolholder envelope on the machine.</p></details>
 
 <section class="cp-sources">
-<h3>Measuring After Each Rough and Finish Pass</h3>
-<p>After G71 roughing, measure the diameter with a micrometer at the position you will finish. The rough part should read about U0.4 larger in diameter than the finish target; for the &Oslash;30 step that means about &Oslash;30.4 before G70. If it reads &Oslash;30.2 instead, the wear offset on the finishing tool can be nudged by &minus;0.1 in diameter (0.05 mm on the radius) before the G70 pass. After G70, measure again and confirm the &Oslash;30 step reads within the drawing tolerance. Always stop the spindle, wait for it to stop, and retract the tool before measuring; do not touch a rotating part.</p>
+<h3>Measuring After Roughing vs After Finishing</h3>
+<p>After G71, the planned rough diameter on the &Oslash;30 step is &Oslash;30.4 (U0.4 in diameter, i.e. 0.2 mm on the radius). If you measure &Oslash;30.2 instead, that means 0.2 mm less in diameter than the rough plan &mdash; but 0.2 mm of material still remains to the &Oslash;30 finish target. That does <strong>not</strong> mean the finish wear offset is wrong. Before touching any offset, check: (1) U and W in the G71 block, (2) that you measured on the same cylinder the cycle will finish, (3) tool deflection and overhang, (4) that the micrometer is zeroed. Only after G70 finishes and the part still reads off the finish size do you correlate the error with the offset convention and adjust wear. Rough-side stock variation is not by itself a finish-compensation amount.</p>
+<table><caption>Rough-side measurement diagnostic</caption>
+<thead><tr><th scope="col">Reading</th><th scope="col">Diameter error vs plan</th><th scope="col">Action</th></tr></thead>
+<tbody>
+<tr><td>&Oslash;30.4 (planned)</td><td>0</td><td>Run G70 as written.</td></tr>
+<tr><td>&Oslash;30.2 (this case)</td><td>&minus;0.2 mm dia</td><td>Verify U, measurement position, deflection; do not trim finish offset yet.</td></tr>
+<tr><td>&Oslash;30.0 after G70</td><td>0 vs finish target</td><td>Accept.</td></tr>
+<tr><td>&Oslash;30.1 after G70</td><td>+0.1 mm dia</td><td>Correlate with offset convention, adjust wear by &minus;0.1 dia, rerun only the finishing pass.</td></tr>
+</tbody></table>
 
 <h2>Sources</h2>
 <ul>

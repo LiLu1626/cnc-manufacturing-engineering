@@ -262,7 +262,7 @@ M30</code></pre>
 
 <section class="cp-sources">
 <h3>Why the Two Layers Are Z-2 and Z-4</h3>
-<p>A &Oslash;10 center-cutting end mill in 6061 aluminum can take a 2&ndash;3 mm axial depth per pass at the recommended chip load. Two layers at Z-2 and Z-4 leave the floor clean at the second pass; the walls are then finished in a separate contour pass at the same Z-4. The ramp entry at 30 mm horizontal for 1 mm vertical keeps the chip load reasonable on entry; a straight plunge into a closed pocket overloads the center teeth. After the rough layers, air-cut the toolpath once at Z+1 to confirm no clamp or fixture interferes before taking the first real cut.</p>
+<p>The pocket in this classroom example is 4 mm deep and is roughed in two 2 mm axial layers, with separate wall and floor finishing passes afterwards. Entry is by ramp rather than straight plunge: each 1 mm of vertical depth is spread over 30 mm horizontal run, which is an angle of arctan(1/30) &asymp; 1.91&deg;. Layer 1 ramps 0 &rarr; &minus;1 &rarr; &minus;2; layer 2 ramps &minus;2 &rarr; &minus;3 &rarr; &minus;4. These numbers are a geometric classroom assumption &mdash; the actual axial depth and ramp angle that a specific &Oslash;10 center-cutting end mill can take must be confirmed from the tool manufacturer's data and the machine's rigidity. Before any cut, review the full toolpath, fixture envelope, and holder reach; the clearance height (Z+1 in the example) is an assumed value, not a universal safe height, and must be verified against the actual clamps.</p>
 
 <h2>Sources</h2>
 <ul>

@@ -151,13 +151,14 @@ M30</code></pre>
 
 <h3>A Working Bolt-Circle Macro</h3>
 <p>This macro drills 12 holes on a 50 mm radius starting at angle 0, stepping 30&deg; each hole. #1 holds the current angle, #2 and #3 hold X and Y, #4 holds the radius.</p>
-<pre class="cp-code"><code>O3601 (BOLT CIRCLE, 12 HOLES, R50)
+<pre class="cp-code"><code>O3601 (BOLT CIRCLE, R50)
 G21 G17 G90 G94 G54 G80 G40
-G00 G43 H01 Z50. M08
-S1500 M03
 #4 = 50.0              (radius, mm)
 #5 = 30.0              (angle step, deg; change to 45.0 for 8 holes)
-IF [#4 LE 0] THEN #3000 = 1 (RADIUS MUST BE >0, checked before any axis motion)
+IF [#4 LE 0] THEN #3000 = 1 (RADIUS MUST BE >0)
+IF [#5 LE 0] THEN #3000 = 2 (STEP MUST BE >0, else loop never ends)
+G00 G43 H01 Z50. M08
+S1500 M03
 G00 X#4 Y0.           (rapid to first hole XY at clearance, NO cut yet)
 G99 G81 X#4 Y0 R2. Z-15. F120.   (drill hole #1 at 0 deg)
 #1 = #5               (next angle = one step past hole #1)
@@ -170,7 +171,16 @@ END 1
 G80 G00 Z50. M09
 M30</code></pre>
 <p>The loop runs while #1 is less than 360. On each iteration, it computes X and Y on the circle and the modal G81 drills at that exact XY. Note: G81 is called once after the first hole's XY is already in position &mdash; not before any XY is set. If you issue G81 with no XY on the same block, the controller drills at whatever the current XY happens to be (often the origin), which is the classic "extra first hole" bug. Change #4 to 60 for a larger circle; change 30.0 to 45.0 for 8 holes. One number edits the whole pattern.</p>
-<p>The input check <code>IF [#4 LE 0] THEN #3000 = 1</code> runs before any motion: a non-positive radius alarms immediately instead of drilling a circle at the origin. In production, self-diagnosing macros let a programmer leave a machine running overnight &mdash; the macro catches the mistake before the first hole, not after 12 scrap parts.</p>
+<h3>Trigger Trace: 12 Holes vs 8 Holes</h3>
+<table><caption>Bolt-circle drill events</caption>
+<thead><tr><th scope="col">Event</th><th scope="col">#5 = 30&deg; (12 holes)</th><th scope="col">#5 = 45&deg; (8 holes)</th></tr></thead>
+<tbody>
+<tr><td>Pre-position G00 X#4 Y0</td><td>Rapid only, no drill</td><td>Rapid only, no drill</td></tr>
+<tr><td>First G81 X#4 Y0</td><td>Drill hole #1 at 0&deg;</td><td>Drill hole #1 at 0&deg;</td></tr>
+<tr><td>Loop fires at #1</td><td>30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330 (11 drills)</td><td>45, 90, 135, 180, 225, 270, 315 (7 drills)</td></tr>
+<tr><td>Total G81 drills</td><td>12</td><td>8</td></tr>
+</tbody></table>
+<p>The input checks <code>IF [#4 LE 0]</code> and <code>IF [#5 LE 0]</code> run before any axis motion: a non-positive radius or a zero step alarms immediately instead of drilling a circle at the origin or looping forever. In production, self-diagnosing macros let a programmer leave a machine running overnight &mdash; the macro catches the mistake before the first hole, not after 12 scrap parts.</p>
 
 <h3>Variables, Arithmetic, and Logic</h3>
 <p>FANUC-style macros use #1&ndash;#33 as local variables (for the current call), #100&ndash;#199 as common variables (saved across calls), and system variables like #5021 (current machine position). Arithmetic is straightforward: #2 = #1 * 2, #3 = #1 + #2. Trig functions use degrees: COS[#1], SIN[#1], TAN[#1]. Logic: IF[#1 LT 360] GOTO 10, or WHILE[#1 LT 360] DO 1&hellip;END 1. The comparison operators are EQ, NE, GT, LT, GE, LE.</p>
