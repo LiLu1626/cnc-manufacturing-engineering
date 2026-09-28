@@ -88,32 +88,35 @@ M99</code></pre>
 <p>Subprograms also have a stack depth limit on every controller &mdash; typically four or eight levels of M98 calls. Nesting a subprogram inside a subprogram is allowed, but going too deep triggers an alarm. Keep nesting shallow: one level for patterns, two at most, and never rely on undocumented depth limits in production.</p>
 <p>On the shop floor, a subprogram is also a testing unit. You can run O2000 alone with a dry-run block to check the hole position before running the full main program. Isolating one hole in its own O-number means you can fix the geometry in one place, and every call inherits the fix. This is the same reason functions exist in programming &mdash; single source of truth, repeated calls, isolated debugging.</p>
 
-<h3>A Complete Subprogram Example</h3>
-<p>Suppose you need to drill a 4-hole pattern on each of 4 parts on a tombstone &mdash; 16 holes total. The main program sets up G54, G81, and then calls the pattern subprogram once per fixture offset. The subprogram itself drills the 4 relative holes and returns. To move to the next fixture, the main program switches G55, G56, G57 and calls again.</p>
-<pre class="cp-code"><code>O0001 (MAIN)
-G21 G17 G90 G94 G54 G80 G40
-G00 G43 H01 Z50. M08
+<h3>A Complete Subprogram Example: Four Fixture Offsets</h3>
+<p>Suppose you drill the same 4-hole rectangular pattern on each of four parts set up on four fixture offsets (G54, G55, G56, G57) on one tombstone &mdash; 16 holes total. The main program establishes tool length and clearance first, then selects each fixture offset and calls the same pattern subprogram. The subprogram uses absolute local coordinates relative to each fixture origin, so the same local (X,Y) maps to a different machine (X,Y) under each G5x.</p>
+<pre class="cp-code"><code>O0001 (MAIN - 4 FIXTURES x 4 HOLES)
+G21 G17 G90 G94 G40 G80
+G00 G43 H01 Z50. M08   (establish clearance BEFORE XY)
 S1500 M03
-G81 R2. Z-15. F120.
-M98 P2000.           (drill pattern on G54)
+G54
+M98 P2000              (pattern on G54)
 G55
-M98 P2000.           (drill pattern on G55)
+M98 P2000              (pattern on G55)
 G56
-M98 P2000.
+M98 P2000
 G57
-M98 P2000.
+M98 P2000
 G80 G00 Z50. M09
+M05
 M30
 
-O2000 (4-HOLE PATTERN, INCREMENTAL)
-G91
-X0 Y0
+O2000 (4-HOLE RECTANGLE, ABSOLUTE LOCAL)
+G98 G81 R2. Z-15. F120.
+X0  Y0
 X20. Y0
 X20. Y20
-X-20. Y0
-G90
+X0  Y20
+G80
+G00 Z50.
 M99</code></pre>
-<p>The subprogram uses G91 for the pattern (relative moves) and restores G90 before M99. This is the leaked-modal bug fixed: if O2000 forgot G90, the next main-program block would move by distance, not to position. On a tombstone, this is the difference between 16 correct holes and 16 holes scattered across the fixture.</p>
+<p>Key points: (1) G81 is issued <em>inside</em> the subprogram on the first local hole X0 Y0, not before it &mdash; otherwise the first block outside the subprogram would drill an extra hole at wherever XY happened to be. (2) The four holes are the rectangle corners (0,0), (20,0), (20,20), (0,20) &mdash; not a drifted incremental chain. (3) G80 and a retract to Z50 happen before M99, so between fixtures the tool is at clearance height. (4) The local coordinates stay inside the subprogram; each G5x offsets them to the correct machine XY.</p>
+<p>Do not try to run O2000 by itself as a "standalone test." A subprogram expects a main program to have already established G54, H01, spindle, and clearance. To test it, write a tiny main program that calls O2000 once, or use the single-block dry-run. Pressing cycle start on O2000 directly either alarms or runs with unknown offsets.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Confusing P and O</strong> — Haas uses M98 P2000 (call), not O2000. The subprogram itself is labeled O2000.</li>
