@@ -128,3 +128,27 @@ body.cnc-programming { line-height: 1.6; }
   .site-nav, .site-footer, .cp-nav-bottom { display: none; }
   .cp-article { width: 100%; padding: 0; }
 }
+
+/* Course-wide layout and accessibility completion, 7d0e255 follow-up. */
+body.cnc-programming .cp-article { box-sizing: border-box; max-width: 780px; }
+body.cnc-programming .cp-article :is(p,li,td,th) { line-height: 1.6; overflow-wrap: anywhere; }
+body.cnc-programming .cp-course-home { width: min(100% - 32px, 1080px); margin: auto; padding: 32px 0; }
+body.cnc-programming .cp-module { border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin: 20px 0; background: var(--surface); }
+body.cnc-programming .cp-lessons { padding-left: 24px; }
+body.cnc-programming .cp-lessons li { margin: 10px 0; }
+body.cnc-programming .cp-objectives { border-left: 4px solid var(--accent); padding: 12px 18px; margin: 18px 0; background: var(--accent-light); }
+body.cnc-programming .cp-meta { overflow-wrap: anywhere; }
+body.cnc-programming .cp-figure { max-width: 100%; margin-inline: 0; }
+body.cnc-programming .cp-figure svg { display: block; width: 100%; max-width: 100%; height: auto; margin-inline: auto; color: var(--ink); }
+body.cnc-programming .cp-table-wrap { max-width: 100%; overflow-x: auto; }
+body.cnc-programming caption { text-align: left; font-weight: 600; padding: 8px 0; color: var(--accent-dark); }
+body.cnc-programming pre { max-width: 100%; box-sizing: border-box; overflow-x: auto; white-space: pre; }
+body.cnc-programming .cp-nav-bottom { flex-wrap: wrap; gap: 12px; }
+body.cnc-programming .cp-nav-bottom a { min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 820px) {
+ body.cnc-programming .site-nav-inner { flex-wrap: wrap; height: auto; min-height: 56px; padding-block: 12px; }
+ body.cnc-programming .site-nav-links { display: flex; flex-wrap: wrap; gap: 10px; padding-left: 0; }
+ body.cnc-programming .cp-meta { display: grid; }
+ body.cnc-programming .cp-nav-bottom { display: grid; grid-template-columns: 1fr; }
+ body.cnc-programming .cp-article { padding-top: 24px; }
+}

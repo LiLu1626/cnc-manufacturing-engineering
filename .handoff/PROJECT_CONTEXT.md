@@ -26,7 +26,7 @@ docs/
 ├── engineering-tools/      35 个计算器 + 首页
 ├── knowledge-base/         14 章知识库
 ├── machine-systems/        机器系统
-├── cnc-programming/        CNC 编程教程（23 篇）
+├── cnc-programming/        CNC 编程课程（40 篇主文 + 1 首页；兼容入口另计）
 ├── about/
 ├── cutting-tool-technology/   (规划中)
 ├── workholding-fixtures/     (规划中)
@@ -133,6 +133,10 @@ docs/
 - Engineering Tools: 35 个计算器
 - Knowledge Base: 14 章 42 篇
 - Machine Systems: 13 章
-- CNC Programming: 23 篇（01-31 学习路线）
+- CNC Programming: 40 篇主文 + 1 板块首页；兼容旧入口不计入主文章和词数验收
 - About
 - SEO: robots.txt, sitemap.xml (125 URLs), Google Search Console 已验证
+
+## 课程补丁记录（7d0e255 后续包）
+
+本包更新主文元信息、学习目标、前置链接、导航、表格、SVG说明与移动样式；22页补区分循环终点/有效牙长。结构检查不等于技术逐句复审或机床验证。来源条目指向相关主题，不宣称每条旧表述已逐条核证。
