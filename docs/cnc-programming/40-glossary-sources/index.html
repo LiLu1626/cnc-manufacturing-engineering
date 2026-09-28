@@ -22,13 +22,14 @@
 <tr><td>ATC</td><td>Automatic Tool Changer</td></tr>
 <tr><td>Canned cycle</td><td>Preprogrammed motion sequence (G81 etc.)</td></tr>
 <tr><td>Chuck</td><td>Workholding on a lathe</td></tr>
-<tr><td>Climb milling</td><td>Tool rotates same direction as feed</td></tr>
+<tr><td>Climb milling</td><td>Tool rotates same direction as feed (down milling)</td></tr>
+<tr><td>Feed</td><td>Rate at which the tool advances through the part: mm/min (feed per minute), mm/rev (lathe), or mm/tooth (indexable cutter). Not the same as cutting speed (m/min surface speed).</td></tr>
 <tr><td>Coolant</td><td>Cutting fluid (M08 on, M09 off)</td></tr>
 <tr><td>CSS</td><td>Constant Surface Speed (G96)</td></tr>
 <tr><td>Datum</td><td>Reference point for dimensions</td></tr>
 <tr><td>Feed</td><td>Cutting speed of tool relative to work</td></tr>
 <tr><td>G54</td><td>Work coordinate system offset</td></tr>
-<tr><td>Machine zero</td><td>Reference position the machine establishes on startup; home switch or scale reference, not always a "fixed physical switch"</td></tr>
+<tr><td>Machine zero</td><td>Coordinate origin the machine uses internally; established at startup via home switch or scale reference. "Home" / "reference position" often means the physical position the axes move to on startup, which may or may not equal machine zero depending on the machine.</td></tr>
 <tr><td>Modal</td><td>Code stays active until changed</td></tr>
 <tr><td>NC file</td><td>G-code program text file</td></tr>
 <tr><td>Rapid (G00)</td><td>Maximum-speed positioning move</td></tr>
