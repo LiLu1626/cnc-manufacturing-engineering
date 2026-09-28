@@ -213,3 +213,74 @@ M30</code></pre>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>
 </html>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Treating X as radius</strong> — X40 means 40 mm diameter. Radial depth = (X_start &minus; X_end)/2.</li>
+<li><strong>Z direction reversed</strong> — cutting into the part (along the spindle) is negative Z, not positive.</li>
+<li><strong>Forgetting the second offset number</strong> — T01 selects the tool but T0101 also activates the offset. T01 alone may not load geometry.</li>
+<li><strong>Not retracting X before Z retract</strong> — after turning to Z-50, retract X away from the part before moving Z, or the tool rubs along the finished surface.</li>
+<li><strong>Using an arbitrary negative X endpoint when facing</strong> — the required endpoint depends on insert geometry, tool orientation, center height, and the machine's permitted travel. Verify the toolmaker's guidance and the actual setup. X&minus;1 in this classroom example is an assumed endpoint, not a universal rule for removing a center nub.</li>
+</ul>
+
+<h2>Practice</h2>
+<p><strong>1.</strong> X moves from &Oslash;50 to &Oslash;44. What is the radial depth of cut?</p>
+<details><summary>Ans</summary><p>(50 &minus; 44) / 2 = 3 mm radial depth. The diameter reduces by 6 mm.</p></details>
+<p><strong>2.</strong> Where is Z0 typically set?</p>
+<details><summary>Ans</summary><p>On the finished front face of the part, after facing. Positive Z is away from the chuck; negative Z goes into the part.</p></details>
+<p><strong>3.</strong> Why is there no M06 on a lathe?</p>
+<details><summary>Ans</summary><p>The turret indexes tools directly. T0202 rotates the turret to tool station 2 and activates offset register 2 in one command.</p></details>
+<p><strong>4.</strong> You want a 2 mm deep roughing pass on &Oslash;50 stock. What X do you program?</p>
+<details><summary>Ans</summary><p>2 mm radial depth = 4 mm diameter reduction. X goes from 50 to 46. Program X46. for the pass.</p></details>
+
+<h3>Contour and Nose Radius on a Lathe</h3>
+<p>Lathe tools have a corner nose radius (commonly 0.4 or 0.8 mm). Programmed coordinates refer to the theoretical sharp corner, but the cutting edge contacts the part on the radius. Nose-radius compensation in the T offset corrects the contour error that this radius would otherwise cause on tapers and radii; it is not a command that rounds corners automatically. This is separate from mill cutter compensation.</p>
+
+<h3>Chuck Clearance and Part-off</h3>
+<p>Program Z travel so the tool never reaches the chuck jaws: leave at least the jaw height plus a margin based on the actual setup. Part-off depth, feed, and catcher arrangement depend on the blade, tool height, and fixture; see page 21. On facing, feed slightly past center to clean the face; the exact past-center amount depends on the nose radius and tool height.</p>
+
+<h3>Spindle Direction and Tool Orientation</h3>
+<p>M03 is forward and M04 reverse on a Haas lathe. Which one cuts correctly depends on the machine, main/sub-spindle configuration, and tool mounting. This page's example assumes a forward-rotation setup already verified on the machine; confirm the cutting edge engages rather than rubs before running.</p>
+
+<h3>Metric vs Inch on a Lathe</h3>
+<p>G21 selects mm, G20 selects inches. On a lathe, X in inch is diameter in inch. Mixing G20 and G21 mid-program scales every move by 25.4 and is a common crash cause. The startup block always sets G21 explicitly.</p>
+
+<h3>Block Trace for the Worked Program</h3>
+<table class="data-table">
+<tr><th>Block</th><th>X (diameter)</th><th>Z</th><th>Action</th></tr>
+<tr><td>G00 X47 Z2</td><td>47</td><td>2</td><td>outside stock, off face</td></tr>
+<tr><td>G01 Z0 F0.2</td><td>47</td><td>0</td><td>approach face</td></tr>
+<tr><td>X-1 F0.15</td><td>&minus;1</td><td>0</td><td>face past center</td></tr>
+<tr><td>G00 Z1 / X47</td><td>47</td><td>1</td><td>+Z off face, then X out</td></tr>
+<tr><td>G01 Z0 / X41 / Z-50</td><td>41</td><td>&minus;50</td><td>rough OD, 2 mm radial</td></tr>
+<tr><td>G00 X47 / Z2</td><td>47</td><td>2</td><td>X clear first, then Z back</td></tr>
+<tr><td>S1500 / G00 X39.5 Z2 / G01 Z0 / Z-50</td><td>39.5</td><td>&minus;50</td><td>finish OD, 0.75 mm radial</td></tr>
+</table>
+
+<h3>Why X Is Diameter on a Lathe</h3>
+<p>Programming X in diameter matches how a machinist measures a turned part with a caliper. If you move the tool 5 mm radially, the diameter changes by 10 mm, so writing X46 from X50 means a 2 mm depth of cut. This is a convention, not a physical law; some controls can switch to radius programming, but diameter is the default on Haas.</p>
+
+<h3>Work Offset and Tool Offset Together</h3>
+<p>The machine only knows its own X/Z positions. G54 tells it where the part origin is; each T offset tells it where that tool's tip is. Both must be set, or coordinates land in the wrong place. When you change a tool, call the T that carries its geometry; when you change a setup, check G54 is the right one. The startup block sets known units and plane so neither offsets nor coordinates drift.</p>
+
+<h3>Axial Reach Is Not Tool Clearance</h3>
+<p>The jaw sits near Z&minus;65 and the cut ends at Z&minus;50, leaving about 15 mm axial distance. That number does not by itself prove the turret, tool holder, and tool post clear the chuck; the tool envelope must be checked on the machine. A 15 mm reach can still bind if the holder is long or the tool post is wide.</p>
+
+<h3>First-Part Check and Offset Correlation</h3>
+<p>After the first rough and finish passes, stop and measure the turned diameter and shoulder length. Compare the rough diameter against the planned O41, not against a vague expectation. Before changing any wear offset, check the program target, the U/W allowance, the G54 datum, the tool geometry offset, the measurement itself, and tool deflection. If the finish diameter is 39.4 rather than 39.5, that part is already undersize and cannot be restored; for the next part, adjust X wear by 0.1 in the appropriate field and confirm the sign convention on the control.</p>
+
+<h3>Two Radial Depths, Two Feeds</h3>
+<p>The rough step removes 2 mm radial from O45 to O41 at F0.2; the finish step removes 0.75 mm radial to O39.5 at F0.1. The smaller finish depth pairs with higher spindle speed and lighter feed for surface finish. The tool tip coordinates describe the programmed path; the holder, turret, and chuck envelope are separate clearance checks that must be made on the machine.</p>
+
+<h2>Sources</h2>
+<ul>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G97.html">Haas G97 Constant RPM</a>.</li>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G96.html">Haas G96 Constant Surface Speed</a>.</li>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G54.html">Haas Lathe G54 Work Offset</a>.</li>
+</ul>
+
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/29-subprograms/">&larr; Subprograms</a><a href="/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/">Turning Cycles &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
