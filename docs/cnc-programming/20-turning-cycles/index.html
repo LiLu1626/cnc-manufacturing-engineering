@@ -77,6 +77,56 @@
 <figcaption>Half-section (radius, not diameter): finished in red, after-rough in green dashed. U0.4 diameter = 0.2 mm radial; W0.1 leaves the shoulder at Z&minus;19.9. Schematic, not a controller trace.</figcaption>
 </figure>
 
+
+
+<h3>ID Boring with G71</h3>
+<p>The same G71 works for ID boring, but the sign of U flips: material is inside the bore, so the finish allowance is negative U (the bore grows toward the finished size). The first P block starts at the small bore diameter and X increases monotonically toward the finished ID. Boring bar deflection usually limits depth-of-cut more than the OD case.</p>
+
+
+
+<h3>When Not to Use G71</h3>
+<p>Very short parts, chamfers only, or a single finishing pass do not need G71. Hand-code those directly. Parts with cross-holes, interrupted cuts, or hard scale benefit from a deliberate first pass rather than the automatic cycle. G71 shines when there is a long profile to rough repeatedly.</p>
+
+
+
+<h3>Verifying the First Article</h3>
+<p>After G70, stop and measure: diameter at the step, length to the shoulder, and surface finish. If the diameter is small, adjust the wear offset on that tool, not the program. If the step is off in Z, adjust the Z wear. The geometry offset stays; wear absorbs the small corrections.</p>
+
+
+
+<h3>U and W Sign by Cutting Side</h3>
+<p>On OD roughing, U leaves material on the outside, positive in diameter. On ID boring, the finish allowance sign flips because material is inside the bore. Always state which side you are cutting; do not infer the sign from the word "bore" alone. W leaves axial material on the shoulder that the finish pass will clean up.</p>
+
+
+
+<h3>Reading a G71 Alarm on the First Block</h3>
+<p>Common causes: the P block starts with a move that reverses X inside Type I, the Z direction changes along the contour, or the tool starts inside the finished profile instead of above the stock. Walk through N10&rarr;N20 block by block and compare against the part. Do not increase D to "force" the cycle through; that hides a geometry error.</p>
+
+
+
+<h3>Roughing vs Finishing Feed and Speed</h3>
+<p>Roughing favors depth over surface finish; finishing favors light cuts at higher speed. The same tool may run at S1000 F0.2 rough and S1500 F0.1 finish. These are classroom starting points; the insert manufacturer's data and the machine's rigidity determine the real values.</p>
+
+
+
+<h3>Why U0.4 Means 0.2 mm Radial</h3>
+<p>U is on diameter. On a turned part, diameter is twice the radius, so leaving 0.4 mm on diameter leaves 0.2 mm on each side radially. G70 takes that 0.2 mm radial light finish cut. W0.1 is axial: the shoulder at Z&minus;20 is left at Z&minus;19.9 after roughing, and the finish pass steps it to &minus;20.0. The allowance table shows these final positions; the internal step-down path is computed by the control.</p>
+
+
+
+<h3>Roughing Feed vs Finishing Feed</h3>
+<p>G71 uses the F on its own line for roughing (F0.2). G70 reads the feed from the contour blocks, where the example sets F0.1 on the G01 Z0 line. That is why the same contour can be rough-fed fast and finish-fed light without rewriting the geometry.</p>
+
+
+
+<h3>Checking Diameter Allowance and Shoulder Allowance Separately</h3>
+<p>After roughing, the two diameters are O30.4 and O36.4 (each 0.2 mm radial over finished), and the shoulder sits at Z&minus;19.9 instead of &minus;20.0. Before changing any offset, check the program target, U/W allowance, G54 datum, geometry offset, measurement, and deflection. If a diameter error remains after those checks, X wear is the correction; for a shoulder error, check Z path and datum before Z wear. P/Q describes the finished contour that G70 follows; it is not a record of every rough pass the control took.</p>
+
+
+
+<h3>When to Use G71 vs a Straight Roughing Pass</h3>
+<p>G71 pays off when the stock is a long cylinder and the profile has several diameters or a taper. For a single short shoulder, hand-coded G01 blocks are faster to write and easier to verify. Match the cycle to the part, not to the other way around.</p>
+
 <h2>Example</h2>
 <p><strong>Worked example:</strong> Stepped shaft. Start at &Oslash;50 raw. Finished: &Oslash;30 from Z0 to Z-20, then &Oslash;36 from Z-20 to Z-40. Rough at D1.0 (1 mm radial per pass), U0.4 diameter finish allowance, W0.1 Z allowance. Rough S1000 F0.2; finish S1500 F0.1.</p>
 <pre class="cp-code"><code>O0020 (G71/G70 EXAMPLE)
@@ -123,6 +173,43 @@ M30</code></pre>
 <h3>Verifying the Cycle Before Running</h3>
 <p>After writing G71, dry-run with feed override low and watch: is the first P block Type I (X only) or Type II (X plus Z)? Do rough passes stay on the stock side? Does the tool pull away before indexing? An alarm usually means X reverses in Type I, Z reverses, or the tool starts inside the finished profile. Identify the type first, then check the matching rule.</p>
 
+
+
+<h3>Cycle Time Estimate</h3>
+<p>For an ideal straight cylinder with D1.0 radial depth and 10 mm total radial stock, expect about 10 roughing passes (the last leaves U0.4 diameter = 0.2 mm for finish). At F0.2 mm/rev and S1000 = 200 mm/min, a 40 mm effective cut length takes 0.2 min = 12 s. This is a classroom approximation for a straight part; on the stepped example below, passes below &Oslash;36 only travel the first length, so not every pass cuts 40 mm. Ignore rapid and acceleration until you have a cycle-time study.</p>
+
+
+
+<h3>Contour Block Trace (P&ndash;Q)</h3>
+<table class="data-table">
+<tr><th>Block</th><th>X (diameter)</th><th>Z</th><th>Motion</th></tr>
+<tr><td>N10 start</td><td>30</td><td>2</td><td>P-block positioning above part</td></tr>
+<tr><td>G01 Z0 F0.1</td><td>30</td><td>0</td><td>feed to face</td></tr>
+<tr><td>Z-20.</td><td>30</td><td>&minus;20</td><td>turn O30 straight, then shoulder</td></tr>
+<tr><td>X36.</td><td>36</td><td>&minus;20</td><td>radial move across shoulder (cutting)</td></tr>
+<tr><td>Z-40.</td><td>36</td><td>&minus;40</td><td>turn O36</td></tr>
+<tr><td>N20 X52.</td><td>52</td><td>&minus;40</td><td>pull off, leave contour</td></tr>
+</table>
+<p>First move is Z on the O30 diameter, then X steps out to O36 at the shoulder — a stepped part, not a taper.</p>
+
+
+
+<h3>Target Allowance Table</h3>
+<table class="data-table">
+<tr><th>Feature</th><th>Finished</th><th>After rough</th></tr>
+<tr><td>Front diameter</td><td>O30</td><td>O30.4</td></tr>
+<tr><td>Rear diameter</td><td>O36</td><td>O36.4</td></tr>
+<tr><td>Shoulder Z</td><td>&minus;20.0</td><td>&minus;19.9</td></tr>
+</table>
+<p>U0.4 is on diameter (0.2 mm radial); W0.1 leaves axial stock on the shoulder. The exact rough pass sequence is computed by the control, not listed here.</p>
+
+
+
+<h3>Reading the First-Part Result</h3>
+<p>After G70, measure. If the front diameter is 30.10 instead of 30.00, and positive X wear moves the tool outward (larger diameter), reduce X wear by 0.10 in a diameter field (0.05 in a radius field) for the next part; confirm the sign convention on your control. If the shoulder lands at Z&minus;19.8 instead of &minus;20.0, adjust Z wear accordingly. Material already removed cannot be restored; corrections apply to subsequent parts only.</p>
+
+
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Grooves in the G71 contour</strong> — reversing X in Type I alarms or cuts wrong. Evaluate the part and tool access; G73 is for near-net-shape stock, not a universal groove solution.</li>
@@ -141,63 +228,6 @@ M30</code></pre>
 <details><summary>Ans</summary><p>Finishing cycle: takes one clean pass along the P–Q contour at the finishing S and F, cutting to exact dimensions.</p></details>
 <p><strong>4.</strong> Raw stock &Oslash;60, finish to &Oslash;40, D1.0 per pass. How many roughing passes?</p>
 <details><summary>Ans</summary><p>Radial stock = (60&minus;40)/2 = 10 mm. At D1.0 per pass = 10 passes. The last pass leaves U0.4 diameter (0.2 mm) for G70.</p></details>
-
-<h3>ID Boring with G71</h3>
-<p>The same G71 works for ID boring, but the sign of U flips: material is inside the bore, so the finish allowance is negative U (the bore grows toward the finished size). The first P block starts at the small bore diameter and X increases monotonically toward the finished ID. Boring bar deflection usually limits depth-of-cut more than the OD case.</p>
-
-<h3>Cycle Time Estimate</h3>
-<p>For an ideal straight cylinder with D1.0 radial depth and 10 mm total radial stock, expect about 10 roughing passes (the last leaves U0.4 diameter = 0.2 mm for finish). At F0.2 mm/rev and S1000 = 200 mm/min, a 40 mm effective cut length takes 0.2 min = 12 s. This is a classroom approximation for a straight part; on the stepped example below, passes below &Oslash;36 only travel the first length, so not every pass cuts 40 mm. Ignore rapid and acceleration until you have a cycle-time study.</p>
-
-<h3>When Not to Use G71</h3>
-<p>Very short parts, chamfers only, or a single finishing pass do not need G71. Hand-code those directly. Parts with cross-holes, interrupted cuts, or hard scale benefit from a deliberate first pass rather than the automatic cycle. G71 shines when there is a long profile to rough repeatedly.</p>
-
-<h3>Verifying the First Article</h3>
-<p>After G70, stop and measure: diameter at the step, length to the shoulder, and surface finish. If the diameter is small, adjust the wear offset on that tool, not the program. If the step is off in Z, adjust the Z wear. The geometry offset stays; wear absorbs the small corrections.</p>
-
-<h3>Contour Block Trace (P&ndash;Q)</h3>
-<table class="data-table">
-<tr><th>Block</th><th>X (diameter)</th><th>Z</th><th>Motion</th></tr>
-<tr><td>N10 start</td><td>30</td><td>2</td><td>P-block positioning above part</td></tr>
-<tr><td>G01 Z0 F0.1</td><td>30</td><td>0</td><td>feed to face</td></tr>
-<tr><td>Z-20.</td><td>30</td><td>&minus;20</td><td>turn O30 straight, then shoulder</td></tr>
-<tr><td>X36.</td><td>36</td><td>&minus;20</td><td>radial move across shoulder (cutting)</td></tr>
-<tr><td>Z-40.</td><td>36</td><td>&minus;40</td><td>turn O36</td></tr>
-<tr><td>N20 X52.</td><td>52</td><td>&minus;40</td><td>pull off, leave contour</td></tr>
-</table>
-<p>First move is Z on the O30 diameter, then X steps out to O36 at the shoulder — a stepped part, not a taper.</p>
-
-<h3>Target Allowance Table</h3>
-<table class="data-table">
-<tr><th>Feature</th><th>Finished</th><th>After rough</th></tr>
-<tr><td>Front diameter</td><td>O30</td><td>O30.4</td></tr>
-<tr><td>Rear diameter</td><td>O36</td><td>O36.4</td></tr>
-<tr><td>Shoulder Z</td><td>&minus;20.0</td><td>&minus;19.9</td></tr>
-</table>
-<p>U0.4 is on diameter (0.2 mm radial); W0.1 leaves axial stock on the shoulder. The exact rough pass sequence is computed by the control, not listed here.</p>
-
-<h3>U and W Sign by Cutting Side</h3>
-<p>On OD roughing, U leaves material on the outside, positive in diameter. On ID boring, the finish allowance sign flips because material is inside the bore. Always state which side you are cutting; do not infer the sign from the word "bore" alone. W leaves axial material on the shoulder that the finish pass will clean up.</p>
-
-<h3>Reading the First-Part Result</h3>
-<p>After G70, measure. If the front diameter is 30.10 instead of 30.00, and positive X wear moves the tool outward (larger diameter), reduce X wear by 0.10 in a diameter field (0.05 in a radius field) for the next part; confirm the sign convention on your control. If the shoulder lands at Z&minus;19.8 instead of &minus;20.0, adjust Z wear accordingly. Material already removed cannot be restored; corrections apply to subsequent parts only.</p>
-
-<h3>Reading a G71 Alarm on the First Block</h3>
-<p>Common causes: the P block starts with a move that reverses X inside Type I, the Z direction changes along the contour, or the tool starts inside the finished profile instead of above the stock. Walk through N10&rarr;N20 block by block and compare against the part. Do not increase D to "force" the cycle through; that hides a geometry error.</p>
-
-<h3>Roughing vs Finishing Feed and Speed</h3>
-<p>Roughing favors depth over surface finish; finishing favors light cuts at higher speed. The same tool may run at S1000 F0.2 rough and S1500 F0.1 finish. These are classroom starting points; the insert manufacturer's data and the machine's rigidity determine the real values.</p>
-
-<h3>Why U0.4 Means 0.2 mm Radial</h3>
-<p>U is on diameter. On a turned part, diameter is twice the radius, so leaving 0.4 mm on diameter leaves 0.2 mm on each side radially. G70 takes that 0.2 mm radial light finish cut. W0.1 is axial: the shoulder at Z&minus;20 is left at Z&minus;19.9 after roughing, and the finish pass steps it to &minus;20.0. The allowance table shows these final positions; the internal step-down path is computed by the control.</p>
-
-<h3>Roughing Feed vs Finishing Feed</h3>
-<p>G71 uses the F on its own line for roughing (F0.2). G70 reads the feed from the contour blocks, where the example sets F0.1 on the G01 Z0 line. That is why the same contour can be rough-fed fast and finish-fed light without rewriting the geometry.</p>
-
-<h3>Checking Diameter Allowance and Shoulder Allowance Separately</h3>
-<p>After roughing, the two diameters are O30.4 and O36.4 (each 0.2 mm radial over finished), and the shoulder sits at Z&minus;19.9 instead of &minus;20.0. Before changing any offset, check the program target, U/W allowance, G54 datum, geometry offset, measurement, and deflection. If a diameter error remains after those checks, X wear is the correction; for a shoulder error, check Z path and datum before Z wear. P/Q describes the finished contour that G70 follows; it is not a record of every rough pass the control took.</p>
-
-<h3>When to Use G71 vs a Straight Roughing Pass</h3>
-<p>G71 pays off when the stock is a long cylinder and the profile has several diameters or a taper. For a single short shoulder, hand-coded G01 blocks are faster to write and easier to verify. Match the cycle to the part, not to the other way around.</p>
 
 <h2>Sources</h2>
 <ul>
