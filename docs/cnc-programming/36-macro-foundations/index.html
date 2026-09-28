@@ -149,8 +149,8 @@ G21 G17 G90 G94 G54 G80 G40
 G00 G43 H01 Z50. M08
 S1500 M03
 #4 = 50.0              (radius, mm)
-IF [#4 LE 0] THEN #3000 = 1 (RADIUS MUST BE >0)
-#1 = 0.0               (start angle, deg)
+IF [#4 LE 0] THEN #3000 = 1 (RADIUS MUST BE >0, checked before any axis motion)
+#1 = 30.0              (first hole at 0 deg is drilled below; loop starts at 30)
 G00 X#4 Y0.           (rapid to first hole XY at clearance, NO cut yet)
 G99 G81 X#4 Y0 R2. Z-15. F120.   (drill hole #1 at 0 deg)
 #1 = 30.0             (next hole at 30 deg)
