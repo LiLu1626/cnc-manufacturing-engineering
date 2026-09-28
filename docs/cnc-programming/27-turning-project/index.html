@@ -251,6 +251,9 @@ M30</code></pre>
 <details><summary>Show answer</summary><p>Tool body reaches Z = &minus;40 &minus; 8 = &minus;48. Gap to jaw at Z&minus;55 is 7 mm. This is a geometric model; verify the actual toolholder envelope on the machine.</p></details>
 
 <section class="cp-sources">
+<h3>Measuring After Each Rough and Finish Pass</h3>
+<p>After G71 roughing, measure the diameter with a micrometer at the position you will finish. The rough part should read about U0.4 larger in diameter than the finish target; for the &Oslash;30 step that means about &Oslash;30.4 before G70. If it reads &Oslash;30.2 instead, the wear offset on the finishing tool can be nudged by &minus;0.1 in diameter (0.05 mm on the radius) before the G70 pass. After G70, measure again and confirm the &Oslash;30 step reads within the drawing tolerance. Always stop the spindle, wait for it to stop, and retract the tool before measuring; do not touch a rotating part.</p>
+
 <h2>Sources</h2>
 <ul>
 <li>Haas Automation Lathe Operator's Manual — G71 roughing cycle (single-line format), G70 finishing cycle.</li>
