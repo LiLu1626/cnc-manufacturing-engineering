@@ -152,8 +152,7 @@ S1500 M03
 IF [#4 LE 0] THEN #3000 = 1 (RADIUS MUST BE >0)
 #1 = 0.0               (start angle, deg)
 G00 X#4 Y0.           (rapid to first hole XY at clearance, NO cut yet)
-G99 G81 R2. Z-15. F120.
-X#4 Y0                (drill hole #1 at 0 deg)
+G99 G81 X#4 Y0 R2. Z-15. F120.   (drill hole #1 at 0 deg)
 #1 = 30.0             (next hole at 30 deg)
 WHILE [#1 LT 360] DO 1
   #2 = #4 * COS[#1]
