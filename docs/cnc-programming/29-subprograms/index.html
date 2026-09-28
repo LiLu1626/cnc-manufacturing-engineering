@@ -117,6 +117,32 @@ G00 Z50.
 M99</code></pre>
 <p>Key points: (1) G81 is issued <em>inside</em> the subprogram on the first local hole X0 Y0, not before it &mdash; otherwise the first block outside the subprogram would drill an extra hole at wherever XY happened to be. (2) The four holes are the rectangle corners (0,0), (20,0), (20,20), (0,20) &mdash; not a drifted incremental chain. (3) G80 and a retract to Z50 happen before M99, so between fixtures the tool is at clearance height. (4) The local coordinates stay inside the subprogram; each G5x offsets them to the correct machine XY.</p>
 <p>Do not try to run O2000 by itself as a "standalone test." A subprogram expects a main program to have already established G54, H01, spindle, and clearance. To test it, write a tiny main program that calls O2000 once, or use the single-block dry-run. Pressing cycle start on O2000 directly either alarms or runs with unknown offsets.</p>
+<h3>Nested Subprograms: When to Go One Level Deeper</h3>
+<p>A main program that calls one subprogram is the easy case. Production setups often need a second level: the main program calls an O2000 that itself calls O3000 for a repeated detail inside each pattern. On a FANUC-style control, subprogram nesting is limited &mdash; typically four to eight levels of M98 calls before the controller alarms. Keep nesting shallow: one level for hole patterns, two at most for reusable detail features, and never rely on an undocumented limit. If you need three or four levels, the program is usually telling you to split the work into multiple main programs instead.</p>
+<p>The main trap in nested subprograms is leaked state across levels. If O2000 switches to G91 and calls O3000, O3000 inherits G91 unless it restores G90. By the time control returns to O2000 and then to the main program, three layers of incremental drift have accumulated. The defensive pattern is: every subprogram that changes a modal mode restores that mode before M99, even if you "know" the caller expects it. This costs a line and saves hours of debugging.</p>
+
+<h3>Passing Data to a Subprogram</h3>
+<p>The four-fixture example above hard-codes the rectangle corners (0,0),(20,0),(20,20),(0,20). That is fine for one part, but the same rectangle called at 30 different sizes becomes a maintenance problem. Production subprograms use macro variables (#1&ndash;#33 local, #100&ndash;#199 common) to pass in the corner positions, stepover, and depth. The main program sets #1 = X start, #2 = Y start, #3 = X length, #4 = Y length, then calls O2000; the subprogram computes the four corners itself.</p>
+<p>Local variables (#1&ndash;#33) are private to each subprogram call: O2000 can use #1 without clobbering the main program's #1. Common variables (#100&ndash;#199) are shared across the whole program &mdash; useful for setup values like material, but dangerous if two subprograms write the same variable without coordination. In a teaching shop, start with hard-coded geometry and introduce variables only when the same subprogram is reused across three different parts.</p>
+
+<h3>Subprograms and the Controller Call Stack</h3>
+<p>Every M98 pushes a return address onto a small internal stack; every M99 pops one off. The stack is not infinite. If you call a subprogram that forgets M99, the controller eventually runs out of return addresses and alarms mid-cut &mdash; often at the worst possible time, halfway through an unmanned cycle. Symptom: a program that runs fine for the first hour and then alarms at the same place every shift. Diagnosis: search every O-number for a missing M99.</p>
+<p>On a FANUC-style control, the call count L word (M98 P2000 L4) repeats the subprogram four times in a row without returning to the main program between calls. This is useful for a bolt circle or a tombstone pattern, but it means the subprogram must position itself for each repeat &mdash; either via incremental motion inside the subprogram (with a G90 restore) or by incrementing a variable. Do not use L4 to call a subprogram that ends at the same XY every time; the controller drills the same hole four times.</p>
+
+<svg viewBox="0 0 320 200" style="width:100%;max-width:400px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="60" y="18" font-size="12" font-weight="bold" fill="#333">Subprogram Call/Return Stack</text>
+  <rect x="30" y="40" width="120" height="28" fill="#54a0ff" rx="4"/>
+  <text x="45" y="58" font-size="11" fill="#fff">Main O0001</text>
+  <text x="160" y="58" font-size="10" fill="#27ae60">&rarr; M98 P2000</text>
+  <rect x="60" y="85" width="120" height="28" fill="#2ecc71" rx="4"/>
+  <text x="75" y="103" font-size="11" fill="#fff">O2000</text>
+  <text x="190" y="103" font-size="10" fill="#27ae60">&rarr; M98 P3000</text>
+  <rect x="90" y="130" width="120" height="28" fill="#e67e22" rx="4"/>
+  <text x="105" y="148" font-size="11" fill="#fff">O3000</text>
+  <text x="220" y="148" font-size="10" fill="#c0392b">&larr; M99</text>
+  <text x="30" y="180" font-size="10" fill="#666">Each M99 returns one level up. Missing M99 = stack overflow alarm.</text>
+</svg>
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Confusing P and O</strong> — Haas uses M98 P2000 (call), not O2000. The subprogram itself is labeled O2000.</li>
