@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Diagnosing Program Problems — CNC Programming</title>
-<meta name="description" content="Systematic troubleshooting of CNC program errors: wrong motion, wrong dimensions, alarms, overtravel, arc errors, and surface finish problems.">
+<title>Diagnosing CNC Program Problems — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Diagnosing CNC Program Problems. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -24,10 +24,10 @@
     </ul>
   </div>
 </nav>
-<main class="article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<main class="article cp-article">
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Diagnosing Program Problems</h1>
-<p class="lead">When the machine does something unexpected, systematic diagnosis beats trial and error. This page covers common symptoms, where to look, and how to fix each category of programming error without compounding the problem.</p>
+<p class="lead">When the machine does something unexpected, systematic diagnosis beats trial and error. This page covers common symptoms, where to look, and how to fix each category of programming error without compounding the problem.</p><div class="cp-meta"><span><strong>Level:</strong> K</span><span><strong>Scope:</strong> Machine-neutral concepts; controller-specific examples are labelled</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/24-verification/">Program Verification and First-Article Checks</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Separate size and position errors</li><li>Use measurements to test a cause</li><li>Explain why offsets need diagnosis</li></ul></div>
 
 <h2>Concept</h2>
 <p>Program problems fall into four categories: <strong>motion errors</strong> (tool goes where it should not), <strong>dimension errors</strong> (part size is wrong), <strong>alarm errors</strong> (machine stops with a fault), and <strong>surface errors</strong> (finish or tool condition is poor). Each category has a diagnostic path: read the alarm, check the modal state, verify coordinates on paper, then make one change and observe.</p>
@@ -38,8 +38,8 @@
 <h2>How It Works</h2>
 
 <h3>Symptom → Cause → Check Table</h3>
-<table class="data-table">
-<tr><th>Symptom</th><th>Likely Cause</th><th>What to Check</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Symptom → Cause → Check Table"><table class="data-table"><caption>Symptom → Cause → Check Table</caption>
+<tr><th scope="col">Symptom</th><th scope="col">Likely Cause</th><th scope="col">What to Check</th></tr>
 <tr><td>Tool goes wrong direction</td><td>G90/G91 distance mode</td><td>Is absolute or incremental active?</td></tr>
 <tr><td>Dimensions off by 25.4&times;</td><td>Units mismatch</td><td>G20 (inch) vs G21 (metric)</td></tr>
 <tr><td>Hole at wrong position</td><td>Work offset wrong</td><td>Is G54 X/Y correct? Accidentally on G55?</td></tr>
@@ -50,7 +50,7 @@
 <tr><td>Dimension off by tool radius</td><td>Cutter comp not active</td><td>Is G41/G42 on? Is D offset correct?</td></tr>
 <tr><td>Spindle wrong direction</td><td>M03/M04 reversed</td><td>Check the S line and M03/M04</td></tr>
 <tr><td>Feed too fast/slow</td><td>G94 vs G95 mode</td><td>F in mm/min vs mm/rev</td></tr>
-</table>
+</table></div>
 
 <h3>Diagnosis Procedure</h3>
 <ol>
@@ -62,7 +62,7 @@
 </ol>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="Diagnosis Procedure" role="img" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="lesson-25-diagram-1-desc">Illustration for Diagnosis Procedure. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-25-diagram-1-title">Diagnosis Procedure</title>
   <rect x="20" y="20" width="100" height="40" fill="#e74c3c" rx="4"/>
   <text x="70" y="45" font-size="11" fill="white" text-anchor="middle">Symptom</text>
   <line x1="120" y1="40" x2="160" y2="40" stroke="#666" stroke-width="1.5"/>
@@ -104,7 +104,7 @@
 <p>Poor finish, chatter marks, or dimensional drift all point to tool wear or rigidity. Replace the insert, check overhang, and confirm the workholding before blaming the program.</p>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="Tool Wear and Surface Finish" role="img" viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="lesson-25-diagram-2-desc">Illustration for Tool Wear and Surface Finish. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-25-diagram-2-title">Tool Wear and Surface Finish</title>
   <circle cx="120" cy="90" r="4" fill="#27ae60"/>
   <text x="120" y="110" font-size="10" fill="#27ae60" text-anchor="middle">correct (-270,-190)</text>
   <circle cx="220" cy="90" r="4" fill="#c0392b"/>
@@ -236,7 +236,7 @@
 <li>Haas Automation, G41 Cutter Compensation Left. <a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G41.html" target="_blank" rel="noopener">haascnc.com</a>.</li>
 <li>Haas Automation, G02 / G03 Circular Interpolation. <a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G02.html" target="_blank" rel="noopener">haascnc.com</a>.</li>
 </ul>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/24-verification/">&larr; Verification</a><a href="/cnc-manufacturing-engineering/cnc-programming/26-common-mistakes/">Common Mistakes &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/24-verification/">Previous: Program Verification and First-Article Checks</a><a href="/cnc-manufacturing-engineering/cnc-programming/26-common-mistakes/">Next: Common Beginner Mistakes and Corrections</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

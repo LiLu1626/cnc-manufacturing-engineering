@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Glossary & Source Guide — CNC Programming</title><meta name="description" content="Key CNC terminology and recommended references for further study."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/40-glossary-sources/"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav">
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>CNC Programming Glossary and Source Guide — CNC &amp; Manufacturing Engineering</title><meta name="description" content="Learn CNC Programming Glossary and Source Guide. Worked examples, checks and practice for CNC programming beginners."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/40-glossary-sources/"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3"></head><body class="cnc-programming"><nav class="site-nav">
   <div class="site-nav-inner">
     <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
     <ul class="site-nav-links">
@@ -10,8 +10,8 @@
       <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
     </ul>
   </div>
-</nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Glossary & Source Guide</h1><p class="lead">Key CNC terms defined, plus recommended sources for going deeper. This page links terminology to the detailed lessons.</p>
-<svg viewBox="0 0 320 140" style="width:100%;max-width:420px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+</nav><main class="article cp-article"><a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a><h1>Glossary & Source Guide</h1><p class="lead">Key CNC terms defined, plus recommended sources for going deeper. This page links terminology to the detailed lessons.</p><div class="cp-meta"><span><strong>Level:</strong> B</span><span><strong>Scope:</strong> Machine-neutral concepts; controller-specific examples are labelled</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/01-getting-started/what-is-cnc-programming/">What Is CNC Programming?</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Distinguish feed and cutting speed</li><li>Separate origin and reference return</li><li>Use terminology to locate a source</li></ul></div>
+<figure class="cp-figure"><svg aria-label="Glossary &amp;amp; Source Guide" role="img" viewBox="0 0 320 140" style="width:100%;max-width:420px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="lesson-40-diagram-1-desc">Illustration for Glossary &amp; Source Guide. Its dimensions and assumptions are explained in the adjacent lesson text.</desc>
 <title>Feed per tooth</title>
 <circle cx="80" cy="70" r="25" fill="none" stroke="#54a0ff" stroke-width="2"/>
 <line x1="80" y1="45" x2="80" y2="95" stroke="#999"/>
@@ -19,14 +19,14 @@
 <text x="130" y="65" font-size="11" fill="#333">fz = feed per tooth (mm)</text>
 <text x="130" y="85" font-size="11" fill="#333">vf = fz &times; z &times; n (mm/min)</text>
 <text x="130" y="105" font-size="10" fill="#666">z = teeth, n = rpm</text>
-</svg><h2>Concept</h2>
+</svg><figcaption>Glossary &amp; Source Guide — read the adjacent example for the stated conditions.</figcaption></figure><h2>Concept</h2>
 <p>Quick definitions of common CNC terms. For full explanations, follow links to the relevant lesson.</p>
 <h2>Why It Matters</h2>
 <p>CNC has its own vocabulary. Knowing the correct terms helps you read manuals, ask questions, and communicate with machinists.</p>
 <h2>How It Works</h2>
 <h3>Glossary</h3>
-<table class="data-table">
-<tr><th>Term</th><th>Meaning</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Glossary"><table class="data-table"><caption>Glossary</caption>
+<tr><th scope="col">Term</th><th scope="col">Meaning</th></tr>
 <tr><td>Absolute (G90)</td><td>Coordinates measured from work zero</td></tr>
 <tr><td>ATC</td><td>Automatic Tool Changer</td></tr>
 <tr><td>Canned cycle</td><td>Preprogrammed motion sequence (G81 etc.)</td></tr>
@@ -65,7 +65,7 @@
 <tr><td>Toolpath</td><td>Sequence of cutter positions</td></tr>
 <tr><td>VMC</td><td>Vertical Machining Center</td></tr>
 <tr><td>Workholding</td><td>How the part is clamped (vise, chuck, fixture)</td></tr>
-</table>
+</table></div>
 
 <h3>How to Use This Glossary</h3>
 <p>This glossary is a quick reference, not a tutorial. If you read a term and do not understand the full explanation, follow the link to the relevant lesson in this CNC Programming section. Each term is listed in plain English first, then with the controller-specific shorthand where it matters. When two shops use different words for the same thing (for example "work offset" vs "fixture offset" vs "G54"), both are listed so the term from one manual maps to the term from another.</p>
@@ -90,4 +90,4 @@
 <p><strong>1.</strong> What does G54 do?</p><details><summary>Ans</summary><p>Sets the work coordinate system offset.</p></details>
 <p><strong>2.</strong> Modal means?</p><details><summary>Ans</summary><p>The code stays active until another code in the same group replaces it.</p></details>
 <p><strong>3.</strong> What is ATC?</p><details><summary>Ans</summary><p>Automatic Tool Changer — the magazine that swaps tools on a mill.</p></details>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/39-exercises-assessment/">&larr; Exercises</a><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming Home &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>
+<h2>Sources</h2><ul><li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G54.html">Haas G54 work coordinates</a></li><li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G94.html">Haas G94 mill feed per minute</a></li></ul><nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/30-reference/">Previous: CNC Programming Quick Reference</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>

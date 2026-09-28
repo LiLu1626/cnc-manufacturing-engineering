@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Drilling, Pecking & Boring — CNC Programming</title>
-<meta name="description" content="G81 drilling, G82 spot drilling, G83 peck drilling, G85 boring, R plane, Z depth, drill point compensation, and G98/G99 retract modes with worked examples.">
+<title>Drilling, Pecking, and Boring — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Drilling, Pecking, and Boring. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -24,10 +24,10 @@
     </ul>
   </div>
 </nav>
-<main class="article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<main class="article cp-article">
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Drilling, Pecking &amp; Boring</h1>
-<p class="lead">Canned drilling cycles turn five or six manual moves into one block of code. This page explains G81, G82, G83, G85, the R plane, drill-point compensation, G98/G99 retract modes, and how to choose the right cycle for each hole.</p>
+<p class="lead">Canned drilling cycles turn five or six manual moves into one block of code. This page explains G81, G82, G83, G85, the R plane, drill-point compensation, G98/G99 retract modes, and how to choose the right cycle for each hole.</p><div class="cp-meta"><span><strong>Level:</strong> K</span><span><strong>Scope:</strong> Haas mill examples; metric unless stated otherwise</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/14-linear-interpolation/">Rapid Positioning and Linear Interpolation</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Read drill depth and return plane</li><li>Calculate point breakthrough</li><li>Explain cycle cancellation</li></ul></div>
 
 <h2>Concept</h2>
 <p>A <strong>drilling cycle</strong> is a pre-programmed sequence stored in the CNC controller. Instead of writing G00 to position, G01 down to depth, G00 back up, and repeating for every hole, you activate a cycle once and then just give new X/Y positions. The controller handles the rapid-to-feed-to-retract sequence automatically.</p>
@@ -40,8 +40,8 @@
 <h2>How It Works</h2>
 
 <h3>Cycle Parameters</h3>
-<table class="data-table">
-<tr><th>Parameter</th><th>Meaning</th><th>Typical Value</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Cycle Parameters"><table class="data-table"><caption>Cycle Parameters</caption>
+<tr><th scope="col">Parameter</th><th scope="col">Meaning</th><th scope="col">Typical Value</th></tr>
 <tr><td>X / Y</td><td>Hole position in work coordinates</td><td>e.g. X10. Y10.</td></tr>
 <tr><td>R</td><td>R plane: height where feed starts, above the stock</td><td>1–3 mm above top surface</td></tr>
 <tr><td>Z</td><td>Final hole depth (negative into the part)</td><td>e.g. Z-15.</td></tr>
@@ -50,13 +50,13 @@
 <tr><td>P</td><td>Dwell time at bottom (cycles that support it, e.g. G82)</td><td>e.g. P0.5 = 0.5 s; confirm decimal convention</td></tr>
 <tr><td>G98</td><td>Retract to initial Z plane after each hole</td><td>use around fixtures/bosses</td></tr>
 <tr><td>G99</td><td>Retract only to R plane after each hole</td><td>use for flat patterns</td></tr>
-</table>
+</table></div>
 
 <h3>The R Plane: Your Safety Buffer</h3>
 <p>The R plane is the Z height where rapid motion switches to feed motion. It must be high enough above the stock that rapid XY moves between holes clear clamps, bosses, and chips. Set R based on the actual setup, not a default number; R = 2–3 mm above the top surface is a starting point, verified against the real obstructions. G98 retracts to the initial plane established before the cycle call (not automatically Z50); use it when a boss or clamp sits between holes.</p>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 420 280" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="The R Plane: Your Safety Buffer" role="img" viewBox="0 0 420 280" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="lesson-17-diagram-1-desc">Illustration for The R Plane: Your Safety Buffer. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-17-diagram-1-title">The R Plane: Your Safety Buffer</title>
   <!-- stock -->
   <rect x="80" y="100" width="280" height="140" fill="#d4c5a9" stroke="#999" stroke-width="1"/>
   <text x="370" y="175" font-size="11" fill="#666">stock</text>
@@ -99,7 +99,7 @@
 <p>A standard twist drill has a conical tip. The full-diameter cutting edge reaches the corners first; the center point extends beyond by h = (D/2)/tan(&alpha;/2). For a 118&deg; drill this is about 0.300D. For a through-hole, the tip must pass the back face by at least h plus a deliberate breakthrough allowance; the failure mode is that the full-diameter edge has not yet broken through, not a center nub. For a 10 mm, 118&deg; drill, h &asymp; 3.0 mm.</p>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="Drill Point Compensation" role="img" viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="lesson-17-diagram-2-desc">Illustration for Drill Point Compensation. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-17-diagram-2-title">Drill Point Compensation</title>
   <rect x="60" y="30" width="240" height="60" fill="#d4c5a9" stroke="#999"/>
   <text x="310" y="65" font-size="11" fill="#666">12 mm plate</text>
   <rect x="135" y="10" width="50" height="80" fill="#7f8c8d"/>
@@ -188,7 +188,7 @@ M30</code></pre>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G84.html">Haas G84 Tapping Cycle</a>.</li>
 </ul>
 
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/33-milling-strategies/">&larr; Milling Strategies</a><a href="/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/">Canned Cycles &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/33-milling-strategies/">Previous: Facing, Slots, Pockets, and Contours</a><a href="/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/">Next: Canned-Cycle State and Hole Patterns</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

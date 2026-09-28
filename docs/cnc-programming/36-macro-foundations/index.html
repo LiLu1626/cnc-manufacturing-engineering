@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Macro Programming Foundations — CNC Programming</title>
-<meta name="description" content="Variables, arithmetic, IF/GOTO, WHILE loops, and parameterized programs — the bridge from basic G-code to advanced CNC automation.">
+<title>Variables, Logic, and Macro Foundations — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Variables, Logic, and Macro Foundations. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/36-macro-foundations/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -25,16 +25,16 @@
   </div>
 </nav>
 <main class="article cp-article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Macro Programming Foundations</h1>
-<p class="lead">Macro programming adds variables, arithmetic, and logic to G-code. Instead of hard-coding every coordinate, the machine calculates it. This page introduces the core concepts — variables, IF/GOTO, WHILE loops, and a bolt-circle example — as the entry point to advanced CNC automation.</p>
-<svg aria-label="Macro loop variables" role="img" viewBox="0 0 320 130" style="width:100%;max-width:420px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="cp-36-macro-foundations-fig-1">Macro loop variables. Read the accompanying explanation for assumptions and values.</desc>
+<p class="lead">Macro programming adds variables, arithmetic, and logic to G-code. Instead of hard-coding every coordinate, the machine calculates it. This page introduces the core concepts — variables, IF/GOTO, WHILE loops, and a bolt-circle example — as the entry point to advanced CNC automation.</p><div class="cp-meta"><span><strong>Level:</strong> K</span><span><strong>Scope:</strong> Haas mill examples; metric unless stated otherwise</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/29-subprograms/">Subprograms and Repeated Features</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Trace variable values through a loop</li><li>Count twelve and eight drilling events</li><li>Explain the limits of input checks</li></ul></div>
+<figure class="cp-figure"><svg aria-label="Macro loop variables" role="img" viewBox="0 0 320 130" style="width:100%;max-width:420px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="cp-36-macro-foundations-fig-1">Macro loop variables. Read the accompanying explanation for assumptions and values.</desc>
 <title>Macro loop variables</title>
 <text x="20" y="30" font-size="11" fill="#333">#4 = radius</text>
 <text x="20" y="55" font-size="11" fill="#333">#5 = angle step (30 or 45)</text>
 <text x="20" y="80" font-size="11" fill="#333">#1 = current angle = #5, #5+#5, ...</text>
 <text x="20" y="105" font-size="11" fill="#333">#2 = #4&middot;cos(#1), #3 = #4&middot;sin(#1)</text>
-</svg>
+</svg><figcaption>Macro Programming Foundations — read the adjacent example for the stated conditions.</figcaption></figure>
 
 <h2>Concept</h2>
 <p>Basic G-code is static: every coordinate, feed, and depth is written as a fixed number. A bolt circle of 12 holes means 12 X/Y lines. A rectangular pocket means dozens of step-over lines. <strong>Macro programming</strong> adds the tools of a simple programming language — variables, math operations, conditional logic, and loops — directly into the CNC program.</p>
@@ -221,7 +221,7 @@ M30</code></pre>
 <p><strong>4.</strong> What happens if you forget <code>#1 = #1 + 60</code>?</p>
 <details><summary>Ans</summary><p>The loop condition <code>#1 LT 360</code> stays true forever (angle never changes). The machine drills the same hole repeatedly until you press feed hold.</p></details>
 
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/35-cad-cam-postprocessing/">&larr; CAD/CAM</a><a href="/cnc-manufacturing-engineering/cnc-programming/37-multiaxis-probing-overview/">Rotary &amp; Probing &rarr;</a></nav>
+<h2>Sources</h2><ul><li><a href="https://www.haascnc.com/service/online-operator-s-manuals/mill-operator-s-manual/mill---macros.html">Haas mill macros: variables and control flow</a></li></ul><nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/35-cad-cam-postprocessing/">Previous: CAD, CAM, and Post-Processor Verification</a><a href="/cnc-manufacturing-engineering/cnc-programming/37-multiaxis-probing-overview/">Next: Rotary Axes, Multi-Axis Motion, and Probing</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Exercises & Assessment — CNC Programming</title>
-<meta name="description" content="CNC assessment with 20 questions, two code reviews, two projects, worked answers and a 100-point rubric.">
+<title>Practice Projects and Final Assessment — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Practice Projects and Final Assessment. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/39-exercises-assessment/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -25,13 +25,13 @@
   </div>
 </nav>
 <main class="article cp-article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Exercises &amp; Assessment</h1>
-<p class="lead">Complete 20 basic questions, two code reviews, and two projects. This assessment tests how you explain coordinates, establish controller state, check geometry, and document a program before supervised verification. The examples use the stated Haas mill or lathe dialect, not interchangeable generic G-code.</p>
+<p class="lead">Complete 20 basic questions, two code reviews, and two projects. This assessment tests how you explain coordinates, establish controller state, check geometry, and document a program before supervised verification. The examples use the stated Haas mill or lathe dialect, not interchangeable generic G-code.</p><div class="cp-meta"><span><strong>Level:</strong> K</span><span><strong>Scope:</strong> Machine-neutral concepts; controller-specific examples are labelled</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/24-verification/">Program Verification and First-Article Checks</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Answer twenty scoped questions</li><li>Repair two deliberately flawed programs</li><li>Score two projects against explicit criteria</li></ul></div>
 <figure class="cp-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 190" role="img" aria-labelledby="assessment-scope-title assessment-scope-desc" style="width:100%;max-width:520px;height:auto;display:block;margin:auto;font-family:Inter,system-ui,sans-serif"><title id="assessment-scope-title">Assessment sections</title><desc id="assessment-scope-desc">Twenty basic questions, two code reviews and two projects.</desc><rect x="20" y="15" width="320" height="36" fill="#e6f4f2" stroke="#0b766e"/><text x="30" y="39" font-size="14" fill="#17242f">20 questions: 40 points</text><rect x="20" y="65" width="320" height="36" fill="#e6f4f2" stroke="#0b766e"/><text x="30" y="89" font-size="14" fill="#17242f">2 code reviews: 20 points</text><rect x="20" y="115" width="320" height="36" fill="#e6f4f2" stroke="#0b766e"/><text x="30" y="139" font-size="14" fill="#17242f">2 projects: 40 points</text></svg><figcaption>Answer first, then use the worked solutions and item rubrics.</figcaption></figure>
 
 <figure class="cp-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 190" role="img" aria-labelledby="assessment-score-title assessment-score-desc" style="width:100%;max-width:520px;height:auto;display:block;margin:auto;font-family:Inter,system-ui,sans-serif"><title id="assessment-score-title">Point allocation</title><desc id="assessment-score-desc">Bars share a scale of seven pixels per point; widths 280, 140, 280 represent 40, 20, 40 points.</desc><text x="20" y="20" font-size="14" fill="#17242f">Basic questions: 40</text><rect x="20" y="28" width="280" height="20" fill="#e6f4f2" stroke="#0b766e"/><text x="20" y="76" font-size="14" fill="#17242f">Code reviews: 20</text><rect x="20" y="84" width="140" height="20" fill="#e6f4f2" stroke="#0b766e"/><text x="20" y="132" font-size="14" fill="#17242f">Projects: 40</text><rect x="20" y="140" width="280" height="20" fill="#e6f4f2" stroke="#0b766e"/></svg><figcaption>Pass requires at least 80/100 and correction of every critical safety or geometry error. A score of 98 with an unresolved critical error does not pass.</figcaption></figure>
-<h2>Part 1 — Knowledge Check (Q01–Q12)</h2>
+<h2>Concept</h2><p>Assessment combines a result with the assumptions that make it valid. A correct number with the wrong feed mode is not a complete answer.</p><h2>Why It Matters</h2><p>Separating interpretation, code review and project planning reveals whether an error concerns arithmetic, controller state or setup geometry.</p><h2>How It Works</h2><p>Attempt every item before opening its answer. State the controller, coordinate convention and required clearances. The scoring rules below award both the result and the explanation.</p><h2>Example</h2><p>For a metric diameter-mode lathe, reducing X50 to X48 removes (50−48)/2=1 mm radially. The subtraction and the diameter-mode assumption are separate parts of a complete answer.</p><h2>Common Mistakes</h2><p>Do not copy a mill startup into a lathe, count repeated drilling events as new positions, or infer a verified fixture clearance from a Z number alone.</p><h2>Practice</h2><h3>Part 1 — Knowledge Check (Q01–Q12)</h3>
 <p>Unless a question explicitly says lathe, use a Haas mill, millimetres, no rotation or scaling, and the named work offset. Answers should state a relevant assumption, not infer missing machine conditions.</p>
 
 <ol class="cp-questions" style="list-style:none;padding-left:0">
@@ -71,7 +71,7 @@
 <details><summary>Answer</summary><p>G54 through G59 provide six standard work coordinate systems in the selected Haas examples. Further offsets depend on the control. In a simple unrotated XY setup, machine XY equals the selected origin XY plus programmed XY. Z must also be interpreted through the tool-length chain, not copied from that simplified XY equation.</p></details></li>
 </ol>
 
-<h2>Part 2 — Code Reading (Questions 13–16)</h2>
+<h3>Part 2 — Code Reading (Questions 13–16)</h3>
 
 <p id="q13"><strong>Q13.</strong> Read the following mill fragment. G21/G17/G90/G94/G54 are active, T01 is loaded, H01 is verified, and Z50 is clear. The tool is approved for the stated entry and the cutting region is free of clamps. What is the final programmed position?</p><pre class="cp-code"><code>G00 G43 H01 Z50.
 S2000 M03
@@ -97,7 +97,7 @@ X52.</code></pre>
 <pre class="cp-code"><code>G99 G83 R2. Z-15. Q3. F120.</code></pre>
 <details><summary>Answer</summary><p>Peck drilling cycle (G83) is active, modal. Retract mode is G99 (return to R2 after each hole). The cycle stays active until G80 or another documented cancelling motion command (such as G00/G01 on Haas). The next X/Y line will peck-drill at that position.</p></details>
 
-<h2>Part 3 — Find the Error (Questions 17–20)</h2>
+<h3>Part 3 — Find the Error (Questions 17–20)</h3>
 
 <p id="q17"><strong>Q17.</strong> This program has a bug. What happens?</p>
 <pre class="cp-code"><code>G90 G54 G00 X0 Y0
@@ -132,7 +132,7 @@ X40.</code></pre>
 (S500, M10x1.5 tap)</code></pre>
 <details><summary>Diagnosis</summary><p>The required feed is 1.5 mm/rev × 500 rev/min = 750 mm/min. F500 instead requests 1.0 mm per revolution under the stated mode. Correct the programmed relationship before running; the result of an incorrect command depends on the control and setup and must not be described as guaranteed thread stripping. Confirm the actual tapping-cycle requirements in the selected manual.</p></details>
 
-<h2>Part 4 — Code Reviews and Projects (CR1, CR2, P1, P2)</h2>
+<h3>Part 4 — Code Reviews and Projects (CR1, CR2, P1, P2)</h3>
 
 <p><strong>CR1 (10 points).</strong> The code below is supposed to drill one &Oslash;8 hole at X30 Y20 to Z&minus;12 in aluminum, S1500, F100. Assume the entry modes and spindle state are not established. Identify missing setup requirements and write a corrected complete example.</p>
 <pre class="cp-code"><code>(SUBMITTED BY STUDENT)
@@ -307,7 +307,7 @@ M30</code></pre>
 <li>Haas Automation, <a href="https://www.haascnc.com/service/online-operator-s-manuals/lathe-operator-s-manual.html" target="_blank" rel="noopener">Lathe Operator's Manual</a> &mdash; G70/G71/G76 turning cycles and C-axis live tooling.</li>
 <li>Sandvik Coromant, <a href="https://www.sandvik.coromant.com/en-us/knowledge/machining-engineering/" target="_blank" rel="noopener">Machining Engineering Knowledge Base</a> &mdash; cutting parameters, chip geometry, tool life.</li>
 </ul>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/38-process-optimization/">&larr; Process Optimization</a><a href="/cnc-manufacturing-engineering/cnc-programming/31-learning-path/">Learning Path &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/38-process-optimization/">Previous: Cycle Time, Quality, and Process Improvement</a><a href="/cnc-manufacturing-engineering/cnc-programming/31-learning-path/">Next: Learning Path and Progress Checkpoints</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Milling Strategies — CNC Programming</title>
-<meta name="description" content="Face milling, slot milling, pocket milling, climb vs conventional cutting, stepover, radial engagement, and toolpath strategy choices.">
+<title>Facing, Slots, Pockets, and Contours — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Facing, Slots, Pockets, and Contours. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/33-milling-strategies/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -25,9 +25,9 @@
   </div>
 </nav>
 <main class="article cp-article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Milling Strategies: Facing, Slots &amp; Pockets</h1>
-<p class="lead">Different milling features call for different strategies. This page covers face milling, slot milling, pocket milling, climb vs conventional cutting, stepover, and how to choose the right approach for each feature.</p>
+<p class="lead">Different milling features call for different strategies. This page covers face milling, slot milling, pocket milling, climb vs conventional cutting, stepover, and how to choose the right approach for each feature.</p><div class="cp-meta"><span><strong>Level:</strong> K</span><span><strong>Scope:</strong> Haas mill examples; metric unless stated otherwise</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/16-cutter-compensation/">Cutter Radius Compensation</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Calculate raster spacing</li><li>Compare entry and engagement choices</li><li>Explain strategy limits</li></ul></div>
 
 <h2>Concept</h2>
 <p>Milling is not just moving the tool in a line. The way the tool engages the material — how wide, how deep, which direction — determines tool life, surface finish, and cycle time. <strong>Face milling</strong> removes material from the top surface. <strong>Slot milling</strong> cuts a channel with full-width tool engagement. <strong>Pocket milling</strong> clears an enclosed area, typically with raster or zig-zag passes. Each strategy uses different stepover, axial depth, and toolpath direction.</p>
@@ -134,7 +134,7 @@
 <details><summary>Ans</summary><p>Full radial engagement can make chip evacuation and cutting load more difficult. It does not imply inevitable tool breakage or a universal depth limit. Select depth and entry from the cutter guidance, then verify the setup and chip removal. Distinguish a milling toolpath from a drilling peck cycle.</p></details>
 
 
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/16-cutter-compensation/">&larr; Cutter Comp</a><a href="/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/">Drilling Cycles &rarr;</a></nav>
+<h2>Sources</h2><ul><li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G01.html">Haas G01 interpolation</a></li><li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G41.html">Haas G41 cutter compensation</a></li></ul><nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/16-cutter-compensation/">Previous: Cutter Radius Compensation</a><a href="/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/">Next: Drilling, Pecking, and Boring</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

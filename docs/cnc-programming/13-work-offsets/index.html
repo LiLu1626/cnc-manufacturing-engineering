@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Work Coordinate Offsets — CNC Programming</title>
-<meta name="description" content="G54–G59 work offsets, machine zero vs workpiece zero, multiple workpieces and setups, datum strategy, and how machine + work offset + tool offset combine.">
+<title>Work Offsets and Datum Setting — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Work Offsets and Datum Setting. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/13-work-offsets/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -24,10 +24,10 @@
     </ul>
   </div>
 </nav>
-<main class="article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<main class="article cp-article">
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Work Coordinate Offsets (G54&ndash;G59)</h1>
-<p class="lead">The program is written around the part's datums. Work offsets locate those datums in the machine coordinate system. The reference-return position is defined by the machine and need not coincide with the machine coordinate origin. This page covers G54&ndash;G59, datum strategy, multiple workpieces, and how machine coordinates, work offset, tool offset, and the commanded program point combine.</p>
+<p class="lead">The program is written around the part's datums. Work offsets locate those datums in the machine coordinate system. The reference-return position is defined by the machine and need not coincide with the machine coordinate origin. This page covers G54&ndash;G59, datum strategy, multiple workpieces, and how machine coordinates, work offset, tool offset, and the commanded program point combine.</p><div class="cp-meta"><span><strong>Level:</strong> K</span><span><strong>Scope:</strong> Haas mill examples; metric unless stated otherwise</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/03-coordinate-systems/">Coordinate Systems and Positioning</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Calculate an edge-finding offset</li><li>Separate work datum and tool length</li><li>Explain multiple work origins</li></ul></div>
 
 <div class="callout"><strong>The core idea:</strong> The program never says "the corner of the vice". It says X0 Y0. The work offset tells the controller where X0 Y0 is in machine coordinates. Move the part, change only the offset &mdash; the program stays the same.</div>
 
@@ -35,7 +35,7 @@
 <p>The machine coordinate system provides the reference for axis positions. Follow the machine's specified referencing procedure; do not assume that reference return and machine-coordinate zero are identical. The machine moves axes in machine coordinates, but a part arrives in a vice or fixture at some arbitrary position on the table. A <strong>work coordinate offset</strong> is the machine position of the chosen part origin (X, Y, Z, and sometimes rotation) stored in a register. When you call <strong>G54</strong>, every commanded program point P in the unrotated XY plane maps to machine position G54_origin + P. Z uses the separate tool-length chain described on the tool-offsets page.</p>
 <p>Most controls provide several work offset registers: G54, G55, G56, G57, G58, G59 on FANUC/Haas-style mills. Additional extended offsets exist on modern controls (Haas uses G154 P1&ndash;P99; FANUC-style controls use G54.1 Pn). The program switches between them with a single G-code block. This is how one setup runs multiple parts or multiple operations without rewriting coordinates.</p>
 
-<svg viewBox="0 0 360 200" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+<figure class="cp-figure"><svg aria-label="Concept" role="img" viewBox="0 0 360 200" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="lesson-13-diagram-1-desc">Illustration for Concept. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-13-diagram-1-title">Concept</title>
   <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Machine point = G54 origin + program point</text>
   <rect x="30" y="40" width="120" height="60" fill="#fef9c3" stroke="#854d0e" rx="3"/>
   <text x="90" y="60" font-size="10" text-anchor="middle" fill="#854d0e">G54 origin (machine)</text>
@@ -48,7 +48,7 @@
   <rect x="80" y="135" width="200" height="50" fill="#dcfce7" stroke="#166534" rx="3"/>
   <text x="180" y="155" font-size="10" text-anchor="middle" fill="#166534">machine point of tool tip</text>
   <text x="180" y="172" font-size="9" text-anchor="middle" fill="#166534">(-135, -95)</text>
-</svg>
+</svg><figcaption>Concept — read the adjacent example for the stated conditions.</figcaption></figure>
 
 <h2>Why It Matters</h2>
 <p>Work offsets decouple the program from the fixture position. You can run the same program while clamping the part anywhere on the table, as long as the G54 offset reflects the new position. They also let one fixture hold four identical parts: G54 over part 1, G55 over part 2, and so on, with the same toolpath subprogram called four times. Without work offsets, every fixture shift would require editing every coordinate in the program &mdash; slow and error-prone.</p>
@@ -58,14 +58,14 @@
 
 <h3>Setting G54 on a Mill: Edge Finder / Probe</h3>
 <p>The operator touches the part's X-edge with a mechanical edge finder or probe, reads the machine X at that touch, and adds or subtracts the finder radius (radius = half the finder diameter). For a mechanical edge finder, the operator adds the radius manually; for a calibrated probe cycle, the controller may apply the probe radius automatically &mdash; do not add it twice. The same is done for Y. For Z, the tool tip touches the part top; the machine reads the gauge line at that touch, and the work offset Z is derived by subtracting the currently loaded tool length L (the same L used in G43). The control stores these numbers; the program simply calls G54.</p>
-<table class="data-table">
-<tr><th>Touch side</th><th>Sign / radius</th><th>Example (finder &Oslash;10, r = 5)</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Setting G54 on a Mill: Edge Finder / Probe"><table class="data-table"><caption>Setting G54 on a Mill: Edge Finder / Probe</caption>
+<tr><th scope="col">Touch side</th><th scope="col">Sign / radius</th><th scope="col">Example (finder &Oslash;10, r = 5)</th></tr>
 <tr><td>Left X edge (tool approaches from &minus;X)</td><td>Enter machine X + r</td><td>Touch at X=&minus;150.0: enter &minus;145.0</td></tr>
 <tr><td>Right X edge (tool approaches from +X)</td><td>Enter machine X &minus; r</td><td>Touch at X=+100.0: enter +95.0</td></tr>
 <tr><td>Front Y edge (tool approaches from &minus;Y)</td><td>Enter machine Y + r</td><td>Touch at Y=&minus;120.0: enter &minus;115.0</td></tr>
 <tr><td>Rear Y edge (tool approaches from +Y)</td><td>Enter machine Y &minus; r</td><td>Touch at Y=+100.0: enter +95.0</td></tr>
 <tr><td>Z part top (tool 1, L = 120)</td><td>Tool tip touches part top; gauge-line machine Z reads -180. With L=120: W = -300</td><td>Enter W = -300 into G54 Z</td></tr>
-</table>
+</table></div>
 <p>The exact sign depends on the control's touch-off routine; always verify by moving to X0 Y0 at safe Z and confirming the tip sits over the part corner. In the work frame, +X moves the tool tip to the right relative to the part and +Y moves it away from the operator on a standard mill, as defined by the machine's axis convention.</p>
 
 <h3>Multiple Work Offsets for One Fixture</h3>
@@ -104,7 +104,7 @@ G00 Z5.
 G01 Z-2. F100.</code></pre>
 <p>When the controller executes G00 X0. Y0., it moves the spindle to machine coordinates X = &minus;145.0, Y = &minus;115.0 &mdash; which is exactly the part corner. The operator never types "X&minus;145" in the program. If the part shifts 10 mm to the right in the vise, only the G54 X value changes by +10; the program is untouched.</p>
 
-<svg viewBox="0 0 360 180" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+<figure class="cp-figure"><svg aria-label="Example" role="img" viewBox="0 0 360 180" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="lesson-13-diagram-2-desc">Illustration for Example. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-13-diagram-2-title">Example</title>
   <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Same subprogram, four offsets</text>
   <rect x="40" y="40" width="60" height="40" fill="#dbeafe" stroke="#1e40af"/>
   <text x="70" y="63" font-size="9" text-anchor="middle" fill="#1e40af">G54</text>
@@ -116,7 +116,7 @@ G01 Z-2. F100.</code></pre>
   <text x="310" y="63" font-size="9" text-anchor="middle" fill="#991b1b">G57</text>
   <text x="180" y="115" font-size="9" text-anchor="middle" fill="#666">Call G54 / M98 P1000 / G55 / M98 P1000 / &hellip;</text>
   <text x="180" y="135" font-size="9" text-anchor="middle" fill="#666">The subprogram P1000 is written once around X0 Y0.</text>
-</svg>
+</svg><figcaption>Example — read the adjacent example for the stated conditions.</figcaption></figure>
 
 
 <h3>Position Errors vs Size Errors</h3>
@@ -174,7 +174,7 @@ G01 Z-2. F100.</code></pre>
 </ul>
 </section>
 
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/12-tool-offsets/">&larr; Tool Offsets</a><a href="/cnc-manufacturing-engineering/cnc-programming/14-linear-interpolation/">Linear Motion &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/10-spindle-feed/">Previous: Spindle Speed and Feed Programming</a><a href="/cnc-manufacturing-engineering/cnc-programming/12-tool-offsets/">Next: Tool Length, Geometry, and Wear Offsets</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

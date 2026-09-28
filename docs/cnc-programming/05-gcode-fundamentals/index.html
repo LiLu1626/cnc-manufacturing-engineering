@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>G-Code Fundamentals — CNC Programming</title>
-<meta name="description" content="Motion G-codes G00, G01, G02, G03: purpose, syntax, safe use, modal behavior, and the critical difference between rapid and feed motion.">
+<title>G-Code Fundamentals — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn G-Code Fundamentals. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/05-gcode-fundamentals/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -24,10 +24,10 @@
     </ul>
   </div>
 </nav>
-<main class="article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<main class="article cp-article">
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>G-Code Fundamentals</h1>
-<p class="lead">G-codes tell the machine what kind of motion to perform. This page covers the four core motion codes — G00, G01, G02, G03 — their syntax, modal behavior, and the safety rules that prevent crashes.</p>
+<p class="lead">G-codes tell the machine what kind of motion to perform. This page covers the four core motion codes — G00, G01, G02, G03 — their syntax, modal behavior, and the safety rules that prevent crashes.</p><div class="cp-meta"><span><strong>Level:</strong> B</span><span><strong>Scope:</strong> Haas mill examples; metric unless stated otherwise</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/04-program-structure/">Reading and Structuring a CNC Program</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Distinguish rapid and feed motion</li><li>Trace a clearance-first approach</li><li>Explain inherited feed mode</li></ul></div>
 
 <h2>Concept</h2>
 <p><strong>G00</strong> is rapid positioning: the machine moves as fast as possible to a target position. It is not a cutting move — no F command is used. <strong>G01</strong> is linear interpolation: the machine moves in a straight line at a specified feed rate while cutting. <strong>G02</strong> and <strong>G03</strong> are circular interpolation — clockwise and counterclockwise arcs, covered in detail on the circular interpolation page.</p>
@@ -49,7 +49,7 @@
 <h3>G02 / G03 — Circular Interpolation</h3>
 <p>Cut arcs: G02 clockwise, G03 counterclockwise. Requires I/J or R to define the arc. See <a href="/cnc-manufacturing-engineering/cnc-programming/15-circular-interpolation/">Circular Interpolation</a> for full detail.</p>
 
-<svg viewBox="0 0 420 200" style="width:100%;max-width:420px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+<figure class="cp-figure"><svg aria-label="G02 / G03 — Circular Interpolation" role="img" viewBox="0 0 420 200" style="width:100%;max-width:420px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="lesson-05-diagram-1-desc">Illustration for G02 / G03 — Circular Interpolation. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-05-diagram-1-title">G02 / G03 — Circular Interpolation</title>
   <text x="80" y="15" font-size="11" font-weight="bold" fill="#333">Safe Approach — 5 Steps (side view, not to scale)</text>
   <line x1="30" y1="40" x2="390" y2="40" stroke="#27ae60" stroke-width="1" stroke-dasharray="4,2"/>
   <text x="330" y="35" font-size="9" fill="#27ae60">Safe Z50</text>
@@ -69,7 +69,7 @@
   <text x="260" y="135" font-size="9" fill="#27ae60">4 G01 cut</text>
   <line x1="320" y1="120" x2="320" y2="40" stroke="#e74c3c" stroke-width="2" stroke-dasharray="4,2"/>
   <text x="328" y="80" font-size="9" fill="#e74c3c">5 G00 up</text>
-</svg>
+</svg><figcaption>G02 / G03 — Circular Interpolation — read the adjacent example for the stated conditions.</figcaption></figure>
 
 <h3>Safe Approach Pattern</h3>
 <pre class="cp-code"><code>G00 X0 Y0        (rapid XY to above target, at safe Z)
@@ -120,7 +120,7 @@ G00 Z50.             (5: retract up to safe Z BEFORE any XY move)</code></pre>
 </ul>
 </section>
 
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/04-program-structure/">&larr; Program Structure</a><a href="/cnc-manufacturing-engineering/cnc-programming/06-modal-codes/">Modal Codes &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/04-program-structure/">Previous: Reading and Structuring a CNC Program</a><a href="/cnc-manufacturing-engineering/cnc-programming/06-modal-codes/">Next: Modal State and Program Execution</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Safe Program Start, Retraction, and Restart — CNC & Manufacturing Engineering</title>
-<meta name="description" content="Safe program startup blocks, machine state verification, retraction strategy, mid-program restart procedure, and why you cannot just jump to a line number.">
+<title>Safe Program Start, Retraction, and Restart — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Safe Program Start, Retraction, and Restart. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/23-program-safety/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -24,10 +24,10 @@
     </ul>
   </div>
 </nav>
-<main class="article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<main class="article cp-article">
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Safe Program Start, Retraction, and Restart</h1>
-<p class="lead">Running from the top restores a known start state, but it is not a guarantee of safety by itself. When you must restart mid-program after a tool break or alarm, you must verify the actual modal state — feed hold, reset, alarm, and power loss retain different information. This page covers startup blocks, safe approach/retract, and the mid-program restart procedure.</p>
+<p class="lead">Running from the top restores a known start state, but it is not a guarantee of safety by itself. When you must restart mid-program after a tool break or alarm, you must verify the actual modal state — feed hold, reset, alarm, and power loss retain different information. This page covers startup blocks, safe approach/retract, and the mid-program restart procedure.</p><div class="cp-meta"><span><strong>Level:</strong> K</span><span><strong>Scope:</strong> Machine-neutral concepts; controller-specific examples are labelled</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/02-machine-fundamentals/">Machine Fundamentals for Programmers</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>List restart-state checks</li><li>Explain fixture-envelope verification</li><li>Identify conditions requiring a new review</li></ul></div>
 
 <div class="callout"><strong>What you will learn:</strong>
 <ul>
@@ -50,15 +50,15 @@
 <h3>The Startup Block, Line by Line</h3>
 <pre class="cp-code"><code>O1001
 G21 G17 G90 G94 G40 G49 G80</code></pre>
-<table class="data-table">
-<tr><th>Code</th><th>What It Does</th><th>Why It Matters</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="The Startup Block, Line by Line"><table class="data-table"><caption>The Startup Block, Line by Line</caption>
+<tr><th scope="col">Code</th><th scope="col">What It Does</th><th scope="col">Why It Matters</th></tr>
 <tr><td>G21</td><td>Metric units (mm)</td><td>Prevents inch/mm mismatch — 25.4&times; errors</td></tr>
 <tr><td>G17</td><td>XY plane selection</td><td>Required before circular interpolation (G02/G03)</td></tr>
 <tr><td>G90</td><td>Absolute programming</td><td>Coordinates refer to work zero, not incremental</td></tr>
 <tr><td>G40</td><td>Cancel cutter compensation</td><td>Prevents unexpected G41/G42 offset from previous program</td></tr>
 <tr><td>G49</td><td>Cancel tool length offset</td><td>Prevents inherited H offset from another tool</td></tr>
 <tr><td>G80</td><td>Cancel canned cycles</td><td>Prevents drilling cycle from triggering on first XY move</td></tr>
-</table>
+</table></div>
 <p>This block does not set the offsets — it cancels old ones so they can be re-established cleanly. G49 cancels the active tool length offset; it does not switch to machine coordinates (that is G53). After G43 H01, Z moves include the tool length. The order matters: cancel first, then set new values.</p>
 
 <h3>Before Cycle Start (Mill Example)</h3>
@@ -97,7 +97,7 @@ G21 G17 G90 G94 G40 G49 G80</code></pre>
 <p>Spindle must be at the commanded direction and speed before the tool engages the work. Start spindle M03 (or M04) and allow it to reach speed before M08 and the first feed move. Feed and rapid overrides are set per the machine's first-article procedure; lowering override slows motion but is not a collision guarantee. Do not change feed override mid-thread or mid-rigid-tap — synchronous feed depends on the commanded rate.</p>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="Spindle, Coolant, and Feed Override Safety" role="img" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="lesson-23-diagram-1-desc">Illustration for Spindle, Coolant, and Feed Override Safety. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-23-diagram-1-title">Spindle, Coolant, and Feed Override Safety</title>
   <rect x="60" y="120" width="280" height="40" fill="#d4c5a9" stroke="#999"/>
   <line x1="40" y1="60" x2="360" y2="60" stroke="#27ae60" stroke-width="2" stroke-dasharray="6,3"/>
   <text x="260" y="55" font-size="10" fill="#27ae60">clearance plane Z50</text>
@@ -112,7 +112,7 @@ G21 G17 G90 G94 G40 G49 G80</code></pre>
 </figure>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="Spindle, Coolant, and Feed Override Safety" role="img" viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="lesson-23-diagram-2-desc">Illustration for Spindle, Coolant, and Feed Override Safety. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-23-diagram-2-title">Spindle, Coolant, and Feed Override Safety</title>
   <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker></defs>
   <!-- safe approach -->
   <text x="100" y="20" font-size="11" fill="#27ae60" text-anchor="middle">Safe Approach</text>
@@ -189,8 +189,8 @@ G21 G17 G90 G94 G40 G49 G80</code></pre>
 <p><strong>Three failure modes to recognize:</strong> (1) leftover G91 means coordinates are interpreted as distances, not positions; (2) wrong H number means Z depth is off by the tool length difference; (3) on Haas mills, with a canned cycle active, a bare X/Y move repeats the cycle; an explicit G00/G01 cancels it. Use G80 to make intent clear.</p>
 
 <h3>Restart State Table (Illustrative)</h3>
-<table>
-<tr><th>Item</th><th>Known before restart</th><th>How to establish</th><th>First-cut state</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Restart State Table (Illustrative)"><table><caption>Restart State Table (Illustrative)</caption>
+<tr><th scope="col">Item</th><th scope="col">Known before restart</th><th scope="col">How to establish</th><th scope="col">First-cut state</th></tr>
 <tr><td>Tool / H02</td><td>T02 broken</td><td>Replace per OEM procedure; measure H02</td><td>H02 loaded</td></tr>
 <tr><td>G54</td><td>Verified at setup</td><td>Check display</td><td>G54 active</td></tr>
 <tr><td>Units / plane / mode</td><td>G21 / G17</td><td>Program G21 G17 G90 G94</td><td>Absolute, mm/min</td></tr>
@@ -198,7 +198,7 @@ G21 G17 G90 G94 G40 G49 G80</code></pre>
 <tr><td>Spindle / coolant</td><td>Unknown</td><td>S600 M03, then M08 (two blocks)</td><td>Direction verified</td></tr>
 <tr><td>Broken edge / hole</td><td>Inspected</td><td>Deburr; confirm part usable</td><td>Hole 4 may proceed</td></tr>
 <tr><td>Clearance path</td><td>Z50 path verified</td><td>Move to Z50 before XY</td><td>Z50 above fixture</td></tr>
-</table>
+</table></div>
 <p>Fragment (hole 4, X60 Y20, Z-15; S/F are classroom values for this example):</p>
 <pre>G21 G17 G90 G94 G54 G80 G40
 G00 G43 H02 Z50.
@@ -232,13 +232,13 @@ M05</pre>
 </section>
 
 
-<h2>Sources</h2>
+<p>Continue with <a href="/cnc-manufacturing-engineering/cnc-programming/24-verification/">program verification</a> for the later workflow used after the initial state and setup review.</p><h2>Sources</h2>
 <ul>
 <li>Haas Automation, G49 Tool Length Cancel. <a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G49.html" target="_blank" rel="noopener">haascnc.com</a>.</li>
 <li>Haas Automation, G80 Canned Cycle Cancel. <a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G80.html" target="_blank" rel="noopener">haascnc.com</a>.</li>
 <li>Haas Automation, Mill Operator's Manual — Operation. <a href="https://www.haascnc.com/service/online-operator-s-manuals/mill-operator-s-manual/mill---operation.html" target="_blank" rel="noopener">haascnc.com</a>.</li>
 </ul>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/02-machine-fundamentals/">&larr; Machine Fundamentals</a><a href="/cnc-manufacturing-engineering/cnc-programming/08-programming-math/">Programming Math &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/02-machine-fundamentals/">Previous: Machine Fundamentals for Programmers</a><a href="/cnc-manufacturing-engineering/cnc-programming/08-programming-math/">Next: Practical Mathematics for CNC Programming</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

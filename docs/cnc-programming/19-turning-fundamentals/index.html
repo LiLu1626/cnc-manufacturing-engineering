@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Turning Coordinates & Toolpaths — CNC Programming</title>
-<meta name="description" content="Lathe coordinate system, diameter programming, X/Z axes, turret tool selection, facing, OD turning, ID boring, and a worked facing-and-turning example.">
+<title>Turning Coordinates and Basic Toolpaths — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Turning Coordinates and Basic Toolpaths. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -24,10 +24,10 @@
     </ul>
   </div>
 </nav>
-<main class="article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<main class="article cp-article">
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Turning Coordinates &amp; Toolpaths</h1>
-<p class="lead">CNC lathes work differently from mills: the part rotates, the tool moves in X and Z, and X is programmed in diameter. This page covers the lathe coordinate system, diameter programming, turret tool selection, and basic turning operations.</p>
+<p class="lead">CNC lathes work differently from mills: the part rotates, the tool moves in X and Z, and X is programmed in diameter. This page covers the lathe coordinate system, diameter programming, turret tool selection, and basic turning operations.</p><div class="cp-meta"><span><strong>Level:</strong> K</span><span><strong>Scope:</strong> Haas lathe examples; metric diameter programming</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/10-spindle-feed/">Spindle Speed and Feed Programming</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Interpret diameter-mode X</li><li>Trace OD cutting and retracts</li><li>Separate tool and work offsets</li></ul></div>
 
 <h2>Concept</h2>
 <p>A CNC lathe has two linear axes: <strong>X</strong> (radial, in and out from the spindle centerline) and <strong>Z</strong> (axial, along the spindle). Unlike a milling machine where the workpiece stays still and the tool moves in X/Y/Z, on a lathe the <strong>workpiece rotates</strong> and the cutting tool moves in X and Z. The spindle chuck holds and rotates the part; the turret holds the tools.</p>
@@ -35,7 +35,7 @@
 <p><strong>Z0</strong> is typically set on the front finished face of the part. Positive Z moves the tool along the spindle axis away from the chuck; negative Z moves it toward the chuck into the part. Cutting along the part length happens in the negative Z direction.</p>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 440 260" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="Concept" role="img" viewBox="0 0 440 260" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="lesson-19-diagram-1-desc">Illustration for Concept. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-19-diagram-1-title">Concept</title>
   <!-- chuck -->
   <rect x="20" y="80" width="60" height="100" fill="#7f8c8d" stroke="#555"/>
   <text x="30" y="195" font-size="11" fill="#555">Chuck</text>
@@ -64,13 +64,13 @@
 <h2>How It Works</h2>
 
 <h3>Diameter Programming in Detail</h3>
-<table class="data-table">
-<tr><th>Action</th><th>X Move</th><th>Diameter Change</th><th>Radial Depth</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Diameter Programming in Detail"><table class="data-table"><caption>Diameter Programming in Detail</caption>
+<tr><th scope="col">Action</th><th scope="col">X Move</th><th scope="col">Diameter Change</th><th scope="col">Radial Depth</th></tr>
 <tr><td>OD turn from &Oslash;50 to &Oslash;44</td><td>X50 &rarr; X44</td><td>6 mm smaller</td><td>3 mm</td></tr>
 <tr><td>Face cut to center</td><td>X50 &rarr; X0</td><td>50 to 0</td><td>25 mm</td></tr>
 <tr><td>Take a 2 mm deep roughing pass</td><td>X50 &rarr; X46</td><td>4 mm smaller</td><td>2 mm</td></tr>
 <tr><td>Finish to &Oslash;30</td><td>X32 &rarr; X30</td><td>2 mm smaller</td><td>1 mm</td></tr>
-</table>
+</table></div>
 <p>The radial depth of cut is always <strong>(X_start &minus; X_end) / 2</strong>. When you plan a 2 mm depth of cut, the X coordinate drops by 4 mm.</p>
 
 <h3>Basic Turning Operations</h3>
@@ -169,7 +169,7 @@ M30</code></pre>
 <p>On an OD turn, X decreases as the part gets smaller. On ID boring, X increases as the bore gets larger, and the tool enters the hole at a smaller X, then bores out. The radial depth formula is the same: (X_end &minus; X_start)/2. Boring bar deflection and chatter are the limit, not the machine power; keep boring bar overhang as short as the part allows.</p>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="ID Boring vs OD Turning" role="img" viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="lesson-19-diagram-2-desc">Illustration for ID Boring vs OD Turning. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-19-diagram-2-title">ID Boring vs OD Turning</title>
   <rect x="80" y="70" width="220" height="50" fill="#d4c5a9" stroke="#999"/>
   <line x1="300" y1="50" x2="300" y2="140" stroke="#e67e22" stroke-dasharray="3,2"/>
   <text x="305" y="55" font-size="9" fill="#e67e22">Z0 (front face)</text>
@@ -188,8 +188,8 @@ M30</code></pre>
 
 
 <h3>Block Trace for the Worked Program</h3>
-<table class="data-table">
-<tr><th>Block</th><th>X (diameter)</th><th>Z</th><th>Action</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Block Trace for the Worked Program"><table class="data-table"><caption>Block Trace for the Worked Program</caption>
+<tr><th scope="col">Block</th><th scope="col">X (diameter)</th><th scope="col">Z</th><th scope="col">Action</th></tr>
 <tr><td>G00 X47 Z2</td><td>47</td><td>2</td><td>outside stock, off face</td></tr>
 <tr><td>G01 Z0 F0.2</td><td>47</td><td>0</td><td>approach face</td></tr>
 <tr><td>X-1 F0.15</td><td>&minus;1</td><td>0</td><td>face past center</td></tr>
@@ -197,7 +197,7 @@ M30</code></pre>
 <tr><td>G01 Z0 / X41 / Z-50</td><td>41</td><td>&minus;50</td><td>rough OD, 2 mm radial</td></tr>
 <tr><td>G00 X47 / Z2</td><td>47</td><td>2</td><td>X clear first, then Z back</td></tr>
 <tr><td>S1500 / G00 X39.5 Z2 / G01 Z0 / Z-50</td><td>39.5</td><td>&minus;50</td><td>finish OD, 0.75 mm radial</td></tr>
-</table>
+</table></div>
 
 
 
@@ -230,7 +230,7 @@ M30</code></pre>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G54.html">Haas Lathe G54 Work Offset</a>.</li>
 </ul>
 
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/29-subprograms/">&larr; Subprograms</a><a href="/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/">Turning Cycles &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/29-subprograms/">Previous: Subprograms and Repeated Features</a><a href="/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/">Next: Turning Roughing and Finishing Cycles</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

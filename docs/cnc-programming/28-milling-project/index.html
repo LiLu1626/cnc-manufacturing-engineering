@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Worked Project: Pocketed Mounting Plate — CNC Programming</title>
-<meta name="description" content="Complete CNC milling project: pocket roughing with ramp entry, two-layer step-down, corner cleanup, and through-hole drilling with drill-tip geometry.">
+<title>Worked Project: A Pocketed Mounting Plate — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Worked Project: A Pocketed Mounting Plate. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/28-milling-project/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -25,9 +25,9 @@
   </div>
 </nav>
 <main class="article cp-article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Worked Project: Pocketed Mounting Plate</h1>
-<p class="lead">A 100&times;80&times;12 mm aluminum plate with a 40&times;30&times;4 mm pocket and four &Oslash;6 through holes. This project ties together ramp entry, layer-by-layer roughing, corner geometry, and drill-tip breakthrough calculation.</p>
+<p class="lead">A 100&times;80&times;12 mm aluminum plate with a 40&times;30&times;4 mm pocket and four &Oslash;6 through holes. This project ties together ramp entry, layer-by-layer roughing, corner geometry, and drill-tip breakthrough calculation.</p><div class="cp-meta"><span><strong>Level:</strong> K</span><span><strong>Scope:</strong> Haas mill examples; metric unless stated otherwise</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/">Canned-Cycle State and Hole Patterns</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Trace both pocket layers</li><li>Check raster coverage</li><li>Calculate through-hole tip depth</li></ul></div>
 
 <h2>Concept</h2>
 <p>The workpiece is an <strong>already-faced</strong> 100&times;80&times;12 mm aluminum plate. G54 work zero is at the lower-left corner on the finished top surface: X0&ndash;100, Y0&ndash;80, Z0 at top, Z&minus;12 at bottom. This program does <strong>not</strong> face mill — that is a prior operation. We machine only the pocket and four holes.</p>
@@ -36,7 +36,7 @@
 <h2>Why It Matters</h2>
 <p>Several things go wrong if you only cut the pocket boundary: (1) the interior material is never removed, leaving an island; (2) plunging straight to Z&minus;4 on a flat end mill is bad because the center of a flat end mill does not chip-load well — you need a ramp; (3) a through-hole is not done when the drill reaches Z&minus;12 — the conical drill tip must also break through; (4) corner radius R5 means the &Oslash;10 cutter naturally forms R5 corners without extra offset math.</p>
 
-<svg aria-label="Diagram accompanying the adjacent worked example" role="img" viewBox="0 0 500 350" style="width:100%;max-width:500px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="cp-28-milling-project-fig-1">Diagram accompanying the adjacent worked example. Read the accompanying explanation for assumptions and values.</desc><title>Diagram accompanying the adjacent worked example</title>
+<figure class="cp-figure"><svg aria-label="Diagram accompanying the adjacent worked example" role="img" viewBox="0 0 500 350" style="width:100%;max-width:500px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="cp-28-milling-project-fig-1">Diagram accompanying the adjacent worked example. Read the accompanying explanation for assumptions and values.</desc><title>Diagram accompanying the adjacent worked example</title>
   <!-- plate outline -->
   <rect x="50" y="50" width="400" height="280" fill="#e8e8e8" stroke="#999" stroke-width="1.5" rx="2"/>
   <text x="55" y="45" font-size="10" fill="#666">Plate 100 x 80</text>
@@ -56,7 +56,7 @@
   <!-- dimensions -->
   <line x1="50" y1="340" x2="450" y2="340" stroke="#333" stroke-width="0.5"/>
   <text x="230" y="338" font-size="9" fill="#666">100 mm</text>
-</svg>
+</svg><figcaption>Why It Matters — read the adjacent example for the stated conditions.</figcaption></figure>
 
 <h2>How It Works</h2>
 <h3>Setup and Tooling</h3>
@@ -103,7 +103,7 @@
 
 <p><strong>Coverage check:</strong> Stepover 4 mm is less than the 10 mm tool diameter, giving 6 mm overlap between adjacent rows. The four wall-cleanup passes ensure side edges and corners are fully swept. Target pocket area = 40&times;30 &minus; (4&minus;&pi;)&times;5&sup2; &asymp; 1178.5 mm&sup2;. At 4 mm depth, theoretical volume &asymp; 4714 mm&sup3;.</p>
 
-<svg aria-label="Diagram accompanying the adjacent worked example" role="img" viewBox="0 0 300 260" style="width:100%;max-width:380px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="cp-28-milling-project-fig-2">Diagram accompanying the adjacent worked example. Read the accompanying explanation for assumptions and values.</desc><title>Diagram accompanying the adjacent worked example</title>
+<figure class="cp-figure"><svg aria-label="Diagram accompanying the adjacent worked example" role="img" viewBox="0 0 300 260" style="width:100%;max-width:380px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="cp-28-milling-project-fig-2">Diagram accompanying the adjacent worked example. Read the accompanying explanation for assumptions and values.</desc><title>Diagram accompanying the adjacent worked example</title>
   <text x="60" y="15" font-size="12" font-weight="bold" fill="#333">17-Point Raster Path (top view, 5px/mm)</text>
   <!-- pocket boundary: X30-70 Y25-55 → rect(50,50,200,150) rx25 -->
   <rect x="50" y="50" width="200" height="150" fill="none" stroke="#54a0ff" stroke-width="1.5" rx="25"/>
@@ -116,14 +116,14 @@
   <circle cx="75" cy="175" r="3" fill="#27ae60"/>
   <text x="55" y="195" font-size="9" fill="#27ae60">Start (35,30)</text>
   <text x="90" y="225" font-size="9" fill="#666">Stepover 4mm = 20px; tool Ø10 → radius 5mm = 25px inset</text>
-</svg>
+</svg><figcaption>Pocket Roughing: Two Layers — read the adjacent example for the stated conditions.</figcaption></figure>
 
 <h3>Drilling: Drill-Tip Breakthrough</h3>
 <p>A &Oslash;6 drill with 118&deg; point angle has a conical tip height:</p>
 <p style="text-align:center;"><strong>h = (6/2) / tan(118&deg;/2) = 3 / tan(59&deg;) &asymp; 1.8026 mm</strong></p>
 <p>Full-diameter breakthrough requires the drill tip to reach Z &le; &minus;(12 + 1.8026) = &minus;13.8026. We choose a teaching target of <strong>Z&minus;14.5</strong>, giving 0.697 mm extra breakthrough. The clearance channel below runs to Z&minus;18, leaving 3.5 mm geometric gap. Drilling uses <strong>G98</strong> (retract to initial Z50 between holes).</p>
 
-<svg aria-label="Diagram accompanying the adjacent worked example" role="img" viewBox="0 0 400 180" style="width:100%;max-width:400px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="cp-28-milling-project-fig-3">Diagram accompanying the adjacent worked example. Read the accompanying explanation for assumptions and values.</desc><title>Diagram accompanying the adjacent worked example</title>
+<figure class="cp-figure"><svg aria-label="Diagram accompanying the adjacent worked example" role="img" viewBox="0 0 400 180" style="width:100%;max-width:400px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="cp-28-milling-project-fig-3">Diagram accompanying the adjacent worked example. Read the accompanying explanation for assumptions and values.</desc><title>Diagram accompanying the adjacent worked example</title>
   <text x="80" y="15" font-size="12" font-weight="bold" fill="#333">Drill Tip Breakthrough (side view, 5px/mm)</text>
   <!-- plate: Z0=y50, Z-12=y110 -->
   <rect x="100" y="50" width="200" height="60" fill="#c8d6e5" stroke="#999"/>
@@ -144,7 +144,7 @@
   <!-- annotations -->
   <text x="110" y="120" font-size="9" fill="#666">Tip h=1.8mm cone height</text>
   <text x="110" y="135" font-size="9" fill="#666">Tip below plate bottom: 2.5mm</text>
-</svg>
+</svg><figcaption>Drilling: Drill-Tip Breakthrough — read the adjacent example for the stated conditions.</figcaption></figure>
 
 <h2>Example: Complete Program</h2>
 <pre class="cp-code"><code>O0028 (POCKETED PLATE PROJECT)
@@ -266,14 +266,14 @@ M30</code></pre>
 <details><summary>Show answer</summary><p>R5. The &Oslash;10 tool sweeps a 5 mm circle around each center point. The center path corners are the centers of the R5 arcs. If you also arc the center path, you produce R10.</p></details>
 
 <section class="cp-sources">
-<h2>Sources</h2>
+<h2>Sources</h2><ul><li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G83.html">Haas G83 peck drilling</a></li><li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G01.html">Haas G01 linear interpolation</a></li></ul>
 <ul>
 <li>Haas Automation Milling Operator's Manual — G83 peck drilling cycle, G98/G99 return modes, G40/G41/G42 compensation.</li>
 <li>Drill point geometry: 118&deg; standard twist drill point angle; tip height h = (D/2)/tan(&theta;/2).</li>
 <li>All speeds, feeds, stepover, and ramp angles are classroom teaching assumptions, not manufacturer recommendations.</li>
 </ul>
 </section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/26-common-mistakes/">&larr; Common Mistakes</a><a href="/cnc-manufacturing-engineering/cnc-programming/27-turning-project/">Turning Project &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/26-common-mistakes/">Previous: Common Beginner Mistakes and Corrections</a><a href="/cnc-manufacturing-engineering/cnc-programming/27-turning-project/">Next: Worked Project: A Stepped Shaft</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

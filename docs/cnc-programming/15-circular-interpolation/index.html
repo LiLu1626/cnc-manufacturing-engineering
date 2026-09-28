@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Circular & Helical Interpolation — CNC Programming</title>
-<meta name="description" content="G02/G03 clockwise/counterclockwise arcs, I/J/K center vectors, R radius, and how to program a circle.">
+<title>Circular and Helical Interpolation — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Circular and Helical Interpolation. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/15-circular-interpolation/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -24,10 +24,10 @@
     </ul>
   </div>
 </nav>
-<main class="article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<main class="article cp-article">
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Circular & Helical Interpolation</h1>
-<p class="lead">Arcs are programmed with G02 (clockwise) and G03 (counterclockwise). This page covers I/J center vectors, R radius notation, and how to verify arc direction with angles.</p>
+<p class="lead">Arcs are programmed with G02 (clockwise) and G03 (counterclockwise). This page covers I/J center vectors, R radius notation, and how to verify arc direction with angles.</p><div class="cp-meta"><span><strong>Level:</strong> K</span><span><strong>Scope:</strong> Haas mill examples; metric unless stated otherwise</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/14-linear-interpolation/">Rapid Positioning and Linear Interpolation</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Check equal centre distances</li><li>Choose plane-specific centre addresses</li><li>Calculate arc length and feed time</li></ul></div>
 
 <h2>Concept</h2>
 <p><strong>G02</strong> cuts clockwise arcs. <strong>G03</strong> cuts counterclockwise. The arc is defined by: start point (current position), end point (X/Y), and either center (I/J) or radius (R). I is the center offset in X from start; J is the center offset in Y from start.</p>
@@ -49,7 +49,7 @@
 <p>Both are 180&deg; arcs; arc length L = 2&pi;r&times;&theta;/360 = 2&pi;&times;25&times;180/360 = <strong>78.540 mm</strong>.</p>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="I/J Method (center vector)" role="img" viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="lesson-15-diagram-1-desc">Illustration for I/J Method (center vector). Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-15-diagram-1-title">I/J Method (center vector)</title>
   <!-- axes -->
   <line x1="40" y1="130" x2="370" y2="130" stroke="#999" stroke-width="1"/>
   <line x1="200" y1="30" x2="200" y2="230" stroke="#999" stroke-width="1"/>
@@ -153,7 +153,7 @@ G03 I-25. J0  (full circle, ends back at start)</code></pre>
 <p><strong>Short 90&deg; arc example:</strong> start S=(0,0), center C=(0,20), end E=(20,20). Start vector from C = (0,&minus;20) at 270&deg;. End vector = (20,0) at 0&deg;. Going 270&deg; &rarr; 360&deg;/0&deg; counterclockwise (increasing angle) is a 90&deg; arc = <strong>G03</strong>. Arc length L = 2&pi;r&times;&theta;/360 = 2&pi;&times;20&times;90/360 = <strong>31.416 mm</strong>. G02 would take the long 270&deg; way around: 2&pi;&times;20&times;270/360 = 94.248 mm.</p>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 320 260" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="Example" role="img" viewBox="0 0 320 260" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="lesson-15-diagram-2-desc">Illustration for Example. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-15-diagram-2-title">Example</title>
   <line x1="30" y1="220" x2="300" y2="220" stroke="#999" stroke-width="1"/>
   <line x1="60" y1="240" x2="60" y2="20" stroke="#999" stroke-width="1"/>
   <text x="302" y="224" font-size="11" fill="#666">X</text>
@@ -200,7 +200,7 @@ G03 I-25. J0  (full circle, ends back at start)</code></pre>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G02.html">Haas G02/G03 Circular Interpolation</a>.</li>
 </ul>
 
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/14-linear-interpolation/">&larr; Linear Motion</a><a href="/cnc-manufacturing-engineering/cnc-programming/16-cutter-compensation/">Cutter Comp &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/14-linear-interpolation/">Previous: Rapid Positioning and Linear Interpolation</a><a href="/cnc-manufacturing-engineering/cnc-programming/16-cutter-compensation/">Next: Cutter Radius Compensation</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

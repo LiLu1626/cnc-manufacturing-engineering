@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Spindle and Feed Programming — CNC & Manufacturing Engineering</title>
-<meta name="description" content="S command, M03/M04/M05 spindle control, G94/G95/G99 feed modes, how to choose RPM and feed from tooling data, and G96 constant surface speed.">
+<title>Spindle Speed and Feed Programming — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Spindle Speed and Feed Programming. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/10-spindle-feed/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -24,10 +24,10 @@
     </ul>
   </div>
 </nav>
-<main class="article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<main class="article cp-article">
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Spindle and Feed Programming</h1>
-<p class="lead">Spindle speed (S) and feed rate (F) are the two cut-rate commands. This page covers S, M03/M04/M05, feed modes G94/G95/G99, G96 constant surface speed, and how to choose values from tooling data.</p>
+<p class="lead">Spindle speed (S) and feed rate (F) are the two cut-rate commands. This page covers S, M03/M04/M05, feed modes G94/G95/G99, G96 constant surface speed, and how to choose values from tooling data.</p><div class="cp-meta"><span><strong>Level:</strong> K</span><span><strong>Scope:</strong> Machine-neutral concepts; controller-specific examples are labelled</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/08-programming-math/">Practical Mathematics for CNC Programming</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Calculate spindle speed</li><li>Convert feed per tooth and per revolution</li><li>Explain a CSS speed limit</li></ul></div>
 
 <h2>Concept</h2>
 <p>Two numbers control how fast the cutting happens: <strong>S</strong> (spindle speed) and <strong>F</strong> (feed rate). On a mill, S is nearly always fixed. On a lathe, S can be fixed RPM (G97) or constant surface speed (G96), where the controller changes RPM as the tool moves across changing diameters. Feed can be per minute (G94) or per revolution (G95, or G99 on a Haas lathe).</p>
@@ -42,15 +42,15 @@
 
 <h3>Feed Modes: G94, G95, G99</h3>
 <p>The F command means different things depending on the active feed mode and machine type:</p>
-<table class="data-table">
-<tr><th>Code</th><th>Meaning</th><th>F Unit</th><th>Used On</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Feed Modes: G94, G95, G99"><table class="data-table"><caption>Feed Modes: G94, G95, G99</caption>
+<tr><th scope="col">Code</th><th scope="col">Meaning</th><th scope="col">F Unit</th><th scope="col">Used On</th></tr>
 <tr><td>G94</td><td>Feed per minute</td><td>mm/min (with G21)</td><td>Mills</td></tr>
 <tr><td>G95 (ISO / FANUC lathe, where configured)</td><td>Feed per revolution</td><td>mm/rev</td><td>Lathes per their G-code system</td></tr>
 <tr><td>G99 (Haas lathe)</td><td>Feed per revolution</td><td>mm/rev</td><td>Haas lathes</td></tr>
-</table>
+</table></div>
 <p>F units also depend on G20/G21. On a mill, F300 means 300 mm/min. On a lathe in G95/G99, F0.2 means 0.2 mm per revolution. At 1000 RPM that is 200 mm/min. If you accidentally program F0.2 on a mill in G94, the tool feeds 0.2 mm/min; F200 on a lathe in per-rev mode means 200 mm per revolution.</p>
 
-<svg viewBox="0 0 360 150" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+<figure class="cp-figure"><svg aria-label="Feed Modes: G94, G95, G99" role="img" viewBox="0 0 360 150" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="lesson-10-diagram-1-desc">Illustration for Feed Modes: G94, G95, G99. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-10-diagram-1-title">Feed Modes: G94, G95, G99</title>
   <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Feed Modes</text>
   <rect x="30" y="35" width="140" height="90" fill="#dbeafe" stroke="#1e40af" rx="4"/>
   <text x="100" y="55" font-size="11" text-anchor="middle" fill="#1e40af">G94 (mm/min)</text>
@@ -62,7 +62,7 @@
   <text x="260" y="75" font-size="10" text-anchor="middle" fill="#333">F0.2</text>
   <text x="260" y="95" font-size="9" text-anchor="middle" fill="#666">tool advances 0.2 mm</text>
   <text x="260" y="110" font-size="9" text-anchor="middle" fill="#666">per spindle revolution</text>
-</svg>
+</svg><figcaption>Feed Modes: G94, G95, G99 — read the adjacent example for the stated conditions.</figcaption></figure>
 
 <h3>How to Choose Speed and Feed</h3>
 <p>Values come from the tool manufacturer catalog: cutting speed Vc (m/min) and feed per tooth fz (mm/tooth). Convert them:</p>
@@ -75,7 +75,7 @@
 <h3>Constant Surface Speed (G96) on Lathes</h3>
 <p>On a lathe, cutting at fixed RPM (G97) means surface speed changes as the tool moves across different diameters. <strong>G96</strong> keeps the surface speed (Vc) constant by raising RPM as the cutting diameter gets smaller. Always pair G96 with a maximum RPM limit (G50 Sxxxx); once RPM reaches that limit, it stays there and Vc drops as the diameter shrinks further. Threading uses G97 fixed RPM.</p>
 
-<svg viewBox="0 0 360 200" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+<figure class="cp-figure"><svg aria-label="Constant Surface Speed (G96) on Lathes" role="img" viewBox="0 0 360 200" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="lesson-10-diagram-2-desc">Illustration for Constant Surface Speed (G96) on Lathes. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-10-diagram-2-title">Constant Surface Speed (G96) on Lathes</title>
   <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">G96 CSS: RPM vs diameter (Vc=180 m/min, cap 2500)</text>
   <!-- axes: x-axis at y=160 = 0 RPM; y-axis bottom at y=160 -->
   <line x1="50" y1="160" x2="330" y2="160" stroke="#333" stroke-width="1.5"/>
@@ -95,15 +95,15 @@
   <circle cx="222.5" cy="59.2" r="2.5" fill="#2563eb"/>
   <circle cx="236" cy="50" r="2.5" fill="#dc2626"/>
   <circle cx="320" cy="50" r="2.5" fill="#2563eb"/>
-</svg>
-<table class="data-table" style="margin-top:0.5em">
-<tr><th>D (mm)</th><th>Unconstrained RPM</th><th>Actual RPM</th><th>Actual Vc (m/min)</th></tr>
+</svg><figcaption>Constant Surface Speed (G96) on Lathes — read the adjacent example for the stated conditions.</figcaption></figure>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Constant Surface Speed (G96) on Lathes"><table class="data-table" style="margin-top:0.5em"><caption>Constant Surface Speed (G96) on Lathes</caption>
+<tr><th scope="col">D (mm)</th><th scope="col">Unconstrained RPM</th><th scope="col">Actual RPM</th><th scope="col">Actual Vc (m/min)</th></tr>
 <tr><td>50</td><td>1146</td><td>1146</td><td>180</td></tr>
 <tr><td>25</td><td>2292</td><td>2292</td><td>180</td></tr>
 <tr><td>&asymp;22.918 (crossover)</td><td>2500</td><td>2500</td><td>180 (cap point)</td></tr>
 <tr><td>20</td><td>2865</td><td>2500</td><td>157</td></tr>
 <tr><td>10</td><td>5730</td><td>2500</td><td>78.5</td></tr>
-</table>
+</table></div>
 
 <h3>Chip Load and Why It Matters</h3>
 <p>Feed per tooth (fz) is how thick each flute cuts per revolution. Too light and the tool rubs; too heavy and the edge chips. The catalog gives the range for your material and tool; start at a middle value and adjust for finish and tool life. Feed rate = RPM &times; fz &times; number of flutes. Radial engagement (ae) affects chip thinning: at light ae, the chip is thinner than fz and you may increase feed to maintain a reasonable chip thickness.</p>
@@ -228,7 +228,7 @@ F0.2</code></pre>
 </ul>
 </section>
 
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/09-mcode-fundamentals/">&larr; M-Codes</a><a href="/cnc-manufacturing-engineering/cnc-programming/11-controller-dialects/">Controller Dialects &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/11-controller-dialects/">Previous: Controller Dialects and Manual Reading</a><a href="/cnc-manufacturing-engineering/cnc-programming/13-work-offsets/">Next: Work Offsets and Datum Setting</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

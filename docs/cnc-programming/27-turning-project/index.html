@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Worked Project: Stepped Shaft — CNC Programming</title>
-<meta name="description" content="Complete CNC lathe project: facing, roughing and finishing a stepped shaft with Haas G71/G70, setup data, and tool nose radius considerations.">
+<title>Worked Project: A Stepped Shaft — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Worked Project: A Stepped Shaft. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/27-turning-project/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -25,9 +25,9 @@
   </div>
 </nav>
 <main class="article cp-article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Worked Project: Stepped Shaft</h1>
-<p class="lead">A &Oslash;40&times;100 mm bar stock, faced to establish Z0, then rough-turned and finish-turned to a two-step profile (&Oslash;30 and &Oslash;36). This project covers facing, setup, Haas single-line G71 roughing, and G70 finishing.</p>
+<p class="lead">A &Oslash;40&times;100 mm bar stock, faced to establish Z0, then rough-turned and finish-turned to a two-step profile (&Oslash;30 and &Oslash;36). This project covers facing, setup, Haas single-line G71 roughing, and G70 finishing.</p><div class="cp-meta"><span><strong>Level:</strong> K</span><span><strong>Scope:</strong> Haas lathe examples; metric diameter programming</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/">Turning Roughing and Finishing Cycles</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Trace the facing and turning plan</li><li>Calculate finish allowance</li><li>Check jaw and tool clearance</li></ul></div>
 
 <h2>Concept</h2>
 <p>We machine the front end of a &Oslash;40&times;100 bar. The finished part has two diameters: &Oslash;30 from Z0 to Z&minus;20, and &Oslash;36 from Z&minus;20 to Z&minus;40. We do <strong>not</strong> part off or turn the back — this setup completes only the front contour.</p>
@@ -47,7 +47,7 @@
 <h2>Why It Matters</h2>
 <p>The facing operation is not optional: it establishes the axial datum (Z0). If you skip facing and set Z0 on the rough stock face at +1, every axial dimension is off by 1 mm. The 44 mm grip length and 55 mm projection are classroom geometry assumptions — real gripping force, jaw envelope, and toolholder clearance must be verified on the actual machine.</p>
 
-<svg aria-label="Diagram accompanying the adjacent worked example" role="img" viewBox="0 0 480 200" style="width:100%;max-width:500px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="cp-27-turning-project-fig-1">Diagram accompanying the adjacent worked example. Read the accompanying explanation for assumptions and values.</desc><title>Diagram accompanying the adjacent worked example</title>
+<figure class="cp-figure"><svg aria-label="Diagram accompanying the adjacent worked example" role="img" viewBox="0 0 480 200" style="width:100%;max-width:500px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="cp-27-turning-project-fig-1">Diagram accompanying the adjacent worked example. Read the accompanying explanation for assumptions and values.</desc><title>Diagram accompanying the adjacent worked example</title>
   <text x="120" y="15" font-size="11" font-weight="bold" fill="#333">Setup geometry (px=440+4Z, radial 2px/mm)</text>
   <!-- Chuck: grip zone x44 to x220 (Z-99 to Z-55) -->
   <rect x="20" y="50" width="200" height="100" fill="#999" rx="3"/>
@@ -70,7 +70,7 @@
   <text x="210" y="175" font-size="8" fill="#666">Z-55 jaw</text>
   <text x="270" y="175" font-size="8" fill="#666">Z-40</text>
   <text x="350" y="175" font-size="8" fill="#666">Z-20</text>
-</svg>
+</svg><figcaption>Why It Matters — read the adjacent example for the stated conditions.</figcaption></figure>
 
 <h2>How It Works</h2>
 
@@ -105,7 +105,7 @@ N20 X42.</code></pre>
 <h3>G70 Finishing</h3>
 <p>After G71, the same T0101 runs G70 at S1200 to cut the finished profile at F0.10. Rough diameter after G71: &Oslash;30.4 and &Oslash;36.4 (U0.4 diameter allowance). Final: &Oslash;30 and &Oslash;36.</p>
 
-<svg aria-label="Diagram accompanying the adjacent worked example" role="img" viewBox="0 0 300 200" style="width:100%;max-width:350px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="cp-27-turning-project-fig-2">Diagram accompanying the adjacent worked example. Read the accompanying explanation for assumptions and values.</desc><title>Diagram accompanying the adjacent worked example</title>
+<figure class="cp-figure"><svg aria-label="Diagram accompanying the adjacent worked example" role="img" viewBox="0 0 300 200" style="width:100%;max-width:350px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="cp-27-turning-project-fig-2">Diagram accompanying the adjacent worked example. Read the accompanying explanation for assumptions and values.</desc><title>Diagram accompanying the adjacent worked example</title>
   <text x="60" y="18" font-size="12" font-weight="bold" fill="#333">Nose Radius at Shoulder (r0.4, local enlargement: 20px = 0.4mm)</text>
   <!-- vertical face (horizontal cut) and horizontal OD (vertical cut) meeting at corner -->
   <!-- virtual tip at (150,80): face horizontal line left, OD vertical line down -->
@@ -122,12 +122,12 @@ N20 X42.</code></pre>
   <!-- virtual tip -->
   <circle cx="150" cy="80" r="2" fill="#999"/>
   <text x="155" y="95" font-size="9" fill="#999">virtual tip</text>
-</svg>
+</svg><figcaption>G70 Finishing — read the adjacent example for the stated conditions.</figcaption></figure>
 
 <h3>Clearance and Retraction</h3>
 <p>After machining, retract in two axes: first to X100 (clear of OD), then to Z100 (away from chuck). These X100/Z100 numbers are classroom safe positions for this model — verify on your machine. The toolholder's rearward Z envelope is 8 mm, so at Z&minus;40 the tool body reaches Z&minus;48, leaving 7 mm to the jaw front at Z&minus;55.</p>
 
-<svg aria-label="Diagram accompanying the adjacent worked example" role="img" viewBox="0 0 480 220" style="width:100%;max-width:480px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="cp-27-turning-project-fig-3">Diagram accompanying the adjacent worked example. Read the accompanying explanation for assumptions and values.</desc><title>Diagram accompanying the adjacent worked example</title>
+<figure class="cp-figure"><svg aria-label="Diagram accompanying the adjacent worked example" role="img" viewBox="0 0 480 220" style="width:100%;max-width:480px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="cp-27-turning-project-fig-3">Diagram accompanying the adjacent worked example. Read the accompanying explanation for assumptions and values.</desc><title>Diagram accompanying the adjacent worked example</title>
   <text x="80" y="18" font-size="12" font-weight="bold" fill="#333">G71 Type I Roughing (X-Z schematic, r=X/2)</text>
   <!-- axes: horizontal = Z, vertical = radius r -->
   <line x1="40" y1="190" x2="440" y2="190" stroke="#999" stroke-width="1"/>
@@ -157,7 +157,7 @@ N20 X42.</code></pre>
   <text x="195" y="205" font-size="9" fill="#666">Z-40</text>
   <text x="60" y="170" font-size="9" fill="#e67e22">Selected cutting segments (not full G71 simulation)</text>
   <text x="60" y="182" font-size="9" fill="#e67e22">W0.1 = 0.1mm axial finish stock</text>
-</svg>
+</svg><figcaption>Clearance and Retraction — read the adjacent example for the stated conditions.</figcaption></figure>
 
 <h3>Setup Procedure Summary</h3>
 <ol>
@@ -264,14 +264,14 @@ M30</code></pre>
 <details><summary>Show answer</summary><p>Tool body reaches Z = &minus;40 &minus; 8 = &minus;48. Gap to jaw at Z&minus;55 is 7 mm. This is a geometric model; verify the actual toolholder envelope on the machine.</p></details>
 
 <section class="cp-sources">
-<h2>Sources</h2>
+<h2>Sources</h2><ul><li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G71.html">Haas G71 roughing</a></li><li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G70.html">Haas G70 finishing</a></li></ul>
 <ul>
 <li>Haas Automation Lathe Operator's Manual — G71 roughing cycle (single-line format), G70 finishing cycle.</li>
 <li>Tool nose radius compensation: r0.4 insert leaves a fillet at shoulders; measure diameters away from the shoulder root.</li>
 <li>All speeds, feeds, depths, and grip lengths are classroom teaching assumptions. Real process parameters require tooling catalogs and machine verification.</li>
 </ul>
 </section>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/28-milling-project/">&larr; Milling Project</a><a href="/cnc-manufacturing-engineering/cnc-programming/35-cad-cam-postprocessing/">CAD/CAM &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/28-milling-project/">Previous: Worked Project: A Pocketed Mounting Plate</a><a href="/cnc-manufacturing-engineering/cnc-programming/35-cad-cam-postprocessing/">Next: CAD, CAM, and Post-Processor Verification</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Roughing & Finishing Cycles — CNC Programming</title>
-<meta name="description" content="G71 roughing cycle, G70 finishing cycle, P/Q contour blocks, depth of cut, finish allowance, and a complete stepped-shaft example.">
+<title>Turning Roughing and Finishing Cycles — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Turning Roughing and Finishing Cycles. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -24,10 +24,10 @@
     </ul>
   </div>
 </nav>
-<main class="article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<main class="article cp-article">
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Roughing &amp; Finishing Cycles</h1>
-<p class="lead">G71 and G70 automate the bulk of lathe work. Instead of writing every roughing pass by hand, you define the finished contour once and let the controller generate the passes. This page explains the G71 format, P/Q contour rules, finish allowance, and a complete stepped-shaft example.</p>
+<p class="lead">G71 and G70 automate the bulk of lathe work. Instead of writing every roughing pass by hand, you define the finished contour once and let the controller generate the passes. This page explains the G71 format, P/Q contour rules, finish allowance, and a complete stepped-shaft example.</p><div class="cp-meta"><span><strong>Level:</strong> K</span><span><strong>Scope:</strong> Haas lathe examples; metric diameter programming</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/">Turning Coordinates and Basic Toolpaths</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Read a finished P–Q contour</li><li>Interpret radial and axial allowance</li><li>Separate rough and finish feeds</li></ul></div>
 
 <h2>Concept</h2>
 <p><strong>G71</strong> is the stock removal turning cycle. It repeatedly cuts the raw stock down to near the finished contour, leaving a small amount of material (the finish allowance) for a final clean pass. <strong>G70</strong> is the finishing cycle: it follows the same contour at finishing speed and feed, producing the final dimensions.</p>
@@ -40,15 +40,15 @@
 
 <h3>Haas Single-Line G71 Format</h3>
 <pre class="cp-code"><code>G71 P10 Q20 D1.0 U0.4 W0.1 F0.2</code></pre>
-<table class="data-table">
-<tr><th>Parameter</th><th>Meaning</th><th>Example</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Haas Single-Line G71 Format"><table class="data-table"><caption>Haas Single-Line G71 Format</caption>
+<tr><th scope="col">Parameter</th><th scope="col">Meaning</th><th scope="col">Example</th></tr>
 <tr><td>P10</td><td>First block number of the finished contour</td><td>N10</td></tr>
 <tr><td>Q20</td><td>Last block number of the finished contour</td><td>N20</td></tr>
 <tr><td>D1.0</td><td>Depth of each roughing pass (radial, mm)</td><td>1.0 mm per pass</td></tr>
 <tr><td>U0.4</td><td>Finish allowance left on diameter (X direction)</td><td>0.4 mm diameter = 0.2 mm radial</td></tr>
 <tr><td>W0.1</td><td>Finish allowance left on Z face</td><td>0.1 mm</td></tr>
 <tr><td>F0.2</td><td>Roughing feed rate (mm/rev)</td><td>0.2 mm/rev</td></tr>
-</table>
+</table></div>
 <p>After G71 finishes roughing, the part is U0.4 oversize in X and W0.1 oversize in Z. Then <code>G70 P10 Q20</code> takes one clean pass at the finishing speed and feed (set with S and F before G70).</p>
 
 <h3>P/Q Contour Rules (Type I vs Type II)</h3>
@@ -61,7 +61,7 @@
 </ul>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="P/Q Contour Rules (Type I vs Type II)" role="img" viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="lesson-20-diagram-1-desc">Illustration for P/Q Contour Rules (Type I vs Type II). Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-20-diagram-1-title">P/Q Contour Rules (Type I vs Type II)</title>
   <line x1="40" y1="180" x2="380" y2="180" stroke="#333" stroke-width="1"/>
   <text x="385" y="184" font-size="10" fill="#333">Z+</text>
   <text x="355" y="196" font-size="9" fill="#e67e22">Z0</text>
@@ -156,7 +156,7 @@ M30</code></pre>
 <p>G72 is the face-turning cycle for parts where Z is short but the diameter changes a lot. G73 (pattern repeating) cuts the same contour repeatedly for parts with already near-net shape or irregular profiles, including grooves. G70 always runs after G71/G72/G73 to clean up. Do not put grooving, threading, or part-off inside the G71 contour; those are separate operations with their own tools and cycles.</p>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="G72, G73, and G70 in Context" role="img" viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="lesson-20-diagram-2-desc">Illustration for G72, G73, and G70 in Context. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-20-diagram-2-title">G72, G73, and G70 in Context</title>
   <line x1="60" y1="140" x2="300" y2="140" stroke="#c0392b" stroke-width="2"/>
   <line x1="60" y1="132" x2="300" y2="132" stroke="#166534" stroke-width="2" stroke-dasharray="4,2"/>
   <line x1="200" y1="60" x2="200" y2="140" stroke="#c0392b" stroke-width="2"/>
@@ -181,26 +181,26 @@ M30</code></pre>
 
 
 <h3>Contour Block Trace (P&ndash;Q)</h3>
-<table class="data-table">
-<tr><th>Block</th><th>X (diameter)</th><th>Z</th><th>Motion</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Contour Block Trace (P&amp;ndash;Q)"><table class="data-table"><caption>Contour Block Trace (P&ndash;Q)</caption>
+<tr><th scope="col">Block</th><th scope="col">X (diameter)</th><th scope="col">Z</th><th scope="col">Motion</th></tr>
 <tr><td>N10 start</td><td>30</td><td>2</td><td>P-block positioning above part</td></tr>
 <tr><td>G01 Z0 F0.1</td><td>30</td><td>0</td><td>feed to face</td></tr>
 <tr><td>Z-20.</td><td>30</td><td>&minus;20</td><td>turn O30 straight, then shoulder</td></tr>
 <tr><td>X36.</td><td>36</td><td>&minus;20</td><td>radial move across shoulder (cutting)</td></tr>
 <tr><td>Z-40.</td><td>36</td><td>&minus;40</td><td>turn O36</td></tr>
 <tr><td>N20 X52.</td><td>52</td><td>&minus;40</td><td>pull off, leave contour</td></tr>
-</table>
+</table></div>
 <p>First move is Z on the O30 diameter, then X steps out to O36 at the shoulder — a stepped part, not a taper.</p>
 
 
 
 <h3>Target Allowance Table</h3>
-<table class="data-table">
-<tr><th>Feature</th><th>Finished</th><th>After rough</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Target Allowance Table"><table class="data-table"><caption>Target Allowance Table</caption>
+<tr><th scope="col">Feature</th><th scope="col">Finished</th><th scope="col">After rough</th></tr>
 <tr><td>Front diameter</td><td>O30</td><td>O30.4</td></tr>
 <tr><td>Rear diameter</td><td>O36</td><td>O36.4</td></tr>
 <tr><td>Shoulder Z</td><td>&minus;20.0</td><td>&minus;19.9</td></tr>
-</table>
+</table></div>
 <p>U0.4 is on diameter (0.2 mm radial); W0.1 leaves axial stock on the shoulder. The exact rough pass sequence is computed by the control, not listed here.</p>
 
 
@@ -235,7 +235,7 @@ M30</code></pre>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G70.html">Haas G70 Finishing Cycle</a>.</li>
 </ul>
 
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/">&larr; Turning Basics</a><a href="/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring/">Grooving &amp; Boring &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/">Previous: Turning Coordinates and Basic Toolpaths</a><a href="/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring/">Next: Grooving, Parting, and Internal Turning</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

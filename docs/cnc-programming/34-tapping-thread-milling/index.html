@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Tapping & Thread Milling — CNC Programming</title>
-<meta name="description" content="Rigid tapping G84, tap drill sizing, feed calculation, blind vs through holes, and when thread milling beats conventional tapping.">
+<title>Tapping and Thread Milling — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Tapping and Thread Milling. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/34-tapping-thread-milling/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -25,9 +25,9 @@
   </div>
 </nav>
 <main class="article cp-article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Tapping &amp; Thread Milling</h1>
-<p class="lead">Tapping cuts internal threads with a tap. This page covers rigid tapping with G84, how to calculate the feed, choosing the right tap drill size, blind-hole considerations, and when thread milling is the better choice.</p>
+<p class="lead">Tapping cuts internal threads with a tap. This page covers rigid tapping with G84, how to calculate the feed, choosing the right tap drill size, blind-hole considerations, and when thread milling is the better choice.</p><div class="cp-meta"><span><strong>Level:</strong> K</span><span><strong>Scope:</strong> Haas mill examples; metric unless stated otherwise</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/">Drilling, Pecking, and Boring</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Calculate tapping feed</li><li>Separate tip and usable thread depth</li><li>Explain thread-milling geometry</li></ul></div>
 
 <h2>Concept</h2>
 <p><strong>Tapping</strong> is the process of cutting internal threads using a threaded tool called a tap. On a CNC mill, <strong>rigid tapping</strong> (G84) synchronizes spindle rotation with Z feed so the tap follows the thread pitch exactly: every spindle revolution advances the tap by exactly one pitch. The spindle reverses at the bottom and retracts, still synchronized, so the tap backs out cleanly.</p>
@@ -232,7 +232,7 @@ M30</code></pre>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G84.html">Haas G84 Rigid Tapping</a>.</li>
 </ul>
 
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/">&larr; Canned Cycles</a><a href="/cnc-manufacturing-engineering/cnc-programming/29-subprograms/">Subprograms &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/">Previous: Canned-Cycle State and Hole Patterns</a><a href="/cnc-manufacturing-engineering/cnc-programming/29-subprograms/">Next: Subprograms and Repeated Features</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Machine Fundamentals for Programmers — CNC Programming</title>
-<meta name="description" content="CNC machine axes, spindle, turret, tool magazine, machine zero vs work zero, and why the same X coordinate means different things on a mill vs lathe.">
+<title>Machine Fundamentals for Programmers — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Machine Fundamentals for Programmers. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/02-machine-fundamentals/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -24,10 +24,10 @@
     </ul>
   </div>
 </nav>
-<main class="article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<main class="article cp-article">
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Machine Fundamentals for Programmers</h1>
-<p class="lead">Before writing code, you need to know what the machine actually moves. This page covers axes, spindle, turret, tool magazine, and the critical difference between machine zero and work zero.</p>
+<p class="lead">Before writing code, you need to know what the machine actually moves. This page covers axes, spindle, turret, tool magazine, and the critical difference between machine zero and work zero.</p><div class="cp-meta"><span><strong>Level:</strong> B</span><span><strong>Scope:</strong> Machine-neutral concepts; controller-specific examples are labelled</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/01-getting-started/what-is-cnc-programming/">What Is CNC Programming?</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Identify mill and lathe axes</li><li>Separate machine travel from fixture clearance</li><li>Explain machine and work origins</li></ul></div>
 
 <h2>Concept</h2>
 <p>Every CNC machine has a set of linear axes (X, Y, Z) and optionally rotary axes (A, B, C). The machine moves the tool relative to the workpiece along these axes. On a <strong>mill</strong>, the tool rotates in the spindle and moves in X, Y, and Z. On a <strong>lathe</strong>, the workpiece rotates in the spindle and the tool moves in X (radial) and Z (axial). Understanding which one rotates — tool or workpiece — explains most of the differences between mill and lathe programming.</p>
@@ -58,16 +58,16 @@
 <p>Both machines have a reference position (machine zero) that they return to on power-up. The work offset (G54) shifts the coordinate system from machine zero to the part. For machine architecture details beyond programming, see <a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a>.</p>
 
 <h3>Mill vs Lathe at a Glance</h3>
-<table class="data-table">
-<tr><th></th><th>Mill / Machining Center</th><th>CNC Lathe</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Mill vs Lathe at a Glance"><table class="data-table"><caption>Mill vs Lathe at a Glance</caption>
+<tr><th scope="col"></th><th scope="col">Mill / Machining Center</th><th scope="col">CNC Lathe</th></tr>
 <tr><td>What rotates</td><td>Tool (spindle)</td><td>Workpiece (chuck)</td></tr>
 <tr><td>Linear axes</td><td>X, Y, Z</td><td>X, Z</td></tr>
 <tr><td>X meaning</td><td>Linear position (mm)</td><td>Diameter (mm)</td></tr>
 <tr><td>Tool holding</td><td>Tool changer + magazine</td><td>Turret</td></tr>
 <tr><td>Coolant</td><td>Flood through spindle</td><td>Flood through turret</td></tr>
-</table>
+</table></div>
 
-<svg viewBox="0 0 480 200" style="width:100%;max-width:480px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+<figure class="cp-figure"><svg aria-label="Mill vs Lathe at a Glance" role="img" viewBox="0 0 480 200" style="width:100%;max-width:480px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="lesson-02-diagram-1-desc">Illustration for Mill vs Lathe at a Glance. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-02-diagram-1-title">Mill vs Lathe at a Glance</title>
   <text x="120" y="15" font-size="11" font-weight="bold" fill="#333">Mill vs Lathe Axes (schematic projection)</text>
   <!-- Mill side: common origin at (100,140), X right, Z up, Y diagonal -->
   <rect x="20" y="30" width="200" height="150" fill="#e8f0fe" stroke="#54a0ff" rx="5"/>
@@ -96,7 +96,7 @@
   <rect x="310" y="125" width="80" height="30" fill="#c8d6e5" rx="2"/>
   <text x="320" y="143" font-size="9" fill="#333">Work rotates</text>
   <defs><marker id="aX" markerWidth="8" markerHeight="8" refX="8" refY="3"><path d="M0,0 L8,3 L0,6" fill="#333"/></marker></defs>
-</svg>
+</svg><figcaption>Mill vs Lathe at a Glance — read the adjacent example for the stated conditions.</figcaption></figure>
 
 <h3>Machine Zero vs Work Zero</h3>
 <p><strong>Machine zero</strong> is the fixed reference point the machine establishes on power-up by moving each axis to a home switch. It never changes. <strong>Work zero</strong> is where you define the part origin using a work offset (G54). You set G54 by touching the part edge with an edge finder or probe. The controller computes: <em>machine position = machine zero + work offset + programmed coordinate</em>. This three-layer relationship is the core mental model of CNC.</p>
@@ -135,7 +135,7 @@
 </ul>
 </section>
 
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/01-getting-started/what-is-cnc-programming/">&larr; What is CNC?</a><a href="/cnc-manufacturing-engineering/cnc-programming/23-program-safety/">Program Safety &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/01-getting-started/what-is-cnc-programming/">Previous: What Is CNC Programming?</a><a href="/cnc-manufacturing-engineering/cnc-programming/23-program-safety/">Next: Safe Program Start, Retraction, and Restart</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

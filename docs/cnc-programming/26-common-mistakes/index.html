@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Common Beginner Mistakes — CNC Programming</title>
-<meta name="description" content="The most frequent CNC programming mistakes new programmers make: wrong offsets, units, modal state, unsafe motion — and how to avoid them.">
+<title>Common Beginner Mistakes and Corrections — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Common Beginner Mistakes and Corrections. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/26-common-mistakes/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -24,10 +24,10 @@
     </ul>
   </div>
 </nav>
-<main class="article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<main class="article cp-article">
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Common Beginner Mistakes</h1>
-<p class="lead">This page collects the mistakes that cause most beginner crashes and scrap, with concrete numbers and a checklist. It is not a list of scare stories; each item has a verification step you can run before cycle start.</p>
+<p class="lead">This page collects the mistakes that cause most beginner crashes and scrap, with concrete numbers and a checklist. It is not a list of scare stories; each item has a verification step you can run before cycle start.</p><div class="cp-meta"><span><strong>Level:</strong> B</span><span><strong>Scope:</strong> Machine-neutral concepts; controller-specific examples are labelled</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting/">Diagnosing CNC Program Problems</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Identify a wrong inherited state</li><li>Explain an offset error</li><li>Review a short defective program</li></ul></div>
 
 <h2>Concept</h2>
 <p>Beginner CNC programming errors cluster in a few predictable areas: offsets, units, modal state, and unsafe motion. Almost every crash traces back to an assumed state rather than a typo. The goal is to make those assumptions explicit before the machine moves.</p>
@@ -61,7 +61,7 @@
 <p>Starting at X20: G90 X30 moves to X30. G91 X30 moves 30 mm from current, to X50. The block text looks identical; the mode decides where the tool ends. Always confirm distance mode before a rapid move.</p>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="G90 vs G91" role="img" viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="lesson-26-diagram-1-desc">Illustration for G90 vs G91. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-26-diagram-1-title">G90 vs G91</title>
   <line x1="50" y1="90" x2="350" y2="90" stroke="#333"/>
   <circle cx="150" cy="90" r="5" fill="#333"/>
   <text x="140" y="80" font-size="10" fill="#333">start X20</text>
@@ -121,7 +121,7 @@
 <li>Haas Automation, G80 Canned Cycle Cancel. <a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G80.html" target="_blank" rel="noopener">haascnc.com</a>.</li>
 <li>Haas Automation, Mill Operator's Manual — Operation. <a href="https://www.haascnc.com/service/online-operator-s-manuals/mill-operator-s-manual/mill---operation.html" target="_blank" rel="noopener">haascnc.com</a>.</li>
 </ul>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting/">&larr; Troubleshooting</a><a href="/cnc-manufacturing-engineering/cnc-programming/28-milling-project/">Milling Project &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting/">Previous: Diagnosing CNC Program Problems</a><a href="/cnc-manufacturing-engineering/cnc-programming/28-milling-project/">Next: Worked Project: A Pocketed Mounting Plate</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Reading & Structuring a CNC Program — CNC Programming</title>
-<meta name="description" content="Program number, blocks, word addresses, sequence numbers, program skeleton, and how to read a CNC program line by line.">
+<title>Reading and Structuring a CNC Program — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Reading and Structuring a CNC Program. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/04-program-structure/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -24,10 +24,10 @@
     </ul>
   </div>
 </nav>
-<main class="article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<main class="article cp-article">
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Reading and Structuring a CNC Program</h1>
-<p class="lead">A CNC program is not a random list of numbers. This page teaches the anatomy: program number, blocks, word addresses, sequence numbers, and the standard program skeleton every program follows.</p>
+<p class="lead">A CNC program is not a random list of numbers. This page teaches the anatomy: program number, blocks, word addresses, sequence numbers, and the standard program skeleton every program follows.</p><div class="cp-meta"><span><strong>Level:</strong> B</span><span><strong>Scope:</strong> Haas mill examples; metric unless stated otherwise</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/07-plane-units/">Planes, Units, and Numeric Conventions</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Read a block address by address</li><li>Trace the startup state</li><li>Explain program end and comments</li></ul></div>
 
 <h2>Concept</h2>
 <p>A CNC program consists of <strong>blocks</strong> (lines), each containing <strong>words</strong> (letter + number). A word like <code>X25.5</code> means "the X coordinate is 25.5." A block may contain multiple words: <code>G01 X25.5 Y10. F200.</code> means linear motion to (25.5, 10) at 200 mm/min.</p>
@@ -50,7 +50,7 @@
 <li><strong>F300.0</strong> — feed rate (modal)</li>
 </ul>
 
-<svg viewBox="0 0 480 100" style="width:100%;max-width:480px;display:block;margin:1em auto;background:#fafafa;border-radius:6px;">
+<figure class="cp-figure"><svg aria-label="Anatomy of a Block" role="img" viewBox="0 0 480 100" style="width:100%;max-width:480px;display:block;margin:1em auto;background:#fafafa;border-radius:6px;"><desc id="lesson-04-diagram-1-desc">Illustration for Anatomy of a Block. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-04-diagram-1-title">Anatomy of a Block</title>
   <rect x="20" y="20" width="60" height="30" fill="#999" rx="3"/>
   <text x="35" y="40" font-size="11" fill="#fff">N10</text>
   <text x="85" y="40" font-size="14" fill="#666">|</text>
@@ -63,7 +63,7 @@
   <rect x="325" y="20" width="60" height="30" fill="#e67e22" rx="3"/>
   <text x="335" y="40" font-size="11" fill="#fff">F300</text>
   <text x="20" y="70" font-size="10" fill="#666">Label    Mode     X target   Y target   Feed</text>
-</svg>
+</svg><figcaption>Anatomy of a Block — read the adjacent example for the stated conditions.</figcaption></figure>
 
 <h3>Standard Program Skeleton</h3>
 <ol>
@@ -95,8 +95,8 @@ M30
 
 <h2>Example: Line-by-Line Trace</h2>
 <p><strong>Entry conditions:</strong> Haas mill, tool changed, G54 and H01 offsets already set, Z50 and all XY paths verified clear of fixtures. We trace what the machine does at each line, tracking modal state:</p>
-<table class="data-table">
-<tr><th>Line</th><th>What happens</th><th>State after</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Example: Line-by-Line Trace"><table class="data-table"><caption>Example: Line-by-Line Trace</caption>
+<tr><th scope="col">Line</th><th scope="col">What happens</th><th scope="col">State after</th></tr>
 <tr><td>G21 G17 G90 G94...</td><td>Known state: metric, XY plane, absolute, feed/min, comp off</td><td>G21/G17/G90/G94/G40/G49/G80 active</td></tr>
 <tr><td>G54</td><td>Select work offset 54</td><td>G54 active</td></tr>
 <tr><td>T01 M06</td><td>ATC picks tool 1</td><td>Tool 1 in spindle</td></tr>
@@ -109,7 +109,7 @@ M30
 <tr><td>G00 Z50. M09</td><td>Rapid up to Z50, coolant off</td><td>G00 active, Z50, M09</td></tr>
 <tr><td>M05</td><td>Spindle stop</td><td>Spindle off</td></tr>
 <tr><td>M30</td><td>End program, rewind</td><td>Program stops</td></tr>
-</table>
+</table></div>
 
 
 <h3>Why Every Program Has the Same Shape</h3>
@@ -141,7 +141,7 @@ M30
 </ul>
 </section>
 
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/07-plane-units/">&larr; Plane &amp; Units</a><a href="/cnc-manufacturing-engineering/cnc-programming/05-gcode-fundamentals/">G-Code Basics &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/07-plane-units/">Previous: Planes, Units, and Numeric Conventions</a><a href="/cnc-manufacturing-engineering/cnc-programming/05-gcode-fundamentals/">Next: G-Code Fundamentals</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

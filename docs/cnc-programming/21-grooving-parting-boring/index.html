@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Grooving, Parting & Boring — CNC Programming</title>
-<meta name="description" content="Groove toolpaths, cutoff/parting operations, boring bars, internal turning, feed/speed considerations, and a worked parting example.">
+<title>Grooving, Parting, and Internal Turning — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Grooving, Parting, and Internal Turning. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -24,10 +24,10 @@
     </ul>
   </div>
 </nav>
-<main class="article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<main class="article cp-article">
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Grooving, Parting &amp; Boring</h1>
-<p class="lead">Grooving, parting (cutoff), and boring use narrow, weak tools and constrained toolpaths. This page covers groove programming, cutoff, internal boring, and the clearance and chip-control rules that keep these operations safe.</p>
+<p class="lead">Grooving, parting (cutoff), and boring use narrow, weak tools and constrained toolpaths. This page covers groove programming, cutoff, internal boring, and the clearance and chip-control rules that keep these operations safe.</p><div class="cp-meta"><span><strong>Level:</strong> K</span><span><strong>Scope:</strong> Haas lathe examples; metric diameter programming</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/19-turning-fundamentals/">Turning Coordinates and Basic Toolpaths</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Calculate groove coverage</li><li>Trace an ID approach and withdrawal</li><li>Check the toolholder envelope</li></ul></div>
 
 <h2>Concept</h2>
 <p><strong>Grooving</strong> feeds a narrow rectangular insert radially to cut a recess. <strong>Parting (cutoff)</strong> is a radial groove taken all the way through the bar to separate the finished part. <strong>Boring</strong> uses an internal bar to enlarge a pre-drilled hole from the inside. On a Haas lathe, X remains diameter programming; Z positions the tool along the spindle axis. The groove or parting tool has two side edges and one center blade, and the programmer must declare which edge is referenced to Z. Boring is the reverse radial direction of OD turning: X grows as the bore grows.</p>
@@ -44,7 +44,7 @@
 <p>X is diameter. Turning a &Oslash;35 bar down to a groove bottom of &Oslash;30 means a radial depth of (35&minus;30)/2 = 2.5 mm. The tool approaches at a diameter above the bar, feeds radially to X30, and retracts. A short bottom dwell can help clean the floor, but it is not a universal chatter cure; too long dwell rubs and wears the insert.</p>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="Groove Depth in Diameter" role="img" viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="lesson-21-diagram-1-desc">Illustration for Groove Depth in Diameter. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-21-diagram-1-title">Groove Depth in Diameter</title>
   <path d="M 40,110 L 196,110 L 196,120 L 204,120 L 204,110 L 380,110 L 380,180 L 40,180 Z" fill="#d4c5a9" stroke="#999"/>
   <line x1="40" y1="180" x2="380" y2="180" stroke="#333" stroke-dasharray="3,2"/>
   <text x="385" y="183" font-size="10" fill="#333">centerline</text>
@@ -63,7 +63,7 @@
 <p>Boring starts at the drilled hole diameter and moves X outward to enlarge the bore. The bar reaches from the bore mouth into the hole, so the retract direction at the bottom of a Z cut is inward (X smaller), not the OD outward move. Bar overhang is constrained by bar material and diameter; a 4&times;D rule is a rough starting point for steel bars, not a universal limit, and carbide or damped bars have their own published recommendations.</p>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="Boring: Internal Radial Direction" role="img" viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="lesson-21-diagram-2-desc">Illustration for Boring: Internal Radial Direction. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-21-diagram-2-title">Boring: Internal Radial Direction</title>
   <rect x="60" y="40" width="300" height="120" fill="#d4c5a9" stroke="#999"/>
   <rect x="60" y="80" width="300" height="40" fill="#fafafa" stroke="#999"/>
   <line x1="60" y1="100" x2="360" y2="100" stroke="#333" stroke-dasharray="3,2"/>
@@ -176,12 +176,12 @@ G00 X42.</code></pre>
 
 <p><strong>Boring position table.</strong> Bore a pre-drilled O20 hole to O24 over Z0 to Z&minus;30. The bar is sized so that its shank clears the O20 bore; the infeed table uses X diameter.</p>
 <p>The pre-drilled hole is O20 over Z0 to Z&minus;30; this assumes the existing hole extends past Z&minus;30 enough that blade and shank reach Z&minus;30 without bottoming. Each pass: approach outside the mouth at Z2, set X to the target diameter, feed Z into the hole to Z&minus;30, retract radially inward to a value that clears the bar envelope (set per holder/bar data, not assumed), then withdraw Z to Z2. The first pass removes 1.00 mm radially from the O20 bore; later passes remove 0.75 and 0.25 mm from the previous diameter.</p>
-<table class="data-table">
-<tr><th>Pass</th><th>Target X diameter</th><th>Radial depth removed in this pass</th><th>Z action</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Example"><table class="data-table"><caption>Example</caption>
+<tr><th scope="col">Pass</th><th scope="col">Target X diameter</th><th scope="col">Radial depth removed in this pass</th><th scope="col">Z action</th></tr>
 <tr><td>rough 1</td><td>22.0</td><td>1.00 mm</td><td>Z2 &rarr; Z&minus;30 cut</td></tr>
 <tr><td>rough 2</td><td>23.5</td><td>0.75 mm</td><td>Z2 &rarr; Z&minus;30 cut</td></tr>
 <tr><td>finish</td><td>24.0</td><td>0.25 mm</td><td>Z2 &rarr; Z&minus;30 light cut</td></tr>
-</table>
+</table></div>
 <p>After each pass, retract X inward to a value verified against the selected boring bar and shank envelope, then withdraw Z. Without that envelope data, the table is a teaching skeleton, not a runnable program.</p>
 
 
@@ -226,7 +226,7 @@ G00 X42.</code></pre>
 <li><a href="https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf">Sandvik Turning Handbook</a>.</li>
 </ul>
 
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/">&larr; Turning Cycles</a><a href="/cnc-manufacturing-engineering/cnc-programming/22-threading/">Threading &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/">Previous: Turning Roughing and Finishing Cycles</a><a href="/cnc-manufacturing-engineering/cnc-programming/22-threading/">Next: Single-Point Thread Programming</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

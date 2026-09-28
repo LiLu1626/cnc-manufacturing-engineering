@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Program Verification & First Article — CNC Programming</title>
-<meta name="description" content="The verification workflow: syntax review, coordinate review, offset check, simulation, dry run, single block, reduced feed, first article inspection.">
+<title>Program Verification and First-Article Checks — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Program Verification and First-Article Checks. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/24-verification/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -24,10 +24,10 @@
     </ul>
   </div>
 </nav>
-<main class="article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<main class="article cp-article">
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Program Verification &amp; First Article</h1>
-<p class="lead">Writing the program is only half the job. This page covers the verification workflow that separates a production programmer from someone who crashes machines: dry run, single block, reduced feed, and first article inspection.</p>
+<p class="lead">Writing the program is only half the job. This page covers the verification workflow that separates a production programmer from someone who crashes machines: dry run, single block, reduced feed, and first article inspection.</p><div class="cp-meta"><span><strong>Level:</strong> K</span><span><strong>Scope:</strong> Machine-neutral concepts; controller-specific examples are labelled</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/23-program-safety/">Safe Program Start, Retraction, and Restart</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Compare code with intended geometry</li><li>Separate simulation and setup checks</li><li>Plan a first-part verification</li></ul></div>
 
 <h2>Concept</h2>
 <p><strong>Program verification</strong> is the process of confirming that the program will produce the intended part before committing to a full production run. The sequence is: syntax review &rarr; coordinate review &rarr; offset review &rarr; CAM simulation &rarr; dry run on the machine &rarr; single block &rarr; reduced feed &rarr; first part cut &rarr; inspection. Each step catches a different class of error.</p>
@@ -50,8 +50,8 @@
 </ol>
 
 <h3>Verification Sequence</h3>
-<table class="data-table">
-<tr><th>Step</th><th>What You Do</th><th>Catches</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Verification Sequence"><table class="data-table"><caption>Verification Sequence</caption>
+<tr><th scope="col">Step</th><th scope="col">What You Do</th><th scope="col">Catches</th></tr>
 <tr><td>1. Syntax review</td><td>Read the code top to bottom on paper</td><td>Missing %, wrong O number, typos</td></tr>
 <tr><td>2. Coordinate review</td><td>Sketch the tool path on paper</td><td>Wrong coordinates, wrong direction</td></tr>
 <tr><td>3. Offset review</td><td>Check G54, H, D on controller</td><td>Missing or wrong offsets</td></tr>
@@ -60,10 +60,10 @@
 <tr><td>6. Single block</td><td>Block-by-block at reduced feed</td><td>Per-motion errors you would miss at speed</td></tr>
 <tr><td>7. Planned first cut</td><td>Feed/rapid overrides per machine first-article procedure</td><td>Tool deflection, chatter, chip issues</td></tr>
 <tr><td>8. First article</td><td>Measure every dimension</td><td>Offset errors, tool wear, dimensional drift</td></tr>
-</table>
+</table></div>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 420 100" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="Verification Sequence" role="img" viewBox="0 0 420 100" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="lesson-24-diagram-1-desc">Illustration for Verification Sequence. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-24-diagram-1-title">Verification Sequence</title>
   <rect x="10" y="30" width="70" height="40" fill="#3498db" rx="4"/>
   <text x="45" y="55" font-size="10" fill="white" text-anchor="middle">Review</text>
   <line x1="80" y1="50" x2="95" y2="50" stroke="#666" stroke-width="1.5"/>
@@ -109,7 +109,7 @@
 <p>After the first cut, stop and measure. Check critical dimensions against the drawing before continuing. If an offset is wrong, you want to find it on the first part, not the tenth.</p>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="First Part Inspection" role="img" viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="lesson-24-diagram-2-desc">Illustration for First Part Inspection. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-24-diagram-2-title">First Part Inspection</title>
   <rect x="60" y="40" width="100" height="40" fill="#fadbd8" stroke="#c0392b"/>
   <text x="110" y="65" font-size="10" fill="#c0392b" text-anchor="middle">slot 20.30</text>
   <rect x="220" y="40" width="100" height="40" fill="#d5f5e3" stroke="#27ae60"/>
@@ -234,7 +234,7 @@
 <li>Haas Automation, G49 Tool Length Cancel. <a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G49.html" target="_blank" rel="noopener">haascnc.com</a>.</li>
 <li>Haas Automation, Mill Operator's Manual — Operation. <a href="https://www.haascnc.com/service/online-operator-s-manuals/mill-operator-s-manual/mill---operation.html" target="_blank" rel="noopener">haascnc.com</a>.</li>
 </ul>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/22-threading/">&larr; Threading</a><a href="/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting/">Troubleshooting &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/22-threading/">Previous: Single-Point Thread Programming</a><a href="/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting/">Next: Diagnosing CNC Program Problems</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Canned Cycles & Hole Patterns — CNC Programming</title>
-<meta name="description" content="How canned drilling cycles work, modal behavior, G80 cancellation, G98/G99 retract, repeating hole patterns, and the full cycle code reference.">
+<title>Canned-Cycle State and Hole Patterns — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Canned-Cycle State and Hole Patterns. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/18-canned-cycles/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -24,10 +24,10 @@
     </ul>
   </div>
 </nav>
-<main class="article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<main class="article cp-article">
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Canned Cycles &amp; Hole Patterns</h1>
-<p class="lead">Canned cycles package a multi-step drilling or boring sequence into one line of code. This page explains how they work internally, their modal behavior, G80 cancellation, retract modes, and how to program efficient hole patterns.</p>
+<p class="lead">Canned cycles package a multi-step drilling or boring sequence into one line of code. This page explains how they work internally, their modal behavior, G80 cancellation, retract modes, and how to program efficient hole patterns.</p><div class="cp-meta"><span><strong>Level:</strong> K</span><span><strong>Scope:</strong> Haas mill examples; metric unless stated otherwise</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/">Drilling, Pecking, and Boring</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Trace repeated hole triggers</li><li>Calculate a bolt-circle pattern</li><li>Choose a documented return mode</li></ul></div>
 
 <h2>Concept</h2>
 <p>A <strong>canned cycle</strong> is a pre-programmed motion sequence stored in the CNC controller. When you write a single line like <code>G83 R2. Z-15. Q3. F120.</code>, the controller remembers a whole recipe: rapid to the hole X/Y, rapid down to R2, feed in 3 mm pecks to Z-15, retract to clear chips, and return to the R plane. You only need to give new X/Y positions for each subsequent hole.</p>
@@ -64,7 +64,7 @@ G80</code></pre>
 </ol>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 420 300" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="Inside Every Canned Cycle" role="img" viewBox="0 0 420 300" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="lesson-18-diagram-1-desc">Illustration for Inside Every Canned Cycle. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-18-diagram-1-title">Inside Every Canned Cycle</title>
   <!-- stock -->
   <rect x="60" y="120" width="300" height="140" fill="#d4c5a9" stroke="#999"/>
   <!-- initial plane -->
@@ -92,15 +92,15 @@ G80</code></pre>
 </figure>
 
 <h3>Common Canned Cycles Reference</h3>
-<table class="data-table">
-<tr><th>Code</th><th>Name</th><th>Motion</th><th>Use For</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Common Canned Cycles Reference"><table class="data-table"><caption>Common Canned Cycles Reference</caption>
+<tr><th scope="col">Code</th><th scope="col">Name</th><th scope="col">Motion</th><th scope="col">Use For</th></tr>
 <tr><td>G81</td><td>Simple drill</td><td>Feed in, rapid out</td><td>Through holes, centering</td></tr>
 <tr><td>G82</td><td>Drill with dwell</td><td>Feed in, dwell P, rapid out</td><td>Spot faces, counterbores</td></tr>
 <tr><td>G83</td><td>Peck drill</td><td>Feed Q, retract, repeat</td><td>Deep holes, chip clearing</td></tr>
 <tr><td>G84</td><td>Tapping</td><td>Synchronous feed in, spindle reverses at bottom, feed out</td><td>Tapped holes (see page 34)</td></tr>
 <tr><td>G85</td><td>Bore</td><td>Feed in, feed out</td><td>Reaming, boring</td></tr>
 <tr><td>G80</td><td>Cancel cycle</td><td>—</td><td>End of hole pattern</td></tr>
-</table>
+</table></div>
 
 <h3>Modal Behavior and Re-Commanding</h3>
 <p>When a cycle is active, the R, Z, F, Q, P values are stored and reused. You only need to re-specify a value when it changes. For example, if all holes are the same depth, you write Z once in the G81 line. If hole 3 needs a different depth, you write a new Z on that line — the controller updates the stored Z for subsequent holes too.</p>
@@ -122,15 +122,15 @@ G80</code></pre>
 <p>Assume G21/G94, a prepared tap drill, and S500. For M8&times;1.25, F = S&times;pitch = 625 mm/min. G84 R2. Z-15. F625. The control reverses spindle at the bottom. G98 is usually chosen for tapping so the tool retracts above the fixture between holes.</p>
 
 <h3>Cycle Parameter Dialect Table</h3>
-<table class="data-table">
-<tr><th>Parameter</th><th>Haas mill example</th><th>Note</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Cycle Parameter Dialect Table"><table class="data-table"><caption>Cycle Parameter Dialect Table</caption>
+<tr><th scope="col">Parameter</th><th scope="col">Haas mill example</th><th scope="col">Note</th></tr>
 <tr><td>R</td><td>R2.</td><td>distance above Z0, mm under G21/G94</td></tr>
 <tr><td>Z</td><td>Z-10.</td><td>tip position, negative into part</td></tr>
 <tr><td>Q</td><td>Q3.</td><td>peck increment, mm (G73/G83 family)</td></tr>
 <tr><td>P</td><td>P0.5</td><td>dwell seconds, decimal on Haas</td></tr>
 <tr><td>F</td><td>F100.</td><td>mm/min under G94</td></tr>
 <tr><td>G98/G99</td><td>modal</td><td>initial plane vs R retract</td></tr>
-</table>
+</table></div>
 
 <h3>When a New Tool Reuses the Same Holes</h3>
 <p>Drill, then tap, then countersink on the same X/Y positions. Each tool calls G80 at the end and re-establishes its own cycle with its own R, Z, F, and S. The coordinates can be kept in a subprogram and called three times, once per tool. Never carry a drill cycle's R2 into a tap cycle without restating it; the tap needs a different R clearance and feed.</p>
@@ -165,8 +165,8 @@ M09
 M05
 M30</code></pre>
 <p><strong>Block trace (4 holes, exactly):</strong></p>
-<table class="data-table">
-<tr><th>Block</th><th>Drills?</th><th>Cumulative holes</th><th>End Z</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Example"><table class="data-table"><caption>Example</caption>
+<tr><th scope="col">Block</th><th scope="col">Drills?</th><th scope="col">Cumulative holes</th><th scope="col">End Z</th></tr>
 <tr><td>G43 Z50 / G00 XY to hole 1</td><td>no</td><td>0</td><td>50</td></tr>
 <tr><td>G99 G81 R2 Z-10 F100 (already at X-25 Y-25)</td><td>hole 1</td><td>1</td><td>R2</td></tr>
 <tr><td>X25 Y-25</td><td>hole 2</td><td>2</td><td>R2</td></tr>
@@ -174,7 +174,7 @@ M30</code></pre>
 <tr><td>X-25 Y25</td><td>hole 4</td><td>4</td><td>R2</td></tr>
 <tr><td>G80</td><td>no</td><td>4</td><td>R2 (mode off)</td></tr>
 <tr><td>G00 Z50</td><td>no</td><td>4</td><td>50</td></tr>
-</table>
+</table></div>
 
 
 <h3>G98 vs G99 Retract, Side by Side</h3>
@@ -184,7 +184,7 @@ M30</code></pre>
 <p>For a rectangular array, list X/Y rows. For a bolt circle, compute each point: (Cx + R&times;cos&theta;, Cy + R&times;sin&theta;). Example: 6 holes on a pitch circle radius 30 mm, starting at 0&deg;, every 60&deg;: (30,0), (15,25.98), (&minus;15,25.98), (&minus;30,0), (&minus;15,&minus;25.98), (15,&minus;25.98). Each is one X/Y line under the active cycle. Coordinates are rounded to two decimals consistently. The Engineering Tools bolt-circle calculator automates this table.</p>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 360 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="Hole Patterns: Rectangular Array and Bolt Circle" role="img" viewBox="0 0 360 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="lesson-18-diagram-2-desc">Illustration for Hole Patterns: Rectangular Array and Bolt Circle. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-18-diagram-2-title">Hole Patterns: Rectangular Array and Bolt Circle</title>
   <rect x="60" y="30" width="240" height="160" fill="#d4c5a9" stroke="#999"/>
   <circle cx="180" cy="110" r="60" fill="none" stroke="#888" stroke-dasharray="3,2"/>
   <circle cx="240" cy="110" r="5" fill="#c0392b"/><text x="248" y="114" font-size="9">0&deg;</text>
@@ -226,7 +226,7 @@ M30</code></pre>
 <li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G83.html">Haas G83 Peck Drilling</a>.</li>
 </ul>
 
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/">&larr; Drilling Cycles</a><a href="/cnc-manufacturing-engineering/cnc-programming/34-tapping-thread-milling/">Tapping &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/17-drilling-cycles/">Previous: Drilling, Pecking, and Boring</a><a href="/cnc-manufacturing-engineering/cnc-programming/34-tapping-thread-milling/">Next: Tapping and Thread Milling</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

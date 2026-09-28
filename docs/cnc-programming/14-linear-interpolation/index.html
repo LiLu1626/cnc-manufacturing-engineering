@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Linear Interpolation G00 / G01 — CNC Programming</title>
-<meta name="description" content="G00 rapid positioning vs G01 linear cutting feed, safe approach and retract, diagonal moves, feed programming, and how the tool path is generated block by block.">
+<title>Rapid Positioning and Linear Interpolation — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Rapid Positioning and Linear Interpolation. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/14-linear-interpolation/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -24,10 +24,10 @@
     </ul>
   </div>
 </nav>
-<main class="article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<main class="article cp-article">
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Linear Interpolation: G00 and G01</h1>
-<p class="lead">Two of the most-used G-codes in any program. G00 moves the tool at rapid speed between positions; G01 cuts a straight line at the programmed feed. This page explains the difference, safe approach and retract, diagonal moves, and how to read a block of linear code as a tool path.</p>
+<p class="lead">Two of the most-used G-codes in any program. G00 moves the tool at rapid speed between positions; G01 cuts a straight line at the programmed feed. This page explains the difference, safe approach and retract, diagonal moves, and how to read a block of linear code as a tool path.</p><div class="cp-meta"><span><strong>Level:</strong> K</span><span><strong>Scope:</strong> Machine-neutral concepts; controller-specific examples are labelled</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/12-tool-offsets/">Tool Length, Geometry, and Wear Offsets</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Trace linear endpoints</li><li>Calculate diagonal distance</li><li>Plan a verified approach and retract</li></ul></div>
 
 <div class="callout"><strong>The core idea:</strong> G00 is for moving in air, fast and unregulated by feed. G01 is for cutting, slow and at a controlled feed. Mixing them up &mdash; cutting at rapid, or feeding at rapid speed &mdash; is dangerous.</div>
 
@@ -35,7 +35,7 @@
 <p><strong>G00</strong> (rapid positioning) moves the tool to the commanded coordinate at the machine's fastest traverse rate. It does not cut. On most machines all axes move simultaneously at their own maximum speed, so the actual path is not a straight diagonal; it is shaped by whichever axis reaches its target first. The exact rapid path depends on the control and machine geometry, so do not assume a straight L or diagonal.</p>
 <p><strong>G01</strong> (linear interpolation) moves the tool in a straight line from the current point to the commanded point at the programmed feed F. The controller computes the straight-line vector and distributes motion across the participating axes so the tip follows a true diagonal at the correct feed. G01 is used for every straight cut: facing, turning OD, pocket walls, chamfers, and plunging.</p>
 
-<svg viewBox="0 0 360 230" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+<figure class="cp-figure"><svg aria-label="Concept" role="img" viewBox="0 0 360 230" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="lesson-14-diagram-1-desc">Illustration for Concept. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-14-diagram-1-title">Concept</title>
   <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Two-block G00 vs one-block G01 to (60,40)</text>
   <text x="180" y="30" font-size="8" text-anchor="middle" fill="#666">4 px/mm. Start (50,200), end (290,40).</text>
   <line x1="50" y1="200" x2="320" y2="200" stroke="#333" stroke-width="1.2"/>
@@ -50,7 +50,7 @@
   <text x="140" y="190" font-size="9" fill="#dc2626">G00 X60. then Y40. (two-block rapid)</text>
   <circle cx="290" cy="40" r="3" fill="#333"/>
   <text x="295" y="38" font-size="8" fill="#333">(60,40)</text>
-</svg>
+</svg><figcaption>Concept — read the adjacent example for the stated conditions.</figcaption></figure>
 
 <h2>Why It Matters</h2>
 <p>G00 is fast but not a cutting motion. If you use G00 where you meant G01, the tool slams into the part at traverse speed &mdash; broken tool, wrecked part, possible spindle damage. If you use G01 for positioning moves, the machine wastes time feeding through air. Reading the tool path correctly &mdash; where it is rapid, where it is cutting, and in what order &mdash; is the first safety skill of CNC programming.</p>
@@ -67,14 +67,14 @@
 
 <h3>Safe Approach and Retract</h3>
 <p>A standard milling approach is: rapid XY to position at safe Z, rapid down to a short clearance above the part (e.g. Z5), then linear plunge to depth at a lower feed, then linear cut at feed. At the end of the cut, rapid Z up to clearance, then rapid XY to the next position. This sequence keeps every sideways move at a Z where the tool cannot hit the part.</p>
-<table class="data-table">
-<tr><th>Step</th><th>Code</th><th>Why</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Safe Approach and Retract"><table class="data-table"><caption>Safe Approach and Retract</caption>
+<tr><th scope="col">Step</th><th scope="col">Code</th><th scope="col">Why</th></tr>
 <tr><td>XY position at safe Z</td><td>G00 X.. Y..</td><td>No side movement at cutting Z</td></tr>
 <tr><td>Down to clearance</td><td>G00 Z5.</td><td>Fast but safe above work</td></tr>
 <tr><td>Plunge</td><td>G01 Z-2. F100.</td><td>Controlled feed into material</td></tr>
 <tr><td>Cut</td><td>G01 X50. F300.</td><td>Feed across the part</td></tr>
 <tr><td>Retract</td><td>G00 Z50.</td><td>Clear all fixtures before next XY</td></tr>
-</table>
+</table></div>
 
 <h3>Reading a Block as a Tool Path</h3>
 <p>Take this snippet and trace it by hand (units mm/min, G21/G17/G90/G94 in force; H01 and G54 already verified; the tool is a center-cutting end mill):</p>
@@ -120,7 +120,7 @@ G01 X60. F250.
 G00 Z50.</code></pre>
 <p>The tool centers at Y0. At X&minus;10 the center is 10 mm left of the part edge, which is more than the 8 mm radius, so the full cut enters outside the material. At X60 the center is 10 mm past the right edge. The single pass covers the 10 mm Y width because the 16 mm cutter overlaps &plusmn;8 mm around Y0, i.e. Y&minus;8&hellip;+8, which covers Y&minus;5&hellip;+5. The overhang on both X sides ensures a clean face across the whole length. Without the overhang, the cut starts and stops inside the edge and leaves a step.</p>
 
-<svg viewBox="0 0 360 170" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+<figure class="cp-figure"><svg aria-label="Example" role="img" viewBox="0 0 360 170" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="lesson-14-diagram-2-desc">Illustration for Example. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-14-diagram-2-title">Example</title>
   <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Facing cut, &Oslash;16 cutter on 10 mm wide part</text>
   <text x="180" y="30" font-size="8" text-anchor="middle" fill="#666">4 px/mm. Part X0&hellip;50, Y&minus;5&hellip;5. Cutter center at Y0.</text>
   <!-- part: X=0 at 80px, X=50 at 280px; Y span drawn as rectangle -->
@@ -134,7 +134,7 @@ G00 Z50.</code></pre>
   <text x="320" y="55" font-size="8" text-anchor="middle" fill="#166534">end X=60</text>
   <line x1="40" y1="90" x2="320" y2="90" stroke="#166534" stroke-width="2"/>
   <text x="180" y="140" font-size="9" text-anchor="middle" fill="#666">Center clears part edge by 10 mm (&gt; r=8). Cutter covers Y&plusmn;8 &gt; Y&plusmn;5.</text>
-</svg>
+</svg><figcaption>Example — read the adjacent example for the stated conditions.</figcaption></figure>
 
 
 <h3>Feed Hold, Block Skip, and Single Block</h3>
@@ -205,7 +205,7 @@ G00 Z50.</code></pre>
 </ul>
 </section>
 
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/13-work-offsets/">&larr; Work Offsets</a><a href="/cnc-manufacturing-engineering/cnc-programming/15-circular-interpolation/">Circular Motion &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/12-tool-offsets/">Previous: Tool Length, Geometry, and Wear Offsets</a><a href="/cnc-manufacturing-engineering/cnc-programming/15-circular-interpolation/">Next: Circular and Helical Interpolation</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Single-Point Thread Programming — CNC Programming</title>
-<meta name="description" content="Pitch, lead, thread geometry, and G76 threading cycles on a CNC lathe, with worked M10x1.5 example and verified depth calculation.">
+<title>Single-Point Thread Programming — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Single-Point Thread Programming. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/22-threading/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -24,10 +24,10 @@
     </ul>
   </div>
 </nav>
-<main class="article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<main class="article cp-article">
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Single-Point Thread Programming</h1>
-<p class="lead">Single-point threading cuts a helical groove by synchronizing spindle rotation with tool feed. For a single-start thread, the feed per revolution must equal the pitch exactly. This page covers the geometry, the G76 cycle, and a worked M10&times;1.5 example.</p>
+<p class="lead">Single-point threading cuts a helical groove by synchronizing spindle rotation with tool feed. For a single-start thread, the feed per revolution must equal the pitch exactly. This page covers the geometry, the G76 cycle, and a worked M10&times;1.5 example.</p><div class="cp-meta"><span><strong>Level:</strong> K</span><span><strong>Scope:</strong> Haas lathe examples; metric diameter programming</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/">Turning Roughing and Finishing Cycles</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Calculate pitch and lead</li><li>Interpret a Haas G76 fragment</li><li>Separate endpoint and usable thread length</li></ul></div>
 
 <h2>Concept</h2>
 <p>A screw thread is a helical ridge wrapped around a cylinder. On a CNC lathe, a single-point threading tool moves along Z while the spindle rotates. The controller must keep the tool position synchronized with spindle angle so that every pass follows the same helix.</p>
@@ -35,7 +35,7 @@
 <p><strong>Major diameter</strong> is the outer diameter of an external thread. <strong>Minor diameter</strong> (core diameter) is the diameter at the root. The radial thread depth determines how much material the tool removes on successive passes.</p>
 
 <h2>Why It Matters</h2>
-<p>This Haas teaching example uses <strong>G97 S500</strong> to keep spindle speed constant, following the manufacturer's G76 example. F specifies the lead per revolution. The programmed lead does not change merely because RPM changes; synchronization, permitted modes and overrides must follow the specific controller manual. The G76 cycle handles the multi-pass strategy automatically — the programmer only specifies the final minor diameter, total thread depth, first-pass depth, and feed (= lead).</p>
+<p>This Haas teaching example uses <strong>G97 S500</strong> to keep spindle speed constant, following the manufacturer's G76 example. F specifies the lead per revolution. The programmed lead does not change merely because RPM changes; synchronization, permitted modes and overrides must follow the specific controller manual. The G76 cycle automates the repeated motion, but setup and cycle settings remain the programmer’s responsibility. The line identifies the final minor diameter, total thread depth, first-pass depth, and feed (= lead).</p>
 
 <h2>How It Works</h2>
 
@@ -47,20 +47,29 @@
 <p>This 0.61343 factor is documented in Hexagon Infoletter No. 37 (thread depth bolt h3 = 0.61343 P for metric DIN external thread design geometry). It applies to the ISO metric external thread design profile used in this page; other thread forms must be checked against their own standards or tooling references.</p>
 
 <h3>Worked Calculation: M10&times;1.5</h3>
-<table class="data-table">
-<tr><th>Quantity</th><th>Formula</th><th>Value</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Worked Calculation: M10&amp;times;1.5"><table class="data-table"><caption>Worked Calculation: M10&times;1.5</caption>
+<tr><th scope="col">Quantity</th><th scope="col">Formula</th><th scope="col">Value</th></tr>
 <tr><td>Pitch P</td><td>given</td><td>1.5 mm</td></tr>
 <tr><td>Sharp triangle H</td><td>0.8660254 &times; 1.5</td><td>1.299038 mm</td></tr>
 <tr><td>Design thread depth h3</td><td>0.6134347 &times; 1.5</td><td>0.920152 mm</td></tr>
 <tr><td>Minor diameter d3</td><td>10 &minus; 2&times;0.920152</td><td>8.159696 mm</td></tr>
-</table>
+</table></div>
 <p>For teaching, we round to <strong>K = 0.92 mm</strong> and <strong>X endpoint = 8.16 mm</strong>. The rounding introduces about 0.0003 mm of diameter difference — negligible for a programming example but not a 6g limit dimension.</p>
 
 <h3>G76 Threading Cycle (Haas lathe)</h3>
 <p>The single-line Haas G76 format:</p>
-<pre class="cp-code"><code>G21 G18 G97 S500 M03  <span class="cp-comment">(unit/plane/coords set; offsets established; snippet only)</span>
-G00 X11. Z3.            <span class="cp-comment">(approach: above stock, 3 mm lead-in)</span>
-G76 X8.16 Z-20. K0.92 D0.2 F1.5</code></pre>
+<p><strong>Scope and entry contract:</strong> this is a Haas lathe fragment in metric diameter programming. G54 has its origin at the spindle axis and the prepared front face. T0101 is an external threading tool with verified geometry, wear and orientation. Stock, toolholder, chuck, spindle direction and the entire approach/return envelope have been checked. The part is already prepared to the drawing's major-diameter limit. Z3 is a classroom approach value, not a calculated synchronization distance. This fragment selects M23; Settings 95/96 must be recorded before evaluating the end geometry.</p>
+<pre class="cp-code"><code>(FRAGMENT - ENTRY CONTRACT ABOVE IS REQUIRED)
+G21 G18 G40 G80 G99
+G54
+T0101
+G97 S500 M03
+M23
+G00 X11. Z3.
+G76 X8.16 Z-20. K0.92 D0.2 F1.5
+G00 X12.
+G00 Z3.
+M05</code></pre>
 <p><strong>Reading the line:</strong></p>
 <ul>
 <li><strong>X8.16</strong> = final minor diameter (program endpoint in diameter mode)</li>
@@ -69,43 +78,31 @@ G76 X8.16 Z-20. K0.92 D0.2 F1.5</code></pre>
 <li><strong>D0.2</strong> = first pass depth (a teaching assumption, not a recommended cutting parameter)</li>
 <li><strong>F1.5</strong> = lead in mm/rev (= pitch for single-start)</li>
 </ul>
-<p>The controller automatically takes successive passes with decreasing radial depth until reaching X8.16. D0.2 is a teaching value — real first-pass depth depends on insert grade, material, coolant, and machine rigidity; follow the tool manufacturer's charts.</p>
+<p>The selected cycle plans multiple passes; the pass distribution also depends on its strategy and settings. Do not infer one universal decreasing-depth schedule from this abbreviated line. D0.2 is a teaching value — real first-pass depth depends on insert grade, material, coolant, and machine rigidity; follow the tool manufacturer's charts.</p>
 
 <figure class="cp-figure">
-<svg viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+<svg aria-label="G76 Threading Cycle (Haas lathe)" role="img" viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="lesson-22-diagram-1-desc">Illustration for G76 Threading Cycle (Haas lathe). Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-22-diagram-1-title">G76 Threading Cycle (Haas lathe)</title>
   <line x1="40" y1="180" x2="380" y2="180" stroke="#333" stroke-width="1.5"/>
   <polygon points="80,180 130,93.4 180,180" fill="none" stroke="#7f8c8d" stroke-width="1.5" stroke-dasharray="4,2"/>
   <line x1="200" y1="180" x2="200" y2="93.4" stroke="#7f8c8d" stroke-width="1"/>
   <text x="205" y="130" font-size="10" fill="#7f8c8d">H = 0.866P</text>
   <line x1="230" y1="180" x2="230" y2="118.66" stroke="#166534" stroke-width="2"/>
   <text x="235" y="155" font-size="10" fill="#166534">h3 = 0.613P</text>
-  <text x="60" y="60" font-size="10" fill="#333">Height comparison on same pitch (P=100). Crest/root geometry not drawn.</text>
+  <text x="60" y="60" font-size="14" fill="#333">Same pitch: height comparison only.</text>
 </svg>
 <figcaption>Height comparison only: theoretical H vs working h3 on the same pitch. Actual crest/root profile is per ISO/DIN design.</figcaption>
 </figure>
 
-<h3>Lead-In and Lead-Out</h3>
-<p>The Z3. approach position provides lead-in distance so the spindle speed reaches sync before the tool cuts the first thread. A lead-out (or thread relief groove) at Z-20+ allows the tool to retract cleanly. Without lead-in, the first few threads may be off-pitch.</p>
-
-<figure class="cp-figure">
-<svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
-  <rect x="120" y="80" width="240" height="40" fill="#d4c5a9" stroke="#999"/>
-  <line x1="90" y1="60" x2="90" y2="140" stroke="#e67e22" stroke-dasharray="3,2"/>
-  <text x="60" y="55" font-size="10" fill="#e67e22">Z3 lead-in</text>
-  <line x1="120" y1="60" x2="120" y2="140" stroke="#333" stroke-width="1.5"/>
-  <text x="110" y="155" font-size="10" fill="#333">Z0 face</text>
-  <line x1="300" y1="60" x2="300" y2="140" stroke="#c0392b" stroke-dasharray="3,2"/>
-  <text x="270" y="55" font-size="10" fill="#c0392b">Z-20 thread end</text>
-  <line x1="330" y1="60" x2="330" y2="140" stroke="#166534" stroke-dasharray="3,2"/>
-  <text x="300" y="170" font-size="10" fill="#166534">relief / retract zone</text>
-</svg>
-<figcaption>Axial zones: lead-in before the face, effective thread from Z0 toward Z&minus;20; retract length depends on M23/M24, Setting 95/96, or a relief groove. Z3 here is an example value.</figcaption>
-</figure>
-
+<h3>Cycle Endpoint Is Not Usable Thread Length</h3>
+<p>Define three different quantities before assigning Z coordinates: the approach position, the cycle endpoint, and the drawing's required full-profile thread interval. The first is outside the face in this example; the second is a programmed motion limit; the third excludes incomplete entry and exit thread. Moving from Z3 to Z−20 spans 23 mm of axial travel, but it does not prove that the finished component contains 23 mm, or even 20 mm, of acceptable full-profile thread.</p>
+<p>In the selected Haas cycle, M23 enables an exit chamfer and M24 disables it. Settings 95 and 96 control its size and angle. With pitch 1.5 mm and a classroom Setting 95 value of 1.0 thread, the nominal axial chamfer amount is 1.5 mm. If the endpoint remains Z−20, that withdrawal region starts nominally around Z−18.5. Do not describe the region through Z−20 as full-depth thread. This arithmetic illustrates the drawing problem; it is not a guarantee of a particular usable length on a real part.</p>
+<figure class="cp-figure"><svg viewBox="0 0 520 220" role="img" aria-labelledby="thread-z-title thread-z-desc" style="width:100%;max-width:650px;height:auto"><title id="thread-z-title">Approach, full-profile requirement and runout</title><desc id="thread-z-desc">Z decreases from left to right. The approach is Z3, face is Z0, nominal chamfer start is Z minus 18.5 and cycle endpoint Z minus 20. The drawing must define the acceptable thread interval separately.</desc><rect x="100" y="85" width="350" height="45" fill="#e6f4f2" stroke="#0b766e"/><rect x="359" y="85" width="21" height="45" fill="#cfdbd8" stroke="#0b766e"/><path d="M58 65V145 M100 65V145 M359 65V145 M380 65V145" stroke="#17242f" fill="none"/><text x="30" y="45" font-size="14">Z3 approach</text><text x="85" y="170" font-size="14">Z0 face</text><text x="235" y="45" font-size="14">Z−18.5 nominal runout start</text><text x="325" y="195" font-size="14">Z−20 endpoint</text><text x="140" y="112" font-size="13">Drawing controls full-profile limits</text></svg><figcaption>The shaded end segment represents a nominal 1.5 mm runout. Drawing position is proportional to Z; the drawing must specify the actual usable thread interval.</figcaption></figure>
+<p>If the drawing requires full-profile thread to Z−20, the process plan needs space beyond that location for the selected exit geometry. One arithmetic illustration moves the cycle endpoint to Z−21.5 for a 1.5 mm nominal runout; this is not permission to extend the existing program. Check the shoulder, relief groove, insert width, toolholder and workholding before deciding whether such a path is possible. An alternative relieved design needs its own dimensions and a verified retract. M24 does not create a relief groove and does not make a shoulder disappear.</p>
+<p>Record entrance chamfer length separately as well. A lead-in move in air and an entry chamfer on the part are different features. The air move supports the selected machine's synchronization and acceleration requirements; the part chamfer affects where the thread reaches full form. Machine data, spindle speed and axial motion capability determine an adequate approach. The 3 mm classroom value must therefore be verified or replaced for the intended setup rather than copied as a universal threading rule.</p>
 <h3>Pitch vs Lead on Multi-Start Threads</h3>
 <p>For a double-start thread with P=1.5, the lead is 3.0 mm/rev, so F=3.0. The programmer must explicitly arrange the second start by the controller-specified phase or axial offset; it does not happen automatically. This is why F in G76 is always the <em>lead</em>, not the pitch — the programmer must account for multiple starts.</p>
 
-<p><strong>Entry state for the G76 example:</strong> G54 selected, tool geometry and wear offsets established, nose radius and orientation set, lead-in/retract space verified. The blocks below are fragments.</p>
+<p><strong>Entry state for the G76 example:</strong> G54 selected, tool geometry and wear offsets established, nose radius and orientation set, lead-in/retract space verified. The G76 and G32 listings are fragments, not interchangeable complete production programs.</p>
 
 <h3>Inspection Is by Gauge, Not by Minor Diameter Alone</h3>
 <p>The X8.16 endpoint is a design minor diameter for programming. Whether the thread accepts a mating part is decided by the ring or plug gauge specified on the drawing, which checks pitch diameter, flank condition, and fit. A measured minor diameter that looks right does not prove the thread is good, and a NO-GO entry must be interpreted under the drawing's gauge acceptance rule rather than assumed scrap on first contact.</p>
@@ -114,7 +111,7 @@ G76 X8.16 Z-20. K0.92 D0.2 F1.5</code></pre>
 <p>For a double-start thread, F becomes the lead (3.0 mm/rev for P1.5). The second helix is 180&deg; out of phase with the first. How the programmer or controller sets that starting phase depends on the control; Haas G76 has a Q thread-start angle whose unit and range must be checked before use.</p>
 
 <h3>G76 Parameters in Detail</h3>
-<p>X is the final minor diameter in diameter mode. Z is the thread end. K is the radial thread height from the crest to the root of the truncated profile. D is the first-pass radial depth, chosen as a classroom assumption. F is the lead. The controller computes successive passes with decreasing engagement until X is reached. Do not confuse K (total depth) with D (first pass); they are separate numbers.</p>
+<p>X is the final minor diameter in diameter mode. Z is the thread end. K is the radial thread height from the crest to the root of the truncated profile. D is the first-pass radial depth, chosen as a classroom assumption. F is the lead. The controller plans passes according to the selected strategy and settings; the short example does not specify a universal pass count. Do not confuse K (total depth) with D (first pass); they are separate numbers.</p>
 
 <h3>Why G97 and Not G96</h3>
 <p>Under synchronous feed, lead is the axial distance per spindle revolution and is set by F. Changing RPM changes the required axial speed and synchronization demand, not the programmed lead. This Haas teaching example uses G97 S500 before G76 per the manufacturer setup; verify the recommended spindle mode on the specific control.</p>
@@ -145,7 +142,7 @@ G76 X8.16 Z-20. K0.92 D0.2 F1.5</code></pre>
 <h3>Thread Relief and Retract</h3>
 <p>A thread runout or relief groove lets the tool leave cleanly. Without one, the insert may drag on the shoulder at thread end.</p>
 
-<h3>When to Rework a Thread vs Scrape</h3>
+<h3>When to Rework a Thread vs Scrap</h3>
 <p>If GO will not enter, the thread may be oversize or have burrs. Clean and re-measure before adding a pass. If NO-GO enters, material is already removed; that part is usually beyond correction. Check with the drawing's gauge rule before deciding.</p>
 
 <h3>Threading Insert and Grade Selection</h3>
@@ -153,12 +150,12 @@ G76 X8.16 Z-20. K0.92 D0.2 F1.5</code></pre>
 
 
 <h2>Example</h2>
-<p><strong>Example 1 — Single-start M10&times;1.5:</strong> At S500 RPM, the ideal synchronous axial feed is 500 &times; 1.5 = 750 mm/min. The tool must not change feed override during the cut.</p>
+<p><strong>Example 1 — Single-start M10&times;1.5:</strong> At S500 RPM, the ideal synchronous axial feed is 500 &times; 1.5 = 750 mm/min. Use the controller’s documented threading override behaviour; do not alter the planned speed or synchronization settings while proving the cut.</p>
 <p><strong>Example 2 — Double-start M10&times;1.5 (pitch 1.5, lead 3.0):</strong> F=3.0 mm/rev. At S500, axial feed = 1500 mm/min. The programmer arranges the second start by the controller's specified phase or axial offset; do not assume the cycle shifts automatically.</p>
 <p><strong>Tolerance and inspection:</strong> In this teaching example we assume a 6g external thread, checked with a thread ring gauge (go/no-go). The mating internal thread would use 6H and a thread plug gauge — but always follow the tolerance class specified on your drawing. The ring gauge confirms functional acceptance; it does not verify every dimension on the drawing.</p>
 
 <h3>G32 — Single-Pass Threading (Manual)</h3>
-<p>Before G76 canned cycles, programmers cut threads pass by pass using <strong>G32</strong> (constant lead threading). Each pass is a separate block. For an external M10&times;1.5 thread on &Oslash;10 stock, the first cut starts just below the major diameter and takes a small radial bite:</p>
+<p>A separate programming approach cuts threads pass by pass using <strong>G32</strong> (constant lead threading). Each pass is a separate block. For an external M10&times;1.5 thread on &Oslash;10 stock, the first cut starts just below the major diameter and takes a small radial bite. This two-pass geometry fragment additionally assumes a prepared relief encompassing Z−20 with sufficient axial width and radial depth for the insert and withdrawal. The selected tool/offset, G21/G18/G40/G54/G99, diameter mode and clear entry are already established. It does not demonstrate full thread completion or a shoulder exit:</p>
 <pre class="cp-code"><code>G97 S500 M03
 G00 X9.8 Z3.           (first pass: 0.1mm radial below Ø10)
 G32 Z-20. F1.5         (cut thread at 1.5 mm/rev lead)
@@ -176,21 +173,22 @@ Z3.
 <p><strong>Thread milling:</strong> A threaded tool follows a helical interpolation path — one circular orbit around the hole, with one pitch of axial travel per orbit. The feed rate is based on feed per tooth, number of flutes, and the tool-center path speed, not simply F = lead &times; RPM. The 1.5 mm axial rise per orbit defines the pitch, but the programmed F is the tool-center feed around the circle. Thread milling is flexible for large holes and hard materials but requires CAM or careful helical math.</p>
 
 <h3>Common Threading Problems</h3>
-<table class="data-table">
-<tr><th>Problem</th><th>Check</th><th>Corrective direction</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Common Threading Problems"><table class="data-table"><caption>Common Threading Problems</caption>
+<tr><th scope="col">Problem</th><th scope="col">Check</th><th scope="col">Corrective direction</th></tr>
 <tr><td>Ring gauge GO won't enter</td><td>Check pitch, setup, burrs, major diameter, then measure pitch diameter</td><td>If pitch diameter is too large, take one more light pass per tooling data; material already cut cannot be restored</td></tr>
 <tr><td>NO-GO gauge enters</td><td>Pitch diameter may be over-cut</td><td>Check against the drawing's gauge acceptance rule; material already removed cannot be recovered</td></tr>
-<tr><td>Off-pitch at start</td><td>No lead-in distance</td><td>Provide enough lead-in for the control to sync; set it from acceleration/RPM data</td></tr>
+<tr><td>Off-pitch at start</td><td>Insufficient verified approach or another synchronization/setup issue</td><td>Verify the cause and provide enough lead-in for the control to sync; set it from acceleration/RPM data</td></tr>
 <tr><td>Chatter / poor finish</td><td>Spindle speed too high or tool worn</td><td>Reduce RPM, check insert condition</td></tr>
 <tr><td>Tool breaks</td><td>Pass depth too aggressive</td><td>Reduce first-pass depth per tooling catalog</td></tr>
-</table>
+</table></div>
 
+<h3>Document the Thread-Length Decision</h3><p>For a reviewable setup sheet, list the drawing's thread designation and tolerance class, the prepared major diameter, the desired full-form start and end, the actual G76 start and endpoint, and the selected chamfer or relief strategy. Then write the relevant machine settings beside the program revision. A reviewer can compare these entries with the physical drawing rather than infer them from a single Z word.</p><p>For example, the teaching line ending at Z−20 may be adequate for a component whose drawing explicitly allows its final 1.5 mm to be runout, but it cannot simply be reused where a gauge must engage full thread through that interval. A successful cycle completion message only confirms that execution ended; it does not inspect usable engagement, tolerance class or the surface. Check the required thread length and gauge result separately, and retain both records with the first-part inspection.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Confusing pitch with lead on multi-start threads</strong> — F must be the lead, not the pitch.</li>
 <li><strong>Using a spindle mode not verified for this threading cycle</strong> — follow the chosen controller's documented setup; this example uses G97.</li>
 <li><strong>Changing spindle RPM mid-thread</strong> — the controller syncs to a fixed spindle speed during the cut. Do not change S during threading.</li>
-<li><strong>No lead-in distance</strong> — the first threads are off-pitch before spindle sync. Choose lead-in based on acceleration, RPM, and controller; Z3 in this example is a classroom value, not a universal fix.</li>
+<li><strong>No lead-in distance</strong> — entry quality may be affected. Verify the actual cause and choose lead-in based on acceleration, RPM, and controller; Z3 in this example is a classroom value, not a universal fix.</li>
 <li><strong>Treating 8.16 mm as a finished tolerance dimension</strong> — it is a theoretical minor diameter estimate used as the G76 X endpoint; actual acceptance is by gauge per drawing.</li>
 <li><strong>Forgetting G97 before G76 on this Haas example</strong> — this teaching example follows the manufacturer's G97 setup. On other controllers, verify the recommended spindle mode for threading.</li>
 </ul>
@@ -203,13 +201,14 @@ Z3.
 <p><strong>3.</strong> A double-start thread has pitch 1.5. What is F in G76, and why?</p>
 <details><summary>Show answer</summary><p>F = 3.0 mm/rev (lead = 2 &times; pitch). G76 feed is always the lead, so on a multi-start thread it is larger than the pitch. At S500, axial feed = 1500 mm/min.</p></details>
 
-<h2>Sources</h2>
+<p><strong>4.</strong> The nominal runout is 1.5 mm and the cycle endpoint is Z−20. Where does nominal runout begin, and what cannot be inferred?</p><details><summary>Show answer</summary><p>Z−18.5. Neither the endpoint nor this subtraction certifies 20 mm of full-profile thread; entry geometry, runout, drawing limits and actual inspection still govern acceptance.</p></details>
+<h2>Sources</h2><ul><li><a href="https://www.haascnc.com/service/codes-settings.type=mcode.machine=lathe.value=M23.html">Haas M23/M24</a>: explicit chamfer selection and its relationship to Settings 95/96.</li></ul>
 <ul>
 <li>Hexagon Infoletter No. 37, "SR1 – Thread up to M160": h3 = 0.61343 P for metric DIN external thread design geometry. <a href="https://www.hexagon.de/info37_e.htm" target="_blank" rel="noopener">hexagon.de/info37_e.htm</a>, retrieved 2026-09-24.</li>
 <li>Haas Automation Mill/Lathe Operator's Manual — G76 thread cycle parameter definitions (K, D, F, X, Z). <a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G76.html" target="_blank" rel="noopener">haascnc.com</a>.</li>
 <li>ISO 68-1:2023 — Basic profile of Metric ISO threads (H = 0.866 P fundamental triangle). Design profile h3 per the above Hexagon reference.</li>
 </ul>
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring/">&larr; Grooving & Boring</a><a href="/cnc-manufacturing-engineering/cnc-programming/24-verification/">Verification &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring/">Previous: Grooving, Parting, and Internal Turning</a><a href="/cnc-manufacturing-engineering/cnc-programming/24-verification/">Next: Program Verification and First-Article Checks</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

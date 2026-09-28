@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Controller Dialects — CNC & Manufacturing Engineering</title>
-<meta name="description" content="FANUC, Siemens, Heidenhain, and Haas: same CNC concepts, different syntax. What transfers, what does not, and how to port programs between controls.">
+<title>Controller Dialects and Manual Reading — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Controller Dialects and Manual Reading. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/11-controller-dialects/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -24,10 +24,10 @@
     </ul>
   </div>
 </nav>
-<main class="article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<main class="article cp-article">
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Controller Dialects</h1>
-<p class="lead">G-code is not universal. FANUC/Haas, Siemens, and Heidenhain share the same CNC concepts &mdash; coordinates, motion, offsets, cycles &mdash; but differ in cycle syntax, parameter names, and program structure. This page uses Haas (FANUC-compatible) as the reference and flags what to verify before porting.</p>
+<p class="lead">G-code is not universal. FANUC/Haas, Siemens, and Heidenhain share the same CNC concepts &mdash; coordinates, motion, offsets, cycles &mdash; but differ in cycle syntax, parameter names, and program structure. This page uses Haas (FANUC-compatible) as the reference and flags what to verify before porting.</p><div class="cp-meta"><span><strong>Level:</strong> B</span><span><strong>Scope:</strong> Machine-neutral concepts; controller-specific examples are labelled</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/09-mcode-fundamentals/">M-Codes and Machine Functions</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Identify controller-specific syntax</li><li>Separate mill and lathe meanings</li><li>Find a matching manual before porting</li></ul></div>
 
 <h2>Concept</h2>
 <p>CNC programming has a common core: Cartesian coordinates, G00/G01 motion, work offsets, tool offsets, and cycles. The words used to express that core vary by controller and by machine builder. This page uses Haas mill/lathe syntax as the reference and points out where other controls differ. Always verify against the manual for your specific control version.</p>
@@ -38,16 +38,16 @@
 <h2>How It Works</h2>
 
 <h3>The Major Controllers at a Glance</h3>
-<table class="data-table">
-<tr><th>Area</th><th>FANUC / Haas (reference)</th><th>Siemens Sinumerik</th><th>Heidenhain TNC</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="The Major Controllers at a Glance"><table class="data-table"><caption>The Major Controllers at a Glance</caption>
+<tr><th scope="col">Area</th><th scope="col">FANUC / Haas (reference)</th><th scope="col">Siemens Sinumerik</th><th scope="col">Heidenhain TNC</th></tr>
 <tr><td>Drilling cycle</td><td>G81 / G83 with R, Z, Q words</td><td>Named cycle calls (e.g. CYCLE81/82/83) with a parameter list</td><td>Conversational (Klartext) drill block filled on screen</td></tr>
 <tr><td>Subprogram call</td><td>M98 Pnnnn / M99</td><td>Procedure/label call per Siemens programming manual</td><td>Label call per Heidenhain Klartext manual</td></tr>
 <tr><td>Program variables</td><td>#1, #2</td><td>R parameters (R1, R2)</td><td>Q parameters in Heidenhain dialect</td></tr>
 <tr><td>Work offsets</td><td>G54&ndash;G59</td><td>Work offset frames; G54-style offsets also used in Siemens examples</td><td>Datum table on the control</td></tr>
 <tr><td>Feed per rev (lathe)</td><td>FANUC: verify the selected G-code system; Haas lathe: G99</td><td>Per Siemens lathe programming</td><td>Per Heidenhain manual</td></tr>
-</table>
+</table></div>
 
-<svg viewBox="0 0 360 180" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+<figure class="cp-figure"><svg aria-label="The Major Controllers at a Glance" role="img" viewBox="0 0 360 180" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="lesson-11-diagram-1-desc">Illustration for The Major Controllers at a Glance. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-11-diagram-1-title">The Major Controllers at a Glance</title>
   <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Concept Mapping (not executable code)</text>
   <text x="180" y="34" font-size="9" text-anchor="middle" fill="#666">Same hole: X10 Y10, top Z0, depth Z-15, approach Z2, retract Z50, F100</text>
   <rect x="20" y="45" width="100" height="120" fill="#fef9c3" stroke="#854d0e" rx="3"/>
@@ -70,7 +70,7 @@
   <text x="290" y="110" font-size="8" text-anchor="middle" fill="#666">look up: TNC block</text>
   <text x="290" y="122" font-size="8" text-anchor="middle" fill="#666">fields for depth,</text>
   <text x="290" y="134" font-size="8" text-anchor="middle" fill="#666">feed, approach</text>
-</svg>
+</svg><figcaption>The Major Controllers at a Glance — read the adjacent example for the stated conditions.</figcaption></figure>
 
 <h3>FANUC / Haas</h3>
 <p>FANUC-style controls use Oxxxx program numbers, G80&ndash;G89 cycles, and M98 P subprogram calls. On Haas lathes G99 selects feed-per-rev; on a FANUC-style lathe the feed-per-rev G-code depends on the configured G-code system and must be checked in the relevant manual — do not assume G95 or G99 from the brand name. Haas thread cycles use the one-line G76 with K/D words. The exact G-code set depends on the control model and option board; verify on your machine.</p>
@@ -134,7 +134,7 @@ G80</code></pre>
 </ul>
 </section>
 
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/10-spindle-feed/">&larr; Spindle &amp; Feed</a><a href="/cnc-manufacturing-engineering/cnc-programming/12-tool-offsets/">Tool Offsets &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/09-mcode-fundamentals/">Previous: M-Codes and Machine Functions</a><a href="/cnc-manufacturing-engineering/cnc-programming/10-spindle-feed/">Next: Spindle Speed and Feed Programming</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

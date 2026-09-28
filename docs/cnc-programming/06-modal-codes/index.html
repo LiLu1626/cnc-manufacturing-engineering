@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Modal State and Code Persistence — CNC Programming</title>
-<meta name="description" content="What modal means, modal groups, code persistence, cancellation rules, startup blocks, drilling cycles, and why forgetting G80 drills unexpected holes on Haas.">
+<title>Modal State and Program Execution — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Modal State and Program Execution. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/06-modal-codes/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -24,16 +24,16 @@
     </ul>
   </div>
 </nav>
-<main class="article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<main class="article cp-article">
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Modal State and Code Persistence</h1>
-<p class="lead">Modal codes are one of the most important and least understood concepts in G-code. This page explains what modal means, how modal groups work, why bare X/Y moves after a drilling cycle drill extra holes, and how to track machine state block by block.</p>
+<p class="lead">Modal codes are one of the most important and least understood concepts in G-code. This page explains what modal means, how modal groups work, why bare X/Y moves after a drilling cycle drill extra holes, and how to track machine state block by block.</p><div class="cp-meta"><span><strong>Level:</strong> K</span><span><strong>Scope:</strong> Haas mill examples; metric unless stated otherwise</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/05-gcode-fundamentals/">G-Code Fundamentals</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Identify modal groups</li><li>Trace state between blocks</li><li>Explain a cancelled drilling cycle</li></ul></div>
 
 <h2>Concept</h2>
 <p>A <strong>modal</strong> code stays active after it is commanded. Once G01 is on, every motion block remains G01 until G00, G02, or G03 replaces it. A <strong>non-modal</strong> code (like G53 or G04 dwell) is active for one block only and does not persist.</p>
 <p>Modal codes are organized into <strong>groups</strong>. Within a group, only one code can be active at a time. Motion codes (G00/G01/G02/G03) are one group. Plane selection (G17/G18/G19) is another. Drilling cycles (G81&ndash;G85) are a separate group from motion. Codes from different groups coexist &mdash; G01 does not cancel G21, and G81 does not cancel G90.</p>
 
-<svg viewBox="0 0 440 200" style="width:100%;max-width:440px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+<figure class="cp-figure"><svg aria-label="Concept" role="img" viewBox="0 0 440 200" style="width:100%;max-width:440px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="lesson-06-diagram-1-desc">Illustration for Concept. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-06-diagram-1-title">Concept</title>
   <text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Modal groups (one active per group)</text>
   <rect x="20" y="35" width="120" height="35" fill="#dbeafe" stroke="#2563eb" rx="4"/>
   <text x="30" y="57" font-size="10" fill="#1e40af">Motion: G00 G01 G02 G03</text>
@@ -50,7 +50,7 @@
   <text x="20" y="145" font-size="10" fill="#666">Same group: new code replaces old.</text>
   <text x="20" y="165" font-size="10" fill="#666">Different groups: both stay active together.</text>
   <text x="20" y="185" font-size="10" fill="#666">Note: G21/G17/G90 on G01 X50 F200 are assumed entry state, not derived from that line.</text>
-</svg>
+</svg><figcaption>Concept — read the adjacent example for the stated conditions.</figcaption></figure>
 
 <h2>Why It Matters</h2>
 <p>Missing G80 after a drilling cycle means the cycle stays active, and the next bare X/Y block drills another hole. This is how programs drill holes at unexpected positions. Modal state errors are <strong>silent</strong>: the code looks fine, but the machine executes a different mode than you intended. Understanding modal groups is how you predict what the machine will do, not just what each line says.</p>
@@ -60,8 +60,8 @@
 <h2>How It Works</h2>
 
 <h3>Common Modal Groups (teaching selection)</h3>
-<table class="data-table">
-<tr><th>Group</th><th>Codes</th><th>How this page uses it</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Common Modal Groups (teaching selection)"><table class="data-table"><caption>Common Modal Groups (teaching selection)</caption>
+<tr><th scope="col">Group</th><th scope="col">Codes</th><th scope="col">How this page uses it</th></tr>
 <tr><td>Motion (Group 01)</td><td>G00, G01, G02, G03</td><td>Set explicitly at each move or inherited</td></tr>
 <tr><td>Plane Selection</td><td>G17, G18, G19</td><td>Set in startup block</td></tr>
 <tr><td>Units</td><td>G20, G21</td><td>Set in startup block</td></tr>
@@ -70,7 +70,7 @@
 <tr><td>Tool Length Offset</td><td>G43, G49</td><td>G49 = off</td></tr>
 <tr><td>Drilling Cycles (Group 09)</td><td>G80, G81, G82, G83, G84, G85</td><td>G80 = cycle off</td></tr>
 <tr><td>Feed Mode</td><td>G94, G95</td><td>G94 = feed per minute</td></tr>
-</table>
+</table></div>
 <p>Exact group membership depends on the controller and software version. This page explicitly sets the modes it needs rather than relying on defaults. F and S are modal values (not G-code group replacements), and T selects a tool; they persist until changed.</p>
 
 <h3>Simple Inheritance Example</h3>
@@ -96,7 +96,7 @@ G80                                   (cancel cycle)
 G00 Z50.</code></pre>
 <p>Each bare X/Y block after the G81 line repeats the drill cycle at the new position. The fix is to write <code>G80</code> after the last hole, before any other Z motion. On Haas, G00 or G01 also cancels the cycle, but writing G80 explicitly makes the program's intent clear and does not depend on the reader knowing which controls cancel on G00 and which do not.</p>
 
-<svg viewBox="0 0 440 220" style="width:100%;max-width:440px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+<figure class="cp-figure"><svg aria-label="Forgotten G80 on Haas" role="img" viewBox="0 0 440 220" style="width:100%;max-width:440px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="lesson-06-diagram-2-desc">Illustration for Forgotten G80 on Haas. Its dimensions and assumptions are explained in the adjacent lesson text.</desc><title id="lesson-06-diagram-2-title">Forgotten G80 on Haas</title>
   <text x="20" y="18" font-size="11" font-weight="bold" fill="#333">Forgotten G80: 3 intended holes + 1 unintended</text>
   <rect x="55" y="25" width="225" height="180" fill="#eef2f7" stroke="#999" stroke-width="0.5"/>
   <circle cx="100" cy="160" r="5" fill="#16a34a"/>
@@ -108,7 +108,7 @@ G00 Z50.</code></pre>
   <circle cx="70" cy="190" r="7" fill="#dc2626" stroke="#7f1d1d" stroke-width="2"/>
   <text x="80" y="195" font-size="9" fill="#dc2626">UNWANTED (0,0)</text>
   <text x="60" y="215" font-size="9" fill="#666">Y increases upward; X increases rightward</text>
-</svg>
+</svg><figcaption>Forgotten G80 on Haas — read the adjacent example for the stated conditions.</figcaption></figure>
 
 <h3>Full Program State Trace</h3>
 <p>Trace this short program and track the active modes. Entry state: G21 G17 G90 G94 already active; tool, work offset, spindle, and clearance verified.</p>
@@ -125,8 +125,8 @@ N100 G80
 N110 G00 Z50. M09
 N120 M05
 N130 M30</code></pre>
-<table class="data-table">
-<tr><th>Block</th><th>What happens</th><th>Newly active modes</th></tr>
+<div class="cp-table-wrap" tabindex="0" role="region" aria-label="Full Program State Trace"><table class="data-table"><caption>Full Program State Trace</caption>
+<tr><th scope="col">Block</th><th scope="col">What happens</th><th scope="col">Newly active modes</th></tr>
 <tr><td>N10</td><td>Select work offset G54</td><td>G54</td></tr>
 <tr><td>N20</td><td>Tool change to tool 1</td><td>Tool 1 in spindle</td></tr>
 <tr><td>N30</td><td>Spindle CW at 1500 RPM</td><td>M03, S1500</td></tr>
@@ -140,7 +140,7 @@ N130 M30</code></pre>
 <tr><td>N110</td><td>Rapid Z50; coolant off</td><td>M09</td></tr>
 <tr><td>N120</td><td>Spindle stop</td><td>M05</td></tr>
 <tr><td>N130</td><td>Program end and rewind</td><td>&mdash;</td></tr>
-</table>
+</table></div>
 <p>Four drill events occur: at (10,10), (50,10), (50,50), and (10,50). On the Haas mill used here, G81 belongs to Group 09 and G00/G01 to Group 01. Despite belonging to different groups, G00 and G01 cancel the canned cycle. G80 explicitly cancels it.</p>
 
 <h3>Modal State Across Program Boundaries</h3>
@@ -198,7 +198,7 @@ N130 M30</code></pre>
 </ul>
 </section>
 
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/05-gcode-fundamentals/">&larr; G-Code Basics</a><a href="/cnc-manufacturing-engineering/cnc-programming/09-mcode-fundamentals/">M-Code Basics &rarr;</a></nav>
+<nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/05-gcode-fundamentals/">Previous: G-Code Fundamentals</a><a href="/cnc-manufacturing-engineering/cnc-programming/09-mcode-fundamentals/">Next: M-Codes and Machine Functions</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>

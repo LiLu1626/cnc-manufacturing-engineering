@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Cycle Time & Process Improvement — CNC Programming</title>
-<meta name="description" content="Cycle time analysis, where time goes, optimization levers, tool life vs cycle time tradeoff, and safe process improvement.">
+<title>Cycle Time, Quality, and Process Improvement — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="Learn Cycle Time, Quality, and Process Improvement. Worked examples, checks and practice for CNC programming beginners.">
 <link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/38-process-optimization/">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
 <link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
-<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css?v=7d0e255-layout3">
 </head>
 <body class="cnc-programming">
 <nav class="site-nav">
@@ -25,9 +25,9 @@
   </div>
 </nav>
 <main class="article cp-article">
-<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<a href="/cnc-manufacturing-engineering/cnc-programming/" class="back-link">&larr; Back to CNC Programming</a>
 <h1>Cycle Time &amp; Process Improvement</h1>
-<p class="lead">Once a program runs correctly and safely, the next question is: how fast can it run? This page covers cycle time analysis, where time actually goes, the levers you can pull, and the tool-life tradeoffs that separate smart optimization from reckless speeding.</p>
+<p class="lead">Once a program runs correctly and safely, the next question is: how fast can it run? This page covers cycle time analysis, where time actually goes, the levers you can pull, and the tool-life tradeoffs that separate smart optimization from reckless speeding.</p><div class="cp-meta"><span><strong>Level:</strong> K</span><span><strong>Scope:</strong> Machine-neutral concepts; controller-specific examples are labelled</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cnc-programming/27-turning-project/">Worked Project: A Stepped Shaft</a></span></div><div class="cp-objectives"><strong>After this lesson, you can:</strong><ul><li>Compare savings in absolute seconds</li><li>Use one cycle-time baseline</li><li>Include quality and tool cost in decisions</li></ul></div>
 <figure class="cp-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 190" role="img" aria-labelledby="time-baseline-title time-baseline-desc" style="width:100%;max-width:520px;height:auto;display:block;margin:auto;font-family:Inter,system-ui,sans-serif"><title id="time-baseline-title">Compare seconds, not percentages</title><desc id="time-baseline-desc">A 60-second cutting element and 20-second non-cutting element share one time scale. Savings of six and ten seconds are compared.</desc><text x="20" y="25" font-size="14" fill="#17242f">Baseline: 80 seconds</text><rect x="20" y="45" width="210" height="34" fill="#e6f4f2" stroke="#0b766e"/><rect x="230" y="45" width="70" height="34" fill="#cfdbd8" stroke="#0b766e"/><text x="35" y="68" font-size="13" fill="#17242f">Cut: 60 s</text><text x="239" y="68" font-size="13" fill="#17242f">20 s</text><text x="20" y="112" font-size="14" fill="#17242f">10% of 60 s = 6 s</text><text x="20" y="145" font-size="14" fill="#17242f">50% of 20 s = 10 s</text></svg><figcaption>Illustrative baseline only. The 210:70 bar widths represent 60:20 seconds; achievable savings require separate verification.</figcaption></figure>
 
 <h2>Concept</h2>
@@ -121,7 +121,7 @@
 <p><strong>4.</strong> Which optimization lever usually has the biggest impact?</p>
 <details><summary>Ans</summary><p>Reducing tool changes and optimizing rapid travel order. A 15-second tool change saved per part beats a 2-second feed-rate improvement on a short cut.</p></details>
 
-<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/37-multiaxis-probing-overview/">&larr; Rotary &amp; Probing</a><a href="/cnc-manufacturing-engineering/cnc-programming/39-exercises-assessment/">Exercises &rarr;</a></nav>
+<h2>Sources</h2><ul><li><a href="https://cdn.sandvik.coromant.com/files/sitecollectiondocuments/services/metal-cutting-e-learning/formulas-and-definitions/formulas-and-deinitions-for-milling-metric-enu.pdf">Sandvik milling formulas and definitions</a></li></ul><nav class="cp-nav-bottom" aria-label="Lesson navigation"><a href="/cnc-manufacturing-engineering/cnc-programming/37-multiaxis-probing-overview/">Previous: Rotary Axes, Multi-Axis Motion, and Probing</a><a href="/cnc-manufacturing-engineering/cnc-programming/39-exercises-assessment/">Next: Practice Projects and Final Assessment</a></nav>
 </main>
 <footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
 </body>
