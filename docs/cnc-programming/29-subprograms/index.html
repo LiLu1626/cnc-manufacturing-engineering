@@ -124,11 +124,11 @@ M99</code></pre>
 
 <h3>Nested Subprograms: When to Go One Level Deeper</h3>
 <p>A main program that calls one subprogram is the easy case. Production setups often need a second level: the main program calls an O2000 that itself calls O3000 for a repeated detail inside each pattern. On a FANUC-style control, subprogram nesting is limited &mdash; typically four to eight levels of M98 calls before the controller alarms. Keep nesting shallow: one level for hole patterns, two at most for reusable detail features, and never rely on an undocumented limit. If you need three or four levels, the program is usually telling you to split the work into multiple main programs instead.</p>
-<p>The main trap in nested subprograms is leaked state across levels. If O2000 switches to G91 and calls O3000, O3000 inherits G91 unless it restores G90. By the time control returns to O2000 and then to the main program, three layers of incremental drift have accumulated. The defensive pattern is: every subprogram that changes a modal mode restores that mode before M99, even if you "know" the caller expects it. This costs a line and saves hours of debugging.</p>
+<p>The main trap in nested subprograms is leaked modal state. If O2000 switches to G91 and calls O3000, O3000 inherits G91 unless it restores G90. The actual position error depends on the motion blocks each level issues &mdash; mode inheritance alone does not move the tool. The defensive pattern is: every subprogram that changes a modal mode restores that mode before M99, even if you "know" the caller expects it. This costs a line and saves hours of debugging.</p>
 
 <h3>Passing Data to a Subprogram</h3>
 <p>The four-fixture example above hard-codes the rectangle corners (0,0),(20,0),(20,20),(0,20). That is fine for one part, but the same rectangle called at 30 different sizes becomes a maintenance problem. Production subprograms use macro variables (#1&ndash;#33 local, #100&ndash;#199 common) to pass in the corner positions, stepover, and depth. The main program sets #1 = X start, #2 = Y start, #3 = X length, #4 = Y length, then calls O2000; the subprogram computes the four corners itself.</p>
-<p>Local variables (#1&ndash;#33) are private to each subprogram call: O2000 can use #1 without clobbering the main program's #1. Common variables (#100&ndash;#199) are shared across the whole program &mdash; useful for setup values like material, but dangerous if two subprograms write the same variable without coordination. In a teaching shop, start with hard-coded geometry and introduce variables only when the same subprogram is reused across three different parts.</p>
+<p>On a FANUC-style control, M98 does NOT create a new local-variable nesting layer the way G65 does: #1 set in the main program and changed inside M98 P2000 stays changed when control returns. Only G65 (macro call) creates private local variables. In a teaching shop, treat #1&ndash;#33 as shared until you specifically teach G65, and give the main program and subprogram different variable numbers to avoid clobbering. Common variables (#100&ndash;#199) are also shared across the whole program.</p>
 
 <h3>Subprograms and the Controller Call Stack</h3>
 <p>Every M98 pushes a return address onto a small internal stack; every M99 pops one off. The stack is not infinite. If you call a subprogram that forgets M99, the controller eventually runs out of return addresses and alarms mid-cut &mdash; often at the worst possible time, halfway through an unmanned cycle. Symptom: a program that runs fine for the first hour and then alarms at the same place every shift. Diagnosis: search every O-number for a missing M99.</p>
@@ -145,7 +145,7 @@ M99</code></pre>
   <rect x="90" y="130" width="120" height="28" fill="#e67e22" rx="4"/>
   <text x="105" y="148" font-size="11" fill="#fff">O3000</text>
   <text x="220" y="148" font-size="10" fill="#c0392b">&larr; M99</text>
-  <text x="30" y="180" font-size="10" fill="#666">Each M99 returns one level up. Missing M99 = stack overflow alarm.</text>
+  <text x="30" y="180" font-size="10" fill="#666">Each M99 returns one level up. A subprogram that ends without M99 falls through to whatever follows; behavior depends on the next block, not a guaranteed stack alarm.</text>
 </svg>
 
 <h2>Common Mistakes</h2>

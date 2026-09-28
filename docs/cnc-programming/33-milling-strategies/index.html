@@ -79,7 +79,7 @@
 <p>Axial depth is how deep the tool cuts per pass, in the Z direction. For a &Oslash;10 end mill: roughing at 1&times;D (10 mm axial) is common in aluminum; in steel, 0.5&times;D (5 mm) is more typical. Full-width slotting (100% radial engagement) requires much smaller axial depth — often 0.2–0.5&times;D — because the tool is fully buried in chips.</p>
 
 <h2>Example</h2>
-<p><strong>Face milling example:</strong> Face mill a 100 mm wide steel plate with a &Oslash;50 face mill. Stepover = 35 mm (70% of &Oslash;50). Number of passes = ceil(100/35) = 3 passes. At feed F300 mm/min, each pass traverses 100 mm. Cutting time &asymp; 3 &times; 100/300 = 100 seconds of pure feed; add separate approach, retract, and rapid between passes, which are not part of the 100 seconds.</p>
+<p><strong>Face milling example:</strong> Face mill a 100 mm wide steel plate with a &Oslash;50 face mill. Stepover = 35 mm (70% of &Oslash;50). Number of passes = ceil(100/35) = 3 passes. At feed F300 mm/min, each pass traverses 100 mm. Cutting time &asymp; 3 passes &times; 100 mm / 300 mm/min = 1.0 min = 60 seconds of pure feed; add separate approach, retract, and rapid between passes, which are not part of the 60 seconds.</p>
 <p><strong>Pocketing example:</strong> Mill a 40&times;40 mm pocket with a &Oslash;10 end mill at 50% stepover. The pocket width is 40 mm; each pass removes 5 mm width. Number of raster passes = 40/5 = 8 passes. If the pocket is 10 mm deep, you might rough in 2 axial passes (5 mm each), then finish the walls and floor separately.</p>
 
 
