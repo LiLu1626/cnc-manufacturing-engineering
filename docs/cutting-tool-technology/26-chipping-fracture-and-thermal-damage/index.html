@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Chipping, Fracture & Thermal Damage — Cutting Tool Technology</title>
+<meta name="description" content="Edge chipping, sudden fracture, cracks and thermal damage: overload, interruption, thermal shock and how to distinguish them from gradual wear.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/26-chipping-fracture-and-thermal-damage/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M6 &middot; Wear Analysis</span>
+<h1>Chipping, Fracture &amp; Thermal Damage</h1>
+<p class="lead">Not all tool death is gradual wear. A chipped edge, a sudden fracture, or heat cracks the edge in one hit. These are mechanical or thermal overloads &mdash; and the fix is different from slowing down for wear.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> K</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cutting-tool-technology/25-wear-mechanisms-morphology/">25 Wear Mechanisms</a></span><span><strong>Scope:</strong> classroom overview</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Distinguish chipping, fracture and thermal cracking</li>
+<li>Identify overload vs interruption vs thermal-shock causes</li>
+<li>Pick a corrective direction for each</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p><strong>Chipping</strong> is small fragments breaking off the edge &mdash; the edge looks nicked. <strong>Fracture / breakage</strong> is a large, sudden failure of the insert or tool body. <strong>Thermal cracks</strong> are heat-cycle cracks across the rake/flank, common when coolant floods a hot edge. These are catastrophic or sub-catastrophic, not the smooth wear land of page 25.</p>
+
+<h2>Why It Matters</h2>
+<p>Catastrophic failure ruins the part and can damage the holder. It usually signals an overload: feed too high, an interruption the grade cannot take, a brittle grade in a shock cut, or thermal shock. The fix is not "run slower for wear" but "remove the shock / choose a tougher edge / control coolant."</p>
+
+<h2>How It Works</h2>
+<div class="ctt-table-wrap"><table>
+<caption>Sudden failure modes</caption>
+<thead><tr><th scope="col">Failure</th><th scope="col">Likely cause</th></tr></thead>
+<tbody>
+<tr><td>Edge chipping</td><td>interruption, chatter, brittle grade, worn edge</td></tr>
+<tr><td>Insert fracture</td><td>excessive feed/depth, overhang, jammed chip</td></tr>
+<tr><td>Thermal cracks</td><td>hot edge hit by coolant cycling</td></tr>
+</tbody></table></div>
+
+<h2>Worked Example</h2>
+<p>An insert in a steel facing cut with scale on entry chips at each pass &mdash; the brittle finishing grade is taking repeated impacts. Move to a tougher grade, reduce entry shock, or add edge preparation. If instead the insert has a checker pattern of heat cracks, flooding a hot edge is thermal shock &mdash; switch to dry/air or through-tool coolant the maker specifies.</p>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Responding to chipping by just slowing speed.</strong> The cause is shock/brittleness. Fix: tougher grade, edge prep, reduce interruption.</li>
+<li><strong>Ignoring chatter as a cause.</strong> Vibration chips the edge. Fix: rigidity first (pages 21&ndash;22).</li>
+<li><strong>Flooding a thermal-shock-prone edge.</strong> Cracks it. Fix: follow coolant guidance.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. Small nicks on the edge from interruption &mdash; what?</summary><p>Chipping; use a tougher grade or edge prep.</p></details>
+<details><summary>Q2. Heat-cycle cracks across the edge &mdash; cause?</summary><p>Thermal shock from flooding a hot edge.</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>Sandvik Coromant, <em>Tool failure types</em> knowledge pages.</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/25-wear-mechanisms-morphology/">&larr; Previous: Wear Mechanisms</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/27-wear-diagnosis-corrective-actions/">Next: Wear Diagnosis &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

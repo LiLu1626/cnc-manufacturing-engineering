@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Wear Mechanisms & Morphology — Cutting Tool Technology</title>
+<meta name="description" content="Flank wear, crater wear, built-up edge, notch and plastic deformation: what each looks like on the edge and what causes it.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/25-wear-mechanisms-morphology/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M6 &middot; Wear Analysis</span>
+<h1>Wear Mechanisms &amp; Morphology</h1>
+<p class="lead">Tool wear is not one thing. Flank wear on the clearance face, a crater on the rake face, a built-up edge, a notch at the depth of cut, or plastic deformation &mdash; each has a different look and a different cause. Recognizing the morphology points to the fix.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> K</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cutting-tool-technology/04-chip-formation-forces-heat/">04 Chip Formation</a></span><span><strong>Scope:</strong> classroom overview</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Identify the main wear types by where they appear</li>
+<li>Explain the typical cause of each</li>
+<li>Read a worn edge like a diagnosis</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p><strong>Flank wear</strong> is the gradual abrasion on the clearance (relief) face &mdash; the normal, expected wear that sets tool life. <strong>Crater wear</strong> is a hollow eroded into the rake face where the hot chip slides. <strong>Built-up edge (BUE)</strong> is workpiece material welded onto the edge. <strong>Notch wear</strong> is a groove at the depth-of-cut line. <strong>Plastic deformation</strong> is the edge squashing under heat and force.</p>
+
+<h2>Why It Matters</h2>
+<p>The wear pattern tells you what the cut is doing. Flank wear steadily degrades size &mdash; that's the normal end of life. A crater on the rake means the edge is too hot or the grade lacks crater resistance. BUE means the edge is rubbing and welding material, usually from too-low speed. Reading the edge before changing the tool points at the parameter or grade to fix, instead of just swapping inserts blindly.</p>
+
+<h2>How It Works</h2>
+<div class="ctt-table-wrap"><table>
+<caption>Wear morphology at a glance</caption>
+<thead><tr><th scope="col">Wear type</th><th scope="col">Where</th><th scope="col">Typical cause</th></tr></thead>
+<tbody>
+<tr><td>Flank wear</td><td>clearance face</td><td>abrasion over time; normal end-of-life</td></tr>
+<tr><td>Crater wear</td><td>rake face</td><td>high heat, long chip contact, low crater resistance</td></tr>
+<tr><td>Built-up edge</td><td>edge nose</td><td>too-low speed / gummy material welding on</td></tr>
+<tr><td>Notch wear</td><td>depth-of-cut line</td><td>work-hardening / scale at the cut boundary</td></tr>
+<tr><td>Plastic deformation</td><td>edge tip</td><td>excessive heat/force softening the grade</td></tr>
+</tbody></table></div>
+
+<h2>Worked Example</h2>
+<p>An insert in steel shows a smooth wear land on the clearance face &mdash; normal flank wear; you measure it and index at the limit. Another insert in a gummy stainless shows material welded to the nose (BUE) and a poor surface: speed is too low and the edge is rubbing. A third shows a deep crater on the rake: the grade needs more crater resistance or lower speed. Same tool, three diagnoses.</p>
+<figure class="ctt-figure">
+<svg viewBox="0 0 420 150" role="img" aria-label="Wear locations on an insert">
+<desc>Wear land on the clearance face and crater on the rake face.</desc>
+<polygon points="120,110 220,50 240,110" fill="#5c6872"/>
+<line x1="120" y1="110" x2="240" y2="110" stroke="#b3261e" stroke-width="2"/>
+<text x="120" y="130" font-size="9" fill="#b3261e">flank wear land</text>
+<ellipse cx="215" cy="70" rx="14" ry="5" fill="#0b766e"/>
+<text x="245" y="70" font-size="9" fill="#0b766e">crater</text>
+</svg>
+<figcaption>Where wear appears on a turning insert (schematic).</figcaption>
+</figure>
+<div class="ctt-assumption"><strong>Classroom assumption:</strong> wear limits and appearances are general; exact end-of-life criteria come from the insert specification.</div>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Treating all wear as "the tool is dull."</strong> Fix: identify the wear type to target the cause.</li>
+<li><strong>Ignoring BUE as normal.</strong> It ruins finish. Fix: raise speed / change geometry.</li>
+<li><strong>Waiting for total failure.</strong> Fix: index at a defined flank-wear limit.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. Where does flank wear appear?</summary><p>On the clearance (relief) face; it is the normal wear land.</p></details>
+<details><summary>Q2. Material welded to the nose &mdash; what and why?</summary><p>Built-up edge, usually from too-low speed in a gummy material.</p></details>
+<details><summary>Q3. A crater on the rake face suggests?</summary><p>High heat / low crater resistance; adjust speed or grade.</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>Sandvik Coromant, <em>Tool wear mechanisms</em> knowledge pages.</li>
+<li>ISO 3685 / tool-life wear criteria (general reference).</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/24-tool-inspection-and-handling/">&larr; Previous: Inspection</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/26-chipping-fracture-and-thermal-damage/">Next: Chipping &amp; Fracture &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

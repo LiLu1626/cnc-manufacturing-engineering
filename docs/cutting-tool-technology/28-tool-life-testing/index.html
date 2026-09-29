@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tool Life Testing — Cutting Tool Technology</title>
+<meta name="description" content="Define a wear criterion, run controlled trials, and compare tool life between grades or parameters without confounding variables.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/28-tool-life-testing/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M6 &middot; Wear Analysis</span>
+<h1>Tool Life Testing</h1>
+<p class="lead">To compare two grades or parameters fairly, you need a defined end-of-life wear criterion and controlled trials &mdash; otherwise "it felt better" is not data. This page sets up a simple, repeatable tool-life test.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> K</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cutting-tool-technology/25-wear-mechanisms-morphology/">25 Wear Mechanisms</a></span><span><strong>Scope:</strong> method</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Define a measurable wear criterion for end-of-life</li>
+<li>Run a controlled comparison trial</li>
+<li>Avoid confounding variables in the test</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p><strong>Tool life</strong> is the cutting time (or number of parts) until the tool reaches a defined wear limit. A test fixes everything except the one variable being compared (grade, speed, feed), measures the wear land at intervals, and records how long it takes to reach the limit. The Taylor relation captures that higher speed shortens life, but a fair trial is what proves it in your shop.</p>
+
+<h2>Why It Matters</h2>
+<p>Without a defined criterion, two people call "dull" at different points, and comparisons are meaningless. A controlled test lets you justify buying a more expensive grade, or prove that lowering speed actually extends life &mdash; with numbers, not opinion.</p>
+
+<h2>How It Works</h2>
+<ol>
+<li><strong>Fix the cut:</strong> same material, machine, holder, setup, speed and feed.</li>
+<li><strong>Define the end:</strong> e.g. flank wear land reaches 0.3&nbsp;mm, or finish fails.</li>
+<li><strong>Run the trial</strong> to the limit, recording time/parts.</li>
+<li><strong>Change only the test variable</strong> (grade or one parameter) and repeat.</li>
+<li><strong>Compare life</strong> under identical conditions.</li>
+</ol>
+<p>Use the printable <a href="/cnc-manufacturing-engineering/cutting-tool-technology/resources/wear-trial-log/">wear trial log</a> to record each run.</p>
+
+<h2>Worked Example</h2>
+<p>Compare grades A and B in the same steel turning cut, same speed and feed. Grade A reaches 0.3&nbsp;mm flank wear after 22 minutes; grade B after 34 minutes. Everything else was held constant, so the ~55% life advantage is attributable to the grade &mdash; worth evaluating even at higher cost. (Cost comparison is module M7.)</p>
+<div class="ctt-assumption"><strong>Classroom assumption:</strong> the 0.3&nbsp;mm wear limit and 22/34 minutes are illustrative; set your own criterion from finish and tolerance requirements.</div>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Changing more than one variable.</strong> The result is confounded. Fix: isolate the test variable.</li>
+<li><strong>No written wear criterion.</strong> Comparisons drift. Fix: define the end-of-life measure.</li>
+<li><strong>One trial only.</strong> Variation. Fix: repeat and average.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. What defines end-of-life in a test?</summary><p>A measurable criterion, e.g. flank wear reaches a set land width.</p></details>
+<details><summary>Q2. Why hold everything else constant?</summary><p>So the measured life difference is attributable to the variable under test.</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>ISO 3685 tool-life testing (general reference).</li>
+<li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/resources/wear-trial-log/">Wear trial log worksheet</a>.</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/27-wear-diagnosis-corrective-actions/">&larr; Previous: Diagnosis</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/29-tooling-economics/">Next: Tooling Economics &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

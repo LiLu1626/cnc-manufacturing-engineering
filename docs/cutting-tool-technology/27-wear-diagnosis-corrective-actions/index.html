@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Wear Diagnosis & Corrective Actions — Cutting Tool Technology</title>
+<meta name="description" content="A structured symptom-to-cause method: read the edge, separate wear from overload, and choose the corrective action without guessing.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/27-wear-diagnosis-corrective-actions/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M6 &middot; Wear Analysis</span>
+<h1>Wear Diagnosis &amp; Corrective Actions</h1>
+<p class="lead">When a tool fails, the instinct is to swap it and keep going. Better: read the symptom, separate gradual wear from overload, and change one thing at a time. This page is the structured diagnosis method.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> K</span><span><strong>Prerequisite:</strong> pages 25&ndash;26</span><span><strong>Scope:</strong> method</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Follow symptom &rarr; cause &rarr; action without guessing</li>
+<li>Change one variable at a time and observe</li>
+<li>Distinguish a wear problem from a setup problem</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p>Diagnosis means separating two families: <strong>gradual wear</strong> (the edge is simply reaching end-of-life &mdash; index on schedule) and <strong>premature failure</strong> (the edge fails too soon &mdash; something is wrong). Then match the failure morphology (page 25&ndash;26) to a cause, and test one corrective change at a time.</p>
+
+<h2>Why It Matters</h2>
+<p>Randomly changing speed, feed and grade at once makes it impossible to know what helped. A structured method &mdash; observe, hypothesize, change one variable, verify &mdash; turns tooling from guesswork into engineering. It also stops blaming the tool when the real issue is rigidity, runout or chip packing.</p>
+
+<h2>How It Works</h2>
+<ol>
+<li><strong>Observe:</strong> how did it fail &mdash; gradual wear, chipping, crater, BUE, fracture?</li>
+<li><strong>Separate:</strong> is this expected end-of-life, or premature?</li>
+<li><strong>Hypothesize:</strong> map the morphology to a cause (speed, feed, grade, rigidity, coolant, runout).</li>
+<li><strong>Change one thing:</strong> adjust the most likely variable only.</li>
+<li><strong>Verify:</strong> run the same cut and compare tool life / finish.</li>
+</ol>
+
+<h2>Worked Example</h2>
+<p>Insert fails after a short run with chipping. Step 1: chipping, not smooth flank wear. Step 2: premature. Step 3: likely shock &mdash; the brittle finishing grade in an interrupted cut. Step 4: switch to a tougher grade, keep everything else the same. Step 5: if life improves, the diagnosis is confirmed; if not, test rigidity/runout next. You did not change speed, feed and grade simultaneously.</p>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Changing several variables at once.</strong> You can't tell what worked. Fix: one change per trial.</li>
+<li><strong>Blaming the tool.</strong> Rigidity/runout/chip packing are setup causes. Fix: check the system first.</li>
+<li><strong>Not recording the result.</strong> Fix: log wear and the change (page 28 / module M7).</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. Why change only one variable?</summary><p>So you can attribute the improvement to that change.</p></details>
+<details><summary>Q2. What two failure families do you separate first?</summary><p>Gradual end-of-life wear versus premature failure.</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>Structured diagnosis method; builds on pages 25&ndash;26.</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/26-chipping-fracture-and-thermal-damage/">&larr; Previous: Chipping</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/28-tool-life-testing/">Next: Tool Life Testing &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
