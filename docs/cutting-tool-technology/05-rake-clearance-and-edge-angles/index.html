@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Rake & Clearance Angles — Cutting Tool Technology</title>
+<meta name="description" content="Rake, clearance and wedge angles, positive versus negative geometry, nose radius, and how each choice trades sharpness for strength.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/05-rake-clearance-and-edge-angles/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M2 &middot; Tool Geometry</span>
+<h1>Rake &amp; Clearance Angles</h1>
+<p class="lead">The wedge at the cutting edge is defined by three angles: rake, clearance and wedge. Get them right and the edge cuts with low force; get them wrong and it rubs or breaks. This page explains positive versus negative rake, why clearance prevents rubbing, and how nose radius trades finish against strength.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> K</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cutting-tool-technology/04-chip-formation-forces-heat/">04 Chip Formation, Forces &amp; Heat</a></span><span><strong>Scope:</strong> metric; classroom examples</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Define rake, clearance and wedge and how they sum</li>
+<li>Compare positive and negative rake and choose between them</li>
+<li>Explain why too much clearance weakens the edge and too little causes rubbing</li>
+<li>Select a nose radius from finish and rigidity requirements</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p>A cutting edge is a wedge. The <strong>rake face</strong> is the surface the chip flows up; its angle relative to the normal to the surface is the <strong>rake angle (&gamma;)</strong>. The <strong>flank</strong> is the surface behind the edge that must not touch the machined surface; its gap angle is the <strong>clearance / relief angle (&alpha;)</strong>. The remaining metal in the wedge is the <strong>wedge angle (&beta;)</strong>. In a 2-D section:</p>
+<pre class="ctt-code">&alpha; + &beta; + &gamma; = 90&deg;</pre>
+<p><strong>Positive rake</strong> tilts the rake face so the chip flows easily and forces are low, but the edge is thinner. <strong>Negative rake</strong> presents a stronger, blunter edge that takes interrupted cuts and high feeds, but pushes harder and needs more power.</p>
+
+<h2>Why It Matters</h2>
+<p>Geometry is the cheapest lever you have &mdash; changing the rake designation on an insert often costs nothing extra yet changes force, heat and tool life more than many coating changes. A positive-rake insert in a heavy interrupted cut will crater or chip immediately; a negative-rake insert in a long, slender aluminum job will chatter and rub because it pushes too hard. Reading the geometry column of the catalog is the difference between choosing a tool that lasts and one that breaks on the first part.</p>
+
+<h2>How It Works</h2>
+<h3>Rake angle</h3>
+<div class="ctt-table-wrap"><table>
+<caption>Positive vs negative rake (directional trade-offs)</caption>
+<thead><tr><th scope="col">Property</th><th scope="col">Positive rake</th><th scope="col">Negative rake</th></tr></thead>
+<tbody>
+<tr><td>Cutting force / power</td><td>lower</td><td>higher</td></tr>
+<tr><td>Edge strength</td><td>weaker</td><td>stronger</td></tr>
+<tr><td>Best for</td><td>light cuts, slender setups, ductile materials, finishing</td><td>heavy/interrupted cuts, roughing, hard materials</td></tr>
+<tr><td>Chip flow</td><td>easy</td><td>pushed; needs chipbreaker</td></tr>
+</tbody></table></div>
+<h3>Clearance angle</h3>
+<p>Clearance is small &mdash; typically a few degrees. Too little and the flank rubs the freshly machined surface, generating heat and a poor finish; too much and the wedge is so thin that the edge crumbles. The catalog's clearance designation is matched to the operation; you rarely change it by hand on indexable inserts.</p>
+<h3>Nose radius</h3>
+<p>The <strong>nose radius (r&epsilon;)</strong> rounds the tip. A larger nose radius gives a better theoretical finish (see the Ra = f&sup2;/(32&middot;r&epsilon;) relation on page 03) but increases radial force and chatter risk on slender setups. This is the central trade-off: finish wants a big nose radius, rigidity wants a small one.</p>
+
+<h2>Worked Example</h2>
+<p>Two turning inserts finish the same shaft to the same feed f = 0.10 mm/rev. Insert A uses r&epsilon; = 0.4 mm; Insert B uses r&epsilon; = 0.8 mm. Using the locked roughness formula:</p>
+<pre class="ctt-code">A: Ra = 0.10&sup2; / (32 &times; 0.4) = 0.000781 mm = 0.781 &micro;m
+B: Ra = 0.10&sup2; / (32 &times; 0.8) = 0.000391 mm = 0.391 &micro;m</pre>
+<p>B predicts half the ideal roughness &mdash; but B also pushes a larger radial force. On a rigid, short-shaft setup B wins; on a long, slender bar supported only at one end, B can chatter and A is the safer choice. The geometry choice depends on the setup, not just the drawing.</p>
+<figure class="ctt-figure">
+<svg viewBox="0 0 440 200" role="img" aria-label="Rake, clearance and wedge angles">
+<desc>2-D section of a cutting wedge: rake angle gamma, clearance angle alpha, wedge angle beta summing to 90 degrees.</desc>
+<text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Edge wedge (schematic, not to scale)</text>
+<rect x="40" y="140" width="360" height="40" fill="#cfdbd8"/>
+<polygon points="180,140 230,90 250,140" fill="#5c6872"/>
+<text x="150" y="80" font-size="10" fill="#0b766e">rake face (&gamma;)</text>
+<line x1="230" y1="90" x2="250" y2="140" stroke="#b3261e" stroke-width="1.5"/>
+<text x="255" y="120" font-size="10" fill="#b3261e">flank / clearance (&alpha;)</text>
+<text x="195" y="130" font-size="10" fill="#fff">wedge &beta;</text>
+<text x="120" y="195" font-size="10" fill="#5c6872">&alpha; + &beta; + &gamma; = 90&deg;</text>
+</svg>
+<figcaption>The three angles in a 2-D section. Real inserts add approach angle, side/end rake and chipbreaker geometry, but this wedge is the mental model.</figcaption>
+</figure>
+<div class="ctt-assumption"><strong>Classroom assumption:</strong> the 0.781 / 0.391&nbsp;&micro;m values are ideal geometric predictions from the locked formula; measured finish will be worse and must be confirmed on the part.</div>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Choosing the biggest nose radius for finish regardless of rigidity.</strong> It chatters on slender parts. Fix: size the nose radius to the setup, and use the smallest radius that meets the finish.</li>
+<li><strong>Using positive rake in a heavy interrupted cut.</strong> The weak edge chips. Fix: use negative rake / a stronger edge designation for roughing and interrupted cuts.</li>
+<li><strong>Thinking clearance is a free &ldquo;more is better&rdquo; angle.</strong> Excessive clearance weakens the wedge. Fix: use the catalog designation matched to the material and operation.</li>
+<li><strong>Reading geometry without the approach angle.</strong> Nose radius and lead angle together decide finish and radial force. Fix: read the full geometry designation, not one field.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. What do &alpha;, &beta; and &gamma; sum to?</summary><p>90 degrees.</p></details>
+<details><summary>Q2. A heavy, interrupted cut on hardened steel &mdash; positive or negative rake?</summary><p>Negative rake: stronger edge that survives interruption and high feed.</p></details>
+<details><summary>Q3. f = 0.2 mm/rev, r&epsilon; = 0.8 mm. Ideal Ra?</summary><p>Ra = 0.04/(32&times;0.8) = 0.00156 mm = 1.56 &micro;m (ideal only).</p></details>
+<details><summary>Q4. Why does a large nose radius risk chatter?</summary><p>It increases the contact length and radial pushing force, which excites vibration on slender setups.</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>Sandvik Coromant, <em>Cutting edges / Rake and clearance angles</em> knowledge pages (general reference).</li>
+<li>ISO 3002 / ASM Handbook Vol. 16 &mdash; geometry angle definitions.</li>
+<li>The 0.781 / 0.391&nbsp;&micro;m values are ideal geometric predictions from the locked Ra formula on page 03.</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/04-chip-formation-forces-heat/">&larr; Previous: Chip Formation, Forces &amp; Heat</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/06-edge-preparation-chipbreakers/">Next: Edge Preparation &amp; Chipbreakers &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
