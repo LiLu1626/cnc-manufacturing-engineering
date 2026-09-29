@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tool Material Families — Cutting Tool Technology</title>
+<meta name="description" content="HSS, carbide, cermet, ceramic, PCBN and PCD — what each is, where it sits on the hardness/toughness scale, and when you reach for it.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/09-tool-material-families/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M3 &middot; Substrates &amp; Coatings</span>
+<h1>Tool Material Families</h1>
+<p class="lead">The substrate is what survives at the edge: HSS, carbide, cermet, ceramic, PCBN, PCD. They trade hardness for toughness along one spectrum &mdash; harder lasts longer at speed but breaks easily, tougher forgives abuse but cannot run fast. This page places each family and tells you when you reach for it.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> K</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cutting-tool-technology/05-rake-clearance-and-edge-angles/">05 Rake &amp; Clearance</a></span><span><strong>Scope:</strong> classroom overview</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Place HSS, carbide, cermet, ceramic, PCBN and PCD on the hardness/toughness spectrum</li>
+<li>State the main advantage and limitation of each family</li>
+<li>Match a family to a material and operation at a high level</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p>Tool materials are ordered by their ability to stay hard at the temperature of the cut (hot hardness) and their toughness (resistance to fracture). The central trade-off: <strong>the harder the material, the faster it can cut, but the more brittle it is</strong>.</p>
+<ul>
+<li><strong>HSS (high-speed steel)</strong> &mdash; tough, cheap, resharpened; low speed.</li>
+<li><strong>Cemented carbide</strong> &mdash; the workhorse; balanced hardness/toughness, used coated or uncoated.</li>
+<li><strong>Cermet</strong> &mdash; harder, sharper, for high-speed finishing of steel.</li>
+<li><strong>Ceramic</strong> &mdash; very hot-hard, for high-speed and hardened steel, brittle.</li>
+<li><strong>PCBN (cubic boron nitride)</strong> &mdash; hardest after diamond, for hard turning &gt;45 HRC.</li>
+<li><strong>PCD (polycrystalline diamond)</strong> &mdash; hardest, for non-ferrous/abrasive non-metals; never on steel.</li>
+</ul>
+
+<h2>Why It Matters</h2>
+<p>Picking a substrate is the first materials decision after you know the workpiece. Running carbide at HSS speeds wastes productivity; running ceramic in an interrupted cut snaps it. PCD on steel chemically diffuses and destroys the edge &mdash; an expensive mistake. Knowing which family fits the material and hardness window prevents both scrap and broken tooling.</p>
+
+<h2>How It Works</h2>
+<div class="ctt-table-wrap"><table>
+<caption>Tool material families at a glance (directional, not absolute)</caption>
+<thead><tr><th scope="col">Family</th><th scope="col">Hot hardness / speed</th><th scope="col">Toughness</th><th scope="col">Typical use</th></tr></thead>
+<tbody>
+<tr><td>HSS</td><td>low</td><td>very high</td><td>form tools, low-speed, manual machines</td></tr>
+<tr><td>Carbide</td><td>medium-high</td><td>medium</td><td>general CNC milling/turning/drilling</td></tr>
+<tr><td>Cermet</td><td>high</td><td>medium-low</td><td>high-speed finishing of steel</td></tr>
+<tr><td>Ceramic</td><td>very high</td><td>low</td><td>hardened steel, high-speed roughing</td></tr>
+<tr><td>PCBN</td><td>very high</td><td>low</td><td>hard turning &gt;45 HRC, hard cast iron</td></tr>
+<tr><td>PCD</td><td>highest</td><td>low</td><td>aluminum, non-ferrous, composites; <em>never steel</em></td></tr>
+</tbody></table></div>
+<p>Coatings (page 12) are applied on top of carbide to extend this window; they do not change the underlying substrate's basic toughness.</p>
+
+<h2>Worked Example</h2>
+<p>Three jobs. (1) Finish-turning 55 HRC hardened steel: carbide will wear fast, but PCBN or ceramic can hard-turn it. (2) Milling abrasive high-silicon aluminum: uncoated carbide abrades quickly, PCD lasts far longer. (3) A form tool on an old manual lathe: HSS is cheap and resharpened, and the low speed does not demand hot hardness. The substrate choice follows the material and hardness, not the other way around.</p>
+<figure class="ctt-figure">
+<svg viewBox="0 0 460 170" role="img" aria-label="Hardness versus toughness spectrum">
+<desc>From left to right: hardest and least tough (PCD, PCBN, ceramic) to toughest and least hard (HSS).</desc>
+<text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Hardness &rarr; / Toughness &larr;</text>
+<line x1="40" y1="90" x2="430" y2="90" stroke="#5c6872" stroke-width="2"/>
+<g font-size="10">
+<circle cx="70" cy="90" r="14" fill="#b3261e"/><text x="60" y="125" fill="#333">HSS</text>
+<circle cx="150" cy="90" r="16" fill="#0b766e"/><text x="135" y="130" fill="#333">Carbide</text>
+<circle cx="230" cy="90" r="13" fill="#0b766e"/><text x="218" y="125" fill="#333">Cermet</text>
+<circle cx="300" cy="90" r="11" fill="#5c6872"/><text x="288" y="120" fill="#333">Ceramic</text>
+<circle cx="360" cy="90" r="10" fill="#5c6872"/><text x="348" y="118" fill="#333">PCBN</text>
+<circle cx="415" cy="90" r="9" fill="#d4a017"/><text x="400" y="115" fill="#333">PCD</text>
+</g>
+<text x="60" y="60" font-size="9" fill="#5c6872">tougher, slower</text>
+<text x="330" y="60" font-size="9" fill="#5c6872">harder, faster, brittle</text>
+</svg>
+<figcaption>Schematic spectrum; circle size roughly indicates toughness. Not to scale.</figcaption>
+</figure>
+<div class="ctt-assumption"><strong>Classroom assumption:</strong> positions are illustrative. Real grade performance depends on composition, grain size and coating (pages 10&ndash;12).</div>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Using PCD on steel.</strong> Diamond diffuses with iron at temperature and the edge fails. Fix: PCD is for non-ferrous only.</li>
+<li><strong>Expecting HSS to run at carbide speeds.</strong> It softens and dulls instantly. Fix: reserve HSS for low-speed/form work.</li>
+<li><strong>Using brittle ceramic/PCBN in interrupted cuts.</strong> They chip. Fix: use tough carbide for interruption; save superhard grades for continuous cuts.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. Which family is the general CNC workhorse?</summary><p>Cemented carbide (coated, for most steel/iron work).</p></details>
+<details><summary>Q2. Hard turning 55 HRC &mdash; which family?</summary><p>PCBN or ceramic, not plain carbide.</p></details>
+<details><summary>Q3. Why not PCD on steel?</summary><p>Diamond reacts/diffuses with iron at cutting temperature and the edge degrades rapidly.</p></details>
+<details><summary>Q4. What happens as hardness rises along the spectrum?</summary><p>Hot hardness and allowable speed rise, but toughness/resistance to fracture falls.</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>ASM International, <em>ASM Handbook Vol. 16</em> &mdash; cutting tool materials.</li>
+<li>Sandvik Coromant / Element Six, <em>PCBN and PCD application</em> guides (general reference).</li>
+<li>Family positions are classroom illustrations; choose grades from the actual catalog.</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/08-insert-designations-catalogs/">&larr; Previous: Insert Designations</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/10-cemented-carbide-substrates/">Next: Cemented Carbide Substrates &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
