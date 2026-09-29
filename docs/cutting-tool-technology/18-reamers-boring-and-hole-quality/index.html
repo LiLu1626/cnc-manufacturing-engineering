@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Reaming, Boring & Hole Quality — Cutting Tool Technology</title>
+<meta name="description" content="How reaming and boring improve a drilled hole: when to ream, when to bore, stock allowance, concentricity and surface finish.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/18-reamers-boring-and-hole-quality/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M5 &middot; Machining Applications</span>
+<h1>Reaming, Boring &amp; Hole Quality</h1>
+<p class="lead">A drilled hole is near-net, not accurate. Reaming finishes and sizes a hole to a fixed diameter; boring corrects position and roundness. Choosing between them &mdash; and leaving the right stock &mdash; decides whether the hole meets its tolerance and finish.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> K</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cutting-tool-technology/17-drills-and-hole-making/">17 Drills</a></span><span><strong>Scope:</strong> metric; classroom examples</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Distinguish reaming and boring and when each is used</li>
+<li>Set a reasonable reaming stock allowance</li>
+<li>Explain why boring follows drill position errors</li>
+<li>Name the limits of each process</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p><strong>Reaming</strong> passes a multi-tooth reamer through a drilled hole to size it to a fixed diameter and improve finish. It follows the existing hole's alignment &mdash; it cannot move the hole's center. <strong>Boring</strong> uses a single-point boring bar on a lathe or machining center to cut the hole to a chosen diameter, correcting position and roundness from the previous operation. Drilling &rarr; boring &rarr; (reaming) is the usual hole-making ladder.</p>
+
+<h2>Why It Matters</h2>
+<p>The two processes solve different problems. If a drilled hole is roughly right in position but needs a closer diameter and better finish, ream it. If the hole wandered off center or is not round, boring is the only way to correct it &mdash; reaming would just polish the mislocated hole. Leaving too much stock for reaming loads the reamer and makes it wander; leaving too little leaves drill marks. The allowance is the whole trick.</p>
+
+<h2>How It Works</h2>
+<h3>Reaming vs boring</h3>
+<div class="ctt-table-wrap"><table>
+<caption>Reaming versus boring</caption>
+<thead><tr><th scope="col">Reaming</th><th scope="col">Boring</th></tr></thead>
+<tbody>
+<tr><td>sizes to a fixed reamer diameter</td><td>cuts to any programmed diameter</td></tr>
+<tr><td>follows existing hole alignment</td><td>corrects position / roundness</td></tr>
+<tr><td>good finish, high production</td><td>flexible, but limited by bar rigidity</td></tr>
+<tr><td>small stock allowance</td><td>removes deliberate stock</td></tr>
+</tbody></table></div>
+<h3>Stock allowance</h3>
+<p>Reaming removes only a small amount &mdash; typical radial stock ~0.1&ndash;0.3&nbsp;mm for a medium drill size. More than that overloads the reamer; less leaves drill marks. Boring removes a deliberate rough then finish amount to control size.</p>
+
+<h2>Worked Example</h2>
+<p>A drawing calls for a &Oslash;10&nbsp;H7 hole with a good finish. Sequence: drill &Oslash;9.7&nbsp;mm, then ream to &Oslash;10. Radial stock left for reaming is (10&minus;9.7)/2 = 0.15&nbsp;mm &mdash; a healthy small allowance. If the hole must also be precisely located relative to a datum, bore it after drilling instead, because reaming cannot move the center. Boring depth is limited by the bar overhang logic from page 16.</p>
+<figure class="ctt-figure">
+<svg viewBox="0 0 440 150" role="img" aria-label="Drill then ream stock allowance">
+<desc>Drill at 9.7 mm then ream to 10 mm; small radial stock removed.</desc>
+<circle cx="110" cy="75" r="34" fill="none" stroke="#5c6872" stroke-width="2"/>
+<text x="80" y="125" font-size="10" fill="#333">drilled &Oslash;9.7</text>
+<circle cx="300" cy="75" r="34" fill="none" stroke="#5c6872" stroke-width="2"/>
+<circle cx="300" cy="75" r="30" fill="none" stroke="#0b766e" stroke-width="2"/>
+<text x="262" y="125" font-size="10" fill="#333">reamed &Oslash;10</text>
+<text x="180" y="40" font-size="10" fill="#0b766e">~0.15 mm radial stock</text>
+</svg>
+<figcaption>Drill then ream: a thin stock layer is sized to final diameter (schematic).</figcaption>
+</figure>
+<div class="ctt-assumption"><strong>Classroom assumption:</strong> the 9.7/10 mm sequence and 0.15 mm allowance are typical; exact values depend on material, hole size and reamer manufacturer.</div>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Reaming a mislocated hole to fix position.</strong> Reaming follows the hole. Fix: bore first to correct position.</li>
+<li><strong>Leaving too much stock for reaming.</strong> The reamer overloads and wanders. Fix: keep the small allowance.</li>
+<li><strong>Expecting reaming on a deep slender bore.</strong> Bar rigidity limits it. Fix: control overhang and rigidity first.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. Hole wandered off center &mdash; ream or bore?</summary><p>Bore, to correct position; reaming cannot move the center.</p></details>
+<details><summary>Q2. Drill &Oslash;14, ream &Oslash;14.5. Radial stock?</summary><p>(14.5&minus;14)/2 = 0.25&nbsp;mm radial.</p></details>
+<details><summary>Q3. Why leave only a thin layer for reaming?</summary><p>A reamer is a sizing/finishing tool; heavy stock overloads it and breaks accuracy.</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>Sandvik Coromant, <em>Reaming and boring</em> knowledge pages.</li>
+<li>Guhring, <em>Reamer stock allowance</em> technical guidance.</li>
+<li>Allowances are classroom illustrations; confirm with the reamer maker.</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/17-drills-and-hole-making/">&larr; Previous: Drills</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/19-threading-tools/">Next: Threading Tools &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

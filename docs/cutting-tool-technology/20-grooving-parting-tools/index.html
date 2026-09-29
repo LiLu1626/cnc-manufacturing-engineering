@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Grooving & Parting Tools — Cutting Tool Technology</title>
+<meta name="description" content="Grooving and cutoff blades: chip control, feed per revolution, corner radius and the rigidity limits of a protruding blade.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/20-grooving-parting-tools/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M5 &middot; Machining Applications</span>
+<h1>Grooving &amp; Parting Tools</h1>
+<p class="lead">Grooving and cutoff are interrupted, two-edge cuts on a thin protruding blade. Chip control and rigidity are everything: the blade cannot deflect, and the chip must break instead of wrapping the part.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> B</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cutting-tool-technology/16-turning-inserts-toolholders/">16 Turning Tools</a></span><span><strong>Scope:</strong> classroom overview</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Describe how a grooving/cutoff blade cuts</li>
+<li>Explain why chip control matters on a groove</li>
+<li>State the rigidity limit of the overhanging blade</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p>A <strong>grooving / parting</strong> tool is a narrow blade with one or two cutting edges, fed radially into the rotating work. Grooving makes a recess of controlled width and depth; <strong>parting (cutoff)</strong> feeds through to separate the part from the bar. The narrow blade cuts on its side edges, so chip flow and rigidity are the two constraints.</p>
+
+<h2>Why It Matters</h2>
+<p>A grooving blade is a cantilever like a boring bar &mdash; but thinner, so it deflects and chatters easily. The chip comes out of a confined space and must break; a long chip wraps the part and jams. Grooving at too high a feed overloads the two edges; too low a feed rubs and work-hardens. Getting feed and chip control right prevents broken blades and scrapped parts.</p>
+
+<h2>How It Works</h2>
+<p>The blade feeds radially at a low feed per revolution. The insert has a chipformer that curls and breaks the chip. For parting, the blade reaches near center, often with a small end geometry to cleanly separate the part. Keep the blade supported and the overhang minimal; use the recommended feed so the chip forms instead of packing.</p>
+
+<h2>Worked Example</h2>
+<p>Cut off a &Oslash;30 bar to length with a 3&nbsp;mm wide cutoff blade. Set the blade exactly on center height. Feed at a conservative per-rev rate so the chip breaks into short pieces rather than a coil, and keep overhang to the depth needed. A wrapped chip around the bar means the feed or chipformer is wrong &mdash; not a reason to push harder.</p>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Running too low a feed.</strong> Rubbing and work-hardening instead of cutting. Fix: use the recommended grooving feed.</li>
+<li><strong>Ignoring a wrapped chip.</strong> It jams. Fix: adjust chipformer/feed to break the chip.</li>
+<li><strong>Blade not on center height.</strong> Poor cut and edge chipping. Fix: set the blade tip on the spindle centerline.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. Why is chip control critical in grooving?</summary><p>The chip exits a confined groove; a long chip wraps and jams the blade.</p></details>
+<details><summary>Q2. What happens if the blade tip is below center?</summary><p>The cut is poor and the edge chips; parting blades must be set on center.</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>Sandvik Coromant, <em>Grooving and parting</em> knowledge pages.</li>
+<li>Feed and chipformer guidance is classroom-level; confirm with the blade maker.</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/19-threading-tools/">&larr; Previous: Threading Tools</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/21-toolholders-interfaces-rigidity/">Next: Toolholders &amp; Interfaces &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
