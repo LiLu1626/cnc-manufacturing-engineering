@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Turning Inserts & Toolholders — Cutting Tool Technology</title>
+<meta name="description" content="Turning insert shapes, lead/approach angle, toolholder style (P/D/S), boring bars, overhang and rigidity in turning.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/16-turning-inserts-toolholders/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M5 &middot; Machining Applications</span>
+<h1>Turning Inserts &amp; Toolholders</h1>
+<p class="lead">On a lathe the workpiece rotates and the insert feeds. The insert shape, lead angle and holder style decide whether you can reach the feature, how much radial force the cut pushes, and whether a boring bar deflects. This page reads turning toolholders and avoids the most common rigidity mistakes.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> K</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cutting-tool-technology/08-insert-designations-catalogs/">08 Insert Designations</a></span><span><strong>Scope:</strong> metric; classroom examples</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Explain how insert shape and lead angle change radial force and finish</li>
+<li>Read a basic toolholder designation and clamping style</li>
+<li>Set boring-bar overhang within the rigidity limit</li>
+<li>Choose a holder that reaches the feature without interference</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p>A turning setup is a <strong>toolholder</strong> clamped in the turret that holds a disposable <strong>insert</strong>. The insert <strong>shape</strong> (triangle, 80&deg; rhombic, 55&deg;, square) determines how many corners you get and how sharp an internal corner you can reach. The <strong>lead (approach) angle</strong> of the holder changes how the chip thickness is distributed and how much radial force pushes on the part. <strong>Boring bars</strong> reach inside holes and are limited by overhang.</p>
+
+<h2>Why It Matters</h2>
+<p>In turning, radial force pushes the tool away from the rotating work &mdash; exactly the direction that deflects a slender bar or thin wall. The lead angle trades this: a larger lead angle spreads the cut and lowers the radial force per pass, but changes chip thickness. Choose the wrong holder and you cannot reach the feature (interference); choose too long a boring bar and the hole comes out tapered and chatters. This is where turning rigidity is won or lost.</p>
+
+<h2>How It Works</h2>
+<h3>Insert shape and corners</h3>
+<div class="ctt-table-wrap"><table>
+<caption>Common turning insert shapes</caption>
+<thead><tr><th scope="col">Shape</th><th scope="col">Corners</th><th scope="col">Typical use</th></tr></thead>
+<tbody>
+<tr><td>Triangle (T)</td><td>6</td><td>sharp internal corners, general turning</td></tr>
+<tr><td>Rhombic 80&deg; (C/W)</td><td>2 (or 4)</td><td>strong, common for turning/facing</td></tr>
+<tr><td>Square (S)</td><td>4</td><td>heavy roughing, robust</td></tr>
+<tr><td>Rhombic 35&deg; (V)</td><td>2</td><td>copying / contouring, sharp points</td></tr>
+</tbody></table></div>
+<h3>Lead angle and radial force</h3>
+<p>A smaller lead angle concentrates force radially and pushes the tool away; a larger lead angle deflects more force axially and can reduce deflection on a thin wall, but changes chip thickness. The holder designation fixes this angle &mdash; you do not set it per part.</p>
+<h3>Boring bar overhang</h3>
+<p>A boring bar reaching into a hole is a cantilever. Keep overhang to diameter ratio within the bar's design limit (typically steel bars ~4:1, carbide-shank bars ~6:1 or more). Beyond that, deflection and chatter grow rapidly and the bore comes out tapered or lobed.</p>
+
+<h2>Worked Example</h2>
+<p>Boring a &Oslash;20&nbsp;mm hole to 40&nbsp;mm deep with a steel-shank boring bar of 16&nbsp;mm diameter. Overhang = 40/16 = 2.5:1 &mdash; well inside a steel bar's ~4:1 limit, so rigidity is acceptable. If the hole were 80&nbsp;mm deep, overhang = 5:1 and a steel bar would chatter; a carbide-shank bar (~6:1) or a smaller/anti-vibration bar would be needed. The turning finish baseline f = 0.10 mm/rev, r&epsilon; = 0.4 gives ideal Ra 0.781&nbsp;&micro;m (page 03) &mdash; but only if the bar does not deflect.</p>
+<figure class="ctt-figure">
+<svg viewBox="0 0 440 170" role="img" aria-label="Boring bar overhang in a hole">
+<desc>A boring bar clamped in a turret reaches into a hole; overhang limited by diameter ratio.</desc>
+<rect x="20" y="60" width="120" height="40" fill="#5c6872"/><text x="30" y="84" font-size="10" fill="#fff">turret / holder</text>
+<rect x="140" y="70" width="220" height="20" fill="#0b766e"/>
+<text x="180" y="65" font-size="10" fill="#0b766e">boring bar (overhang L)</text>
+<rect x="360" y="55" width="60" height="50" fill="#cfdbd8"/>
+<text x="365" y="120" font-size="9" fill="#5c6872">hole</text>
+<line x1="140" y1="100" x2="360" y2="100" stroke="#b3261e" stroke-dasharray="3,2"/>
+</svg>
+<figcaption>Boring bar as a cantilever (schematic). Keep L/D within the bar's rated limit.</figcaption>
+</figure>
+<div class="ctt-assumption"><strong>Classroom assumption:</strong> 4:1 and 6:1 are typical guide values, not universal; anti-vibration bars extend further. Always respect the bar manufacturer's stated overhang limit.</div>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Reaching too far with a steel boring bar.</strong> Chatter and taper. Fix: keep L/D in range, or use a carbide/anti-vibration bar.</li>
+<li><strong>Ignoring holder interference.</strong> The holder back hits the shoulder. Fix: check the holder shape reaches the feature.</li>
+<li><strong>Expecting good finish on a deflecting bar.</strong> The 0.781&nbsp;&micro;m formula assumes a rigid setup. Fix: control deflection first, then feed/nose radius.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. Why does a larger lead angle help a thin wall?</summary><p>It directs more force axially and less radially, reducing push-away and deflection.</p></details>
+<details><summary>Q2. A 16&nbsp;mm bar reaches 64&nbsp;mm into a hole. L/D? OK for a steel bar?</summary><p>64/16 = 4:1 &mdash; at the upper end of a typical steel bar limit; watch for chatter.</p></details>
+<details><summary>Q3. Which insert shape reaches a very sharp internal corner?</summary><p>A sharper point such as a 35&deg; rhombic (V) or thin triangle, within strength limits.</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>Sandvik Coromant, <em>Turning tools / Boring bars</em> knowledge pages.</li>
+<li>ISO 30079 / toolholder designation standards (general reference).</li>
+<li>L/D limits are classroom illustrations; use the bar manufacturer's rated overhang.</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/15-indexable-milling-cutters/">&larr; Previous: Indexable Milling</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/17-drills-and-hole-making/">Next: Drills &amp; Hole Making &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
