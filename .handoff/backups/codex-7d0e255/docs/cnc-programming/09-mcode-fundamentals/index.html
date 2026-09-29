@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M-Codes: Machine Functions — CNC & Manufacturing Engineering</title>
+<meta name="description" content="M03/M04/M05 spindle, M08/M09 coolant, M06 tool change, M00/M01/M30 program control, and the correct startup and shutdown sequence.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/09-mcode-fundamentals/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>M-Codes: Machine Functions</h1>
+<p class="lead">G-codes control tool motion; M-codes control the machine itself &mdash; spindle, coolant, tool change, program stop. This page covers the common M-codes and the correct program start and end sequence on a Haas (FANUC-compatible) mill.</p>
+
+<h2>Concept</h2>
+<p>If G-codes answer "where does the tool go," M-codes answer "what does the machine do." An M-code is a machine function: start the spindle, turn on coolant, change a tool, stop the program. M-codes are mostly <strong>one-shot</strong>: they execute once when the block is read. Once M03 starts the spindle, it stays running until M05, but that is a physical state change, not a modal code group in the G-code sense.</p>
+<p>A block can contain both motion and an M-code. On a Haas mill, M-codes (M03/M04/M05/M08/M09) are executed at the end of the block after motion completes. To express a clear order, put each M-code on its own block: move first, then turn the machine function on or off. This avoids ambiguity about whether coolant starts before or after the tool arrives at the cut.</p>
+
+<svg viewBox="0 0 360 160" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="180" y="16" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Coolant Before the First Cut</text>
+  <rect x="20" y="30" width="100" height="50" fill="#dcfce7" stroke="#166534" rx="3"/>
+  <text x="70" y="50" font-size="9" text-anchor="middle" fill="#166534">1. Safe position</text>
+  <text x="70" y="65" font-size="8" text-anchor="middle" fill="#333">G00 Z5. clearance</text>
+  <rect x="130" y="30" width="100" height="50" fill="#dbeafe" stroke="#1e40af" rx="3"/>
+  <text x="180" y="50" font-size="9" text-anchor="middle" fill="#1e40af">2. M08 alone</text>
+  <text x="180" y="65" font-size="8" text-anchor="middle" fill="#333">confirm flow at tip</text>
+  <rect x="240" y="30" width="100" height="50" fill="#fef9c3" stroke="#854d0e" rx="3"/>
+  <text x="290" y="50" font-size="9" text-anchor="middle" fill="#854d0e">3. G01 cut</text>
+  <text x="290" y="65" font-size="8" text-anchor="middle" fill="#333">F100 Z-2.</text>
+  <text x="180" y="110" font-size="9" text-anchor="middle" fill="#991b1b">Wrong: put M08 on the G01 line &mdash; first plunge cuts dry.</text>
+</svg>
+
+<h2>Why It Matters</h2>
+<p>M-codes are the on/off switches for the machine. Their order at start and finish matters: starting the spindle before the tool is clear, or changing tools without the machine having completed the tool-change sequence, causes errors. On a Haas, M30 itself ends spindle and coolant at shutdown; explicit M09/M05 documents the order. M-codes are also the most machine-specific part of the program &mdash; the G-codes G00/G01/G90 are largely universal, but M-codes are not. Always verify against your machine manual.</p>
+
+<h2>How It Works</h2>
+
+<h3>Spindle: M03, M04, M05</h3>
+<p><strong>M03</strong> starts the spindle in forward (Haas terminology); <strong>M04</strong> starts it in reverse; <strong>M05</strong> stops it. The speed is set with the S word: <code>M03 S2000</code> starts the spindle at 2000 RPM forward. On a mill, right-hand cutting tools run forward (M03); M04 is reserved for left-hand tooling. On a lathe, confirm forward direction against your machine and tooling arrangement before assuming M03.</p>
+<p>Give the spindle time to reach speed before cutting. The line <code>M03 S2000</code> starts acceleration; a safe move to clearance or a short dwell gives the spindle time to ramp. M05 stops the spindle; on a Haas, M06 (tool change) automatically stops the spindle, turns off coolant, and moves to the tool-change position as part of its cycle. Writing M05 explicitly before M06 is a teaching habit that makes the shutdown order clear, not a requirement because M06 would otherwise change tools while spinning.</p>
+
+<h3>Coolant: M08, M09, and Through-Spindle</h3>
+<p><strong>M08</strong> turns on flood coolant. <strong>M09</strong> turns off coolant. On a Haas mill, through-spindle coolant (TSC) uses separate M-codes (commonly M88 on / M89 off) &mdash; check your manual. M07 mist coolant is machine-specific and not a Haas universal. Write M08 on its own block after the tool is at safe clearance and confirm coolant reaches the tip before the first cut. In this example the end sequence retracts to verified clearance first, then M09 and M05; the exact clearance value is set by the setup, not a universal Z5.</p>
+
+<h3>Tool Change: M06, T, and H Offsets</h3>
+<p>On a machining center, <code>T02 M06</code> selects tool 2 from the magazine and loads it into the spindle. On a Haas, M06 automatically stops the spindle, turns off coolant, and moves to the tool-change position. On a lathe, the turret moves to the tool station directly: <code>T0202</code> selects tool 2 and its offset.</p>
+<p><strong>T selects the tool number; H sets the length offset separately.</strong> After M06, establish the tool length offset with <code>G43 H02</code> on the next safe Z move. Whether the control automatically recalls the matching H offset depends on control version and settings; explicitly writing G43 H is the clear, portable practice. This page uses that explicit form.</p>
+
+<h3>Program Control: M00, M01, M02, M30</h3>
+<table class="data-table">
+<tr><th>Code</th><th>Function</th><th>Use</th></tr>
+<tr><td>M00</td><td>Unconditional program stop</td><td>Always pauses; press cycle start to continue. Used for mandatory inspections or chip clearing.</td></tr>
+<tr><td>M01</td><td>Optional stop</td><td>Pauses only if the optional-stop switch on the panel is on. Used for spot checks; skipped in production.</td></tr>
+<tr><td>M02</td><td>Program end</td><td>Stops the program without rewinding to the top. Rarely used today.</td></tr>
+<tr><td>M30</td><td>Program end and rewind</td><td>Standard end: ends the program, stops spindle/coolant, and rewinds to program top for the next cycle.</td></tr>
+</table>
+<p>On a Haas mill, M30 ends the program and stops the spindle and coolant as part of the end sequence. Writing M09 and M05 explicitly before M30 documents the shutdown order clearly; it is not required because M30 would otherwise leave the spindle running. M02 does not rewind, which is why M30 is the standard end command.</p>
+
+<h3>M-Code Timing on a Block</h3>
+<p>On a Haas mill, an M-code on the same line as motion executes at the end of the block, after the motion completes. To express a clear order, use separate blocks: retract first (G00), then M09, then M05, then M30. Do not try to reorder an M-code by moving it to the front of the same line &mdash; block order is controlled by writing separate blocks, not by word order inside one block.</p>
+
+<h3>Other Common M-Codes</h3>
+<p><strong>M19</strong> orients the spindle to a fixed position (used for some setups, boring bar orientation, or probe alignment; on a Haas, M19 with an R word can orient to a specific angle). Chuck clamp/unclamp and tailstock functions use machine-specific M-codes (commonly M10/M11 on some lathes, but verify). These vary by builder &mdash; do not assume.</p>
+
+<h3>Program Number and Block Structure</h3>
+<p>A FANUC/Haas mill program starts with <code>O0001</code> and ends with <code>M30</code>. Comments in parentheses after a block are ignored by the controller but read by the operator: <code>(DRILL 4 HOLES)</code>. Write comments that explain why, not what.</p>
+
+<h3>Safety: Why the Start Block Matters</h3>
+<p>The startup block <code>G21 G17 G90 G40 G49 G80</code> establishes a known state: metric units, XY plane, absolute mode, compensation cancelled, cycles cancelled. It does not set spindle, coolant, or work offset &mdash; those follow. Without it, the program inherits whatever mode the previous program left.</p>
+
+<h2>Example: Program Start and End (Teaching Snippet)</h2>
+<p>A Haas mill teaching snippet. Assumes: tool 1 loaded, G54 work datum set, fixture clears Z50, Z5 is above the work face, and the tool can safely move at Z50. This is a fragment, not a complete production cycle:</p>
+<pre class="cp-code"><code>O0001 (DEMO SNIPPET)
+G21 G17 G90 G94 G40 G49 G80  (startup: metric, XY, abs, mm/min, modes off)
+T01 M06                       (load tool 1; M06 stops spindle/coolant)
+G54 G90                       (work offset)
+G00 G43 H01 Z50.              (length offset at safe Z; verify Z50 clears fixture)
+S1500 M03                     (spindle forward at 1500 RPM)
+G00 X0. Y0.                   (XY position over part at safe Z50)
+M08                           (coolant on, confirm flow before cutting)
+G00 Z5.                       (rapid to clearance above work face)
+G01 Z-2. F100.                (plunge feed)
+G01 X50. F300.                (cut)
+G00 Z50.                      (retract to safe height)
+M09                           (coolant off)
+M05                           (spindle stop)
+G91 G28 Z0                    (optional Z home return)
+M30                           (end, rewind)</code></pre>
+<p>Note the order: G43 H01 Z50 is established at a verified safe Z <em>before</em> XY moves; M08 is on its own block at clearance; the end block retracts, then M09, M05, then M30. Assumptions: after tool change the current position allows a Z move to Z50, H01 and G54 are calibrated, Z50 clears all fixtures on XY traverse, Z5 at X0 Y0 clears the work face, and the selected tool is confirmed by the manufacturer to plunge axially at the programmed feed.</p>
+
+<svg viewBox="0 0 360 200" style="width:100%;max-width:360px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="180" y="18" font-size="11" text-anchor="middle" font-weight="bold" fill="#333">Program End Sequence</text>
+  <rect x="60" y="35" width="240" height="22" fill="#dcfce7" stroke="#166534" rx="3"/>
+  <text x="180" y="50" font-size="10" text-anchor="middle" fill="#166534">1. G00 Z50. (retract to safe height)</text>
+  <rect x="60" y="62" width="240" height="22" fill="#dcfce7" stroke="#166534" rx="3"/>
+  <text x="180" y="77" font-size="10" text-anchor="middle" fill="#166534">2. M09 (coolant off)</text>
+  <rect x="60" y="89" width="240" height="22" fill="#dcfce7" stroke="#166534" rx="3"/>
+  <text x="180" y="104" font-size="10" text-anchor="middle" fill="#166534">3. M05 (spindle stop, explicit)</text>
+  <rect x="60" y="116" width="240" height="22" fill="#fef9c3" stroke="#854d0e" rx="3"/>
+  <text x="180" y="131" font-size="10" text-anchor="middle" fill="#854d0e">4. G91 G28 Z0 (optional return home)</text>
+  <rect x="60" y="143" width="240" height="22" fill="#fee2e2" stroke="#991b1b" rx="3"/>
+  <text x="180" y="158" font-size="10" text-anchor="middle" fill="#991b1b">5. M30 (end; also stops spindle/coolant)</text>
+</svg>
+
+<h3>Spindle Orientation and M19</h3>
+<p><strong>M19</strong> orients the spindle to a fixed position (used for some tool setups, boring bar orientation, or probe alignment). On a Haas, M19 with an R word can orient to a specific angle. This is a setup function, not a cutting function.</p>
+
+<h3>Why M-Codes Are Not G-Codes</h3>
+<p>M03 starts the spindle and it stays running until M05, but that physical persistence is not a modal G-code group. Track spindle, coolant, and program state separately: M03/M04/M05 control spindle state; M08/M09 control coolant state; M30 controls program state. G-codes set motion and mode groups. Mixing the mental models &mdash; for example expecting M08 to cancel a drilling cycle &mdash; causes errors.</p>
+
+<h3>Checking M-Code Effects Before Running</h3>
+<p>When a program uses an unfamiliar M-code, look it up in the machine manual before cycle-start. A wrong M-code can unclamp the chuck, flood coolant, or move the pallet. Most modern machines show the M-code function on the screen when you single-block through it; use that as a checklist on the first run.</p>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Putting M08 on the first plunge line</strong> &mdash; the first cut runs dry because coolant turns on after the motion. Put M08 on its own block at clearance.</li>
+<li><strong>Starting spindle before the tool is clear</strong> &mdash; position the tool at safe Z, then M03.</li>
+<li><strong>Assuming M06 loads the H offset</strong> &mdash; T selects the tool; explicitly write G43 H on the next safe Z move. Auto-recall depends on control version.</li>
+<li><strong>Omitting the explicit shutdown order</strong> &mdash; retract, M09, M05, then M30. M30 also stops spindle/coolant, but writing the order documents it.</li>
+<li><strong>Using M02 instead of M30</strong> &mdash; M02 does not rewind to program top.</li>
+<li><strong>Assuming M-codes are universal</strong> &mdash; chuck, tailstock, TSC, and pallet M-codes are builder-specific. Verify against the manual.</li>
+</ul>
+
+<section class="cp-practice">
+<h2>Practice</h2>
+<p><strong>1.</strong> What does M01 do?</p>
+<details><summary>Show answer</summary><p>Optional stop &mdash; pauses only if the optional-stop switch on the panel is on. Used for spot checks; skipped during production runs.</p></details>
+<p><strong>2.</strong> Why write M09 and M05 explicitly before M30?</p>
+<details><summary>Show answer</summary><p>To document the shutdown order clearly. On a Haas, M30 also ends spindle and coolant as part of program end; the explicit M09/M05 makes the sequence readable and portable to controls where behavior differs.</p></details>
+<p><strong>3.</strong> What is the difference between M00 and M01?</p>
+<details><summary>Show answer</summary><p>M00 always stops (unconditional). M01 stops only if the optional-stop switch is on.</p></details>
+<p><strong>4.</strong> After T01 M06, what must happen before the first Z cut?</p>
+<details><summary>Show answer</summary><p>Establish the tool length offset with G43 H01 on a safe Z move (Z50). T selects the tool; this page writes H explicitly rather than assuming the control auto-recalls it.</p></details>
+<p><strong>5.</strong> Why is M30 preferred over M02?</p>
+<details><summary>Show answer</summary><p>M30 rewinds the program pointer to the top for the next cycle; M02 does not.</p></details>
+</section>
+
+<section class="cp-sources">
+<h2>Sources</h2>
+<ul>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=mcode.machine=mill.value=M30.html">Haas M30 Program End</a> &mdash; M-code behavior on Haas mills.</li>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=mcode.machine=mill.value=M06.html">Haas M06 Tool Change</a> &mdash; M06 stops spindle/coolant and moves to tool-change position.</li>
+<li><a href="https://www.haascnc.com/service/online-operator-s-manuals/mill-operator-s-manual/mill---m-codes.html">Haas Mill M-Codes manual</a> &mdash; M-code list and timing.</li>
+<li>All speeds and feeds are classroom teaching assumptions, not tooling recommendations.</li>
+</ul>
+</section>
+
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/08-programming-math/">&larr; Programming Math</a><a href="/cnc-manufacturing-engineering/cnc-programming/10-spindle-feed/">Spindle &amp; Feed &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

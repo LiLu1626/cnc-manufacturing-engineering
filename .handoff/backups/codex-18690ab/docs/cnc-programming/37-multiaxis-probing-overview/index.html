@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Rotary Axes & Probing — CNC Programming</title><meta name="description" content="A-axis/B-axis/C-axis rotary motion, touch probing for work offset setting, and 3+2 vs full 5-axis."><link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/37-multiaxis-probing-overview/"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css"><link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css"></head><body class="cnc-programming"><nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav><main class="article"><a href="../" class="back-link">&larr; Back to CNC Programming</a><h1>Rotary Axes & Probing Overview</h1><p class="lead">Rotary axes and probing extend what a CNC machine can do. This page introduces A/B/C axes, touch probes, and 3+2 machining without going deep into 5-axis programming.</p>
+<svg viewBox="0 0 320 160" style="width:100%;max-width:420px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0 0, 7 3, 0 6" fill="#27ae60"/></marker></defs>
+<title>Work probe touches edge</title>
+<rect x="60" y="80" width="200" height="50" fill="#ddd" stroke="#333"/>
+<line x1="60" y1="80" x2="60" y2="130" stroke="#c0392b" stroke-width="2"/>
+<circle cx="55" cy="105" r="5" fill="#e67e22"/>
+<line x1="55" y1="105" x2="55" y2="60" stroke="#333" stroke-width="2"/>
+<line x1="30" y1="105" x2="48" y2="105" stroke="#27ae60" stroke-width="1.5" marker-end="url(#arr)"/>
+<text x="30" y="98" font-size="10" fill="#27ae60">approach</text>
+<text x="70" y="75" font-size="10" fill="#333">Probe</text>
+<text x="70" y="145" font-size="10" fill="#666">Schematic, not to scale. Ball surface contacts the edge; center stays one effective radius away.</text>
+</svg><h2>Concept</h2>
+<p><strong>Rotary axes</strong> (A, B, C) rotate the tool or workpiece around the linear axes. <strong>A</strong> rotates around X, <strong>B</strong> around Y, <strong>C</strong> around Z. A touch probe measures part position and feeds back into work offsets automatically.</p>
+<h2>Why It Matters</h2>
+<p>Without probing, setting work offset on a complex fixture is manual and error-prone. A probe touches the part, calculates the edge/center, and sets G54 automatically. Rotary axes let you machine multiple sides without re-fixturing — reducing setup error and cycle time.</p>
+<h2>How It Works</h2>
+<h3>3+2 vs Full 5-Axis</h3>
+<ul><li><strong>3+2</strong> — rotary axes position once, then XYZ linear milling. Simpler programming.</li>
+<li><strong>Full 5-axis</strong> — rotary and linear move simultaneously. Complex CAM required.</li></ul>
+<h3>Probing Basics</h3>
+<p>A touch probe mounts in the spindle. It moves to the part, touches it, and records the position. The controller computes the offset. The measured coordinate is not directly G54 — it must be converted: edge touch = half stock offset from center.</p>
+<h2>Example</h2>
+<p>Probe a 60 mm square part edge: touch left edge at X-30, touch right edge at X+30. Center X = (X-30 + X+30)/2 = X0. Set G54 X to the machine position at X0. This replaces manual edge-finding.</p>
+<h2>Probe Applications</h2>
+<p>Beyond setting work offsets, probes are used for:</p>
+<ul>
+<li><strong>Fixture verification</strong> — confirm the part is clamped before cutting.</li>
+<li><strong>Work offset update</strong> — auto-set G54 after each job change.</li>
+<li><strong>In-process inspection</strong> — measure a feature mid-cycle and adjust offsets.</li>
+<li><strong>Tool setting</strong> — measure tool length and diameter automatically.</li>
+<li><strong>First-article check</strong> — probe critical dimensions after the first cut.</li>
+</ul>
+
+<h2>Rotary Axis Naming</h2>
+<table class="data-table">
+<tr><th>Axis</th><th>Rotates Around</th><th>Typical Use</th></tr>
+<tr><td>A</td><td>X axis</td><td>Tilt spindle or table for angled features</td></tr>
+<tr><td>B</td><td>Y axis</td><td>Swivel head on 5-axis machines</td></tr>
+<tr><td>C</td><td>Z axis</td><td>Rotate table for 4th-axis milling, bolt circles</td></tr>
+</table>
+
+
+<h3>What a Probe Actually Does</h3>
+<p>A touch probe is a precision switch mounted in the spindle or turret. When the stylus touches the part, the switch triggers, and the controller records the current machine coordinate. By touching two opposite faces, the controller computes the center and writes it into a work offset. This replaces manual edge-finding and dramatically reduces setup time on repetitive parts. The probe itself is a precision instrument &mdash; it must be calibrated, the stylus must be clean, and the touch speed must be slow enough to avoid bending the stylus.</p>
+<p>Probing is not limited to setting G54. In production, a probe can: (1) find the part on a tombstone and write G54, G55, G56, G57 automatically; (2) measure a bore after boring and compare it to the nominal, adjusting the boring bar offset if needed; (3) detect a missing or misloaded blank before the program crashes; (4) measure tool length after a tool change and update H automatically. Each of these uses the same physical device but a different macro routine.</p>
+<p>Multi-axis (rotary) probing is a separate topic. On a 4- or 5-axis machine, the probe can touch a bore on a tilted face, or measure a part after a C-axis rotation. The math is more complex because the probe point is in a rotated coordinate system, but the principle &mdash; record machine position at trigger, compute part position &mdash; is the same. Start with 3-axis probing before attempting rotary probing.</p>
+<p>A probe crash can damage the stylus, the probe body, and the part. Cost depends on the probe model and setup &mdash; check your machine's manual and your shop's procedure. Always run probing routines at reduced feed override first, and keep a clear air approach distance before the touch move.</p>
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Treating probe reading as G54 directly</strong> — the probe touches an edge, not the center. Convert: center = (edge1 + edge2)/2.</li>
+<li><strong>Probing at high feed</strong> — probe feed must be set per the probe and controller manufacturer; too high a feed risks breaking the stylus. Use the recommended feed for your device.</li>
+<li><strong>Confusing 3+2 with full 5-axis</strong> — 3+2 positions rotary once; full 5-axis interpolates simultaneously.</li>
+<li><strong>Forgetting probe calibration</strong> — the stylus length and radius must be calibrated on a reference sphere before probing.</li>
+</ul>
+
+<h3>Rotary Axes: A, B, C in One Paragraph</h3>
+<p>A rotary axis rotates the workpiece (or the spindle). On a mill, a trunnion or rotary table adds A (rotation around X) and B (rotation around Y), or C (rotation around Z). On a lathe, the C axis indexes the spindle so you can mill flats or drill cross-holes while the part is held. A 4-axis machine adds one rotary; a 5-axis adds two and can tilt the spindle or the table to reach undercuts. Programming rotary axes is not harder in principle &mdash; the same G01/G02 rules apply &mdash; but the coordinate system rotates, so the tool tip position in space is a function of both linear and rotary position.</p>
+<p>Start with 3-axis. Add a C-axis indexing mill (C rotates between moves, not during cutting) before you try true 5-axis simultaneous. Each step adds complexity and a new class of crashes &mdash; most often the rotary axis carrying the fixture into the spindle.</p>
+<h2>Practice</h2>
+<p><strong>1.</strong> Probe left edge at X-25.3, right edge at X24.8. Center?</p><details><summary>Ans</summary><p>(-25.3 + 24.8)/2 = -0.25 mm. Part center is at X-0.25.</p></details>
+<p><strong>2.</strong> What is 3+2?</p><details><summary>Ans</summary><p>Rotary axes position at an angle, then XYZ linear milling — no simultaneous rotary motion.</p></details>
+<p><strong>3.</strong> Why slow probe feed?</p><details><summary>Ans</summary><p>Probes are delicate. Fast feed bends the stylus and gives false readings.</p></details>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/36-macro-foundations/">&larr; Macro Basics</a><a href="/cnc-manufacturing-engineering/cnc-programming/38-process-optimization/">Process Optimization &rarr;</a></nav></main><footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer></body></html>

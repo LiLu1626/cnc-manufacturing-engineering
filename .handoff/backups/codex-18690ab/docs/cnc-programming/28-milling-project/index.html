@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Worked Project: Pocketed Mounting Plate — CNC Programming</title>
+<meta name="description" content="Complete CNC milling project: pocket roughing with ramp entry, two-layer step-down, corner cleanup, and through-hole drilling with drill-tip geometry.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/28-milling-project/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Worked Project: Pocketed Mounting Plate</h1>
+<p class="lead">A 100&times;80&times;12 mm aluminum plate with a 40&times;30&times;4 mm pocket and four &Oslash;6 through holes. This project ties together ramp entry, layer-by-layer roughing, corner geometry, and drill-tip breakthrough calculation.</p>
+
+<h2>Concept</h2>
+<p>The workpiece is an <strong>already-faced</strong> 100&times;80&times;12 mm aluminum plate. G54 work zero is at the lower-left corner on the finished top surface: X0&ndash;100, Y0&ndash;80, Z0 at top, Z&minus;12 at bottom. This program does <strong>not</strong> face mill — that is a prior operation. We machine only the pocket and four holes.</p>
+<p>The pocket boundary is X30&ndash;70, Y25&ndash;55 (40&times;30 mm), depth Z&minus;4, internal corner radius R5. We use a &Oslash;10 flat end mill (tool radius 5 mm) and program the <strong>tool center</strong> directly (G40 throughout — no cutter compensation). The tool center boundary is inset by one radius: X35&ndash;65, Y30&ndash;50. The four &Oslash;6 through holes are at (10,10), (90,10), (90,70), (10,70).</p>
+
+<h2>Why It Matters</h2>
+<p>Several things go wrong if you only cut the pocket boundary: (1) the interior material is never removed, leaving an island; (2) plunging straight to Z&minus;4 on a flat end mill is bad because the center of a flat end mill does not chip-load well — you need a ramp; (3) a through-hole is not done when the drill reaches Z&minus;12 — the conical drill tip must also break through; (4) corner radius R5 means the &Oslash;10 cutter naturally forms R5 corners without extra offset math.</p>
+
+<svg viewBox="0 0 500 350" style="width:100%;max-width:500px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <!-- plate outline -->
+  <rect x="50" y="50" width="400" height="280" fill="#e8e8e8" stroke="#999" stroke-width="1.5" rx="2"/>
+  <text x="55" y="45" font-size="10" fill="#666">Plate 100 x 80</text>
+  <!-- pocket (tool center boundary inset) -->
+  <rect x="175" y="130" width="150" height="120" fill="#fff" stroke="#54a0ff" stroke-width="1.5" rx="25"/>
+  <text x="220" y="195" font-size="11" fill="#54a0ff">Pocket 40x30</text>
+  <text x="225" y="210" font-size="10" fill="#54a0ff">R5 corners</text>
+  <!-- holes -->
+  <circle cx="90" cy="90" r="6" fill="none" stroke="#e74c3c" stroke-width="2"/>
+  <circle cx="410" cy="90" r="6" fill="none" stroke="#e74c3c" stroke-width="2"/>
+  <circle cx="410" cy="290" r="6" fill="none" stroke="#e74c3c" stroke-width="2"/>
+  <circle cx="90" cy="290" r="6" fill="none" stroke="#e74c3c" stroke-width="2"/>
+  <text x="75" y="80" font-size="9" fill="#e74c3c">Ø6</text>
+  <!-- work zero -->
+  <circle cx="50" cy="330" r="3" fill="#2ecc71"/>
+  <text x="55" y="345" font-size="10" fill="#2ecc71">G54 (0,0)</text>
+  <!-- dimensions -->
+  <line x1="50" y1="340" x2="450" y2="340" stroke="#333" stroke-width="0.5"/>
+  <text x="230" y="338" font-size="9" fill="#666">100 mm</text>
+</svg>
+
+<h2>How It Works</h2>
+<h3>Setup and Tooling</h3>
+<p><strong>Setup assumptions (classroom geometry, not a production fixture design):</strong></p>
+<ul>
+<li>Fixture top does not exceed Z8. Clamping jaws are at X&le;4 and X&ge;96, Y32&ndash;48.</li>
+<li>Support under the plate contacts the bottom at Z&minus;12. Around each hole, a clearance channel of at least 5 mm radius runs from Z&minus;12 to Z&minus;18.</li>
+<li>Z50 is the cross-travel height between operations in this classroom model.</li>
+</ul>
+<table class="data-table">
+<tr><th>Tool</th><th>Description</th><th>H offset</th><th>Speed/Feed (teaching)</th></tr>
+<tr><td>T02</td><td>&Oslash;10 flat end mill, center-cutting</td><td>H02</td><td>S2000, F200 planar, F60 ramp</td></tr>
+<tr><td>T03</td><td>&Oslash;6 twist drill, 118&deg; point</td><td>H03</td><td>S1500, F80, Q3</td></tr>
+</table>
+
+<h3>Pocket Roughing: Two Layers</h3>
+<p>We take two axial cuts: Z&minus;2 and Z&minus;4. Entry is a 30 mm long ramp that drops 1 mm per segment (slope 1/30 &asymp; 1.9&deg;). This requires a center-cutting end mill capable of slotting at this ramp angle — a classroom assumption, not a manufacturer endorsement.</p>
+<p><strong>Layer 1 (Z&minus;2):</strong> rapid to (35,40,Z5) with H02 active, then G00 to Z2 over the pocket center; feed to Z0, ramp to (65,40,Z&minus;1), reverse ramp to (35,40,Z&minus;2). Then run the 17-point raster at F200. The ramp starts at Z0 on already-clean air, not at the pocket floor.</p>
+<p><strong>Layer 2 (Z&minus;4):</strong> G00 Z5, reposition to (35,40), feed down to Z&minus;2 (already cleared), ramp to (65,40,Z&minus;3), reverse ramp to (35,40,Z&minus;4). Repeat the same 17-point raster.</p>
+
+<p>The 17-point center path (stepover 4 mm, tool diameter 10 mm &rarr; 6 mm overlap between rows):</p>
+<table class="data-table">
+<tr><th>#</th><th>X</th><th>Y</th><th>Purpose</th></tr>
+<tr><td>1</td><td>35</td><td>30</td><td>start of first row</td></tr>
+<tr><td>2</td><td>65</td><td>30</td><td>first row cut</td></tr>
+<tr><td>3</td><td>65</td><td>34</td><td>step up 4 mm</td></tr>
+<tr><td>4</td><td>35</td><td>34</td><td>second row</td></tr>
+<tr><td>5</td><td>35</td><td>38</td><td>step</td></tr>
+<tr><td>6</td><td>65</td><td>38</td><td>third row</td></tr>
+<tr><td>7</td><td>65</td><td>42</td><td>step</td></tr>
+<tr><td>8</td><td>35</td><td>42</td><td>fourth row</td></tr>
+<tr><td>9</td><td>35</td><td>46</td><td>step</td></tr>
+<tr><td>10</td><td>65</td><td>46</td><td>fifth row</td></tr>
+<tr><td>11</td><td>65</td><td>50</td><td>step</td></tr>
+<tr><td>12</td><td>35</td><td>50</td><td>sixth row</td></tr>
+<tr><td>13</td><td>35</td><td>30</td><td>left wall cleanup</td></tr>
+<tr><td>14</td><td>65</td><td>30</td><td>bottom wall cleanup</td></tr>
+<tr><td>15</td><td>65</td><td>50</td><td>right wall cleanup</td></tr>
+<tr><td>16</td><td>35</td><td>50</td><td>top wall cleanup</td></tr>
+<tr><td>17</td><td>35</td><td>30</td><td>return to start</td></tr>
+</table>
+
+<p><strong>Corner geometry:</strong> The tool center stays on a rectangle [35,65]&times;[30,50]. The &Oslash;10 tool sweeps a circle of radius 5 around each center point. The union traces the target rounded rectangle with R5 corners. The four center corners are the centers of the four R5 arcs — do not also round the center path corners or you will produce R10.</p>
+
+<p><strong>Coverage check:</strong> Stepover 4 mm is less than the 10 mm tool diameter, giving 6 mm overlap between adjacent rows. The four wall-cleanup passes ensure side edges and corners are fully swept. Target pocket area = 40&times;30 &minus; (4&minus;&pi;)&times;5&sup2; &asymp; 1178.5 mm&sup2;. At 4 mm depth, theoretical volume &asymp; 4714 mm&sup3;.</p>
+
+<svg viewBox="0 0 300 260" style="width:100%;max-width:380px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="60" y="15" font-size="12" font-weight="bold" fill="#333">17-Point Raster Path (top view, 5px/mm)</text>
+  <!-- pocket boundary: X30-70 Y25-55 → rect(50,50,200,150) rx25 -->
+  <rect x="50" y="50" width="200" height="150" fill="none" stroke="#54a0ff" stroke-width="1.5" rx="25"/>
+  <!-- 17-point polyline from table -->
+  <polyline points="75,175 225,175 225,155 75,155 75,135 225,135 225,115 75,115 75,95 225,95 225,75 75,75 75,175 225,175 225,75 75,75 75,175"
+    fill="none" stroke="#e67e22" stroke-width="1.5"/>
+  <!-- tool center boundary (dashed) -->
+  <rect x="75" y="75" width="150" height="100" fill="none" stroke="#27ae60" stroke-width="1" stroke-dasharray="3,2"/>
+  <!-- start point -->
+  <circle cx="75" cy="175" r="3" fill="#27ae60"/>
+  <text x="55" y="195" font-size="9" fill="#27ae60">Start (35,30)</text>
+  <text x="90" y="225" font-size="9" fill="#666">Stepover 4mm = 20px; tool Ø10 → radius 5mm = 25px inset</text>
+</svg>
+
+<h3>Drilling: Drill-Tip Breakthrough</h3>
+<p>A &Oslash;6 drill with 118&deg; point angle has a conical tip height:</p>
+<p style="text-align:center;"><strong>h = (6/2) / tan(118&deg;/2) = 3 / tan(59&deg;) &asymp; 1.8026 mm</strong></p>
+<p>Full-diameter breakthrough requires the drill tip to reach Z &le; &minus;(12 + 1.8026) = &minus;13.8026. We choose a teaching target of <strong>Z&minus;14.5</strong>, giving 0.697 mm extra breakthrough. The clearance channel below runs to Z&minus;18, leaving 3.5 mm geometric gap. Drilling uses <strong>G98</strong> (retract to initial Z50 between holes).</p>
+
+<svg viewBox="0 0 400 180" style="width:100%;max-width:400px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="80" y="15" font-size="12" font-weight="bold" fill="#333">Drill Tip Breakthrough (side view, 5px/mm)</text>
+  <!-- plate: Z0=y50, Z-12=y110 -->
+  <rect x="100" y="50" width="200" height="60" fill="#c8d6e5" stroke="#999"/>
+  <text x="160" y="85" font-size="10" fill="#333">12 mm plate</text>
+  <!-- drill cylinder: from top down to y=113.487 (Z=-12.697) -->
+  <rect x="185" y="30" width="30" height="83.487" fill="#e74c3c" opacity="0.6"/>
+  <!-- drill taper: junction (185,113.487)-(215,113.487), tip (200,122.5) -->
+  <polygon points="185,113.487 215,113.487 200,122.5" fill="#e74c3c" opacity="0.6"/>
+  <text x="225" y="60" font-size="10" fill="#e74c3c">Ø6 drill</text>
+  <!-- dimension lines -->
+  <line x1="320" y1="50" x2="320" y2="110" stroke="#333" stroke-width="1"/>
+  <text x="325" y="85" font-size="9" fill="#333">12 mm</text>
+  <line x1="345" y1="50" x2="345" y2="122.5" stroke="#e74c3c" stroke-width="1"/>
+  <text x="350" y="90" font-size="9" fill="#e74c3c">Z-14.5</text>
+  <!-- clearance bottom -->
+  <line x1="100" y1="140" x2="300" y2="140" stroke="#999" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="120" y="155" font-size="9" fill="#666">Clearance channel bottom (Z-18)</text>
+  <!-- annotations -->
+  <text x="110" y="120" font-size="9" fill="#666">Tip h=1.8mm cone height</text>
+  <text x="110" y="135" font-size="9" fill="#666">Tip below plate bottom: 2.5mm</text>
+</svg>
+
+<h2>Example: Complete Program</h2>
+<pre class="cp-code"><code>O0028 (POCKETED PLATE PROJECT)
+G21 G17 G90 G94 G40 G80 G49
+G54
+(T02 - 10mm FLAT END MILL)
+T02 M06
+S2000 M03
+G43 H02 Z50. M08
+(RAMP ENTRY LAYER 1 - Z-2)
+G00 X35. Y40.
+G00 Z2.
+G01 Z0 F200.
+G01 X65. Z-1. F60.
+G01 X35. Z-2. F60.
+G01 F200.
+(17-POINT RASTER LAYER 1)
+G01 Y30.
+G01 X65.
+G01 Y34.
+G01 X35.
+G01 Y38.
+G01 X65.
+G01 Y42.
+G01 X35.
+G01 Y46.
+G01 X65.
+G01 Y50.
+G01 X35.
+G01 Y30.
+G01 X65.
+G01 Y50.
+G01 X35.
+G01 Y30.
+G00 Z5.
+G00 X35. Y40.
+G01 Z-2. F200.
+(RAMP ENTRY LAYER 2 - Z-4)
+G01 X65. Z-3. F60.
+G01 X35. Z-4. F60.
+G01 F200.
+(17-POINT RASTER LAYER 2)
+G01 Y30.
+G01 X65.
+G01 Y34.
+G01 X35.
+G01 Y38.
+G01 X65.
+G01 Y42.
+G01 X35.
+G01 Y46.
+G01 X65.
+G01 Y50.
+G01 X35.
+G01 Y30.
+G01 X65.
+G01 Y50.
+G01 X35.
+G01 Y30.
+G00 Z50. M09
+(T03 - 6mm DRILL, 118 DEG, PECK DRILL G83)
+T03 M06
+S1500 M03
+G90 G00 G43 H03 Z50. M08
+G00 X10. Y10.
+G98 G83 X10. Y10. R2. Z-14.5 Q3. F80.
+X90. Y10.
+X90. Y70.
+X10. Y70.
+G80
+G00 Z50. M09
+M05
+G91 G28 Z0
+M30</code></pre>
+
+
+<h3>Why This Project Is Not Just a Pocket</h3>
+<p>Three small mistakes on this plate cause most beginner scrap: (1) plunging a flat end mill straight down to depth instead of ramping &mdash; the center of a flat end mill is not a cutting edge, and forcing it down loads the spindle and dulls the corners; (2) ignoring the drill point angle when calling a through-hole done at Z&minus;12 &mdash; the 118&deg; conical tip of the &Oslash;6 drill means the hole is not through until the drill tip reaches about Z&minus;13.8, and this program uses Z&minus;14.5 to leave 2.5 mm below the plate bottom; (3) setting G54 at the lower-left corner on the raw stock top instead of the faced top, which puts every Z depth off by the facing stock.</p>
+<p>The two-layer step-down (Z&minus;2 then Z&minus;4) exists because a 4 mm axial depth on a &Oslash;10 tool in aluminum is at the edge of what a typical classroom spindle can hold under full width of cut. Taking two layers also gives a cleaner floor: the first layer rough-cuts, the second layer cleans the bottom. Stepover 4 mm (40% of diameter) is a conservative classroom choice; real aluminum pocketing often uses 50&ndash;70% stepover, but only when the machine, toolholder, and coolant can support it.</p>
+<p>After the first pocket, measure the opening X30&ndash;70 and Y25&ndash;55 with calipers and the depth Z&minus;4 with a depth micrometer. If the pocket is uniformly oversized by 0.1 mm, diagnose the cause &mdash; tool deflection, a worn corner, or a wrong tool diameter &mdash; before changing any offset. This program runs G40 (no cutter compensation), so the D offset does not move the tool path. Do not change G54 to fix a wall width; G54 shifts the whole part, which moves the holes with it.</p>
+
+<h3>Workholding and Setup Detail</h3>
+<p>The plate is held in a precision milling vise. The fixture model on this page assumes support contacts the plate bottom at Z&minus;12, with a clearance channel of at least 5 mm radius around each hole running to Z&minus;18. The vise jaws are at X&le;4 and X&ge;96, Y32&ndash;48, so they do not interfere with the pocket (X30&ndash;70, Y25&ndash;55) or the holes. Verify the actual clearance on your machine before running.</p>
+<p>G54 is set at the lower-left corner on the faced top surface: X at the left edge, Y at the front edge, Z at the top. To set X, edge-find the left edge with a &Oslash;10 edge finder, offset by 5 mm (the edge finder radius), and enter the resulting machine X. To set Y, edge-find the front edge the same way. To set Z with the absolute tool-length model used on this page: touch off the top surface with T02, read the gauge-line machine Z, and enter G54 Z = gauge-machine-Z &minus; H02 (where H02 is the measured tool length). Verify G54 by touching the lower-left corner at low feed.</p>
+<p>The four holes are at the positions listed in the drilling section of the program. Before drilling, a center drill or spot drill prevents walk. The drill itself is a &Oslash;6 twist drill, 118&deg; point. The program uses G83 (peck drilling) with Q3 for chip clearance; G81 does not accept a Q peck word. For a shallower hole you could drop to G81, but keep peck if chips pack.</p>
+
+<h3>Drill Break-Through and Coolant</h3>
+<p>The 118&deg; drill point means the hole is not through when the tip reaches Z&minus;12. For a &Oslash;6 drill, the conical tip height is h = 3 / tan(59&deg;) &asymp; 1.80 mm below the full-diameter cylinder. Full-diameter breakthrough therefore requires the tip to reach about Z&minus;13.8. This program uses Z&minus;14.5, leaving 2.5 mm of tip below the plate bottom (and the full-diameter edge about 0.697 mm below the plate bottom). The clearance channel below runs to Z&minus;18, so the drill does not hit the fixture.</p>
+<p>Coolant on through-holes in 12 mm plate: flood through the spindle, aimed at the hole. At breakthrough, the coolant washes chips out the bottom; without it, chips pack in the flutes and snap the drill. Peck (G83 with Q3) retracts the chip out on each step. If chips still pack, reduce Q. Do not add peck to a shallow hole that already evaculates cleanly &mdash; it only adds time.</p>
+<p>After drilling, inspect: hole positions with height gauge or CMM, hole diameter with a gauge pin, hole depth with a depth micrometer. If hole positions are uniformly shifted by +20 mm in X, G54 X is off. If holes are oversized, the drill walked (spot-drill was too shallow) or the drill is dull. Diagnose before re-drilling.</p>
+
+<h3>Why a Milling Project Is the First Real Mill Program</h3>
+<p>After isolated G01 and G81 examples, this milling project ties them together: a two-layer pocket raster, wall cleanup, drill breakthrough math, H offsets, and G54. It uses one raw plate and one setup, which is how real mill work flows. The pocket is 40&times;30 mm, 4 mm deep, with R5 internal corners; the four &Oslash;6 through-holes are positioned from the lower-left corner. After running it, you will have a physical part with every feature you programmed, and you will have measured every dimension.</p>
+
+<h3>Pocket Path: Two Layers and the 17-Point Raster</h3>
+<p>The pocket target is X30&ndash;70 by Y25&ndash;55, 4 mm deep. The tool center path is inset by the 5 mm tool radius, so it runs X35&ndash;65 by Y30&ndash;50. Stepover 4 mm between rows gives 6 mm overlap. The 17-point table above lists every center position: six raster rows, then four wall-cleanup passes, then a return to start. Entry is a 30 mm ramp dropping 1 mm per layer (about 1.9&deg;), not a straight plunge. The first layer reaches Z&minus;2, the second reaches Z&minus;4.</p>
+<p>If the tool is not center-cutting, you must drill a start hole before ramping. The &Oslash;10 end mill on this page is assumed center-cutting. The R5 internal corners of the pocket match the tool radius, so the tool sweeps them exactly; do not also round the center-path corners, or you will produce R10.</p>
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Only cutting the pocket boundary</strong> — leaves material in the center. You must raster through the interior.</li>
+<li><strong>Plunging straight to depth</strong> — a flat end mill center has zero cutting speed; ramp or drill a start hole first.</li>
+<li><strong>Adding G41/G42 on top of center-programmed coordinates</strong> — double offset. Since we program tool center directly, stay in G40.</li>
+<li><strong>Forgetting the drill tip</strong> — Z&minus;12 does not break through a 12 mm plate with an 118&deg; drill; use Z&minus;14.5.</li>
+<li><strong>Not changing H offset after tool change</strong> — T03 must use H03, not still H02.</li>
+<li><strong>Rounding pocket corners on the center path</strong> — the R5 corner comes from the tool radius, not from arcing the center path.</li>
+</ul>
+
+<h2>Practice</h2>
+<p><strong>1.</strong> Pocket depth target is 4.00 &plusmn; 0.05 mm. You measure 3.92 mm. Is it acceptable?</p>
+<details><summary>Show answer</summary><p>No. 3.92 is below the lower limit of 3.95. The pocket is too shallow by 0.08 mm — you need an additional depth pass.</p></details>
+<p><strong>2.</strong> For a &Oslash;8 drill with 118&deg; point, what is tip height h? On a 10 mm plate, what Z target gives 0.5 mm breakthrough?</p>
+<details><summary>Show answer</summary><p>h = 4/tan(59&deg;) = 4/1.664 = 2.404 mm. Full breakthrough at Z = &minus;(10 + 2.404) = &minus;12.404. Add 0.5 mm: target Z = &minus;12.904.</p></details>
+<p><strong>3.</strong> The tool center boundary is X35&ndash;65, Y30&ndash;50. What is the actual pocket corner radius, and why?</p>
+<details><summary>Show answer</summary><p>R5. The &Oslash;10 tool sweeps a 5 mm circle around each center point. The center path corners are the centers of the R5 arcs. If you also arc the center path, you produce R10.</p></details>
+
+<section class="cp-sources">
+<h3>Why the Two Layers Are Z-2 and Z-4</h3>
+<p>The pocket in this classroom example is 4 mm deep and is roughed in two 2 mm axial layers, with separate wall and floor finishing passes afterwards. Entry is by ramp rather than straight plunge: each 1 mm of vertical depth is spread over 30 mm horizontal run, which is an angle of arctan(1/30) &asymp; 1.91&deg;. Layer 1 ramps 0 &rarr; &minus;1 &rarr; &minus;2; layer 2 ramps &minus;2 &rarr; &minus;3 &rarr; &minus;4. These numbers are a geometric classroom assumption &mdash; the actual axial depth and ramp angle that a specific &Oslash;10 center-cutting end mill can take must be confirmed from the tool manufacturer's data and the machine's rigidity. Before any cut, review the full toolpath, fixture envelope, and holder reach; the clearance height (Z+1 in the example) is an assumed value, not a universal safe height, and must be verified against the actual clamps.</p>
+
+<h2>Sources</h2>
+<ul>
+<li>Haas Automation Milling Operator's Manual — G83 peck drilling cycle, G98/G99 return modes, G40/G41/G42 compensation.</li>
+<li>Drill point geometry: 118&deg; standard twist drill point angle; tip height h = (D/2)/tan(&theta;/2).</li>
+<li>All speeds, feeds, stepover, and ramp angles are classroom teaching assumptions, not manufacturer recommendations.</li>
+</ul>
+</section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/26-common-mistakes/">&larr; Common Mistakes</a><a href="/cnc-manufacturing-engineering/cnc-programming/27-turning-project/">Turning Project &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

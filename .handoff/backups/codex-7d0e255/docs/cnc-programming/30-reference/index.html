@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Quick Reference — CNC Programming</title>
+<meta name="description" content="One-page lookup of common G-codes, M-codes, addresses, canned cycles, and formulas used in CNC programming.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/30-reference/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article cp-article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Quick Reference</h1>
+<p class="lead">A one-page lookup of the most common G-codes, M-codes, and formulas. Use this while working — not while learning. For explanations, follow the links to each topic.</p>
+
+<figure class="cp-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 370 240" role="img" aria-labelledby="haas-groups-title haas-groups-desc" style="width:100%;max-width:520px;height:auto;display:block;margin:auto;font-family:Inter,system-ui,sans-serif"><title id="haas-groups-title">Haas mill modal groups</title><desc id="haas-groups-desc">Six boxes show the Haas mill groups; group zero is non-modal.</desc><rect x="15" y="20" width="160" height="54" fill="#e6f4f2" stroke="#0b766e"/><text x="23" y="40" font-size="13" fill="#17242f">Motion / 01</text><text x="23" y="62" font-size="12" fill="#17242f">G00 G01 G02 G03</text><rect x="190" y="20" width="160" height="54" fill="#e6f4f2" stroke="#0b766e"/><text x="198" y="40" font-size="13" fill="#17242f">Plane / 02</text><text x="198" y="62" font-size="12" fill="#17242f">G17 G18 G19</text><rect x="15" y="90" width="160" height="54" fill="#e6f4f2" stroke="#0b766e"/><text x="23" y="110" font-size="13" fill="#17242f">Units / 06</text><text x="23" y="132" font-size="12" fill="#17242f">G20 G21</text><rect x="190" y="90" width="160" height="54" fill="#e6f4f2" stroke="#0b766e"/><text x="198" y="110" font-size="13" fill="#17242f">Cutter comp / 07</text><text x="198" y="132" font-size="12" fill="#17242f">G40 G41 G42</text><rect x="15" y="160" width="160" height="54" fill="#e6f4f2" stroke="#0b766e"/><text x="23" y="180" font-size="13" fill="#17242f">Drilling / 09</text><text x="23" y="202" font-size="12" fill="#17242f">G80 G81 G83 G84</text><rect x="190" y="160" width="160" height="54" fill="#e6f4f2" stroke="#0b766e"/><text x="198" y="180" font-size="13" fill="#17242f">Non-modal / 00</text><text x="198" y="202" font-size="12" fill="#17242f">G04 G28</text></svg><figcaption>The group number is not the G-code number. The one-active-mode rule describes modal groups; group 00 is non-modal.</figcaption></figure>
+
+<h2>G-Codes</h2>
+<div class="cp-table-wrap"><table class="data-table"><caption>G-Codes</caption>
+<tr><th scope="col">Code</th><th scope="col">Function</th><th scope="col">Modal?</th></tr>
+<tr><td>G00</td><td>Rapid positioning</td><td>Yes (motion group)</td></tr>
+<tr><td>G01</td><td>Linear feed interpolation</td><td>Yes</td></tr>
+<tr><td>G02</td><td>Clockwise circular arc</td><td>Yes</td></tr>
+<tr><td>G03</td><td>Counterclockwise circular arc</td><td>Yes</td></tr>
+<tr><td>G04</td><td>Dwell (P / X seconds)</td><td>No (one block)</td></tr>
+<tr><td>G17/G18/G19</td><td>XY / XZ / YZ plane selection</td><td>Yes</td></tr>
+<tr><td>G20/G21</td><td>Inch / millimeter units</td><td>Yes</td></tr>
+<tr><td>G40/G41/G42</td><td>Cutter comp off / left / right</td><td>Yes</td></tr>
+<tr><td>G43/G49</td><td>Tool length comp on / off</td><td>Yes</td></tr>
+<tr><td>G53</td><td>Machine coordinates (one block)</td><td>No</td></tr>
+<tr><td>G54–G59</td><td>Work coordinate systems</td><td>Yes</td></tr>
+<tr><td>G70</td><td>Finish turning cycle (lathe, Group 00 non-modal on Haas)</td><td>No</td></tr>
+<tr><td>G71</td><td>Rough turning cycle (lathe, Group 00 non-modal on Haas)</td><td>No</td></tr>
+<tr><td>G76</td><td>Threading cycle (lathe, Group 00 non-modal on Haas)</td><td>No</td></tr>
+<tr><td>G80</td><td>Cancel canned cycle</td><td>Yes</td></tr>
+<tr><td>G81</td><td>Drilling cycle</td><td>Yes</td></tr>
+<tr><td>G82</td><td>Drill with dwell</td><td>Yes</td></tr>
+<tr><td>G83</td><td>Peck drilling cycle</td><td>Yes</td></tr>
+<tr><td>G84</td><td>Right-hand tapping cycle</td><td>Yes</td></tr>
+<tr><td>G85</td><td>Boring cycle</td><td>Yes</td></tr>
+<tr><td>G90/G91</td><td>Absolute / incremental</td><td>Yes</td></tr>
+<tr><td>G94/G95</td><td>Feed per minute / per revolution</td><td>Yes</td></tr>
+<tr><td>G96/G97</td><td>Constant surface speed / fixed RPM</td><td>Yes</td></tr>
+<tr><td>G98/G99</td><td>Cycle retract to initial / R plane</td><td>Yes</td></tr>
+</table></div>
+
+<h2>M-Codes</h2>
+<div class="cp-table-wrap"><table class="data-table"><caption>M-Codes</caption>
+<tr><th scope="col">Code</th><th scope="col">Function</th></tr>
+<tr><td>M00</td><td>Program stop (unconditional)</td></tr>
+<tr><td>M01</td><td>Optional stop (switch-dependent)</td></tr>
+<tr><td>M03/M04/M05</td><td>Spindle CW / CCW / stop</td></tr>
+<tr><td>M06</td><td>Tool change (mill)</td></tr>
+<tr><td>M08/M09</td><td>Coolant on / off</td></tr>
+<tr><td>M30</td><td>Program end and rewind</td></tr>
+<tr><td>M98</td><td>Call subprogram</td></tr>
+<tr><td>M99</td><td>Return from subprogram</td></tr>
+</table></div>
+
+<h2>Common Formulas</h2>
+<ul>
+<li><strong>RPM</strong> = Vc &times; 1000 / (&pi; &times; D)</li>
+<li><strong>Feed (mm/min)</strong> = fz &times; flutes &times; RPM</li>
+<li><strong>Feed (mm/rev)</strong> = mm/min / RPM</li>
+<li><strong>Cutting time</strong> = distance / feed</li>
+<li><strong>MRR (mm&sup3;/min)</strong> = width &times; depth &times; feed</li>
+<li><strong>Tap feed</strong> = pitch &times; RPM</li>
+<li><strong>Drill tip height</strong> = (D/2) / tan(point_angle/2)</li>
+</ul>
+
+
+<h3>How to Read These Tables</h3>
+<p>This reference lists the most common G- and M-codes used on a typical Haas-style mill and lathe. The "Modal" column tells you whether the code stays active after one block (Yes) or applies only to the block it is called in (No). Group 00 codes (like G70/G71 on a lathe) are non-modal: they run once and then the machine returns to whatever motion mode was active before. If you expected G71 to stay on and it did not, check the modal group &mdash; it is not a bug, it is how the control is designed.</p>
+<p>When in doubt, look up your exact controller model. FANUC, Siemens, Heidenhain, and Haas all use overlapping but not identical code sets. A code that means one thing on Haas may mean something else on FANUC &mdash; for example, G90 on a Haas lathe is a stock-removal cycle, not absolute mode. The startup block at the top of every program exists precisely to put the machine in a known state, so these differences cannot leak into the cut.</p>
+<p>Use this page as a lookup, not as a tutorial. If a code here is unfamiliar, go back to the lesson that explains it &mdash; the code table alone will not teach you how to use it safely.</p>
+
+<h3>M-Codes Are Machine-Specific</h3>
+<p>M03/M04/M05 (spindle on fwd/rev/off) and M08/M09 (coolant on/off) are universal. M06 (tool change) on a Haas mill is a carousel rotation; on a machining center with a magazine it may be a 5-second ATC. M30 (program end and reset) returns to the top on Haas; M02 does not. The exact behavior of M-codes outside the universal list &mdash; M19 spindle orientation, M41/M42 gear range, M54 pallet change &mdash; is defined by the machine builder. Always check your manual before relying on a non-standard M code.</p>
+<p>One block on Haas mills carries only one M code. If you need spindle on and coolant on, write two blocks: S1000 M03, then M08. Combining them in one block can alarm or ignore the second M on some controls. This is a Haas-specific rule; FANUC allows more than one M per block in some configurations.</p>
+<h3>Check the Machine Column Before Reusing a Code</h3><p>A code number without a machine type is incomplete information. On the Haas mill, G98 and G99 select the drilling return level. On the Haas lathe, those numbers select feed per minute and feed per revolution. For example, F0.20 at 1000 rpm gives 200 mm/min only when the lathe is in feed-per-revolution mode. A reference lookup should therefore record the machine, units and active group before interpreting the number. Never copy a mill startup block into a lathe simply because both programs use G21 and G54.</p>
+<h2>Common Mistakes</h2>
+<p>This page is intentionally brief. For each code, follow the link to the detailed lesson. M-codes are machine-specific — always verify against your manual.</p>
+
+
+<h3>About This Reference</h3>
+<p>This page is a quick lookup, not a tutorial. For how each G/M code is used in a real program, follow the links to the relevant lesson. For controller-specific differences (FANUC vs Siemens vs Heidenhain vs Haas), see the controller dialects lesson. The codes listed here are Haas-mill baseline; M-codes especially vary by machine and by builder &mdash; always confirm against your machine's manual before using an unfamiliar M code.</p>
+<h2>Quick Self-Test</h2>
+<p><strong>1.</strong> Quick: G83 is what?</p>
+<details><summary>Ans</summary><p>Peck drilling cycle (G83 with Q peck depth).</p></details>
+<p><strong>2.</strong> Quick: M08?</p>
+<details><summary>Ans</summary><p>Coolant on.</p></details>
+<p><strong>3.</strong> Quick: G41?</p>
+<details><summary>Ans</summary><p>Cutter radius compensation, left side of cut direction.</p></details>
+<p><strong>4.</strong> Quick: G96?</p>
+<details><summary>Ans</summary><p>Constant surface speed (CSS) on a lathe — RPM varies with diameter.</p></details>
+
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/29-subprograms/">&larr; Subprograms</a><a href="/cnc-manufacturing-engineering/cnc-programming/31-learning-path/">Learning Path &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

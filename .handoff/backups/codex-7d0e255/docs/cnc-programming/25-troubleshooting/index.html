@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Diagnosing Program Problems — CNC Programming</title>
+<meta name="description" content="Systematic troubleshooting of CNC program errors: wrong motion, wrong dimensions, alarms, overtravel, arc errors, and surface finish problems.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Diagnosing Program Problems</h1>
+<p class="lead">When the machine does something unexpected, systematic diagnosis beats trial and error. This page covers common symptoms, where to look, and how to fix each category of programming error without compounding the problem.</p>
+
+<h2>Concept</h2>
+<p>Program problems fall into four categories: <strong>motion errors</strong> (tool goes where it should not), <strong>dimension errors</strong> (part size is wrong), <strong>alarm errors</strong> (machine stops with a fault), and <strong>surface errors</strong> (finish or tool condition is poor). Each category has a diagnostic path: read the alarm, check the modal state, verify coordinates on paper, then make one change and observe.</p>
+
+<h2>Why It Matters</h2>
+<p>The #1 debugging mistake is changing a random line and re-running. This compounds errors: you fix one symptom but break another, and you lose track of what actually caused the problem. Systematic diagnosis — read, check one thing at a time, change one variable — is the engineering habit that prevents crashes and scrap.</p>
+
+<h2>How It Works</h2>
+
+<h3>Symptom → Cause → Check Table</h3>
+<table class="data-table">
+<tr><th>Symptom</th><th>Likely Cause</th><th>What to Check</th></tr>
+<tr><td>Tool goes wrong direction</td><td>G90/G91 distance mode</td><td>Is absolute or incremental active?</td></tr>
+<tr><td>Dimensions off by 25.4&times;</td><td>Units mismatch</td><td>G20 (inch) vs G21 (metric)</td></tr>
+<tr><td>Hole at wrong position</td><td>Work offset wrong</td><td>Is G54 X/Y correct? Accidentally on G55?</td></tr>
+<tr><td>Arc alarm or wrong geometry</td><td>Center/radius inconsistency</td><td>Check S/E/C radii; on Haas G17, I/J are increments from start</td></tr>
+<tr><td>Cycle drills extra holes</td><td>Missing G80</td><td>Was the cycle cancelled after the pattern?</td></tr>
+<tr><td>Tool crashes at cut depth</td><td>No Z retract before XY move</td><td>Was G00 Z50 before any XY move?</td></tr>
+<tr><td>Tool cuts at wrong diameter</td><td>X treated as radius on lathe</td><td>X is diameter; radial depth = (X1-X2)/2</td></tr>
+<tr><td>Dimension off by tool radius</td><td>Cutter comp not active</td><td>Is G41/G42 on? Is D offset correct?</td></tr>
+<tr><td>Spindle wrong direction</td><td>M03/M04 reversed</td><td>Check the S line and M03/M04</td></tr>
+<tr><td>Feed too fast/slow</td><td>G94 vs G95 mode</td><td>F in mm/min vs mm/rev</td></tr>
+</table>
+
+<h3>Diagnosis Procedure</h3>
+<ol>
+<li><strong>Read the alarm</strong> — the alarm number and message tell you what the controller thinks is wrong. Do not clear it before reading it.</li>
+<li><strong>Check modal state</strong> — on the controller, display active G codes. Is G90 or G91 active? G20 or G21? G41 or G40? G80 or a cycle?</li>
+<li><strong>Verify on paper</strong> — trace the program from the start. Where should the tool be at each line? Compare to where it actually is.</li>
+<li><strong>Make one change</strong> — fix one thing, then run again. Do not change three lines at once.</li>
+<li><strong>Observe</strong> — use single-block mode and dry run to watch the corrected motion before full cut.</li>
+</ol>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <rect x="20" y="20" width="100" height="40" fill="#e74c3c" rx="4"/>
+  <text x="70" y="45" font-size="11" fill="white" text-anchor="middle">Symptom</text>
+  <line x1="120" y1="40" x2="160" y2="40" stroke="#666" stroke-width="1.5"/>
+  <rect x="160" y="20" width="100" height="40" fill="#f39c12" rx="4"/>
+  <text x="210" y="45" font-size="11" fill="white" text-anchor="middle">Read Alarm</text>
+  <line x1="260" y1="40" x2="300" y2="40" stroke="#666" stroke-width="1.5"/>
+  <rect x="300" y="20" width="80" height="40" fill="#3498db" rx="4"/>
+  <text x="340" y="45" font-size="11" fill="white" text-anchor="middle">Check State</text>
+  <rect x="20" y="100" width="100" height="40" fill="#27ae60" rx="4"/>
+  <text x="70" y="125" font-size="11" fill="white" text-anchor="middle">One Fix</text>
+  <line x1="120" y1="120" x2="160" y2="120" stroke="#666" stroke-width="1.5"/>
+  <rect x="160" y="100" width="100" height="40" fill="#27ae60" rx="4"/>
+  <text x="210" y="125" font-size="11" fill="white" text-anchor="middle">Observe</text>
+  <line x1="260" y1="120" x2="300" y2="120" stroke="#666" stroke-width="1.5"/>
+  <rect x="300" y="100" width="80" height="40" fill="#2c3e50" rx="4"/>
+  <text x="340" y="125" font-size="11" fill="white" text-anchor="middle">Done</text>
+</svg>
+<figcaption>Systematic diagnosis: symptom → read alarm → check modal state → one fix → observe. Never change multiple lines at once.</figcaption>
+</figure>
+
+<h2>Example</h2>
+<p><strong>Scenario (Case A):</strong> Program hole at X30 Y10. Expected machine position with G54=(-300,-200) is (-270,-190). If measured hole lands 20 mm in +X, check whether G54 X was entered as -280 instead of -300:</p>
+<ol>
+<li>Is G90 (absolute) active? Check the modal display. If G91 (incremental) is active, X30 means "move 30 mm from current position," not "go to X30."</li>
+<li>Measure the actual hole position relative to the part datum first.</li>
+<li>Check G54 display: if X origin was entered as -280 instead of -300, the hole shifts +20 mm.</li>
+<li>Are you running the correct program? Check the O number on the controller display. Machine shops have dozens of similar programs.</li>
+</ol>
+<p>Under the no-rotation/no-scale/no-additional-offset assumption, if measurement confirms a constant +20 mm X shift and the controller G54 X is indeed -280, correct it to -300. Multiple shifted holes alone do not prove this; verify the actual datum.</p>
+
+
+<h3>Unexpected Tool Motion</h3>
+<p>If the tool moves where you did not expect, suspect modal state: leftover G91, active G81, wrong plane G18/G19, or inherited G41/G42. Check the modal display on the controller, not just the current line.</p>
+
+<h3>Wrong Direction or Wrong Coordinates</h3>
+<p>A part cut on the wrong side usually means G90/G91 confusion, wrong work offset (G54 vs G55), or mirrored axes. Re-measure, re-check offsets, and verify the part zero matches the drawing datum.</p>
+
+<h3>Tool Wear and Surface Finish</h3>
+<p>Poor finish, chatter marks, or dimensional drift all point to tool wear or rigidity. Replace the insert, check overhang, and confirm the workholding before blaming the program.</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <circle cx="120" cy="90" r="4" fill="#27ae60"/>
+  <text x="120" y="110" font-size="10" fill="#27ae60" text-anchor="middle">correct (-270,-190)</text>
+  <circle cx="220" cy="90" r="4" fill="#c0392b"/>
+  <text x="220" y="110" font-size="10" fill="#c0392b" text-anchor="middle">wrong (-250,-190)</text>
+  <line x1="120" y1="90" x2="220" y2="90" stroke="#333" stroke-dasharray="4,2"/>
+  <text x="170" y="80" font-size="10" fill="#333" text-anchor="middle">+20 mm X</text>
+  <text x="200" y="150" font-size="10" fill="#666" text-anchor="middle">Case A: G54 X off by 20 mm</text>
+</svg>
+<figcaption>Case A: correct vs wrong machine position; hole shifts +20 mm in X.</figcaption>
+</figure>
+
+
+<h3>Chatter and Vibration</h3>
+<p>Chatter leaves a wave pattern on the surface. Causes include tool overhang, weak workholding, spindle speed near resonance, or worn inserts. Reduce overhang, increase rigidity, and change speed before changing feed.</p>
+
+<h3>Dimensional Drift</h3>
+<p>If parts start on-size and drift over a shift, suspect thermal growth, tool wear, or workholding loosening. Warm up the spindle, re-check offsets, and monitor temperature.</p>
+
+<h3>Chip Control Problems</h3>
+<p>Long birds' nests wrap around the tool or part. Adjust feed and speed, use a chip breaker geometry, or add pecking. Chips that do not evacuate scratch the finish and can break the tool.</p>
+
+<h3>Alarm Codes</h3>
+<p>Treat alarm codes as clues, not as instructions. Look up the code in the machine manual, understand the condition, and clear it. Resetting repeatedly without understanding damages the machine and the part.</p>
+
+<h3>Separating Program Errors from Setup Errors</h3>
+<p>A part dimension that is consistently off by the same amount points to an offset error. A dimension that varies between parts points to workholding, tool wear, or thermal growth. A move that goes the wrong way points to a program or modal error. Diagnose the pattern before changing code.</p>
+
+<h3>Wrong Tool Offset Sign</h3>
+<p>If a bore cuts too small on the inside or too deep on the outside, the offset sign may be reversed relative to the controller. Re-check the H/D value against the touch-off procedure on this specific machine.</p>
+
+<h3>Wrong Cutter Compensation Side</h3>
+<p>For positive cutter compensation, G41 places the tool center to the left of the programmed path, and G42 places it to the right, viewed along the direction of travel. First identify the finished boundary and the side of material to retain, then choose the required tool-center side. For example, moving along +X on Y0 with retained material at Y<0 requires the center on Y>0, the left side, so use G41. Verify the lead-in and the controller's compensation convention.</p>
+
+<h3>Feed or Speed Alarm</h3>
+<p>A spindle overload alarm means the cut is too heavy for the tool or machine. Reduce depth of cut, feed, or speed; do not reset and run the same cut again.</p>
+
+<h3>Overtravel Alarm</h3>
+<p>Overtravel usually means the program expects coordinates beyond the envelope, or a work offset sends motion into a limit. Follow the machine's recovery procedure, then verify the offset and envelope.</p>
+
+<h3>Surface Finish Worse Than Expected</h3>
+<p>Compare to tool condition, nose radius, feed per rev, and buildup. A worn insert or built-up edge also affects dimensions and finish; do not assume finish issues are separate from size.</p>
+
+<h3>Part Not Where the Drawing Says</h3>
+<p>If features are translated as a group, suspect work zero. If individual features vary, suspect tool wear or deflection. Measure before changing anything.</p>
+
+<h3>Bolt Hole Circle Out of Position</h3>
+<p>If a bolt circle is rotated or shifted, the center coordinate or work zero is off. Re-measure the center from the datums. Do not rotate individual holes.</p>
+
+<h3>Bore Size Wrong</h3>
+<p>A bore that is off size requires checking target diameter, wear, deflection, and measurement before adjusting the offset.</p>
+
+<h3>Thread Not Accepting the Gauge</h3>
+<p>If the GO does not enter, check depth, pitch, and spindle/feed sync. If NO-GO enters, material is already removed and the part is likely scrap.</p>
+
+<h3>Program Crashes on a Move That Was Fine Before</h3>
+<p>Something in the setup changed: a clamp moved, a tool got longer, or a different stock was loaded. Re-verify the changed variable, not the whole program.</p>
+
+<h3>Establishing a Diagnostic Habit</h3>
+<p>Write down the symptom, the suspected cause, and the actual fix after every issue. Over time this becomes the shop's troubleshooting knowledge base. Same symptom next month is no longer a mystery.</p>
+
+<h3>Tool Breakage</h3>
+<p>When a tool breaks, stop, inspect, and replace. Do not try to continue with a broken tool — it will wreck the part and possibly the spindle. Note the cut conditions that caused it and reduce them on the next run.</p>
+
+<h3>Dimensional Error That Changes Over Time</h3>
+<p>If parts drift gradually, suspect tool wear or thermal growth. Record dimensions over a batch and re-offset when drift crosses a threshold.</p>
+
+<h3>Surface Integrity Issues</h3>
+<p>Burn marks, white layer, or work hardening are hypotheses to verify — speed, feed, grade, and coolant all play a role. Do not assume a single cause.</p>
+
+<h3>Machine-Related Issues</h3>
+<p>Not every issue is a program bug. Loose belts, worn ballscrews, or faulty encoders cause real machine errors. If symptoms repeat across programs on the same machine, investigate the machine, not the code.</p>
+
+<h3>When to Escalate</h3>
+<p>If the cause is not identified after structured diagnosis, escalate to a more experienced operator or maintenance. Bring the symptom history, not just the latest part.</p>
+
+<h3>Using Data to Troubleshoot</h3>
+<p>Record dimensions across parts. Trends suggest wear, thermal growth, or workholding; outliers suggest setup or tool events. Numbers beat intuition.</p>
+
+<h3>When to Stop the Batch</h3>
+<p>If one part is out of spec, stop and find the cause before running more. Do not hope the next one will be fine. Scrap piles grow from ignored outliers.</p>
+
+<h3>Root Cause, Not Symptom</h3>
+<p>If the bore is small, adjusting the offset treats the symptom. Find out why the bore went small: tool wear? Deflection? Thermal? Fix the root cause, then adjust offset.</p>
+
+<h3>Documentation of Every Fix</h3>
+<p>Write down what worked. A troubleshooting fix that only lives in your head is lost when you are not at the machine. Keep a simple log on the setup sheet or in the program comments.</p>
+
+<h3>Common False Leads</h3>
+<p>The most obvious cause is often not the real one. Before editing the program, check the simple things: clamp tight? tool seated? offset correct? Most "program bugs" are setup errors.</p>
+
+<h3>Building a Troubleshooting Mindset</h3>
+<p>Every crash is a lesson. What assumption turned out to be wrong? Write it down. Over time you will recognize patterns before they become crashes.</p>
+
+<h3>Working with Maintenance</h3>
+<p>When the machine itself is suspect, describe symptoms precisely: alarm numbers, repeatability, sounds, dimensions. Maintenance can act on data, not on "it feels wrong."</p>
+
+<h3>Sharing What You Learned</h3>
+<p>Tell the next operator about the issue. A problem fixed in isolation repeats on the next shift. Communication on the shop floor prevents repeat scrap.</p>
+
+<h3>Summary</h3>
+<p>Good troubleshooting is systematic: observe, hypothesize, test, verify. Rushing leads to repeated scrap.</p>
+
+<h3>Closing the Loop</h3>
+<p>After a fix, run a few parts and confirm the symptom is gone. Do not declare victory after one good part; verify the fix is repeatable.</p>
+<h3>Arc Radius Consistency Check</h3>
+<p>For an arc from S(0,0) to E(50,0) with center C(25,0), both radii are 25 mm. If C(20,0), the two radii are 20 and 30 — inconsistent, and the controller will alarm before cutting a "lopsided" arc.</p>
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Guessing and re-running</strong> — change one thing at a time. Multiple changes at once make it impossible to know what fixed it.</li>
+<li><strong>Ignoring the alarm text</strong> — the alarm number usually points directly to the problem. Read it before clearing.</li>
+<li><strong>Changing the program before diagnosing</strong> — first check G90/G91, actual datum, active offset, and program version. Only edit code after the cause is confirmed.</li>
+<li><strong>Running full speed for diagnosis</strong> — use single-block and a feed override set per the machine's first-article procedure.</li>
+<li><strong>Forgetting to check which program is loaded</strong> — O1001 and O1011 can be confused at a glance.</li>
+</ul>
+
+<h2>Practice</h2>
+<p><strong>1.</strong> The part comes out 25.4&times; too small. What happened?</p>
+<details><summary>Ans</summary><p>Units mismatch: the program uses mm (G21) but the machine is in inch mode (G20), or vice versa. 1 inch = 25.4 mm. Check the active units modal.</p></details>
+<p><strong>2.</strong> After drilling four holes, the next X/Y move makes an unexpected hole. Why?</p>
+<details><summary>Ans</summary><p>Missing G80 after the hole pattern. The drilling cycle stayed modal, so the next X/Y position triggered another drill cycle. Add G80.</p></details>
+<p><strong>3.</strong> How do you verify which program is loaded on the controller?</p>
+<details><summary>Ans</summary><p>Check the O number on the controller display. Machine shops have many programs with similar names; always confirm the O number before running.</p></details>
+<p><strong>4.</strong> Arc from S(0,0) to E(50,0) with center C(20,0). Why does the controller alarm?</p>
+<details><summary>Ans</summary><p>Start radius from C(20,0) to S(0,0) is 20 mm; end radius to E(50,0) is 30 mm. The two endpoints are not on the same circle, so the controller alarms.</p></details>
+
+
+<h2>Sources</h2>
+<ul>
+<li>Haas Automation, G41 Cutter Compensation Left. <a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G41.html" target="_blank" rel="noopener">haascnc.com</a>.</li>
+<li>Haas Automation, G02 / G03 Circular Interpolation. <a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G02.html" target="_blank" rel="noopener">haascnc.com</a>.</li>
+</ul>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/24-verification/">&larr; Verification</a><a href="/cnc-manufacturing-engineering/cnc-programming/26-common-mistakes/">Common Mistakes &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

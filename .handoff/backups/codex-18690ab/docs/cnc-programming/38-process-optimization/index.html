@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Cycle Time & Process Improvement — CNC Programming</title>
+<meta name="description" content="Cycle time analysis, where time goes, optimization levers, tool life vs cycle time tradeoff, and safe process improvement.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/38-process-optimization/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Cycle Time &amp; Process Improvement</h1>
+<p class="lead">Once a program runs correctly and safely, the next question is: how fast can it run? This page covers cycle time analysis, where time actually goes, the levers you can pull, and the tool-life tradeoffs that separate smart optimization from reckless speeding.</p>
+<svg viewBox="0 0 320 120" style="width:100%;max-width:420px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+<title>Where to save time</title>
+<rect x="20" y="30" width="180" height="24" fill="#54a0ff" rx="3"/><text x="30" y="46" font-size="10" fill="#fff">Cut time (hard to shave)</text>
+<rect x="200" y="30" width="100" height="24" fill="#2ecc71" rx="3"/><text x="208" y="46" font-size="10" fill="#fff">Load (easy)</text>
+<text x="20" y="80" font-size="10" fill="#666">Cut 60s, load 20s, total 80s. Cut -10% = 6s; load -50% = 10s. Compare seconds.</text>
+<text x="20" y="100" font-size="10" fill="#666">Measure each element separately before claiming savings.</text>
+</svg>
+
+<h2>Concept</h2>
+<p><strong>Cycle time</strong> is the total time from program start (M30 reset) to part complete, including every move: rapid, feed, tool change, spindle start, and dwell. Optimization means reducing that total time — but not by simply cranking feed to maximum. Real optimization is about eliminating waste: shorter rapid paths, fewer tool changes, deeper cuts that stay within tool ratings, and smarter hole ordering.</p>
+
+<h2>Why It Matters</h2>
+<p>A 10-second saving per part on a 10,000-part run is 100,000 seconds = 27.8 hours of machine time. That is over a full week of available production time. Small per-part improvements compound across volume. But pushing feed too hard breaks tools, causes chatter, and scraps parts — optimization is a balance between cycle time, tooling cost, and quality.</p>
+
+<h2>How It Works</h2>
+
+<h3>Where Time Actually Goes</h3>
+<table class="data-table">
+<tr><th>Category</th><th>Examples</th><th>Typical Share</th></tr>
+<tr><td>Cutting time</td><td>Feed moves engaged with material</td><td>40–60%</td></tr>
+<tr><td>Rapid time</td><td>G00 moves between features</td><td>15–30%</td></tr>
+<tr><td>Tool change</td><td>ATC carousel + spindle orientation</td><td>5–15%</td></tr>
+<tr><td>Spindle/dwell</td><td>Speed changes, dwells, coolant</td><td>5–10%</td></tr>
+<tr><td>Non-cutting setup</td><td>Part probing, chip brush, air blast</td><td>5–10%</td></tr>
+</table>
+<p>Many beginners only look at cutting time. But on a typical mill program, rapid moves and tool changes can consume as much as the actual cutting. Optimizing only feed rate captures a fraction of the available gain.</p>
+
+<h3>Optimization Levers (in order of impact)</h3>
+<ol>
+<li><strong>Reduce tool changes</strong> — fewer tools = fewer ATC cycles. Can two operations share one tool? Can drilling and chamfering use the same tool?</li>
+<li><strong>Optimize hole/feature order</strong> — drilling holes in a zig-zag order wastes rapid time. Order them nearest-to-nearest to minimize travel.</li>
+<li><strong>Increase stepover</strong> — wider raster passes mean fewer passes across a pocket, reducing both rapid and cut time. Stay within tool and power limits.</li>
+<li><strong>Increase feed</strong> — within the tool catalog. Most beginners run feed too conservative; running at 80% of catalog feed is safe.</li>
+<li><strong>Increase depth of cut</strong> — take one deeper roughing pass instead of two shallow ones. Watch spindle power.</li>
+<li><strong>Reduce rapid travel</strong> — program tool start positions closer to the part. Don't rapid across the full table for every hole.</li>
+</ol>
+
+<h3>The Tool Life Tradeoff</h3>
+<p>Every tool has a recommended cutting speed (SFM or m/min). Run faster and tool life drops sharply. The Taylor tool life equation: tool life is roughly inversely proportional to cutting speed raised to a power. Doubling speed can reduce tool life from 60 minutes to 6 minutes.</p>
+<p>The break-even analysis: if increasing feed saves 4 seconds per pass but causes a tool to wear out twice as fast (adding a 30-second tool change every part instead of every other part), you lose 30 seconds to save 4. Optimize the whole process, not one number.</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <!-- axes -->
+  <line x1="50" y1="170" x2="370" y2="170" stroke="#333" stroke-width="1.5"/>
+  <line x1="50" y1="20" x2="50" y2="170" stroke="#333" stroke-width="1.5"/>
+  <text x="200" y="190" font-size="11" fill="#333" text-anchor="middle">Cutting Speed</text>
+  <text x="20" y="100" font-size="11" fill="#333" transform="rotate(-90 20 100)" text-anchor="middle">Time / Cost</text>
+  <!-- cycle time curve (decreasing) -->
+  <path d="M 60 40 Q 150 120 200 140 Q 300 160 360 165" fill="none" stroke="#27ae60" stroke-width="2"/>
+  <text x="300" y="155" font-size="10" fill="#27ae60">Cycle time &darr;</text>
+  <!-- tool cost curve (increasing) -->
+  <path d="M 60 165 Q 150 160 200 140 Q 300 80 360 30" fill="none" stroke="#c0392b" stroke-width="2"/>
+  <text x="300" y="45" font-size="10" fill="#c0392b">Tool cost &uarr;</text>
+  <!-- optimum -->
+  <circle cx="200" cy="140" r="4" fill="#3498db"/>
+  <text x="210" y="130" font-size="10" fill="#3498db">Optimum</text>
+</svg>
+<figcaption>As speed increases, cycle time drops but tooling cost rises. The optimum is where total cost (cutting + tooling) is lowest — not at maximum speed.</figcaption>
+</figure>
+
+<h2>Example</h2>
+<p><strong>Worked example:</strong> A rectangular pocket requires 3 raster passes of 120 mm each. Current feed F300. Each pass = 120/300 = 0.4 min = 24 s. Total cutting = 72 s.</p>
+<p>Increase feed to F360 (20% higher). Each pass = 120/360 = 0.333 min = 20 s. Total cutting = 60 s. Saving = 12 s per part.</p>
+<p>On a 1,000-part run: 12 s &times; 1000 = 12,000 s = 3.3 hours saved. But check tool life: at F360, does the tool still last the expected 30 parts? If tool life drops from 30 parts to 15 parts, you change the tool twice as often. Each tool change adds 20 s to cycle time. Extra tool change cost per part: 20 s &times; (1/15 &minus; 1/30) = 0.667 s per part. Net saving: 12 s saved &minus; 0.667 s extra = 11.333 s per part. The faster feed still saves time.</p>
+<p><strong>Lesson:</strong> always verify the tool-life impact before increasing feed. The optimum is where the time saved exceeds the added tool-change cost.</p>
+
+
+<h3>Where Cycle Time Actually Goes</h3>
+<p>On a typical mill program, the time breakdown is roughly: cutting (feed moves) 40&ndash;50%, rapid moves 20&ndash;30%, tool changes 5&ndash;15%, spindle/dwell 5&ndash;10%, and load/unload 10&ndash;20%. Beginners optimize the cutting feed because it is the most visible number, but rapid moves and tool changes often consume as much time. A 12 s saving per pass sounds small; over 1,000 parts it is 3.3 hours of machine time. But if that saving comes with a tool-life penalty that adds even a few seconds of tool-change amortization per part, the net gain evaporates.</p>
+<p>The three highest-leverage optimizations are: (1) reduce rapid travel &mdash; order holes so the machine does not zig-zag across the table, use a common Z height between operations, and move XY while the spindle is still ramping; (2) reduce tool changes &mdash; can two operations share one tool? Can drilling and chamfering use the same end mill? (3) increase depth of cut rather than feed &mdash; taking a deeper radial step at the same feed removes more material per minute without pushing the chip load past the tool rating.</p>
+<p>Never optimize a program by cranking feed to the maximum on the first article. The first part is a verification run, not a production run. After the first part passes inspection, ramp feed up in 10&ndash;20% steps and watch the surface finish, the chip shape, and the spindle load. Stop when surface finish, chip shape, or tool wear begins to degrade; do not assume a fixed load percentage applies to every machine.</p>
+<p>Cycle time is also a quality lever: a slower feed that produces a good finish every time beats a faster feed that needs a deburr operation after every part. Optimize the total part cost, not the stopwatch time on the screen.</p>
+
+<h3>Case Study: Optimizing a Drilled Hole</h3>
+<p>A &Oslash;6 through hole in 12 mm aluminum, drilled at S1500 F80 with no peck. Time per hole: rapid to position (1.5 s), drill to breakthrough Z&minus;15.6 at F80 (15.6/80 &times; 60 = 11.7 s), retract R plane (1 s), rapid to next hole (1 s). Total &asymp; 15 s per hole.</p>
+<p>Optimization 1: as a teaching example, assume the insert manufacturer allows S3000 F160 for this material and grade. Cutting time halves to 5.85 s, total &asymp; 9 s, saving 6 s per hole. Treat these numbers as an example; verify the actual speed, feed, and tool life against the insert catalog before running. Tool life depends on the specific grade, material, and coolant.</p>
+<p>Optimization 2: use G83 peck Q3 instead of G81. Peck adds retract time on each step: 5 pecks &times; 1 s = 5 s extra. But peck clears chips, which prevents drill walking in deep holes. For through holes in 12 mm plate, G81 is fine; peck is for deep holes (3&times; diameter or more). Do not add peck to shallow holes &mdash; it only adds time.</p>
+<p>Optimization 3: order the holes so the machine does not zig-zag. Holes at (10,10), (90,10), (90,70), (10,70): drill in that order and the rapid between holes is ~80 mm each way. Ordering them (10,10), (10,70), (90,70), (90,10) is the same distance. The point is to avoid backtracking across the table: sort holes by X, then Y, so each move is in the same direction. Over 1,000 parts, even 0.5 s saved per hole is 33 minutes of machine time.</p>
+
+<h3>When to Leave the Machine Alone</h3>
+<p>Optimization has a floor: once the cycle time is dominated by load/unload, further cutting-time optimization buys little. If a part takes 60 seconds to machine and 20 seconds to load/unload (total 80 s cycle), shaving 5 seconds off the cut is a 6.25% reduction in cycle time; eliminating the whole 20 s load/unload (a separate automation project) would be a 25% reduction in the same 80 s denominator. Use one consistent denominator when comparing options.</p>
+<p>Also know when to stop. A program that cuts 10 seconds faster but needs a new insert every 50 parts is not faster in total cost. Track tool life as you optimize: if a new feed strategy drops tool life from 300 parts to 80, the tool-change cost can exceed the time saving. Run the numbers for your actual tool cost and cycle time before declaring a win.</p>
+<p>Finally, document the optimized program. Write in the comment block: "Feed increased from F200 to F280 on 2026-09-28, tool life verified at 250 parts, surface finish within spec." The next person who touches the program needs to know why the numbers are what they are &mdash; otherwise they will "optimize" them back.</p>
+
+<h3>Measuring Cycle Time Before You Optimize</h3>
+<p>You cannot optimize what you have not measured. Run the program in single-block and time each section: tool change, rapid to position, plunge, cut, retract, rapid to next feature. Write the times down. You will usually find that 80% of the cycle is in 20% of the cuts &mdash; optimize those, not the small ones.</p>
+<p>Common discoveries: tool changes take 8 seconds each and you have 6 tools; rapid moves across the table take 5 seconds and you have 20 rapid moves; the actual cutting is 30 seconds. In that case, reducing tool changes (consolidate tools) and ordering holes (reduce rapid) saves more than increasing feed. Optimize the bottleneck, not the easy number.</p>
+<p>After optimization, re-measure. If the new cycle time is not what you expected, the bottleneck moved elsewhere. Repeat the measure&ndash;optimize&ndash;measure loop. The first optimization rarely gets you to the real limit.</p>
+
+<h3>Tool Life Economics</h3>
+<p>A carbide insert costs $15 and lasts 300 parts at the current feed. At a higher feed, it lasts 150 parts. The time saving per part is 2 seconds. Over 300 parts, the time saving is 10 minutes. The extra insert cost is $15 (one extra insert per 300 parts). If machine time costs $60/hour, 10 minutes is $10. The optimization loses $5. Do not optimize feed blindly &mdash; run the tool-life number.</p>
+<p>The formula: tool change cost per part = (tool cost) / (parts per tool). If tool life drops from 300 to 150 parts, the per-part tool cost doubles. Compare that to the cycle-time saving. If the cycle saving is less than the tool-cost increase, the optimization is not worth it. This is why aggressive feeds that double throughput but halve tool life are often break-even.</p>
+<p>Tool life also affects quality: a worn insert leaves a poor surface finish and drifts dimensionally. If you push feed to the limit, you may be changing inserts more often than you are machining parts. The optimal feed is not the maximum feed &mdash; it is the feed where the combined tool + machine cost is lowest.</p>
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Increasing feed beyond tool rating</strong> — breaks tools, causes chatter, scraps parts. Stay within the tool catalog's recommended feed per tooth.</li>
+<li><strong>Ignoring non-cutting time</strong> — rapid moves and tool changes often exceed cutting time. Optimize hole order and tool count first.</li>
+<li><strong>Optimizing one operation in isolation</strong> — the bottleneck may be elsewhere: fixturing time, inspection, or another machine. Measure total cycle time, not one cut.</li>
+<li><strong>Ignoring acceleration/deceleration</strong> — on very short moves, the tool never reaches programmed feed. Short rapids between holes are slower than they look.</li>
+<li><strong>No baseline measurement</strong> — you cannot improve what you do not measure. Record cycle time before and after each change.</li>
+</ul>
+
+<h2>Practice</h2>
+<p><strong>1.</strong> 120 mm cut at F300 vs F360. Time saving?</p>
+<details><summary>Ans</summary><p>At F300: 120/300 = 0.4 min = 24 s. At F360: 120/360 = 0.333 min = 20 s. Saving = 4 s per pass.</p></details>
+<p><strong>2.</strong> Name two non-cutting time savings.</p>
+<details><summary>Ans</summary><p>(1) Optimize hole order to minimize rapid travel. (2) Reduce tool changes by combining operations or using one tool for multiple tasks.</p></details>
+<p><strong>3.</strong> Why not always run at maximum feed?</p>
+<details><summary>Ans</summary><p>Tool life drops rapidly with speed. The cost of extra tool changes and scrap parts can exceed the time saved. The optimum balances cycle time against tooling cost.</p></details>
+<p><strong>4.</strong> Which optimization lever usually has the biggest impact?</p>
+<details><summary>Ans</summary><p>Reducing tool changes and optimizing rapid travel order. A 15-second tool change saved per part beats a 2-second feed-rate improvement on a short cut.</p></details>
+
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/37-multiaxis-probing-overview/">&larr; Rotary &amp; Probing</a><a href="/cnc-manufacturing-engineering/cnc-programming/39-exercises-assessment/">Exercises &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

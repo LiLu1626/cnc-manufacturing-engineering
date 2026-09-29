@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Common Beginner Mistakes — CNC Programming</title>
+<meta name="description" content="The most frequent CNC programming mistakes new programmers make: wrong offsets, units, modal state, unsafe motion — and how to avoid them.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/26-common-mistakes/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Common Beginner Mistakes</h1>
+<p class="lead">This page collects the mistakes that cause most beginner crashes and scrap, with concrete numbers and a checklist. It is not a list of scare stories; each item has a verification step you can run before cycle start.</p>
+
+<h2>Concept</h2>
+<p>Beginner CNC programming errors cluster in a few predictable areas: offsets, units, modal state, and unsafe motion. Almost every crash traces back to an assumed state rather than a typo. The goal is to make those assumptions explicit before the machine moves.</p>
+
+<h2>Why It Matters</h2>
+<p>A minute of verification prevents hours of cleanup. The cost of a wrong offset or a unit mismatch is a broken tool, a scrapped part, or a crashed spindle. New programmers repeatedly make the same errors until they build a pre-run checklist.</p>
+
+<h2>How It Works</h2>
+
+<h3>The Pre-Run Checklist</h3>
+<ol>
+<li><strong>Work offset (G54)</strong> — set on the correct datum? Measured and verified?</li>
+<li><strong>Tool offset (H/D)</strong> — matches the physical tool? H for length, D for radius (per controller convention)?</li>
+<li><strong>Units</strong> — G20 vs G21 matches the drawing?</li>
+<li><strong>Distance mode</strong> — G90 absolute vs G91 incremental?</li>
+<li><strong>Compensation</strong> — G40 canceled at the right place? G41/G42 on the correct side?</li>
+<li><strong>Canned cycles</strong> — G80 where appropriate? Cycle parameters correct?</li>
+<li><strong>Spindle and coolant</strong> — direction, speed, M08 timing?</li>
+</ol>
+
+<h3>Case A: Work Offset Translation</h3>
+<p>Drawing origin should be at machine (-300,-200). If G54 is mistakenly entered as (-280,-200), a programmed hole at (30,10) lands at machine (-250,-190) instead of (-270,-190). On the part, the hole appears 20 mm in +X. Both X and Y origins must be checked separately; a +20 error in X does not imply a +20 error in Y. Fix G54, not the program.</p>
+
+<h3>Case B: Width Is Not a Position Error</h3>
+<p>A slot programmed to be 20.00 mm wide measures 20.30 mm. Shifting G54 X by 0.30 moves the whole slot; the width is still 20.30. Width errors point to cutter compensation, actual tool diameter, tool wear, or deflection — not work offset. Measure again before changing any offset.</p>
+
+<h3>Units: Direction Matters</h3>
+<p>If the drawing is in inches but the program runs G21 (mm), the values are interpreted as mm and the part comes out 1/25.4 of the expected size. If the drawing is mm but G20 is active, values are treated as inches and the part comes out 25.4&times; too large. Both directions are possible; check the first block.</p>
+
+<h3>G90 vs G91</h3>
+<p>Starting at X20: G90 X30 moves to X30. G91 X30 moves 30 mm from current, to X50. The block text looks identical; the mode decides where the tool ends. Always confirm distance mode before a rapid move.</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <line x1="50" y1="90" x2="350" y2="90" stroke="#333"/>
+  <circle cx="150" cy="90" r="5" fill="#333"/>
+  <text x="140" y="80" font-size="10" fill="#333">start X20</text>
+  <circle cx="200" cy="90" r="5" fill="#27ae60"/>
+  <text x="180" y="75" font-size="10" fill="#27ae60">G90 X30 = end X30</text>
+  <circle cx="300" cy="90" r="5" fill="#c0392b"/>
+  <text x="280" y="115" font-size="10" fill="#c0392b">G91 X30 = end X50</text>
+</svg>
+<figcaption>Same block text, different endpoint, depending on G90/G91.</figcaption>
+</figure>
+
+<h3>Code Review Exercise</h3>
+<p>Given entry state: G90 G21 G94 G54, H02 and spindle already established, Z at verified R-plane clearance. Fragment: G81 Z-5 R2 F100; X50 Y20. On a Haas mill the bare X50 Y20 repeats the drill cycle. If you meant to reposition, write G00 X50 Y20 (or G80 first), and only then move at clearance.</p>
+<h2>Example</h2>
+<p>A beginner program starts with G21 G90 G54, calls T01, and immediately rapid-moves to X50 Y50. The operator should have checked: T01 is the physical tool in the spindle, H01 matches, G54 is on the correct datum, and the Z height at that XY move is above the fixture. If any of these is wrong, the crash happens before the first cut.</p>
+
+<h3>Why Modal Codes Bite Beginners</h3>
+<p>G01, G90, G41, and canned cycles all persist until changed. A code from ten blocks ago still controls motion. Reading the current line alone is not enough; track modal state.</p>
+
+<h3>Run the Checklist Every Time</h3>
+<p>The checklist is not a one-time lesson. Run it on every new program and every new setup. It is cheap insurance.</p>
+<h3>Reading a Program Before You Run It</h3>
+<p>Read the whole program once on paper. Identify the startup block, the tool calls, the first cut, and the program end. If anything surprises you, fix it before cycle start.</p>
+
+<h3>When in Doubt, Single Block</h3>
+<p>Single block the first approach, the first cut, and the first retract. Slow motion is safer than a surprise.</p>
+<h2>Common Mistakes About the Mistakes</h2>
+<ul>
+<li><strong>Thinking experience replaces the checklist</strong> — even experienced programmers verify offsets and units.</li>
+<li><strong>Editing coordinates to compensate for an offset error</strong> — the next setup inherits the wrong program.</li>
+<li><strong>Using G80 as a "mode" to leave on</strong> — G80 is a cancel command; cycles are turned on by G81+ codes.</li>
+<li><strong>Forcing G40 at the current position</strong> — cancel compensation at the end of the contour on a planned lead-out, not mid-air.</li>
+</ul>
+
+<section class="cp-practice">
+
+<h3>Why This List Is Not Just a Warning</h3>
+<p>Every mistake on this page comes from a real crash or a real scrapped part. The reason they recur is that they all share the same root: the programmer assumed the machine knew what they meant, instead of writing it explicitly. "The tool knows it is at safe Z" &mdash; no, it does not. "G40 was already on" &mdash; no, you must cancel it explicitly. "G81 was canceled by the next XY" &mdash; on Haas, a bare XY repeats the cycle. The fix for every one of these mistakes is the same: write the startup block, write G80, write G40, write G49, and never assume state.</p>
+<p>In the absolute tool-length model used on this site, G43 H01 loads a measured tool length. If H01 is left at 0, the machine treats the tool tip as if it were at the gauge line. On a 120 mm tool, that puts the tip 120 mm below where you think it is. The result is a crash into the table. Always verify the H value matches the tool before the first Z move. Different tool-setup methods (preset length, touch-off) use different signs; verify the convention on your machine.</p>
+<p>The second most expensive mistake is confusing G54 shift with size error. A slot that measures 20.30 against a 20.00 target is 0.30 too wide. Shifting G54 X moves the whole slot left and right; it does not change the width. The width is set by the D offset (or by the tool center path when running G40). Diagnose by which dimension is off before you change any offset.</p>
+<p>Read this page once before every first-article run for the first month. After that, the habit becomes automatic: startup block, offsets verified, safe Z, single block, reduced rapid. The point is not to memorize the list; it is to make the checks unconscious. Use the reduced-rapid value your shop prescribes, not a fixed percentage.</p>
+
+<h3>Why These Mistakes Happen</h3>
+<p>Almost every beginner mistake traces back to one of three root causes: forgetting that the machine remembers state (modal codes, work offsets, tool offsets), confusing programmed coordinates with machine coordinates, or rushing the first part. The startup block exists to erase remembered state. G54 is the translation between program and machine. Dry run and single-block are how you prove the program before you trust it. If you internalize those three ideas, most mistakes stop happening on their own. The rest of this page lists the specific mistakes, grouped by cause, so you can check yourself against each one before pressing cycle start.</p>
+<h2>Practice</h2>
+<p><strong>1.</strong> A hole appears 20 mm in +X from where expected. What do you check first?</p>
+<details><summary>Ans</summary><p>Measure relative to the part datum, then check whether G54 X was entered with a 20 mm error. Do not edit program coordinates.</p></details>
+<p><strong>2.</strong> A slot is 0.3 mm too wide. Is adjusting G54 X the fix?</p>
+<details><summary>Ans</summary><p>No. Shifting G54 moves the slot; width unchanged. Check cutter compensation, actual tool diameter, wear, and deflection.</p></details>
+<p><strong>3.</strong> The drawing is in mm but G20 is active. What happens to the part?</p>
+<details><summary>Ans</summary><p>Values are interpreted as inches without conversion, so every linear dimension is 25.4&times; too large.</p></details>
+</section>
+
+
+<h2>Sources</h2>
+<ul>
+<li>Haas Automation, G80 Canned Cycle Cancel. <a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G80.html" target="_blank" rel="noopener">haascnc.com</a>.</li>
+<li>Haas Automation, Mill Operator's Manual — Operation. <a href="https://www.haascnc.com/service/online-operator-s-manuals/mill-operator-s-manual/mill---operation.html" target="_blank" rel="noopener">haascnc.com</a>.</li>
+</ul>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting/">&larr; Troubleshooting</a><a href="/cnc-manufacturing-engineering/cnc-programming/28-milling-project/">Milling Project &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Grooving, Parting & Boring — CNC Programming</title>
+<meta name="description" content="Groove toolpaths, cutoff/parting operations, boring bars, internal turning, feed/speed considerations, and a worked parting example.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/21-grooving-parting-boring/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Grooving, Parting &amp; Boring</h1>
+<p class="lead">Grooving, parting (cutoff), and boring use narrow, weak tools and constrained toolpaths. This page covers groove programming, cutoff, internal boring, and the clearance and chip-control rules that keep these operations safe.</p>
+
+<h2>Concept</h2>
+<p><strong>Grooving</strong> feeds a narrow rectangular insert radially to cut a recess. <strong>Parting (cutoff)</strong> is a radial groove taken all the way through the bar to separate the finished part. <strong>Boring</strong> uses an internal bar to enlarge a pre-drilled hole from the inside. On a Haas lathe, X remains diameter programming; Z positions the tool along the spindle axis. The groove or parting tool has two side edges and one center blade, and the programmer must declare which edge is referenced to Z. Boring is the reverse radial direction of OD turning: X grows as the bore grows.</p>
+
+<h2>Why It Matters</h2>
+<p>Groove and parting tools are narrow, so they are weak in Z and deflect under side load. Chips have little room to escape, and the tool is close to the chuck and the finished part. Boring bars reach into a hole, so overhang and deflection limit depth and finish. These operations therefore use lighter feeds, shorter engagements, and explicit retract moves, rather than the same free-flowing G01 path used for OD turning. The challenge is not just choosing a feed; it is keeping a thin tool away from the chuck, clearing chips, and finishing a cut without rubbing.</p>
+
+<h2>How It Works</h2>
+
+<h3>Groove Width, Tool Width, and Reference Edge</h3>
+<p>A 2 mm wide insert cuts a 2 mm wide groove in one Z pass. For a wider groove, the tool steps in Z between radial cuts. Before stepping, retract radially to a verified clearance above the part, then index Z; do not slide the insert sideways at groove depth unless the insert and holder are rated for side turning. The programmer must state which edge of the insert is touched off: the front edge sets one side of the groove, and the other side is tool-width away in Z.</p>
+
+<h3>Groove Depth in Diameter</h3>
+<p>X is diameter. Turning a &Oslash;35 bar down to a groove bottom of &Oslash;30 means a radial depth of (35&minus;30)/2 = 2.5 mm. The tool approaches at a diameter above the bar, feeds radially to X30, and retracts. A short bottom dwell can help clean the floor, but it is not a universal chatter cure; too long dwell rubs and wears the insert.</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <path d="M 40,110 L 196,110 L 196,120 L 204,120 L 204,110 L 380,110 L 380,180 L 40,180 Z" fill="#d4c5a9" stroke="#999"/>
+  <line x1="40" y1="180" x2="380" y2="180" stroke="#333" stroke-dasharray="3,2"/>
+  <text x="385" y="183" font-size="10" fill="#333">centerline</text>
+  <text x="50" y="105" font-size="10" fill="#333">O35 surface (r17.5, y110)</text>
+  <text x="210" y="135" font-size="10" fill="#e67e22">O30 groove bottom (r15, y120), 2.5 mm radial</text>
+  <rect x="196" y="60" width="8" height="50" fill="#c0392b"/>
+  <text x="150" y="55" font-size="10" fill="#c0392b">2 mm blade, front edge Z-17</text>
+</svg>
+<figcaption>Upper half-section: open groove notch in the surface. 4 px/mm; O35 at y110, O30 at y120. Not to scale.</figcaption>
+</figure>
+
+<h3>Parting and Separation</h3>
+<p>Parting positions the insert at the finished part length and feeds radially. The exact feed, spindle speed, and separation method depend on the insert, material, chuck setup, and catcher. The example on this page stops at X1.0 as a <em>radial in-feed fragment</em> and does not by itself complete separation. A real cutoff cycle follows the machine and tool supplier's procedure, including catcher and spindle handling.</p>
+
+<h3>Boring: Internal Radial Direction</h3>
+<p>Boring starts at the drilled hole diameter and moves X outward to enlarge the bore. The bar reaches from the bore mouth into the hole, so the retract direction at the bottom of a Z cut is inward (X smaller), not the OD outward move. Bar overhang is constrained by bar material and diameter; a 4&times;D rule is a rough starting point for steel bars, not a universal limit, and carbide or damped bars have their own published recommendations.</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <rect x="60" y="40" width="300" height="120" fill="#d4c5a9" stroke="#999"/>
+  <rect x="60" y="80" width="300" height="40" fill="#fafafa" stroke="#999"/>
+  <line x1="60" y1="100" x2="360" y2="100" stroke="#333" stroke-dasharray="3,2"/>
+  <text x="370" y="104" font-size="10" fill="#333">axis</text>
+  <line x1="320" y1="80" x2="100" y2="80" stroke="#c0392b" stroke-width="2"/>
+  <polygon points="100,80 110,76 110,84" fill="#c0392b"/>
+  <text x="200" y="70" font-size="10" fill="#c0392b">cut along wall (Z from mouth to bottom)</text>
+  <line x1="100" y1="80" x2="100" y2="90" stroke="#166534" stroke-width="2"/>
+  <text x="110" y="88" font-size="10" fill="#166534">radial inward retract (clearance per bar envelope, not X0)</text>
+  <line x1="100" y1="90" x2="320" y2="90" stroke="#2c3e50" stroke-width="2" stroke-dasharray="4,2"/>
+  <text x="180" y="118" font-size="10" fill="#2c3e50">Z withdraw to mouth</text>
+</svg>
+<figcaption>Boring: cut along the bore wall, retract radially inward at the bottom, then withdraw Z to the mouth.</figcaption>
+</figure>
+
+
+
+<h3>Tool Reference Edge and the Two Z Sides of a Groove</h3>
+<p>A 2 mm blade has two side edges. When you touch off on the front edge, that edge sits at the programmed Z. The back edge is 2 mm away in Z. If the drawing calls for a groove centered at Z&minus;20 with width 2 mm, the front edge goes to Z&minus;19 and the back edge lands at Z&minus;21; if instead the groove starts at Z&minus;20, the front edge goes there. State which edge is referenced so the groove lands on the drawing, not half a tool-width off.</p>
+
+
+
+<h3>Constant Surface Speed on Grooving and Parting</h3>
+<p>As the tool approaches center on a parting cut, diameter shrinks. Constant surface speed can be used when capped and when the setup permits; many parting setups choose G97 at a fixed RPM. The exact mode and speed follow the insert manufacturer's data for the material.</p>
+
+
+
+<h3>Boring Bar Envelope and Retract</h3>
+<p>When the boring bar reaches the bore bottom, the tool tip must retract inward enough that the holder and shank clear the bore wall as Z withdraws. That inward amount is not the same as the roughing infeed; it is set by bar shank size and hole diameter. Program it explicitly, then verify on the machine.</p>
+
+
+
+<h3>Coolant and Chip Evacuation in Grooving</h3>
+<p>Groove chips are short and congested. A steady, directed coolant wash helps break and flush them. Dry grooving or weak coolant invites built-up edge and a rubbing floor. Use the holder's coolant feed near the insert when available.</p>
+
+
+
+<h3>Setup Checks Before First Groove</h3>
+<p>Touch off the correct reference edge; confirm the tool does not hit the chuck or jaw when Z moves; set the parting position so the finished part clears the catcher; dry-run at low feed around the groove and parting Z. First groove should be a slow pass so any clearance issue shows before full depth.</p>
+
+
+
+<h3>Parting Through a Cold Saw vs Lathe Cutoff</h3>
+<p>Some shops cut parts off the bar on a bandsaw after the lathe, instead of parting in the machine. That frees the lathe from the cutoff operation but adds a second setup. The choice depends on batch size, material thickness, and catcher capability; the programming on the lathe side still needs to leave enough material for the second operation.</p>
+
+
+
+<h3>Boring Boring Cycles</h3>
+<p>On lathes with boring canned cycles, the cycle handles approach, cut, inward retract, and withdraw automatically. The programmer must still supply the bore depth, the final diameter, and the inward retract amount. Hand-coded G01 boring is fine for one or two passes; cycles help when the bore has multiple steps.</p>
+
+
+
+<h3>Why Boring Deflects More Than OD Turning</h3>
+<p>The boring bar reaches from one side of the hole; the overhang is inside the part, and chips must travel back along the bar. Deflection grows as the bar reaches deeper. That is why finishing passes use light infeed and short bar extension, and why surface finish often worsens as bore depth grows.</p>
+
+
+
+<h3>Program a First-Part Dry Run</h3>
+<p>For a new groove or parting Z, dry-run at low feed before the first cut. Machine lock checks program motion but not physical clearance; verify the blade-to-chuck and part-to-catcher envelope by observation and hand setup before running.</p>
+
+
+
+<h3>Why a Groove Tool Has Two Feed Directions</h3>
+<p>The same blade can feed in Z for side finishing after the radial groove depth is reached. Side feed is slower and lighter than radial feed; it is not a normal turning pass. Use it only when the insert is rated for it.</p>
+
+
+
+<h3>Parting Tool Life</h3>
+<p>Parting sees a wide range of diameters as it approaches center, and heat concentrates at the blade. Inspect the insert after the batch; worn blades leave a rough nub and chatter.</p>
+
+
+
+<h3>Summary</h3>
+<p>Grooving, parting, and boring reward explicit Z reference edges, controlled retracts, and conservative feeds. Treat the first part as a setup run.</p>
+
+
+
+<h3>Next Steps</h3>
+<p>After this page, read the boring-cycle and workholding material before programming a deep bore on real parts.</p>
+
+
+
+<h3>Setup Checklist Recap</h3>
+<p>Confirm blade reference edge, chuck clearance, catcher position, bar envelope for boring, and first-part dry run before committing to a production cycle.</p>
+
+
+
+<h3>Why External Grooves Need Special Holders</h3>
+<p>A groove holder clamps a narrow blade rigidly across the shank. Overhang should be just enough to reach the groove without rubbing. Excess overhang amplifies chatter and shortens blade life.</p>
+
+<h2>Example</h2>
+<p><strong>Groove example.</strong> Cut a 2 mm wide groove to O30 on an O35 bar at Z&minus;20, using a 2 mm blade touched off on its front edge. X approaches at O37, feeds radially to X30, dwells briefly, and retracts to O37. The radial depth is (35&minus;30)/2 = 2.5 mm.</p>
+<pre class="cp-code"><code>G21 G18 G97 G99 G40
+G54
+T0303 M03 S800
+G00 X37. Z-20.
+G01 X30. F0.05
+G04 P0.2
+G01 X37. F0.2
+G00 X50. Z100.
+M30</code></pre>
+<p>S800 and F0.05 are classroom assumptions. The radial feed distance is (37&minus;30)/2 = 3.5 mm; at 40 mm/min that is about 5 seconds. The dwell cleans the floor but is kept short.</p>
+
+<p><strong>Parting in-feed fragment.</strong> Part off at Z&minus;45 from an O40 bar. The block below feeds radially to X1.0 and retracts; it is <em>not a complete cutoff program</em> because separation, catcher, and spindle stop follow the machine and tool procedure.</p>
+<pre class="cp-code"><code>T0505 M03 S800
+G00 X42. Z-45.
+G01 X1.0 F0.05
+G00 X42.</code></pre>
+<p>At S800 F0.05, feed = 40 mm/min. Total X travel from 42 to 1 is 20.5 mm radius. Of that, the bar material spans O40 to O1 = 19.5 mm radius; air travel above O40 is 1 mm. Cutting time on material is 19.5/40 = 0.49 min = 29.25 s; air travel adds about 1.5 s. Do not count the whole 20.5 mm as cutting.</p>
+
+<p><strong>Boring position table.</strong> Bore a pre-drilled O20 hole to O24 over Z0 to Z&minus;30. The bar is sized so that its shank clears the O20 bore; the infeed table uses X diameter.</p>
+<p>The pre-drilled hole is O20 over Z0 to Z&minus;30; this assumes the existing hole extends past Z&minus;30 enough that blade and shank reach Z&minus;30 without bottoming. Each pass: approach outside the mouth at Z2, set X to the target diameter, feed Z into the hole to Z&minus;30, retract radially inward to a value that clears the bar envelope (set per holder/bar data, not assumed), then withdraw Z to Z2. The first pass removes 1.00 mm radially from the O20 bore; later passes remove 0.75 and 0.25 mm from the previous diameter.</p>
+<table class="data-table">
+<tr><th>Pass</th><th>Target X diameter</th><th>Radial depth removed in this pass</th><th>Z action</th></tr>
+<tr><td>rough 1</td><td>22.0</td><td>1.00 mm</td><td>Z2 &rarr; Z&minus;30 cut</td></tr>
+<tr><td>rough 2</td><td>23.5</td><td>0.75 mm</td><td>Z2 &rarr; Z&minus;30 cut</td></tr>
+<tr><td>finish</td><td>24.0</td><td>0.25 mm</td><td>Z2 &rarr; Z&minus;30 light cut</td></tr>
+</table>
+<p>After each pass, retract X inward to a value verified against the selected boring bar and shank envelope, then withdraw Z. Without that envelope data, the table is a teaching skeleton, not a runnable program.</p>
+
+
+
+<h3>Multiple Passes for Wide Grooves</h3>
+<p>With the front edge as the touch-off reference, program the front edge at Z&minus;17, Z&minus;19, Z&minus;21. The 2 mm blade then covers [&minus;19,&minus;17], [&minus;21,&minus;19], [&minus;23,&minus;21], covering the full 6 mm groove from Z&minus;23 to Z&minus;17. Sliding sideways at full depth is a side-turning operation that requires a capable insert and holder; do not assume every groove tool can do it.</p>
+
+
+
+<h3>Groove Width Tolerance</h3>
+<p>A 2 mm blade cuts a 2 mm groove, but wear and deflection can change the width or floor condition. On a tight tolerance, finish the groove floor and walls with a light second pass and measure the external groove diameter with a groove micrometer or external caliper.</p>
+
+
+
+<h3>Measuring a Groove</h3>
+<p>Groove diameter is hard to reach with a standard micrometer. Use a groove micrometer or another instrument designed for external groove diameters. Measure on the floor, not on the chamfer.</p>
+
+
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Sliding sideways at groove depth</strong> — retract radially to a verified clearance before indexing Z, unless the insert is rated for side turning.</li>
+<li><strong>Treating X1.0 as a finished part</strong> — that is a radial in-feed fragment, not a separation cycle; follow the tool and machine procedure.</li>
+<li><strong>Applying a universal L/D ratio</strong> — 4&times;D is a rough starting point for steel bars; carbide and damped bars have their own published limits.</li>
+<li><strong>Assuming bottom dwell always cures chatter</strong> — dwell rubs and wears the insert; use it briefly only to clean the floor.</li>
+<li><strong>Boring retracts like OD turning</strong> — at the bore bottom, retract X inward before Z withdraw.</li>
+</ul>
+
+<h2>Practice</h2>
+<p><strong>1.</strong> Groove to O26 from O35 stock. What is the radial depth?</p>
+<details><summary>Ans</summary><p>(35&minus;26)/2 = 4.5 mm radial.</p></details>
+<p><strong>2.</strong> A 20 mm diameter boring bar extends 120 mm into a bore. What should you check?</p>
+<details><summary>Ans</summary><p>L/D = 6:1, which is high for a steel bar. Check bar material and manufacturer data; consider shorter overhang, larger bar, or a damped bar. The exact limit depends on bar type, not a universal rule.</p></details>
+<p><strong>3.</strong> The parting fragment feeds to X1.0. Is the part separated?</p>
+<details><summary>Ans</summary><p>No. X1.0 leaves a 1 mm diameter core; separation follows the specified cutoff procedure.</p></details>
+<p><strong>4.</strong> At S800 F0.05, material cutting distance on O40&rarr;O1 is 19.5 mm radius. What is the cutting time?</p>
+<details><summary>Ans</summary><p>Feed = 40 mm/min; 19.5/40 = 0.49 min = 29.25 s. Air travel above O40 is counted separately.</p></details>
+
+<h2>Sources</h2>
+<ul>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=lathe.value=G04.html">Haas G04 Dwell</a>.</li>
+<li><a href="https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf">Sandvik Turning Handbook</a>.</li>
+</ul>
+
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/20-turning-cycles/">&larr; Turning Cycles</a><a href="/cnc-manufacturing-engineering/cnc-programming/22-threading/">Threading &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

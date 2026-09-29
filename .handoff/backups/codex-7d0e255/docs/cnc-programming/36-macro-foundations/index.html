@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Macro Programming Foundations — CNC Programming</title>
+<meta name="description" content="Variables, arithmetic, IF/GOTO, WHILE loops, and parameterized programs — the bridge from basic G-code to advanced CNC automation.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/36-macro-foundations/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article cp-article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Macro Programming Foundations</h1>
+<p class="lead">Macro programming adds variables, arithmetic, and logic to G-code. Instead of hard-coding every coordinate, the machine calculates it. This page introduces the core concepts — variables, IF/GOTO, WHILE loops, and a bolt-circle example — as the entry point to advanced CNC automation.</p>
+<svg aria-label="Macro loop variables" role="img" viewBox="0 0 320 130" style="width:100%;max-width:420px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;"><desc id="cp-36-macro-foundations-fig-1">Macro loop variables. Read the accompanying explanation for assumptions and values.</desc>
+<title>Macro loop variables</title>
+<text x="20" y="30" font-size="11" fill="#333">#4 = radius</text>
+<text x="20" y="55" font-size="11" fill="#333">#5 = angle step (30 or 45)</text>
+<text x="20" y="80" font-size="11" fill="#333">#1 = current angle = #5, #5+#5, ...</text>
+<text x="20" y="105" font-size="11" fill="#333">#2 = #4&middot;cos(#1), #3 = #4&middot;sin(#1)</text>
+</svg>
+
+<h2>Concept</h2>
+<p>Basic G-code is static: every coordinate, feed, and depth is written as a fixed number. A bolt circle of 12 holes means 12 X/Y lines. A rectangular pocket means dozens of step-over lines. <strong>Macro programming</strong> adds the tools of a simple programming language — variables, math operations, conditional logic, and loops — directly into the CNC program.</p>
+<p>Variables are written as <code>#1</code>, <code>#2</code>, and so on. You can assign them values, do arithmetic on them, and use them in coordinates. <code>G00 X#1</code> moves to whatever value #1 currently holds. With a <code>WHILE</code> loop, the machine can drill 12 holes around a circle by computing each position from trigonometry instead of you typing every coordinate.</p>
+<p>This page covers the fundamentals. Full macro programming (deep parameterization, probing, custom canned cycles) is an advanced topic built on these basics.</p>
+
+<h2>Why It Matters</h2>
+<p>Consider drilling 12 holes on a bolt circle of radius 50 mm. Without macros, you calculate each hole position by hand:</p>
+<pre class="cp-code"><code>G81 X50.0 Y0.
+X43.3 Y25.0
+X25.0 Y43.3
+X0.0 Y50.0
+... (12 lines total)</code></pre>
+<p>With a macro, you write a loop that computes each angle from 0 to 360 in 30&deg; steps:</p>
+<pre class="cp-code"><code>#1 = 0
+WHILE [#1 LT 360] DO 1
+  #2 = 50 * COS[#1]
+  #3 = 50 * SIN[#1]
+  G81 X#2 Y#3 R2. Z-10. F100.
+  #1 = #1 + 30
+END 1</code></pre>
+<p>Now change the bolt circle radius from 50 to 60: you edit one number (<code>#2 = 60 * COS[#1]</code>). Change from 12 holes to 8: edit the step from 30 to 45. No recalculating coordinates. This is the power of parameterized programming.</p>
+
+<h2>How It Works</h2>
+
+<h3>Variables</h3>
+<p>Variables are storage locations named <code>#1</code> through <code>#n</code>. You assign values, do math, and use them in G-code:</p>
+<pre class="cp-code"><code>#1 = 10.          (assign 10 to #1)
+#2 = 20.
+#3 = #1 + #2      (#3 = 30)
+#4 = #1 * 2       (#4 = 20)
+G00 X#1 Y#2       (rapid to X10 Y20)
+G01 Z-#3 F100.    (feed to Z-30)</code></pre>
+<p>Variables can hold coordinates, depths, feed rates, angles, or any numeric value. The <code>#</code> prefix tells the controller "look up the value in this variable" instead of treating it as a literal number.</p>
+
+<h3>Arithmetic and Functions</h3>
+<div class="cp-table-wrap"><table class="data-table"><caption>Arithmetic and Functions</caption>
+<tr><th scope="col">Operation</th><th scope="col">Syntax</th><th scope="col">Example</th></tr>
+<tr><td>Add</td><td>#1 + #2</td><td>#3 = #1 + #2</td></tr>
+<tr><td>Subtract</td><td>#1 - #2</td><td>#3 = #1 - #2</td></tr>
+<tr><td>Multiply</td><td>#1 * #2</td><td>#3 = #1 * #2</td></tr>
+<tr><td>Divide</td><td>#1 / #2</td><td>#3 = #1 / #2</td></tr>
+<tr><td>Sine</td><td>SIN[angle]</td><td>#3 = 50 * SIN[#1]</td></tr>
+<tr><td>Cosine</td><td>COS[angle]</td><td>#2 = 50 * COS[#1]</td></tr>
+<tr><td>Square root</td><td>SQRT[#1]</td><td>#4 = SQRT[#1]</td></tr>
+</table></div>
+
+<h3>Conditional Logic: IF / GOTO</h3>
+<p><code>IF</code> makes decisions. <code>GOTO n</code> jumps to line number Nn. This is the simplest form of branching:</p>
+<pre class="cp-code"><code>#1 = 10.
+IF [#1 GT 10] GOTO 100   (if #1 > 10, jump to N100)
+(something when #1 <= 10)
+N100 (continues here)</code></pre>
+<p>Comparison operators: EQ (equal), NE (not equal), GT (greater than), LT (less than), GE (greater/equal), LE (less/equal).</p>
+
+<h3>Loops: WHILE / DO / END</h3>
+<p><code>WHILE</code> repeats a block of code while a condition is true:</p>
+<pre class="cp-code"><code>#1 = 0
+WHILE [#1 LT 360] DO 1
+  (do something)
+  #1 = #1 + 30
+END 1</code></pre>
+<p>The loop starts with #1 = 0. Each pass, it runs the body, then adds 30 to #1. When #1 reaches 360, the condition <code>#1 LT 360</code> is false and the loop exits. The DO 1 / END 1 pairs define which block belongs to which loop.</p>
+
+<figure class="cp-figure">
+<svg aria-label="Diagram accompanying the adjacent worked example" role="img" viewBox="0 0 380 280" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;"><desc id="cp-36-macro-foundations-fig-2">Diagram accompanying the adjacent worked example. Read the accompanying explanation for assumptions and values.</desc><title>Diagram accompanying the adjacent worked example</title>
+  <!-- bolt circle -->
+  <circle cx="190" cy="140" r="100" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="4,3"/>
+  <circle cx="190" cy="140" r="3" fill="#333"/>
+  <text x="195" y="136" font-size="10" fill="#333">Center</text>
+  <!-- 6 holes -->
+  <circle cx="290" cy="140" r="6" fill="#c0392b"/>
+  <circle cx="240" cy="53.4" r="6" fill="#c0392b"/>
+  <circle cx="140" cy="53.4" r="6" fill="#c0392b"/>
+  <circle cx="90" cy="140" r="6" fill="#c0392b"/>
+  <circle cx="140" cy="226.6" r="6" fill="#c0392b"/>
+  <circle cx="240" cy="226.6" r="6" fill="#c0392b"/>
+  <text x="295" y="144" font-size="10" fill="#c0392b">0&deg;</text>
+  <text x="245" y="50" font-size="10" fill="#c0392b">60&deg;</text>
+  <text x="70" y="144" font-size="10" fill="#c0392b">180&deg;</text>
+</svg>
+<figcaption>Six holes on a bolt circle, 60&deg; apart. A WHILE loop computes each X/Y from COS and SIN of the current angle.</figcaption>
+</figure>
+
+<h2>Example</h2>
+<p><strong>Bolt circle macro:</strong> 6 holes on radius 50 mm, centered at G54 X0 Y0. Hole depth Z-10, R plane Z2, feed 100 mm/min. Start at angle 0&deg;, advance 60&deg; per hole.</p>
+<pre class="cp-code"><code>O0036 (BOLT CIRCLE MACRO)
+G21 G17 G90 G40 G80
+G54
+T01 M06                 (&Oslash;6 DRILL)
+S2000 M03
+G00 X0 Y0
+G43 H01 Z50. M08
+
+#1 = 0                  (angle in degrees, starts at 0)
+WHILE [#1 LT 360] DO 1
+  #2 = 50 * COS[#1]     (X = radius * cos(angle))
+  #3 = 50 * SIN[#1]     (Y = radius * sin(angle))
+  G99 G81 X#2 Y#3 R2. Z-10. F100.
+  #1 = #1 + 60          (next hole: +60 degrees)
+END 1
+
+G80
+G00 Z50. M09
+M30</code></pre>
+<p><strong>Trace:</strong> Iteration 1: angle=0, X=50&times;COS(0)=50, Y=50&times;SIN(0)=0 → drill at (50,0). Iteration 2: angle=60, X=25, Y=43.3 → drill at (25,43.3). Continues for angles 120, 180, 240, 300. When angle reaches 360, loop exits. Six holes drilled, one loop. To change to 8 holes, change <code>#1 = #1 + 60</code> to <code>+45</code>. To change radius, edit the 50.</p>
+
+
+<h3>When to Reach for a Macro</h3>
+<p>A macro is a parameterized program: you feed it a few numbers (radius, hole count, start angle), and it computes every coordinate. You should not reach for a macro when a subprogram or a canned cycle already solves the problem. Reach for a macro when the geometry is defined by a formula rather than a list &mdash; a bolt circle, a grid of holes with adjustable pitch, a chamfer that repeats on every corner, a probe routine that measures a bore and writes the offset automatically.</p>
+<p>The simplest macro pattern is a WHILE loop over an angle. Start with #1 = 0, step by 30&deg; up to 360&deg;, compute X = R&middot;cos(#1), Y = R&middot;sin(#1), drill the hole, increment #1. The same loop, with #1 as depth instead of angle, becomes a peck-drill loop that steps down 3 mm at a time until the bottom. The point is not the trigonometry &mdash; it is that the machine recomputes the pattern every run, so changing R or the hole count is a one-number edit.</p>
+<p>Macros read and write system variables: current position, current offset values, probe status, spindle load. This is how probing works: the machine moves the probe toward the wall, reads the machine X at contact, subtracts the known edge position, and writes the result into G54 X. A macro can also alarm itself: IF [#2 LT 0] THEN #3000 = 1 (BAD RADIUS). Self-diagnosing macros stop the machine before it cuts scrap, which is the production advantage over hand-coded coordinates.</p>
+<p>Macros are controller-specific. FANUC uses #1&ndash;#33 local, #100&ndash;#199 common, and system variables like #5021 for current position; Haas uses a similar but not identical scheme; Siemens uses R parameters and Q loops. Do not assume a macro that runs on Haas will run unchanged on FANUC. The trigonometry is universal; the variable numbers and loop syntax are not.</p>
+
+<h3>A Working Bolt-Circle Macro</h3>
+<p>This macro drills 12 holes on a 50 mm radius starting at angle 0, stepping 30&deg; each hole. #1 holds the current angle, #2 and #3 hold X and Y, #4 holds the radius.</p>
+<pre class="cp-code"><code>O3601 (BOLT CIRCLE, R50)
+G21 G17 G90 G94 G54 G80 G40
+#4 = 50.0              (radius, mm)
+#5 = 30.0              (angle step, deg; change to 45.0 for 8 holes)
+IF [#4 LE 0] THEN #3000 = 1 (RADIUS MUST BE >0)
+IF [#5 LE 0] THEN #3000 = 2 (STEP MUST BE >0, else loop never ends)
+G00 G43 H01 Z50. M08
+S1500 M03
+G00 X#4 Y0.           (rapid to first hole XY at clearance, NO cut yet)
+G99 G81 X#4 Y0 R2. Z-15. F120.   (drill hole #1 at 0 deg)
+#1 = #5               (next angle = one step past hole #1)
+WHILE [#1 LT 360] DO 1
+  #2 = #4 * COS[#1]
+  #3 = #4 * SIN[#1]
+  X#2 Y#3             (G81 drills at THIS XY)
+  #1 = #1 + #5
+END 1
+G80 G00 Z50. M09
+M30</code></pre>
+<p>The loop runs while #1 is less than 360. On each iteration, it computes X and Y on the circle and the modal G81 drills at that exact XY. Note: G81 is called once after the first hole's XY is already in position &mdash; not before any XY is set. If you issue G81 with no XY on the same block, the controller drills at whatever the current XY happens to be (often the origin), which is the classic "extra first hole" bug. Change #4 to 60 for a larger circle; change 30.0 to 45.0 for 8 holes. One number edits the whole pattern.</p>
+<h3>Trigger Trace: 12 Holes vs 8 Holes</h3>
+<div class="cp-table-wrap"><table><caption>Bolt-circle drill events</caption>
+<thead><tr><th scope="col">Event</th><th scope="col">#5 = 30&deg; (12 holes)</th><th scope="col">#5 = 45&deg; (8 holes)</th></tr></thead>
+<tbody>
+<tr><td>Pre-position G00 X#4 Y0</td><td>Rapid only, no drill</td><td>Rapid only, no drill</td></tr>
+<tr><td>First G81 X#4 Y0</td><td>Drill hole #1 at 0&deg;</td><td>Drill hole #1 at 0&deg;</td></tr>
+<tr><td>Loop fires at #1</td><td>30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330 (11 drills)</td><td>45, 90, 135, 180, 225, 270, 315 (7 drills)</td></tr>
+<tr><td>Total G81 drills</td><td>12</td><td>8</td></tr>
+</tbody></table></div>
+<p>The input checks <code>IF [#4 LE 0]</code> and <code>IF [#5 LE 0]</code> run before any axis motion: a non-positive radius or a zero step alarms immediately instead of drilling a circle at the origin or looping forever. These checks detect the named invalid inputs before the first movement; they do not validate every program state, clearance or cutting condition.</p>
+
+<h3>Variables, Arithmetic, and Logic</h3>
+<p>FANUC-style macros use #1&ndash;#33 as local variables (for the current call), #100&ndash;#199 as common variables (saved across calls), and system variables like #5021 (current machine position). Arithmetic is straightforward: #2 = #1 * 2, #3 = #1 + #2. Trig functions use degrees: COS[#1], SIN[#1], TAN[#1]. Logic: IF[#1 LT 360] GOTO 10, or WHILE[#1 LT 360] DO 1&hellip;END 1. The comparison operators are EQ, NE, GT, LT, GE, LE.</p>
+<p>Macros read and write offsets: you can measure a bore with a probe, compute the center, and write G54 X automatically. This is how automated setup works. A macro can also stop the machine with #3000 = 1 (message text) if a measured value is out of range. Self-diagnosing macros are the bridge between CNC programming and automated inspection.</p>
+<p>Start simple: a WHILE loop over an angle. Do not start with nested IF/WHILE or subprogram calls. The bolt-circle macro above is the first real program most people write. Once it works, you can parameterize radius, hole count, start angle, depth, and feed &mdash; but each parameter is one more thing that can be wrong, so add them one at a time and test each.</p>
+
+<h3>When Macros Earn Their Keep</h3>
+<p>Do not write a macro for a one-off part. Macros are for patterns that repeat: bolt circles, hole grids, pockets at varying sizes, probing cycles, parameterized programs. If you will only drill this one hole pattern once, hand-coding the coordinates is faster and safer. If you will drill 20 variants of the same pattern next month, the macro pays for itself the second time.</p>
+<p>Macros also let you build in safety. A macro can check that radius is positive, that depth is within travel, that the tool number matches. A hand-coded program has none of that. In a production cell where an operator loads parts and presses cycle start, the macro is the engineer's representative at the machine &mdash; it catches mistakes the operator cannot.</p>
+<p>Start with the bolt-circle macro. Add one feature at a time: start angle, hole count, radius, depth. Test each on a dry run. Do not write a 50-line macro blind. The best macro is the one you can read and debug at the machine in 30 seconds.</p>
+
+<h3>Macro Safety and Testing</h3>
+<p>A macro that loops forever can move the machine forever. Before running a macro on a real part, test it in single-block with the tool above the part, feed override at 0, and your finger on the feed-hold button. Watch the first iteration: does it compute the right X/Y? Does the loop increment correctly? Does it exit at the right angle? If the first iteration is wrong, stop and fix the macro.</p>
+<p>Use #3000 to alarm on bad input. If the radius variable is zero or negative, alarm immediately. If the hole count is not an integer, alarm. If the depth exceeds travel, alarm. A macro that stops with a clear message is better than a macro that drills 12 holes in the wrong place.</p>
+<p>Document the macro. Put a comment block at the top: what it does, what variables mean, what the expected inputs are, and what the safe values are. The next person (possibly you, six months later) needs to know what #4 means without reverse-engineering the loop.</p>
+
+<h3>Probing and Offsets</h3>
+<p>A touch probe in the spindle measures the part automatically. The probe touches a surface, records the machine position, and the macro computes the offset. This replaces hand edge-finding. A probing macro can find the center of a bore, set G54 X/Y, and even measure tool length automatically.</p>
+<p>The probe does not write G54 directly &mdash; it computes the offset and writes it to the work offset register. The macro must account for the probe tip radius (the probe touches a sphere, not a point). If the tip is &Oslash;4, the center is 2 mm from the touched surface. Get the sign right: touching the left edge gives a different sign than touching the right edge.</p>
+<p>Probing is faster and more repeatable than hand edge-finding, but it is not magic. The probe must be calibrated (tip diameter, stylus length) on a reference ring. If the calibration is off, every probe-set offset is off. Treat the probe as a measuring instrument, not a setup convenience.</p>
+<h3>Positive Inputs Are Only the First Check</h3><p>The example demonstrates two intended settings: a 30-degree step for twelve holes and a 45-degree step for eight holes. A positive step alone does not prove that a different value evenly divides a revolution. For example, 100 degrees would trigger at 0, 100, 200 and 300 degrees, leaving a 60-degree closing gap. That is not an equally spaced four-hole pattern. Keep the teaching input to the two demonstrated choices, or add a separately designed validation rule before offering a general-purpose pattern generator.</p><p>Radius validity also differs from travel and clearance validity. A positive 50 mm radius produces X and Y values between −50 and +50 relative to the active work origin; the machine positions additionally depend on that origin. Compare the resulting envelope with actual travel, fixtures, drill length and holder size. The input checks catch the named numerical errors only. They do not certify a setup for unattended operation or replace the first-part verification plan.</p>
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Learning macros before mastering basic G-code</strong> — you must understand coordinates, offsets, and canned cycles first. Macros build on top of them.</li>
+<li><strong>Forgetting to increment the loop variable</strong> — if you omit <code>#1 = #1 + 60</code>, the loop runs forever at the same angle. Always update the counter.</li>
+<li><strong>Controller-specific syntax</strong> — Haas uses <code>#1</code>, FANUC uses <code>#1</code>, Siemens uses different system variables. Check your controller manual.</li>
+<li><strong>Using G81 inside a loop without G90</strong> — the variables produce absolute coordinates, but ensure G90 is active so the positions are not incremental.</li>
+<li><strong>Radians vs degrees</strong> — most controllers use degrees for SIN/COS. If your results are wildly wrong, check whether the controller expects radians.</li>
+</ul>
+
+<h2>Practice</h2>
+<p><strong>1.</strong> What is <code>#1 = 10.</code> used for?</p>
+<details><summary>Ans</summary><p>It assigns the value 10 to variable #1. Later, <code>G00 X#1</code> moves to X10. The variable acts as a named storage location.</p></details>
+<p><strong>2.</strong> Why use a loop instead of writing 12 hole positions by hand?</p>
+<details><summary>Ans</summary><p>Maintainability: change the radius or hole count in one place and the whole pattern updates. No manual trigonometry, no typos in coordinates.</p></details>
+<p><strong>3.</strong> You want 8 holes instead of 6 on the bolt circle. What do you change?</p>
+<details><summary>Ans</summary><p>The angle increment from 60 to 45 (360/8 = 45 degrees). The loop automatically runs 8 times: 0, 45, 90, 135, 180, 225, 270, 315.</p></details>
+<p><strong>4.</strong> What happens if you forget <code>#1 = #1 + 60</code>?</p>
+<details><summary>Ans</summary><p>The loop condition <code>#1 LT 360</code> stays true forever (angle never changes). The machine drills the same hole repeatedly until you press feed hold.</p></details>
+
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/35-cad-cam-postprocessing/">&larr; CAD/CAM</a><a href="/cnc-manufacturing-engineering/cnc-programming/37-multiaxis-probing-overview/">Rotary &amp; Probing &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

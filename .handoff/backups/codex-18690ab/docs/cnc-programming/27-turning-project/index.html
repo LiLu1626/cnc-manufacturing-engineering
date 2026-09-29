@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Worked Project: Stepped Shaft — CNC Programming</title>
+<meta name="description" content="Complete CNC lathe project: facing, roughing and finishing a stepped shaft with Haas G71/G70, setup data, and tool nose radius considerations.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/27-turning-project/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Worked Project: Stepped Shaft</h1>
+<p class="lead">A &Oslash;40&times;100 mm bar stock, faced to establish Z0, then rough-turned and finish-turned to a two-step profile (&Oslash;30 and &Oslash;36). This project covers facing, setup, Haas single-line G71 roughing, and G70 finishing.</p>
+
+<h2>Concept</h2>
+<p>We machine the front end of a &Oslash;40&times;100 bar. The finished part has two diameters: &Oslash;30 from Z0 to Z&minus;20, and &Oslash;36 from Z&minus;20 to Z&minus;40. We do <strong>not</strong> part off or turn the back — this setup completes only the front contour.</p>
+<table class="data-table">
+<tr><th>Item</th><th>Classroom model</th></tr>
+<tr><td>Raw stock</td><td>&Oslash;40 &times; 100 mm; axial range Z&minus;99 to +1</td></tr>
+<tr><td>Finished datum</td><td>Final face at Z0 (1 mm stock to remove from original face at +1)</td></tr>
+<tr><td>Chuck jaw front</td><td>Z&minus;55; gripping from Z&minus;99 to Z&minus;55 (44 mm grip length)</td></tr>
+<tr><td>Original projection</td><td>56 mm from jaw front to stock end; 55 mm after facing</td></tr>
+<tr><td>Front section</td><td>&Oslash;30, Z0 to Z&minus;20</td></tr>
+<tr><td>Rear section</td><td>&Oslash;36, Z&minus;20 to Z&minus;40</td></tr>
+<tr><td>Retained zone</td><td>Z&minus;40 to Z&minus;55 (15 mm gap, not machined)</td></tr>
+<tr><td>Tolerances</td><td>&Oslash;30/&Oslash;36 &plusmn;0.05; shoulder position &plusmn;0.10</td></tr>
+</table>
+<p><strong>Tool:</strong> T0101, a right-hand turning/facing tool with 0.4 mm nose radius. X is programmed in diameter. The virtual tool tip defines the geometry offset; the actual r0.4 nose leaves a small radius at the shoulder root — this is allowed and is not a sharp internal corner.</p>
+
+<h2>Why It Matters</h2>
+<p>The facing operation is not optional: it establishes the axial datum (Z0). If you skip facing and set Z0 on the rough stock face at +1, every axial dimension is off by 1 mm. The 44 mm grip length and 55 mm projection are classroom geometry assumptions — real gripping force, jaw envelope, and toolholder clearance must be verified on the actual machine.</p>
+
+<svg viewBox="0 0 480 200" style="width:100%;max-width:500px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="120" y="15" font-size="11" font-weight="bold" fill="#333">Setup geometry (px=440+4Z, radial 2px/mm)</text>
+  <!-- Chuck: grip zone x44 to x220 (Z-99 to Z-55) -->
+  <rect x="20" y="50" width="200" height="100" fill="#999" rx="3"/>
+  <text x="60" y="105" font-size="10" fill="#fff">CHUCK (grip Z-99 to Z-55)</text>
+  <!-- Unfinished projection: x220-280 (Z-55 to Z-40), Ø40 height 80, center y=100 -->
+  <rect x="220" y="60" width="60" height="80" fill="#c8d6e5" stroke="#999"/>
+  <text x="225" y="155" font-size="8" fill="#666">Ø40 stock</text>
+  <!-- Ø36 section: x280-360 (Z-40 to Z-20), height 72, center y=100 -->
+  <rect x="280" y="64" width="80" height="72" fill="#5f27cd" rx="1"/>
+  <text x="295" y="105" font-size="9" fill="#fff">Ø36</text>
+  <!-- Ø30 section: x360-440 (Z-20 to Z0), height 60, center y=100 -->
+  <rect x="360" y="70" width="80" height="60" fill="#54a0ff" rx="1"/>
+  <text x="370" y="105" font-size="9" fill="#fff">Ø30</text>
+  <!-- Z0 at x440, original face Z+1 at x444 (dashed) -->
+  <line x1="440" y1="55" x2="440" y2="145" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="420" y="50" font-size="9" fill="#e74c3c">Z0 (face)</text>
+  <line x1="444" y1="65" x2="444" y2="135" stroke="#999" stroke-width="1" stroke-dasharray="2,2"/>
+  <text x="446" y="100" font-size="8" fill="#999">orig Z+1</text>
+  <!-- Z markers -->
+  <text x="210" y="175" font-size="8" fill="#666">Z-55 jaw</text>
+  <text x="270" y="175" font-size="8" fill="#666">Z-40</text>
+  <text x="350" y="175" font-size="8" fill="#666">Z-20</text>
+</svg>
+
+<h2>How It Works</h2>
+
+<h3>Two Facing Cuts</h3>
+<p>We take two 0.5 mm facing passes to remove the 1 mm stock from the original face at Z+1 down to Z0:</p>
+<ol>
+<li>Approach at X42 Z2 (outside the stock).</li>
+<li>Feed to Z0.5, then face from X42 to X&minus;0.5 (0.5 mm cut).</li>
+<li>Retract +Z to 2, then return X42 (do not radial-retract in the cut).</li>
+<li>Feed to Z0, face from X42 to X&minus;0.5 (remaining 0.5 mm).</li>
+<li>Retract +Z to 2, return X42, ready for roughing.</li>
+</ol>
+<p>At S1000 and F0.10 mm/rev, ideal feed = 100 mm/min. Each facing pass traverses X42.5 radially (21.25 mm actual radius), taking about 12.75 seconds of ideal cutting time — not including acceleration, approach, or center-cutting effects.</p>
+
+<h3>Haas Single-Line G71 Roughing</h3>
+<p>We use the Haas single-line format:</p>
+<pre class="cp-code"><code>G71 P10 Q20 D1.0 U0.4 W0.1 F0.20</code></pre>
+<ul>
+<li><strong>D1.0</strong> = radial depth of cut per pass (1.0 mm)</li>
+<li><strong>U0.4</strong> = finish allowance on diameter (0.4 mm diameter = 0.2 mm radial)</li>
+<li><strong>W0.1</strong> = finish allowance on Z</li>
+<li><strong>P10 Q20</strong> = contour block range</li>
+</ul>
+<p>The P-Q contour defines the finished shape (Type I, no grooves):</p>
+<pre class="cp-code"><code>N10 G00 X30.
+G01 Z0. F0.10
+Z-20.
+X36.
+Z-40.
+N20 X42.</code></pre>
+
+<h3>G70 Finishing</h3>
+<p>After G71, the same T0101 runs G70 at S1200 to cut the finished profile at F0.10. Rough diameter after G71: &Oslash;30.4 and &Oslash;36.4 (U0.4 diameter allowance). Final: &Oslash;30 and &Oslash;36.</p>
+
+<svg viewBox="0 0 300 200" style="width:100%;max-width:350px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="60" y="18" font-size="12" font-weight="bold" fill="#333">Nose Radius at Shoulder (r0.4, local enlargement: 20px = 0.4mm)</text>
+  <!-- vertical face (horizontal cut) and horizontal OD (vertical cut) meeting at corner -->
+  <!-- virtual tip at (150,80): face horizontal line left, OD vertical line down -->
+  <line x1="50" y1="80" x2="150" y2="80" stroke="#333" stroke-width="2"/>
+  <line x1="150" y1="80" x2="150" y2="180" stroke="#333" stroke-width="2"/>
+  <!-- r=20px circle tangent to both lines, center at (130,100) -->
+  <circle cx="130" cy="100" r="20" fill="none" stroke="#e74c3c" stroke-width="2"/>
+  <!-- tangent points -->
+  <circle cx="130" cy="80" r="2" fill="#e74c3c"/>
+  <circle cx="150" cy="100" r="2" fill="#e74c3c"/>
+  <text x="155" y="78" font-size="9" fill="#e74c3c">tangent</text>
+  <text x="155" y="103" font-size="9" fill="#e74c3c">tangent</text>
+  <text x="100" y="130" font-size="10" fill="#e74c3c" font-weight="bold">r0.4</text>
+  <!-- virtual tip -->
+  <circle cx="150" cy="80" r="2" fill="#999"/>
+  <text x="155" y="95" font-size="9" fill="#999">virtual tip</text>
+</svg>
+
+<h3>Clearance and Retraction</h3>
+<p>After machining, retract in two axes: first to X100 (clear of OD), then to Z100 (away from chuck). These X100/Z100 numbers are classroom safe positions for this model — verify on your machine. The toolholder's rearward Z envelope is 8 mm, so at Z&minus;40 the tool body reaches Z&minus;48, leaving 7 mm to the jaw front at Z&minus;55.</p>
+
+<svg viewBox="0 0 480 220" style="width:100%;max-width:480px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="80" y="18" font-size="12" font-weight="bold" fill="#333">G71 Type I Roughing (X-Z schematic, r=X/2)</text>
+  <!-- axes: horizontal = Z, vertical = radius r -->
+  <line x1="40" y1="190" x2="440" y2="190" stroke="#999" stroke-width="1"/>
+  <line x1="40" y1="30" x2="40" y2="190" stroke="#999" stroke-width="1"/>
+  <text x="445" y="194" font-size="10" fill="#666">Z</text>
+  <text x="20" y="28" font-size="10" fill="#666">r</text>
+  <!-- stock r=20 → y=190-80=110 -->
+  <line x1="40" y1="110" x2="420" y2="110" stroke="#999" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="350" y="105" font-size="9" fill="#999">Stock r=20 (Ø40)</text>
+  <!-- finish profile: front r=15 (y=130) Z0→Z-20; rear r=18 (y=118) Z-20→Z-40 -->
+  <!-- Z0=x400, Z-20=x300, Z-40=x200 -->
+  <path d="M 400 130 L 300 130 L 300 118 L 200 118" fill="none" stroke="#27ae60" stroke-width="2.5"/>
+  <text x="320" y="125" font-size="9" fill="#27ae60">r15 (Ø30)</text>
+  <text x="230" y="113" font-size="9" fill="#27ae60">r18 (Ø36)</text>
+  <!-- finish stock boundary: front r=15.2, rear r=18.2, axial W0.1, connected at shoulder x=300.5 -->
+  <line x1="400" y1="129.2" x2="300.5" y2="129.2" stroke="#27ae60" stroke-width="0.8" stroke-dasharray="2,2"/>
+  <line x1="300.5" y1="129.2" x2="300.5" y2="117.2" stroke="#27ae60" stroke-width="0.8" stroke-dasharray="2,2"/>
+  <line x1="300.5" y1="117.2" x2="200.5" y2="117.2" stroke="#27ae60" stroke-width="0.8" stroke-dasharray="2,2"/>
+  <!-- front rough passes: r16 (y=126), r17 (y=122) — Z0 to Z-19.9 (W0.1 stock) -->
+  <line x1="400" y1="126" x2="300.5" y2="126" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="400" y1="122" x2="300.5" y2="122" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <!-- rear rough pass: r=19 (y=114) — Z-20 to Z-39.9 -->
+  <line x1="300" y1="114" x2="200.5" y2="114" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <!-- Z markers -->
+  <text x="395" y="205" font-size="9" fill="#666">Z0</text>
+  <text x="290" y="205" font-size="9" fill="#666">Z-20</text>
+  <text x="195" y="205" font-size="9" fill="#666">Z-40</text>
+  <text x="60" y="170" font-size="9" fill="#e67e22">Selected cutting segments (not full G71 simulation)</text>
+  <text x="60" y="182" font-size="9" fill="#e67e22">W0.1 = 0.1mm axial finish stock</text>
+</svg>
+
+<h3>Setup Procedure Summary</h3>
+<ol>
+<li>Mount raw &Oslash;40 bar in 3-jaw chuck, project 56 mm from jaw face.</li>
+<li>Install T0101 right-hand turning tool in turret station 1.</li>
+<li>Set G54: X offset at bar center (touch off OD and set diameter), Z offset by touching the original rough face and entering Z+1 (the facing program then cuts 1 mm to reach Z0).</li>
+<li>Set T0101 geometry offsets: X and Z geometry for the virtual tool tip, plus nose radius 0.4 and tip direction number (for this right-hand OD tool, direction 3). Wear offsets are adjusted during inspection.</li>
+<li>Test air cut at rapid override 25% before full run.</li>
+<li>Face, then run G71 roughing, inspect diameters, then G70 finishing.</li>
+</ol>
+
+<h2>Example: Complete Program</h2>
+<pre class="cp-code"><code>O0027 (STEPPED SHAFT PROJECT)
+G21 G18 G97 G99
+T0101 (RIGHT-HAND TURNING/FACING TOOL, R0.4)
+G54 S1000 M03
+
+(FACING PASS 1 - REMOVE 0.5mm)
+G00 X42. Z2.
+G01 Z0.5 F0.10
+G01 X-0.5
+G00 Z2.
+G00 X42.
+
+(FACING PASS 2 - REMOVE REMAINING 0.5mm TO Z0)
+G01 Z0 F0.10
+G01 X-0.5
+G00 Z2.
+G00 X42.
+
+(ROUGHING CYCLE)
+G71 P10 Q20 D1.0 U0.4 W0.1 F0.20
+N10 G00 X30.
+G01 Z0. F0.10
+Z-20.
+X36.
+Z-40.
+N20 X42.
+
+(FINISHING CYCLE)
+S1200 M03
+G70 P10 Q20
+
+(RETRACT)
+G00 X100.
+G00 Z100.
+M05
+M30</code></pre>
+
+
+<h3>Why a Stepped Shaft Teaches the Whole Machine</h3>
+<p>This single part touches almost every turning concept: diameter programming (X is the finished diameter, twice the radius), G18 XZ plane, G97 constant-RPM roughing, G71 stock removal, G70 finish pass, nose radius compensation, and two-axis retract in the correct order. The two diameters create a 90&deg; shoulder that exposes the most common beginner error: cutting the shoulder with a tool whose nose radius leaves a blend or an undercut. The r0.4 insert does not produce a sharp corner; it leaves a 0.4 mm radius at the shoulder root, which the drawing must either specify or permit as a default break.</p>
+<p>The facing step deserves extra attention. Many beginners treat facing as a quick cleanup pass, but it is the operation that establishes Z0. If the tool touches the rough stock face at Z+1 and the program assumes Z0 at that face, every axial dimension &mdash; the position of the shoulder, the length of the &Oslash;30 section, the total length &mdash; is off by 1 mm. Facing to Z0 and then touching off at that fresh face is the engineering habit that prevents a whole class of axial errors.</p>
+<p>After G71 finishes, the part is not yet done: there is 0.4 mm of diameter stock (U0.4) and 0.1 mm of axial stock (W0.1) left on the profile. G70 at S1200 removes that stock in one clean pass. Running G70 at the roughing speed would tool-wear the finish pass; running G71 at the finish speed would chatter. Speed is chosen per operation, not per machine.</p>
+<p>On the first part, measure the &Oslash;30 and &Oslash;36 diameters with a micrometer, then measure the shoulder position with a height gauge or a DTI on a surface plate. If the diameters are uniformly small by 0.05 mm, enter +0.05 in the X wear field (per your control's sign convention); if the shoulder is off in Z, adjust Z wear. Do not change G54 to correct a diameter size &mdash; G54 shifts the whole part, while a diameter error is a tool-wear or deflection issue.</p>
+
+<h3>Tooling for This Project</h3>
+<p>T0101 is a right-hand external turning/facing tool with a 0.4 mm nose radius, as introduced at the top of this page. The insert grade and holder are classroom assumptions for mild-steel (1018/A36) bar; real insert selection must follow the tooling catalog for your material and machine. X is programmed in diameter, so the finished front section is X30 and the rear section is X36. The raw stock is &Oslash;40, gripped at Z&minus;99 to Z&minus;55, projecting to Z&minus;40.</p>
+<p>Facing uses the same tool: approach X42 Z2, feed to Z0.5, face from X42 to X&minus;0.5, retract Z2, return X42, then repeat at Z0. The two 0.5 mm facing passes establish Z0 at the faced face. S1000 and F0.10 mm/rev are starting values; adjust to the insert manufacturer's chart.</p>
+<p>Roughing with G71 uses U0.4 as the diameter finish allowance (not the depth per pass; the depth is set by the G71 depth parameter D on Haas lathes) and W0.1 axial finish allowance. The contour N10&ndash;N20 describes the finished path X30 Z&minus;20, X36 Z&minus;40. G70 then runs the same contour at finish feed.</p>
+
+<h3>First-Part Inspection Checklist</h3>
+<p>After the program finishes, leave the part in the chuck and measure: (1) &Oslash;30 at mid-length of the front section (away from the shoulder root, where the r0.4 nose fillet distorts the reading); (2) &Oslash;36 at mid-length of the rear section; (3) shoulder position Z&minus;20 from the faced face; (4) projection from Z&minus;55 to Z&minus;40.</p>
+<p>If a diameter is 0.05 mm too small, the tool cut too deep. Correct it in the X wear offset (sign per your control's convention) and rerun G70; do not change G54, which shifts the whole part. If the diameter is too large, diagnose the cause first — tool deflection, built-up edge, or a worn insert — before adding a wear correction. If the shoulder Z position is off, adjust the Z wear offset, not G54 Z.</p>
+<p>Do not promise that rerunning G70 will recover material that has already been cut past the target. Once a diameter is undersized, the part is scrap; the wear correction applies to the next part, not to undo this one. The first part is a learning part — use it to verify the offsets, then run the second part for production.</p>
+
+<h3>Why a Complete Project Teaches More Than Isolated Codes</h3>
+<p>A single G71 example shows one code. A complete project shows how drawing, datum, tooling, offsets, program, and inspection fit together. Once you have run a real program from drawing to inspected part, the abstract G-codes become physical. The project on this page uses the &Oslash;40 raw bar, r0.4 insert, and X30/X36 contour described in the figures and code above — do not confuse it with other example diameters used elsewhere on this site.</p>
+<h3>Why a Lathe Uses Diameter Programming</h3>
+<p>On a lathe, X is programmed as the full diameter of the turned surface, not the radius. This matches how we measure turned parts: a micrometer reads 30.0, not 15.0, for a &Oslash;30 shaft. It also means a 0.1 mm diameter cut removes 0.05 mm of radial stock &mdash; the infeed the cross-slide actually moves. In diameter mode, X15 means a 15 mm diameter target, i.e. radius 7.5 mm from center; X0 is the axis. Relative to a &Oslash;30 target, programming X15 leaves the tool 7.5 mm too close to center on the radius (15 mm too small in diameter) and cuts the shaft undersize. Always confirm the lathe is in diameter programming, not radius.</p>
+
+<h3>Measuring the First Turn</h3>
+<p>After the first rough-OD pass to &Oslash;36.4 and the finish pass to &Oslash;30.0 (Z0 to Z-20), stop the spindle, let it coast, and measure both diameters with a micrometer. The &Oslash;30.0 section should read on the drawing tolerance; the &Oslash;36.0 section (Z-20 to Z-40) should read about 0.4 mm oversize on the rough pass. If the &Oslash;30.0 reads 29.8 instead of 30.0, you have cut 0.2 mm too deep &mdash; that is a wear-offset correction, not a program edit. Touch the part off, enter the correction in the wear offset, and run the next piece. Do not edit the X30.0 in the program; that moves the drawing dimension.</p>
+<p>Axial position is checked against Z0 (the face). If the shoulder at Z-20 is actually at Z-19.8, the Z wear offset is off by 0.2 mm. On a lathe, diameter and length corrections live in two different offsets; do not mix them up. After correcting, run one more piece and re-measure both diameters and the shoulder before letting the machine run a batch.</p>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Saying "face it" without writing the facing code</strong> — the 1 mm face stock must be actually removed to establish Z0.</li>
+<li><strong>Treating U0.4 as 0.4 mm radial</strong> — U is diameter allowance, so radial is 0.2 mm.</li>
+<li><strong>Ignoring the r0.4 nose radius</strong> — the shoulder root has a small radius, not a sharp 90&deg; corner. Do not measure diameter at the shoulder root.</li>
+<li><strong>Confusing tool clearance with toolholder clearance</strong> — the tip clearance to the chuck is not the same as the toolholder body clearance.</li>
+<li><strong>Claiming the part is complete</strong> — we only machined the front contour; parting, back-facing, and final length are separate operations.</li>
+</ul>
+
+<h2>Practice</h2>
+<p><strong>1.</strong> After G71 with U0.4, what are the rough diameters?</p>
+<details><summary>Show answer</summary><p>&Oslash;30.4 and &Oslash;36.4. U0.4 is diameter allowance, so each rough diameter is 0.4 mm over finished.</p></details>
+<p><strong>2.</strong> You measure &Oslash;30.03 and &Oslash;36.07. Are both acceptable at &plusmn;0.05?</p>
+<details><summary>Show answer</summary><p>&Oslash;30.03 is within 30.00&plusmn;0.05 (29.95&ndash;30.05) — OK. &Oslash;36.07 is above 36.05 — out of tolerance by 0.02 mm.</p></details>
+<p><strong>3.</strong> If the toolholder rearward envelope is 8 mm behind the tip, and the jaw front is at Z&minus;55, what is the minimum gap when machining to Z&minus;40?</p>
+<details><summary>Show answer</summary><p>Tool body reaches Z = &minus;40 &minus; 8 = &minus;48. Gap to jaw at Z&minus;55 is 7 mm. This is a geometric model; verify the actual toolholder envelope on the machine.</p></details>
+
+<section class="cp-sources">
+<h3>Measuring After Roughing vs After Finishing</h3>
+<p>After G71, the planned rough diameter on the &Oslash;30 step is &Oslash;30.4 (U0.4 in diameter, i.e. 0.2 mm on the radius). If you measure &Oslash;30.2 instead, that means 0.2 mm less in diameter than the rough plan &mdash; but 0.2 mm of material still remains to the &Oslash;30 finish target. That does <strong>not</strong> mean the finish wear offset is wrong. Before touching any offset, check: (1) U and W in the G71 block, (2) that you measured on the same cylinder the cycle will finish, (3) tool deflection and overhang, (4) that the micrometer is zeroed. Only after G70 finishes and the part still reads off the finish size do you correlate the error with the offset convention and adjust wear. Rough-side stock variation is not by itself a finish-compensation amount.</p>
+<table><caption>Rough-side measurement diagnostic</caption>
+<thead><tr><th scope="col">Reading</th><th scope="col">Diameter error vs plan</th><th scope="col">Action</th></tr></thead>
+<tbody>
+<tr><td>&Oslash;30.4 (planned)</td><td>0</td><td>Run G70 as written.</td></tr>
+<tr><td>&Oslash;30.2 (this case)</td><td>&minus;0.2 mm dia</td><td>Verify U, measurement position, deflection; do not trim finish offset yet.</td></tr>
+<tr><td>&Oslash;30.0 after G70</td><td>0 vs finish target</td><td>Accept.</td></tr>
+<tr><td>&Oslash;30.1 after G70</td><td>+0.1 mm dia</td><td>Correlate with offset convention, adjust wear by &minus;0.1 dia, rerun only the finishing pass.</td></tr>
+</tbody></table>
+
+<h2>Sources</h2>
+<ul>
+<li>Haas Automation Lathe Operator's Manual — G71 roughing cycle (single-line format), G70 finishing cycle.</li>
+<li>Tool nose radius compensation: r0.4 insert leaves a fillet at shoulders; measure diameters away from the shoulder root.</li>
+<li>All speeds, feeds, depths, and grip lengths are classroom teaching assumptions. Real process parameters require tooling catalogs and machine verification.</li>
+</ul>
+</section>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/28-milling-project/">&larr; Milling Project</a><a href="/cnc-manufacturing-engineering/cnc-programming/35-cad-cam-postprocessing/">CAD/CAM &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

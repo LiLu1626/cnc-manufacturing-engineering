@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Program Verification & First Article — CNC Programming</title>
+<meta name="description" content="The verification workflow: syntax review, coordinate review, offset check, simulation, dry run, single block, reduced feed, first article inspection.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/24-verification/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Program Verification &amp; First Article</h1>
+<p class="lead">Writing the program is only half the job. This page covers the verification workflow that separates a production programmer from someone who crashes machines: dry run, single block, reduced feed, and first article inspection.</p>
+
+<h2>Concept</h2>
+<p><strong>Program verification</strong> is the process of confirming that the program will produce the intended part before committing to a full production run. The sequence is: syntax review &rarr; coordinate review &rarr; offset review &rarr; CAM simulation &rarr; dry run on the machine &rarr; single block &rarr; reduced feed &rarr; first part cut &rarr; inspection. Each step catches a different class of error.</p>
+
+<h2>Why It Matters</h2>
+<p>Every crash started as a "should be fine" program. Mental simulation is unreliable: you read over the same wrong coordinate three times and still miss it. A 5-minute dry run at reduced feed catches errors that cost 4 hours of machine repair, a broken spindle, and a scrapped part. The cost of verification is tiny compared to the cost of a crash. The engineering habit of verification is what lets you run unattended programs with confidence.</p>
+
+<h2>How It Works</h2>
+
+<h3>Before Hitting Cycle Start — Checklist</h3>
+<ol>
+<li><strong>Units</strong> — G21 (metric) or G20 (inch)? Confirm both in the program and on the controller.</li>
+<li><strong>Work offset</strong> — G54 set to the correct datum on the part? Check X, Y, and Z origin.</li>
+<li><strong>Tool length offsets</strong> — H01, H02... measured and loaded? Not zero? Also confirm the sign convention on your control: on a mill with G43 the H value is the gauge-line-to-tip length; an H of 0 or a wrong sign sends the tool to the wrong Z.</li>
+<li><strong>Tool radius offsets</strong> — D register set per this controller's radius/diameter and wear/geometry convention?</li>
+<li><strong>Spindle direction and speed</strong> — M03 forward, S in the correct range?</li>
+<li><strong>Z clearance</strong> — is the tool at a safe Z above the stock, not at cut depth?</li>
+<li><strong>Tool number</strong> — does T01 in the program match what is physically in the spindle?</li>
+<li><strong>Startup block</strong> — does the program begin with G21 G17 G90 G40 G49 G80?</li>
+</ol>
+
+<h3>Verification Sequence</h3>
+<table class="data-table">
+<tr><th>Step</th><th>What You Do</th><th>Catches</th></tr>
+<tr><td>1. Syntax review</td><td>Read the code top to bottom on paper</td><td>Missing %, wrong O number, typos</td></tr>
+<tr><td>2. Coordinate review</td><td>Sketch the tool path on paper</td><td>Wrong coordinates, wrong direction</td></tr>
+<tr><td>3. Offset review</td><td>Check G54, H, D on controller</td><td>Missing or wrong offsets</td></tr>
+<tr><td>4. CAM simulation</td><td>Watch material removal in CAM</td><td>Obvious collisions, wrong tool path</td></tr>
+<tr><td>5. Planned air run</td><td>Per machine procedure, verify path</td><td>Gross coordinate errors, limit switches</td></tr>
+<tr><td>6. Single block</td><td>Block-by-block at reduced feed</td><td>Per-motion errors you would miss at speed</td></tr>
+<tr><td>7. Planned first cut</td><td>Feed/rapid overrides per machine first-article procedure</td><td>Tool deflection, chatter, chip issues</td></tr>
+<tr><td>8. First article</td><td>Measure every dimension</td><td>Offset errors, tool wear, dimensional drift</td></tr>
+</table>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 420 100" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <rect x="10" y="30" width="70" height="40" fill="#3498db" rx="4"/>
+  <text x="45" y="55" font-size="10" fill="white" text-anchor="middle">Review</text>
+  <line x1="80" y1="50" x2="95" y2="50" stroke="#666" stroke-width="1.5"/>
+  <rect x="95" y="30" width="70" height="40" fill="#2ecc71" rx="4"/>
+  <text x="130" y="55" font-size="10" fill="white" text-anchor="middle">Dry Run</text>
+  <line x1="165" y1="50" x2="180" y2="50" stroke="#666" stroke-width="1.5"/>
+  <rect x="180" y="30" width="70" height="40" fill="#f39c12" rx="4"/>
+  <text x="215" y="55" font-size="10" fill="white" text-anchor="middle">1st Part</text>
+  <line x1="250" y1="50" x2="265" y2="50" stroke="#666" stroke-width="1.5"/>
+  <rect x="265" y="30" width="70" height="40" fill="#9b59b6" rx="4"/>
+  <text x="300" y="55" font-size="10" fill="white" text-anchor="middle">Measure</text>
+  <line x1="335" y1="50" x2="350" y2="50" stroke="#666" stroke-width="1.5"/>
+  <rect x="350" y="30" width="60" height="40" fill="#27ae60" rx="4"/>
+  <text x="380" y="55" font-size="10" fill="white" text-anchor="middle">OK</text>
+</svg>
+<figcaption>The verification chain. Each step catches errors the previous step cannot.</figcaption>
+</figure>
+
+<h3>First Article Inspection</h3>
+<p>After the first part runs through at reduced feed, stop and measure. Check every dimension the drawing calls for: hole positions, depths, diameters, and surface finish. If dimensions are off, first separate position error from width/size error. A translated position suggests work offset; a width error suggests cutter compensation, tool size, or deflection — not G54. Measure before adjusting. Only after the first article passes inspection do you increase feed to production rate.</p>
+
+<h2>Example</h2>
+<p><strong>Before first cut checklist for a drilling program:</strong></p>
+<ul>
+<li>G21 G90 G17 active in the startup block</li>
+<li>G54 origin at the correct corner of the stock</li>
+<li>H01 tool length offset measured and loaded (not 0)</li>
+<li>Spindle S2000 M03 forward rotation</li>
+<li>G00 Z50 above the stock (not hovering at Z&minus;5)</li>
+<li>T01 in the spindle is the &Oslash;6 drill the program expects</li>
+<li>G80 at the end of the hole pattern</li>
+</ul>
+<p>Run a planned air run per the machine procedure, watching XY positions. Then single-block the first hole down to Z-15. Confirm the tool is at the right X/Y before allowing it to feed down.</p>
+
+
+<h3>Simulation Before Metal Cutting</h3>
+<p>CAM/NC verification against a stock model can catch tool gouging, overtravel, missed moves, and unit errors if the NC and model inputs are checked together. It cannot prove on-machine offsets or unmodeled fixture clearance.</p>
+
+<h3>Dry Run and Single Block</h3>
+<p>Controller graphics, CAM verification, and machine dry-run each behave differently. Use them per the machine procedure to confirm the XY path. Single block executes one block at a time; step through the first few cuts to confirm Z depth and compensation engage as expected.</p>
+
+<h3>First Part Inspection</h3>
+<p>After the first cut, stop and measure. Check critical dimensions against the drawing before continuing. If an offset is wrong, you want to find it on the first part, not the tenth.</p>
+
+<figure class="cp-figure">
+<svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fafafa;border:1px solid #ddd;border-radius:6px;">
+  <rect x="60" y="40" width="100" height="40" fill="#fadbd8" stroke="#c0392b"/>
+  <text x="110" y="65" font-size="10" fill="#c0392b" text-anchor="middle">slot 20.30</text>
+  <rect x="220" y="40" width="100" height="40" fill="#d5f5e3" stroke="#27ae60"/>
+  <text x="270" y="65" font-size="10" fill="#27ae60" text-anchor="middle">slot 20.30</text>
+  <line x1="110" y1="100" x2="270" y2="100" stroke="#333" stroke-dasharray="4,2"/>
+  <text x="190" y="115" font-size="10" fill="#333" text-anchor="middle">G54 X shifted +0.3</text>
+  <text x="190" y="140" font-size="10" fill="#c0392b" text-anchor="middle">width unchanged</text>
+</svg>
+<figcaption>Case B: shifting G54 moves the whole slot; width stays 20.30.</figcaption>
+</figure>
+
+
+<h3>What Simulation Cannot Catch</h3>
+<p>On-machine setup still must be verified: G54, H, D values are loaded as expected. Unloaded or unverified on-machine offsets and fixture clearance cannot be proven by this simulation.</p>
+
+<h3>Program Structure Review</h3>
+<p>Read the program end to end once before running. Check: units, plane, distance mode, compensation cancel, tool number matches, work offset, spindle direction, feed mode, and program end. Most errors are visible in a single read-through.</p>
+
+<h3>First Article and Inspection Plan</h3>
+<p>Define which dimensions will be measured on the first part, with what instrument, and what the acceptable range is. Do not invent the inspection plan after the part is made. Critical dimensions get measured first; cosmetic features last.</p>
+
+<h3>When to Stop and Re-check</h3>
+<p>Stop if the first cut sounds wrong, if the dimension is off by more than a small tolerance, or if chips look unusual. Continuing a suspect program "just to finish" turns one bad part into a scrap batch and a broken tool.</p>
+
+<h3>Offset Verification on Machine</h3>
+<p>After touching off, verify the offset makes sense: a 10 mm end mill should give a work zero near where you touched. A 50 mm face mill should not show a 20 mm offset. Sanity-check every number before cycling on.</p>
+
+<h3>Z-Height Check with Paper or Dial Indicator</h3>
+<p>Lower the tool slowly toward the part surface until a slip of paper just drags. Note the Z position. Compare it to the programmed zero. This catches gross setup errors before a 500 mm/min plunge.</p>
+
+<h3>Dry Run Without Clamping the Part</h3>
+<p>For a first program, run the tool path in the air above the part. Confirm XY travels match the expected outline. This catches gross coordinate and fixture errors without risking the part.</p>
+
+<h3>Single Block Through Compensation Engage</h3>
+<p>Cutter compensation engages on a lead-in move. Step through that block on single block and confirm the tool moves to the expected offset position, not into the part.</p>
+
+<h3>Measuring After the First Tool</h3>
+<p>Run the first tool only, measure its features, then call the next tool. Do not run all tools before measuring — if offset 1 is wrong, every downstream feature is wrong too.</p>
+
+<h3>Sign-off for Production Run</h3>
+<p>Once the first part is verified, record the offsets, tool list, and fixture number on the setup sheet. Future operators repeat the verified setup rather than re-discovering it.</p>
+
+<h3>Check the Tool Number Actually Called</h3>
+<p>Programs call T01 M06. Confirm the tool physically in the spindle matches. Tools can be put back in the wrong pocket. This is a one-second check that prevents a broken cutter.</p>
+
+<h3>Check the Work Offset Number</h3>
+<p>G54 vs G55 on a tombstone with multiple parts. Confirm which fixture the program expects. Running G54 when the part is on G55 is an instant crash.</p>
+
+<h3>Check the Units</h3>
+<p>G20 vs G21. Mixed units scale dimensions by 25.4 or 1/25.4. Look at the first block before cycle start.</p>
+
+<h3>Check Feed Override Position</h3>
+<p>Set rapid and feed overrides per the machine first-article procedure; lowering override slows motion but is not a collision guarantee.</p>
+
+<h3>Document the First Part Result</h3>
+<p>Record actual measured dimensions and any offset tweaks. The next setup repeats the tweaks rather than re-discovering them.</p>
+
+<h3>Simulation of Stock, Not Just Tool Path</h3>
+<p>Watch the stock model during simulation. The tool should remove material where expected, leave lugs where expected, and not gouge into the fixture. A path that looks clean on 2D may cut the vise in 3D.</p>
+
+<h3>Check Rapid Moves Above the Part</h3>
+<p>Rapid moves are where crashes happen. Trace every rapid XY move and confirm the Z height at that moment is above the fixture. Do this on paper before running.</p>
+
+<h3>Verify the Program End Is Where You Expect</h3>
+<p>The program should end at a known tool change position, with compensation canceled and spindle off. If the program ends mid-air, the next operator has to figure out where it stopped.</p>
+
+<h3>First Part Cycle</h3>
+<p>Run the first part with your hand near feed hold. Watch the first approach, first cut, and first retract. Be ready to stop if anything looks wrong.</p>
+
+<h3>Sign-Off and Record Keeping</h3>
+<p>A verified program is a documented program. Keep the setup sheet, offset list, and tool list with the program. Future operators should be able to repeat the job without re-discovering the verification steps.</p>
+
+<h3>When to Re-Verify After a Tool Change</h3>
+<p>Any tool change, even an insert index, changes the effective tool. Re-touch the offset and run a test cut before resuming production.</p>
+
+<h3>Simulation and Offsets Are Separate</h3>
+<p>A perfect simulation with the wrong H offset still crashes. Simulation verifies the tool path in the abstract; offsets are verified on the machine. Never substitute one for the other.</p>
+
+<h3>Measuring Critical Features First</h3>
+<p>On the first part, measure tight-tolerance features first. If they are off, stop and correct before running more. Cosmetic features can be checked later; critical ones cannot be fixed later.</p>
+
+<h3>Documenting Edge Cases</h3>
+<p>If this part has a tricky fixture, a thin wall, or a tool that barely clears, write a note in the program. Next setup will thank you.</p>
+
+<h3>Verification Is a Habit, Not a One-Time Gate</h3>
+<p>Re-verify after every tool change, after stock change, and after any interruption. Even a verified program becomes unverified when something changes.</p>
+
+<h3>The First Part Is the Payoff</h3>
+<p>All the simulation, dry runs, and offset checks exist to protect that first part. Treat it carefully; once it passes, production can run with confidence.</p>
+
+<h3>Never Skip the First-Part Check</h3>
+<p>Even on a program you have run before, the first part of a new batch deserves a check. Stock, tooling, and fixtures change between runs.</p>
+
+<h3>Verification Is Part of the Job</h3>
+<p>It is not extra work; it is the work. Skip it and you pay for it later in scrap and crashes.</p>
+<h3>Position vs Size: A Diagnostic Rule</h3>
+<p>If multiple features translate together, the work offset is suspect. If one feature size is wrong, the tool or compensation is suspect. These are different problems with different fixes.</p>
+<h3>Reading the NC, Not Just the CAM Picture</h3>
+<p>CAM verification shows the cutter path the system intended; the actual NC may differ after postprocessing. Open the G-code that will run on the machine and read it end to end before the first part.</p>
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Running full feed on first part</strong> — set overrides per the machine procedure until the first part passes.</li>
+<li><strong>Skipping the planned air run</strong> — follow the machine procedure to confirm the XY path before cutting.</li>
+<li><strong>Trusting CAM simulation</strong> — CAM does not know if your G54 is wrong or if H01 is unloaded.</li>
+<li><strong>Not measuring the first part</strong> — "it looks right" is not inspection. Measure every critical dimension.</li>
+<li><strong>Adjusting the program to compensate for measured errors</strong> — confirm the cause (work offset vs size error) before changing offsets or coordinates.</li>
+</ul>
+
+<h2>Practice</h2>
+<p><strong>1.</strong> Why use reduced feed on the first article?</p>
+<details><summary>Ans</summary><p>So you can hit feed hold immediately if something looks wrong, before the tool cuts into the part. At full feed, a 0.5-second delay can scrap the part.</p></details>
+<p><strong>2.</strong> What three offsets must be verified before running?</p>
+<details><summary>Ans</summary><p>Work offset (G54 X/Y/Z), tool length offset (H), and tool radius offset (D).</p></details>
+<p><strong>3.</strong> CAM simulation looks perfect. What might still be wrong?</p>
+<details><summary>Ans</summary><p>Work offset, tool length, tool number, units, spindle direction — anything in the physical setup that the CAM model does not know about. On-machine verification confirms setup values the CAM model does not carry.</p></details>
+<p><strong>4.</strong> The first part comes out 0.3 mm too large in X. Do you change the program X coordinates?</p>
+<details><summary>Ans</summary><p>No. A slot width of 20.30 vs 20.00 is a size error. Shifting G54 moves the slot; the width stays 20.30. Check contour, cutter compensation, tool size, wear, and measurement.</p></details>
+
+
+<h2>Sources</h2>
+<ul>
+<li>Haas Automation, G49 Tool Length Cancel. <a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G49.html" target="_blank" rel="noopener">haascnc.com</a>.</li>
+<li>Haas Automation, Mill Operator's Manual — Operation. <a href="https://www.haascnc.com/service/online-operator-s-manuals/mill-operator-s-manual/mill---operation.html" target="_blank" rel="noopener">haascnc.com</a>.</li>
+</ul>
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/22-threading/">&larr; Threading</a><a href="/cnc-manufacturing-engineering/cnc-programming/25-troubleshooting/">Troubleshooting &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

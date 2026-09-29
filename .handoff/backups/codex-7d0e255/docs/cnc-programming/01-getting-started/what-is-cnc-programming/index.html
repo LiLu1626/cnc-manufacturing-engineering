@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Is CNC Programming? — CNC Programming</title>
+<meta name="description" content="What CNC programming is, how a drawing becomes a machine path, manual vs CAM programming, and the engineering workflow from drawing to finished part.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/01-getting-started/what-is-cnc-programming/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>What Is CNC Programming?</h1>
+<p class="lead">CNC programming is the bridge between an engineering drawing and a moving cutting tool. This page explains what a program actually controls, how a drawing becomes coordinates, and when to program by hand versus using CAM.</p>
+
+<h2>Concept</h2>
+<p><strong>CNC</strong> stands for Computer Numerical Control. A CNC machine follows a set of coded instructions — a program — that tells the spindle, axes, coolant, and tool changer what to do and when. <strong>CNC programming</strong> is the process of writing those instructions so the machine removes material from raw stock and produces the part shown on a drawing.</p>
+<p>The program itself is a plain-text file (often called an NC file or G-code file) that lives on the machine's controller. It is not the same as a CAD drawing or a CAM project file. CAD defines geometry; CAM generates tool paths; the post-processor translates those paths into machine-specific G-code. The CNC programmer's job — whether manual or CAM-assisted — is to ensure the final G-code is correct, safe, and produces the intended part.</p>
+
+<h2>Why It Matters</h2>
+<p>Imagine a 60&times;40 mm plate with two holes: one at (10,10) and one at (50,30). The drawing gives you the dimensions, but the machine needs coordinates, speeds, feeds, and tool calls. A hole at (50,30) in the program does not mean "move 50 mm from where you are" — it means "go to X50, Y30 relative to the work zero." Confusing absolute and incremental coordinates is one of the most common beginner mistakes, and it can move a hole by exactly the wrong amount.</p>
+
+<h2>How It Works</h2>
+<p>The workflow from drawing to part always follows the same chain:</p>
+<ol>
+<li><strong>Engineering drawing</strong> — defines geometry, dimensions, tolerances, material.</li>
+<li><strong>Process planning</strong> — choose machine, fixturing, tools, operation order.</li>
+<li><strong>Workholding</strong> — clamp the stock, set the datum, verify clearance.</li>
+<li><strong>CNC program</strong> — write coordinates, speeds, feeds, tool changes.</li>
+<li><strong>Program verification</strong> — dry run, single block, first part, inspect.</li>
+</ol>
+
+<svg viewBox="0 0 500 120" style="width:100%;max-width:500px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="140" y="18" font-size="11" font-weight="bold" fill="#333">Drawing to Part Workflow</text>
+  <rect x="10" y="40" width="70" height="40" fill="#54a0ff" rx="5"/>
+  <text x="20" y="63" font-size="9" fill="#fff">Drawing</text>
+  <text x="85" y="63" font-size="12" fill="#666">→</text>
+  <rect x="100" y="40" width="70" height="40" fill="#5f27cd" rx="5"/>
+  <text x="108" y="58" font-size="9" fill="#fff">Process</text>
+  <text x="108" y="70" font-size="9" fill="#fff">Plan</text>
+  <text x="175" y="63" font-size="12" fill="#666">→</text>
+  <rect x="190" y="40" width="70" height="40" fill="#e67e22" rx="5"/>
+  <text x="198" y="58" font-size="9" fill="#fff">Workhold</text>
+  <text x="198" y="70" font-size="9" fill="#fff">+ Set Datum</text>
+  <text x="265" y="63" font-size="12" fill="#666">→</text>
+  <rect x="280" y="40" width="70" height="40" fill="#27ae60" rx="5"/>
+  <text x="290" y="58" font-size="9" fill="#fff">CNC</text>
+  <text x="290" y="70" font-size="9" fill="#fff">Program</text>
+  <text x="355" y="63" font-size="12" fill="#666">→</text>
+  <rect x="370" y="40" width="70" height="40" fill="#e74c3c" rx="5"/>
+  <text x="380" y="58" font-size="9" fill="#fff">Verify +</text>
+  <text x="380" y="70" font-size="9" fill="#fff">Machining</text>
+</svg>
+
+<p><strong>Manual programming</strong> means you write each G-code line yourself. It is fast for simple parts (straight turns, basic drilling, rectangular pockets) and gives you direct control. <strong>CAM programming</strong> uses software to generate tool paths from a 3D model. It is essential for complex 3D surfaces, multi-axis work, and high-volume production — but the output still needs human review. A CAM post-processor can produce code that looks right yet crashes the machine if the toolholder or fixture was not modeled.</p>
+
+<p>A CNC program controls several machine systems at once: the spindle speed and direction, the linear axis positions and feed rates, tool selection and change, coolant on/off, and auxiliary functions like chuck clamp or tailstock. The controller reads the program line by line, interprets each word (e.g., X50, S2000, F300), and sends signals to the servo drives. Modal codes (like G01) stay active until canceled, which is why you can write three X moves without repeating G01.</p>
+
+<table class="data-table">
+<tr><th></th><th>Manual Programming</th><th>CAM Programming</th></tr>
+<tr><td>Best for</td><td>Simple 2D parts, turning, drilling</td><td>Complex 3D surfaces, multi-axis</td></tr>
+<tr><td>Setup time</td><td>Minutes</td><td>Hours (model, toolpaths, post)</td></tr>
+<tr><td>Control</td><td>Full line-by-line control</td><td>Software-controlled; needs review</td></tr>
+<tr><td>Cost</td><td>Free (text editor)</td><td>Software license + training</td></tr>
+</table>
+
+<h3>NC vs CNC</h3>
+<p><strong>NC</strong> (Numerical Control) is the older technology using punched tape. <strong>CNC</strong> (Computer Numerical Control) is the modern version with a dedicated computer controller. The terms are often used interchangeably today, but "NC program" still refers to the G-code file itself, while "CNC machine" refers to the controlled machine tool.</p>
+
+<h2>Example</h2>
+<p>Two holes on a plate: Hole 1 at (10,10), Hole 2 at (50,30). In plain language, the machine needs to: move above Hole 1, drill, retract, move above Hole 2, drill, retract.</p>
+<pre class="cp-code"><code>G21 G17 G90 G94 G54 G80 G40
+G00 G43 H01 Z5. M08
+S1500 M03
+X10. Y10.
+G81 R2. Z-15. F120.
+X50. Y30.                  (bare XY repeats cycle, drills hole 2)
+G80
+G00 Z50. M09</code></pre>
+<p>Reading the numbers: X50 Y30 is the absolute target position. S1500 is spindle speed in RPM. F120 is feed rate in mm/min. G81 is the drilling canned cycle. You do not need to memorize every code yet — the point is that each letter-and-number pair controls one specific machine function.</p>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Treating coordinates as distances</strong> — X50 means "go to X50" (absolute), not "move 50 mm" (incremental). See <a href="../../03-coordinate-systems/">Coordinate Systems</a>.</li>
+<li><strong>Thinking S is cutting speed</strong> — S is RPM. The surface speed (m/min) depends on tool diameter. See <a href="../../10-spindle-feed/">Spindle Speed &amp; Feed</a>.</li>
+<li><strong>Assuming CAM output needs no review</strong> — the post-processor only knows what you told it. If units, work offset, or tool numbers are wrong, the code will faithfully execute the wrong path.</li>
+</ul>
+
+<h2>Practice</h2>
+<p><strong>1.</strong> Hole 1 is at (10,10), Hole 2 is at (50,30). What are the delta X and delta Y between them?</p>
+<details><summary>Show answer</summary><p>&Delta;X = 50 &minus; 10 = 40 mm. &Delta;Y = 30 &minus; 10 = 20 mm.</p></details>
+<p><strong>2.</strong> A simple shaft with two straight turned diameters — would you program it manually or use CAM? Why?</p>
+<details><summary>Show answer</summary><p>Manual. Straight turning on a lathe is a simple axisymmetric profile; G71/G70 cycles handle the roughing, and the programmer directly controls coordinates. CAM adds setup overhead without geometric benefit.</p></details>
+<p><strong>3.</strong> What is the difference between a CAD file and an NC file?</p>
+<details><summary>Show answer</summary><p>CAD is the geometric model (drawing). NC is the machine-readable G-code that tells the controller how to move the tool. A CAM package sits between them: it takes CAD geometry, generates tool paths, and a post-processor outputs NC code for a specific machine.</p></details>
+
+<section class="cp-sources">
+<h2>Sources</h2>
+<ul>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G00.html">Haas G00 Rapid Positioning</a> — supports rapid motion behavior.</li>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G01.html">Haas G01 Linear Interpolation</a> — supports feed motion and F command rules.</li>
+<li>Program examples and speeds/feeds are classroom teaching assumptions; verify against tooling catalogs and machine documentation.</li>
+</ul>
+</section>
+
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/31-learning-path/">&larr; Learning Path</a><a href="/cnc-manufacturing-engineering/cnc-programming/02-machine-fundamentals/">Machine Fundamentals &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

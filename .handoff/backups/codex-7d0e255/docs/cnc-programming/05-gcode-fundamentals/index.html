@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>G-Code Fundamentals — CNC Programming</title>
+<meta name="description" content="Motion G-codes G00, G01, G02, G03: purpose, syntax, safe use, modal behavior, and the critical difference between rapid and feed motion.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/05-gcode-fundamentals/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>G-Code Fundamentals</h1>
+<p class="lead">G-codes tell the machine what kind of motion to perform. This page covers the four core motion codes — G00, G01, G02, G03 — their syntax, modal behavior, and the safety rules that prevent crashes.</p>
+
+<h2>Concept</h2>
+<p><strong>G00</strong> is rapid positioning: the machine moves as fast as possible to a target position. It is not a cutting move — no F command is used. <strong>G01</strong> is linear interpolation: the machine moves in a straight line at a specified feed rate while cutting. <strong>G02</strong> and <strong>G03</strong> are circular interpolation — clockwise and counterclockwise arcs, covered in detail on the circular interpolation page.</p>
+<p>G00 and G01 are <strong>modal</strong>: once you set G01, every subsequent motion block stays in G01 until another motion code replaces it. You do not need to write G01 on every line — it persists.</p>
+
+<h2>Why It Matters</h2>
+<p>G00 moves at rapid speed (often 15–40 m/min). If the tool is not above the stock when you rapid in X/Y, it crashes into the vise or part. The #1 cause of beginner crashes is unsafe G00 motion. Always make sure Z is at a clearance height before rapid in X/Y.</p><p>The G00 path depends on the controller and machine. On many machining centers each axis accelerates independently at its own rapid rate, so the tool does not follow a straight diagonal line; the actual path is determined by how the controller blends rapid motion. This matters because a straight line might clear a fixture while the actual rapid path does not. Always check the controller manual for how G00 is interpolated on your machine, and verify the rapid path in simulation or at low override before relying on it.</p>
+
+<h2>How It Works</h2>
+
+<h3>G00 — Rapid Positioning</h3>
+<pre class="cp-code"><code>G00 X50. Y30.</code></pre>
+<p>Moves the tool to X50 Y30 at maximum rapid speed. No F command. Used only for positioning between cuts — never for cutting. On many machines, axes move independently rather than in a straight diagonal, so visualize the actual path.</p>
+
+<h3>G01 — Linear Feed</h3>
+<pre class="cp-code"><code>G01 X50. Y30. F200.</code></pre>
+<p>Moves in a straight line at feed rate 200 mm/min. The F is modal — once set, subsequent G01 lines inherit it. The first G01 after a G00 must specify F.</p>
+
+<h3>G02 / G03 — Circular Interpolation</h3>
+<p>Cut arcs: G02 clockwise, G03 counterclockwise. Requires I/J or R to define the arc. See <a href="/cnc-manufacturing-engineering/cnc-programming/15-circular-interpolation/">Circular Interpolation</a> for full detail.</p>
+
+<svg viewBox="0 0 420 200" style="width:100%;max-width:420px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+  <text x="80" y="15" font-size="11" font-weight="bold" fill="#333">Safe Approach — 5 Steps (side view, not to scale)</text>
+  <line x1="30" y1="40" x2="390" y2="40" stroke="#27ae60" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="330" y="35" font-size="9" fill="#27ae60">Safe Z50</text>
+  <rect x="160" y="100" width="160" height="60" fill="#c8d6e5"/>
+  <text x="200" y="135" font-size="9" fill="#333">Stock top Z0</text>
+  <line x1="30" y1="90" x2="390" y2="90" stroke="#e67e22" stroke-width="1" stroke-dasharray="2,2"/>
+  <text x="340" y="88" font-size="9" fill="#e67e22">Z2</text>
+  <circle cx="60" cy="40" r="3" fill="#999"/>
+  <text x="25" y="35" font-size="9" fill="#999">start</text>
+  <line x1="60" y1="40" x2="240" y2="40" stroke="#e74c3c" stroke-width="2" stroke-dasharray="4,2"/>
+  <text x="120" y="35" font-size="9" fill="#e74c3c">1 G00 XY</text>
+  <line x1="240" y1="40" x2="240" y2="90" stroke="#e74c3c" stroke-width="2" stroke-dasharray="4,2"/>
+  <text x="248" y="68" font-size="9" fill="#e74c3c">2 G00 Z2</text>
+  <line x1="240" y1="90" x2="240" y2="120" stroke="#27ae60" stroke-width="2"/>
+  <text x="248" y="108" font-size="9" fill="#27ae60">3 G01 down</text>
+  <line x1="240" y1="120" x2="320" y2="120" stroke="#27ae60" stroke-width="2.5"/>
+  <text x="260" y="135" font-size="9" fill="#27ae60">4 G01 cut</text>
+  <line x1="320" y1="120" x2="320" y2="40" stroke="#e74c3c" stroke-width="2" stroke-dasharray="4,2"/>
+  <text x="328" y="80" font-size="9" fill="#e74c3c">5 G00 up</text>
+</svg>
+
+<h3>Safe Approach Pattern</h3>
+<pre class="cp-code"><code>G00 X0 Y0        (rapid XY to above target, at safe Z)
+G00 Z5.          (rapid Z to 5 mm clearance)
+G01 Z-2. F100.   (feed down to cut depth)
+G01 X50. F300.   (feed cut)
+G00 Z50.         (retract up BEFORE next XY)</code></pre>
+<p>The critical rule: Z goes up before XY moves. Never rapid sideways at cut depth.</p>
+
+<h2>Example: Safe Approach and Cut</h2>
+<p>This is a motion fragment, not a complete setup program. Assume G21, G17, G90 and G94 are active; the intended work offset and tool-length compensation are verified; and the spindle and required coolant are already running. The selected &Oslash;10 mm center-cutting end mill is suitable for the illustrated axial entry. Z0 is the stock top. Z50 clears the stock, clamps and holder envelope along the transfer route; the approach and cutting locations are clear of clamps. The speeds and feeds are teaching assumptions, not tooling recommendations.</p>
+<p>On a Haas mill with a &Oslash;10 end mill, cutting a straight groove 2 mm deep into aluminum. Starting position is X0 Y0 Z50 (above the part corner):</p>
+<pre class="cp-code"><code>G00 X20. Y15.        (1: rapid XY to above cut start, at Z50 safe)
+G00 Z2.              (2: rapid down to 2mm clearance above surface)
+G01 Z-2. F100.       (3: feed down to cut depth at 100 mm/min)
+G01 X60. F300.       (4: feed cut along X at 300 mm/min)
+G00 Z50.             (5: retract up to safe Z BEFORE any XY move)</code></pre>
+<p>Step 1 is rapid — the tool is at Z50, well above the stock, so XY motion is safe. Step 2 drops to Z2. Step 3 switches to feed (G01) and enters the cut. Step 4 does the cutting. Step 5 retracts in Z first — only after Z is at 50 is it safe to rapid in XY again. This order (up, over, down, cut, up) prevents the #1 crash.</p>
+
+
+<h3>Reading G-Code Is Like Reading a Recipe</h3>
+<p>Each block is one instruction. G00 says "go fast here"; G01 says "go slow, cut"; G02/G03 say "cut an arc." The letters X/Y/Z are destinations. F is the feed. You do not need to memorize every G-code &mdash; you need to recognize the motion group and look up the rest. A working programmer keeps a one-page G-code cheat sheet taped to the machine. This page is that cheat sheet, with explanations.</p>
+<p>The most important G-codes are G00, G01, G02, G03. Alongside them, modal group codes set state (compensation, cycles, units, plane) and motion codes move the tool. Canned cycles (G81&ndash;G89) are shortcuts for drilling patterns; turning cycles (G70/G71/G72/G76) are shortcuts for stock removal. Learn the motion codes first, then the state codes, then the cycles.</p>
+<p>Modal codes stick. G01 stays on until G00 or G02. F stays on until the next F. S stays on until the next S. This is why a program can have 50 blocks of G01 without writing G01 on every line &mdash; and also why a missing G00 at the end of a cut feeds the tool across air instead of rapid-retracting.</p>
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Rapid XY at cut height</strong> — always retract Z to clearance before moving in X/Y. This is the #1 crash cause.</li>
+<li><strong>Forgetting F on the first G01</strong> — the feed may default to a dangerous value. Always specify F on the first feed move.</li>
+<li><strong>Using G00 for cutting</strong> — G00 is positioning only; it moves too fast and does not maintain a controlled cut.</li>
+<li><strong>Assuming G00 is straight-line</strong> — axes move independently; the path may not be a straight diagonal and can hit obstacles.</li>
+<li><strong>Forgetting that G01 persists</strong> — once G01 is active, every motion block stays in feed mode until G00, G02, or G03 replaces it. You do not need to repeat G01 on every line.</li>
+</ul>
+
+<h2>Practice</h2>
+<p><strong>1.</strong> When is G00 safe vs unsafe?</p>
+<details><summary>Show answer</summary><p>Safe: tool is above the clearance plane, clear of all fixtures. Unsafe: tool is at cut depth or near the stock. Always retract Z before rapid XY.</p></details>
+<p><strong>2.</strong> Distance 40 mm at F200. Cutting time?</p>
+<details><summary>Show answer</summary><p>40/200 = 0.2 minutes = 12 seconds.</p></details>
+<p><strong>3.</strong> Why is G01 modal important?</p>
+<details><summary>Show answer</summary><p>Once G01 is set, you do not need to repeat it on every line. It persists until G00, G02, or G03 replaces it. This keeps programs shorter.</p></details>
+
+<section class="cp-sources">
+<h2>Sources</h2>
+<ul>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G00.html">Haas G00 Rapid Positioning</a> — supports rapid motion behavior.</li>
+<li><a href="https://www.haascnc.com/service/codes-settings.type=gcode.machine=mill.value=G01.html">Haas G01 Linear Interpolation</a> — supports feed motion and F command rules.</li>
+<li>Program examples and speeds/feeds are classroom teaching assumptions; verify against tooling catalogs and machine documentation.</li>
+</ul>
+</section>
+
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/04-program-structure/">&larr; Program Structure</a><a href="/cnc-manufacturing-engineering/cnc-programming/06-modal-codes/">Modal Codes &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

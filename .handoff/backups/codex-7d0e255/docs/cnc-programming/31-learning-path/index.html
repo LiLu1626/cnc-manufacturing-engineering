@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Learning Path & Checkpoints — CNC Programming</title>
+<meta name="description" content="The recommended order to learn CNC programming across seven modules, with checkpoints after each.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cnc-programming/31-learning-path/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cnc-programming.css">
+</head>
+<body class="cnc-programming">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/" class="active">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article">
+<a href="../" class="back-link">&larr; Back to CNC Programming</a>
+<h1>Learning Path & Checkpoints</h1>
+<p class="lead">Seven modules, in dependency order. Start at Module 1 and work through; each module has a checkpoint you must pass before moving on.</p>
+
+<svg viewBox="0 0 320 230" style="width:100%;max-width:420px;display:block;margin:1em auto;background:#f8f9fa;border-radius:8px;">
+<title>Seven-module learning path</title>
+<rect x="20" y="10" width="280" height="22" fill="#54a0ff" rx="3"/><text x="28" y="25" font-size="10" fill="#fff">1 Foundations</text>
+<rect x="20" y="38" width="280" height="22" fill="#2ecc71" rx="3"/><text x="28" y="53" font-size="10" fill="#fff">2 Language and Control</text>
+<rect x="20" y="66" width="280" height="22" fill="#e67e22" rx="3"/><text x="28" y="81" font-size="10" fill="#fff">3 Setup and Motion</text>
+<rect x="20" y="94" width="280" height="22" fill="#9b59b6" rx="3"/><text x="28" y="109" font-size="10" fill="#fff">4 Milling Applications</text>
+<rect x="20" y="122" width="280" height="22" fill="#16a085" rx="3"/><text x="28" y="137" font-size="10" fill="#fff">5 Turning Applications</text>
+<rect x="20" y="150" width="280" height="22" fill="#c0392b" rx="3"/><text x="28" y="165" font-size="10" fill="#fff">6 Verification and Projects</text>
+<rect x="20" y="178" width="280" height="22" fill="#34495e" rx="3"/><text x="28" y="193" font-size="10" fill="#fff">7 CAM and Further Applications</text>
+</svg>
+
+<h2>Concept</h2>
+<p>CNC programming is cumulative. Trying subprograms before you understand coordinates is like building a house from the roof. The path below follows the same seven modules as the course homepage; each links to the first lesson in that module.</p>
+
+<h2>Why It Matters</h2>
+<p>A structured path prevents the "I read everything but can't program anything" problem. Each checkpoint requires writing and verifying code — not just reading. Most new programmers get stuck because they try to jump from G01 to G76 without mastering offsets and coordinates.</p>
+
+<h2>Estimated Time per Module</h2>
+<table class="data-table">
+<tr><th>Module</th><th>Topic</th><th>Est. Time</th><th>Difficulty</th></tr>
+<tr><td>1</td><td>Foundations</td><td>2&ndash;3 days</td><td>Beginner</td></tr>
+<tr><td>2</td><td>Language and Control</td><td>2&ndash;3 days</td><td>Beginner</td></tr>
+<tr><td>3</td><td>Setup and Motion</td><td>3&ndash;4 days</td><td>Intermediate</td></tr>
+<tr><td>4</td><td>Milling Applications</td><td>3&ndash;4 days</td><td>Intermediate</td></tr>
+<tr><td>5</td><td>Turning Applications</td><td>3&ndash;4 days</td><td>Intermediate</td></tr>
+<tr><td>6</td><td>Verification and Projects</td><td>4&ndash;5 days</td><td>Advanced</td></tr>
+<tr><td>7</td><td>CAM and Further</td><td>Open-ended</td><td>Advanced</td></tr>
+</table>
+<p>Total beginner-to-competent: about 3&ndash;4 weeks of focused study. This is not a speed run — mastery comes from writing and debugging real programs.</p>
+
+<h2>How It Works</h2>
+
+<h3>Module 1 &middot; Foundations</h3>
+<p><a href="../01-getting-started/what-is-cnc-programming/">Start Module 1 &rarr;</a></p>
+<ol>
+<li>What is CNC Programming?</li>
+<li>Machine Fundamentals for Programmers</li>
+<li>Safe Program Start &amp; Restart</li>
+<li>Programming Math</li>
+<li>From Drawing to Process Plan</li>
+<li>Coordinate Systems</li>
+</ol>
+<p><strong>Checkpoint:</strong> Explain G90 vs G91 in your own words, and write the coordinate values for three points on a part drawing.</p>
+
+<h3>Module 2 &middot; Language and Control</h3>
+<p><a href="../07-plane-units/">Start Module 2 &rarr;</a></p>
+<ol>
+<li>Planes, Units &amp; Numeric Conventions</li>
+<li>Reading &amp; Structuring a Program</li>
+<li>G-Code Fundamentals</li>
+<li>Modal State &amp; Execution</li>
+<li>M-Codes &amp; Machine Functions</li>
+<li>Controller Dialects</li>
+</ol>
+<p><strong>Checkpoint:</strong> Read a 15-line G-code program and explain every line, including which codes are modal.</p>
+
+<h3>Module 3 &middot; Setup and Motion</h3>
+<p><a href="../10-spindle-feed/">Start Module 3 &rarr;</a></p>
+<ol>
+<li>Spindle Speed &amp; Feed</li>
+<li>Work Offsets &amp; Datums</li>
+<li>Tool Length &amp; Geometry Offsets</li>
+<li>Rapid &amp; Linear Motion</li>
+<li>Circular &amp; Helical Interpolation</li>
+<li>Cutter Radius Compensation</li>
+</ol>
+<p><strong>Checkpoint:</strong> Set up G54 and H01 offsets, and write a linear profile program with G41 lead-in.</p>
+
+<h3>Module 4 &middot; Milling Applications</h3>
+<p><a href="../33-milling-strategies/">Start Module 4 &rarr;</a></p>
+<ol>
+<li>Milling Strategies: Facing, Slots, Pockets</li>
+<li>Drilling, Pecking &amp; Boring</li>
+<li>Canned Cycles &amp; Hole Patterns</li>
+<li>Tapping &amp; Thread Milling</li>
+<li>Subprograms</li>
+</ol>
+<p><strong>Checkpoint:</strong> Drill a 4-hole pattern with G83 and a subprogram, then edit the depth in one place.</p>
+
+<h3>Module 5 &middot; Turning Applications</h3>
+<p><a href="../19-turning-fundamentals/">Start Module 5 &rarr;</a></p>
+<ol>
+<li>Turning Coordinates &amp; Toolpaths</li>
+<li>Roughing &amp; Finishing Cycles</li>
+<li>Grooving, Parting &amp; Boring</li>
+<li>Single-Point Thread Programming</li>
+</ol>
+<p><strong>Checkpoint:</strong> Complete the stepped shaft turning project from drawing to program.</p>
+
+<h3>Module 6 &middot; Verification and Projects</h3>
+<p><a href="../24-verification/">Start Module 6 &rarr;</a></p>
+<ol>
+<li>Program Verification &amp; First Article</li>
+<li>Diagnosing Program Problems</li>
+<li>Common Beginner Mistakes</li>
+<li>Project: Pocketed Mounting Plate</li>
+<li>Project: Stepped Shaft</li>
+</ol>
+<p><strong>Checkpoint:</strong> Run both projects through dry-run, single-block, and first-piece inspection.</p>
+
+<h3>Module 7 &middot; CAM and Further Applications</h3>
+<p><a href="../35-cad-cam-postprocessing/">Start Module 7 &rarr;</a></p>
+<ol>
+<li>CAD, CAM &amp; Post-Processing</li>
+<li>Macro Programming Foundations</li>
+<li>Rotary Axes &amp; Probing</li>
+<li>Cycle Time &amp; Process Improvement</li>
+<li>Exercises &amp; Final Assessment</li>
+</ol>
+<p><strong>Checkpoint:</strong> Read a random shop-floor program and explain every line; pass the final exercises.</p>
+
+<h2>Example</h2>
+<p>If you're starting now: do Module 1 first. Don't skip to G-code projects. Coordinates and offsets are the foundation; everything else builds on them.</p>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Skipping modules</strong> — if you can't explain G90 vs G91, don't start subprograms.</li>
+<li><strong>Reading without practicing</strong> — every checkpoint requires writing code, not just reading.</li>
+</ul>
+
+
+<h3>How to Use This Path</h3>
+<p>Work through the levels in order. Level 1 is not optional: a programmer who skips coordinate systems and offsets will crash machines on Level 2. Each lesson should end with you able to explain the concept out loud and trace a small program by hand. If you cannot explain G54 to a coworker, do not move on to canned cycles.</p>
+<p>Level 3 is where the work pays off: you can read a drawing, choose tools, write a complete program, and verify it on the machine. Level 4 (macro programming) is optional and only worth it if your shop runs repetitive parts that benefit from parameterization. Do not start macros until you can hand-write and debug a complete turning or milling program without help.</p>
+<p>Revisit the reference page when you forget a code &mdash; that is what it is for. The exercises page is where you prove you understand, not where you first learn.</p>
+
+<h3>Level 1 Checklist</h3>
+<p>Before moving to Level 2, you should be able to: (1) explain the difference between machine zero and work zero; (2) write a startup block G21 G17 G90 G94 G40 G49 G80; (3) trace a 10-line G01 program and state the tool position at each line; (4) explain why G43 H is needed and what happens if H is 0; (5) state the difference between G90 and G91. If any of these is shaky, revisit that lesson &mdash; do not proceed.</p>
+<p>Level 2 adds canned cycles, cutter compensation, and multi-tool programs. By the end of Level 2 you should be able to write a complete 2-tool milling program that faces a block, mills a pocket, and drills four holes, then verify it on paper. Level 3 is the turning and milling projects on this site; Level 4 is macros.</p>
+<h2>Practice</h2>
+<p><strong>1.</strong> What should you learn first?</p><details><summary>Ans</summary><p>Coordinate systems (Module 1). Everything else depends on them.</p></details>
+<p><strong>2.</strong> When are you ready for subprograms?</p><details><summary>Ans</summary><p>When you can write and verify a basic drilling cycle with G83 and G80.</p></details>
+<p><strong>3.</strong> What's the Module 1 checkpoint?</p><details><summary>Ans</summary><p>Explain G90 vs G91 and write coordinates for three points on a part drawing.</p></details>
+
+<nav class="cp-nav-bottom"><a href="/cnc-manufacturing-engineering/cnc-programming/39-exercises-assessment/">&larr; Exercises</a><a href="/cnc-manufacturing-engineering/cnc-programming/01-getting-started/what-is-cnc-programming/">What is CNC? &rarr;</a></nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

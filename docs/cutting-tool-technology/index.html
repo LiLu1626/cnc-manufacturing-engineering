@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Cutting Tool Technology — CNC &amp; Manufacturing Engineering</title>
+<meta name="description" content="A complete course from cutting-tool geometry, substrates and coatings to wear diagnosis, tool-life testing and cost per good part.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-home">
+<span class="ctt-eyebrow">Learning Module</span>
+<h1>Cutting Tool Technology</h1>
+<p class="lead">A structured course from recognizing a cutting edge, to reading tool catalogs, choosing geometry/substrate/coating, diagnosing wear, designing a tool-life trial, and comparing cost per good part. Built for new machinists and junior manufacturing engineers &mdash; not a list of manufacturer SKUs or universal speed tables.</p>
+
+<div class="ctt-objectives">
+<strong>Three ways in:</strong>
+<ul>
+<li><strong>New here:</strong> follow the modules in order, starting with <a href="/cnc-manufacturing-engineering/cutting-tool-technology/01-cutting-tool-system/">The Cutting Tool as a System</a>.</li>
+<li><strong>At the machine with a problem:</strong> start at <a href="/cnc-manufacturing-engineering/cutting-tool-technology/27-wear-diagnosis-corrective-actions/">Wear Diagnosis</a> and work back to the mechanism and setup pages.</li>
+<li><strong>Choosing a tool now:</strong> use <a href="/cnc-manufacturing-engineering/cutting-tool-technology/13-tool-selection-workflow/">the selection workflow</a> and the printable <a href="/cnc-manufacturing-engineering/cutting-tool-technology/resources/tool-selection-worksheet/">tool selection worksheet</a>.</li>
+</ul>
+</div>
+
+<p><em>Note: all speeds, feeds, tool lives and costs shown in this course are classroom teaching assumptions unless explicitly tagged as a manufacturer recommendation. Nothing here authorizes running an unvalidated cut on a real machine.</em></p>
+
+<h2>Learning roadmap</h2>
+<figure class="ctt-figure">
+<svg viewBox="0 0 720 260" role="img" aria-label="Eight-module learning roadmap">
+<desc>Eight modules in learning order: system basics, geometry, substrates and coatings, setup and condition, machining applications, wear and failure, economics and management, then cases and assessment.</desc>
+<rect x="10" y="20" width="150" height="50" rx="8" fill="#0b766e"/><text x="20" y="42" font-size="12" fill="#fff">M1 System &amp; Basics</text><text x="20" y="58" font-size="10" fill="#dff0ee">01&ndash;04</text>
+<rect x="180" y="20" width="150" height="50" rx="8" fill="#0b766e"/><text x="190" y="42" font-size="12" fill="#fff">M2 Geometry</text><text x="190" y="58" font-size="10" fill="#dff0ee">05&ndash;08</text>
+<rect x="350" y="20" width="150" height="50" rx="8" fill="#0b766e"/><text x="360" y="42" font-size="12" fill="#fff">M3 Substrates &amp; Coatings</text><text x="360" y="58" font-size="10" fill="#dff0ee">09&ndash;13</text>
+<rect x="520" y="20" width="190" height="50" rx="8" fill="#5c6872"/><text x="530" y="42" font-size="12" fill="#fff">M4 Setup &amp; Rigidity</text><text x="530" y="58" font-size="10" fill="#eef1f3">21&ndash;24 (learn before M5)</text>
+<rect x="10" y="110" width="150" height="50" rx="8" fill="#07574f"/><text x="20" y="132" font-size="12" fill="#fff">M5 Applications</text><text x="20" y="148" font-size="10" fill="#dff0ee">14&ndash;20</text>
+<rect x="180" y="110" width="150" height="50" rx="8" fill="#07574f"/><text x="190" y="132" font-size="12" fill="#fff">M6 Wear &amp; Failure</text><text x="190" y="148" font-size="10" fill="#dff0ee">25&ndash;28</text>
+<rect x="350" y="110" width="150" height="50" rx="8" fill="#07574f"/><text x="360" y="132" font-size="12" fill="#fff">M7 Economics</text><text x="360" y="148" font-size="10" fill="#dff0ee">29&ndash;31</text>
+<rect x="520" y="110" width="190" height="50" rx="8" fill="#b3261e"/><text x="530" y="132" font-size="12" fill="#fff">M8 Cases &amp; Assessment</text><text x="530" y="148" font-size="10" fill="#f8dcd9">32&ndash;36</text>
+<line x1="160" y1="45" x2="180" y2="45" stroke="#5c6872" stroke-width="2" marker-end="url(#a)"/>
+<line x1="330" y1="45" x2="350" y2="45" stroke="#5c6872" stroke-width="2" marker-end="url(#a)"/>
+<line x1="615" y1="70" x2="615" y2="110" stroke="#5c6872" stroke-width="2" marker-end="url(#a)"/>
+<line x1="100" y1="160" x2="100" y2="200" stroke="#5c6872" stroke-width="2"/>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0 0,7 3,0 6" fill="#5c6872"/></marker></defs>
+<text x="40" y="225" font-size="11" fill="#5c6872">Full path: M1&rarr;M2&rarr;M3&rarr;M4&rarr;M5&rarr;M6&rarr;M7&rarr;M8. Field troubleshooting may enter at M6.</text>
+</svg>
+<figcaption>Eight-module learning roadmap (schematic).</figcaption>
+</figure>
+
+<h2>The eight modules</h2>
+<div class="ctt-modules">
+  <div class="ctt-module-card"><h3>M1 &mdash; Cutting System &amp; Basics</h3><p>Material as input, speed/feed/units, chip formation, forces and heat.</p><ul>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/01-cutting-tool-system/">01 The Cutting Tool as a System</a><span class="ctt-tag ctt-tag-b">B</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/02-workpiece-materials-machinability/">02 Materials &amp; Machinability</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/03-cutting-data-and-units/">03 Cutting Data &amp; Units</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/04-chip-formation-forces-heat/">04 Chip Formation, Forces &amp; Heat</a><span class="ctt-tag ctt-tag-k">K</span></li>
+  </ul></div>
+  <div class="ctt-module-card"><h3>M2 &mdash; Tool Geometry</h3><p>Rake, clearance, edge prep, nose radius, chipbreakers, end-mill geometry, insert designations.</p><ul>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/05-rake-clearance-and-edge-angles/">05 Rake &amp; Clearance Angles</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/06-edge-preparation-chipbreakers/">06 Edge Prep &amp; Chipbreakers</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/07-end-mill-geometry-engagement/">07 End-Mill Geometry</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/08-insert-designations-catalogs/">08 Insert Designations &amp; Catalogs</a><span class="ctt-tag ctt-tag-b">B</span></li>
+  </ul></div>
+  <div class="ctt-module-card"><h3>M3 &mdash; Substrates &amp; Coatings</h3><p>Material families, carbide grades, ceramics/PCBN/PCD, coatings, selection workflow.</p><ul>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/09-tool-material-families/">09 Tool Material Families</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/10-cemented-carbide-substrates/">10 Cemented Carbide</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/11-ceramics-pcbn-pcd/">11 Ceramics, PCBN &amp; PCD</a><span class="ctt-tag ctt-tag-b">B</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/12-coating-processes-and-families/">12 Coatings</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/13-tool-selection-workflow/">13 Selection Workflow</a><span class="ctt-tag ctt-tag-b">B</span></li>
+  </ul></div>
+  <div class="ctt-module-card"><h3>M4 &mdash; Setup &amp; Condition</h3><p>Holders, interfaces, runout, balance, coolant, inspection.</p><ul>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/21-toolholders-interfaces-rigidity/">21 Holders &amp; Rigidity</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/22-runout-balance-and-tool-setting/">22 Runout &amp; Balance</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/23-coolant-lubrication-chip-evacuation/">23 Coolant &amp; Chip Evacuation</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/24-tool-inspection-and-handling/">24 Inspection &amp; Handling</a><span class="ctt-tag ctt-tag-b">B</span></li>
+  </ul></div>
+  <div class="ctt-module-card"><h3>M5 &mdash; Applications</h3><p>End mills, indexable milling, turning, drills, reaming, threading, grooving.</p><ul>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/14-solid-end-mills/">14 Solid End Mills</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/15-indexable-milling-cutters/">15 Indexable Milling</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/16-turning-inserts-toolholders/">16 Turning Tools</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/17-drills-and-hole-making/">17 Drills &amp; Hole Making</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/18-reamers-boring-and-hole-quality/">18 Reaming &amp; Boring</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/19-threading-tools/">19 Threading Tools</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/20-grooving-parting-tools/">20 Grooving &amp; Parting</a><span class="ctt-tag ctt-tag-b">B</span></li>
+  </ul></div>
+  <div class="ctt-module-card"><h3>M6 &mdash; Wear &amp; Failure</h3><p>Wear mechanisms, chipping, diagnosis, controlled tool-life trials.</p><ul>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/25-wear-mechanisms-morphology/">25 Wear Mechanisms</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/26-chipping-fracture-and-thermal-damage/">26 Chipping &amp; Fracture</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/27-wear-diagnosis-corrective-actions/">27 Wear Diagnosis</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/28-tool-life-testing/">28 Tool-Life Testing</a><span class="ctt-tag ctt-tag-k">K</span></li>
+  </ul></div>
+  <div class="ctt-module-card"><h3>M7 &mdash; Economics &amp; Management</h3><p>Cost per good part, tool records, monitoring, reconditioning.</p><ul>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/29-tooling-economics/">29 Tooling Economics</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/30-tool-management-and-monitoring/">30 Tool Management</a><span class="ctt-tag ctt-tag-b">B</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/31-reconditioning-sustainability/">31 Reconditioning</a><span class="ctt-tag ctt-tag-b">B</span></li>
+  </ul></div>
+  <div class="ctt-module-card"><h3>M8 &mdash; Cases &amp; Assessment</h3><p>Three worked cases, final assessment, glossary.</p><ul>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/32-case-milling-tool-selection/">32 Milling Selection Case</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/33-case-turning-wear/">33 Turning Wear Case</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/34-case-hole-quality/">34 Hole Quality Case</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/35-assessment/">35 Final Assessment</a><span class="ctt-tag ctt-tag-k">K</span></li>
+    <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/36-glossary-reference/">36 Glossary &amp; Formulas</a><span class="ctt-tag ctt-tag-b">B</span></li>
+  </ul></div>
+</div>
+
+<h2>Practical resources</h2>
+<ul>
+<li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/resources/tool-selection-worksheet/">Printable Tool Selection Worksheet</a></li>
+<li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/resources/wear-trial-log/">Printable Wear &amp; Trial Log</a></li>
+<li>Related calculators: <a href="/cnc-manufacturing-engineering/engineering-tools/cutting-speed-calculator/">Cutting Speed</a>, <a href="/cnc-manufacturing-engineering/engineering-tools/feed-rate-calculator/">Feed Rate</a>, <a href="/cnc-manufacturing-engineering/engineering-tools/material-removal-rate-calculator/">MRR</a>.</li>
+</ul>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

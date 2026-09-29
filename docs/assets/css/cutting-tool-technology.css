@@ -1,0 +1,91 @@
+/* Cutting Tool Technology module styles — scoped to body.cutting-tool-technology */
+
+.cutting-tool-technology body,
+body.cutting-tool-technology { line-height: 1.6; color: var(--ink, #17242f); }
+
+.ctt-article { width: min(100% - 32px, 780px); margin: 0 auto; padding: 40px 0 60px; }
+.ctt-article p, .ctt-article li { line-height: 1.65; }
+
+.ctt-back { display: inline-block; margin-bottom: 18px; font-size: 0.9rem; color: var(--accent, #0b766e); text-decoration: none; }
+.ctt-back:hover { text-decoration: underline; }
+
+.ctt-eyebrow {
+  display: inline-block; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--accent, #0b766e);
+  background: var(--accent-light, #e6f4f2); padding: 4px 12px; border-radius: 999px; margin-bottom: 14px;
+}
+
+.ctt-meta {
+  display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 0.85rem; color: var(--muted, #5c6872);
+  margin: 16px 0 24px; padding: 12px 16px; background: var(--accent-light, #e6f4f2);
+  border-radius: 12px;
+}
+.ctt-meta a { color: var(--accent-dark, #07574f); }
+
+.ctt-objectives {
+  margin: 0 0 28px; padding: 14px 18px; background: #fff;
+  border: 1px solid var(--border, #cfdbd8); border-left: 4px solid var(--accent, #0b766e);
+  border-radius: 10px; font-size: 0.95rem;
+}
+.ctt-objectives ul { margin: 8px 0 0; padding-left: 20px; }
+
+.ctt-toc {
+  margin: 0 0 32px; padding: 12px 18px; background: #f8f9fa; border-radius: 10px; font-size: 0.9rem;
+}
+.ctt-toc strong { display: block; margin-bottom: 6px; }
+.ctt-toc ol { margin: 0; padding-left: 22px; columns: 2; column-gap: 24px; }
+@media (max-width: 640px) { .ctt-toc ol { columns: 1; } }
+
+.ctt-figure { margin: 24px 0; text-align: center; }
+.ctt-figure svg { width: 100%; max-width: 460px; height: auto; background: #f8f9fa; border-radius: 8px; }
+.ctt-figure figcaption { font-size: 0.85rem; color: var(--muted, #5c6872); margin-top: 8px; }
+
+.ctt-table-wrap { overflow-x: auto; margin: 20px 0; }
+.ctt-table-wrap table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+.ctt-table-wrap caption { caption-side: top; text-align: left; font-size: 0.85rem; color: var(--muted, #5c6872); margin-bottom: 6px; }
+.ctt-table-wrap th, .ctt-table-wrap td { border: 1px solid var(--border, #cfdbd8); padding: 8px 10px; text-align: left; vertical-align: top; }
+.ctt-table-wrap thead th { background: var(--accent-light, #e6f4f2); }
+
+.ctt-assumption {
+  background: #fff8e6; border: 1px solid #f0d98a; border-radius: 8px; padding: 10px 14px;
+  font-size: 0.88rem; margin: 16px 0;
+}
+.ctt-evidence {
+  background: var(--accent-light, #e6f4f2); border-radius: 8px; padding: 10px 14px; font-size: 0.88rem; margin: 16px 0;
+}
+
+.ctt-code {
+  background: #17242f; color: #e6f4f2; padding: 14px 16px; border-radius: 8px;
+  overflow-x: auto; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.88rem; line-height: 1.5;
+}
+
+.ctt-practice details { margin: 12px 0; border: 1px solid var(--border, #cfdbd8); border-radius: 8px; padding: 10px 14px; }
+.ctt-practice summary { cursor: pointer; font-weight: 600; }
+
+.ctt-nav-bottom {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 40px; padding-top: 20px;
+  border-top: 1px solid var(--border, #cfdbd8);
+}
+.ctt-nav-bottom a { font-size: 0.9rem; color: var(--accent-dark, #07574f); text-decoration: none; }
+.ctt-nav-bottom a:hover { text-decoration: underline; }
+.ctt-nav-bottom a:last-child { text-align: right; }
+
+@media (max-width: 640px) {
+  .ctt-nav-bottom { grid-template-columns: 1fr; }
+  .ctt-nav-bottom a:last-child { text-align: left; }
+}
+
+/* Home page */
+.ctt-home { width: min(100% - 32px, 1080px); margin: 0 auto; padding: 40px 0 60px; }
+.ctt-modules { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin: 28px 0; }
+.ctt-module-card { border: 1px solid var(--border, #cfdbd8); border-radius: 14px; padding: 18px; background: #fff; }
+.ctt-module-card h3 { margin-top: 0; color: var(--accent-dark, #07574f); }
+.ctt-module-card ul { padding-left: 18px; font-size: 0.9rem; }
+.ctt-tag { display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; margin-left: 6px; }
+.ctt-tag-b { background: #e6f4f2; color: #07574f; }
+.ctt-tag-k { background: #fdecea; color: #b3261e; }
+
+@media print {
+  .site-nav, .site-footer, .ctt-nav-bottom, .ctt-back { display: none; }
+  body.cutting-tool-technology .ctt-article { width: 100%; }
+}
