@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Solid End Mills — Cutting Tool Technology</title>
+<meta name="description" content="Solid carbide end mills: geometry variants, roughers vs finishers, chip splitting, corner radius, and how to pick one for pocketing and profiling.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/14-solid-end-mills/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M5 &middot; Machining Applications</span>
+<h1>Solid End Mills</h1>
+<p class="lead">The solid carbide end mill is the most common milling cutter in the shop: square, ball, corner-radius, roughing, finishing, high-feed. This page tells the variants apart, explains chip-splitting and core strength, and picks the right tool for a pocket, profile or face.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> K</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cutting-tool-technology/07-end-mill-geometry-engagement/">07 End-Mill Geometry</a></span><span><strong>Scope:</strong> metric; classroom examples</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Distinguish square, ball and corner-radius end mills</li>
+<li>Explain the trade-off between flute count, chip room and core strength</li>
+<li>Pick a roughing vs finishing end mill for a feature</li>
+<li>Recognize when a long-reach end mill needs support</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p>A <strong>solid carbide end mill</strong> is ground from one carbide blank. Its variants differ at the tip: <strong>square</strong> (sharp 90&deg; corner for shoulders), <strong>ball-nose</strong> (hemispherical tip for 3D surfaces), and <strong>corner-radius</strong> (rounded tip that both improves finish and resists corner chipping). <strong>Roughing (corn-cobab)</strong> end mills have wavy teeth that split the chip and reduce cutting force; <strong>finishing</strong> mills have smooth flutes for a clean wall.</p>
+
+<h2>Why It Matters</h2>
+<p>The end mill is where most milling hours &mdash; and most broken tools &mdash; happen. Choosing a ball nose for a square shoulder leaves radius marks; choosing a high-flute finishing mill to rough a gummy pocket packs chips; reaching deep with a slender end mill chatters. Matching the tip style and flute count to the feature is the difference between a clean pocket and a scrapped part.</p>
+
+<h2>How It Works</h2>
+<h3>Tip style</h3>
+<div class="ctt-table-wrap"><table>
+<caption>End-mill tip styles</caption>
+<thead><tr><th scope="col">Tip</th><th scope="col">Use</th></tr></thead>
+<tbody>
+<tr><td>Square</td><td>90&deg; shoulders, flat-bottom pockets, side milling</td></tr>
+<tr><td>Corner radius</td><td>shoulders that need a radius or chip-resistant corner</td></tr>
+<tr><td>Ball nose</td><td>3D sculpted surfaces, contoured finishes</td></tr>
+</tbody></table></div>
+<h3>Roughing vs finishing</h3>
+<p>A <strong>roughing end mill</strong> has chip-splitting serrations that break the chip into smaller pieces and lower force &mdash; good for high material removal where finish does not matter. A <strong>finishing end mill</strong> has smooth flutes and often more teeth for a clean wall. Do not try to finish with a roughing mill (serrations leave marks).</p>
+<h3>Core strength and reach</h3>
+<p>More flutes mean a thicker core (stiffer, less deflection) but a smaller chip gullet. Long-reach end mills for deep pockets are slender and deflect easily &mdash; the same overhang logic as page 01 applies.</p>
+
+<h2>Worked Example</h2>
+<p>Machining a rectangular pocket in steel, rough then finish. Rough: a 4-flute roughing end mill takes a light radial engagement and deep axial cut, splitting chips. Finish: a corner-radius end mill with a smooth wall cuts the final wall and floor to drawing. Ball nose would be wrong here &mdash; the pocket has square corners and a flat floor. The locked baseline &Oslash;10, 4-flute tool at n=3800, fz=0.04 (vf=608) applies as the starting milling numbers.</p>
+<figure class="ctt-figure">
+<svg viewBox="0 0 440 150" role="img" aria-label="Square, corner-radius and ball nose tips">
+<desc>Three end-mill tip styles: square, corner radius, ball nose.</desc>
+<g>
+<rect x="40" y="20" width="24" height="80" fill="#5c6872"/><line x1="40" y1="100" x2="64" y2="100" stroke="#0b766e" stroke-width="2"/>
+<text x="30" y="125" font-size="10" fill="#333">square</text>
+</g>
+<g>
+<rect x="180" y="20" width="24" height="80" fill="#5c6872"/>
+<path d="M180 100 L180 92 A12 12 0 0 0 204 100 Z" fill="#0b766e"/>
+<text x="165" y="125" font-size="10" fill="#333">corner radius</text>
+</g>
+<g>
+<rect x="320" y="20" width="24" height="80" fill="#5c6872"/>
+<path d="M320 100 A12 12 0 0 0 344 100 Z" fill="#b3261e"/>
+<text x="315" y="125" font-size="10" fill="#333">ball nose</text>
+</g>
+</svg>
+<figcaption>Tip styles (schematic, not to scale).</figcaption>
+</figure>
+<div class="ctt-assumption"><strong>Classroom assumption:</strong> the &Oslash;10/3800/608 figures are the locked baseline from page 03; actual speed and feed come from the end-mill catalog for the material.</div>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Finishing with a roughing mill.</strong> Serrations leave marks. Fix: rough then finish with a smooth-flute mill.</li>
+<li><strong>Using a ball nose for square shoulders.</strong> It leaves a radius. Fix: use square or corner-radius for 90&deg; corners.</li>
+<li><strong>Overloading a slender long-reach mill.</strong> It deflects and chatters. Fix: reduce engagement or use a stronger/ shorter setup.</li>
+<li><strong>Too many flutes in gummy material.</strong> Chips pack. Fix: fewer flutes where chip room matters.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. Which tip for a 3D sculpted surface?</summary><p>Ball nose.</p></details>
+<details><summary>Q2. What do roughing mill serrations do?</summary><p>Split the chip and reduce cutting force for high material removal.</p></details>
+<details><summary>Q3. Why does more flutes mean a smaller chip gullet?</summary><p>The core is thicker for stiffness, leaving less room in the flute for chips.</p></details>
+<details><summary>Q4. Locked baseline: n=3800, zc=4, fz=0.04. vf?</summary><p>608 mm/min (page 03).</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>Sandvik Coromant, <em>Solid end mills</em> catalog and knowledge pages.</li>
+<li>OSG / Nachi, <em>Solid carbide end mill geometries</em> technical references.</li>
+<li>Speed/feed figures are classroom assumptions; verify against the catalog for the material.</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/13-tool-selection-workflow/">&larr; Previous: Selection Workflow</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/15-indexable-milling-cutters/">Next: Indexable Milling Cutters &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
