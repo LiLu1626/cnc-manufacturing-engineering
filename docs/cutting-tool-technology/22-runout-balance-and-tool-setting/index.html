@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Runout, Balance & Tool Setting — Cutting Tool Technology</title>
+<meta name="description" content="Radial runout effects, tool balance at spindle speed, and presetting tools to reduce setup time and protect accuracy.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/22-runout-balance-and-tool-setting/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M4 &middot; Tool System Conditions</span>
+<h1>Runout, Balance &amp; Tool Setting</h1>
+<p class="lead">When the tool does not spin exactly on its intended axis, one corner takes all the wear. Runout shortens tool life and wrecks finish; unbalance vibrates at high speed; presetting saves setup time. This page measures and controls all three.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> K</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cutting-tool-technology/21-toolholders-interfaces-rigidity/">21 Toolholders</a></span><span><strong>Scope:</strong> classroom overview</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Explain how runout redistributes load across cutting edges</li>
+<li>State when tool balance matters</li>
+<li>Describe presetting and why it shortens setup</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p><strong>Runout</strong> is the wobble of the cutting edge relative to the true spindle axis. If one edge sits farther out, it takes most of the cut while the others barely engage &mdash; that edge wears first. <strong>Balance</strong> matters at high spindle speed: an unbalanced assembly vibrates and limits how fast you can run. <strong>Presetting</strong> measures tool length and diameter off the machine, so the operator loads known offsets instead of touching off at the spindle.</p>
+
+<h2>Why It Matters</h2>
+<p>Runout silently ruins the numbers: your catalog says the insert should last 30 minutes, but one edge loaded by runout fails in 10. It also hurts surface finish, because the engaged edge cuts deeper than the others. Balance limits high-speed machining &mdash; a cheap unbalanced collet at 20&nbsp;000&nbsp;rpm shakes the machine. Presetting cuts non-cutting setup time and avoids touching-in errors.</p>
+
+<h2>How It Works</h2>
+<h3>Runout</h3>
+<p>Runout comes from a dirty taper, a worn chuck, or a side-lock holder. It is measured at the cutting edge. Reducing runout spreads the load across all edges &mdash; the exact opposite problem to an indexable face mill with one far-protruding insert (page 15).</p>
+<h3>Balance</h3>
+<p>At higher spindle speeds, balance grade (G2.5, G6.3 etc.) becomes relevant; balanced holders and shrink-fit assemblies are preferred for high-speed work.</p>
+<h3>Presetting</h3>
+<p>A presetter measures tool length and diameter offline. The operator enters the known offset, saving spindle-down time and reducing touch-off mistakes.</p>
+
+<h2>Worked Example</h2>
+<p>A 4-flute end mill in a side-lock holder shows 0.03&nbsp;mm runout at the edge. Effectively one flute does most of the cutting and wears fast. Moving to a collet or shrink-fit chuck drops runout and spreads load across all four flutes, improving tool life and finish. At 20&nbsp;000&nbsp;rpm the assembly should also be balanced for the spindle speed.</p>
+<div class="ctt-assumption"><strong>Classroom assumption:</strong> the 0.03&nbsp;mm runout example is illustrative; acceptable runout depends on tool diameter and finish requirement.</div>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Blaming tool life on the grade while runout is high.</strong> Fix: check runout first.</li>
+<li><strong>Ignoring balance at high rpm.</strong> Vibration limits speed. Fix: use balanced assemblies.</li>
+<li><strong>Touching in every tool at the spindle.</strong> Slow and error-prone. Fix: preset offline.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. Why does runout shorten tool life?</summary><p>One overhanging edge takes nearly all the cut and wears first.</p></details>
+<details><summary>Q2. What does a presetter measure offline?</summary><p>Tool length and diameter, so offsets are known before loading.</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>Sandvik Coromant, <em>Runout and tool balance</em> knowledge pages.</li>
+<li>ISO balance-quality grade references (general).</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/21-toolholders-interfaces-rigidity/">&larr; Previous: Toolholders</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/23-coolant-lubrication-chip-evacuation/">Next: Coolant &amp; Chip Evacuation &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

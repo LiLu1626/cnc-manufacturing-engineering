@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Coolant, Lubrication & Chip Evacuation — Cutting Tool Technology</title>
+<meta name="description" content="Flood vs minimum quantity lubrication vs air, coolant pressure, chip evacuation and why the cutting edge must stay cool but not thermal-shocked.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/23-coolant-lubrication-chip-evacuation/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M4 &middot; Tool System Conditions</span>
+<h1>Coolant, Lubrication &amp; Chip Evacuation</h1>
+<p class="lead">Coolant does two jobs: it carries heat away from the edge and helps chips leave. But the wrong delivery &mdash; flooding a hot ceramic edge, or weak pressure in a deep hole &mdash; causes thermal shock or chip packing. This page chooses coolant strategy by operation.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> K</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cutting-tool-technology/04-chip-formation-forces-heat/">04 Chip Formation</a></span><span><strong>Scope:</strong> classroom overview</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Distinguish flood, MQL and air/coolant-through strategies</li>
+<li>Explain why coolant placement matters for chip evacuation</li>
+<li>State when flooding a hot edge causes thermal shock</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p>Coolant <strong>cools</strong> the cutting zone and <strong>lubricates</strong> the chip-tool interface, while also flushing chips out of the cut. Strategies: <strong>flood coolant</strong> (large volume, general), <strong>through-tool coolant</strong> (directed to the edge, drills and deep holes), <strong>minimum quantity lubrication (MQL)</strong> (tiny oil mist), and <strong>air blast</strong> (cleaning and cooling for dry cuts). The goal is to get fluid where the heat and chips are.</p>
+
+<h2>Why It Matters</h2>
+<p>Heat shortens tool life and degrades the surface; chips packed in a hole or pocket re-cut and ruin finish. But coolant is not always "more is better": a hot ceramic or cermet edge hit by a cold flood can thermal-shock and crack. In deep holes, weak coolant pressure cannot flush chips up the flutes. Choosing the right delivery protects both the edge and the part.</p>
+
+<h2>How It Works</h2>
+<div class="ctt-table-wrap"><table>
+<caption>Coolant strategies</caption>
+<thead><tr><th scope="col">Strategy</th><th scope="col">Best for</th></tr></thead>
+<tbody>
+<tr><td>Flood coolant</td><td>general turning/milling, heat control</td></tr>
+<tr><td>Through-tool coolant</td><td>deep drilling, chip evacuation from the hole</td></tr>
+<tr><td>MQL</td><td>clean machining, light cuts, chip/heat reduction</td></tr>
+<tr><td>Dry / air blast</td><td>ceramics, certain superalloys, thermal-shock-prone edges</td></tr>
+</tbody></table></div>
+
+<h2>Worked Example</h2>
+<p>Deep hole drilling needs through-spindle coolant: pressure flushes chips up the flutes (page 17). By contrast, running a ceramic insert in dry high-speed steel turning with sudden flood coolant would thermally shock the hot edge &mdash; here dry or controlled air is safer. The rule: put coolant where the heat/chips are, but do not shock an edge that the maker says runs dry.</p>
+<div class="ctt-assumption"><strong>Classroom assumption:</strong> strategies are general; always follow the tool manufacturer's coolant guidance for the specific grade.</div>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Flooding a thermal-shock-sensitive edge.</strong> Cracks the insert. Fix: follow maker guidance for ceramics/superalloys.</li>
+<li><strong>Weak coolant in deep holes.</strong> Chips pack. Fix: through-tool coolant at adequate pressure.</li>
+<li><strong>Ignoring chip evacuation in pockets.</strong> Chips re-cut. Fix: position coolant/air to clear chips.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. Why use through-tool coolant for deep drilling?</summary><p>It flushes chips up the flutes from the bottom of the hole.</p></details>
+<details><summary>Q2. Why not flood a hot ceramic edge?</summary><p>Coolant shock can crack the hot insert.</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>Sandvik Coromant, <strong>Coolant strategies</strong> knowledge pages.</li>
+<li>Maker coolant guidance is authoritative for specific grades.</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/22-runout-balance-and-tool-setting/">&larr; Previous: Runout &amp; Balance</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/24-tool-inspection-and-handling/">Next: Tool Inspection &amp; Handling &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
