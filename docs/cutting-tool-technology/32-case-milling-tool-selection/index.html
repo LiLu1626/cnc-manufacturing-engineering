@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Case: Milling Tool Selection — Cutting Tool Technology</title>
+<meta name="description" content="Worked end-to-end milling selection: from drawing and material through geometry, substrate, coating and setup to a written recommendation.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/32-case-milling-tool-selection/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M8 &middot; Integrated Practice</span>
+<h1>Case: Milling Tool Selection</h1>
+<p class="lead">Putting it together: select a milling tool for a real pocket-and-profile job using the workflow from page 13, the geometry rules from M2, the substrate/coating logic from M3, and the setup checks from M4.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> K</span><span><strong>Prerequisite:</strong> pages 13&ndash;24</span><span><strong>Scope:</strong> worked case</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Walk the full selection workflow on one job</li>
+<li>Justify geometry, grade, coating and setup choices</li>
+<li>Record the decision on the selection worksheet</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p>This case applies the whole module to one component: a steel rectangular part with an open pocket and a finished side profile, moderate quantity. We follow drawing &rarr; material &rarr; operation &rarr; geometry &rarr; substrate/coating &rarr; parameters &rarr; setup.</p>
+
+<h2>Why It Matters</h2>
+<p>Pieces of knowledge are only useful when combined. A single selection that justifies each choice &mdash; rather than guessing at the shelf &mdash; shows the method works end to end and gives a repeatable record.</p>
+
+<h2>How It Works</h2>
+<ol>
+<li><strong>Drawing:</strong> open pocket, Ra 1.6 finish wall, square corners, moderate volume.</li>
+<li><strong>Material:</strong> plain carbon steel, continuous cut, chip-forming.</li>
+<li><strong>Operation:</strong> rough pocket then finish wall and floor.</li>
+<li><strong>Geometry:</strong> corner-radius end mill for the finished wall; a roughing mill for stock.</li>
+<li><strong>Substrate/coating:</strong> steel-grade carbide, PVD TiAlN for the interrupted milling heat.</li>
+<li><strong>Parameters:</strong> start from catalog; the locked &Oslash;10, n=3800, fz=0.04 &rarr; vf=608 baseline sets the scale.</li>
+<li><strong>Setup:</strong> shortest holder, low runout, through/flood coolant.</li>
+</ol>
+
+<h2>Worked Example</h2>
+<p>Following the steps: rough with a chip-splitting roughing end mill, then finish with a corner-radius mill at the locked baseline feed. The selection worksheet records why: corner radius for chip-resistant corners, TiAlN for heat in steel milling, short holder for rigidity. That record is the deliverable.</p>
+<div class="ctt-assumption"><strong>Classroom assumption:</strong> the part and numbers are illustrative; confirm exact tools and speeds from the catalog for the actual steel grade.</div>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Skipping justification.</strong> Fix: fill every step on the worksheet.</li>
+<li><strong>Finishing with the roughing tool.</strong> Marks the wall. Fix: separate rough and finish tools.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. Why a corner-radius end mill for the finished wall?</summary><p>It resists corner chipping and gives a controlled radius.</p></details>
+<details><summary>Q2. Locked baseline feed rate?</summary><p>vf = n&middot;zc&middot;fz = 3800&middot;4&middot;0.04 = 608 mm/min.</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>Synthesis of pages 03, 05&ndash;07, 12, 14&ndash;15, 21&ndash;23.</li>
+<li>Record on the <a href="/cnc-manufacturing-engineering/cutting-tool-technology/resources/tool-selection-worksheet/">selection worksheet</a>.</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/31-reconditioning-sustainability/">&larr; Previous: Reconditioning</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/33-case-turning-wear/">Next: Case: Turning Wear &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Case: Hole Quality — Cutting Tool Technology</title>
+<meta name="description" content="Worked hole-making sequence: drill, then bore or ream to tolerance, accounting for point depth, stock and concentricity.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/34-case-hole-quality/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M8 &middot; Integrated Practice</span>
+<h1>Case: Hole Quality</h1>
+<p class="lead">A tight-tolerance hole needs a sequence, not a drill. This case plans drill &rarr; (bore or ream) with point depth, stock allowance and concentricity handled correctly.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> K</span><span><strong>Prerequisite:</strong> pages 17&ndash;18</span><span><strong>Scope:</strong> worked case</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Plan a hole-making sequence to tolerance</li>
+<li>Account for drill point depth and reaming stock</li>
+<li>Choose bore vs ream by position and tolerance needs</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p>This case chains drill (page 17) with reaming/boring (page 18): size a near-net drilled hole to a tolerance, while planning the conical point and the small reaming stock. Concentricity and position decide whether boring is required.</p>
+
+<h2>Why It Matters</h2>
+<p>A hole that drills to size but wanders, or that ignores the 118&deg; point, either fails inspection or leaves a conical bottom. Planning the sequence up front avoids both.</p>
+
+<h2>How It Works</h2>
+<p>Required hole: &Oslash;10 H7, good finish, located to a datum. Step 1: drill &Oslash;9.7 (leaving ~0.15&nbsp;mm radial stock, page 18). Step 2: if position must be corrected, bore; if the drilled hole is aligned and only needs sizing, ream. Add the 118&deg; point height for through holes (page 17: h = D/(2&middot;tan59&deg;)). Keep boring-bar overhang within limits (page 16).</p>
+
+<h2>Worked Example</h2>
+<p>For a &Oslash;10 H7 hole that must be precisely located: drill &Oslash;9.7, bore to size and position, then ream for finish if needed. For a simpler hole already aligned: drill &Oslash;9.7 then ream to &Oslash;10 directly. The locked &Oslash;10 point height is 3.004&nbsp;mm when planning through depth.</p>
+<div class="ctt-assumption"><strong>Classroom assumption:</strong> drill size and stock are typical; confirm against the drill/reamer maker for the material.</div>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Reaming a mislocated hole.</strong> Fix: bore first to correct position.</li>
+<li><strong>Forgetting point depth.</strong> Fix: add h = 3.004&nbsp;mm for the &Oslash;10 drill.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. Drill for a &Oslash;10 ream, leaving 0.15&nbsp;mm radial stock? drill size?</summary><p>&Oslash;9.7 (10 &minus; 2&times;0.15).</p></details>
+<details><summary>Q2. Hole off-center &mdash; ream or bore first?</summary><p>Bore first to correct position, then ream if sizing/finish needed.</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>Synthesis of pages 17&ndash;18; locked point height from page 03.</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/33-case-turning-wear/">&larr; Previous: Turning Case</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/35-assessment/">Next: Final Assessment &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
