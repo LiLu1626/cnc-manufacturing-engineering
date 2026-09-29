@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>End-Mill Geometry & Engagement — Cutting Tool Technology</title>
+<meta name="description" content="Helix angle, number of flutes, center-cutting vs non, radial and axial engagement, climb vs conventional milling.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/07-end-mill-geometry-engagement/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M2 &middot; Tool Geometry</span>
+<h1>End-Mill Geometry &amp; Engagement</h1>
+<p class="lead">Helix angle, number of flutes, center-cutting, and how much of the cutter actually contacts the work decide whether an end mill cuts, rubs, chatters or jams. This page reads those features and sets radial and axial engagement the right way around.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> K</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cutting-tool-technology/06-edge-preparation-chipbreakers/">06 Edge Prep &amp; Chipbreakers</a></span><span><strong>Scope:</strong> metric; classroom examples</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Explain helix angle and flute-count trade-offs</li>
+<li>Tell center-cutting from non-center-cutting end mills</li>
+<li>Set radial engagement (ae) and axial engagement (ap) sensibly</li>
+<li>Distinguish climb from conventional milling and when each applies</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p>A solid end mill is defined by its <strong>diameter</strong>, <strong>number of flutes (zc)</strong>, <strong>helix angle</strong>, and whether it is <strong>center-cutting</strong>. The flutes are the cutting edges; more flutes means higher feed rate at the same chip load but less room for chips. The <strong>helix angle</strong> lets the edge engage gradually instead of slamming in full width, lowering shock and noise. <strong>Radial engagement (ae)</strong> is how much of the cutter diameter sits in the cut sideways; <strong>axial engagement (ap)</strong> is the depth of cut along the axis.</p>
+
+<h2>Why It Matters</h2>
+<p>Most end-mill trouble comes from engagement, not the tool itself. A full-width slot (ae = D) engages the edge for half the revolution and heats the tool; a light radial engagement (ae small) with deep axial cut keeps the edge cooler and lets you run higher speed. Getting flute count wrong means either chip packing (too many flutes in a gummy material) or low productivity (too few flutes in aluminum). Knowing center-cutting tells you whether you can plunge straight down or must ramp/helical-interpolate in.</p>
+
+<h2>How It Works</h2>
+<h3>Number of flutes</h3>
+<div class="ctt-table-wrap"><table>
+<caption>Flute-count trade-offs</caption>
+<thead><tr><th scope="col">Fewer flutes (2&ndash;3)</th><th scope="col">More flutes (4&ndash;6)</th></tr></thead>
+<tbody>
+<tr><td>More chip room, good for gummy/aluminum</td><td>Smaller chip gullet, better for steel finishing</td></tr>
+<tr><td>Lower feed rate at same fz (fewer edges)</td><td>Higher feed rate at same fz</td></tr>
+<tr><td>Weaker core</td><td>Stronger core, stiffer</td></tr>
+</tbody></table></div>
+<h3>Center-cutting vs not</h3>
+<p>A <strong>center-cutting</strong> end mill has flutes that reach the center, so it can plunge axially like a drill. A <strong>non-center-cutting</strong> end mill has a dead zone at the center and cannot plunge straight down &mdash; you must ramp in or start from a pre-drilled hole. This is a setup safety point: trying to plunge a non-center-cutting tool jams it.</p>
+<h3>Climb vs conventional</h3>
+<p>In <strong>climb (up) milling</strong>, the cutter rotates the same direction as feed, chip starts thick and thins out &mdash; preferred on modern CNC machines, gives better finish and less rubbing. In <strong>conventional (down) milling</strong>, the chip starts thin and thickens, rubbing and work-hardening; used mainly on older machines with backlash.</p>
+
+<h2>Worked Example</h2>
+<p>Use the locked baseline: &Oslash;10 mm, zc = 4, fz = 0.04 mm/tooth, n = 3800 RPM &rarr; vf = 608 mm/min. Two strategies. Slotting at ae = D = 10 mm engages each tooth for about half the cut, heats the core, and forces a conservative ap. Trochoidal/low-radial engagement at ae = 1&ndash;2 mm with a deep ap keeps engagement short and cool, allowing higher speed &mdash; but you must have a strong, short setup because radial deflection is now the limit. The same &Oslash;10, 4-flute tool behaves like two different tools depending on ae.</p>
+<figure class="ctt-figure">
+<svg viewBox="0 0 440 210" role="img" aria-label="Radial engagement ae on an end mill">
+<desc>Top view: a 10 mm end mill taking a light radial engagement ae versus full slot ae equals diameter.</desc>
+<text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Radial engagement ae (top view)</text>
+<rect x="40" y="60" width="150" height="100" fill="#cfdbd8"/>
+<circle cx="190" cy="110" r="20" fill="#0b766e"/>
+<line x1="190" y1="110" x2="170" y2="110" stroke="#b3261e" stroke-width="2"/>
+<text x="60" y="180" font-size="10" fill="#5c6872">light ae: short engagement, cooler</text>
+<rect x="260" y="60" width="160" height="100" fill="#cfdbd8"/>
+<circle cx="340" cy="110" r="20" fill="#b3261e"/>
+<text x="265" y="180" font-size="10" fill="#5c6872">ae = D: full slot, long engagement, hot</text>
+</svg>
+<figcaption>Same tool, different ae. Light radial engagement with deeper axial cut is the basis of trochoidal milling (schematic).</figcaption>
+</figure>
+<div class="ctt-assumption"><strong>Classroom assumption:</strong> ae = 1&ndash;2 mm and the speed/feed figures are illustrative. Real engagement and speed depend on machine rigidity, chip evacuation and the specific tool grade.</div>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Plunging a non-center-cutting end mill.</strong> It cannot drill down; it jams. Fix: check center-cutting, or ramp/helical in.</li>
+<li><strong>Packing chips with too many flutes in aluminum.</strong> The gullet cannot clear chips. Fix: use fewer flutes for gummy materials.</li>
+<li><strong>Always slotting at ae = D.</strong> Excess heat and wear. Fix: use low radial engagement with deeper axial cut where rigidity allows.</li>
+<li><strong>Ignoring machine backlash for climb milling.</strong> Climb milling can cause chatter on a worn machine. Fix: know your machine's condition.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. Can a non-center-cutting end mill plunge straight down?</summary><p>No &mdash; the center has no cutting edge. Ramp in or start from a drilled hole.</p></details>
+<details><summary>Q2. Why do gummy materials want fewer flutes?</summary><p>Larger chip gullets evacuate stringy chips instead of packing them.</p></details>
+<details><summary>Q3. Which direction (climb or conventional) gives a thick-to-thin chip?</summary><p>Climb (up) milling: chip starts thick and thins out; preferred on modern CNC machines.</p></details>
+<details><summary>Q4. Locked baseline: zc=4, fz=0.04, n=3800. What is vf?</summary><p>608 mm/min (page 03).</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>Sandvik Coromant, <em>End milling / Radial and axial cutting depth</em> knowledge pages.</li>
+<li>IMC / Seco, <em>Trochoidal milling and chip-thickness guidance</em> (general reference).</li>
+<li>Engagement and speed figures are classroom illustrations; verify against the end-mill catalog.</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/06-edge-preparation-chipbreakers/">&larr; Previous: Edge Prep &amp; Chipbreakers</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/08-insert-designations-catalogs/">Next: Insert Designations &amp; Catalogs &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

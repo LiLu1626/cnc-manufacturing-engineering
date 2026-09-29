@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Insert Designations & Catalogs — Cutting Tool Technology</title>
+<meta name="description" content="How to decode the ISO insert code: shape, clearance, tolerance, chipbreaker, size, and how to read a catalog.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/08-insert-designations-catalogs/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M2 &middot; Tool Geometry</span>
+<h1>Insert Designations &amp; Catalogs</h1>
+<p class="lead">An insert code like CNMG 12 04 08 has a defined meaning: shape, clearance, tolerance, chipbreaker, size and nose radius. Once you can read the first few characters, a catalog stops looking like noise and becomes a selection tool.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> B</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cutting-tool-technology/07-end-mill-geometry-engagement/">07 End-Mill Geometry</a></span><span><strong>Scope:</strong> metric; classroom examples</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Decode the main fields of an ISO turning insert code</li>
+<li>Read shape, clearance, size and nose radius from a real example</li>
+<li>Use a catalog to narrow a candidate insert for a job</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p>The ISO turning-insert designation is a coded string. Reading left to right, the first characters tell you the most: <strong>shape</strong>, <strong>clearance angle</strong>, <strong>tolerance</strong>, <strong>chipbreaker/clamp type</strong>, then <strong>size</strong> (inscribed circle), <strong>thickness</strong> and <strong>nose radius</strong>. A worked example makes it concrete.</p>
+
+<h2>Why It Matters</h2>
+<p>You order an insert by this code, and the holder pocket only accepts certain shapes and clearances. Buy the wrong clearance letter and it does not sit in the holder; misread the nose radius and your finish expectation is wrong. Decoding the code is the cheapest way to avoid buying the wrong part.</p>
+
+<h2>How It Works</h2>
+<h3>Worked code: CNMG 12 04 08</h3>
+<div class="ctt-table-wrap"><table>
+<caption>Decoding CNMG 12 04 08 (illustrative; verify against the manufacturer code)</caption>
+<thead><tr><th scope="col">Field</th><th scope="col">Means</th><th scope="col">Here</th></tr></thead>
+<tbody>
+<tr><td>C</td><td>Shape = 80&deg; rhombic</td><td>80&deg; diamond insert</td></tr>
+<tr><td>N</td><td>Clearance = 0&deg; (negative)</td><td>strong, negative-rake geometry</td></tr>
+<tr><td>M</td><td>Tolerance class</td><td>medium-tolerance grade</td></tr>
+<tr><td>G</td><td>Clamp / chipbreaker type</td><td>standard hole + chipbreaker form</td></tr>
+<tr><td>12</td><td>Size (inscribed circle)</td><td>~12.7 mm class</td></tr>
+<tr><td>04</td><td>Thickness</td><td>~4.76 mm</td></tr>
+<tr><td>08</td><td>Nose radius</td><td>r&epsilon; = 0.8 mm</td></tr>
+</tbody></table></div>
+<p>The nose radius field "08" = 0.8 mm, which connects directly to the roughness formula on page 03. The N clearance = negative rake connects to page 05: a strong insert for roughing, not a light finishing setup.</p>
+
+<h2>Worked Example</h2>
+<p>Given a roughing job on 4140 at 280 HB, you want a strong negative-rake insert. You decode a candidate CNMG 12 04 08: C = 80&deg; shape, N = 0&deg; clearance (negative rake, strong), nose radius 0.8 mm. That matches the requirement for a robust roughing insert &mdash; and the 0.8 mm nose radius sets your expected finish. You would not pick a positive-rake finishing code for this pocket.</p>
+<div class="ctt-assumption"><strong>Classroom assumption:</strong> the field meanings above follow the general ISO convention; exact tolerance and chipbreaker letters vary by manufacturer. Always confirm against the maker's code table for the actual insert.</div>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Ordering by the whole string without decoding.</strong> You may get a clearance the holder cannot accept. Fix: decode shape and clearance before ordering.</li>
+<li><strong>Misreading the nose radius field.</strong> "08" means 0.8 mm, not 8 mm. Fix: treat the last two digits as tenths of a millimetre.</li>
+<li><strong>Ignoring that holders are pocket-specific.</strong> A CNMG does not fit a TNMG pocket. Fix: match insert shape to the holder pocket.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. In CNMG 12 04 08, what is the nose radius?</summary><p>0.8 mm (the "08" field, in tenths of a mm).</p></details>
+<details><summary>Q2. The "N" clearance means what?</summary><p>0&deg; clearance / negative rake &mdash; a stronger, more robust geometry.</p></details>
+<details><summary>Q3. Why must insert shape match the holder?</summary><p>The holder pocket is ground for one insert shape; a different shape will not sit or clamp correctly.</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>ISO 1832 &mdash; Indexable insert designation system.</li>
+<li>Sandvik Coromant / Mitsubishi Materials, <em>Insert designation</em> catalog reference.</li>
+<li>Field meanings are general; confirm exact letters against the chosen manufacturer's code table.</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/07-end-mill-geometry-engagement/">&larr; Previous: End-Mill Geometry</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/09-tool-material-families/">Next: Tool Material Families &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
