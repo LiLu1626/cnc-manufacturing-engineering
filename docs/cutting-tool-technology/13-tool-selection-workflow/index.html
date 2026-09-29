@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tool Selection Workflow — Cutting Tool Technology</title>
+<meta name="description" content="A step-by-step decision path from drawing and material to geometry, substrate, coating and setup, ending in a written selection record.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/13-tool-selection-workflow/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M3 &middot; Substrates &amp; Coatings</span>
+<h1>Tool Selection Workflow</h1>
+<p class="lead">How do you actually choose a tool? Not by browsing the shelf &mdash; by a decision path: read the drawing and material, choose the operation and geometry, then substrate and coating, then check the setup. This page is that checklist, ending in a written record you can defend.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> B</span><span><strong>Prerequisite:</strong> pages 02, 05, 09, 12</span><span><strong>Scope:</strong> general method</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Walk a tooling decision in the correct order</li>
+<li>Record why a tool was chosen, not just what was chosen</li>
+<li>Use the printable selection worksheet on a real job</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p>Tool selection is a sequence of narrowing decisions, not a single guess. It starts from the part and material (what must be made and from what), moves through operation and geometry (how the edge engages), then substrate and coating (what survives the heat and wear), and finally checks the setup (holder, overhang, runout) before approving the first cut.</p>
+
+<h2>Why It Matters</h2>
+<p>Without a sequence, people start from the tool box &mdash; "what do we have?" &mdash; and make the part fit the tool, which guarantees compromise. A written workflow forces you to name constraints first, so the choice is traceable. When the tool fails later, you have a record of which assumption to revisit instead of starting over.</p>
+
+<h2>How It Works</h2>
+<ol>
+<li><strong>Read the drawing:</strong> feature, tolerance, finish, quantity, critical surfaces.</li>
+<li><strong>Read the material:</strong> grade, condition, hardness (page 02), scale/work-hardening.</li>
+<li><strong>Choose the operation and tool type:</strong> end mill, indexable, turning insert, drill (modules M5).</li>
+<li><strong>Choose geometry:</strong> positive/negative rake, nose radius, chipbreaker window (pages 05&ndash;06, 08).</li>
+<li><strong>Choose substrate &amp; coating:</strong> grade family matched to material and hardness (pages 09&ndash;12).</li>
+<li><strong>Set starting parameters</strong> from the catalog for that tool, never from memory.</li>
+<li><strong>Check the setup:</strong> holder, overhang/L-D, runout, coolant (pages 21&ndash;24).</li>
+<li><strong>Record and trial:</strong> log the choice and run a short tool-life check (page 28).</li>
+</ol>
+
+<h2>Worked Example</h2>
+<p>Pocketing an aluminum casting. Drawing: open pocket, Ra 1.6, moderate quantity. Material: high-silicon aluminum, abrasive. Operation: square-shoulder end milling. Geometry: positive rake, sharp edge, few flutes for chip clearance. Substrate/coating: wear-resistant, PCD or diamond-coated for the abrasive alloy rather than plain carbide. Setup: short overhang, flood coolant. The record on the worksheet makes it clear why PCD was chosen &mdash; not "because expensive," but because the high silicon abrades uncoated carbide.</p>
+<div class="ctt-assumption"><strong>Classroom assumption:</strong> the aluminum grade and PCD choice are illustrative. Confirm the exact grade, silicon content and tool recommendation with the catalog before cutting.</div>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Starting from the available tool instead of the requirement.</strong> Fix: read drawing and material first.</li>
+<li><strong>Recording only the tool number, not the reasoning.</strong> Fix: fill the selection worksheet.</li>
+<li><strong>Skipping the setup check.</strong> A correct tool on a long, run-out holder still fails. Fix: step 7 before the first cut.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. What are the first two inputs to tool selection?</summary><p>The drawing/feature requirements and the material (grade, condition, hardness).</p></details>
+<details><summary>Q2. Why record the reasoning, not just the part number?</summary><p>When the tool fails, you revisit the right assumption; the choice is repeatable and defensible.</p></details>
+<details><summary>Q3. Which step checks overhang and runout?</summary><p>The setup check, after geometry/substrate/coating but before approving the cut.</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>Sandvik Coromant, <em>Tool selection process</em> knowledge pages.</li>
+<li>The <a href="/cnc-manufacturing-engineering/cutting-tool-technology/resources/tool-selection-worksheet/">printable selection worksheet</a> accompanies this workflow.</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/12-coating-processes-and-families/">&larr; Previous: Coatings</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/14-solid-end-mills/">Next: Solid End Mills &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
