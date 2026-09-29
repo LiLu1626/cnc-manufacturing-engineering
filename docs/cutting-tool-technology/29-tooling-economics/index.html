@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tooling Economics — Cutting Tool Technology</title>
+<meta name="description" content="Cost per component, not just insert price: balance tool cost, machine hour rate and tool life to choose the lowest-cost-per-part option.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/29-tooling-economics/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M7 &middot; Cost &amp; Management</span>
+<h1>Tooling Economics</h1>
+<p class="lead">The cheapest insert is often the most expensive choice. Tooling cost should be compared per <em>finished component</em>, balancing insert cost, machine hour rate and tool life. A pricier grade that lasts much longer often wins &mdash; this page does the math.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> K</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cutting-tool-technology/28-tool-life-testing/">28 Tool Life Testing</a></span><span><strong>Scope:</strong> classroom example</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Estimate tooling cost per component</li>
+<li>Compare two tool options on cost per part</li>
+<li>Explain why insert price alone is the wrong comparison</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p>The real comparison is <strong>cost per good component</strong>, not cost per insert. Two terms matter: the tool cost spread over parts, and the machine time the tool consumes (machine hour rate &times; cycle). A tool that costs more but lasts twice as long, or cuts faster and shortens cycle, can lower cost per part &mdash; even at a higher sticker price.</p>
+
+<h2>Why It Matters</h2>
+<p>Buying the cheapest insert saves cents on the tool but loses dollars on machine time and scrapped parts. Conversely, a premium grade paid for only if it measurably extends life or raises material removal. The locked case below shows why the cheaper-looking option can lose.</p>
+
+<h2>How It Works</h2>
+<p>Approximate tooling cost per part = (tool cost usable per edge &times; edges used per part) + machine-time share. The locked CTT baseline uses two competing options, A and B, at <strong>0.64 vs 0.525 cost units per part</strong> &mdash; the seemingly pricier tool B wins because it lasts longer / removes more, lowering cost per component.</p>
+
+<h2>Worked Example</h2>
+<p>Two turning options on the same part. Option A: cheaper insert but shorter life and slower cycle. Option B: pricier insert, longer life and higher metal removal. On a per-part basis the locked figures are <strong>A = 0.64, B = 0.525 cost units/part</strong>. B is ~18% cheaper per component despite a higher insert price. The lesson: compare cost per good part, at the machine rate your shop actually charges.</p>
+<figure class="ctt-figure">
+<svg viewBox="0 0 420 150" role="img" aria-label="Cost per component A vs B">
+<desc>Two horizontal bars: option A 0.64 and option B 0.525 cost units per part.</desc>
+<text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Cost per component (locked case)</text>
+<rect x="140" y="45" width="224" height="22" fill="#b3261e"/>
+<text x="150" y="61" font-size="11" fill="#fff">A 0.64</text>
+<rect x="140" y="85" width="184" height="22" fill="#0b766e"/>
+<text x="150" y="101" font-size="11" fill="#fff">B 0.525</text>
+<text x="30" y="125" font-size="9" fill="#5c6872">shorter bar = lower cost per part</text>
+</svg>
+<figcaption>Locked case: B wins on cost per part despite higher insert price.</figcaption>
+</figure>
+<div class="ctt-assumption"><strong>Classroom assumption:</strong> the 0.64 / 0.525 figures are the locked CTT baseline for teaching. Substitute your own insert price, machine hour rate, tool life and cycle time for a real decision.</div>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Comparing insert prices, not cost per part.</strong> Fix: include life and machine time.</li>
+<li><strong>Ignoring scrap and downtime.</strong> A marginal tool that scrapes parts costs far more. Fix: price in quality cost.</li>
+<li><strong>Buying the fastest tool regardless of price.</strong> Fix: only the cost-per-part math justifies it.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. What is the right unit of comparison?</summary><p>Cost per good component, not cost per insert.</p></details>
+<details><summary>Q2. In the locked case, which option wins and at what per-part cost?</summary><p>B, at 0.525 vs A's 0.64 cost units per part.</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>Sandvik Coromant, <em>Cost per component</em> methodology.</li>
+<li>0.64 / 0.525 are locked classroom baselines; replace with real shop data.</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/28-tool-life-testing/">&larr; Previous: Tool Life Testing</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/30-tool-management-and-monitoring/">Next: Tool Management &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
