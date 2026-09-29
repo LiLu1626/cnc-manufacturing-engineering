@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Chip Formation, Forces & Heat — Cutting Tool Technology</title>
+<meta name="description" content="How the chip is formed, the three cutting forces, where heat goes, and why chip control and force balance drive tool life.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/04-chip-formation-forces-heat/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M1 &middot; The Cutting System</span>
+<h1>Chip Formation, Forces &amp; Heat</h1>
+<p class="lead">Every cut is controlled plastic deformation: the edge shears a layer, the chip flows up the rake face, and 99% of the power becomes heat. Understanding chip shape, the three forces and where heat goes explains chatter, built-up edge, crater wear and tool breakage before you see them.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> K</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cutting-tool-technology/03-cutting-data-and-units/">03 Cutting Data &amp; Units</a></span><span><strong>Scope:</strong> metric; classroom examples</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Describe continuous, segmented and discontinuous chips and what each means</li>
+<li>Identify the three force directions and what each predicts</li>
+<li>Explain how heat distributes and why speed concentrates it at the edge</li>
+<li>Read chip shape as a diagnostic signal for feed and speed</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p>Metal cutting is not &ldquo;scraping&rdquo;: the tool wedge forces the workpiece material to shear along a narrow <strong>shear zone</strong>, and the sheared layer flows up the rake face as a <strong>chip</strong>. The chip is thicker than the undeformed chip because it compresses in the shear zone. The way that chip forms falls into three main types:</p>
+<ul>
+<li><strong>Continuous chips</strong> &mdash; ductile materials at adequate speed; ideal but stringy, so they need a chipbreaker.</li>
+<li><strong>Segmented (serrated) chips</strong> &mdash; titanium, austenitic stainless, hardened steel; partly sheared then fractured, with high heat.</li>
+<li><strong>Discontinuous chips</strong> &mdash; brittle materials (cast iron) or very light cuts; chips break into small pieces naturally.</li>
+</ul>
+<p>A <strong>built-up edge (BUE)</strong> occurs when workpiece material welds to the rake face at low cutting speed; it changes the actual geometry and ruins finish.</p>
+
+<h2>Why It Matters</h2>
+<p>The chip is the only part of the process you can see and measure without instruments. A long, snarled chip means the feed or chipbreaker window is wrong; a blue, hot chip means speed is high and heat is leaving through the chip; a shiny, welded edge means BUE. Forces tell you about rigidity and tool load: high radial force causes deflection and chatter; high tangential force drives power consumption. Heat distribution tells you whether coolant is reaching the right place. Reading these signs is how you catch a failing process before it ruins a part or snaps an insert.</p>
+
+<h2>How It Works</h2>
+<h3>The three force components</h3>
+<div class="ctt-table-wrap"><table>
+<caption>Cutting forces and what they predict</caption>
+<thead><tr><th scope="col">Force</th><th scope="col">Direction</th><th scope="col">What it drives</th></tr></thead>
+<tbody>
+<tr><td>Tangential (main) force Fc</td><td>Opposes rotation / cutting speed</td><td>Power consumption, spindle load</td></tr>
+<tr><td>Radial force Fp</td><td>Perpendicular to the surface, pushing tool away</td><td>Deflection, vibration, chatter</td></tr>
+<tr><td>Axial / feed force Ff</td><td>Along feed direction</td><td>Feed mechanism load, chip thickness</td></tr>
+</tbody></table></div>
+<p>For a given depth, radial force is the enemy of thin walls and long tools: it deflects the tool radially, causing taper and chatter. Positive rake geometry lowers cutting forces overall; negative rake is stronger but pushes harder.</p>
+<h3>Where the heat goes</h3>
+<p>Roughly, in conventional machining: most heat leaves in the chip, a smaller share goes into the tool, and a small fraction into the workpiece. At higher cutting speed, a larger fraction of heat travels in the chip &mdash; which sounds good, but the edge temperature still rises sharply with speed. This is why speed is the dominant lever on crater wear and edge softening, while feed mainly affects mechanical loading.</p>
+<h3>Chip thickness and the shear angle</h3>
+<p>The <strong>undeformed chip thickness</strong> depends on feed and engagement. In milling it is not constant: for a mild climb cut with fz and radial engagement, the chip is thin at entry and grows. Thinner chips rub instead of shear, which is why too-light feed work-hardens stainless and accelerates flank wear.</p>
+
+<h2>Worked Example</h2>
+<p>Use the locked milling baseline from page 03: n = 3800 RPM, zc = 4, fz = 0.04 mm, giving vf = 608 mm/min. If radial engagement leaves an average undeformed chip thickness near the 0.04&nbsp;mm design value, the edge shears cleanly. If the operator, chasing a better finish, drops fz to 0.01&nbsp;mm on stainless, the chip no longer shears &mdash; it rubs, work-hardens the surface, and flank wear rises even though &ldquo;the cut looks lighter.&rdquo; This is the classic too-light-feed failure.</p>
+<figure class="ctt-figure">
+<svg viewBox="0 0 440 200" role="img" aria-label="Chip formation and shear zone">
+<desc>Schematic orthogonal cut: tool wedge shears the workpiece along a shear plane, and the chip flows up the rake face.</desc>
+<rect x="40" y="120" width="360" height="50" fill="#cfdbd8"/>
+<polygon points="120,120 200,90 200,120" fill="#0b766e"/>
+<text x="150" y="80" font-size="10" fill="#0b766e">chip flows up rake face</text>
+<line x1="120" y1="120" x2="200" y2="95" stroke="#b3261e" stroke-width="1.5" stroke-dasharray="3,2"/>
+<text x="90" y="110" font-size="10" fill="#b3261e">shear zone</text>
+<polygon points="200,95 230,105 200,120" fill="#5c6872"/>
+<text x="235" y="100" font-size="10" fill="#333">tool edge</text>
+<text x="40" y="185" font-size="10" fill="#5c6872">workpiece</text>
+</svg>
+<figcaption>Orthogonal cut (schematic, not to scale). The chip is compressed in the shear zone and leaves hotter than the bulk material.</figcaption>
+</figure>
+<div class="ctt-assumption"><strong>Classroom assumption:</strong> force magnitudes and heat fractions are typical textbook ranges, not measured values for a specific setup. Always verify rigidity and load with your own cut.</div>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Reducing feed to get a better finish.</strong> Too-light feed rubs, work-hardens and worsens finish. Fix: keep feed in the designed chip-thickness window and use nose radius/geometry for finish.</li>
+<li><strong>Ignoring the chip as a diagnostic.</strong> A blue, curled chip is normal; a snarled, welded or dusty chip is information. Fix: observe chip shape after every setup.</li>
+<li><strong>Blaming the coating for chatter.</strong> Chatter is a rigidity/engagement problem (radial force), not a coating problem. Fix: reduce radial engagement, shorten overhang, change speed.</li>
+<li><strong>Assuming coolant removes most heat.</strong> Most heat leaves in the chip. Fix: direct coolant at the edge/chip interface where it matters, and use it consistently.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. Name the three chip types and one material that gives each.</summary><p>Continuous (ductile steel/aluminum), segmented (titanium, stainless, hardened steel), discontinuous (cast iron/brittle).</p></details>
+<details><summary>Q2. Which force most directly causes deflection and chatter?</summary><p>The radial force Fp, pushing the tool away from the surface.</p></details>
+<details><summary>Q3. Why does dropping feed on stainless often increase wear?</summary><p>A too-thin chip rubs rather than shears, work-hardening the surface and accelerating flank wear.</p></details>
+<details><summary>Q4. Where does most cutting heat leave?</summary><p>In the chip; only a smaller share enters the tool and a small share the workpiece.</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>ASM International, <em>ASM Handbook Vol. 16: Machining</em> &mdash; chip formation, force components and heat partition.</li>
+<li>Sandvik Coromant, <em>Chip formation / Cutting forces</em> knowledge pages (general reference).</li>
+<li>Chip-type and heat-partition percentages are textbook classroom illustrations; exact values depend on material, edge and speed.</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/03-cutting-data-and-units/">&larr; Previous: Cutting Data &amp; Units</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/05-rake-clearance-and-edge-angles/">Next: Rake &amp; Clearance Angles &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

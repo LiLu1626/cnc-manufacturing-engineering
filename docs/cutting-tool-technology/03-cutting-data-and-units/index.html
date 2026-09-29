@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Cutting Data & Units — Cutting Tool Technology</title>
+<meta name="description" content="Cutting speed, RPM, feed per tooth and feed rate with worked, numerically locked examples and unit-conversion traps.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/03-cutting-data-and-units/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M1 &middot; The Cutting System</span>
+<h1>Cutting Data &amp; Units</h1>
+<p class="lead">Cutting speed, RPM, feed per tooth and feed rate are one linked chain &mdash; not four separate numbers. This page fixes the formulas with worked examples you can reuse, and names the unit errors that most often cause scrap or edge failure.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> K</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cutting-tool-technology/02-workpiece-materials-machinability/">02 Materials &amp; Machinability</a></span><span><strong>Scope:</strong> metric, unless stated</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Convert cutting speed (vc) to spindle speed (RPM) and back</li>
+<li>Compute feed rate from feed per tooth, number of teeth and RPM</li>
+<li>Use the theoretical-roughness and drill-point-height formulas correctly</li>
+<li>Spot the three most common unit errors before they reach the machine</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p><strong>Cutting speed (vc)</strong> is the surface speed of the edge past the work, in m/min. It is what the tool material can tolerate &mdash; set by the catalog, not by the spindle. <strong>Spindle speed (n, RPM)</strong> is what the machine actually turns; it is derived from vc and the tool/work diameter. <strong>Feed per tooth (fz)</strong> is how far the edge advances each tooth, in mm. <strong>Feed rate (vf)</strong> is how fast the tool travels through the cut, in mm/min &mdash; derived from n, number of teeth and fz.</p>
+<p>The chain is: <em>choose vc from the catalog for the material &rarr; compute n from the diameter &rarr; choose fz for the edge &rarr; compute vf</em>. Speed and feed are independent levers: speed mainly drives heat and tool life; feed mainly drives force, chip thickness and surface finish.</p>
+
+<h2>Why It Matters</h2>
+<p>A new operator often sets RPM directly &mdash; &ldquo;last time 3000 RPM worked&rdquo; &mdash; which throws away the whole point of cutting speed. Change the diameter and 3000 RPM means a completely different surface speed. Working from vc keeps the edge in its comfort window regardless of tool size. The second trap is units: mixing mm/min with in/min, or mm per tooth with inches per tooth, changes a feed by a factor of ~25.4 and either rubs (too light) or overloads the edge (too heavy). This page locks the arithmetic so those mistakes are visible.</p>
+
+<h2>How It Works</h2>
+<h3>Cutting speed to RPM</h3>
+<p>For milling and drilling (rotating tool), where D is tool diameter in mm:</p>
+<pre class="ctt-code">n [RPM] = 1000 &times; vc [m/min] / (&pi; &times; D [mm])</pre>
+<p>For turning (rotating workpiece), D is the current cutting diameter; the same formula applies. The 1000 converts metres to millimetres.</p>
+<h3>Feed per tooth to feed rate</h3>
+<pre class="ctt-code">vf [mm/min] = n &times; zc &times; fz</pre>
+<p>where zc is the number of effective cutting teeth (flutes or inserts engaged), and fz is feed per tooth in mm. In turning there is one edge in the cut, so feed rate reduces to vf = n &times; f (feed per revolution).</p>
+<h3>The three formulas locked to this course</h3>
+<div class="ctt-table-wrap"><table>
+<caption>Formulas used throughout the course (do not restate with different coefficients)</caption>
+<thead><tr><th scope="col">Quantity</th><th scope="col">Formula</th><th scope="col">Units</th></tr></thead>
+<tbody>
+<tr><td>Spindle speed</td><td>n = 1000&middot;vc / (&pi;&middot;D)</td><td>RPM</td></tr>
+<tr><td>Feed rate (milling)</td><td>vf = n&middot;zc&middot;fz</td><td>mm/min</td></tr>
+<tr><td>Theoretical roughness (turning)</td><td>Ra &asymp; f&sup2; / (32&middot;r&epsilon;)</td><td>mm, then &times;1000 for &micro;m</td></tr>
+<tr><td>Drill point height (118&deg;)</td><td>h = D / (2&middot;tan(59&deg;))</td><td>mm</td></tr>
+</tbody></table></div>
+<p>The roughness formula uses the factor 32 (a geometric average for a sharp rounded nose); it predicts the ideal <em>best-case</em> Ra, never the real finish, which is worse due to wear, built-up edge and vibration.</p>
+
+<h2>Worked Example</h2>
+<h3>1 &mdash; Cutting speed to RPM (locked: n = 3819.72)</h3>
+<p>A &Oslash;10&nbsp;mm end mill is run at a classroom cutting speed of vc = 120&nbsp;m/min. Then:</p>
+<pre class="ctt-code">n = 1000 &times; 120 / (&pi; &times; 10)
+  = 120000 / 31.4159
+  = 3819.72 RPM</pre>
+<div class="ctt-evidence"><strong>Locked course value:</strong> this course always uses <strong>n = 3819.72 RPM</strong> for vc&nbsp;=&nbsp;120&nbsp;m/min and D&nbsp;=&nbsp;&Oslash;10&nbsp;mm. If another page or calculator prints a different number, it is wrong. (120 m/min is a classroom assumption, not a recommended speed.)</div>
+<h3>2 &mdash; Feed per tooth to feed rate (locked: vf = 608)</h3>
+<p>Take n = 3800 RPM, zc = 4 teeth, fz = 0.04 mm/tooth:</p>
+<pre class="ctt-code">vf = 3800 &times; 4 &times; 0.04 = 608 mm/min</pre>
+<p>Note this deliberately rounds RPM to a realistic 3800 rather than the exact 3819.72 &mdash; you cannot set .72 RPM on a controller. The exact value is for calculation; the programmed value is what you choose on the machine.</p>
+<h3>3 &mdash; Theoretical roughness (locked: Ra &asymp; 0.781 &micro;m)</h3>
+<p>A turning finish pass uses feed f = 0.10 mm/rev and nose radius r&epsilon; = 0.4&nbsp;mm:</p>
+<pre class="ctt-code">Ra = 0.10&sup2; / (32 &times; 0.4) = 0.010 / 12.8 = 0.000781 mm = 0.781 &micro;m</pre>
+<p>This is the <em>ideal</em> floor. Real measured Ra will be higher &mdash; often several times higher &mdash; once wear and vibration appear.</p>
+<h3>4 &mdash; Drill point height (locked: h = 3.004 mm)</h3>
+<p>A &Oslash;10&nbsp;mm drill has a standard 118&deg; included point angle. Half-angle = 59&deg;:</p>
+<pre class="ctt-code">h = 10 / (2 &times; tan 59&deg;) = 10 / (2 &times; 1.6643) = 3.004 mm</pre>
+<figure class="ctt-figure">
+<svg viewBox="0 0 420 200" role="img" aria-label="118 degree drill point geometry">
+<desc>A drill with 118 degree included point angle; for a 10 mm diameter the conical point height is 3.004 mm.</desc>
+<line x1="210" y1="20" x2="210" y2="150" stroke="#5c6872" stroke-width="2"/>
+<polygon points="180,60 240,60 210,110" fill="none" stroke="#0b766e" stroke-width="2"/>
+<line x1="180" y1="60" x2="240" y2="60" stroke="#333" stroke-width="1"/>
+<text x="248" y="64" font-size="10" fill="#333">D = 10 mm</text>
+<line x1="210" y1="60" x2="210" y2="110" stroke="#b3261e" stroke-width="1.5" stroke-dasharray="3,2"/>
+<text x="218" y="90" font-size="10" fill="#b3261e">h = 3.004 mm</text>
+<text x="150" y="170" font-size="10" fill="#5c6872">Included angle 118&deg; (half = 59&deg;)</text>
+</svg>
+<figcaption>Standard 118&deg; point: for through-hole depth planning, add h to the required hole depth so the chisel edge clears.</figcaption>
+</figure>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Forgetting the &times;1000.</strong> Using vc in m/min directly with D in mm gives a result 1000&times; too small. Fix: always include 1000 in n = 1000&middot;vc/(&pi;D).</li>
+<li><strong>Confusing feed per tooth with feed per revolution.</strong> Multiplying vf by zc for a turning operation (only one edge engaged) double-counts. Fix: milling uses zc; turning uses feed per revolution with zc = 1.</li>
+<li><strong>Trusting the theoretical Ra as a guarantee.</strong> 0.781&nbsp;&micro;m is the geometric floor, not the shop result. Fix: measure the real surface and treat wear and vibration separately.</li>
+<li><strong>Ignoring drill point height.</strong> Programming a 20&nbsp;mm deep hole with a flat-bottom assumption wastes the last 3&nbsp;mm. Fix: for a &Oslash;10 drill at 118&deg;, add 3.004&nbsp;mm when planning through-hole depth.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. Compute RPM for vc = 150 m/min and D = &Oslash;20 mm.</summary><p>n = 1000&times;150/(&pi;&times;20) = 150000/62.83 = 2387 RPM.</p></details>
+<details><summary>Q2. n = 2000 RPM, zc = 4, fz = 0.05 mm. What is vf?</summary><p>vf = 2000&times;4&times;0.05 = 400 mm/min.</p></details>
+<details><summary>Q3. f = 0.15 mm/rev, r&epsilon; = 0.8 mm. Ideal Ra?</summary><p>Ra = 0.15&sup2;/(32&times;0.8) = 0.0225/25.6 = 0.000879 mm = 0.879 &micro;m (ideal only).</p></details>
+<details><summary>Q4. Why can you not set 3819.72 RPM on the controller?</summary><p>Controllers take integer RPM. You use 3819 or 3800; the exact value is for the calculation, the rounded value for the program.</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>Mitsubishi Materials, <em>Calculation of Cutting Conditions</em> technical reference (formulas n = 1000vc/&pi;D and vf = n&middot;zc&middot;fz).</li>
+<li>Sandvik Coromant, <em>Cutting speed and spindle speed / Feed and feed rate</em> knowledge pages.</li>
+<li>The 118&deg; drill point geometry and 0.781&nbsp;&micro;m Ra use textbook formulas; all vc values are classroom assumptions.</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/02-workpiece-materials-machinability/">&larr; Previous: Materials &amp; Machinability</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/04-chip-formation-forces-heat/">Next: Chip Formation, Forces &amp; Heat &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>

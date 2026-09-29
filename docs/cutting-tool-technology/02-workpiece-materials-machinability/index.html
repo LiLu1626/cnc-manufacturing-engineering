@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Workpiece Materials & Machinability — Cutting Tool Technology</title>
+<meta name="description" content="How material properties — hardness, toughness, work hardening, thermal conductivity and abrasiveness — drive tool choice and cutting data.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/02-workpiece-materials-machinability/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M1 &middot; The Cutting System</span>
+<h1>Workpiece Materials &amp; Machinability</h1>
+<p class="lead">Machinability is not a property stamped on a bar. It is the result of hardness, strength, toughness, work hardening, thermal conductivity and abrasiveness acting together &mdash; and it changes with heat-treat condition. This page turns those properties into the tool and speed choices they actually drive.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> K</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cutting-tool-technology/01-cutting-tool-system/">01 The Cutting Tool as a System</a></span><span><strong>Scope:</strong> metric; classroom examples</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Define machinability and the five properties that move it</li>
+<li>Order the common material families by typical cutting speed window</li>
+<li>Explain why hardness, work hardening and low thermal conductivity each change the tool recipe</li>
+<li>Read a material data sheet and extract the numbers that matter to a tooling decision</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p><strong>Machinability</strong> is a relative measure of how easily a material can be machined to the required finish and tolerance at reasonable tool cost. There is no single unit. In industry it is usually expressed one of three ways: the cutting speed that gives a fixed tool life (say 15 minutes) under standardized conditions; the material removal rate achievable; or the resulting surface finish and chip behavior. All three are tied to a specific tool material &mdash; &ldquo;machinable&rdquo; with carbide may be &ldquo;not machinable&rdquo; with high-speed steel.</p>
+<p>Five physical properties dominate:</p>
+<ul>
+<li><strong>Hardness</strong> &mdash; resistance to plastic deformation; directly raises cutting force and abrasive wear.</li>
+<li><strong>Toughness / strength</strong> &mdash; energy absorbed before fracture; strong, tough materials build up heat and resist shearing.</li>
+<li><strong>Work hardening</strong> &mdash; the material gets harder as it is deformed, common in austenitic stainless and aluminum alloys.</li>
+<li><strong>Thermal conductivity</strong> &mdash; whether heat leaves the chip zone through the part or stays at the edge.</li>
+<li><strong>Abrasiveness</strong> &mdash; hard particles in the microstructure (carbides, oxides, silica) that grind the edge.</li>
+</ul>
+
+<h2>Why It Matters</h2>
+<p>A tooling decision starts from the workpiece, not the tool. If you treat &ldquo;steel&rdquo; as one thing, you will choose a generic grade and lose tool life. Annealed low-carbon steel, quenched-and-tempered 4140 at 280&nbsp;HB, and pre-hard H13 at 48&nbsp;HRC are three different machining jobs even though a non-engineer calls all three &ldquo;steel.&rdquo; The heat-treat condition sets hardness, which sets whether you use a coated carbide grade, cermet, ceramic or PCBN &mdash; and each step down in speed window costs cycle time or tool cost.</p>
+<p>The other reason is safety of assumptions. A bar labeled &ldquo;aluminum&rdquo; may be 6061-T6 (free cutting) or a high-silicon 390 aluminum (very abrasive to uncoated carbide). Recording the actual grade, condition and hardness &mdash; and its source &mdash; is what separates an engineering choice from a guess.</p>
+
+<h2>How It Works</h2>
+<h3>How each property changes the tool recipe</h3>
+<div class="ctt-table-wrap"><table>
+<caption>How workpiece properties push tool and parameter choices (directional, not absolute)</caption>
+<thead><tr><th scope="col">Property rises</th><th scope="col">Effect at the edge</th><th scope="col">Typical response</th></tr></thead>
+<tbody>
+<tr><td>Hardness / strength</td><td>Higher force, higher temperature, more flank wear</td><td>Tougher substrate, lower speed, stronger edge prep</td></tr>
+<tr><td>Toughness</td><td>Built-up edge, stringy chips, heat stays in the cut</td><td>Positive rake, sharper edge, chipbreaker, coolant</td></tr>
+<tr><td>Work hardening</td><td>Worked layer hardens; light cuts rub and accelerate wear</td><td>Higher feed per tooth, avoid rubbing, sharp edge</td></tr>
+<tr><td>Low thermal conductivity (Ti, Ni alloys, austenitic SS)</td><td>Heat stays in the edge, crater and notch wear</td><td>Heat-resistant coating, positive geometry, generous coolant</td></tr>
+<tr><td>Abrasiveness (high-Si Al, cast iron, sintered alloys)</td><td>Abrasive flank wear, edge rounding</td><td>Wear-resistant grade, PCD or ceramic for extreme cases</td></tr>
+</tbody></table></div>
+<h3>The common families at a glance</h3>
+<p>The table below orders families by a <em>typical</em> cutting-speed window with carbide. These are directional classroom ranges &mdash; not a recommended parameter and not a substitute for a catalog or a trial. The point is the relative order, not the exact numbers.</p>
+<div class="ctt-table-wrap"><table>
+<caption>Approximate cutting-speed windows with coated carbide (classroom illustration, not a recommendation)</caption>
+<thead><tr><th scope="col">Family</th><th scope="col">Typical vc window (classroom)</th><th scope="col">Wear tendency to expect</th></tr></thead>
+<tbody>
+<tr><td>Free-machining low-carbon steel</td><td>medium</td><td>moderate flank; good chip control</td></tr>
+<tr><td>Alloy steel 200&ndash;300 HB</td><td>medium&ndash;lower</td><td>flank + crater; need coating</td></tr>
+<tr><td>Stainless austenitic (304/316)</td><td>lower</td><td>work hardening, built-up edge, notch</td></tr>
+<tr><td>Hardened steel 45&ndash;65 HRC</td><td>low (hard turning)</td><td>high heat; PCBN or ceramic</td></tr>
+<tr><td>Cast iron (gray)</td><td>medium&ndash;high</td><td>abrasive flank, thermal shock</td></tr>
+<tr><td>Aluminum (Si &lt; ~12%)</td><td>high</td><td>built-up edge, welding to edge</td></tr>
+<tr><td>High-silicon / abrasive Al</td><td>lower</td><td>abrasive; PCD preferred</td></tr>
+<tr><td>Titanium / Ni superalloys</td><td>low</td><td>heat at edge, notch, thermal fatigue</td></tr>
+</tbody></table></div>
+<h3>Reading the data sheet for the numbers that matter</h3>
+<p>A material cert or data sheet gives tensile strength, yield strength, elongation, hardness and heat-treat condition. For tooling, hardness and condition carry the most weight; tensile strength and elongation explain chip behavior; the grade tells you which wear family to expect. Record them, with their source, on the selection worksheet.</p>
+
+<h2>Worked Example</h2>
+<p>Two bars both say &ldquo;steel.&rdquo; Bar&nbsp;A is annealed 1018, ~120&nbsp;HB. Bar&nbsp;B is quenched-and-tempered 4140, ~280&nbsp;HB. Same nominal operation: face-turning a flange OD. If you choose the same carbide grade and the same speed, Bar&nbsp;B will wear the edge much faster because hardness has more than doubled and the chip carries more shear energy.</p>
+<figure class="ctt-figure">
+<svg viewBox="0 0 460 210" role="img" aria-label="Hardness versus tool-wear trend">
+<desc>Schematic: as workpiece hardness rises, flank wear rate rises sharply and allowable cutting speed falls.</desc>
+<text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Hardness drives wear (schematic, not to scale)</text>
+<line x1="50" y1="180" x2="430" y2="180" stroke="#333" stroke-width="1"/>
+<line x1="50" y1="180" x2="50" y2="40" stroke="#333" stroke-width="1"/>
+<text x="200" y="200" font-size="10" fill="#333">Workpiece hardness (HB)</text>
+<text x="10" y="115" font-size="10" fill="#333" transform="rotate(-90 10 115)">Wear rate</text>
+<path d="M60 165 Q 200 150 300 110 T 420 55" stroke="#b3261e" stroke-width="2.5" fill="none"/>
+<circle cx="120" cy="158" r="4" fill="#0b766e"/><text x="128" y="162" font-size="9" fill="#0b766e">1018 ~120 HB</text>
+<circle cx="300" cy="110" r="4" fill="#b3261e"/><text x="308" y="114" font-size="9" fill="#b3261e">4140 QT ~280 HB</text>
+</svg>
+<figcaption>Schematic trend only; the slope and exact points are illustrative classroom assumptions, not measured data.</figcaption>
+</figure>
+<div class="ctt-assumption"><strong>Classroom assumption:</strong> the 120&nbsp;HB and 280&nbsp;HB values are realistic typical values for those conditions, but the exact speed and wear numbers are invented for teaching. Real allowable speed must come from the insert catalog for the actual grade, coolant and setup.</div>
+<p>The engineering response is not &ldquo;run slower and hope.&rdquo; It is: tougher substrate for the interrupted and higher-force cut, sharper controlled edge prep, possibly a CVD coating for crater resistance, and re-evaluating speed from the catalog &mdash; then confirming tool life with a short trial (page 28).</p>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Saying &ldquo;machinability&rdquo; without naming the tool.</strong> A material is only &ldquo;easy&rdquo; relative to a given tool material and condition. Fix: always state &ldquo;machinable with carbide at this hardness.&rdquo;</li>
+<li><strong>Ignoring work hardening.</strong> Taking a very light finish pass on 304 stainless that rubs rather than cuts, hardening the surface and accelerating flank wear. Fix: use a feed that actually shears, and keep the edge sharp.</li>
+<li><strong>Using free-cutting assumptions on abrasive alloys.</strong> Running uncoated carbide in high-silicon aluminum and expecting normal life. Fix: recognize abrasiveness and move to PCD or a wear-resistant grade.</li>
+<li><strong>Recording only the grade, not the condition.</strong> &ldquo;4140&rdquo; tells you nothing about hardness. Fix: record condition + hardness + source.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. List the five properties that drive machinability.</summary><p>Hardness, toughness/strength, work hardening, thermal conductivity, abrasiveness.</p></details>
+<details><summary>Q2. Why does low thermal conductivity hurt the tool?</summary><p>Heat cannot leave through the part, so it concentrates at the cutting edge, raising edge temperature and accelerating crater and notch wear.</p></details>
+<details><summary>Q3. Two bars are both labeled &ldquo;aluminum.&rdquo; What should you check before assuming the same speed?</summary><p>The silicon content / alloy and condition. High-silicon (e.g. ~390) is far more abrasive and may need PCD rather than uncoated carbide.</p></details>
+<details><summary>Q4. What does &ldquo;machinability&rdquo; actually measure, and what is it always relative to?</summary><p>A relative measure (speed for fixed tool life, MRR, or finish) &mdash; always relative to a specific tool material and cutting condition.</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>ASM International, <em>ASM Handbook Vol. 16: Machining</em> &mdash; reference on material properties and machinability factors.</li>
+<li>Sandvik Coromant, <em>Turning &amp; Milling knowledge / Material selection</em> portal (general reference).</li>
+<li>All speed windows and wear-trend figures on this page are classroom teaching assumptions; verify against the tool catalog and your own trial.</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/01-cutting-tool-system/">&larr; Previous: The Cutting Tool as a System</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/03-cutting-data-and-units/">Next: Cutting Data &amp; Units &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
