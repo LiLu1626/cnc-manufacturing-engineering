@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Indexable Milling Cutters — Cutting Tool Technology</title>
+<meta name="description" content="Inserted milling cutters: face mills, shell mills, ramping cutters, insert seats, runout and when indexable beats solid.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/15-indexable-milling-cutters/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M5 &middot; Machining Applications</span>
+<h1>Indexable Milling Cutters</h1>
+<p class="lead">When the cut is bigger than a solid carbide shank, indexable (inserted) cutters take over: face mills for flat surfaces, shell mills for large shoulders, inserted end mills for heavy slotting. You change a cheap insert instead of a whole tool &mdash; but runout and seat condition now matter.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> K</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cutting-tool-technology/14-solid-end-mills/">14 Solid End Mills</a></span><span><strong>Scope:</strong> metric; classroom examples</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Distinguish face mills, shell mills and inserted end mills</li>
+<li>Explain the economic advantage of indexable cutting</li>
+<li>State why insert runout and seat cleanliness matter</li>
+<li>Choose between solid and indexable for a given cut size</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p>An <strong>indexable milling cutter</strong> is a reusable steel body with disposable, clamped carbide inserts. When an edge dulls you <strong>index</strong> (rotate) the insert to a fresh corner or replace it, instead of replacing the whole tool. Families: <strong>face mills</strong> (large diameter, for flat facing), <strong>shell mills</strong> (modular on an arbor, for large shoulders), and <strong>inserted end mills</strong> (indexable inserts on a shank, for heavy slotting/shoulder work).</p>
+
+<h2>Why It Matters</h2>
+<p>Indexable cutters are the economic backbone of large milling: a worn edge costs a few cents, not a whole solid carbide tool. But they introduce two failure modes a solid tool does not have: <strong>insert runout</strong> (tips not at the same radius, so one insert does all the work) and <strong>seat contamination</strong> (a chip under an insert tilts it and wrecks the surface). Setup discipline &mdash; clean seats, correct torque, matched inserts &mdash; is non-negotiable.</p>
+
+<h2>How It Works</h2>
+<h3>When indexable beats solid</h3>
+<div class="ctt-table-wrap"><table>
+<caption>Solid vs indexable milling</caption>
+<thead><tr><th scope="col">Solid carbide</th><th scope="col">Indexable</th></tr></thead>
+<tbody>
+<tr><td>small diameter, tight tolerance, fine finish</td><td>large diameter, heavy stock, roughing</td></tr>
+<tr><td>whole tool replaced when dull</td><td>only the cheap insert replaced</td></tr>
+<tr><td>sharp, accurate corners</td><td>insert corner radius and runout limit finish</td></tr>
+</tbody></table></div>
+<h3>Runout and seat cleanliness</h3>
+<p>If one insert sits 0.02&nbsp;mm farther out than the others, it takes the whole cut and fails first. After a crash or chip jam, the seat must be cleaned and the insert re-torqued; a single chip trapped under an insert tilts it and leaves a pattern on the face.</p>
+
+<h2>Worked Example</h2>
+<p>Facing a 120&nbsp;mm wide cast-iron block. A &Oslash;10 solid end mill would take dozens of passes and wear constantly. A &Oslash;100&nbsp;mm face mill with octagonal indexable facing inserts covers most of the width in one pass, and when the edges dull you swap inserts instead of the body. Setup: seats clean, inserts matched, torqued to spec, and the body trued so all inserts cut at the same radius.</p>
+<figure class="ctt-figure">
+<svg viewBox="0 0 440 160" role="img" aria-label="Face mill with indexable inserts">
+<desc>Front view of a face mill body with several carbide inserts clamped around its periphery.</desc>
+<text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Face mill body (front view, schematic)</text>
+<circle cx="220" cy="90" r="55" fill="#5c6872"/>
+<circle cx="220" cy="90" r="12" fill="#333"/>
+<g fill="#b3261e">
+<rect x="212" y="35" width="16" height="8"/>
+<rect x="268" y="62" width="16" height="8"/>
+<rect x="268" y="110" width="16" height="8"/>
+<rect x="156" y="110" width="16" height="8"/>
+<rect x="156" y="62" width="16" height="8"/>
+</g>
+<text x="300" y="90" font-size="10" fill="#b3261e">indexable inserts</text>
+</svg>
+<figcaption>Face mill body with clamped inserts (schematic, not to scale).</figcaption>
+</figure>
+<div class="ctt-assumption"><strong>Classroom assumption:</strong> the &Oslash;120 block and &Oslash;100 face mill are illustrative; insert count and geometry come from the body catalog.</div>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Ignoring insert runout.</strong> One edge over-loads. Fix: true the body and use matched inserts.</li>
+<li><strong>Re-clamping over a trapped chip.</strong> It tilts the insert. Fix: clean seats every insert change.</li>
+<li><strong>Using indexable where solid precision is needed.</strong> Insert radius and runout limit finish. Fix: finish with a solid or fine-finishing insert.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. What is the economic advantage of indexable?</summary><p>You replace a cheap insert, not the whole tool body, when the edge dulls.</p></details>
+<details><summary>Q2. Why does one far-protruding insert fail first?</summary><p>It takes nearly all the cut while the others barely engage, so it overloads.</p></details>
+<details><summary>Q3. Facing a large flat surface &mdash; solid or indexable?</summary><p>Indexable face mill, for width and low cost per edge.</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>Sandvik Coromant, <em>Indexable milling / face milling</em> knowledge pages.</li>
+<li>ISCAR / Kennametal, <em>Face mill and shell mill</em> catalog guidance.</li>
+<li>Diameters and passes are classroom illustrations; match to the body catalog.</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/14-solid-end-mills/">&larr; Previous: Solid End Mills</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/16-turning-inserts-toolholders/">Next: Turning Inserts &amp; Toolholders &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
