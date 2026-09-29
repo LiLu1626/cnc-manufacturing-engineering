@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Ceramics, PCBN & PCD — Cutting Tool Technology</title>
+<meta name="description" content="Ceramic, cubic boron nitride and polycrystalline diamond: when to use each, their brittleness limits, and what they should never cut.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/11-ceramics-pcbn-pcd/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M3 &middot; Substrates &amp; Coatings</span>
+<h1>Ceramics, PCBN &amp; PCD</h1>
+<p class="lead">Beyond carbide lie the superhard materials: ceramic for high-speed steel and cast-iron machining, PCBN for hard turning, and PCD for non-ferrous and abrasive work. They cut fast and hold size, but they are brittle &mdash; and PCD must never touch steel.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> B</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cutting-tool-technology/10-cemented-carbide-substrates/">10 Cemented Carbide</a></span><span><strong>Scope:</strong> classroom overview</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Name the main uses of ceramic, PCBN and PCD</li>
+<li>State the brittleness and setup limits that apply to all three</li>
+<li>Explain why PCD cannot machine steel</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p><strong>Ceramic</strong> inserts (alumina or silicon-nitride based) stay hard at very high temperature and run high speeds, but are brittle and dislike interrupted cuts and coolant shocks. <strong>PCBN (cubic boron nitride)</strong> is the second-hardest material after diamond, used to hard-turn steel above ~45 HRC and to machine hard cast irons. <strong>PCD (polycrystalline diamond)</strong> is the hardest tool material, used for aluminum, non-ferrous metals, composites and abrasive non-metals.</p>
+
+<h2>Why It Matters</h2>
+<p>These materials unlock work carbide cannot do: turning a hardened die to size without grinding, or finishing abrasive aluminum at high speed. But the same hardness means a light tap, a chatter, or a coolant blast can break the edge. The rule for superhard tools is: rigid setup, continuous cut, generous edge prep, and no surprise interruption.</p>
+
+<h2>How It Works</h2>
+<div class="ctt-table-wrap"><table>
+<caption>Superhard tool materials at a glance</caption>
+<thead><tr><th scope="col">Material</th><th scope="col">Best at</th><th scope="col">Avoid</th></tr></thead>
+<tbody>
+<tr><td>Ceramic</td><td>high-speed turning/milling of steel and cast iron</td><td>heavy interruption, thermal shock from coolant</td></tr>
+<tr><td>PCBN</td><td>hard turning &gt;45 HRC, hard cast iron</td><td>soft steels (built-up edge), thin chatter-prone work</td></tr>
+<tr><td>PCD</td><td>high-Si aluminum, copper alloys, composites, plastics</td><td><em>any steel / ferrous</em> (chemical diffusion)</td></tr>
+</tbody></table></div>
+<p>PCD and iron are chemically incompatible at cutting temperature: carbon diffuses into iron, so a PCD tool on steel self-destructs. This is the single most important "never" in superhard tooling.</p>
+
+<h2>Worked Example</h2>
+<p>A hardened 55 HRC die insert needs a precise OD. Grinding is slow and rigid. Instead, hard-turn it with a PCBN insert on a rigid lathe, at high speed and light feed, in a continuous cut. The result replaces a grinding step. The same PCBN tool would be wrong on a soft 304 part (built-up edge), and a PCD tool chosen "because it is hardest" would destroy itself on the steel.</p>
+<div class="ctt-assumption"><strong>Classroom assumption:</strong> the 45 HRC threshold and hard-turning speed are general guidance; exact data comes from the PCBN/ceramic manufacturer for the grade and setup.</div>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Using PCD on steel.</strong> Chemical diffusion destroys the edge. Fix: PCD is non-ferrous only.</li>
+<li><strong>Treating superhard inserts like carbide.</strong> They chip under chatter and interruption. Fix: rigid setup, continuous cut, edge-checked before running.</li>
+<li><strong>Flooding a ceramic cut with coolant.</strong> Thermal shock cracks the edge. Fix: follow the maker's coolant guidance; dry or air-blast for ceramics.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. Which material hard-turns 55 HRC steel?</summary><p>PCBN (or ceramic for continuous high-speed work).</p></details>
+<details><summary>Q2. Why not PCD on steel?</summary><p>Diamond carbon diffuses into iron at cutting temperature, wearing the edge away.</p></details>
+<details><summary>Q3. What setup condition do all superhard tools demand?</summary><p>High rigidity and a continuous, non-chattering cut; they tolerate almost no interruption.</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>Element Six / Sandvik Coromant, <em>PCBN and PCD application</em> guides (general reference).</li>
+<li>Kennametal, <em>Advanced ceramics machining</em> technical literature.</li>
+<li>Hardness thresholds and speeds are classroom illustrations; confirm against the manufacturer.</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/10-cemented-carbide-substrates/">&larr; Previous: Cemented Carbide</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/12-coating-processes-and-families/">Next: Coating Processes &amp; Families &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
