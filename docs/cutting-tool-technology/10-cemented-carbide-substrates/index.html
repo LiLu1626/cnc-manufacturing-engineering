@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Cemented Carbide Substrates — Cutting Tool Technology</title>
+<meta name="description" content="WC grain size, cobalt binder, coarse versus fine grades, and why grain size and binder content trade wear resistance against toughness.">
+<link rel="canonical" href="https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/10-cemented-carbide-substrates/">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/site.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/article.css">
+<link rel="stylesheet" href="/cnc-manufacturing-engineering/assets/css/cutting-tool-technology.css?v=wp0">
+</head>
+<body class="cutting-tool-technology">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <div class="site-nav-brand">Li Lu <span>&middot;</span> CNC Eng</div>
+    <ul class="site-nav-links">
+      <li><a href="/cnc-manufacturing-engineering/">Home</a></li>
+      <li><a href="/cnc-manufacturing-engineering/engineering-tools/">Engineering Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/knowledge-base/">Knowledge Base</a></li>
+      <li><a href="/cnc-manufacturing-engineering/machine-systems/">Machine Systems</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cnc-programming/">CNC Programming</a></li>
+      <li><a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="active">Cutting Tools</a></li>
+      <li><a href="/cnc-manufacturing-engineering/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="article ctt-article">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/" class="ctt-back">&larr; Back to Cutting Tool Technology</a>
+<span class="ctt-eyebrow">M3 &middot; Substrates &amp; Coatings</span>
+<h1>Cemented Carbide Substrates</h1>
+<p class="lead">Cemented carbide is tungsten-carbide particles held together by cobalt. Grain size and cobalt content are the two dials: fine grain and low cobalt resist wear but are brittle; coarse grain and higher cobalt absorb shock but crater sooner. This page reads those dials and matches a grade family to a job.</p>
+<div class="ctt-meta"><span><strong>Level:</strong> K</span><span><strong>Prerequisite:</strong> <a href="/cnc-manufacturing-engineering/cutting-tool-technology/09-tool-material-families/">09 Tool Material Families</a></span><span><strong>Scope:</strong> classroom overview</span></div>
+<div class="ctt-objectives"><strong>After this lesson, you can:</strong><ul>
+<li>Describe what cemented carbide is made of</li>
+<li>Explain how grain size changes wear resistance and toughness</li>
+<li>Explain how cobalt content changes toughness and hot hardness</li>
+<li>Choose between a wear-resistant and a shock-resistant grade family</li>
+</ul></div>
+
+<h2>Concept</h2>
+<p><strong>Cemented carbide</strong> is a cermet-like composite: hard <strong>tungsten carbide (WC)</strong> grains are sintered with a <strong>cobalt (Co)</strong> metal binder. The WC grains provide hardness and wear resistance; the cobalt binder provides toughness by holding the grains together. Manufacturers vary two main levers &mdash; <strong>grain size</strong> (fine to coarse) and <strong>cobalt content</strong> &mdash; and add titanium/tantalum carbides for steel-machining grades.</p>
+
+<h2>Why It Matters</h2>
+<p>Not all carbide is the same. A &ldquo;wear&rdquo; grade for finishing aluminum and cast iron is brittle and will chip on a steel interruption; a &ldquo;tough&rdquo; grade for roughing steel will crater too fast in a long finishing pass. The grade designation in the catalog is the manufacturer's position on these two dials. Reading that position tells you whether the insert can survive your interruption and hold up to your speed.</p>
+
+<h2>How It Works</h2>
+<h3>Grain size</h3>
+<div class="ctt-table-wrap"><table>
+<caption>Grain size trade-offs</caption>
+<thead><tr><th scope="col">Fine grain (&lt; ~1&micro;m)</th><th scope="col">Coarse grain</th></tr></thead>
+<tbody>
+<tr><td>harder, better wear resistance</td><td>tougher, better thermal-shock resistance</td></tr>
+<tr><td>sharper edge possible</td><td>resists plastic deformation less</td></tr>
+<tr><td>finishing, high-speed, hard materials</td><td>roughing, interrupted cuts, thermal cycling</td></tr>
+</tbody></table></div>
+<h3>Cobalt content</h3>
+<p>More cobalt = tougher and shock-absorbing, but softer at high temperature and more prone to crater/wear. Less cobalt = harder and more wear-resistant at temperature, but more brittle. Steel grades also add cubic carbides (TiC/TaC/NbC) to resist cratering from the long chip contact in steel turning.</p>
+<h3>The two broad grade families</h3>
+<p>Industry groups carbide into <strong>P/M/K</strong>-style application classes (ISO): P = steel, M = stainless/alloy, K = cast iron/non-ferrous. Within each, the catalog pushes you toward wear-resistant (speed, finish) or shock-resistant (roughing, interruption) depending on the operation.</p>
+
+<h2>Worked Example</h2>
+<p>A shop runs two operations on the same part. (1) Finish boring a steel bore at high speed to a tight tolerance &mdash; continuous cut, needs edge retention: a fine-grain, lower-cobalt, steel grade with coating resists crater wear. (2) Rough facing a forging with heavy scale and interrupted entry &mdash; shocks the edge: a tougher, higher-cobalt grade survives the impacts even though it wears a little faster. Choosing one grade for both either chips the finishing edge or wears out the roughing edge.</p>
+<figure class="ctt-figure">
+<svg viewBox="0 0 440 180" role="img" aria-label="Grain size and cobalt content trade-off">
+<desc>Schematic microstructure: fine-grain low-cobalt carbide versus coarse-grain higher-cobalt carbide.</desc>
+<text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Two grade directions (schematic)</text>
+<g fill="#0b766e">
+<circle cx="80" cy="70" r="5"/><circle cx="95" cy="80" r="5"/><circle cx="70" cy="90" r="5"/><circle cx="90" cy="100" r="5"/><circle cx="105" cy="70" r="5"/>
+</g>
+<text x="55" y="130" font-size="10" fill="#333">fine grain, low Co</text>
+<text x="45" y="145" font-size="9" fill="#5c6872">wear-resistant, brittle</text>
+<g fill="#b3261e">
+<circle cx="290" cy="70" r="9"/><circle cx="320" cy="85" r="9"/><circle cx="280" cy="100" r="9"/><circle cx="310" cy="105" r="9"/>
+</g>
+<text x="265" y="140" font-size="10" fill="#333">coarse grain, higher Co</text>
+<text x="260" y="155" font-size="9" fill="#5c6872">tough, shock-absorbing</text>
+</svg>
+<figcaption>Schematic microstructures; grain sizes and cobalt percentages are not to scale.</figcaption>
+</figure>
+<div class="ctt-assumption"><strong>Classroom assumption:</strong> grain-size cutoffs and cobalt ranges are general; exact grades are proprietary. Match the operation to the catalog's wear-vs-tough recommendation.</div>
+
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Treating all carbide as the same.</strong> A finishing grade chips on roughing. Fix: pick wear vs toughness by operation, not just material.</li>
+<li><strong>Running a tough roughing grade at high finishing speed.</strong> It craters. Fix: use a finer, more wear-resistant grade for continuous finishing.</li>
+<li><strong>Ignoring the ISO application class (P/M/K).</strong> A K-grade for cast iron is not ideal for steel. Fix: match the grade class to the workpiece family.</li>
+</ul>
+
+<h2>Practice</h2>
+<div class="ctt-practice">
+<details><summary>Q1. What holds the WC grains together?</summary><p>Cobalt metal binder, sintered into the structure.</p></details>
+<details><summary>Q2. Fine grain trades what for what?</summary><p>More wear resistance and sharpness, against lower toughness.</p></details>
+<details><summary>Q3. Why does roughing with scale want higher cobalt / coarser grain?</summary><p>It absorbs shock and thermal cycling better; the edge survives interruption even if it wears faster.</p></details>
+<details><summary>Q4. What do steel grades add to resist cratering?</summary><p>Cubic carbides such as TiC/TaC/NbC in the substrate.</p></details>
+</div>
+
+<section class="ctt-sources">
+<h2>Sources</h2>
+<ul>
+<li>ASM International, <em>Cemented Carbide</em> reference (substrate structure).</li>
+<li>Sandvik Coromant / Kennametal, <em>Carbide grade design</em> technical papers (general reference).</li>
+<li>Grain-size and cobalt ranges are classroom illustrations; exact grades are proprietary.</li>
+</ul>
+</section>
+<nav class="ctt-nav-bottom">
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/09-tool-material-families/">&larr; Previous: Tool Material Families</a>
+<a href="/cnc-manufacturing-engineering/cutting-tool-technology/11-ceramics-pcbn-pcd/">Next: Ceramics, PCBN &amp; PCD &rarr;</a>
+</nav>
+</main>
+<footer class="site-footer">Designed by Li Lu &middot; CNC &amp; Manufacturing Engineering</footer>
+</body>
+</html>
