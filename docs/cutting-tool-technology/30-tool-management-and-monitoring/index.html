@@ -48,6 +48,10 @@
 
 <h2>Worked Example</h2>
 <p>A recurring job uses T03; the proven life is 120 parts. The operator logs each run and indexes T03 at 120 parts &mdash; before wear hurts the bore. Offsets are recorded so a replacement tool touches in once and repeats. No surprise scrapped bores.</p>
+<h3>What a record should contain</h3>
+<p>At minimum: tool assembly ID, holder and tool number, measured length/diameter offset, the job it runs on, parts-per-edge at replacement, and the reason it was changed (wear, chipping, or scheduled). Over time this data reveals patterns &mdash; which jobs wear tools fastest, which grade outlasts another, and when to reorder before stock runs out. Without it, every setup starts from zero memory and offsets drift.</p>
+<h3>Monitoring levels</h3>
+<p>The simplest monitoring is the operator noticing a rising spindle load, a dull tone, or a worsening finish between parts. More advanced shops track spindle power/current against a baseline; a rising draw signals wear before the part suffers. Even a basic in-process check catches the slow drift that scheduled replacement alone might miss between two index points.</p>
 
 <h2>Common Mistakes</h2>
 <ul>
