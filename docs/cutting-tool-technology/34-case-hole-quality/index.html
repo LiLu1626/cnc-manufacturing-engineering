@@ -87,6 +87,21 @@
 <h3>Why this sequence repeats for every hole pattern</h3>
 <p>A single located hole demonstrates the chain, but the same sequence is what makes a bolt circle or a hole pattern repeatable. Once the spot-drill position, the &Oslash;9.7 drill depth with the 3.004&nbsp;mm point add, and the bore/ream order are locked for the &Oslash;10 H7 feature, every hole in the pattern follows the identical steps at each coordinate &mdash; which is why the Engineering Tools bolt-circle and hole-pattern calculators exist upstream: they give the coordinates, while this case gives the per-hole operation chain. The two connect cleanly: a pattern calculator outputs positions, and this page outputs what happens at each position. Batching the same drill at all locations first, then the bore, then the ream, also reduces tool changes and keeps each station's inspection consistent. Treat the hole as a recurring feature with a fixed recipe rather than a one-off, and positional and diameter drift across the pattern becomes a matter of checking one tool rather than re-planning each hole.</p>
 
+<figure class="ctt-figure">
+<svg viewBox="0 0 460 190" role="img" aria-label="Hole sequence: spot, drill with point, bore, ream to ten millimetres">
+<desc>Four stages left to right. The drilled hole shows the 118-degree conical point adding 3.004 mm; final reamed hole is ten mm diameter.</desc>
+<text x="20" y="20" font-size="11" font-weight="bold" fill="#333">From spot to &Oslash;10 H7 (schematic)</text>
+<g font-size="9" fill="#333">
+<rect x="20" y="55" width="80" height="90" fill="#eef2f0"/><path d="M50 55 L42 80 L58 80 Z" fill="#0b766e"/><text x="28" y="160">1 spot</text>
+<rect x="120" y="55" width="80" height="90" fill="#eef2f0"/><path d="M145 55 L145 120 L160 145 L175 120 L175 55" fill="none" stroke="#b3261e" stroke-width="2"/><text x="125" y="160">2 drill &Oslash;9.7</text><text x="120" y="172" fill="#5c6872">+3.004 pt</text>
+<rect x="220" y="55" width="80" height="90" fill="#eef2f0"/><rect x="245" y="55" width="30" height="90" fill="none" stroke="#0b766e" stroke-width="2"/><text x="228" y="160">3 bore (position)</text>
+<rect x="320" y="55" width="80" height="90" fill="#eef2f0"/><rect x="345" y="55" width="30" height="90" fill="#cfdbd8" stroke="#333" stroke-width="2"/><text x="328" y="160">4 ream &Oslash;10 H7</text>
+</g>
+<text x="20" y="185" font-size="9" fill="#5c6872">Position is set at spot/bore; the reamer only sizes and finishes. It cannot move a mislocated hole.</text>
+</svg>
+<figcaption>Each step owns one attribute: spot locates, drill adds depth with the conical point, bore corrects position, ream sizes and finishes to H7.</figcaption>
+</figure>
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Reaming a mislocated hole.</strong> Fix: bore first to correct position.</li>
