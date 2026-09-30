@@ -97,6 +97,9 @@
 <figcaption>Standard 118&deg; point: for through-hole depth planning, add h to the required hole depth so the chisel edge clears.</figcaption>
 </figure>
 
+<h3>Why the same RPM means a different cut on a bigger tool</h3>
+<p>The reason to work from vc rather than a remembered RPM is geometry: the edge speed past the work is the circumference per revolution, so at a fixed spindle speed a larger tool runs its edge faster than a small one. Run the locked baseline &Oslash;10 at 3820 RPM and the edge sees about 120&nbsp;m/min. Swap to a &Oslash;20 cutter and leave the dial at 3820 RPM, and the same edge now sees ~240&nbsp;m/min &mdash; double the surface speed, double the heat, and a very short tool life, even though "the RPM is the one that worked last time". This is the whole point of n = 1000&middot;vc/(&pi;D): the catalog tells you the surface speed the edge can survive, and you back-calculate the RPM for whatever diameter is in the holder. When you change tools, recompute n; never carry the RPM over. The same logic runs in reverse for turning, where the cutting diameter shrinks as you face or bore, which is why constant surface speed (CSS) keeps the edge temperature in a window instead of letting the part-edge speed explode at small diameters.</p>
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Forgetting the &times;1000.</strong> Using vc in m/min directly with D in mm gives a result 1000&times; too small. Fix: always include 1000 in n = 1000&middot;vc/(&pi;D).</li>
