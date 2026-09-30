@@ -97,6 +97,21 @@
 <h3>Why the locked numbers are illustrative, not a universal answer</h3>
 <p>The 0.64 versus 0.525 result is a teaching case, not a rule that the premium grade always wins. In your own shop the winner depends entirely on the two real inputs: the machine hour rate and the measured parts-per-edge. On a high-rate bottleneck machine, cycle-time reduction tilts the balance toward the faster, pricier tool; on a low-rate machine with spare spindle capacity, the cheap long-life insert may win outright. The point of the locked numbers is to show the method &mdash; build the two streams, divide edge cost by real parts, add machine time &mdash; and then substitute your own figures. Treat B winning here as an example of how the arithmetic works, not as a reason to buy the expensive grade on every job. When the numbers are rerun with real shop data, a different option may legitimately win, and that is the expected outcome rather than a contradiction.</p>
 
+<figure class="ctt-figure">
+<svg viewBox="0 0 460 170" role="img" aria-label="Cost per part versus cutting speed has an optimum">
+<desc>Machine-time cost falls as speed rises; tool cost rises as life collapses; their sum has a minimum, not a fastest-speed best.</desc>
+<text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Total cost per part vs speed</text>
+<path d="M60 120 Q160 90 230 55 Q300 90 400 130" fill="none" stroke="#0b766e" stroke-width="2.5"/>
+<path d="M60 50 L400 130" fill="none" stroke="#9aa6b2" stroke-width="1.5" stroke-dasharray="4,3"/>
+<path d="M60 140 L400 60" fill="none" stroke="#b3261e" stroke-width="1.5" stroke-dasharray="4,3"/>
+<circle cx="230" cy="55" r="4" fill="#0b766e"/>
+<text x="240" y="50" font-size="9" fill="#0b766e">minimum total</text>
+<text x="60" y="160" font-size="9" fill="#9aa6b2">dash down: machine time &darr; as speed &uarr;</text>
+<text x="230" y="160" font-size="9" fill="#b3261e">dash up: tool cost &uarr; as life &darr;</text>
+</svg>
+<figcaption>The optimum sits between too slow (machine bleeds rate) and too fast (edges vanish). Trial a few speeds, don't max the spindle.</figcaption>
+</figure>
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Comparing insert prices, not cost per part.</strong> Fix: include life and machine time.</li>
