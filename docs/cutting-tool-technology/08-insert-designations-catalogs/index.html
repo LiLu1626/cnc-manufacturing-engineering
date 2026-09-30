@@ -68,6 +68,25 @@
 <h3>How the nose-radius field sets your finish</h3>
 <p>The last field is not a cosmetic detail &mdash; it is a finish specification. In CNMG 12 04 <strong>08</strong>, the 08 means r&epsilon; = 0.8&nbsp;mm. At the locked feed f = 0.10&nbsp;mm/rev, the theoretical roughness is Ra &asymp; f&sup2;/(32&middot;r&epsilon;) = 0.10&sup2;/(32&middot;0.8) = 0.391&nbsp;&micro;m &mdash; a fine finish. If instead you picked a CNMG 12 04 <strong>04</strong> (r&epsilon; = 0.4&nbsp;mm) at the same feed, the theory doubles to 0.781&nbsp;&micro;m. So before ordering, the drawing's required Ra already tells you which nose-radius field to look for: a fine finish pushes you toward 08 or larger, while a roughing pass where chatter matters wants a smaller radius. Decoding the code therefore connects directly back to page 05's trade-off between finish (large nose radius) and rigidity (small nose radius) &mdash; the designation string is where that choice becomes a part number.</p>
 
+<figure class="ctt-figure">
+<svg viewBox="0 0 460 170" role="img" aria-label="Decode CNMG 12 04 08 field by field">
+<desc>The code split into shape, clearance, tolerance, clamp, size, thickness and nose radius, with the 08 field meaning 0.8 millimetres.</desc>
+<text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Reading CNMG 12 04 08 left to right</text>
+<g font-size="10" fill="#333">
+<rect x="20" y="45" width="44" height="30" fill="#cfdbd8"/><text x="28" y="64">C</text><text x="14" y="92" font-size="8.5" fill="#5c6872">shape 80&deg;</text>
+<rect x="66" y="45" width="44" height="30" fill="#cfdbd8"/><text x="74" y="64">N</text><text x="62" y="92" font-size="8.5" fill="#5c6872">0&deg; neg.</text>
+<rect x="112" y="45" width="44" height="30" fill="#cfdbd8"/><text x="120" y="64">M</text><text x="112" y="92" font-size="8.5" fill="#5c6872">tolerance</text>
+<rect x="158" y="45" width="44" height="30" fill="#cfdbd8"/><text x="166" y="64">G</text><text x="162" y="92" font-size="8.5" fill="#5c6872">clamp/brk</text>
+<rect x="210" y="45" width="52" height="30" fill="#d7e8e5"/><text x="218" y="64">12</text><text x="212" y="92" font-size="8.5" fill="#5c6872">size IC</text>
+<rect x="264" y="45" width="52" height="30" fill="#d7e8e5"/><text x="272" y="64">04</text><text x="270" y="92" font-size="8.5" fill="#5c6872">thick.</text>
+<rect x="318" y="45" width="52" height="30" fill="#f3e3d0"/><text x="326" y="64">08</text><text x="318" y="92" font-size="8.5" fill="#b3261e">r&epsilon;=0.8 mm</text>
+</g>
+<text x="20" y="130" font-size="9" fill="#5c6872">Last two digits = tenths of a millimetre: 08 &rarr; 0.8 mm nose radius, which sets expected finish (page 03).</text>
+<text x="20" y="148" font-size="9" fill="#5c6872">Shape and clearance must match the holder pocket; the grade/chipbreaker letter picks speed and chip control.</text>
+</svg>
+<figcaption>Decode left to right: the first four letters set geometry, the last three numbers set size, thickness and nose radius.</figcaption>
+</figure>
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Ordering by the whole string without decoding.</strong> You may get a clearance the holder cannot accept. Fix: decode shape and clearance before ordering.</li>
