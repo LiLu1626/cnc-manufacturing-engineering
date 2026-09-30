@@ -65,6 +65,9 @@
 <h3>Reading a catalog row</h3>
 <p>The designation is only the first line. A catalog entry also lists the recommended geometry, grade, chipbreaker, the cutting-speed band by material group, and whether the insert is for steel, stainless, cast iron or non-ferrous. Match all four to your job: shape and clearance set strength, nose radius sets finish (via Ra = f&sup2;/(32&middot;r&epsilon;)), chipbreaker set the chip control, and grade/coating set the speed and wear resistance. Buying on shape alone is a common beginner mistake &mdash; the same "CNMG 12 04 08" in a finishing steel grade and a roughing cast-iron grade behave very differently. When in doubt, the catalog's material-group recommendation is the safest starting point.</p>
 
+<h3>How the nose-radius field sets your finish</h3>
+<p>The last field is not a cosmetic detail &mdash; it is a finish specification. In CNMG 12 04 <strong>08</strong>, the 08 means r&epsilon; = 0.8&nbsp;mm. At the locked feed f = 0.10&nbsp;mm/rev, the theoretical roughness is Ra &asymp; f&sup2;/(32&middot;r&epsilon;) = 0.10&sup2;/(32&middot;0.8) = 0.391&nbsp;&micro;m &mdash; a fine finish. If instead you picked a CNMG 12 04 <strong>04</strong> (r&epsilon; = 0.4&nbsp;mm) at the same feed, the theory doubles to 0.781&nbsp;&micro;m. So before ordering, the drawing's required Ra already tells you which nose-radius field to look for: a fine finish pushes you toward 08 or larger, while a roughing pass where chatter matters wants a smaller radius. Decoding the code therefore connects directly back to page 05's trade-off between finish (large nose radius) and rigidity (small nose radius) &mdash; the designation string is where that choice becomes a part number.</p>
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Ordering by the whole string without decoding.</strong> You may get a clearance the holder cannot accept. Fix: decode shape and clearance before ordering.</li>
