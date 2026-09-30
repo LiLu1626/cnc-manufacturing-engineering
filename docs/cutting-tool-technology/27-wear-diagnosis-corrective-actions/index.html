@@ -89,6 +89,27 @@
 <h3>Why finish complaints often trace back to wear, not programming</h3>
 <p>When a part comes out with a poor surface, the first instinct is to change the program &mdash; adjust feed, slow the spindle, add a finishing pass. But the tooling diagnosis asks what the edge looked like, because a degrading edge produces exactly the symptoms operators blame on the program: a worn, rounded corner leaves a wider theoretical roughness than the feed and nose radius should predict (page 03), a built-up edge that partly tears away leaves a smeared or torn wall, and chatter from a flexible holder marks the surface at a fixed frequency. In each case the G-code is doing what it was told; the edge is simply no longer the sharp tool the program assumes. This is why the observe step deliberately looks at the edge before anyone edits the program: if the wear land or nose rounding explains the finish, sharpening or changing the tool restores the surface, and a program change would have been unnecessary at best. It also means the planned edge-change cycle (page above) doubles as a quality control &mdash; edges changed on schedule are sharp enough that the programmed finish is actually achieved.</p>
 
+<figure class="ctt-figure">
+<svg viewBox="0 0 460 180" role="img" aria-label="Wear diagnosis loop: observe, separate, hypothesize, change one thing, verify">
+<desc>Five steps in a cycle, ending with a verification loop back to observe.</desc>
+<text x="20" y="20" font-size="11" font-weight="bold" fill="#333">The diagnosis loop</text>
+<g font-size="9.5" fill="#333">
+<rect x="20" y="45" width="78" height="40" rx="4" fill="#cfdbd8"/><text x="30" y="62">1 Observe</text><text x="30" y="75" fill="#5c6872">edge look?</text>
+<rect x="110" y="45" width="78" height="40" rx="4" fill="#cfdbd8"/><text x="120" y="62">2 Separate</text><text x="120" y="75" fill="#5c6872">wear vs fault</text>
+<rect x="200" y="45" width="78" height="40" rx="4" fill="#cfdbd8"/><text x="210" y="62">3 Hypothesise</text><text x="210" y="75" fill="#5c6872">map cause</text>
+<rect x="290" y="45" width="78" height="40" rx="4" fill="#f3e3d0"/><text x="300" y="62">4 Change</text><text x="300" y="75" fill="#5c6872">ONE variable</text>
+<rect x="155" y="115" width="90" height="40" rx="4" fill="#d7e8e5"/><text x="168" y="132">5 Verify</text><text x="168" y="145" fill="#5c6872">run &amp; compare</text>
+</g>
+<line x1="98" y1="65" x2="110" y2="65" stroke="#5c6872" stroke-width="1.5"/>
+<line x1="188" y1="65" x2="200" y2="65" stroke="#5c6872" stroke-width="1.5"/>
+<line x1="278" y1="65" x2="290" y2="65" stroke="#5c6872" stroke-width="1.5"/>
+<path d="M329 85 L200 115" stroke="#5c6872" stroke-width="1.5" fill="none"/>
+<path d="M155 135 L60 135 L60 85" stroke="#0b766e" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+<text x="65" y="128" font-size="9" fill="#0b766e">if not confirmed, try next lever</text>
+</svg>
+<figcaption>Change one thing per trial and verify. A run that does not improve the result still tells you which cause was not the dominant one.</figcaption>
+</figure>
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Changing several variables at once.</strong> You can't tell what worked. Fix: one change per trial.</li>
