@@ -86,6 +86,22 @@
 <h3>Why this case is deliberately not about a broken tool</h3>
 <p>The scenario &mdash; a welded nose, a torn finish, but an intact insert &mdash; is chosen on purpose, because the most expensive recurring failures on a lathe are quiet rather than dramatic. A snapped insert stops the machine immediately and gets attention; a slowly welding edge that produces torn parts and short, unpredictable life instead drifts along, and the cost shows up in rejected pieces and edge changes nobody planned. The structured loop exists to catch exactly this quiet case before it becomes a scrap issue. It also illustrates the diagnostic habit the course is building: reach for the morphology first, not for the alarm. A shiny nose and a bad finish are not a crisis, they are a readable sign pointing at one lever, and treating them as information rather than annoyance is what lets you correct the speed once instead of replacing edges all week. The dramatic fractures are covered on page 26; this case is the everyday, low-noise problem most shops actually live with.</p>
 
+<figure class="ctt-figure">
+<svg viewBox="0 0 440 170" role="img" aria-label="Cutting speed maps to RPM on a 60 mm bar">
+<desc>Two bars: 80 m/min gives 424 RPM and causes BUE; 140 m/min gives 743 RPM, still inside the catalog band.</desc>
+<text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Ø60 stainless bar: vc &rarr; n = 1000&middot;vc / (&pi;&middot;D)</text>
+<rect x="30" y="45" width="120" height="24" fill="#b3261e"/>
+<text x="40" y="61" font-size="10" fill="#fff">80 m/min &rarr; 424 RPM</text>
+<text x="160" y="61" font-size="9" fill="#b3261e">low speed: BUE, torn finish</text>
+<rect x="30" y="85" width="210" height="24" fill="#0b766e"/>
+<text x="40" y="101" font-size="10" fill="#fff">140 m/min &rarr; 743 RPM</text>
+<text x="250" y="101" font-size="9" fill="#0b766e">within catalog 120&ndash;160 band</text>
+<line x1="30" y1="125" x2="400" y2="125" stroke="#cfdbd8" stroke-width="1"/>
+<text x="30" y="145" font-size="9" fill="#5c6872">Keep feed and depth fixed during the trial &mdash; only vc (and hence n) changes.</text>
+</svg>
+<figcaption>Same diameter, speed raised in proportion. The corrected 743 RPM is anchored to the catalog band, not chosen by feel.</figcaption>
+</figure>
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Reaching for a tougher grade when BUE is the issue.</strong> BUE is speed-related. Fix: read the morphology first.</li>
