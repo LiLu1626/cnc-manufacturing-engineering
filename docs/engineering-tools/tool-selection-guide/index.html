@@ -36,11 +36,11 @@ title: Tool Selection Guide
     <p><strong>Flute count:</strong> fewer flutes = more chip room (for aluminum, soft materials, slotting). More flutes = higher feed rate (for steel, finishing, small features).</p>
     <p><strong>Helix angle:</strong> higher helix (35–45°) gives shearing action in aluminum and stainless. Lower helix (20–30°) is stronger for heavy roughing in steel.</p>
     <p><strong>Coating matching:</strong> TiN for general steel (low heat). TiCN for abrasive materials. AlCrN/TiAlN for high-heat cutting (stainless, titanium, hardened steel). Uncoated for aluminum to prevent built-up edge.</p>
-    <p><strong>Rigidity first:</strong> always use the shortest tool that reaches the feature. A 10 mm tool at 15 mm protrusion outlasts the same tool at 30 mm by 3–5×.</p>
+    <p><strong>Rigidity first:</strong> always use the shortest tool that reaches the feature. Because deflection scales roughly with the cube of overhang, a shorter protrusion can outlast a long one by a wide margin in chatter-prone cuts &mdash; the exact factor depends on setup, not a fixed number. See <a href="../../cutting-tool-technology/21-toolholders-interfaces-rigidity/">Toolholders &amp; Rigidity</a>.</p>
   </section>
 
   <aside class="notice">
-    <strong>Example:</strong> Machining 304 stainless. Choose a 10 mm variable-helix carbide end mill with 3 flutes and AlCrN coating. Run Vc = 100 m/min (≈3180 RPM), fz = 0.06 mm/tooth (feed ≈ 570 mm/min). Use flood coolant and take ap ≤ 1×D. This setup gives stable cuts and 45–90 min tool life.
+    <strong>Example (starting point, not a guarantee):</strong> machining 304 stainless. A reasonable starting choice is a 10 mm variable-helix carbide end mill, ~3 flutes, AlCrN coating, with a starting Vc near 100 m/min (≈3180 RPM), fz ≈ 0.06 mm/tooth (feed ≈ 570 mm/min), flood coolant, and ap ≤ 1×D. Treat these as catalog-derived starting values &mdash; actual speed, feed and tool life depend on your machine rigidity, overhang and the specific insert grade, and must be confirmed with a short trial (see <a href="../../cutting-tool-technology/28-tool-life-testing/">Tool Life Testing</a>). This table is a starting map, not a substitute for the full selection workflow in <a href="../../cutting-tool-technology/13-tool-selection-workflow/">Cutting Tool Technology</a>.
   </aside>
 
   <footer class="tool-footer">Designed by Li Lu · CNC &amp; Manufacturing Engineering</footer>
