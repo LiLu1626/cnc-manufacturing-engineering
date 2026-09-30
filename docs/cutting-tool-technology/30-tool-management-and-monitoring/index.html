@@ -53,6 +53,16 @@
 <h3>Monitoring levels</h3>
 <p>The simplest monitoring is the operator noticing a rising spindle load, a dull tone, or a worsening finish between parts. More advanced shops track spindle power/current against a baseline; a rising draw signals wear before the part suffers. Even a basic in-process check catches the slow drift that scheduled replacement alone might miss between two index points.</p>
 
+<div class="ctt-table-wrap"><table>
+<caption>Minimum tool record</caption>
+<thead><tr><th scope="col">Field</th><th scope="col">Example</th><th scope="col">Why it matters</th></tr></thead>
+<tbody>
+<tr><td>Assembly ID</td><td>T03</td><td>identify and recall offsets</td></tr>
+<tr><td>Tool / grade</td><td>&Oslash;10 TiAlN end mill</td><td>reorder correctly</td></tr>
+<tr><td>Offset</td><td>length / dia</td><td>repeatable touch-in</td></tr>
+<tr><td>Parts per edge</td><td>120</td><td>scheduled change</td></tr>
+<tr><td>Change reason</td><td>wear / chip / schedule</td><td>feeds diagnosis (page 27)</td></tr>
+</tbody></table></div>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Running a tool past its proven life.</strong> It scrapes. Fix: count parts and change on schedule.</li>
