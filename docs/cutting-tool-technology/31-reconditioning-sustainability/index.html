@@ -66,6 +66,24 @@
 <h3>What changes each time you regrind</h3>
 <p>Each regrind is not a free reset: to restore a sharp edge the grinder removes a layer of carbide from the flutes and the tip, which slightly shortens the tool and thins the core. The first one or two cycles barely change performance; later cycles shorten the flute gullet and reduce the core stiffness, so the tool deflects and chatters sooner &mdash; the same rigidity limit as page 16, reached by a different route. Recoating after regrind is what restores the low-friction, heat-resistant skin (page 12); a reground tool sent back uncoated will wear much faster, so the two steps normally go together. The practical rule is to stamp or label each solid tool with its regrind count the way page 30 logs parts per edge, and retire when the count or measured core diameter crosses the maker's limit rather than discovering the limit on a bad surface finish. Cheap indexable inserts skip this whole cycle: they are engineered to be tipped and recycled, and regrinding them never pays.</p>
 
+<figure class="ctt-figure">
+<svg viewBox="0 0 460 150" role="img" aria-label="Regrind lifecycle from new tool to retirement">
+<desc>A new solid tool, two or three regrind-recoat cycles that each slightly thin the core, then retirement once core or geometry crosses the maker limit.</desc>
+<text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Regrind lifecycle: cheap life, then a limit</text>
+<g font-size="9" fill="#333">
+<rect x="20" y="45" width="80" height="34" rx="4" fill="#cfdbd8"/><text x="38" y="60">new tool</text><text x="30" y="72" font-size="8" fill="#5c6872">full core</text>
+<rect x="125" y="45" width="80" height="34" rx="4" fill="#d7e8e5"/><text x="140" y="60">regrind 1</text><text x="132" y="72" font-size="8" fill="#5c6872">recoat</text>
+<rect x="230" y="45" width="80" height="34" rx="4" fill="#f3e3d0"/><text x="245" y="60">regrind 2</text><text x="237" y="72" font-size="8" fill="#5c6872">core thinner</text>
+<rect x="335" y="45" width="90" height="34" rx="4" fill="#b3261e"/><text x="352" y="60" fill="#fff">retire</text><text x="345" y="72" font-size="8" fill="#fff">recycle carbide</text>
+</g>
+<line x1="100" y1="62" x2="125" y2="62" stroke="#5c6872" stroke-width="1.5"/>
+<line x1="205" y1="62" x2="230" y2="62" stroke="#5c6872" stroke-width="1.5"/>
+<line x1="310" y1="62" x2="335" y2="62" stroke="#5c6872" stroke-width="1.5"/>
+<text x="20" y="115" font-size="9" fill="#5c6872">Regrind expensive solid tools while each cycle returns a rigid edge; cheap indexable inserts are tipped and recycled, never reground.</text>
+</svg>
+<figcaption>Each cycle removes carbide: track the count and core diameter, then retire before chatter or a bad finish forces the decision.</figcaption>
+</figure>
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Re-grinding cheap disposable tools.</strong> Not worth it. Fix: recondition expensive solid tools only.</li>
