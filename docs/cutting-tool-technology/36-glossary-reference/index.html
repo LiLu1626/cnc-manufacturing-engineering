@@ -90,6 +90,9 @@
 </tbody></table></div>
 <p>Example: a catalog quoting vc = 400 SFM is about 400&times;0.305 = 122&nbsp;m/min &mdash; close to the locked 120&nbsp;m/min baseline, which is how you confirm an imperial table is describing the same steel cut. Always apply the conversion <em>before</em> plugging a number into a formula, and never mix an SFM value straight into n = 1000&middot;vc /(&pi;&middot;D).</p>
 
+<h3>MRR and the power check</h3>
+<p>Material removal rate (MRR) converts a cut into volume per minute, which is what the spindle power actually has to deliver. In milling, MRR = ae &middot; ap &middot; vf (in consistent units, giving mm&sup3;/min, divided by 1000 to get cm&sup3;/min). Work the locked baseline: ae = 2&nbsp;mm, ap = 10&nbsp;mm, vf = 608&nbsp;mm/min gives MRR = 2&times;10&times;608 = 12&nbsp;160&nbsp;mm&sup3;/min &asymp; 12.2&nbsp;cm&sup3;/min. In turning, MRR = ap &middot; f &middot; vc instead. The reason to keep this formula in the reference is that when the machine stalls or trips on power, the first question is not "is the tool dull" but "what is the MRR and does it fit the spindle" &mdash; which is the same tangential-force-to-power chain from page 04. If two setups remove the same volume, they demand roughly the same power regardless of how they are programmed; the tool choice only changes how efficiently that volume is cut.</p>
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Mixing mm/rev and mm/tooth.</strong> Fix: confirm the feed unit before using a formula.</li>
