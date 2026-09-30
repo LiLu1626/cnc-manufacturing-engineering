@@ -64,6 +64,9 @@
 
 <h2>Threading at a glance</h2>
 <p>Threads are produced several ways: single-point turning on a lathe, taps for internal threads, and thread mills for larger or harder holes. Each cuts the same fundamental geometry &mdash; pitch, major/minor diameter, thread depth &mdash; but at very different productivity and setup cost. A tap is quick for standard holes but can snap if chip evacuation is poor; thread milling is flexible and avoids tap breakage in hard material; single-point threading is most controllable for odd or large forms. The critical machining detail is that feed equals the pitch per revolution, so the machine's feed and spindle are locked together. Whatever the method, start with the thread form and size from the drawing, then choose the tool that fits the machine and batch size rather than the other way around.</p>
+<h3>The tap-drill size you must set first</h3>
+<p>An internal thread is only as good as the minor (tap-drill) diameter you start with. Drill it too large and the tap has too little thread engagement; drill it too small and the tap is overloaded and snaps. For a metric thread, the common rule of thumb is tap drill diameter &asymp; major diameter &minus; pitch. For the M10&times;1.5 worked thread that gives roughly 10 &minus; 1.5 = 8.5&nbsp;mm pre-drill, which is why an 8.5&nbsp;mm drill precedes an M10&times;1.5 tap. Get this backwards and no amount of speed or pecking saves the thread: a tap forced through an undersized hole breaks, and one through an oversized hole produces a thread that strips under load. This is the first decision in any tapping program, before spindle speed or peck cycles are chosen, and it links back to the drill and point-height planning on page 17 and the hole-quality ladder on page 18.</p>
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Taking the full depth in one pass.</strong> The insert overloads and chips. Fix: multiple decreasing passes.</li>
