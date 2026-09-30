@@ -91,6 +91,25 @@
 <h3>Why record the machine and setup, not just the life</h3>
 <p>The wear-trial log captures more than minutes to failure because a life number is meaningless without the conditions that produced it. A 34-minute result on a rigid machine with through-coolant and a short overhang does not transfer to a floppy knee mill with flood coolant and a long bar, and if you record only the time, the next person who reads the log will apply a number that no longer holds. This is why the log asks for machine, holder, overhang, coolant, ap, ae and material condition alongside the wear reading: it makes the trial repeatable on your own floor and lets you tell when a life change came from the tool rather than from a setup that quietly drifted. It also feeds page 30's tool management: a grade that proves itself on one machine may not transfer to another, and the recorded conditions are what tell you whether it can. A life number without its setup is an anecdote; with its setup, it is a datum you can build on.</p>
 
+<figure class="ctt-figure">
+<svg viewBox="0 0 440 220" role="img" aria-label="Taylor tool-life curve: cutting speed versus tool life">
+<desc>Log-log style curve: higher cutting speed shortens tool life steeply. Two locked grades: grade A life 22 min, grade B life 34 min at the chosen speed.</desc>
+<text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Tool life falls steeply as speed rises</text>
+<line x1="60" y1="180" x2="410" y2="180" stroke="#333" stroke-width="1"/>
+<line x1="60" y1="180" x2="60" y2="40" stroke="#333" stroke-width="1"/>
+<text x="230" y="205" font-size="10" fill="#333">Cutting speed vc (m/min) &rarr;</text>
+<text x="20" y="115" font-size="10" fill="#333" transform="rotate(-90 25 115)">Tool life T &rarr;</text>
+<path d="M90 60 Q 180 90 250 130 T 390 168" fill="none" stroke="#b3261e" stroke-width="2.5"/>
+<circle cx="200" cy="108" r="4" fill="#0b766e"/>
+<text x="210" y="105" font-size="9" fill="#0b766e">grade A: 22 min</text>
+<circle cx="200" cy="80" r="4" fill="#333"/>
+<text x="210" y="78" font-size="9" fill="#333">grade B: 34 min (~55% longer)</text>
+<text x="80" y="150" font-size="9" fill="#5c6872">slow &rarr; long life, slow cycle</text>
+<text x="300" y="155" font-size="9" fill="#5c6872">fast &rarr; short life, fast cycle</text>
+</svg>
+<figcaption>At the chosen speed, grade B outlasts grade A by ~55%. The curve is why a small speed trial &mdash; not a guess &mdash; sets the optimum (page 29).</figcaption>
+</figure>
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Changing more than one variable.</strong> The result is confounded. Fix: isolate the test variable.</li>
