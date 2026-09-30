@@ -52,6 +52,17 @@
 
 <h2>Planning the depth correctly</h2>
 <p>For a &Oslash;10 through hole in a 20&nbsp;mm plate, the drill does not stop at 20&nbsp;mm. The 118&deg; point leaves a conical tip, so the total depth commanded is plate thickness plus the point height h = D/(2&middot;tan59&deg;) = 3.004&nbsp;mm &mdash; about 23&nbsp;mm. For the finishing sequence, leave a small radial stock (≈0.15&nbsp;mm) after drilling at &Oslash;9.7, then bore or ream. If the hole must be on position, bore before reaming; reaming follows an existing hole and will not correct a wandering one. Keep boring-bar overhang within limits (page 16), because a long, thin bar chatter even with the right tool. This case ties pages 17 and 18 together into one sequence rather than two isolated operations.</p>
+<div class="ctt-table-wrap"><table>
+<caption>Hole sequence for the case</caption>
+<thead><tr><th scope="col">Step</th><th scope="col">Tool</th><th scope="col">Result</th><th scope="col">Purpose</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>spot drill</td><td>start mark</td><td>locate</td></tr>
+<tr><td>2</td><td>&Oslash;9.7 drill</td><td>&Oslash;9.7, depth 23 mm</td><td>near-net, leave stock</td></tr>
+<tr><td>3</td><td>boring bar</td><td>correct position</td><td>set location/straightness</td></tr>
+<tr><td>4</td><td>&Oslash;10 reamer</td><td>&Oslash;10 H7</td><td>size + finish</td></tr>
+</tbody></table></div>
+<h2>Inspection after the sequence</h2>
+<p>The plan is not done until the hole is checked. Measure diameter against the H7 tolerance, inspect the finish, and confirm the hole location against its datum on a CMM or with a bore gauge. If the diameter trends large across a batch, suspect reamer wear or reaming stock creeping up; if position is off, the boring step &mdash; not the ream &mdash; is where to look. Record the result on the wear-trial log so the sequence is repeatable. This closes the loop from tooling choice to inspection that the rest of module M8 expects.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Reaming a mislocated hole.</strong> Fix: bore first to correct position.</li>
