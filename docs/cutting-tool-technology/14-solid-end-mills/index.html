@@ -106,6 +106,18 @@
 <h3>Why a center-cutting end mill matters when plunging</h3>
 <p>Not every end mill can drill straight down into the work. A standard square or corner-radius mill has cutting edges that do not quite meet at the center, so it must enter the pocket by a pre-drilled hole or by ramping in an arc; trying to plunge it vertically into solid steel forces the non-cutting center to rub and pushes the tool off line. A center-cutting (slot-drill type) end mill has edges that pass through the center and can plunge straight down. This distinction decides how you start a pocket: with a center-cutting mill you can go in directly, otherwise you need a start hole or a helical ramp programmed. When a tool chatters or pushes off on the first plunge, check whether it was actually center-cutting rather than blaming the feed.</p>
 
+<figure class="ctt-figure">
+<svg viewBox="0 0 460 140" role="img" aria-label="Flute count trade-off">
+<desc>Few flutes give a deep gullet and chip clearance for gummy material; more flutes give a stiff core and higher feed for small-chip steel.</desc>
+<text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Flute count is matched to the chip</text>
+<circle cx="110" cy="80" r="34" fill="#cfdbd8"/><circle cx="110" cy="80" r="14" fill="#fff"/>
+<text x="60" y="130" font-size="9" fill="#5c6872">2&ndash;3 flutes: gummy Al / steel, deep gullet</text>
+<circle cx="330" cy="80" r="34" fill="#d7e8e5"/><circle cx="330" cy="80" r="24" fill="#fff"/>
+<text x="270" y="130" font-size="9" fill="#5c6872">4+ flutes: steel, thick stiff core, faster feed</text>
+</svg>
+<figcaption>Thicker core = stiffer but less chip room. Pick flute count for the material's chip, then compute vf = n&middot;zc&middot;fz.</figcaption>
+</figure>
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Finishing with a roughing mill.</strong> Serrations leave marks. Fix: rough then finish with a smooth-flute mill.</li>
