@@ -73,6 +73,9 @@
 <tr><td>Metal removal / cycle</td><td>slower</td><td>faster</td></tr>
 <tr><td><strong>Cost per part</strong></td><td><strong>0.64</strong></td><td><strong>0.525 (wins)</strong></td></tr>
 </tbody></table></div>
+<h3>How the comparison is built up</h3>
+<p>The cost-per-part number comes from two streams added together. First, the tool stream: the cost of one edge divided by the number of good parts that edge produces, which spreads a fixed insert price over its life. Second, the machine stream: the machine hour rate times the cycle time for one part, which is paid whether the tool is expensive or cheap. A cheap insert with short life spreads its small price over few parts, and its slower cycle adds machine time &mdash; that is how option A lands at 0.64. A pricier edge that runs faster and cuts more parts per edge spreads its larger price over many parts, and its shorter cycle lowers the machine stream &mdash; landing at 0.525. Notice what is <em>not</em> in the sticker price: a tool that occasionally scrapes a part adds rework and downtime that no insert quote includes. Run the comparison with your real machine rate and measured parts-per-edge, and the option that wins in the math will usually also win on the shop floor.</p>
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Comparing insert prices, not cost per part.</strong> Fix: include life and machine time.</li>
