@@ -97,6 +97,21 @@
 <h3>Why hole quality is more than diameter</h3>
 <p>A drawing's hole callout usually lists diameter and finish, but a quality hole also depends on roundness, straightness and the absence of a torn or work-hardened wall &mdash; and these are set by the process sequence, not by the final reamer. A drilled hole that is then bored straightens and rounds the wall; reaming to size after that leaves a surface that has been sheared rather than torn. Skip the boring correction and the reamer polishes a hole that is out-of-round in the wrong place, which matters for a bearing bore even if the diameter reads on the gauge. This is why page 34 treats the hole as a system: the drill opens it, the bore corrects geometry, the reamer sizes and finishes, and each step inherits the quality of the one before it. A single "reamer choice" cannot repair a poor drilled core. When a hole fails inspection on roundness or position rather than diameter, look upstream at whether the prior operation actually did its job &mdash; the reamer was only ever going to finish what the drill and bore left behind.</p>
 
+<figure class="ctt-figure">
+<svg viewBox="0 0 460 130" role="img" aria-label="Hole-making ladder and what each step controls">
+<desc>Spot drill sets start, twist drill opens the hole, boring corrects position and roundness, reaming sizes and finishes.</desc>
+<text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Each step controls one quality</text>
+<g font-size="9.5">
+<rect x="20" y="45" width="95" height="50" rx="4" fill="#eef2f0" stroke="#cfdbd8"/><text x="30" y="66">spot drill</text><text x="30" y="80" fill="#5c6872">sets start axis</text>
+<rect x="130" y="45" width="95" height="50" rx="4" fill="#eef2f0" stroke="#cfdbd8"/><text x="140" y="66">twist drill</text><text x="140" y="80" fill="#5c6872">opens hole</text>
+<rect x="240" y="45" width="95" height="50" rx="4" fill="#d7e8e5"/><text x="250" y="66">bore</text><text x="250" y="80" fill="#5c6872">position / round</text>
+<rect x="350" y="45" width="95" height="50" rx="4" fill="#d7e8e5"/><text x="360" y="66">ream</text><text x="360" y="80" fill="#5c6872">size / finish</text>
+</g>
+<text x="20" y="115" font-size="9" fill="#b3261e">Reaming cannot move the center &mdash; a wandering hole must be bored first.</text>
+</svg>
+<figcaption>The hole is a system: each step inherits the geometry of the one before it.</figcaption>
+</figure>
+
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Reaming a mislocated hole to fix position.</strong> Reaming follows the hole. Fix: bore first to correct position.</li>
