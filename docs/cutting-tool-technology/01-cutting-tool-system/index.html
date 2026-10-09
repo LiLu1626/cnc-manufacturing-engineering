@@ -68,16 +68,18 @@
 <h2>Worked Example</h2>
 <p>Two jobs both use a &Oslash;10&nbsp;mm, 3-flute carbide end mill. Job&nbsp;A mills a shallow pocket with the tool clamped so only 30&nbsp;mm projects from the holder. Job&nbsp;B reaches into a deep cavity and needs 60&nbsp;mm of projection. The slenderness ratio is projection divided by diameter: A&nbsp;=&nbsp;30/10&nbsp;=&nbsp;3, B&nbsp;=&nbsp;60/10&nbsp;=&nbsp;6.</p>
 <figure class="ctt-figure">
-<svg viewBox="0 0 420 200" role="img" aria-label="Short versus long overhang">
-<desc>Two end mills, one projected 3 times diameter and one 6 times diameter, clamped in a holder above a workpiece.</desc>
-<rect x="60" y="20" width="60" height="30" fill="#5c6872"/><text x="66" y="40" font-size="10" fill="#fff">holder</text>
-<rect x="82" y="50" width="16" height="90" fill="#0b766e"/><text x="40" y="95" font-size="10" fill="#333">L=30, L/D=3</text>
-<rect x="60" y="150" width="60" height="12" fill="#b3261e"/><text x="55" y="180" font-size="9" fill="#5c6872">workpiece</text>
-<rect x="260" y="20" width="60" height="30" fill="#5c6872"/><text x="266" y="40" font-size="10" fill="#fff">holder</text>
-<rect x="282" y="50" width="16" height="150" fill="#b3261e"/><text x="230" y="120" font-size="10" fill="#333">L=60, L/D=6</text>
-<rect x="260" y="200" width="60" height="12" fill="#b3261e"/>
+<svg viewBox="0 0 420 260" role="img" aria-label="Short versus long overhang">
+<title>Short versus long overhang</title>
+<desc>Two end mills, one projected 3 times diameter and one 6 times diameter, clamped in a holder above a workpiece. Overhangs drawn in the 1:2 ratio of 30 to 60 mm; vertical scale only.</desc>
+<text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Same catalog tool, different overhang (not to scale vertically)</text>
+<rect x="60" y="30" width="60" height="30" fill="#5c6872"/><text x="66" y="50" font-size="10" fill="#fff">holder</text>
+<rect x="82" y="60" width="16" height="90" fill="#0b766e"/><text x="38" y="108" font-size="10" fill="#333">L=30, L/D=3</text>
+<rect x="60" y="150" width="60" height="12" fill="#b3261e"/><text x="50" y="180" font-size="9" fill="#5c6872">workpiece</text>
+<rect x="260" y="30" width="60" height="30" fill="#5c6872"/><text x="266" y="50" font-size="10" fill="#fff">holder</text>
+<rect x="282" y="60" width="16" height="180" fill="#b3261e"/><text x="228" y="155" font-size="10" fill="#333">L=60, L/D=6</text>
+<rect x="260" y="240" width="60" height="12" fill="#b3261e"/>
 </svg>
-<figcaption>Same catalog tool, different overhang. Doubling projection roughly multiplies tip deflection by 27&times; in an ideal cantilever (see page 21) &mdash; size alone is not performance.</figcaption>
+<figcaption>For an ideal cantilever with the same end load, elastic modulus and cross-section, doubling the overhang from 30 to 60 mm increases calculated tip deflection by a factor of 8. This model illustrates sensitivity to overhang; it does not predict the complete tool-holder-spindle system.</figcaption>
 </figure>
 <div class="ctt-assumption"><strong>Classroom assumption:</strong> the 30/60&nbsp;mm figures are illustrative. L/D&nbsp;=3 is not a universal &ldquo;safe&rdquo; line and L/D&nbsp;=6 is not automatically forbidden; the deflection, chatter and runout discussion on page 21 explains what the ratio actually predicts.</div>
 <p>The point is that the catalog number &Oslash;10 tells you almost nothing about these two jobs. You cannot approve Job&nbsp;B from the tool box label alone &mdash; you must check reach, clamping length, holder rigidity and the allowed deflection.</p>
