@@ -135,6 +135,8 @@
 <li><strong>Ignoring drill point height.</strong> Programming a 20&nbsp;mm deep hole with a flat-bottom assumption wastes the last 3&nbsp;mm. Fix: for a &Oslash;10 drill at 118&deg;, add 3.004&nbsp;mm when planning through-hole depth.</li>
 </ul>
 
+<p><strong>Worked unit check.</strong> The locked baseline uses vc&nbsp;=&nbsp;120&nbsp;m/min on a &Oslash;10&nbsp;mm tool. Convert the diameter to metres for the formula: 10&nbsp;mm&nbsp;=&nbsp;0.010&nbsp;m, so n&nbsp;=&nbsp;1000&middot;vc/(&pi;&middot;D)&nbsp;=&nbsp;1000&times;120/(3.1416&times;10)&nbsp;&asymp;&nbsp;3819.7&nbsp;RPM, rounded to 3800 on the machine. Then feed: vf&nbsp;=&nbsp;n&middot;zc&middot;fz&nbsp;=&nbsp;3800&times;4&times;0.04&nbsp;=&nbsp;608&nbsp;mm/min. The place people slip is the &times;1000: dropping it gives 3.8 instead of 3800, and mixing mm/min with inch/min multiplies the motion by 25.4. Carry the unit with every number &mdash; m/min, RPM, mm/min, mm/tooth &mdash; rather than only the value, and the arithmetic stays honest.</p>
+
 <h2>Practice</h2>
 <div class="ctt-practice">
 <details><summary>Q1. Compute RPM for vc = 150 m/min and D = &Oslash;20 mm.</summary><p>n = 1000&times;150/(&pi;&times;20) = 150000/62.83 = 2387 RPM.</p></details>
