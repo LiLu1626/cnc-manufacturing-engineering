@@ -1,317 +1,317 @@
 [
-  {
-    "page": "01-cutting-tool-system",
-    "claim": "General cutting-tool system and chip formation principles",
-    "reference": "Sandvik Coromant knowledge portal",
-    "url": "https://www.sandvik.coromant.com/",
-    "section_or_page": "Turning Handbook, Ch.1 Introduction to metal cutting (chip formation, cutting speed/feed)",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "02-workpiece-materials-machinability",
-    "claim": "Work material groups and machinability in the Turning Handbook material tables",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook, material groups and machinability table (P/M/K/N/S/H)",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "03-cutting-data-and-units",
-    "claim": "Cutting data: speed, feed and feed-rate definitions in the Milling Guide",
-    "reference": "Sandvik Milling Guide",
-    "url": "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
-    "section_or_page": "Milling Guide, cutting data: vc, n, vf, feed-per-tooth formulas",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "04-chip-formation-forces-heat",
-    "claim": "Chip formation, forces and heat in the Turning Handbook theory section",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook, theory of metal cutting: chip, forces, heat",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "05-rake-clearance-and-edge-angles",
-    "claim": "Rake, clearance and entering-angle geometry in the Turning Handbook",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook, insert rake/clearance/entering-angle geometry",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "06-edge-preparation-chipbreakers",
-    "claim": "Edge preparation and chipformer / chip-breaker feed windows",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook, edge preparation and chipformer feed windows",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "07-end-mill-geometry-engagement",
-    "claim": "Radial and axial engagement of end mills in the Milling Guide",
-    "reference": "Sandvik Milling Guide",
-    "url": "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
-    "section_or_page": "Milling Guide, end mill radial/axial engagement ae/ap",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "08-insert-designations-catalogs",
-    "claim": "Insert designation (ISO 1832) reading and catalog selection",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook, ISO insert designation (ISO 1832)",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "09-tool-material-families",
-    "claim": "Cemented carbide, ceramic, cermet and superhard tool materials",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook, tool materials: carbide, ceramic, cermet, CBN/PCD",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "10-cemented-carbide-substrates",
-    "claim": "Carbide grain size and binder grades in the tool-material chapter",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook, cemented carbide grades: grain size and binder",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "11-ceramics-pcbn-pcd",
-    "claim": "PCBN and PCD applications and workpiece limits",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook, CBN and PCD application tables",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "12-coating-processes-and-families",
-    "claim": "PVD/CVD coatings and matched edge-prep systems",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook, PVD/CVD coatings and matched edge prep",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "13-tool-selection-workflow",
-    "claim": "Step-by-step tool selection workflow",
-    "reference": "Sandvik Coromant knowledge portal",
-    "url": "https://www.sandvik.coromant.com/",
-    "section_or_page": "Milling/Turning application guide, step-by-step tool selection",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "14-solid-end-mills",
-    "claim": "Solid carbide end mill geometries and application notes",
-    "reference": "Sandvik Milling Guide",
-    "url": "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
-    "section_or_page": "Milling Guide, solid carbide end mill application",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "15-indexable-milling-cutters",
-    "claim": "Indexable insert milling cutters, lead angle and entry",
-    "reference": "Sandvik Milling Guide",
-    "url": "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
-    "section_or_page": "Milling Guide, indexable insert cutters, lead angle, entry",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "16-turning-inserts-toolholders",
-    "claim": "Turning insert grades, geometries and toolholders",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook, turning insert grades, geometries and holders",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "17-drills-and-hole-making",
-    "claim": "Drill point geometry, pecking and chip evacuation",
-    "reference": "Sandvik Milling Guide",
-    "url": "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
-    "section_or_page": "Milling/hole-making guide, drill point geometry and pecking",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "18-reamers-boring-and-hole-quality",
-    "claim": "Boring and reaming stock, pre-hole quality and hole tolerance",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook, boring and reaming stock and pre-hole",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "19-threading-tools",
-    "claim": "Threading insert grades, chipbreaker and pass depth",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook, threading inserts and pass depth",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "20-grooving-parting-tools",
-    "claim": "Parting and grooving insert geometries and chip control",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook, parting and grooving tool geometry",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "21-toolholders-interfaces-rigidity",
-    "claim": "Tool overhang, clamping and rigidity principles",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook, overhang, clamping and rigidity",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "22-runout-balance-and-tool-setting",
-    "claim": "Runout, balancing and tool-setting practice",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook, runout, balancing and tool setting",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "23-coolant-lubrication-chip-evacuation",
-    "claim": "Coolant, lubrication and chip evacuation recommendations",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook, coolant and chip evacuation recommendations",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "24-tool-inspection-and-handling",
-    "claim": "Insert inspection, wear rejection and handling",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook, insert inspection and wear rejection",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "25-wear-mechanisms-morphology",
-    "claim": "Flank wear, crater wear and wear-morphology identification",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook, wear types: flank, crater, notch",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "26-chipping-fracture-and-thermal-damage",
-    "claim": "Chipping, fracture and thermal wear limits",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook, tool failure modes and thermal wear",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "27-wear-diagnosis-corrective-actions",
-    "claim": "Wear diagnosis and corrective actions in the application guide",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook application guide, troubleshooting",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "28-tool-life-testing",
-    "claim": "Tool-life testing and the Taylor wear-life relationship",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook, tool life and Taylor relationship",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "29-tooling-economics",
-    "claim": "Cost per component and grade economy",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook, cost per component",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "30-tool-management-and-monitoring",
-    "claim": "Tool management, monitoring and reorder records",
-    "reference": "Sandvik Coromant knowledge portal",
-    "url": "https://www.sandvik.coromant.com/",
-    "section_or_page": "Tool management / monitoring practice (general reference)",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "31-reconditioning-sustainability",
-    "claim": "Tool reconditioning, recycling and sustainability",
-    "reference": "Sandvik Coromant knowledge portal",
-    "url": "https://www.sandvik.coromant.com/",
-    "section_or_page": "Tool reconditioning and recycling practice (general reference)",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "32-case-milling-tool-selection",
-    "claim": "Milling tool selection case: geometry, grade and starting data",
-    "reference": "Sandvik Milling Guide",
-    "url": "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
-    "section_or_page": "Milling Guide, milling tool selection worked example",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "33-case-turning-wear",
-    "claim": "Turning wear case: flank wear, indexing and offset discipline",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Turning Handbook, flank wear and indexing case",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "34-case-hole-quality",
-    "claim": "Hole-quality case: spot, drill, bore and ream sequence",
-    "reference": "Sandvik Turning Handbook C-1020-18",
-    "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
-    "section_or_page": "Hole-making guide, drill-bore-ream sequence",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  },
-  {
-    "page": "36-glossary-reference",
-    "claim": "Terminology and formula reference",
-    "reference": "Sandvik Coromant knowledge portal",
-    "url": "https://www.sandvik.coromant.com/",
-    "section_or_page": "Turning/Milling handbook terminology and formula appendix",
-    "note": "chapter-level reference; HTTP not probed in this audit",
-    "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
-  }
+ {
+  "page": "01-cutting-tool-system",
+  "claim": "General cutting-tool system and chip formation principles",
+  "reference": "Mitsubishi Materials technical portal; ISCAR Cutting Tools User Guide",
+  "url": "https://www.mitsubishicarbide.com/",
+  "section_or_page": "Technical Data portal / Cutting Tools User Guide (general reference; not a source for a specific recommended speed)",
+  "note": "page-level portal references; section-level page numbers not yet read/probed",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "02-workpiece-materials-machinability",
+  "claim": "Work material groups and machinability in the Turning Handbook material tables",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook, material groups and machinability table (P/M/K/N/S/H)",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "03-cutting-data-and-units",
+  "claim": "Cutting data: speed, feed and feed-rate definitions in the Milling Guide",
+  "reference": "Sandvik Milling Guide",
+  "url": "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
+  "section_or_page": "Milling Guide, cutting data: vc, n, vf, feed-per-tooth formulas",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "04-chip-formation-forces-heat",
+  "claim": "Chip formation, forces and heat in the Turning Handbook theory section",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook, theory of metal cutting: chip, forces, heat",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "05-rake-clearance-and-edge-angles",
+  "claim": "Rake, clearance and entering-angle geometry in the Turning Handbook",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook, insert rake/clearance/entering-angle geometry",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "06-edge-preparation-chipbreakers",
+  "claim": "Edge preparation and chipformer / chip-breaker feed windows",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook, edge preparation and chipformer feed windows",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "07-end-mill-geometry-engagement",
+  "claim": "Radial and axial engagement of end mills in the Milling Guide",
+  "reference": "Sandvik Milling Guide",
+  "url": "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
+  "section_or_page": "Milling Guide, end mill radial/axial engagement ae/ap",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "08-insert-designations-catalogs",
+  "claim": "Insert designation (ISO 1832) reading and catalog selection",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook, ISO insert designation (ISO 1832)",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "09-tool-material-families",
+  "claim": "Cemented carbide, ceramic, cermet and superhard tool materials",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook, tool materials: carbide, ceramic, cermet, CBN/PCD",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "10-cemented-carbide-substrates",
+  "claim": "Carbide grain size and binder grades in the tool-material chapter",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook, cemented carbide grades: grain size and binder",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "11-ceramics-pcbn-pcd",
+  "claim": "PCBN and PCD applications and workpiece limits",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook, CBN and PCD application tables",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "12-coating-processes-and-families",
+  "claim": "PVD/CVD coatings and matched edge-prep systems",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook, PVD/CVD coatings and matched edge prep",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "13-tool-selection-workflow",
+  "claim": "Step-by-step tool selection workflow",
+  "reference": "Sandvik Coromant knowledge portal",
+  "url": "https://www.sandvik.coromant.com/",
+  "section_or_page": "Milling/Turning application guide, step-by-step tool selection",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "14-solid-end-mills",
+  "claim": "Solid carbide end mill geometries and application notes",
+  "reference": "Sandvik Milling Guide",
+  "url": "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
+  "section_or_page": "Milling Guide, solid carbide end mill application",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "15-indexable-milling-cutters",
+  "claim": "Indexable insert milling cutters, lead angle and entry",
+  "reference": "Sandvik Milling Guide",
+  "url": "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
+  "section_or_page": "Milling Guide, indexable insert cutters, lead angle, entry",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "16-turning-inserts-toolholders",
+  "claim": "Turning insert grades, geometries and toolholders",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook, turning insert grades, geometries and holders",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "17-drills-and-hole-making",
+  "claim": "Drill point geometry, pecking and chip evacuation",
+  "reference": "Sandvik Milling Guide",
+  "url": "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
+  "section_or_page": "Milling/hole-making guide, drill point geometry and pecking",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "18-reamers-boring-and-hole-quality",
+  "claim": "Boring and reaming stock, pre-hole quality and hole tolerance",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook, boring and reaming stock and pre-hole",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "19-threading-tools",
+  "claim": "Threading insert grades, chipbreaker and pass depth",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook, threading inserts and pass depth",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "20-grooving-parting-tools",
+  "claim": "Parting and grooving insert geometries and chip control",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook, parting and grooving tool geometry",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "21-toolholders-interfaces-rigidity",
+  "claim": "Tool overhang, clamping and rigidity principles",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook, overhang, clamping and rigidity",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "22-runout-balance-and-tool-setting",
+  "claim": "Runout, balancing and tool-setting practice",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook, runout, balancing and tool setting",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "23-coolant-lubrication-chip-evacuation",
+  "claim": "Coolant, lubrication and chip evacuation recommendations",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook, coolant and chip evacuation recommendations",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "24-tool-inspection-and-handling",
+  "claim": "Insert inspection, wear rejection and handling",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook, insert inspection and wear rejection",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "25-wear-mechanisms-morphology",
+  "claim": "Flank wear, crater wear and wear-morphology identification",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook, wear types: flank, crater, notch",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "26-chipping-fracture-and-thermal-damage",
+  "claim": "Chipping, fracture and thermal wear limits",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook, tool failure modes and thermal wear",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "27-wear-diagnosis-corrective-actions",
+  "claim": "Wear diagnosis and corrective actions in the application guide",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook application guide, troubleshooting",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "28-tool-life-testing",
+  "claim": "Tool-life testing and the Taylor wear-life relationship",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook, tool life and Taylor relationship",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "29-tooling-economics",
+  "claim": "Cost per component and grade economy",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook, cost per component",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "30-tool-management-and-monitoring",
+  "claim": "Tool management, monitoring and reorder records",
+  "reference": "Sandvik Coromant knowledge portal",
+  "url": "https://www.sandvik.coromant.com/",
+  "section_or_page": "Tool management / monitoring practice (general reference)",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "31-reconditioning-sustainability",
+  "claim": "Tool reconditioning, recycling and sustainability",
+  "reference": "Sandvik Coromant knowledge portal",
+  "url": "https://www.sandvik.coromant.com/",
+  "section_or_page": "Tool reconditioning and recycling practice (general reference)",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "32-case-milling-tool-selection",
+  "claim": "Milling tool selection case: geometry, grade and starting data",
+  "reference": "Sandvik Milling Guide",
+  "url": "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
+  "section_or_page": "Milling Guide, milling tool selection worked example",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "33-case-turning-wear",
+  "claim": "Turning wear case: flank wear, indexing and offset discipline",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Turning Handbook, flank wear and indexing case",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "34-case-hole-quality",
+  "claim": "Hole-quality case: spot, drill, bore and ream sequence",
+  "reference": "Sandvik Turning Handbook C-1020-18",
+  "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+  "section_or_page": "Hole-making guide, drill-bore-ream sequence",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ },
+ {
+  "page": "36-glossary-reference",
+  "claim": "Terminology and formula reference",
+  "reference": "Sandvik Coromant knowledge portal",
+  "url": "https://www.sandvik.coromant.com/",
+  "section_or_page": "Turning/Milling handbook terminology and formula appendix",
+  "note": "chapter-level reference; HTTP not probed in this audit",
+  "audit_status": "registered: title/URL recorded; HTTP reachability and on-page content NOT probed in this audit; claims are classroom examples unless noted"
+ }
 ]

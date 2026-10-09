@@ -35,3 +35,20 @@ Final commit: **e22dd1c** (pushed; `main` == `origin/main`).
 - Sandvik URLs are registered as references; their HTTP reachability and chapter-level content were not probed in this audit (per-entry `audit_status`).
 
 No Siemens/Heidenhain controller content was added to CTT; the prior report's drill-point formula now reads h = (D/2)/tan(59°) = (D/2)·tan(31°) consistently on pages 34/35.
+
+---
+
+## Post-review follow-up (18773b8 review)
+
+### R10 source verification — NOT fully closed
+- Page-01 register mismatch fixed: the page actually cites the **Mitsubishi Materials technical portal** and the **ISCAR Cutting Tools User Guide** (see `01-cutting-tool-system/index.html` Sources). The register entry now matches those two, with section "Technical Data portal / Cutting Tools User Guide (general reference; not a source for a specific recommended speed)". It no longer claims a Sandvik Turning Handbook chapter for page 01.
+- All other entries remain **registered only**: HTTP reachability and on-page content support were NOT probed; `audit_status` says so explicitly. R10 therefore stays "registration complete; content/accessibility verification pending" — not CLOSED.
+
+### R11 browser / print — partial; blockers recorded
+- Native forced 390 px device emulation via CDP: **blocked** (`Emulation.setDeviceMetricsOverride` → "Session with given id not found").
+- Headless Chrome (`--screenshot`/`--print-to-pdf`) from shell: **blocked** — every invocation aborts (`Abort trap: 6`, macOS `__SharedStringStorage initialize` fork error), including `--version`.
+- What DID run:
+  - In-app browser, narrow layout: no horizontal overflow at cw=499 and again at cw=416 (`scrollWidth == clientWidth`), page 33 new content confirmed live (details=6, svg=3).
+  - Native zoom: after the in-app webview applied additional zoom, `devicePixelRatio` moved 2.0 → 2.4 and layout width 499 → 416 px with **no horizontal overflow** (`scrollWidth == clientWidth == 416`). Exact 200% could not be forced (hotkey reported input-focus blocked), so this is not a certified 200% check.
+  - Both worksheets render: `tool-selection-worksheet` (h1 + 3 tables) and `wear-trial-log` (h1 + 3 tables), no overflow.
+- Still unverified (not claimed as passed): exact 390 px layout, certified native 200% zoom, and actual print-to-pdf output of the two worksheets.
