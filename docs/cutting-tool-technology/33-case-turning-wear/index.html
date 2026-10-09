@@ -124,6 +124,23 @@
 <li><strong>Changing speed and feed at once.</strong> Fix: one variable, then verify.</li>
 </ul>
 
+<figure>
+<svg viewBox="0 0 460 150" role="img" aria-label="Wear diagnosis loop: observe, candidate cause, check, trial">
+<title>Wear diagnosis decision loop</title>
+<desc>Four boxes in a row: observe morphology, list candidate causes, run one check, confirm on the trial log. Not a one-to-one lever mapping.</desc>
+<text x="20" y="22" font-size="11" font-weight="bold" fill="#333">Diagnosis loop (CTT-T1)</text>
+<rect x="20" y="50" width="90" height="40" rx="4" fill="#cfdbd8"/><text x="30" y="73" font-size="9.5" fill="#333">observe morphology</text>
+<rect x="130" y="50" width="95" height="40" rx="4" fill="#d7e8e5"/><text x="138" y="73" font-size="9.5" fill="#333">candidate causes</text>
+<rect x="245" y="50" width="85" height="40" rx="4" fill="#f3e3d0"/><text x="255" y="73" font-size="9.5" fill="#333">one check</text>
+<rect x="350" y="50" width="90" height="40" rx="4" fill="#e7d6da"/><text x="360" y="73" font-size="9.5" fill="#333">trial + log</text>
+<line x1="110" y1="70" x2="130" y2="70" stroke="#333" marker-end="url(#a)"/>
+<line x1="225" y1="70" x2="245" y2="70" stroke="#333"/>
+<line x1="330" y1="70" x2="350" y2="70" stroke="#333"/>
+<text x="20" y="120" font-size="9" fill="#5c6872">Diameter drift 40.006&rarr;40.028 &rArr; flank wear, not a sudden overload. Confirm before compensating.</text>
+</svg>
+<figcaption>Observe &rarr; candidate &rarr; check &rarr; confirm on the log. The third measured section being 0.008 over the limit is what identifies gradual wear.</figcaption>
+</figure>
+
 <h2>Practice</h2>
 <div class="ctt-practice">
 <details><summary>Q1. Part 3 measures &Oslash;40.028 against an upper limit of 40.020. Accept or reject?</summary><p>Reject / not releasable: it is 0.008&nbsp;mm over the upper limit; the mean (40.016) being inside does not rescue an oversized part.</p></details>
