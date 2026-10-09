@@ -38,95 +38,96 @@
 </ul></div>
 
 <h2>Concept</h2>
-<p>This case walks the page-27 loop: observe the worn insert, separate gradual wear from premature failure, match morphology to cause, change one variable, verify. The lathe operation is OD turning of a stainless bar.</p>
+<p>This case walks the page-27 loop on the locked CTT-T1 part: OD turning of a &Oslash;50 raw bar down to &Oslash;40 over 60&nbsp;mm in 42CrMo4 QT at a classroom 240&nbsp;HBW. We read the worn insert and the measured size together, separate gradual wear from sudden failure, and decide when to adjust &mdash; without releasing a part that is over the limit.</p>
 
 <h2>Why It Matters</h2>
 <p>Premature insert failure in production costs money per stop. A structured diagnosis turns a recurring nuisance into a fixed parameter or grade, and the record feeds tool management (page 30).</p>
 
 <h2>How It Works</h2>
-<p><strong>Observe:</strong> the insert shows built-up edge on the nose and a poor finish, not a smooth wear land. <strong>Separate:</strong> premature &mdash; the edge is rubbing and welding material. <strong>Hypothesize:</strong> speed too low for the work-hardening stainless. <strong>Change one thing:</strong> raise cutting speed within grade limits (and confirm chipformer). <strong>Verify:</strong> BUE reduces and finish improves; tool life logged on the trial sheet.</p>
+<p><strong>Input:</strong> CTT-T1, &Oslash;50&rarr;&Oslash;40&times;60, classroom fn&nbsp;=&nbsp;0.20&nbsp;mm/rev, n&nbsp;=&nbsp;1000&nbsp;rpm, so vf&nbsp;=&nbsp;n&middot;fn&nbsp;=&nbsp;200&nbsp;mm/min. <strong>Roughing arithmetic:</strong> radial ap&nbsp;=&nbsp;2&nbsp;mm means the diameter drops 4&nbsp;mm per pass (50&rarr;46&rarr;42), then a final radial 1&nbsp;mm to &Oslash;40 &mdash; material-removal arithmetic, not a full tool path. <strong>Measure:</strong> read VB on the insert at fixed cutting time (page 25). <strong>Compare size:</strong> measured diameters 40.006 / 40.014 / 40.028&nbsp;mm against a drawing upper limit of 40.020. <strong>Decide:</strong> the third part is 0.008&nbsp;mm over the upper limit; the mean (40.016) being inside does not release it (page 18). Before compensating, rule out temperature, seating and measurement (page 27).</p>
 
 <h2>Worked Example</h2>
-<p>The same method would branch differently by evidence: a crater on the rake points to hot/crater wear (adjust grade or speed), chipping points to shock (tougher grade/rigidity). Here the welded nose says low speed, not overload. Each branch changes a different lever.</p>
-<div class="ctt-assumption"><strong>Classroom assumption:</strong> the stainless and BUE scenario is illustrative; confirm the speed adjustment within the insert catalog's range for the grade.</div>
+<p>The evidence points to gradual flank wear growing over the batch, not a sudden fracture: the diameter creeps up (the worn edge pushes the tool away) and the finish degrades together, while the VB land grows with cutting time. A crater on the rake or a chipped corner would branch to a different lever (grade/heat vs toughness/rigidity), as page 27 requires. Here the corrective direction is a planned wear limit and a small compensation &mdash; but only after the cheap setup checks.</p>
+<div class="ctt-assumption"><strong>Classroom assumption:</strong> 240&nbsp;HBW, fn&nbsp;=&nbsp;0.20, n&nbsp;=&nbsp;1000&nbsp;rpm and the three measured diameters are locked CTT-T1 teaching values, not a production recipe. Any offset must be proven on your own machine, material batch and holder.</div>
 
 <h2>Reading the record</h2>
-<p>The worn insert from the stainless bar shows a built-up nose and a torn-looking finish, while the flank land itself is modest &mdash; so this is not an insert that wore out from long service. The diagnosis (page 27) points to low speed in a work-hardening material, not to a weak grade. The single change is raising vc within the catalog's stainless range and confirming the chipformer is suited to gummy flow. On the follow-up run, BUE should shrink and the finish improve; if instead crater or flank wear accelerates, the speed was pushed too far and the grade should step up. The result goes on the wear-trial log so the next stainless job starts at the corrected speed, not at the old guess.</p>
+<p>The three measured diameters &mdash; 40.006, 40.014, 40.028&nbsp;mm &mdash; tell a story the average hides. The drawing upper limit is 40.020. Parts one and two are inside; part three is 40.028, 0.008&nbsp;mm over. A shop that reports only the mean (40.016) as &ldquo;within spec&rdquo; is shipping an oversized part, because it is the maximum, not the average, that the tolerance controls. The trend (0.006&rarr;0.014&rarr;0.028) accelerates, consistent with a wear land developing rather than a one-off setup error. Before compensating, rule out the cheap causes (page 27): insert seating, swarf in the pocket, offset and nose-radius compensation, bar rigidity, and thermal equilibrium of part and gauge.</p>
 <div class="ctt-table-wrap"><table>
-<caption>Diagnosis loop for the stainless turn</caption>
-<thead><tr><th scope="col">Step</th><th scope="col">Observation</th><th scope="col">Conclusion</th></tr></thead>
+<caption>CTT-T1 size record vs drawing upper limit 40.020 mm</caption>
+<thead><tr><th scope="col">Part</th><th scope="col">Observation</th><th scope="col">Conclusion</th></tr></thead>
 <tbody>
-<tr><td>Observe</td><td>welded nose, torn finish; small flank land</td><td>BUE, not gradual wear</td></tr>
-<tr><td>Rule out</td><td>insert seated, offset correct</td><td>not a setup error</td></tr>
-<tr><td>Hypothesize</td><td>vc too low for work-hardening stainless</td><td>raise speed in range</td></tr>
-<tr><td>Change</td><td>vc only; keep feed/ap</td><td>one variable</td></tr>
-<tr><td>Verify</td><td>BUE down, finish up, life logged</td><td>record and repeat</td></tr>
+<tr><td>1</td><td>&Oslash;40.006</td><td>inside limit</td></tr>
+<tr><td>2</td><td>&Oslash;40.014</td><td>inside limit</td></tr>
+<tr><td>3</td><td>&Oslash;40.028</td><td>over upper limit by 0.008</td></tr>
+<tr><td>rule out</td><td>insert seated, offset correct, thermal equilibrium</td><td>not a setup error</td></tr>
+<tr><td>verify</td><td>VB grows with time; diameter creeps up</td><td>gradual flank wear &rarr; plan limit / offset</td></tr>
 </tbody></table></div>
 <h3>What the follow-up tells you</h3>
 <p>The verify step is what turns a guess into knowledge, and it has three possible outcomes. If BUE drops and the finish cleans up, the hypothesis was right and the corrected speed becomes the new starting point for this material. If raising speed makes BUE better but crater wear or a red-hot chip appears immediately, the speed was pushed past what the current coating survives &mdash; the next change is a more heat-resistant grade, not more speed. If nothing changes at all, the welded nose was not really BUE: look again at the edge, and suspect a chip not breaking and rewelding, or a feed too low for the chipformer window &mdash; the next lever is feed and chipbreaker, not speed. Writing down which outcome occurred is the point of the trial log: the next person does not have to re-derive it.</p>
 
-<h3>Putting numbers on the speed change</h3>
-<p>To make the "raise speed" lever concrete, translate it to RPM rather than leaving it vague. Suppose the stainless part is turned on an &Oslash;60 bar and the old, BUE-producing speed was a cautious 80&nbsp;m/min. From n = 1000&middot;vc /(&pi;&middot;D) that is 1000&times;80 /(&pi;&times;60) = 424&nbsp;rpm. The catalog's recommended band for a PVD-coated stainless grade might be 120&ndash;160&nbsp;m/min; moving to 140&nbsp;m/min gives 1000&times;140 /(&pi;&times;60) = 743&nbsp;rpm &mdash; a 75% step up, but still inside the catalog window. This is why the case says "raise speed within grade limits" rather than "make it faster": the number is anchored to the catalog band and the diameter, not chosen by feel. Notice also that raising vc on a fixed diameter raises RPM in exact proportion, so the spindle speed command and the chip evacuation both change at once &mdash; another reason to keep feed and depth fixed during the trial, so the only thing that changed is the temperature at the edge where BUE forms. If 743&nbsp;rpm already throws heat or crater wear, the grade step-up (page 12) is the next move, not backing off speed.</p>
+<h3>Putting numbers on the drift</h3>
+<p>To make the wear problem concrete, put the measured trend on the limit. The upper limit is 40.020&nbsp;mm. Part three at 40.028 is over by 0.008&nbsp;mm, and the gap from part two (40.014) to part three (40.028) is 0.014&nbsp;mm of growth between parts &mdash; faster than the 0.008&nbsp;mm step from part one to two. An accelerating trend is the signature of a wear land reaching its useful limit rather than a stable offset. The classroom feed and speed (fn&nbsp;=&nbsp;0.20, n&nbsp;=&nbsp;1000, vf&nbsp;=&nbsp;200&nbsp;mm/min) are held fixed while we observe, so any size growth is not from changing parameters; it is from the edge. This is why the case measures VB at fixed cutting time (page 25): the curve of VB against time tells you when to stop and index, before part three repeats on the next batch.</p>
 
 <h3>Why you rule out setup before changing the grade</h3>
 <p>The reason the diagnosis loop has a &ldquo;rule out&rdquo; step is that many premature-failure complaints are not about the edge at all. A loosely seated insert, a built-up chip in the pocket, a wrong tool offset, or a holder that is not drawing the insert fully home all look from the outside like a tool that does not last: the finish goes off, the size wanders, the edge seems to wear fast. If you skip the setup check and jump straight to ordering a more expensive grade, you have spent money on a hypothesis that was never tested &mdash; and the new insert fails the same way. So the first action on a recurring failure is the cheapest one: confirm the insert seats cleanly, the pocket is free of swarf, the offset and nose-radius compensation are correct, and the bar is rigid. Only after those are known-good do you read the wear morphology and change a process variable. This is the same zero-cost-first principle as page 27: every setup check costs minutes, every new grade and every trial costs money and stops the machine. Diagnose the cheap causes first, then spend.</p>
 
 <h3>Why the corrected speed is recorded, not just remembered</h3>
-<p>The point of the wear-trial log is that a solved problem this week should not reappear as a mystery next month. When the corrected speed (the 743&nbsp;rpm from 80&nbsp;m/min on the &Oslash;60 bar) is written against the grade, insert geometry and material, the next person loading that stainless bar starts at the right speed and never experiences the welded-nose failure that cost the first batch. Without the record, knowledge lives in one operator's head and evaporates when the shift changes; with it, the shop accumulates a small, true database of "what actually worked here" instead of re-deriving every setting from the catalog each time. This is exactly the link to tool management on page 30: individual diagnoses become shop-wide starting points. A rule of thumb worth keeping &mdash; if you had to run a trial to find it, write it down, because the reason you had to trial it is that the catalog band alone was not specific enough for your machine, material and coolant. The log is what turns one lucky fix into a repeatable process.</p>
+<p>The point of the wear-trial log is that a solved problem this week should not reappear as a mystery next month. When the measured limit &mdash; index before the diameter can drift past 40.020 &mdash; is written against the grade, geometry, material and these settings (fn&nbsp;=&nbsp;0.20, n&nbsp;=&nbsp;1000), the next batch starts indexed at the right point and never repeats part three being oversized. Without the record, knowledge lives in one operator's head and evaporates when the shift changes; with it, the shop accumulates "what actually worked here" instead of re-deriving it each time. This links to tool management on page 30: individual diagnoses become shop-wide starting points. The log is what turns one lucky fix into a repeatable process.</p>
 
 <h3>What each failure mode would have looked like instead</h3>
-<p>To make the diagnosis sharper, it helps to hold the alternatives side by side. If the edge instead showed a smooth, even flank land that grew steadily until finish failed, that would be normal wear at too-high speed &mdash; the fix is to lower vc or take a more wear-resistant grade, the opposite lever to the welded-nose case. If it showed a small crescent crater on the rake face at high temperature, that is crater wear from the long steel chip sliding at speed, again pointing at speed and grade rather than setup. If it showed a chipped corner with a rough, interrupted or scale-covered entry, that is mechanical shock and wants a tougher substrate and a more rigid setup, not a speed change. Only the shiny, welded nose with a torn finish says "speed too low in a work-hardening material." Practising this matching &mdash; holding the morphology in your hand and asking which of these four stories it tells before reaching for a tool &mdash; is what turns page 27's loop from a procedure into a reflex, and it is why the worn insert is photographed or kept rather than thrown away: it is the evidence that decides which lever to turn.</p>
+<p>To make the diagnosis sharper, it helps to hold the alternatives side by side. If the edge instead showed a smooth, even flank land that grew steadily until finish failed, that would be normal wear at too-high speed &mdash; the fix is to lower vc or take a more wear-resistant grade, the opposite lever to the welded-nose case. If it showed a small crescent crater on the rake face at high temperature, that is crater wear from the long steel chip sliding at speed, again pointing at speed and grade rather than setup. If it showed a chipped corner with a rough, interrupted or scale-covered entry, that is mechanical shock and wants a tougher substrate and a more rigid setup, not a speed change. A smooth, steadily growing flank land &mdash; as in this CTT-T1 case &mdash; points at planned wear and a settable limit, not at speed. Practising this matching &mdash; holding the morphology and asking which of these stories it tells before reaching for a tool &mdash; is what turns page 27's loop from a procedure into a reflex, and it is why the worn insert is photographed or kept rather than thrown away: it is the evidence that decides which lever to turn.</p>
 
 <h3>Why changing only one variable keeps the diagnosis honest</h3>
 <p>The loop says "change vc only, keep feed and depth fixed" because a trial that moves speed and feed together cannot tell you which lever helped &mdash; and worse, it can move two levers that pull in opposite directions, so the result looks unchanged and you abandon the right fix. Raising speed reduces BUE but tends to heat the edge, while raising feed thins the chip and changes the chipbreaker window; if you do both at once and the finish improves a little, you never learn which one mattered for next time, and if it gets worse you do not know which to back off. The one-variable rule is what makes the verify step meaningful: the before-and-after difference is attributable to the single thing you changed. This is also why the corrected speed on the log is trustworthy &mdash; it was isolated, not bundled. On the shop floor this sometimes feels slow, but it is the difference between a diagnosis that reproduces and a set of parameters that happened to work once and cannot be reasoned about next time. Keep the diameter, feed and depth constant during the trial, change the one lever the morphology points to, and let the measured VB and finish decide the next move.</p>
 
-<h3>Why stainless rewards a sharper, freer edge at the corrected speed</h3>
-<p>Once the speed is raised out of the BUE regime, the geometry choice quietly matters too. Work-hardening stainless does not shear like plain steel: a negative-rake, blunt edge pushes and rubs, inviting the very welded layer the diagnosis just removed, even at a correct speed. This is why the case also says "confirm the chipformer" &mdash; the corrected speed is paired with a geometry that shears rather than smears, usually a sharper positive-rake edge with a chipbreaker tuned to gummy flow and a PVD coating that stays smooth. Raising speed alone helps, but pairing it with the freer edge is what makes the finish clean rather than merely less welded. This is the same system view as page 12: substrate, coating and geometry are chosen together, and a speed correction is rarely the whole fix. If after raising speed the BUE is reduced but the edge still drags, the next lever is geometry and chipbreaker window, not a further speed increase.</p>
+<h3>Why a stable edge geometry matters once the wear limit is set</h3>
+<p>Once the VB limit and the indexing point are established, the geometry choice quietly matters too. A built-up, blunt edge pushes and rubs, making the finish worse exactly as the diameter drifts, and a chip that does not break can rewrap around the part and scratch it. This is why the case pairs the wear-limit decision with a check of the edge and chipformer rather than only moving the offset: the corrected indexing point is paired with geometry that shears cleanly for this material (page 12). If after setting the limit the size holds but the finish still drags, the next lever is geometry and chipformer window, not a further offset. Substrate, coating and geometry are chosen together, and a wear limit is rarely the whole fix.</p>
 
 <h3>Why this case is deliberately not about a broken tool</h3>
 <p>The scenario &mdash; a welded nose, a torn finish, but an intact insert &mdash; is chosen on purpose, because the most expensive recurring failures on a lathe are quiet rather than dramatic. A snapped insert stops the machine immediately and gets attention; a slowly welding edge that produces torn parts and short, unpredictable life instead drifts along, and the cost shows up in rejected pieces and edge changes nobody planned. The structured loop exists to catch exactly this quiet case before it becomes a scrap issue. It also illustrates the diagnostic habit the course is building: reach for the morphology first, not for the alarm. A shiny nose and a bad finish are not a crisis, they are a readable sign pointing at one lever, and treating them as information rather than annoyance is what lets you correct the speed once instead of replacing edges all week. The dramatic fractures are covered on page 26; this case is the everyday, low-noise problem most shops actually live with.</p>
 
 <figure class="ctt-figure">
-<svg viewBox="0 0 440 170" role="img" aria-label="Cutting speed maps to RPM on a 60 mm bar">
-<desc>Two bars: 80 m/min gives 424 RPM and causes BUE; 140 m/min gives 743 RPM, still inside the catalog band.</desc>
-<text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Ø60 stainless bar: vc &rarr; n = 1000&middot;vc / (&pi;&middot;D)</text>
-<rect x="30" y="45" width="120" height="24" fill="#b3261e"/>
-<text x="40" y="61" font-size="10" fill="#fff">80 m/min &rarr; 424 RPM</text>
-<text x="160" y="61" font-size="9" fill="#b3261e">low speed: BUE, torn finish</text>
-<rect x="30" y="85" width="210" height="24" fill="#0b766e"/>
-<text x="40" y="101" font-size="10" fill="#fff">140 m/min &rarr; 743 RPM</text>
-<text x="250" y="101" font-size="9" fill="#0b766e">within catalog 120&ndash;160 band</text>
-<line x1="30" y1="125" x2="400" y2="125" stroke="#cfdbd8" stroke-width="1"/>
-<text x="30" y="145" font-size="9" fill="#5c6872">Keep feed and depth fixed during the trial &mdash; only vc (and hence n) changes.</text>
+<svg viewBox="0 0 440 170" role="img" aria-label="Measured diameter drifts over batch against the upper limit">
+<title>Diameter drift over the CTT-T1 batch</title>
+<desc>Three measured diameters 40.006, 40.014, 40.028 climb past the 40.020 upper limit; the third point sits above the limit line.</desc>
+<text x="20" y="20" font-size="11" font-weight="bold" fill="#333">CTT-T1 &Oslash;40: measured diameter vs upper limit 40.020</text>
+<line x1="60" y1="120" x2="400" y2="120" stroke="#cfdbd8" stroke-width="1"/>
+<line x1="60" y1="55" x2="400" y2="55" stroke="#b3261e" stroke-width="1.5" stroke-dasharray="4,3"/>
+<text x="280" y="50" font-size="9" fill="#b3261e">upper limit 40.020</text>
+<circle cx="120" cy="108" r="4" fill="#0b766e"/><text x="98" y="128" font-size="9">40.006</text>
+<circle cx="230" cy="90" r="4" fill="#0b766e"/><text x="208" y="110" font-size="9">40.014</text>
+<circle cx="340" cy="38" r="4" fill="#b3261e"/><text x="312" y="30" font-size="9" fill="#b3261e">40.028 (+0.008)</text>
 </svg>
-<figcaption>Same diameter, speed raised in proportion. The corrected 743 RPM is anchored to the catalog band, not chosen by feel.</figcaption>
+<figcaption>The mean (40.016) is inside, but part 3 exceeds the upper limit. The worst cross-section, not the average, decides acceptance.</figcaption>
 </figure>
 
 <figure class="ctt-figure">
-<svg viewBox="0 0 460 150" role="img" aria-label="Four wear morphologies map to four different corrective levers">
-<desc>Welded nose = raise speed; smooth land = lower speed/wear grade; rake crater = cooler grade; chipped corner = tougher edge/rigidity.</desc>
+<svg viewBox="0 0 460 160" role="img" aria-label="Each wear observation leads to a candidate cause, checks and a trial action">
+<title>From wear observation to candidate action</title>
+<desc>Four rows: observe, candidate cause, what to check, candidate action &mdash; none is a one-to-one rule.</desc>
 <text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Match the morphology before changing a lever</text>
 <g font-size="9">
-<rect x="20" y="45" width="100" height="45" rx="4" fill="#f3e8d0"/><text x="28" y="63">welded nose</text><text x="28" y="78" fill="#5c6872">&rarr; raise vc</text>
-<rect x="130" y="45" width="100" height="45" rx="4" fill="#d7e8e5"/><text x="138" y="63">smooth land</text><text x="138" y="78" fill="#5c6872">&rarr; lower vc / wear grade</text>
-<rect x="240" y="45" width="100" height="45" rx="4" fill="#d7e8e5"/><text x="248" y="63">rake crater</text><text x="248" y="78" fill="#5c6872">&rarr; cooler grade</text>
-<rect x="350" y="45" width="95" height="45" rx="4" fill="#e8d2d0"/><text x="358" y="63">chipped corner</text><text x="358" y="78" fill="#5c6872">&rarr; tougher / rigid</text>
+<rect x="20" y="40" width="95" height="92" rx="4" fill="#f3e8d0"/><text x="28" y="58">welded edge</text><text x="28" y="74" fill="#5c6872">candidate: adhesion</text><text x="28" y="88" fill="#5c6872">check edge/geometry</text><text x="28" y="102" fill="#5c6872">/chip load/lube</text><text x="28" y="122" fill="#0b766e">trial per mfr range</text>
+<rect x="125" y="40" width="95" height="92" rx="4" fill="#d7e8e5"/><text x="133" y="58">smooth VB land</text><text x="133" y="74" fill="#5c6872">candidate: flank wear</text><text x="133" y="88" fill="#5c6872">check VB vs time</text><text x="133" y="102" fill="#5c6872">/temperature</text><text x="133" y="122" fill="#0b766e">plan limit / offset</text>
+<rect x="230" y="40" width="95" height="92" rx="4" fill="#d7e8e5"/><text x="238" y="58">rake crater</text><text x="238" y="74" fill="#5c6872">candidate: thermal</text><text x="238" y="88" fill="#5c6872">check speed/chip heat</text><text x="238" y="102" fill="#5c6872">/coating</text><text x="238" y="122" fill="#0b766e">cooler/harder grade</text>
+<rect x="335" y="40" width="100" height="92" rx="4" fill="#e8d2d0"/><text x="343" y="58">chipped corner</text><text x="343" y="74" fill="#5c6872">candidate: shock</text><text x="343" y="88" fill="#5c6872">check entry/scale</text><text x="343" y="102" fill="#5c6872">/rigidity</text><text x="343" y="122" fill="#0b766e">tougher edge/setup</text>
 </g>
-<text x="20" y="120" font-size="9" fill="#5c6872">Keep the worn insert: the morphology is the evidence that decides which lever to turn.</text>
+<text x="20" y="150" font-size="9" fill="#5c6872">Observe &rarr; candidate cause &rarr; checks &rarr; trial action. The morphology is evidence, not a one-to-one command.</text>
 </svg>
-<figcaption>Only the shiny welded nose with a torn finish says "speed too low" &mdash; the other three want the opposite or a different lever.</figcaption>
+<figcaption>No observation maps to a single lever. Each row names what to check before changing anything.</figcaption>
 </figure>
 
 <h2>Common Mistakes</h2>
 <ul>
-<li><strong>Reaching for a tougher grade when BUE is the issue.</strong> BUE is speed-related. Fix: read the morphology first.</li>
+<li><strong>Releasing part 3 because the mean is inside the limit.</strong> The maximum controls the tolerance. Fix: judge the worst cross-section (page 18).</li>
+<li><strong>Applying a wear offset before checking setup and thermal state.</strong> Fix: rule out the cheap causes first (page 27).</li>
 <li><strong>Changing speed and feed at once.</strong> Fix: one variable, then verify.</li>
 </ul>
 
 <h2>Practice</h2>
 <div class="ctt-practice">
-<details><summary>Q1. Welded material on the nose suggests what?</summary><p>Built-up edge, usually too-low speed in a gummy/work-hardening material.</p></details>
-<details><summary>Q2. What is the single first change?</summary><p>Raise speed within grade limits, then re-observe BUE and finish.</p></details>
+<details><summary>Q1. Part 3 measures &Oslash;40.028 against an upper limit of 40.020. Accept or reject?</summary><p>Reject / not releasable: it is 0.008&nbsp;mm over the upper limit; the mean (40.016) being inside does not rescue an oversized part.</p></details>
+<details><summary>Q2. Roughing &Oslash;50 to &Oslash;40 with radial ap&nbsp;=&nbsp;2&nbsp;mm: how many passes to leave 1&nbsp;mm for finish?</summary><p>Diameter drops 4&nbsp;mm per radial 2&nbsp;mm: 50&rarr;46&rarr;42 (two roughing passes), then a final radial 1&nbsp;mm to &Oslash;40.</p></details>
 </div>
 
 <section class="ctt-sources">
