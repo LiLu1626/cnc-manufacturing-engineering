@@ -48,4 +48,5 @@ if problems:
     for x in problems:
         print("  -", x)
     sys.exit(1)
-print("PASS: sources, allowed hosts, svg title/desc and quiz answers all present.")
+print("PASS (structure only): Sources heading present, external links on the allow-list, every SVG has title/desc, every quiz item has an answer.")
+print("NOTE: this script does NOT probe HTTP reachability and does NOT verify that a reference supports the adjacent claim; see source-register.json audit_status.")

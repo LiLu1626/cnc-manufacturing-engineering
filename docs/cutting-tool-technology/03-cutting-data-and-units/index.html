@@ -153,11 +153,13 @@
 <details><summary>Q2. n = 2000 RPM, zc = 4, fz = 0.05 mm. What is vf?</summary><p>vf = 2000&times;4&times;0.05 = 400 mm/min.</p></details>
 <details><summary>Q3. f = 0.15 mm/rev, r&epsilon; = 0.8 mm. Ideal Ra?</summary><p>Ra = 0.15&sup2;/(32&times;0.8) = 0.0225/25.6 = 0.000879 mm = 0.879 &micro;m (ideal only).</p></details>
 <details><summary>Q4. Why can you not set 3819.72 RPM on the controller?</summary><p>Controllers take integer RPM. You use 3819 or 3800; the exact value is for the calculation, the rounded value for the program.</p></details>
-</div>
+
+<details><summary>You set a table speed for a 20 mm tool but the cutter in the holder is 12 mm. What happens?</summary><p>Cutting speed is wrong because rpm is diameter-dependent. Recompute on the actual 12 mm diameter; do not transfer spindle speeds between diameters.</p></details>
+<details><summary>Feed is mm/min but insert data is per tooth. What must you know to compare?</summary><p>Number of teeth zc; vf = n*zc*fz, so without zc the two feeds cannot be compared.</p></details></div>
 
 <section class="ctt-sources">
-<details><summary>You set a table speed for a 20 mm tool but the cutter in the holder is 12 mm. What happens?</summary><p>Cutting speed is wrong because rpm is diameter-dependent. Recompute on the actual 12 mm diameter; do not transfer spindle speeds between diameters.</p></details>
-<details><summary>Feed is mm/min but insert data is per tooth. What must you know to compare?</summary><p>Number of teeth zc; vf = n*zc*fz, so without zc the two feeds cannot be compared.</p></details>
+
+
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.mitsubishicarbide.com/" target="_blank" rel="noopener">Mitsubishi Materials</a>, <em>Calculation of Cutting Conditions</em> technical reference (formulas n = 1000vc/&pi;D and vf = n&middot;zc&middot;fz).</li>

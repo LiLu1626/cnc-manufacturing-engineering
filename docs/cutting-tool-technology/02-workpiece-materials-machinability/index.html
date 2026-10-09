@@ -118,8 +118,8 @@
 <p>Cast iron looks easy because it chips into small fragments and the graphite lets it flow with little built-up edge, so it tolerates high speeds and even uncoated carbide. But the fractured chip carries hard abrasive particles, and the machined skin abrades the flank, which is why cast-iron inserts wear by flank abrasion rather than by crater or built-up edge. The practical consequence is that the edge wants a wear-resistant rather than super-tough grade, and the fine, dusty chips need good extraction because they score surfaces. It is another case of reading the dominant wear from the material family &mdash; cast iron's problem is abrasion, not heat or welding &mdash; and matching the substrate and coolant strategy to that rather than to the alloy name alone.</p>
 
 <figure class="ctt-figure">
-<svg viewBox="0 0 460 160" role="img" aria-label="Work-hardening: depth of cut must pass through the hardened layer, separate from feed"><title>Work-hardening: depth of cut must pass through the hardened layer, separate from feed</title>
-<desc>Side view of a cut. The hardened skin is a thin surface layer of fixed depth. Feed is the horizontal motion; depth of cut ap is vertical and must exceed the hardened-layer depth to shear fresh soft bulk.</desc>
+<svg viewBox="0 0 460 160" role="img" aria-label="Work-hardening: feed and depth of cut are different quantities"><title>Work-hardening: feed and depth of cut are different quantities</title>
+<desc>Side view comparing a cut within an existing hardened surface layer with a deeper cut extending beyond it; neither case is automatically rubbing.</desc>
 <text x="20" y="18" font-size="11" font-weight="bold" fill="#333">Work-hardening trap (e.g. 304 stainless)</text>
 <rect x="30" y="70" width="400" height="70" fill="#d7e8e5"/>
 <rect x="30" y="70" width="400" height="10" fill="#b3261e"/><text x="35" y="66" font-size="9" fill="#b3261e">hardened skin (fixed depth, not set by feed)</text>
@@ -131,11 +131,11 @@
 <circle cx="330" cy="88" r="6" fill="#0b766e"/>
 <line x1="330" y1="70" x2="330" y2="94" stroke="#0b766e" stroke-width="1.5" marker-end="url(#arw2)"/>
 <text x="340" y="92" font-size="9" fill="#0b766e">ap exceeds layer depth</text>
-<text x="35" y="120" font-size="9" fill="#5c6872">ap within the skin: edge rubs hardened layer &rarr; fast wear</text>
-<text x="245" y="135" font-size="9" fill="#0b766e">ap below skin: shears fresh soft bulk</text>
+<text x="35" y="120" font-size="9" fill="#5c6872">cut within layer: not automatically rubbing</text>
+<text x="245" y="135" font-size="9" fill="#0b766e">deeper cut: extends beyond layer</text>
 <defs><marker id="arw2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#333"/></marker></defs>
 </svg>
-<figcaption>Feed is the horizontal motion; the vertical depth of cut ap must exceed the hardened-layer depth. Do not "raise feed" to get below the skin &mdash; set ap and keep the edge sharp. Thickness shown is illustrative, not to scale.</figcaption>
+<figcaption>Feed direction and depth of cut are different quantities. This schematic compares a cut within an existing hardened surface layer with a deeper cut extending beyond it. Cutting within the layer is not automatically rubbing. Select depth and chip load for the tool, edge preparation, material and finishing allowance; do not treat either a feed increase or a fixed depth rule as a universal remedy. Thickness shown is illustrative, not to scale.</figcaption>
 </figure>
 
 <!--cTT_INSERT_MARKER_02--><p class="ctt-added">Reading machinability is therefore about comparing conditions, not quoting a single grade number. A material that machines well at the catalog feed and speed may frustrate a shop that runs at half the feed to reach a fine finish, because the light undeformed chip thickness rides on the work-hardened layer instead of shearing through it. When you hand this page to a new operator, train them to ask three things before blaming the tool: what feed and depth are actually running, whether the edge is still sharp, and whether the workpiece is work-hardening in the cut. Those three answers explain most "the material is hard to machine" complaints without changing the grade.</p>
@@ -157,11 +157,13 @@
 <details><summary>Q2. Why does low thermal conductivity hurt the tool?</summary><p>Heat cannot leave through the part, so it concentrates at the cutting edge, raising edge temperature and accelerating crater and notch wear.</p></details>
 <details><summary>Q3. Two bars are both labeled &ldquo;aluminum.&rdquo; What should you check before assuming the same speed?</summary><p>The silicon content / alloy and condition. High-silicon (e.g. ~390) is far more abrasive and may need PCD rather than uncoated carbide.</p></details>
 <details><summary>Q4. What does &ldquo;machinability&rdquo; actually measure, and what is it always relative to?</summary><p>A relative measure (speed for fixed tool life, MRR, or finish) &mdash; always relative to a specific tool material and cutting condition.</p></details>
-</div>
+
+<details><summary>A shop runs a stainless part at half feed for finish and sees fast flank wear. Most likely cause?</summary><p>The light feed keeps undeformed chip thickness in the work-hardened layer; the response is a sharp edge and a depth/chip load chosen for the tool and material, not slower feed. Whether to cut below the layer is decided by the finishing allowance, not a universal rule.</p></details>
+<details><summary>Why is machinability a range rather than one speed?</summary><p>It depends on tool material, edge prep, coolant, rigidity and required life; the number is a starting reference confirmed in the actual setup.</p></details></div>
 
 <section class="ctt-sources">
-<details><summary>A shop runs a stainless part at half feed for finish and sees fast flank wear. Most likely cause?</summary><p>The light feed keeps undeformed chip thickness inside the work-hardened layer, so the edge rubs hardened skin. Fix with a sharp edge and enough depth to cut below the skin, not slower feed.</p></details>
-<details><summary>Why is machinability a range rather than one speed?</summary><p>It depends on tool material, edge prep, coolant, rigidity and required life; the number is a starting reference confirmed in the actual setup.</p></details>
+
+
 <h2>Sources</h2>
 <ul>
 <li>ASM International, <em>ASM Handbook Vol. 16: Machining</em> &mdash; reference on material properties and machinability factors.</li>
