@@ -103,13 +103,18 @@
 <desc>Climb milling chip starts thick and thins; conventional milling starts thin and rubs, then thickens.</desc>
 <text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Chip thickness across the cut</text>
 <rect x="30" y="55" width="180" height="40" fill="#cfdbd8"/>
-<path d="M30 55 L210 90 L210 55 Z" fill="#0b766e" opacity="0.7"/>
-<text x="35" y="115" font-size="9" fill="#0b766e">climb: thick &rarr; thin, no rubbing</text>
+<path d="M30 55 L30 90 L210 55 Z" fill="#0b766e" opacity="0.7"/>
+<line x1="45" y1="100" x2="95" y2="100" stroke="#333" marker-end="url(#arw)"/>
+<text x="100" y="103" font-size="8" fill="#333">feed</text>
+<text x="35" y="115" font-size="9" fill="#0b766e">climb: thick at entry &rarr; thin at exit</text>
 <rect x="250" y="55" width="180" height="40" fill="#cfdbd8"/>
-<path d="M250 90 L430 55 L430 90 Z" fill="#b3261e" opacity="0.7"/>
-<text x="255" y="115" font-size="9" fill="#b3261e">conventional: thin rub &rarr; thick, work-hardens</text>
+<path d="M250 55 L430 90 L250 90 Z" fill="#b3261e" opacity="0.7"/>
+<line x1="265" y1="100" x2="315" y2="100" stroke="#333" marker-end="url(#arw)"/>
+<text x="320" y="103" font-size="8" fill="#333">feed</text>
+<text x="255" y="115" font-size="9" fill="#b3261e">conventional: thin at entry &rarr; thick at exit</text>
+<defs><marker id="arw" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#333"/></marker></defs>
 </svg>
-<figcaption>Climb milling is preferred on modern CNC; conventional is reserved for machines with backlash you cannot remove.</figcaption>
+<figcaption>Climb starts thick and thins; conventional starts thin and thickens. Choice also depends on machine backlash and setup, not edge life alone.</figcaption>
 </figure>
 
 <h2>Common Mistakes</h2>

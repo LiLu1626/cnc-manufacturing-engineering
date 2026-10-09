@@ -88,20 +88,20 @@
 <h2>Part B &mdash; Record Reviews (CR1&ndash;CR2, 10 pts each = 20)</h2>
 <p>You are given a record. State whether it is internally consistent, find the error, and give the corrected action. 10 pts per record: 4 for identifying the defect, 3 for the corrected value/action, 3 for the justification.</p>
 <h3>CR1 (10 pts)</h3>
-<p>A selection card reads: "&Oslash;8 3-flute end mill on 6061-T6, vc = 80&nbsp;m/min, n = 7958&nbsp;rpm, vf = 955&nbsp;mm/min." Find the inconsistency and correct it.</p>
+<p>A selection card reads: "&Oslash;8 3-flute end mill on 6061-T6, vc = 80&nbsp;m/min, n = 7958&nbsp;rpm, vf = 955&nbsp;mm/min." Retain fz = 0.04&nbsp;mm/tooth and z = 3. Find the inconsistency and correct it.</p>
 <details><summary>Model answer (10)</summary><p>The n = 7958 corresponds to vc = 200 on &Oslash;8, not vc = 80. At vc = 80, n = 1000&times;80/(&pi;&times;8) = 3183&nbsp;rpm, and vf = 3183&times;3&times;0.04 = 382&nbsp;mm/min. Either the vc should be 200 (keeping n/vf = 7958/955) or the n/vf must be recomputed for 80. (4 points: vc&ndash;n mismatch; 3: correct n/vf; 3: vf follows n&middot;zc&middot;fz.)</p></details>
 <h3>CR2 (10 pts)</h3>
 <p>A turning log: "three measured diameters 40.006 / 40.014 / 40.028, upper limit 40.020. Mean = 40.016 &mdash; OK, release." Find the error and correct the decision.</p>
-<details><summary>Model answer (10)</summary><p>The mean is inside, but part 3 at 40.028 exceeds the upper limit by 0.008&nbsp;mm. Acceptance is by the worst cross-section, not the average. Decision: reject part 3, plan a wear limit/offset before the diameter can exceed 40.020, and rule out setup/thermal first. (4: average-vs-maximum error; 3: reject + offset; 3: worst-section controls.)</p></details>
+<details><summary>Model answer (10)</summary><p>The mean is inside, but part 3 at 40.028 exceeds the upper limit by 0.008&nbsp;mm. Acceptance is by the worst of the three consecutive parts, not the average. Decision: reject part 3, plan a wear limit/offset before the diameter can exceed 40.020, and rule out setup/thermal first. (4: average-vs-maximum error; 3: reject + offset; 3: worst-section controls.)</p></details>
 
 <h2>Part C &mdash; Projects (P1&ndash;P2, 20 pts each = 40)</h2>
 <p>Use the printable selection card and wear-trial log. Each project: correct choice with justification earns full marks; a bare answer earns partial.</p>
 <h3>P1 (20 pts) &mdash; Tool selection</h3>
 <p>Brief: 6061-T6 plate, open pocket 40&times;30&times;8, inside corners R5, finished wall/floor, moderate quantity on a VMC. Fill the selection card: material &rarr; operation &rarr; geometry (diameter/flutes) &rarr; substrate/coating &rarr; starting vc/fz/n/vf &rarr; holder/overhang/coolant. Justify each field.</p>
-<details><summary>Rubric (20)</summary><p>Material/BUE reasoning (4); &Oslash;8 3-flute chosen because radius 4 &lt; R5 and 3 flutes clear chips (5); polished-edge carbide, not heat-resistant coating (3); vc=200/fz=0.04, n&asymp;7958, vf&asymp;955 (5); short ER holder, flood coolant (3). No justification &rarr; half marks.</p></details>
+<details><summary>Rubric (20)</summary><p>Material/BUE reasoning (4); &Oslash;8 3-flute chosen because radius 4 &lt; R5 and 3 flutes clear chips (5); polished-edge carbide with an aluminum-appropriate coating supported by product data (3); vc=200/fz=0.04 stated as classroom assumptions, n&asymp;7958, vf&asymp;955 (5); short ER holder, flood coolant (3). No justification &rarr; half marks.</p></details>
 <h3>P2 (20 pts) &mdash; Wear diagnosis</h3>
 <p>Brief: OD turning 42CrMo4 QT, diameters creep 40.006&rarr;40.014&rarr;40.028 against upper limit 40.020; finish degrades together; edge shows a smooth growing flank land. Name the wear mode, separate wear from overload, state the single first change, and describe how you verify on the trial log.</p>
-<details><summary>Rubric (20)</summary><p>Gradual flank wear, not sudden fracture/chipping (5); rule out seating/offset/thermal before compensating (5); plan a wear limit / small offset, not a grade change (5); verify by VB-vs-time and re-measure diameter, record on the log (5). Calling it BUE or "raise speed" fails the key-point condition.</p></details>
+<details><summary>Rubric (20)</summary><p>Gradual flank wear, not sudden fracture/chipping (5); rule out seating/offset/thermal before compensating (5); first verify wear and size trend, then within tolerance compensate or set a wear limit / index as evidence supports (5); verify by VB-vs-time and re-measure diameter, record on the log (5). Diameter compensation cannot repair a damaged edge or poor surface finish. Calling it BUE or "raise speed" fails the key-point condition.</p></details>
 <p><strong>Pass:</strong> total &ge; 80/100 <em>and</em> every key technical point (the four locked numbers, the wear-to-cause mapping, and the worst-cross-section rule) correct.</p>
 
 <h2>How the locked numbers are derived</h2>

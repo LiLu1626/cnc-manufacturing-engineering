@@ -103,13 +103,17 @@
 <svg viewBox="0 0 460 170" role="img" aria-label="Cost per part versus cutting speed has an optimum"><title>Cost per part versus cutting speed has an optimum</title>
 <desc>Machine-time cost falls as speed rises; tool cost rises as life collapses; their sum has a minimum, not a fastest-speed best.</desc>
 <text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Total cost per part vs speed</text>
+<line x1="60" y1="145" x2="410" y2="145" stroke="#333" stroke-width="1"/>
+<line x1="60" y1="30" x2="60" y2="145" stroke="#333" stroke-width="1"/>
+<text x="330" y="160" font-size="9" fill="#333">cutting speed &rarr;</text>
+<text x="15" y="40" font-size="9" fill="#333">cost/part</text>
 <path d="M60 120 Q160 90 230 55 Q300 90 400 130" fill="none" stroke="#0b766e" stroke-width="2.5"/>
 <path d="M60 50 L400 130" fill="none" stroke="#9aa6b2" stroke-width="1.5" stroke-dasharray="4,3"/>
 <path d="M60 140 L400 60" fill="none" stroke="#b3261e" stroke-width="1.5" stroke-dasharray="4,3"/>
 <circle cx="230" cy="55" r="4" fill="#0b766e"/>
-<text x="240" y="50" font-size="9" fill="#0b766e">minimum total</text>
-<text x="60" y="160" font-size="9" fill="#9aa6b2">dash down: machine time &darr; as speed &uarr;</text>
-<text x="230" y="160" font-size="9" fill="#b3261e">dash up: tool cost &uarr; as life &darr;</text>
+<text x="240" y="50" font-size="9" fill="#0b766e">minimum total (valley)</text>
+<text x="60" y="150" font-size="8" fill="#9aa6b2">machine-time cost &darr; as speed &uarr;</text>
+<text x="230" y="150" font-size="8" fill="#b3261e">tool cost &uarr; as life &darr;</text>
 </svg>
 <figcaption>The optimum sits between too slow (machine bleeds rate) and too fast (edges vanish). Trial a few speeds, don't max the spindle.</figcaption>
 </figure>
