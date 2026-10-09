@@ -84,7 +84,7 @@
 <p>A &Oslash;10&nbsp;mm drill has a standard 118&deg; included point angle. Half-angle = 59&deg;:</p>
 <pre class="ctt-code">h = 10 / (2 &times; tan 59&deg;) = 10 / (2 &times; 1.6643) = 3.004 mm</pre>
 <figure class="ctt-figure">
-<svg viewBox="0 0 420 200" role="img" aria-label="118 degree drill point geometry">
+<svg viewBox="0 0 420 200" role="img" aria-label="118 degree drill point geometry"><title>118 degree drill point geometry</title>
 <desc>A drill with 118 degree included point angle; for a 10 mm diameter the conical point height is 3.004 mm.</desc>
 <line x1="210" y1="20" x2="210" y2="150" stroke="#5c6872" stroke-width="2"/>
 <polygon points="180,60 240,60 210,110" fill="none" stroke="#0b766e" stroke-width="2"/>
@@ -113,7 +113,7 @@
 <p>When the locked n comes out to 3819.72 and the controller only takes integers, the direction of rounding is a small but real decision. Rounding up to 3820 changes the surface speed by a fraction of a percent, which is harmless; but the habit worth keeping is to round toward the safer value when the edge is near a limit. On a brand-new grade in a difficult material, landing on 3800 rather than 3820 keeps you just inside the catalog window on the first trial, and you can always step up once wear confirms the edge is comfortable. The exact 3819.72 belongs in the calculation and the cost math, while the programmed 3800 is what the spindle actually turns &mdash; the page's worked example deliberately shows both. This also keeps the locked numbers consistent: every later page that multiplies 3800&times;4&times;0.04 to get 600-series feed uses the rounded, programmable RPM, not the theoretical one, so the arithmetic traces cleanly from catalog to controller.</p>
 
 <figure class="ctt-figure">
-<svg viewBox="0 0 460 150" role="img" aria-label="Same spindle speed gives a different cutting speed when the diameter changes">
+<svg viewBox="0 0 460 150" role="img" aria-label="Same spindle speed gives a different cutting speed when the diameter changes"><title>Same spindle speed gives a different cutting speed when the diameter changes</title>
 <desc>At 3800 RPM, a 10 millimetre tool sees 120 metres per minute; a 20 millimetre tool at the same RPM sees about 240, double the heat.</desc>
 <text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Why you recompute RPM when D changes</text>
 <circle cx="110" cy="80" r="30" fill="#d7e8e5"/><text x="88" y="125" font-size="9.5" fill="#333">D10 @3800</text>

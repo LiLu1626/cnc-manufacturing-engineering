@@ -70,7 +70,7 @@
 <p>The cheapest monitoring sensor you already own is the spindle load meter. A fresh edge at the locked cut draws a known current; as flank wear grows, the edge rubs more and the same cut needs more power, so load climbs before the part visibly suffers. A simple workflow establishes the baseline on the first good part, then watches for a rise &mdash; say 15&ndash;20% above baseline &mdash; as the trigger to inspect the edge, between scheduled 120-part changes. This catches the slow drift that a part counter alone misses: if T03 suddenly starts drawing higher load at part 80, the edge may be chipping or the incoming material harder, and you learn that at part 80 instead of discovering a bad bore at part 119. Load is not a precision instrument, but as a free trip-wire it is far better than waiting for the operator to notice a dull tone. Combine it with the parts counter and the offset log and you have a closed loop: schedule changes at proven life, and investigate any edge that departs from the baseline early.</p>
 
 <figure class="ctt-figure">
-<svg viewBox="0 0 460 160" role="img" aria-label="Parts counter plus spindle load baseline form a closed loop">
+<svg viewBox="0 0 460 160" role="img" aria-label="Parts counter plus spindle load baseline form a closed loop"><title>Parts counter plus spindle load baseline form a closed loop</title>
 <desc>Bar graph of parts per edge: scheduled change at the proven 120 parts, and an earlier warning if spindle load climbs above the baseline before then.</desc>
 <text x="20" y="20" font-size="11" font-weight="bold" fill="#333">T03: change at 120 parts, watch load in between</text>
 <line x1="40" y1="120" x2="420" y2="120" stroke="#333" stroke-width="1"/>
@@ -85,7 +85,7 @@
 </figure>
 
 <figure class="ctt-figure">
-<svg viewBox="0 0 460 120" role="img" aria-label="The tool record closes the loop across setups">
+<svg viewBox="0 0 460 120" role="img" aria-label="The tool record closes the loop across setups"><title>The tool record closes the loop across setups</title>
 <desc>Identify, log offset, count parts per edge, inspect by load, then replace and reuse the known offset next setup.</desc>
 <text x="20" y="20" font-size="11" font-weight="bold" fill="#333">What the record feeds back</text>
 <g font-size="9.5" fill="#333">

@@ -94,7 +94,7 @@
 <p>Material removal rate (MRR) converts a cut into volume per minute, which is what the spindle power actually has to deliver. In milling, MRR = ae &middot; ap &middot; vf (in consistent units, giving mm&sup3;/min, divided by 1000 to get cm&sup3;/min). Work the locked baseline: ae = 2&nbsp;mm, ap = 10&nbsp;mm, vf = 608&nbsp;mm/min gives MRR = 2&times;10&times;608 = 12&nbsp;160&nbsp;mm&sup3;/min &asymp; 12.2&nbsp;cm&sup3;/min. In turning, MRR = ap &middot; f &middot; vc instead. The reason to keep this formula in the reference is that when the machine stalls or trips on power, the first question is not "is the tool dull" but "what is the MRR and does it fit the spindle" &mdash; which is the same tangential-force-to-power chain from page 04. If two setups remove the same volume, they demand roughly the same power regardless of how they are programmed; the tool choice only changes how efficiently that volume is cut. When the spindle stalls on a heavier pass, confirm the MRR before blaming the insert &mdash; an overloaded machine cannot be fixed by a sharper edge.</p>
 
 <figure class="ctt-figure">
-<svg viewBox="0 0 460 150" role="img" aria-label="Locked formula chain from cutting speed to feed to surface finish">
+<svg viewBox="0 0 460 150" role="img" aria-label="Locked formula chain from cutting speed to feed to surface finish"><title>Locked formula chain from cutting speed to feed to surface finish</title>
 <desc>Chain: vc 120 m/min and D 10 mm give n 3819.72 RPM; with zc 4 and fz 0.04 gives vf 608 mm/min; feed f 0.10 and nose radius 0.4 give Ra 0.781 micrometres.</desc>
 <text x="20" y="20" font-size="11" font-weight="bold" fill="#333">The locked calculation chain</text>
 <g font-size="9.5" fill="#333">
@@ -111,7 +111,7 @@
 </figure>
 
 <figure class="ctt-figure">
-<svg viewBox="0 0 460 130" role="img" aria-label="Quick unit conversions between metric and imperial">
+<svg viewBox="0 0 460 130" role="img" aria-label="Quick unit conversions between metric and imperial"><title>Quick unit conversions between metric and imperial</title>
 <desc>Cutting speed m/min to SFM times 3.281; inch to millimetre times 25.4; micrometres to microinches times 39.4.</desc>
 <text x="20" y="20" font-size="11" font-weight="bold" fill="#333">When a catalog mixes units</text>
 <g font-size="10" fill="#333">

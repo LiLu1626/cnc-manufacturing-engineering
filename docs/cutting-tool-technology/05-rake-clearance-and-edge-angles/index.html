@@ -68,7 +68,7 @@
 B: Ra = 0.10&sup2; / (32 &times; 0.8) = 0.000391 mm = 0.391 &micro;m</pre>
 <p>B predicts half the ideal roughness &mdash; but B also pushes a larger radial force. On a rigid, short-shaft setup B wins; on a long, slender bar supported only at one end, B can chatter and A is the safer choice. The geometry choice depends on the setup, not just the drawing.</p>
 <figure class="ctt-figure">
-<svg viewBox="0 0 440 200" role="img" aria-label="Rake, clearance and wedge angles">
+<svg viewBox="0 0 440 200" role="img" aria-label="Rake, clearance and wedge angles"><title>Rake, clearance and wedge angles</title>
 <desc>2-D section of a cutting wedge: rake angle gamma, clearance angle alpha, wedge angle beta summing to 90 degrees.</desc>
 <text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Edge wedge (schematic, not to scale)</text>
 <rect x="40" y="140" width="360" height="40" fill="#cfdbd8"/>
@@ -102,7 +102,7 @@ B: Ra = 0.10&sup2; / (32 &times; 0.8) = 0.000391 mm = 0.391 &micro;m</pre>
 <p>The rake sign is chosen partly on geometry, but it is also bounded by how much power the spindle has. A negative-rake roughing cut removes the most metal per pass, but its high force draws more spindle power; on a lightly-powered or older machine, that same cut may stall or deflect even though the insert is strong enough. This is why geometry is read together with machine capacity (the result target and the six inputs on page 01), not in isolation: a positive-rake tool cuts freer and lets a smaller machine reach a useful MRR, even if its edge is less robust, because the machine cannot supply the force a negative rake wants. The practical rule is to match the bluntness of the edge to both the cut's interruption and the machine's power &mdash; a stout, high-horsepower spindle can exploit a strong negative-rake geometry, while a smaller machine is better served by a freer positive rake that it can actually drive. When a cut bogs down or surges, it is worth asking whether the geometry is asking for more power than the machine has, rather than assuming the tool is dull.</p>
 
 <figure class="ctt-figure">
-<svg viewBox="0 0 460 150" role="img" aria-label="Positive versus negative rake wedge strength">
+<svg viewBox="0 0 460 150" role="img" aria-label="Positive versus negative rake wedge strength"><title>Positive versus negative rake wedge strength</title>
 <desc>Positive rake gives a thin, sharp wedge and low force; negative rake gives a thick, strong wedge that pushes harder and needs a chipbreaker.</desc>
 <text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Same 90 degrees, two wedges</text>
 <rect x="40" y="110" width="160" height="25" fill="#cfdbd8"/>

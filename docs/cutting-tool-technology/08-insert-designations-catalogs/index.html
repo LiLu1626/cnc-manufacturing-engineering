@@ -69,7 +69,7 @@
 <p>The last field is not a cosmetic detail &mdash; it is a finish specification. In CNMG 12 04 <strong>08</strong>, the 08 means r&epsilon; = 0.8&nbsp;mm. At the locked feed f = 0.10&nbsp;mm/rev, the theoretical roughness is Ra &asymp; f&sup2;/(32&middot;r&epsilon;) = 0.10&sup2;/(32&middot;0.8) = 0.391&nbsp;&micro;m &mdash; a fine finish. If instead you picked a CNMG 12 04 <strong>04</strong> (r&epsilon; = 0.4&nbsp;mm) at the same feed, the theory doubles to 0.781&nbsp;&micro;m. So before ordering, the drawing's required Ra already tells you which nose-radius field to look for: a fine finish pushes you toward 08 or larger, while a roughing pass where chatter matters wants a smaller radius. Decoding the code therefore connects directly back to page 05's trade-off between finish (large nose radius) and rigidity (small nose radius) &mdash; the designation string is where that choice becomes a part number.</p>
 
 <figure class="ctt-figure">
-<svg viewBox="0 0 460 170" role="img" aria-label="Decode CNMG 12 04 08 field by field">
+<svg viewBox="0 0 460 170" role="img" aria-label="Decode CNMG 12 04 08 field by field"><title>Decode CNMG 12 04 08 field by field</title>
 <desc>The code split into shape, clearance, tolerance, clamp, size, thickness and nose radius, with the 08 field meaning 0.8 millimetres.</desc>
 <text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Reading CNMG 12 04 08 left to right</text>
 <g font-size="10" fill="#333">
@@ -88,7 +88,7 @@
 </figure>
 
 <figure class="ctt-figure">
-<svg viewBox="0 0 460 140" role="img" aria-label="Nose radius field sets theoretical roughness at fixed feed">
+<svg viewBox="0 0 460 140" role="img" aria-label="Nose radius field sets theoretical roughness at fixed feed"><title>Nose radius field sets theoretical roughness at fixed feed</title>
 <desc>At f=0.10 mm/rev, a 0.4 millimetre nose radius gives Ra 0.781 micrometres; a 0.8 millimetre radius gives half, 0.391.</desc>
 <text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Last field = finish spec (f = 0.10 mm/rev)</text>
 <rect x="40" y="45" width="150" height="30" fill="#f3e3d0"/><text x="55" y="64" font-size="10" fill="#333">04 &rarr; r&epsilon;=0.4</text>
