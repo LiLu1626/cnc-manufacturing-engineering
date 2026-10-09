@@ -117,6 +117,7 @@
 <figcaption>Same residual imbalance feels quiet at low speed but vibrates at high speed &mdash; match the balance grade to the speed you actually run.</figcaption>
 </figure>
 
+<!--cTT_INSERT_MARKER_22--><p class="ctt-added">Runout and balance turn a nominal edge diameter into an effective one. A tool that trues at the setter but wobbles in the spindle divides the load unevenly across its flutes and shortens life silently. Tool setting is not a once-per-shift formality; it is the measurement that tells you whether the geometry you selected is actually the geometry cutting.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Blaming tool life on the grade while runout is high.</strong> Fix: check runout first.</li>
@@ -133,9 +134,13 @@
 </div>
 
 <section class="ctt-sources">
+<details><summary>A tool trues at the setter but vibrates in cut. Likely cause?</summary><p>Runout appears in the spindle though the setter read zero; check holder seating and collet condition.</p></details>
+<details><summary>Why balance matters more above a certain rpm?</summary><p>Mass imbalance force grows with the square of speed; at low rpm runout dominates, at high rpm balance does.</p></details>
+<details><summary>Why measure runout at the cutting end, not only at the shank?</summary><p>Amplified runout at the tip is what unloads flutes; shank readings understate the effective runout.</p></details>
+<details><summary>Why is a tool that trues cold inaccurate when hot?</summary><p>Spindle and holder thermal growth shift the effective axis; set or re-verify after warm-up for precision work.</p></details>
 <h2>Sources</h2>
 <ul>
-<li><a href="https://www.sandvik.coromant.com/" target="_blank" rel="noopener">Sandvik Coromant</a>, <em>Runout and tool balance</em> knowledge pages.</li>
+<li><a href="https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf" target="_blank" rel="noopener">Sandvik Turning Handbook C-1020-18</a> &mdash; Runout, balancing and tool-setting practice. Used as general reference; starting parameters must be confirmed for the actual tool, material and setup.</li>
 <li>ISO balance-quality grade references (general).</li>
 </ul>
 </section>

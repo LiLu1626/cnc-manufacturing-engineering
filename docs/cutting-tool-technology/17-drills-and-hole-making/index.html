@@ -112,6 +112,8 @@
 <figcaption>The depth/diameter band is a capability envelope: running a shallow indexable drill deep seizes it.</figcaption>
 </figure>
 
+<!--cTT_INSERT_MARKER_17--><p class="ctt-added">A drill is judged as much by how it clears chips as by how it cuts. Long flutes that pack swarf, a point that walks on an inclined surface, or coolant that cannot reach the bottom all convert a quick hole into a wandering one. The point geometry and the flute form are chosen together for the material and the hole depth; do not select a drill on diameter alone.</p>
+<!--cTT_FILL2_17--><p class="ctt-added">Drill life is decided by chip evacuation more often than by edge wear. A deep hole that packs chips near the point re-grinds its own flutes from the inside; pecking and through-coolant are not luxuries on deep holes, they are what keep the point cutting instead of rubbing swarf.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Forgetting point height in depth planning.</strong> Leaves a conical bottom. Fix: add h = D/(2&middot;tan59&deg;) for 118&deg; drills.</li>
@@ -131,9 +133,12 @@
 </div>
 
 <section class="ctt-sources">
+<details><summary>A deep drill packs chips and wanders. Operational fix?</summary><p>Peck to break and clear chips, plus through-coolant. Chip evacuation, not point wear, often limits deep holes.</p></details>
+<details><summary>Why spot drill before a twist drill on an inclined surface?</summary><p>The chisel point walks on a slanted face; the spot drill makes a true starting cone on the programmed XY.</p></details>
+<details><summary>Why do small drills walk more than large ones?</summary><p>They are slender and deflect easily under the chisel-point force, so spot centring matters more on small diameters.</p></details>
 <h2>Sources</h2>
 <ul>
-<li><a href="https://www.sandvik.coromant.com/" target="_blank" rel="noopener">Sandvik Coromant</a>, <em>Drilling / drill point geometry</em> knowledge pages.</li>
+<li><a href="https://www.sandvik.coromant.com/en-gb/milling-appl-guide" target="_blank" rel="noopener">Sandvik Milling Guide</a> &mdash; Drill point geometry, pecking and chip evacuation. Used as general reference; starting parameters must be confirmed for the actual tool, material and setup.</li>
 <li><a href="https://www.mitsubishicarbide.com/" target="_blank" rel="noopener">Mitsubishi Materials</a>, <em>Solid carbide drill</em> technical references.</li>
 <li>Point height h = D/(2&middot;tan59&deg;) uses the locked 118&deg; geometry from page 03.</li>
 </ul>

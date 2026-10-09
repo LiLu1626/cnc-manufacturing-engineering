@@ -96,19 +96,21 @@
 <p>Edge preparation is not set independently of the coating (page 12). A very light hone on a coated insert can actually remove or stress the thin coating at the sharpest point, and a heavy T-land on a sharp, PVD-coated finish edge changes how the coating lays down. This is why grades are sold as a matched system &mdash; substrate, edge prep, coating &mdash; rather than three independent choices you mix and match on the shop floor. Practically, it means you should not "upgrade" the coating on a favourite insert without also checking whether the edge prep behind it still matches, and why re-honing a coated insert yourself (beyond a light touch-up) usually destroys the coating benefit. When a catalog lists a grade for a specific material and operation, the edge prep and coating have already been tuned together; deviating from that system by re-sharpening or swapping one element is how an edge that should last fails early. Treat the insert box as one integrated specification, and read edge prep, coating and substrate together rather than as separate dials.</p>
 
 <figure class="ctt-figure">
-<svg viewBox="0 0 460 130" role="img" aria-label="Chipbreaker feed window on a feed axis"><title>Chipbreaker feed window on a feed axis</title>
-<desc>Below the window the chip strings; inside the window it breaks; far above it jams.</desc>
-<text x="20" y="20" font-size="11" font-weight="bold" fill="#333">Feed must land inside the chipbreaker window</text>
+<svg viewBox="0 0 460 140" role="img" aria-label="Chipbreaker feed window depends on material, depth and insert geometry"><title>Chipbreaker feed window depends on material, depth and insert geometry</title>
+<desc>For a stated material, depth of cut and insert geometry, feeds inside the listed window tend to control chips; below it chips may string, far above they may pack. These are tendencies, not guarantees.</desc>
+<text x="20" y="18" font-size="11" font-weight="bold" fill="#333">Chipbreaker feed window (for a stated material, ap and insert)</text>
 <line x1="40" y1="80" x2="430" y2="80" stroke="#333" stroke-width="1.5"/>
 <rect x="150" y="66" width="180" height="28" fill="#d7e8e5"/>
-<text x="160" y="60" font-size="9" fill="#0b766e">window (e.g. 0.08&ndash;0.20 mm/rev)</text>
-<circle cx="90" cy="80" r="4" fill="#b3261e"/><text x="55" y="105" font-size="9" fill="#b3261e">below: stringy chip</text>
-<circle cx="240" cy="80" r="4" fill="#0b766e"/><text x="200" y="105" font-size="9" fill="#0b766e">inside: C-chip breaks</text>
-<circle cx="395" cy="80" r="4" fill="#b3261e"/><text x="360" y="105" font-size="9" fill="#b3261e">far above: jam</text>
+<text x="155" y="60" font-size="9" fill="#0b766e">catalog window (e.g. 0.08&ndash;0.20 mm/rev, this insert+material+ap)</text>
+<circle cx="90" cy="80" r="4" fill="#b3261e"/><text x="45" y="108" font-size="9" fill="#b3261e">below: chip may string</text>
+<circle cx="240" cy="80" r="4" fill="#0b766e"/><text x="195" y="108" font-size="9" fill="#0b766e">inside: tends to break</text>
+<circle cx="395" cy="80" r="4" fill="#b3261e"/><text x="350" y="108" font-size="9" fill="#b3261e">far above: may pack/jam</text>
 </svg>
-<figcaption>Starving the feed for a fine finish pushes you below the window &mdash; improve finish via nose radius and speed, not by starving feed.</figcaption>
+<figcaption>The window is specific to the material, depth of cut and insert geometry shown on the catalog; landing inside tends to improve chip control but does not guarantee it. Improve finish via nose radius and speed, not by starving feed below the window.</figcaption>
 </figure>
 
+<!--cTT_INSERT_MARKER_06--><p class="ctt-added">When a new insert grade arrives in the shop, its edge prep and chipbreaker shape arrive as a matched pair. Re-honing the edge to "sharpen" it can remove the very hone that protects a thin coating, and the chipbreaker groove only performs inside its stated feed band. Treat the insert as one specification: if the chip shape changes after a touch-up, the prep has changed the geometry.</p>
+<!--cTT_FILL2_06--><p class="ctt-added">A practical check after indexing an insert is the chip shape for the first few seconds, not the first part dimension. If the chip does not curl as expected, the feed or the edge prep is off before any wear appears, and adjusting then costs seconds instead of a scrapped batch later.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Running feed below the chipbreaker window.</strong> Chips do not break. Fix: choose a chipbreaker rated for your actual feed, or raise feed into its window.</li>
@@ -123,14 +125,16 @@
 <div class="ctt-practice">
 <details><summary>Q1. Why is an as-ground edge honed?</summary><p>To micro-round the fragile tip and resist chipping, trading a little sharpness for edge strength.</p></details>
 <details><summary>Q2. What is a T-land for?</summary><p>A small chamfer behind the edge that adds strength for heavy, interrupted or hard cuts.</p></details>
-<details><summary>Q3. A chipbreaker is rated 0.15&ndash;0.35 mm/rev. You run 0.10. What happens?</summary><p>The feed is below the window; the chip never reaches the back wall and does not break, forming a stringy chip.</p></details>
+<details><summary>Q3. A chipbreaker is rated 0.15&ndash;0.35 mm/rev. You run 0.10. What happens?</summary><p>The selected feed lies below the stated application window, so chip control may be poor. Check that the window applies to the actual material, depth of cut and insert geometry. Select suitable geometry or test an approved feed adjustment within the tool and setup limits; chip shape alone does not prove a unique cause.</p></details>
 <details><summary>Q4. How does a chipbreaker break the chip?</summary><p>The back wall forces the chip to curl tightly until it fractures into a short piece.</p></details>
 </div>
 
 <section class="ctt-sources">
+<details><summary>Why not hand-hone a coated finishing insert to sharpen it?</summary><p>The hone is part of the matched edge-prep/coating system; extra honing can strip the thin coating. Treat the insert as one specification.</p></details>
+<details><summary>A long springy chip sits at the bottom of the feed window. Conditional response?</summary><p>Check the window applies to this material, depth and insert, then adjust feed within approved limits; chip shape alone does not prove a unique cause.</p></details>
 <h2>Sources</h2>
 <ul>
-<li><a href="https://www.sandvik.coromant.com/" target="_blank" rel="noopener">Sandvik Coromant</a>, <em>Chipbreakers / Edge preparation</em> knowledge pages (general reference).</li>
+<li><a href="https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf" target="_blank" rel="noopener">Sandvik Turning Handbook C-1020-18</a> &mdash; Edge preparation and chipformer / chip-breaker feed windows. Used as general reference; starting parameters must be confirmed for the actual tool, material and setup.</li>
 <li>ISCAR, <em>Turning grades &amp; chipbreaker geometry</em> catalog guidance.</li>
 <li>All feed windows on this page are classroom illustrations; use the actual catalog for the chosen insert.</li>
 </ul>

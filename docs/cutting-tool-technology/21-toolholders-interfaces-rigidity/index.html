@@ -123,6 +123,8 @@
 <figcaption>Cantilever deflection scales with the cube of length &mdash; the cheapest rigidity available is a shorter tool.</figcaption>
 </figure>
 
+<!--cTT_INSERT_MARKER_21--><p class="ctt-added">The holder is half the tool's effective stiffness. A collet that is not fully seated, a face contact with a chip under it, or an overlong extension multiplies the deflection the spindle sees. When a programmed light cut still chatters, the holder interface is the first place to look, because no grade compensates for a wobbling tool.</p>
+<!--cTT_FILL2_21--><p class="ctt-added">Holder selection is where a good tool choice quietly wins or loses. A cheap holder that allows runout turns an expensive precision end mill into a runout-limited cutter; spending on the holder often pays back faster than stepping up the tool grade.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Using a long holder "just in case."</strong> Extra overhang guarantees chatter. Fix: shortest assembly that clears.</li>
@@ -139,9 +141,13 @@
 </div>
 
 <section class="ctt-sources">
+<details><summary>A light programmed cut chatters on a small end mill. Interface check first?</summary><p>Collet seating, clean face contact and overhang. Runout at the holder causes chatter regardless of grade.</p></details>
+<details><summary>Why does an expensive tool lose value in a cheap holder?</summary><p>Runout divides the load across flutes and shortens life; holder quality often pays back more than grade.</p></details>
+<details><summary>Why does a shrink-fit holder often outperform an ER collet for small mills?</summary><p>Higher concentricity and less runout at speed, which spreads load evenly across flutes.</p></details>
+<details><summary>Why torque the retention knob and pullstud to spec?</summary><p>Under-torque allows movement and runout; over-torque can distort the holder. Spec torque keeps seating repeatable.</p></details>
 <h2>Sources</h2>
 <ul>
-<li><a href="https://www.sandvik.coromant.com/" target="_blank" rel="noopener">Sandvik Coromant</a>, <em>Toolholding / overhang</em> knowledge pages.</li>
+<li><a href="https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf" target="_blank" rel="noopener">Sandvik Turning Handbook C-1020-18</a> &mdash; Tool overhang, clamping and rigidity principles. Used as general reference; starting parameters must be confirmed for the actual tool, material and setup.</li>
 <li>HSK/BT interface references (general).</li>
 <li>Ratios are classroom guidance; verify against the holder catalog.</li>
 </ul>

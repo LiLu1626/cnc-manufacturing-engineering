@@ -127,6 +127,8 @@
 <figcaption>Work from catalog vc and back-calculate n for the diameter in the holder; never carry the last RPM over.</figcaption>
 </figure>
 
+<!--cTT_FILL2_03--><p class="ctt-added">When a beginner mixes the units, the error is rarely obvious on the readout: a feed set in inches where millimetres are expected either barely cuts or overloads the edge. Building the habit of writing the unit next to every number on the worksheet is what prevents that class of mistake, and it also makes the worksheet readable by the next shift without guesswork.</p>
+<p class="ctt-added">Finally, never read a speed number off a sticker and assume it applies to every diameter; the spindle speed that is safe on a small mill may be a different condition on a large cutter at the same surface speed. Always recompute on the actual diameter in the holder.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Forgetting the &times;1000.</strong> Using vc in m/min directly with D in mm gives a result 1000&times; too small. Fix: always include 1000 in n = 1000&middot;vc/(&pi;D).</li>
@@ -154,10 +156,12 @@
 </div>
 
 <section class="ctt-sources">
+<details><summary>You set a table speed for a 20 mm tool but the cutter in the holder is 12 mm. What happens?</summary><p>Cutting speed is wrong because rpm is diameter-dependent. Recompute on the actual 12 mm diameter; do not transfer spindle speeds between diameters.</p></details>
+<details><summary>Feed is mm/min but insert data is per tooth. What must you know to compare?</summary><p>Number of teeth zc; vf = n*zc*fz, so without zc the two feeds cannot be compared.</p></details>
 <h2>Sources</h2>
 <ul>
 <li><a href="https://www.mitsubishicarbide.com/" target="_blank" rel="noopener">Mitsubishi Materials</a>, <em>Calculation of Cutting Conditions</em> technical reference (formulas n = 1000vc/&pi;D and vf = n&middot;zc&middot;fz).</li>
-<li><a href="https://www.sandvik.coromant.com/" target="_blank" rel="noopener">Sandvik Coromant</a>, <em>Cutting speed and spindle speed / Feed and feed rate</em> knowledge pages.</li>
+<li><a href="https://www.sandvik.coromant.com/en-gb/milling-appl-guide" target="_blank" rel="noopener">Sandvik Milling Guide</a> &mdash; Cutting data: speed, feed and feed-rate definitions in the Milling Guide. Used as general reference; starting parameters must be confirmed for the actual tool, material and setup.</li>
 <li>The 118&deg; drill point geometry and 0.781&nbsp;&micro;m Ra use textbook formulas; all vc values are classroom assumptions.</li>
 </ul>
 </section>

@@ -121,6 +121,7 @@
 <figcaption>An undersized pre-drill overloads and breaks the tap; size it before choosing speed or peck.</figcaption>
 </figure>
 
+<!--cTT_INSERT_MARKER_19--><p class="ctt-added">Threading is a multi-pass cut where every pass re-enters the same groove. Tool wear or a slight deflection on an early pass shows up as a thread that will not gauge later, so the edge condition and the programmed depth both matter. A worn threading tool produces undersize or torn threads that are easy to misread as a depth error; check the edge before adjusting the last pass.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Taking the full depth in one pass.</strong> The insert overloads and chips. Fix: multiple decreasing passes.</li>
@@ -138,9 +139,12 @@
 </div>
 
 <section class="ctt-sources">
+<details><summary>A thread will not gauge though last-pass depth looks right. Edge check first?</summary><p>A worn threading edge tears or undersizes and is mistaken for a depth error. Inspect the insert before adjusting depth.</p></details>
+<details><summary>Why multiple threading passes rather than one full depth?</summary><p>Each pass must leave a controllable chip load; one full-depth pass overloads the edge and causes deflection.</p></details>
+<details><summary>What happens if the spindle speed on a lathe thread is wrong direction?</summary><p>The tool follows the helix incorrectly; confirm M03/M04 against the hand of thread and lead before the first pass.</p></details>
 <h2>Sources</h2>
 <ul>
-<li><a href="https://www.sandvik.coromant.com/" target="_blank" rel="noopener">Sandvik Coromant</a>, <em>Threading / infeed methods</em> knowledge pages.</li>
+<li><a href="https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf" target="_blank" rel="noopener">Sandvik Turning Handbook C-1020-18</a> &mdash; Threading insert grades, chipbreaker and pass depth. Used as general reference; starting parameters must be confirmed for the actual tool, material and setup.</li>
 <li>ISO metric thread standards (pitch and profile reference).</li>
 <li>Pass counts are classroom illustrations; match to the insert catalog.</li>
 </ul>

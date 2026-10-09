@@ -119,6 +119,8 @@
 <figcaption>The chip is a free diagnostic: its shape tells you the material regime and whether feed or speed is wrong.</figcaption>
 </figure>
 
+<!--cTT_INSERT_MARKER_04--><p class="ctt-added">In practice, the force and heat picture explains why a stable cut feels quiet. When the chip thickness is correct and the edge is sharp, the bulk of the heat leaves in the chip and the workpiece stays near the temperature of the workshop; chatter or a built-up edge pushes heat into the edge and the part, and that is when dimensions drift and finish collapses.</p>
+<!--cTT_FILL2_04--><p class="ctt-added">Because the heat leaves mostly with the chip, a chip that is thick and warm but not glowing is usually a sign of a well-loaded cut, while a red-hot chip is a signal that the speed or grade is carrying more heat than the edge can handle. Reading the chip temperature is a free diagnostic that no sensor on the machine gives you for free.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Reducing feed to get a better finish.</strong> Too-light feed rubs, work-hardens and worsens finish. Fix: keep feed in the designed chip-thickness window and use nose radius/geometry for finish.</li>
@@ -140,10 +142,12 @@
 </div>
 
 <section class="ctt-sources">
+<details><summary>A red-hot chip leaves the cut. Which input first?</summary><p>Lower cutting speed or move to a more heat-resistant grade; heat rises strongly with speed, coolant alone does not remove the source.</p></details>
+<details><summary>Why does a sharp edge cut with less force than a worn one?</summary><p>A worn flank rubs the fresh surface, adding friction and force; a sharp edge shears cleanly. The same program on fresh and worn edges behaves differently.</p></details>
 <h2>Sources</h2>
 <ul>
 <li>ASM International, <em>ASM Handbook Vol. 16: Machining</em> &mdash; chip formation, force components and heat partition.</li>
-<li><a href="https://www.sandvik.coromant.com/" target="_blank" rel="noopener">Sandvik Coromant</a>, <em>Chip formation / Cutting forces</em> knowledge pages (general reference).</li>
+<li><a href="https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf" target="_blank" rel="noopener">Sandvik Turning Handbook C-1020-18</a> &mdash; Chip formation, forces and heat in the Turning Handbook theory section. Used as general reference; starting parameters must be confirmed for the actual tool, material and setup.</li>
 <li>Chip-type and heat-partition percentages are textbook classroom illustrations; exact values depend on material, edge and speed.</li>
 </ul>
 </section>

@@ -1,0 +1,52 @@
+{
+  "version": "1.0",
+  "note": "Locked worked-example baselines for the Cutting Tool Technology course. Do not drift these numbers between text, figures, tables and answers.",
+  "examples": {
+    "CTT-M1": {
+      "operation": "aluminum pocket face-milling",
+      "workpiece": "6061-T6",
+      "tool_diameter_mm": 8,
+      "flutes": 3,
+      "vc_m_per_min": 200,
+      "fz_mm_per_tooth": 0.04,
+      "n_rpm": 7958,
+      "vf_mm_per_min": 955,
+      "corner_radius_note": "part corner R5 minus tool radius R4 => center-path radius R1"
+    },
+    "CTT-T1": {
+      "operation": "turning wear case",
+      "workpiece": "42CrMo4",
+      "raw_od_mm": 50,
+      "finished_od_mm": 40,
+      "length_mm": 60,
+      "fn_mm_per_rev": 0.20,
+      "n_rpm": 1000,
+      "vf_mm_per_min": 200,
+      "measured_od_consecutive_parts_mm": [40.006, 40.014, 40.028],
+      "upper_limit_mm": 40.020,
+      "decision": "worst of three consecutive parts controls; part 3 exceeds by 0.008 mm"
+    },
+    "CTT-H1": {
+      "operation": "drill-bore-ream hole quality",
+      "workpiece": "304 stainless",
+      "finished_diameter_mm": "20.000-20.021",
+      "predrill_diameter_mm": 19.80,
+      "radial_ream_stock_mm": 0.10,
+      "drill_point_angle_deg": 118,
+      "point_depth_for_depth_25": "9.9/tan(59) ~= 5.949 mm",
+      "ideal_total_depth_mm": 25.949
+    },
+    "general": {
+      "spindle_speed": "n = 1000*vc/(pi*D)",
+      "feed_rate": "vf = n*zc*fz",
+      "surface_finish": "Ra ~= f^2/(31*r_eps); f=0.10, r=0.4 -> Ra ~= 0.781 um",
+      "cantilever_deflection": "delta proportional to L^3; doubling L gives 8x deflection",
+      "solid_bar_stiffness": "I proportional to D^4"
+    },
+    "cost": {
+      "insert_A": 0.64,
+      "insert_B": 0.525,
+      "note": "compare cost per accepted part, not price per edge"
+    }
+  }
+}

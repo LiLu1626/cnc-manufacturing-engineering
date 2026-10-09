@@ -42,7 +42,7 @@
 <p>A turning setup is a <strong>toolholder</strong> clamped in the turret that holds a disposable <strong>insert</strong>. The insert <strong>shape</strong> (triangle, 80&deg; rhombic, 55&deg;, square) determines how many corners you get and how sharp an internal corner you can reach. The holder's entering angle changes chip-thickness distribution and the split of cutting force. Here &kappa;<sub>r</sub> is the entering angle between the major cutting edge and the feed direction; under the complementary convention lead = 90&deg; &minus; &kappa;<sub>r</sub>. An entering angle near 90&deg; can reduce the radial component compared with a smaller entering angle; this is not a claim that raising the complementary lead angle reduces radial force &mdash; check the holder geometry. <strong>Boring bars</strong> reach inside holes and are limited by overhang.</p>
 
 <h2>Why It Matters</h2>
-<p>In turning, radial force pushes the tool away from the rotating work &mdash; exactly the direction that deflects a slender bar or thin wall. The lead angle trades this: a larger lead angle spreads the cut and lowers the radial force per pass, but changes chip thickness. Choose the wrong holder and you cannot reach the feature (interference); choose too long a boring bar and the hole comes out tapered and chatters. This is where turning rigidity is won or lost.</p>
+<p>In turning, radial force pushes the tool away from the rotating work &mdash; exactly the direction that deflects a slender bar or thin wall. Use the entering angle &kappa;<sub>r</sub> consistently: an entering angle near 90&deg; can reduce the radial component compared with a smaller entering angle. Under the complementary convention lead = 90&deg; &minus; &kappa;<sub>r</sub>; increasing this lead angle is not the same as increasing &kappa;<sub>r</sub>. Choose the holder geometry using the manufacturer's boring application guidance and the setup's stiffness. Choose the wrong holder and you cannot reach the feature (interference); choose too long a boring bar and the hole comes out tapered and chatters. This is where turning rigidity is won or lost.</p>
 
 <h2>How It Works</h2>
 <h3>Insert shape and corners</h3>
@@ -56,7 +56,7 @@
 <tr><td>Rhombic 35&deg; (V)</td><td>2</td><td>copying / contouring, sharp points</td></tr>
 </tbody></table></div>
 <h3>Lead angle and radial force</h3>
-<p>A smaller lead angle concentrates force radially and pushes the tool away; a larger lead angle deflects more force axially and can reduce deflection on a thin wall, but changes chip thickness. The holder designation fixes this angle &mdash; you do not set it per part.</p>
+<p>A smaller entering angle concentrates force radially and pushes the tool away; an entering angle near 90&deg; tilts more force toward the axial direction and can reduce push-away on a thin wall, while changing chip thickness. Do not transfer this guidance by substituting the complementary lead name, because the two move in opposite directions. The holder designation fixes this angle &mdash; you do not set it per part.</p>
 <h3>Boring bar overhang</h3>
 <p>A boring bar reaching into a hole is a cantilever. Keep overhang to diameter ratio within the bar's design limit (typically steel bars ~4:1, carbide-shank bars ~6:1 or more). Beyond that, deflection and chatter grow rapidly and the bore comes out tapered or lobed.</p>
 
@@ -87,8 +87,8 @@
 <h3>Why the tip must be set on centre height</h3>
 <p>On a lathe, setting the insert exactly on the workpiece centreline is not a fine-detail ritual &mdash; it changes the actual rake and clearance angles the edge sees. If the tip sits above centre, the effective clearance angle shrinks and the tool rubs; if it sits well below centre, the effective rake changes and the edge tends to dig in or the cut deflects, especially on a small diameter where a few hundredths of a millimetre is a large angular error. Facing to the centre also depends on it: a tool set too high or too low leaves a nub or pushes at the dead centre. This is why tool-height setting (shims, the tool-setting offset) is checked after every tool change, and why the same holder can cut well or rub depending on a tiny vertical offset &mdash; it is the turning analogue of the tool-length and work offsets in the CNC programming course. A correctly shaped insert on a holder mounted slightly off-centre does not cut the geometry its catalog assumes. Always set the tip on the centreline of the part for the diameter you are turning, and re-check after a turret or tool change.</p>
 
-<h3>Why the lead angle decides where the force goes</h3>
-<p>The cutting force on a turning insert splits into radial (pushing the tool away from the part), axial (along the spindle) and tangential components, and the lead angle decides how much lands on the radial one. A small lead angle points the force largely radially &mdash; pushing a boring bar or thin wall outward, which is exactly the direction that causes taper and chatter. A larger lead angle tilts the cut so more force runs axially, which both lowers the radial push and thins the chip for the same feed, and that is why a high-lead holder is preferred on thin-walled or slender turning work. The trade is that a very large lead angle concentrates force at the point and can weaken the corner, and it changes how the chip curls, so it is not "bigger is always better" &mdash; it is a dial matched to whether deflection (thin wall, long bar) or corner strength (heavy roughing) is the limiting factor. When a bored hole comes out tapered, the first suspects are overhang (page above) and an over-small lead angle that pushes radially, not a dull insert. Set the holder angle for the force direction the part can tolerate, the same way a milling tool's engagement is chosen for deflection.</p>
+<h3>Why the entering angle decides where the force goes</h3>
+<p>The cutting force on a turning insert splits into radial (pushing the tool away from the part), axial (along the spindle) and tangential components, and the entering angle &kappa;<sub>r</sub> decides how much lands on the radial one. A smaller entering angle points the force largely radially &mdash; pushing a boring bar or thin wall outward, which is exactly the direction that causes taper and chatter. An entering angle near 90&deg; tilts the cut so more force runs axially, which lowers the radial push and thins the chip for the same feed, and that is why a near-90&deg; entering holder is preferred on thin-walled or slender turning work. The trade is that a very large entering angle concentrates force at the point and can weaken the corner, and it changes how the chip curls, so it is not "bigger is always better" &mdash; it is a dial matched to whether deflection (thin wall, long bar) or corner strength (heavy roughing) is the limiting factor. When a bored hole comes out tapered, the first suspects are overhang (page above) and an entering angle that pushes radially, not a dull insert. Set the holder angle for the force direction the part can tolerate, the same way a milling tool's engagement is chosen for deflection.</p>
 
 <h3>Why a damped boring bar moves the rigidity limit outward</h3>
 <p>When a hole simply cannot be reached within a steel bar's ~4:1 limit, the usual answer is not to accept chatter but to change the bar. A carbide-shank bar is stiffer and heavier, moving the usable overhang toward 6:1, but even that runs out for deep bores. The next step is a damped (anti-vibration) bar, which carries an internal tuned mass that actively cancels the chatter rather than merely adding stiffness. This is why deep, slender bores that would be impossible on a steel bar become routine with a damped bar &mdash; the L/D envelope is roughly doubled or more. The economic point is that these bars are expensive and precision tools, so you reserve them for the deep, narrow bores where a steel bar genuinely cannot work, rather than fitting one to every shallow bore. When a bar chatters at its limit, the engineering choice is to move to the stiffer/damped class (page 21), not to slow the cut and live with a tapered hole. Recognising when you have crossed the cantilever limit and reached for the right bar class is the whole skill of internal turning.</p>
@@ -110,6 +110,7 @@
 <figcaption>The insert catalog geometry is only valid when the tip sits on the part centreline; re-check after every tool change.</figcaption>
 </figure>
 
+<!--cTT_INSERT_MARKER_16--><p class="ctt-added">On a lathe the insert and its holder are a matched stiffness chain. A long overhang, a loose shim or a weak clamping screw turns a capable insert into a vibrating, dimensionally drifting edge. Before blaming the grade on a turning job, walk the chain: insert seat, screw torque, holder projection and turret index. Most "tool wear" complaints on a lathe begin somewhere in that chain.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Reaching too far with a steel boring bar.</strong> Chatter and taper. Fix: keep L/D in range, or use a carbide/anti-vibration bar.</li>
@@ -123,15 +124,18 @@
 
 <h2>Practice</h2>
 <div class="ctt-practice">
-<details><summary>Q1. Why does a larger lead angle help a thin wall?</summary><p>It directs more force axially and less radially, reducing push-away and deflection.</p></details>
+<details><summary>Q1. Under the convention lead = 90&deg; &minus; &kappa;<sub>r</sub>, what lead angle corresponds to &kappa;<sub>r</sub> = 90&deg;? Why must the convention be stated?</summary><p>0&deg;. Complementary angles move in opposite directions, so force-direction guidance cannot be transferred by substituting one name for the other &mdash; always state whether you mean entering angle or lead.</p></details>
 <details><summary>Q2. A 16&nbsp;mm bar reaches 64&nbsp;mm into a hole. L/D? OK for a steel bar?</summary><p>64/16 = 4:1 &mdash; at the upper end of a typical steel bar limit; watch for chatter.</p></details>
 <details><summary>Q3. Which insert shape reaches a very sharp internal corner?</summary><p>A sharper point such as a 35&deg; rhombic (V) or thin triangle, within strength limits.</p></details>
 </div>
 
 <section class="ctt-sources">
+<details><summary>A lathe part drifts slowly; you suspect the grade. Stiffness checks first?</summary><p>Insert seat, screw torque, holder projection and turret index. Most lathe wear complaints start in the clamping chain.</p></details>
+<details><summary>Why does boring-bar overhang matter more than the insert grade?</summary><p>Deflection scales strongly with overhang; a graded edge on a long bar vibrates. Shorten overhang first.</p></details>
+<details><summary>What does turret index repeatability affect on a lathe?</summary><p>Consistent tool position between stations; a worn index repeats the same offset error on every part.</p></details>
 <h2>Sources</h2>
 <ul>
-<li><a href="https://www.sandvik.coromant.com/" target="_blank" rel="noopener">Sandvik Coromant</a>, <em>Turning tools / Boring bars</em> knowledge pages.</li>
+<li><a href="https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf" target="_blank" rel="noopener">Sandvik Turning Handbook C-1020-18</a> &mdash; Turning insert grades, geometries and toolholders. Used as general reference; starting parameters must be confirmed for the actual tool, material and setup.</li>
 <li>ISO 30079 / toolholder designation standards (general reference).</li>
 <li>L/D limits are classroom illustrations; use the bar manufacturer's rated overhang.</li>
 </ul>

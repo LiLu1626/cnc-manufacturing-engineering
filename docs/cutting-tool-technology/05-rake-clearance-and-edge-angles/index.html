@@ -114,6 +114,8 @@ B: Ra = 0.10&sup2; / (32 &times; 0.8) = 0.000391 mm = 0.391 &micro;m</pre>
 <figcaption>You cannot make the edge razor-sharp and bulletproof at once &mdash; the 90&deg; sum trades rake against wedge strength.</figcaption>
 </figure>
 
+<!--cTT_INSERT_MARKER_05--><p class="ctt-added">Put the angles together on the shop floor and they explain everyday complaints. A lathe tool that rubs instead of shears often has too small a clearance angle for the diameter being turned, so the flank pushes on the freshly machined surface; a milling insert that cratered quickly on a gummy material may need a more positive rake to reduce the heat it generates. Geometry is not a catalog detail to copy from a colleague's toolbox; it is the reason the same grade behaves differently on the same machine.</p>
+<!--cTT_FILL2_05--><p class="ctt-added">Once the angles are named, the catalog becomes readable: the same insert shape offered with a different clearance is a different compromise between strength and rubbing. Do not assume a holder that holds one insert can simply be re-tipped with a stronger-looking geometry, because the chip flow and force direction change with the angle pair.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Choosing the biggest nose radius for finish regardless of rigidity.</strong> It chatters on slender parts. Fix: size the nose radius to the setup, and use the smallest radius that meets the finish.</li>
@@ -135,9 +137,11 @@ B: Ra = 0.10&sup2; / (32 &times; 0.8) = 0.000391 mm = 0.391 &micro;m</pre>
 </div>
 
 <section class="ctt-sources">
+<details><summary>A lathe tool rubs and burns though the edge looks sharp. Which angle?</summary><p>Working clearance may be too small for the turned diameter, so the flank contacts the fresh surface. Check it against the actual diameter before blaming speed.</p></details>
+<details><summary>What happens to force when rake is made more positive?</summary><p>The edge shears more easily, lowering force and heat, but a very positive rake is weaker for interrupted or hard cuts. It is a strength-vs-force trade-off.</p></details>
 <h2>Sources</h2>
 <ul>
-<li><a href="https://www.sandvik.coromant.com/" target="_blank" rel="noopener">Sandvik Coromant</a>, <em>Cutting edges / Rake and clearance angles</em> knowledge pages (general reference).</li>
+<li><a href="https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf" target="_blank" rel="noopener">Sandvik Turning Handbook C-1020-18</a> &mdash; Rake, clearance and entering-angle geometry in the Turning Handbook. Used as general reference; starting parameters must be confirmed for the actual tool, material and setup.</li>
 <li>ISO 3002 / ASM Handbook Vol. 16 &mdash; geometry angle definitions.</li>
 <li>The 0.781 / 0.391&nbsp;&micro;m values are ideal geometric predictions from the locked Ra formula on page 03.</li>
 </ul>

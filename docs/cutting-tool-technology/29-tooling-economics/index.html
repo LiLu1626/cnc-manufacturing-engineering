@@ -118,6 +118,7 @@
 <figcaption>The optimum sits between too slow (machine bleeds rate) and too fast (edges vanish). Trial a few speeds, don't max the spindle.</figcaption>
 </figure>
 
+<!--cTT_INSERT_MARKER_29--><p class="ctt-added">Cost per accepted part, not price per edge, is the number that matters. A cheaper insert that fails early and adds inspection and downtime can cost more per part than a pricier grade that runs the whole shift. Comparing tools on the edge price alone ignores tool change time and scrap, and leads to buying the wrong economy.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Comparing insert prices, not cost per part.</strong> Fix: include life and machine time.</li>
@@ -134,9 +135,13 @@
 </div>
 
 <section class="ctt-sources">
+<details><summary>A cheaper insert fails half as often per edge. Why may it cost more per part?</summary><p>Edge price ignores tool-change time and scrap. Cost per accepted part, not price per edge, decides economy.</p></details>
+<details><summary>When is the cheapest tool NOT the best economy?</summary><p>When short life drives frequent changes and scrap; cost per accepted part is the true comparator.</p></details>
+<details><summary>When does tool cost dominate over machine cost?</summary><p>On long, high-production runs where insert life and changes repeat; then cost per part is sensitive to edge life.</p></details>
+<details><summary>Why include inspection cost in cost-per-part?</summary><p>A tool that leaves more variation raises gauging and sorting time, a real per-part expense.</p></details>
 <h2>Sources</h2>
 <ul>
-<li><a href="https://www.sandvik.coromant.com/" target="_blank" rel="noopener">Sandvik Coromant</a>, <em>Cost per component</em> methodology.</li>
+<li><a href="https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf" target="_blank" rel="noopener">Sandvik Turning Handbook C-1020-18</a> &mdash; Cost per component and grade economy. Used as general reference; starting parameters must be confirmed for the actual tool, material and setup.</li>
 <li>0.64 / 0.525 are locked classroom baselines; replace with real shop data.</li>
 </ul>
 </section>

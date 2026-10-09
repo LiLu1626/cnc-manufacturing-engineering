@@ -118,6 +118,8 @@
 <figcaption>Thicker core = stiffer but less chip room. Pick flute count for the material's chip, then compute vf = n&middot;zc&middot;fz.</figcaption>
 </figure>
 
+<!--cTT_INSERT_MARKER_14--><p class="ctt-added">A solid carbide end mill is bought as a complete system: substrate, helix, number of flutes, corner radius and coating are already balanced by the maker. Changing one element in service, such as re-grinding the corner radius, changes chip evacuation and tool deflection. Treat the catalog geometry as fixed, and choose the variant that matches the pocket depth and material rather than adapting a general-purpose mill.</p>
+<!--cTT_FILL2_14--><p class="ctt-added">When a solid mill breaks early at the corner, the cause is often the engagement at entry rather than the diameter itself. A programmed plunge into a solid pocket overloads the centre-cutting tip; a ramping or helical entry spreads that load. Check the entry strategy before condemning the flute count or the coating.</p>
 <h2>Common Mistakes</h2>
 <ul>
 <li><strong>Finishing with a roughing mill.</strong> Serrations leave marks. Fix: rough then finish with a smooth-flute mill.</li>
@@ -139,9 +141,11 @@
 </div>
 
 <section class="ctt-sources">
+<details><summary>A solid mill breaks at the corner during pocket entry. Check before changing tool?</summary><p>The entry strategy: a straight plunge overloads the centre tip. Use ramp/helical entry and check rigidity first.</p></details>
+<details><summary>Why does re-grinding the corner radius degrade a solid mill?</summary><p>It changes chip evacuation and the maker's balanced geometry. Choose the right catalog radius rather than adapting a general tool.</p></details>
 <h2>Sources</h2>
 <ul>
-<li><a href="https://www.sandvik.coromant.com/" target="_blank" rel="noopener">Sandvik Coromant</a>, <em>Solid end mills</em> catalog and knowledge pages.</li>
+<li><a href="https://www.sandvik.coromant.com/en-gb/milling-appl-guide" target="_blank" rel="noopener">Sandvik Milling Guide</a> &mdash; Solid carbide end mill geometries and application notes. Used as general reference; starting parameters must be confirmed for the actual tool, material and setup.</li>
 <li><a href="https://www.osgtool.com/" target="_blank" rel="noopener">OSG</a> / Nachi, <em>Solid carbide end mill geometries</em> technical references.</li>
 <li>Speed/feed figures are classroom assumptions; verify against the catalog for the material.</li>
 </ul>

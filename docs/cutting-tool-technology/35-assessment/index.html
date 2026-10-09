@@ -91,8 +91,8 @@
 <p>A selection card reads: "&Oslash;8 3-flute end mill on 6061-T6, vc = 80&nbsp;m/min, n = 7958&nbsp;rpm, vf = 955&nbsp;mm/min." Retain fz = 0.04&nbsp;mm/tooth and z = 3. Find the inconsistency and correct it.</p>
 <details><summary>Model answer (10)</summary><p>The n = 7958 corresponds to vc = 200 on &Oslash;8, not vc = 80. At vc = 80, n = 1000&times;80/(&pi;&times;8) = 3183&nbsp;rpm, and vf = 3183&times;3&times;0.04 = 382&nbsp;mm/min. Either the vc should be 200 (keeping n/vf = 7958/955) or the n/vf must be recomputed for 80. (4 points: vc&ndash;n mismatch; 3: correct n/vf; 3: vf follows n&middot;zc&middot;fz.)</p></details>
 <h3>CR2 (10 pts)</h3>
-<p>A turning log: "three measured diameters 40.006 / 40.014 / 40.028, upper limit 40.020. Mean = 40.016 &mdash; OK, release." Find the error and correct the decision.</p>
-<details><summary>Model answer (10)</summary><p>The mean is inside, but part 3 at 40.028 exceeds the upper limit by 0.008&nbsp;mm. Acceptance is by the worst of the three consecutive parts, not the average. Decision: reject part 3, plan a wear limit/offset before the diameter can exceed 40.020, and rule out setup/thermal first. (4: average-vs-maximum error; 3: reject + offset; 3: worst-section controls.)</p></details>
+<p>A turning log records three consecutive parts: "diameters 40.006 / 40.014 / 40.028, upper limit 40.020. Mean = 40.016 &mdash; OK, release." Find the error and correct the decision.</p>
+<details><summary>Model answer (10)</summary><p>The mean is inside, but part 3 at 40.028 exceeds the upper limit by 0.008&nbsp;mm. Acceptance is by the worst of the three consecutive parts, not the average. Decision: reject part 3, plan a wear limit/offset before the diameter can exceed 40.020, and rule out setup/thermal first. (4: average-vs-per-part error; 3: reject part 3 + plan wear limit; 3: worst of the three parts controls.)</p></details>
 
 <h2>Part C &mdash; Projects (P1&ndash;P2, 20 pts each = 40)</h2>
 <p>Use the printable selection card and wear-trial log. Each project: correct choice with justification earns full marks; a bare answer earns partial.</p>
