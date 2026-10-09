@@ -44,10 +44,10 @@
 <p>Buying the cheapest insert saves cents on the tool but loses dollars on machine time and scrapped parts. Conversely, a premium grade paid for only if it measurably extends life or raises material removal. The locked case below shows why the cheaper-looking option can lose.</p>
 
 <h2>How It Works</h2>
-<p>Approximate tooling cost per part = (tool cost usable per edge &times; edges used per part) + machine-time share. The locked CTT baseline uses two competing options, A and B, at <strong>0.64 vs 0.525 cost units per part</strong> &mdash; the seemingly pricier tool B wins because it lasts longer / removes more, lowering cost per component.</p>
+<p>Approximate tooling cost per part = tool cost spread over good parts, plus the downtime of indexing over those parts. The locked CTT baseline uses two competing options, A and B, at <strong>0.64 vs 0.525 cost units per part</strong> &mdash; the seemingly pricier tool B wins because its cost spread over more good edges and less frequent indexing, not because the inputs prove it cuts faster.</p>
 
 <h2>Worked Example</h2>
-<p>Two turning options on the same part. Option A: cheaper insert but shorter life and slower cycle. Option B: pricier insert, longer life and higher metal removal. On a per-part basis the locked figures are <strong>A = 0.64, B = 0.525 cost units/part</strong>. B is ~18% cheaper per component despite a higher insert price. The lesson: compare cost per good part, at the machine rate your shop actually charges.</p>
+<p>Two turning options on the same part, with the same assumed machine-hour rate. Option A: 120&nbsp;CU insert, 4 usable edges, 50 good parts per edge. Option B: 160&nbsp;CU insert, 4 usable edges, 80 good parts per edge. A: 120&nbsp;/&nbsp;4&nbsp;/&nbsp;50 = 0.60&nbsp;CU per part, plus allocated indexing downtime of 0.04&nbsp;CU, giving <strong>0.64&nbsp;CU per part</strong>. B: 160&nbsp;/&nbsp;4&nbsp;/&nbsp;80 = 0.50&nbsp;CU per part, plus indexing downtime of 0.025&nbsp;CU, giving <strong>0.525&nbsp;CU per part</strong>. The difference is 0.115&nbsp;CU per part. These inputs do <em>not</em> establish a shorter cutting cycle for B; any difference in cutting-cycle cost or scrap cost must be measured and added separately.</p>
 <figure class="ctt-figure">
 <svg viewBox="0 0 420 150" role="img" aria-label="Cost per component A vs B">
 <desc>Two horizontal bars: option A 0.64 and option B 0.525 cost units per part.</desc>
@@ -68,13 +68,15 @@
 <caption>Locked cost-per-part comparison</caption>
 <thead><tr><th scope="col">Factor</th><th scope="col">Option A</th><th scope="col">Option B</th></tr></thead>
 <tbody>
-<tr><td>Insert price</td><td>lower</td><td>higher</td></tr>
-<tr><td>Tool life</td><td>shorter</td><td>longer</td></tr>
-<tr><td>Metal removal / cycle</td><td>slower</td><td>faster</td></tr>
+<tr><td>Insert price</td><td>120 CU</td><td>160 CU</td></tr>
+<tr><td>Usable edges</td><td>4</td><td>4</td></tr>
+<tr><td>Good parts per edge</td><td>50</td><td>80</td></tr>
+<tr><td>Tool cost / part</td><td>0.60</td><td>0.50</td></tr>
+<tr><td>Indexing downtime / part</td><td>0.04</td><td>0.025</td></tr>
 <tr><td><strong>Cost per part</strong></td><td><strong>0.64</strong></td><td><strong>0.525 (wins)</strong></td></tr>
 </tbody></table></div>
 <h3>How the comparison is built up</h3>
-<p>The cost-per-part number comes from two streams added together. First, the tool stream: the cost of one edge divided by the number of good parts that edge produces, which spreads a fixed insert price over its life. Second, the machine stream: the machine hour rate times the cycle time for one part, which is paid whether the tool is expensive or cheap. A cheap insert with short life spreads its small price over few parts, and its slower cycle adds machine time &mdash; that is how option A lands at 0.64. A pricier edge that runs faster and cuts more parts per edge spreads its larger price over many parts, and its shorter cycle lowers the machine stream &mdash; landing at 0.525. Notice what is <em>not</em> in the sticker price: a tool that occasionally scrapes a part adds rework and downtime that no insert quote includes. Run the comparison with your real machine rate and measured parts-per-edge, and the option that wins in the math will usually also win on the shop floor.</p>
+<p>The cost-per-part number comes from two streams added together. First, the tool stream: the cost of one edge divided by the number of good parts that edge produces, which spreads a fixed insert price over its life. Second, the indexing stream: the machine downtime of changing an edge, spread over the good parts that edge produces. A cheap insert with short life spreads its small price over few parts, and its edge-change downtime lands on few parts too &mdash; that is how option A lands at 0.64. A pricier edge that makes more good parts per edge spreads its larger price over more parts, and its less frequent indexing lowers the downtime share &mdash; landing at 0.525. Notice what is <em>not</em> concluded here: these inputs do not say B has a shorter cutting cycle. Run that comparison separately with your real cycle time, machine rate and scrap data, and remember that a tool that occasionally scrapes a part adds rework and downtime that no insert quote includes.</p>
 
 <h3>Why the machine rate often dominates</h3>
 <p>In most CNC shops the machine hour rate &mdash; depreciation, labor, overhead &mdash; dwarfs the insert price, which changes how the cost-per-part math should be read. Suppose an edge costs a few cost-units and produces hundreds of parts: its tool stream per part is fractions of a unit, while a cycle that runs a minute longer adds a full minute of the machine rate on every single part. That is why a tool that lets you raise vc and shorten cycle time can win even if it wears faster and costs more per edge: you are buying back machine time, which is the expensive commodity. It also explains the opposite trap on a lightly-loaded, low-rate machine &mdash; a cheap, long-life insert may win because the machine time saved by a faster premium tool is worth little there. The comparison is therefore always local to your shop: plug your real machine hour rate and measured parts-per-edge into the two streams, and do not assume the premium tool wins universally. When the rate is high and the machine is the bottleneck, cycle-time reduction rules; when the rate is low and the machine has spare capacity, edge life and price dominate.</p>
