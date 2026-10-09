@@ -1,0 +1,400 @@
+{
+  "course": "Cutting Tool Technology",
+  "article_count": 36,
+  "strict_word_threshold": {
+    "B_class": 800,
+    "K_class": 2000
+  },
+  "verifier": "scripts/verify_cutting_tool_course.py",
+  "locked_baselines": {
+    "\u00d810_vc120": "n=3819.72",
+    "vf_608": "n=3800,z=4,fz=0.04",
+    "Ra": "f=0.10,r\u03b5=0.4 -> 0.781um",
+    "point_h": "5/tan59=5*tan31\u22483.004mm",
+    "M1": "6061-T6 \u00d88 3f vc200 fz0.04 n\u22487958 vf\u2248955",
+    "T1": "42CrMo4 \u00d850->40x60 fn0.20 n1000 vf200; 40.006/40.014/40.028 vs 40.020",
+    "H1": "304 \u00d820.000-20.021 predrill19.80 point h\u22485.949 depth25.949",
+    "cantilever": "\u03b4\u221dL^3 (L doubles=8x)"
+  },
+  "pages": [
+    {
+      "path": "docs/cutting-tool-technology/01-cutting-tool-system/index.html",
+      "slug": "01-cutting-tool-system",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/01-cutting-tool-system/",
+        "https://www.mitsubishicarbide.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/02-workpiece-materials-machinability/index.html",
+      "slug": "02-workpiece-materials-machinability",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/02-workpiece-materials-machinability/",
+        "https://www.sandvik.coromant.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/03-cutting-data-and-units/index.html",
+      "slug": "03-cutting-data-and-units",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/03-cutting-data-and-units/",
+        "https://www.mitsubishicarbide.com/",
+        "https://www.sandvik.coromant.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/04-chip-formation-forces-heat/index.html",
+      "slug": "04-chip-formation-forces-heat",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/04-chip-formation-forces-heat/",
+        "https://www.sandvik.coromant.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/05-rake-clearance-and-edge-angles/index.html",
+      "slug": "05-rake-clearance-and-edge-angles",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/05-rake-clearance-and-edge-angles/",
+        "https://www.sandvik.coromant.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/06-edge-preparation-chipbreakers/index.html",
+      "slug": "06-edge-preparation-chipbreakers",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/06-edge-preparation-chipbreakers/",
+        "https://www.sandvik.coromant.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/07-end-mill-geometry-engagement/index.html",
+      "slug": "07-end-mill-geometry-engagement",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/07-end-mill-geometry-engagement/",
+        "https://www.sandvik.coromant.com/",
+        "https://www.secotools.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/08-insert-designations-catalogs/index.html",
+      "slug": "08-insert-designations-catalogs",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/08-insert-designations-catalogs/",
+        "https://www.sandvik.coromant.com/",
+        "https://www.mitsubishicarbide.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/09-tool-material-families/index.html",
+      "slug": "09-tool-material-families",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/09-tool-material-families/",
+        "https://www.sandvik.coromant.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/10-cemented-carbide-substrates/index.html",
+      "slug": "10-cemented-carbide-substrates",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/10-cemented-carbide-substrates/",
+        "https://www.sandvik.coromant.com/",
+        "https://www.kennametal.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/11-ceramics-pcbn-pcd/index.html",
+      "slug": "11-ceramics-pcbn-pcd",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/11-ceramics-pcbn-pcd/",
+        "https://www.sandvik.coromant.com/",
+        "https://www.kennametal.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/12-coating-processes-and-families/index.html",
+      "slug": "12-coating-processes-and-families",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/12-coating-processes-and-families/",
+        "https://www.sandvik.coromant.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/13-tool-selection-workflow/index.html",
+      "slug": "13-tool-selection-workflow",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/13-tool-selection-workflow/",
+        "https://www.sandvik.coromant.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/14-solid-end-mills/index.html",
+      "slug": "14-solid-end-mills",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/14-solid-end-mills/",
+        "https://www.sandvik.coromant.com/",
+        "https://www.osgtool.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/15-indexable-milling-cutters/index.html",
+      "slug": "15-indexable-milling-cutters",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/15-indexable-milling-cutters/",
+        "https://www.sandvik.coromant.com/",
+        "https://www.kennametal.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/16-turning-inserts-toolholders/index.html",
+      "slug": "16-turning-inserts-toolholders",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/16-turning-inserts-toolholders/",
+        "https://www.sandvik.coromant.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/17-drills-and-hole-making/index.html",
+      "slug": "17-drills-and-hole-making",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/17-drills-and-hole-making/",
+        "https://www.sandvik.coromant.com/",
+        "https://www.mitsubishicarbide.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/18-reamers-boring-and-hole-quality/index.html",
+      "slug": "18-reamers-boring-and-hole-quality",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/18-reamers-boring-and-hole-quality/",
+        "https://www.sandvik.coromant.com/",
+        "https://www.guehring.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/19-threading-tools/index.html",
+      "slug": "19-threading-tools",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/19-threading-tools/",
+        "https://www.sandvik.coromant.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/20-grooving-parting-tools/index.html",
+      "slug": "20-grooving-parting-tools",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/20-grooving-parting-tools/",
+        "https://www.sandvik.coromant.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/21-toolholders-interfaces-rigidity/index.html",
+      "slug": "21-toolholders-interfaces-rigidity",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/21-toolholders-interfaces-rigidity/",
+        "https://www.sandvik.coromant.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/22-runout-balance-and-tool-setting/index.html",
+      "slug": "22-runout-balance-and-tool-setting",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/22-runout-balance-and-tool-setting/",
+        "https://www.sandvik.coromant.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/23-coolant-lubrication-chip-evacuation/index.html",
+      "slug": "23-coolant-lubrication-chip-evacuation",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/23-coolant-lubrication-chip-evacuation/",
+        "https://www.sandvik.coromant.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/24-tool-inspection-and-handling/index.html",
+      "slug": "24-tool-inspection-and-handling",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/24-tool-inspection-and-handling/",
+        "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
+        "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&amp;url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/25-wear-mechanisms-morphology/index.html",
+      "slug": "25-wear-mechanisms-morphology",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/25-wear-mechanisms-morphology/",
+        "https://www.sandvik.coromant.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/26-chipping-fracture-and-thermal-damage/index.html",
+      "slug": "26-chipping-fracture-and-thermal-damage",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/26-chipping-fracture-and-thermal-damage/",
+        "https://www.sandvik.coromant.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/27-wear-diagnosis-corrective-actions/index.html",
+      "slug": "27-wear-diagnosis-corrective-actions",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/27-wear-diagnosis-corrective-actions/",
+        "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
+        "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&amp;url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/28-tool-life-testing/index.html",
+      "slug": "28-tool-life-testing",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/28-tool-life-testing/",
+        "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
+        "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&amp;url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/29-tooling-economics/index.html",
+      "slug": "29-tooling-economics",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/29-tooling-economics/",
+        "https://www.sandvik.coromant.com/"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/30-tool-management-and-monitoring/index.html",
+      "slug": "30-tool-management-and-monitoring",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/30-tool-management-and-monitoring/",
+        "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
+        "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&amp;url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/31-reconditioning-sustainability/index.html",
+      "slug": "31-reconditioning-sustainability",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/31-reconditioning-sustainability/",
+        "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
+        "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&amp;url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/32-case-milling-tool-selection/index.html",
+      "slug": "32-case-milling-tool-selection",
+      "svgs": 3,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/32-case-milling-tool-selection/",
+        "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
+        "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&amp;url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/33-case-turning-wear/index.html",
+      "slug": "33-case-turning-wear",
+      "svgs": 3,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/33-case-turning-wear/",
+        "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
+        "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&amp;url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/34-case-hole-quality/index.html",
+      "slug": "34-case-hole-quality",
+      "svgs": 3,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/34-case-hole-quality/",
+        "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
+        "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&amp;url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/35-assessment/index.html",
+      "slug": "35-assessment",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/35-assessment/",
+        "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
+        "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&amp;url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf"
+      ]
+    },
+    {
+      "path": "docs/cutting-tool-technology/36-glossary-reference/index.html",
+      "slug": "36-glossary-reference",
+      "svgs": 2,
+      "has_canonical": true,
+      "external_sources": [
+        "https://lilu1626.github.io/cnc-manufacturing-engineering/cutting-tool-technology/36-glossary-reference/",
+        "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
+        "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&amp;url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "external_references": [
+    {
+      "name": "Sandvik Milling Application Guide",
+      "url": "https://www.sandvik.coromant.com/en-gb/milling-appl-guide",
+      "use": "general milling principles; not a per-insert recommendation"
+    },
+    {
+      "name": "Sandvik Turning Handbook C-1020-18 (PDF)",
+      "url": "https://www.sandvik.coromant.com/api/publications/view?fileName=C-1020-18.pdf&url=92df68b7-b8c0-494d-b290-e27f540b5885.pdf",
+      "use": "general turning principles; not a per-insert recommendation"
+    }
+  ],
+  "note": "Worked numbers in articles are classroom assumptions unless explicitly labelled measured. HTTP status of these hosts is not re-validated on every build."
+}
