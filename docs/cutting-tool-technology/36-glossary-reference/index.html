@@ -130,7 +130,7 @@
 <li><strong>Forgetting units.</strong> Fix: always carry units through.</li>
 <li><strong>Confusing accuracy with precision.</strong> Fix: accuracy is how close to true; precision is repeatability &mdash; see page 06 of the knowledge base.</li>
 </ul>
-<h2>Quick unit sanity checks</h2>
+<h3>Quick unit sanity checks</h3>
 <p>When a number looks wrong, check the unit first. Feed rate in mm/min and feed per rev in mm/rev differ by a factor of spindle speed; a "608 mm/min" at 3800&nbsp;rpm is about 0.16&nbsp;mm/rev &mdash; plausible. Surface speed in m/min must be converted to SFM by multiplying by about 3.28 when working from imperial data. Ra numbers below 1&nbsp;&micro;m are very fine finishes; numbers above 6&nbsp;&micro;m are rough. If your computed value sits far outside these ranges, the unit slipped before the arithmetic did.</p>
 
 <h2>Practice</h2>
